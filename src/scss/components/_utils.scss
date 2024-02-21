@@ -1,0 +1,84 @@
+.StockReturnWithName {
+  &.MuiStack-root {
+    align-items: center;
+    @include media-min($lg) {
+      gap: 10px;
+    }
+    .StockReturn {
+      align-items: center;
+      gap: 3px;
+    }
+    &.Boxes {
+      .StockReturn {
+        padding: 0 4px 1px 4px;
+        border-radius: 2px;
+      }
+      &.Profit {
+        .StockReturn {
+          background-color: $success;
+        }
+      }
+      &.Loss {
+        .StockReturn {
+          background-color: $error;
+        }
+      }
+    }
+    &.Text {
+      &.Profit {
+        .StockReturn {
+          color: $success;
+        }
+      }
+      &.Loss {
+        .StockReturn {
+          color: $error;
+        }
+      }
+    }
+    .MuiTypography-root {
+      font-family: inherit;
+    }
+  }
+}
+
+.SectionHeading {
+  text-align: center;
+  .Description {
+    color: $greyRegent;
+    letter-spacing: 0.3px;
+    margin-top: 15px;
+    @include media($md) {
+      font-size: pxToRem(14);
+    }
+    @include media($sm) {
+      font-size: pxToRem(12);
+      margin-top: 12px;
+    }
+  }
+}
+
+.ProductStockStatus {
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  .Message {
+    font-weight: 600;
+  }
+  &.Available {
+    color: $success;
+  }
+  &.NotAvailable {
+    color: $error;
+  }
+}
+
+.LinkWithIcon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  @include media($md) {
+    flex-direction: initial;
+  }
+}

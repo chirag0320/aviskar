@@ -1,0 +1,19 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+// Settings
+@import "settings/variables";
+@import "settings/mixins";
+@import "settings/functions";
+
+// Components
+@import "components/swiper";
+@import "components/utils";
+@import "components/mui";
+@import "components/card";
+
+// Common
+@import "common/header";
+@import "common/footer";
+
+// Pages
+@import "pages/home.scss";
+@import "pages/signin.scss";

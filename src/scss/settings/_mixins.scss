@@ -1,0 +1,64 @@
+// margin:: vertical
+@mixin margin-vertical($top, $bottom: $top) {
+  margin-top: #{$top}px;
+  margin-bottom: #{$bottom}px;
+}
+
+// margin:: horizontal
+@mixin margin-horizontal($left, $right: $left) {
+  margin-left: #{$left}px;
+  margin-right: #{$right}px;
+}
+
+// margin:: auto
+@mixin margin-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// padding:: vertical
+@mixin padding-vertical($top, $bottom: $top) {
+  padding-top: #{$top}px;
+  padding-bottom: #{$bottom}px;
+}
+
+// padding:: horizontal
+@mixin padding-horizontal($left, $right: $left) {
+  padding-left: #{$left}px;
+  padding-right: #{$right}px;
+}
+
+// transition:: smooth
+@mixin transition($time: 200) {
+  transition: #{$time}ms all ease;
+}
+
+// @media query:: max-Width
+@mixin media($width) {
+  @media screen and (max-width: #{$width - 1}) {
+    @content;
+  }
+}
+
+// @media query:: min-Width
+@mixin media-min($width) {
+  @media screen and (min-width: #{$width + 1}) {
+    @content;
+  }
+}
+
+// @media query:: between
+@mixin media-between($minWidth, $maxWidth) {
+  @media screen and (min-width: $minWidth) and (max-width: #{$maxWidth - 1}) {
+    @content;
+  }
+}
+
+// text:: ellipsis
+@mixin max-line($line) {
+  display: -webkit-box;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

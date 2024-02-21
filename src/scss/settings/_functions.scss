@@ -1,0 +1,8 @@
+@use 'sass:math';
+
+@function pxToRem($pxValue) {
+  @if type-of($pxValue) !=number or not unitless($pxValue) {
+    @error "pxToRem() function only accepts unitless number.";
+  }
+  @return math.div($pxValue, 16) * 1rem;
+}

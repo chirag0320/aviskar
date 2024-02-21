@@ -1,0 +1,44 @@
+.MuiLink-root {
+  &.Outlined {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+    padding: 8px 28px;
+    border-radius: 8px;
+    border: 1px solid $yellowFuel;
+    box-shadow: $shadow2;
+    &:hover {
+      text-decoration: initial;
+      outline: 1px solid $yellowFuel;
+    }
+    .MuiTypography-root {
+      color: $yellowFuel;
+    }
+  }
+}
+
+.MuiIconButton-root {
+  &.Outlined {
+    border: 1px solid $mercury;
+    box-shadow: $shadow4;
+    background-color: $white;
+    @include media-min($md) {
+      width: 50px;
+      height: 50px;
+    }
+    &:hover {
+      background-color: $white;
+      border-color: $yellowFuel;
+    }
+  }
+  &.MenuButton {
+    height: 34px;
+    width: 34px;
+    border-radius: 8px;
+    padding: 0;
+    &.Active {
+      background-color: $yellowFuel;
+    }
+  }
+}
