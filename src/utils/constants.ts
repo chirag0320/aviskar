@@ -19,5 +19,5 @@ export const ENDPOINTS = {
 }
 export const StoreData = {
     storeCode: 12,
-    returnUrl: window.location.href
+    returnUrl: typeof window !== 'undefined' ? window.location.href : null
 }

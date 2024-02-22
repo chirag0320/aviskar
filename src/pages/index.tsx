@@ -73,9 +73,11 @@ function IndexPage() {
           lang="en"
         />
         {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>}
-        {configDetailsState?.sliderenableinhome?.value === false ? null : <Banner />}
+        {/* {configDetailsState?.sliderenableinhome?.value === false ? null : <Banner />}
         <FeaturedProducts />
-        {wait1 && <Suspense fallback={<></>}><LookingFor /></Suspense>}
+        {wait1 && <Suspense fallback={<></>}> <LookingFor /></Suspense>} */}
+        {/* {wait1 && <Suspense fallback={<Skeleton className='Container' height="300px" />
+        }><LookingFor /></Suspense>} */}
         {wait1 && <Suspense fallback={<></>}><PopularProducts /></Suspense>}
         {wait2 && <Suspense fallback={<></>}><DiscoverTreasure /></Suspense>}
         {wait3 && <Suspense fallback={<></>}><CloserLook /></Suspense>}

@@ -8,7 +8,6 @@ import { ArrowDown, ArrowUp } from '../../assets/icons/index'
 // Utils
 import { navigationItems } from "../../utils/data"
 import { useAppSelector } from "@/hooks"
-
 function MobileMenu(props: any) {
   const { open, toggleMobileMenu, trigger } = props
   const [openMenu, setOpenMenu] = useState<any>({})

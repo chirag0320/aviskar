@@ -26,17 +26,19 @@ const Index = () => {
 
   return (
     <Box id="HeaderWrapper">
-      <Suspense fallback={<Skeleton style={{ minHeight: '60px' }} />}>
-        <Pricing />
-      </Suspense>
-      <Divider />
+      {!isMobile && <>
+        <Suspense fallback={<Skeleton style={{ minHeight: '60px' }} />}>
+          <Pricing />
+        </Suspense>
+        <Divider />
+      </>}
       <AppBar position={trigger ? "fixed" : "static"}>
         {loading && <PageLoader />}
-        <Suspense fallback={<Skeleton style={{ minHeight: '90px', transform: "none" }} />}>
+        <Suspense fallback={<Skeleton style={{ minHeight: '80px' }} />}>
           <Main toggleMobileMenu={toggleMobileMenu} />
         </Suspense>
         <Divider />
-        <Suspense fallback={<Skeleton style={{ minHeight: '60px' }} />}>
+        <Suspense fallback={<Skeleton style={{ minHeight: '53px' }} />}>
           <Navigation />
         </Suspense>
       </AppBar>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
 import classNames from 'classnames'
-import { Box, Card, Skeleton, useMediaQuery,Container } from "@mui/material"
+import { Box, Card, Skeleton, useMediaQuery, Container } from "@mui/material"
 
 import { Autoplay, Pagination, A11y } from 'swiper/modules'
 
@@ -194,19 +194,33 @@ function FeaturedProducts() {
                 </SwiperSlide>)
               })
                 :
-                Array(6).fill(0).map((_, index) => {
-                  return (
-                    <SwiperSlide key={index}>
-                      <Card className="ProductCard">
-                        <Skeleton animation="wave" height={500} style={{ padding: "0px" }} />
-                        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                          <Skeleton animation="wave" height={95} width="100%" style={{ marginBottom: "4px" }} />
-                          <Skeleton animation="wave" height={70} width="100%" />
-                        </div>
-                      </Card>
-                    </SwiperSlide>
-                  );
-                })
+                <>
+                  {!isMobile ? Array(6).fill(0).map((_, index) => {
+                    return (
+                      <SwiperSlide key={index}>
+                        <Card className="ProductCard">
+                          <Skeleton animation="wave" height={500} style={{ padding: "0px" }} />
+                          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                            <Skeleton animation="wave" height={95} width="100%" style={{ marginBottom: "4px" }} />
+                            <Skeleton animation="wave" height={70} width="100%" />
+                          </div>
+                        </Card>
+                      </SwiperSlide>
+                    );
+                  }) : Array(4).fill(0).map((_, index) => {
+                    return (
+                      <SwiperSlide key={index}>
+                        <Card className="ProductCard">
+                          <Skeleton animation="wave" height={320} style={{ padding: "0px" }} />
+                          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                            <Skeleton animation="wave" height={100} width="100%" style={{ marginBottom: "4px" }} />
+                            <Skeleton animation="wave" height={70} width="100%" />
+                          </div>
+                        </Card>
+                      </SwiperSlide>
+                    );
+                  })}
+                </>
             }
           </Swiper>
         </Box>

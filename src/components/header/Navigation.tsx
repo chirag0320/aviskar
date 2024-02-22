@@ -5,7 +5,6 @@ import classNames from "classnames"
 // Components
 import { HoverTooltip } from "../common/CustomTooltip"
 import { ConstantApiLoader } from "./Loader"
-import SubMenu from "./SubMenu"
 const ChartMenu = lazy(() => import('./ChartMenu'))
 const CartMenu = lazy(() => import('./CartMenu'))
 import ActionMenu from "./ActionMenu"
