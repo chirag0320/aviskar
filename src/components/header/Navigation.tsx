@@ -46,6 +46,7 @@ function Navigation() {
                         placement="bottom-start"
                         renderComponent={
                           <Button
+                            aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                             color="secondary"
                             className={classNames("MenuLink")}
                             disableRipple
@@ -60,6 +61,7 @@ function Navigation() {
                       : <Fragment key={category.name}><Button
                         href="#"
                         color="secondary"
+                        aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                         name={category?.searchEngineFriendlyPageName ?? category.name}
                         className={classNames("MenuLink", { "Active": false })}
                         disableRipple

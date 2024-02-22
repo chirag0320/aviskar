@@ -26,9 +26,7 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware: any) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ['addDataset/moveToMapHeaders'],
-      },
+      serializableCheck: false,
     }),
 })
 const persistor = persistStore(store)

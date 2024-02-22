@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useCallback, useState } from 'react'
-import { Box, Container, Link, Stack, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Button, IconButton, Skeleton } from "@mui/material"
+import { Box, Container, Link, Stack, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Button, Skeleton } from "@mui/material"
 import classNames from 'classnames'
 
 // Components
@@ -81,15 +81,15 @@ function index() {
               <Stack className="FieldWrapper">
                 {/* props i have removed */}
                 <TextField type="email" className="EmailField" placeholder="Your Email Address" value={email} onChange={handleEmailChange} />
-                <Button className="SubscribeButton" variant="contained" onClick={subscribe}>Subscribe</Button>
+                <Button name='subscribe' aria-label='subscribe' className="SubscribeButton" variant="contained" onClick={subscribe}>Subscribe</Button>
               </Stack>
               <Typography className="ConsentMessage" variant="body2">Your email is safe with us, we don't spam</Typography>
             </Box>
             <Stack className="SocialWrapper">
-              <Link target={"_blank"} href={configDetailsState?.facebooklink?.value}><FacebookIcon /></Link>
-              <Link target={"_blank"} href={configDetailsState?.youtubelink?.value}><YoutubeIcon /></Link>
-              <Link target={"_blank"} href={configDetailsState?.twitterlink?.value}><TwitterIcon /></Link>
-              <Link target={"_blank"} href={configDetailsState?.feedIcon?.value}><FeedIcon /></Link>
+              <Link target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}><FacebookIcon /></Link>
+              <Link target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}><YoutubeIcon /></Link>
+              <Link target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}><TwitterIcon /></Link>
+              <Link target={"_blank"} href={configDetailsState?.feedIcon?.value ?? window?.location?.href}><FeedIcon /></Link>
             </Stack>
           </Stack>
         </Stack>

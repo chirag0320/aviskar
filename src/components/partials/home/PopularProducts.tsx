@@ -100,7 +100,7 @@ function PopularProducts() {
           }
         </Box>
         <Stack className="Action">
-          <Button className="DiscoverMore" variant="contained">Discover More</Button>
+          <Button className="DiscoverMore" name='DiscoverMore' aria-label="DiscoverMore" variant="contained">Discover More</Button>
         </Stack>
       </Box>
     </Container>

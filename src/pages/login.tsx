@@ -6,10 +6,10 @@ import { EyeOffIcon, EyeOnIcon } from "../assets/icons/index"
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { useForm } from "react-hook-form";
 import { LoginUserAPI } from '@/redux/reducers/homepageReducer';
-import { ENDPOINTS } from '@/utils/constants';
+import { ENDPOINTS, StoreData } from '@/utils/constants';
 import { Dispatch } from '@reduxjs/toolkit';
 import { isActionRejected } from '@/components/common/Utils';
-import { navigate } from 'gatsby';
+import { Link, navigate } from 'gatsby';
 import axios, { AxiosError } from 'axios';
 export interface IdispatchType {
   type: string,
@@ -54,7 +54,7 @@ function SignInPage() {
     <Box id="SignInPage">
       <Container maxWidth="sm" >
         <DialogTitle component="p">
-          <img src={configDetailsState?.storelogourl?.value} alt="QMint logo" loading='eager' />
+          <img onClick={() => { navigate('/') }} src={configDetailsState?.storelogourl?.value} alt="QMint logo" loading='eager' />
         </DialogTitle>
         {loginError && <Typography variant='subtitle1' className='LoginError'>{loginError}</Typography>}
         <DialogContent>
@@ -110,15 +110,19 @@ function SignInPage() {
                 required
               />
             </Stack>
-            <Button className="ForgotPassword" color="secondary">Forgot Your Password?</Button>
+            <Link target='_blank' to={ENDPOINTS.forgotPasswordLink + '/?id=' + StoreData.storeCode}>
+              <Button name='Forgot Your Password' aria-label='Forgot Your Password' className="ForgotPassword" color="secondary" onClick={() => {
+              }}>Forgot Your Password?</Button></Link>
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleSubmit(onSubmit)} variant="contained" size="large" fullWidth disabled={loadingForSignIn}>Sign Me In</Button>
-          <Button variant="outlined" size="large" fullWidth>Create My Account</Button>
+          <Button name='signIn' aria-label='signIn' onClick={handleSubmit(onSubmit)} variant="contained" size="large" fullWidth disabled={loadingForSignIn}>Sign Me In</Button>
+          {/* <Link target='_blank' to={ENDPOINTS.createMyAccount + StoreData.returnUrl}> */}
+          <Button onClick={() => {navigate(ENDPOINTS.createMyAccount + StoreData.returnUrl);}} name='Create My Account' aria-label='Create My Account' variant="outlined" size="large" fullWidth>Create My Account</Button>
+          {/* </Link> */}
           <Stack className="SignUpAction">
             <Typography className="Message" variant="overline">Don't have an account?</Typography>
-            <Button color="secondary">Sign Up</Button>
+            <Button name='Sign Up' aria-label='Sign Up' color="secondary">Sign Up</Button>
           </Stack>
         </DialogActions>
       </Container>

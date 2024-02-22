@@ -132,7 +132,7 @@ function CloserLook() {
         </Box>
       </Box>
       <Stack className="Action">
-        <Button variant="contained">Discover More</Button>
+        <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained">Discover More</Button>
       </Stack>
     </Container>
   )
