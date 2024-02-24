@@ -15,6 +15,13 @@ module.exports = {
       },
     },
     {
+      resolve: `@builder.io/partytown`,
+      options: {
+        name: `assets`,
+        path: `${__dirname}/public/static/`,
+      },
+    },
+    {
       resolve: `gatsby-plugin-manifest`,
       options: {
         icon: `src/assets/favicon.ico`,

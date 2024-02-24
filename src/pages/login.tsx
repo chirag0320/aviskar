@@ -34,6 +34,7 @@ export interface IdispatchType {
 function SignInPage() {
   const { configDetails: configDetailsState, loadingForSignIn } = useAppSelector((state) => state.homePage)
   const [passwordVisible, setPasswordVisible] = useState(false)
+  const [loadingForNavigate,setLoadingForNavigate] = useState(false)
   const [loginError, setLoginError] = useState<string | null>(null);
   const dispatch: Dispatch<any> = useAppDispatch()
   const togglePasswordVisibility = () => {
@@ -49,7 +50,11 @@ function SignInPage() {
     }
     navigate("/");
   };
-
+function navigateToRegister(){
+  setLoadingForNavigate(true)
+  navigate(ENDPOINTS.createMyAccount + StoreData.returnUrl);
+  setLoadingForNavigate(false)
+}
   return (
     <Box id="SignInPage">
       <Container maxWidth="sm" >
@@ -118,11 +123,11 @@ function SignInPage() {
         <DialogActions>
           <Button name='signIn' aria-label='signIn' onClick={handleSubmit(onSubmit)} variant="contained" size="large" fullWidth disabled={loadingForSignIn}>Sign Me In</Button>
           {/* <Link target='_blank' to={ENDPOINTS.createMyAccount + StoreData.returnUrl}> */}
-          <Button onClick={() => {navigate(ENDPOINTS.createMyAccount + StoreData.returnUrl);}} name='Create My Account' aria-label='Create My Account' variant="outlined" size="large" fullWidth>Create My Account</Button>
+          <Button onClick={navigateToRegister} name='Create My Account' aria-label='Create My Account' variant="outlined" size="large" fullWidth disabled={loadingForNavigate}>Create My Account</Button>
           {/* </Link> */}
           <Stack className="SignUpAction">
             <Typography className="Message" variant="overline">Don't have an account?</Typography>
-            <Button name='Sign Up' aria-label='Sign Up' color="secondary">Sign Up</Button>
+            <Button name='Sign Up' aria-label='Sign Up' color="secondary" onClick={navigateToRegister} disabled={loadingForNavigate}>Sign Up</Button>
           </Stack>
         </DialogActions>
       </Container>
