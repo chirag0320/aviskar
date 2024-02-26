@@ -50,6 +50,7 @@
     flex-direction: column;
     position: relative;
     height: 100%;
+    width: 100%;
     &:hover {
       box-shadow: $shadow5;
     }
@@ -101,10 +102,16 @@
       flex-grow: 1;
       padding: $horizontalSpacing $horizontalSpacing 13px;
       .ProductName {
-        font-weight: 600;
         @include max-line(2);
         @include media-min($xl) {
           max-width: 277px;
+        }
+        .MuiTypography-root {
+          @include media($sm) {
+            font-size: pxToRem(14);
+            line-height: pxToRem(24);
+            font-weight: 600;
+          }
         }
       }
       .ContentWrapper {
@@ -119,34 +126,38 @@
           .Left {
             align-items: center;
             gap: 8px;
-            .ActualPrice {
-              font-size: 18px;
-              font-weight: 700;
-            }
+            .ActualPrice {}
             .DiscountedPrice {
-              font-size: 14px;
               text-decoration: line-through;
               color: rgba($dark, 0.5);
             }
           }
           .Discount {
             color: $sinopia;
-            font-size: 14px;
-            font-weight: 600;
+            @include media($sm) {
+              font-size: pxToRem(13);
+              line-height: pxToRem(24);
+            }
           }
         }
         .Bottom {
           justify-content: space-between;
           align-items: center;
           .PriceMessage {
-            font-size: 14px;
             color: rgba($dark, 0.5);
-            font-weight: 500;
+            @include media($sm) {
+              font-size: pxToRem(12);
+              line-height: pxToRem(28);
+              font-weight: 500;
+            }
           }
           .DiscountMessage {
-            font-size: 14px;
-            font-weight: 600;
             color: $blueCyan;
+            @include media($sm) {
+              font-size: pxToRem(13);
+              line-height: pxToRem(24);
+              font-weight: 600;
+            }
           }
         }
       }
@@ -163,12 +174,6 @@
           top: 16px;
           right: 40px;
           padding: 2px 20px 2px 10px;
-        }
-        &.Blue {
-          background-color: $blueDress;
-        }
-        &.Red {
-          background-color: $sinopia;
         }
       }
     }
@@ -202,19 +207,15 @@
       }
       .TooltipOfferTag {
         .MuiTooltip-tooltip {
-          box-shadow: $shadow5;
+          box-shadow: $shadow6;
           .Offers {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 0 16px;
             padding: 15px;
-            .ItemWrapper {
-              gap: 10px;
-              justify-content: space-between;
-              .Item {
-                min-width: 100px;
-              }
-              .ItemPrice {
-                flex-grow: 1;
-                font-weight: 700;
-              }
+            .ItemPrice {
+              font-weight: 700;
+              line-height: pxToRem(28);
             }
           }
         }

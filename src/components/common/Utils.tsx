@@ -61,7 +61,7 @@ export const ProductStockStatus = React.memo(({ availability, colorClass, iconCl
   return (
     <Stack className={classNames("ProductStockStatus", [availability !== "Sold Out" ? "Available" : "NotAvailable"])}>
       {colorClass !== 'red-circle' ? <ContainedCheckIcon /> : <ContainedCrossIcon />}
-      <Typography variant="body2" className="Message">{availability}</Typography>
+      <Typography variant="overline" className="Message">{availability}</Typography>
     </Stack>
   )
 }
@@ -83,7 +83,7 @@ export function generateGUID() {
   let uniqueId = localStorage.getItem('uniqueSessionId');
 
   if (!uniqueId) {
-    uniqueId = 'xxxxxxxx-xxxx-yxxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    uniqueId = 'xxxxxxxx-xxxx-yxxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       const r = Math.random() * 16 | 0;
       const v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);

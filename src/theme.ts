@@ -66,6 +66,16 @@ const theme: any = createTheme({
       fontSize: pxToRem(14),
       lineHeight: pxToRem(20),
     },
+    // Headline Small
+    subtitle1: {
+      fontSize: pxToRem(18),
+      lineHeight: pxToRem(28),
+      fontWeight: 700,
+      '@media (max-width: 900px)': {
+        fontSize: pxToRem(16),
+        lineHeight: pxToRem(28),
+      },
+    },
     // Headline Medium
     subtitle2: {
       fontSize: pxToRem(22),
