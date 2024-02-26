@@ -8,7 +8,7 @@ const SwiperNavigation = lazy(() => import('../../common/Utils').then((module) =
 import useApiRequest from "@/hooks/useAPIRequest"
 import { Url } from "url"
 import { ENDPOINTS } from "@/utils/constants"
-import { StaticImage } from "gatsby-plugin-image"
+import { GatsbyImage, StaticImage } from "gatsby-plugin-image"
 
 interface IbannerData {
   id: number,
@@ -51,8 +51,8 @@ function Banner() {
   useEffect(() => {
     const x = setTimeout(() => {
       setTempImgHide(false)
-      setConfig((prev) => ({ ...prev, autoplay: { delay: 4000 } }))
-    }, 10000);
+      setConfig((prev) => ({ ...prev, autoplay: { delay: 3000 } }))
+    }, 2000);
     return () => {
       clearTimeout(x)
     }
@@ -70,13 +70,22 @@ function Banner() {
                   return (
                     <SwiperSlide key={`BannerSlider-${index}`}>
                       <Box className="Wrapper" sx={{ position: 'relative', width: '100%', height: '100%' }}>
-                        <img
+                        {<>
+                        {/* <StaticImage
                           rel="prefetch"
                           loading="eager"
-                          src={isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall}
+                          src={'../../../assets/images/loading.gif'}
+                          // src={isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall}
                           alt="background"
-                          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'fill' }}
-                        />
+                          style={{visibility: tempImgHide ?'visible' :'hidden', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'fill' }}
+                        />   */}
+                        <img
+                            rel="prefetch"
+                            loading="eager"
+                            src={isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall}
+                            alt="background"
+                            style={{ visibility: !tempImgHide ?'visible' :'hidden',position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'fill' }}
+                          /></>}
                       </Box>
                     </SwiperSlide>
                   )
