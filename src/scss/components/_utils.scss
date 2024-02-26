@@ -44,6 +44,12 @@
 
 .SectionHeading {
   text-align: center;
+  .Title {
+    @include media($sm) {
+      font-size: pxToRem(26);
+      line-height: pxToRem(35);
+    }
+  }
   .Description {
     color: $greyRegent;
     letter-spacing: 0.3px;
@@ -53,6 +59,7 @@
     }
     @include media($sm) {
       font-size: pxToRem(12);
+      line-height: pxToRem(22);
       margin-top: 12px;
     }
   }
@@ -63,7 +70,10 @@
   align-items: center;
   gap: 8px;
   .Message {
-    font-weight: 600;
+    @include media($sm) {
+      font-size: pxToRem(12);
+      line-height: pxToRem(24);
+    }
   }
   &.Available {
     color: $success;
