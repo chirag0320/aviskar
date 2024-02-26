@@ -71,37 +71,6 @@ function Navigation() {
                 })
                 : null
             }
-            {/* <Button
-            href="#"
-            color="secondary"
-            className={classNames("MenuLink", { "Active": false })}
-            disableRipple
-          >
-            Invest
-          </Button>
-          <HoverTooltip
-            className="TooltipSubMenu"
-            placement="bottom"
-            renderComponent={
-              <Button
-                color="secondary"
-                className={classNames("MenuLink", { "Active": false })}
-                disableRipple
-              >
-                Collect
-              </Button>
-            }
-          >
-            <SubMenu data={subMenuItems} />
-          </HoverTooltip>
-          <Button
-            href="#"
-            color="secondary"
-            className={classNames("MenuLink", { "Active": false })}
-            disableRipple
-          >
-            Discover
-          </Button> */}
           </Stack>
           <Stack className="RightPart">
             {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
@@ -116,18 +85,3 @@ function Navigation() {
 }
 
 export default React.memo(Navigation)
-{/* <HoverTooltip
-className="TooltipSubMenu"
-placement="bottom"
-renderComponent={
-  <Button
-    color="secondary"
-    className={classNames("MenuLink", { "Active": false })}
-    disableRipple
-  >
-    Collect
-  </Button>
-}
->
-<SubMenu data={subMenuItems} />
-</HoverTooltip> */}

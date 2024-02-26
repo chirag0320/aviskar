@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect, useState } from "react"
-import { Box, Typography, Button, useMediaQuery, Theme, Skeleton } from "@mui/material"
+import { Box, Typography, useMediaQuery, Theme, Skeleton } from "@mui/material"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation, Autoplay, Pagination, A11y } from 'swiper/modules'
 

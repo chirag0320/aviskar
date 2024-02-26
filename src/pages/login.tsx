@@ -10,7 +10,7 @@ import { ENDPOINTS, StoreData } from '@/utils/constants';
 import { Dispatch } from '@reduxjs/toolkit';
 import { isActionRejected } from '@/components/common/Utils';
 import { Link, navigate } from 'gatsby';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 export interface IdispatchType {
   type: string,
   meta: {

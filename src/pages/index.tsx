@@ -1,27 +1,17 @@
 import React, { Suspense, lazy, useEffect, useState } from "react"
-// import Typography from "@mui/material/Typography";
-// Components
-// import Layout from "../components/common/Layout"
 import Seo from "../components/common/Seo"
-// const Banner = lazy(() => import('../components/partials/home/Banner'))
 import Banner from '../components/partials/home/Banner'
 const MobileSecondaryMenu = lazy(() => import('../components/header/MobileSecondaryMenu'));
 const LookingFor = lazy(() => import("../components/partials/home/LookingFor"))
-// const FeaturedProducts = lazy(() => import("../components/partials/home/FeaturedProducts"))
 const PopularProducts = lazy(() => import("../components/partials/home/PopularProducts"))
 const DiscoverTreasure = lazy(() => import("../components/partials/home/DiscoverTreasure"))
 const CloserLook = lazy(() => import("../components/partials/home/CloserLook"))
-// import MobileSecondaryMenu from '../components/header/MobileSecondaryMenu'
-// import LookingFor from "../components/partials/home/LookingFor"
 import FeaturedProducts from "../components/partials/home/FeaturedProducts"
-// import PopularProducts from "../components/partials/home/PopularProducts"
-// import DiscoverTreasure from "../components/partials/home/DiscoverTreasure"
-// import CloserLook from "../components/partials/home/CloserLook"
 import { ENDPOINTS } from "@/utils/constants"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { CategoriesListDetails, HomePageSectionDetails, configDetails } from "@/redux/reducers/homepageReducer"
 import { useAppSelector } from "@/hooks"
-import { Skeleton, useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import Layout from "@/components/common/Layout";
 import useUserDetailsFromToken from "@/hooks/useUserDetailsFromToken";
 
@@ -76,8 +66,6 @@ function IndexPage() {
         {configDetailsState?.sliderenableinhome?.value === false ? null : <Banner />}
         <FeaturedProducts />
         {wait1 && <Suspense fallback={<></>}> <LookingFor /></Suspense>}
-        {/* {wait1 && <Suspense fallback={<Skeleton className='Container' height="300px" />
-        }><LookingFor /></Suspense>} */}
         {wait1 && <Suspense fallback={<></>}><PopularProducts /></Suspense>}
         {wait2 && <Suspense fallback={<></>}><DiscoverTreasure /></Suspense>}
         {wait3 && <Suspense fallback={<></>}><CloserLook /></Suspense>}

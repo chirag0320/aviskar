@@ -1,15 +1,12 @@
-import React, { Suspense, lazy, useCallback, useMemo, useState } from "react"
+import React, { Suspense, lazy, useCallback, useState } from "react"
 import { useMediaQuery, useScrollTrigger, AppBar, Box, Divider, Skeleton } from "@mui/material"
 
 // Components
 const Pricing = lazy(() => import('./Pricing'))
-// import Pricing from './Pricing'
-// import Main from './Main'
 const Main = lazy(() => import('./Main'))
 import { PageLoader } from './Loader'
 const Navigation = lazy(() => import('./Navigation'))
 import { useAppSelector } from "@/hooks"
-// import MobileMenu from './MobileMenu'
 const MobileMenu = lazy(() => import('./MobileMenu'))
 
 const Index = () => {

@@ -17,6 +17,7 @@
     "gatsby-omni-font-loader": "^2.0.2",
     "gatsby-plugin-image": "^3.13.1",
     "gatsby-plugin-manifest": "^5.13.1",
+    "gatsby-plugin-perf-budgets": "^0.0.18",
     "gatsby-plugin-sass": "^6.13.1",
     "gatsby-plugin-sharp": "^5.13.1",
     "gatsby-source-filesystem": "^5.13.1",
@@ -38,7 +39,7 @@
     "@types/node": "^20.11.17",
     "@types/react": "^18.2.55",
     "@types/react-helmet": "^6.1.11",
-    "gatsby-plugin-webpack-bundle-analyser-v2": "^1.1.31",
+    "gatsby-plugin-webpack-bundle-analyser-v2": "^1.1.32",
     "prettier": "^3.2.5",
     "typescript": "^5.3.3"
   },

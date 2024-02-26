@@ -2,7 +2,6 @@ import React from 'react'
 import {
   Container,
   Box,
-  Skeleton,
 } from "@mui/material"
 import { useAppSelector } from '@/hooks'
 

@@ -3,15 +3,6 @@ import { Box, Container, Stack, Link, Typography } from "@mui/material"
 
 // Componenets
 import SubMenu from "./SubMenu"
-
-// Assets
-import DestinationMenu1 from "../../assets/images/destination-menu-1.png"
-import DestinationMenu2 from "../../assets/images/destination-menu-2.png"
-import DestinationMenu3 from "../../assets/images/destination-menu-3.png"
-import DestinationMenu4 from "../../assets/images/destination-menu-4.png"
-
-// Utils
-import { megaMenuItems } from "../../utils/data"
 import { Icategory } from "./Navigation"
 
 function MegaMenu({ subCategorys, category }: { subCategorys: Icategory[], category: Icategory }) {
@@ -30,10 +21,6 @@ function MegaMenu({ subCategorys, category }: { subCategorys: Icategory[], categ
                 {/* {item.imageText} */}
               </Typography></Link>)
             }) : null}
-            {/* <Link href="#" className="DestinationLink"><img src={DestinationMenu1} /><Typography variant="overline" component="span">AIRLIE BEACH</Typography></Link> */}
-            {/* <Link href="#" className="DestinationLink"><img src={DestinationMenu2} /><Typography variant="overline" component="span">AIRLIE BEACH</Typography></Link> */}
-            {/* <Link href="#" className="DestinationLink"><img src={DestinationMenu3} /><Typography variant="overline" component="span">AIRLIE BEACH</Typography></Link> */}
-            {/* <Link href="#" className="DestinationLink"><img src={DestinationMenu4} /><Typography variant="overline" component="span">AIRLIE BEACH</Typography></Link> */}
           </Box>
         </Stack>
       </Stack>

@@ -11,7 +11,6 @@ import { ProductCard } from "../../common/Card"
 import useApiRequest from "@/hooks/useAPIRequest"
 import axiosInstance from "@/axiosfolder"
 import { ENDPOINTS } from "@/utils/constants"
-// import "../../../scss/components/"
 export interface IFeaturedProducts {
   productId: number,
   categoryId: number,
