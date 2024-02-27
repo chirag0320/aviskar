@@ -58,6 +58,10 @@ function Seo({ description, lang, meta, keywords, title }: any) {
           name: `twitter:description`,
           content: metaDescription,
         },
+        {
+          name: `robots`,
+          content: `noindex`,
+        },
       ]
         .concat(
           keywords?.length > 0

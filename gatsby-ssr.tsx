@@ -14,21 +14,21 @@ import theme from '@/theme';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Partytown } from '@builder.io/partytown/react';
 export const wrapRootElement = ({ element }: any) => (
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {element}
-    </ThemeProvider>
-    </PersistGate>
-  </Provider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          {element}
+        </ThemeProvider>
+      </PersistGate>
+    </Provider>
 );
-export const onRenderBody = ({ setHeadComponents, setPreBodyComponents }:any) => {
+export const onRenderBody = ({ setHeadComponents, setPreBodyComponents }: any) => {
   setHeadComponents([
     <Partytown key="partytown" debug={true} forward={['dataLayer.push']} />,
     // <script key="analytics" src="https://example.com/analytics.js" type="text/partytown" />
   ]);
-  
+
   // For GTM, we will need to add this noscript tag to the body of the HTML
   setPreBodyComponents([
     <noscript
