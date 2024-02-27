@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, Fragment } from "react"
 import { Stack, Box, Card, CardContent, CardActions, Typography, Button, Link, IconButton, Skeleton } from "@mui/material"
 import classNames from 'classnames'
 
@@ -43,23 +43,23 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
         <Stack className="ContentWrapper">
           <Stack className="Top">
             <Stack className="Left">
-              <Typography className="ActualPrice">${(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ?
+              <Typography variant="subtitle1" className="ActualPrice">${(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ?
                 (product?.priceWithDetails?.productLowestPrice) : product?.priceWithDetails?.price}</Typography>
               {(product?.priceWithDetails?.discount && product?.priceWithDetails?.discount !== 0)
                 ?
-                <Typography className="DiscountedPrice">
+                <Typography variant="overline" className="DiscountedPrice">
                   ${(product?.priceWithDetails?.price + product?.priceWithDetails?.discount).toFixed(4)}</Typography>
                 : null}
             </Stack>
-            {(product?.priceWithDetails?.discount) && (product?.priceWithDetails?.discount !== 0) ? (<Typography className="Discount">${product?.priceWithDetails?.discount?.toFixed(2)} Off</Typography>) : null}
+            {(product?.priceWithDetails?.discount) && (product?.priceWithDetails?.discount !== 0) ? (<Typography variant="overline" className="Discount">${product?.priceWithDetails?.discount?.toFixed(2)} Off</Typography>) : null}
           </Stack>
           <Stack className="Bottom">
-            <Typography className="PriceMessage">{(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ? "As low As" : null}</Typography>
+            <Typography variant="overline" className="PriceMessage">{(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ? "As low As" : null}</Typography>
             {/* @todo :- below will be static for now */}
-            <Typography className="DiscountMessage">43% off the premium</Typography>
+            <Typography variant="overline" className="DiscountMessage">43% off the premium</Typography>
           </Stack>
         </Stack>
-        {product.tagName && <Typography className={classNames("OfferBadge", [product.tagColor ? "Blue" : "Red"])} sx={{ backgroundColor: product.tagColor }}>{product.tagName}</Typography>}
+        {product.tagName && <Typography className={classNames("OfferBadge")} sx={{ backgroundColor: product.tagColor }}>{product.tagName}</Typography>}
         {/* <Typography className={classNames("OfferBadge", [product.tagColor ? "Blue" : "Red"])}>{product.tagName ? "Sale" : "Top Pick"}</Typography> */}
       </CardContent>
       <CardActions>
@@ -75,10 +75,10 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
           >
             <Box className="Offers">
               {product?.priceWithDetails?.tierPriceList?.map((price) => {
-                return (<Stack className="ItemWrapper" key={`${price.fromQty} - ${price.toQty} ${price.price}`}>
+                return (<Fragment key={`${price.fromQty} - ${price.toQty} ${price.price}`}>
                   <Typography className="Item">{price.fromQty} - {price.toQty} Items</Typography>
                   <Typography className="ItemPrice">${price.price}</Typography>
-                </Stack>)
+                </Fragment>)
               })}
             </Box>
           </ClickTooltip>
@@ -99,7 +99,7 @@ export const TravelCard = (props: any) => {
         <img src={imageUrl} alt="Travel image" loading="lazy" />
       </Link>
       <CardContent>
-        <Link className="Place" href="#" variant="h6"><Typography variant="subtitle2" component="h3">{place}</Typography></Link>
+        <Link className="Place" href="#"><Typography variant="subtitle2" component="h3">{place}</Typography></Link>
         <Typography className="Description">{description}</Typography>
       </CardContent>
       <CardActions>
