@@ -52,7 +52,6 @@
   }
   .Description {
     color: $greyRegent;
-    letter-spacing: 0.3px;
     margin-top: 15px;
     @include media($md) {
       font-size: pxToRem(14);

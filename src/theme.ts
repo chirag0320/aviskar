@@ -29,15 +29,10 @@ const theme: any = createTheme({
     h2: {
       fontSize: pxToRem(40),
       lineHeight: pxToRem(54),
-      letterSpacing: 2,
       fontWeight: 700,
-      '@media (max-width: 1580px)': {
-        letterSpacing: 1,
-      },
       '@media (max-width: 1440px)': {
         fontSize: pxToRem(26),
         lineHeight: pxToRem(34),
-        letterSpacing: "normal",
       },
       '@media (max-width: 900px)': {
         fontSize: pxToRem(24),
