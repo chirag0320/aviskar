@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect, useState } from "react"
-import { Box, Typography, Button, useMediaQuery, Theme, Skeleton } from "@mui/material"
+import { Box, Typography, useMediaQuery, Theme, Skeleton } from "@mui/material"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation, Autoplay, Pagination, A11y } from 'swiper/modules'
 
@@ -8,7 +8,7 @@ const SwiperNavigation = lazy(() => import('../../common/Utils').then((module) =
 import useApiRequest from "@/hooks/useAPIRequest"
 import { Url } from "url"
 import { ENDPOINTS } from "@/utils/constants"
-import { StaticImage } from "gatsby-plugin-image"
+import { GatsbyImage, StaticImage } from "gatsby-plugin-image"
 
 interface IbannerData {
   id: number,
@@ -24,6 +24,7 @@ interface IbannerData {
 function Banner() {
   const { data }: any = useApiRequest(ENDPOINTS.getSlider);
   const isLargeScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
+  const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('sm'))
   const [tempImgHide, setTempImgHide] = useState(true)
   const [config, setConfig] = useState({
     slidesPerView: 1,
@@ -50,12 +51,13 @@ function Banner() {
   useEffect(() => {
     const x = setTimeout(() => {
       setTempImgHide(false)
-      setConfig((prev) => ({ ...prev, autoplay: { delay: 4000 } }))
-    }, 10000);
+      setConfig((prev) => ({ ...prev, autoplay: { delay: 3000 } }))
+    }, 2000);
     return () => {
       clearTimeout(x)
     }
   }, [])
+
   return (
     <Box id="Banner" component="section" key={'banner'}>
       <Typography variant="h2" className="BannerTitle">Top articles</Typography>
@@ -63,30 +65,27 @@ function Banner() {
         <Swiper {...config} >
           {data?.data?.length > 0 ?
             <>
-              {/* {tempImgHide && <SwiperSlide key={`BannerSlider-${-1}`}>
-                <Box className="Wrapper" sx={{ position: 'relative', width: '100%', height: '100%' }}>
-                  <StaticImage
-                    src='../../../assets/images/loading.gif'
-                    alt="background"
-                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'fill' }}
-                  />
-                </Box>
-              </SwiperSlide>} */}
               {
                 data?.data?.map((item: IbannerData, index: number) => {
                   return (
                     <SwiperSlide key={`BannerSlider-${index}`}>
                       <Box className="Wrapper" sx={{ position: 'relative', width: '100%', height: '100%' }}>
-                        <img
+                        {<>
+                        {/* <StaticImage
                           rel="prefetch"
                           loading="eager"
-                          src={isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall}
+                          src={'../../../assets/images/loading.gif'}
+                          // src={isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall}
                           alt="background"
-                          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'fill' }}
-                        />
-                        {/* <svg xmlns="http://www.w3.org/1000/svg" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'fill' }}>
-                          <image href={isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall} />
-                        </svg> */}
+                          style={{visibility: tempImgHide ?'visible' :'hidden', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'fill' }}
+                        />   */}
+                        <img
+                            rel="prefetch"
+                            loading="eager"
+                            src={isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall}
+                            alt="background"
+                            style={{ visibility: !tempImgHide ?'visible' :'hidden',position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'fill' }}
+                          /></>}
                       </Box>
                     </SwiperSlide>
                   )
@@ -94,7 +93,9 @@ function Banner() {
               }
             </>
             :
-            <Skeleton animation="wave" height="75vh" width="100vw" style={{ transform: "none", margin: "auto", borderRadius: "0px" }} />
+            <>
+              {!isMobile ? <Skeleton animation="wave" height="75vh" width="100vw" style={{ transform: "none", margin: "auto", borderRadius: "0px" }} /> : <Skeleton animation="wave" height="300px" width="100vw" style={{ transform: "none", margin: "auto", borderRadius: "0px" }} />}
+            </>
           }
         </Swiper>
         {data?.data?.length > 0 ? <Suspense fallback={<></>}><SwiperNavigation /></Suspense> : null}
@@ -104,12 +105,3 @@ function Banner() {
 }
 
 export default React.memo(Banner)
-{/* <SwiperSlide key={`BannerSlider-${-1}`}>
-              <Box className="Wrapper" sx={{ position: 'relative', width: '100%', height: '100%' }}>
-                <StaticImage
-                  src='../../../assets/images/loading.gif'
-                  alt="background"
-                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'fill' }}
-                />
-              </Box>
-            </SwiperSlide> */}

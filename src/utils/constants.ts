@@ -13,5 +13,11 @@ export const ENDPOINTS = {
     login: '/login',
     loginUser: 'account/JO6SKzu1bEGLAizHldGDcg',
     ImpersonateSignIn: 'account/SdcEKDGa6sV',
-    logOutUser: 'account/VH7qPWBrFW1lA'
+    logOutUser: 'account/VH7qPWBrFW1lA',
+    forgotPasswordLink: "https://register.qmint.com/passwordrecovery",
+    createMyAccount: "https://queenslandmint.com/register?returnUrl="
+}
+export const StoreData = {
+    storeCode: 12,
+    returnUrl: typeof window !== 'undefined' ? window.location.href : null
 }

@@ -5,6 +5,7 @@
   "description": "Discover treasure at the Queensland Mint. Biggest range of Australian gold and silver coins. Public welcome. Buy & sell QMINT Direct and save. Visit us Instore, buy online or call 07 3184 8300.",
   "author": "Steven Martin",
   "dependencies": {
+    "@builder.io/partytown": "^0.9.2",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.10",
@@ -16,6 +17,7 @@
     "gatsby-omni-font-loader": "^2.0.2",
     "gatsby-plugin-image": "^3.13.1",
     "gatsby-plugin-manifest": "^5.13.1",
+    "gatsby-plugin-perf-budgets": "^0.0.18",
     "gatsby-plugin-sass": "^6.13.1",
     "gatsby-plugin-sharp": "^5.13.1",
     "gatsby-source-filesystem": "^5.13.1",
@@ -36,7 +38,8 @@
     "@types/axios": "^0.14.0",
     "@types/node": "^20.11.17",
     "@types/react": "^18.2.55",
-    "gatsby-plugin-webpack-bundle-analyser-v2": "^1.1.31",
+    "@types/react-helmet": "^6.1.11",
+    "gatsby-plugin-webpack-bundle-analyser-v2": "^1.1.32",
     "prettier": "^3.2.5",
     "typescript": "^5.3.3"
   },

@@ -5,7 +5,6 @@ import classNames from "classnames"
 // Components
 import { HoverTooltip } from "../common/CustomTooltip"
 import { ConstantApiLoader } from "./Loader"
-import SubMenu from "./SubMenu"
 const ChartMenu = lazy(() => import('./ChartMenu'))
 const CartMenu = lazy(() => import('./CartMenu'))
 import ActionMenu from "./ActionMenu"
@@ -46,6 +45,7 @@ function Navigation() {
                         placement="bottom-start"
                         renderComponent={
                           <Button
+                            aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                             color="secondary"
                             className={classNames("MenuLink")}
                             disableRipple
@@ -60,6 +60,7 @@ function Navigation() {
                       : <Fragment key={category.name}><Button
                         href="#"
                         color="secondary"
+                        aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                         name={category?.searchEngineFriendlyPageName ?? category.name}
                         className={classNames("MenuLink", { "Active": false })}
                         disableRipple
@@ -70,37 +71,6 @@ function Navigation() {
                 })
                 : null
             }
-            {/* <Button
-            href="#"
-            color="secondary"
-            className={classNames("MenuLink", { "Active": false })}
-            disableRipple
-          >
-            Invest
-          </Button>
-          <HoverTooltip
-            className="TooltipSubMenu"
-            placement="bottom"
-            renderComponent={
-              <Button
-                color="secondary"
-                className={classNames("MenuLink", { "Active": false })}
-                disableRipple
-              >
-                Collect
-              </Button>
-            }
-          >
-            <SubMenu data={subMenuItems} />
-          </HoverTooltip>
-          <Button
-            href="#"
-            color="secondary"
-            className={classNames("MenuLink", { "Active": false })}
-            disableRipple
-          >
-            Discover
-          </Button> */}
           </Stack>
           <Stack className="RightPart">
             {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
@@ -115,18 +85,3 @@ function Navigation() {
 }
 
 export default React.memo(Navigation)
-{/* <HoverTooltip
-className="TooltipSubMenu"
-placement="bottom"
-renderComponent={
-  <Button
-    color="secondary"
-    className={classNames("MenuLink", { "Active": false })}
-    disableRipple
-  >
-    Collect
-  </Button>
-}
->
-<SubMenu data={subMenuItems} />
-</HoverTooltip> */}

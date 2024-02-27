@@ -83,7 +83,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
             </Box>
           </ClickTooltip>
         ) : null}
-        <Button href="#" variant="contained" className="PrimaryAction" fullWidth>Discover More</Button>
+        <Button name='discoverMore' aria-label='discoverMore' href="#" variant="contained" className="PrimaryAction" fullWidth>Discover More</Button>
         {product.isBundle && <IconButton className="Outlined Stack"><StackIcon /></IconButton>}
         <IconButton className="Outlined AddToCart"><AddToCartIcon /></IconButton>
       </CardActions>
@@ -103,7 +103,7 @@ export const TravelCard = (props: any) => {
         <Typography className="Description">{description}</Typography>
       </CardContent>
       <CardActions>
-        <Button href="#" endIcon={<ArrowRight />}>Discover More</Button>
+        <Button name='discoverMore' aria-label="discoverMore" href="#" endIcon={<ArrowRight />}>Discover More</Button>
       </CardActions>
     </Card>
   )

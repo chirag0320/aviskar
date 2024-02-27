@@ -1,15 +1,12 @@
-import React, { Suspense, lazy, useCallback, useMemo, useState } from "react"
+import React, { Suspense, lazy, useCallback, useState } from "react"
 import { useMediaQuery, useScrollTrigger, AppBar, Box, Divider, Skeleton } from "@mui/material"
 
 // Components
 const Pricing = lazy(() => import('./Pricing'))
-// import Pricing from './Pricing'
-// import Main from './Main'
 const Main = lazy(() => import('./Main'))
 import { PageLoader } from './Loader'
 const Navigation = lazy(() => import('./Navigation'))
 import { useAppSelector } from "@/hooks"
-// import MobileMenu from './MobileMenu'
 const MobileMenu = lazy(() => import('./MobileMenu'))
 
 const Index = () => {
@@ -26,17 +23,19 @@ const Index = () => {
 
   return (
     <Box id="HeaderWrapper">
-      <Suspense fallback={<Skeleton style={{ minHeight: '60px' }} />}>
-        <Pricing />
-      </Suspense>
-      <Divider />
+      {!isMobile && <>
+        <Suspense fallback={<Skeleton style={{ minHeight: '60px' }} />}>
+          <Pricing />
+        </Suspense>
+        <Divider />
+      </>}
       <AppBar position={trigger ? "fixed" : "static"}>
         {loading && <PageLoader />}
-        <Suspense fallback={<Skeleton style={{ minHeight: '90px', transform: "none" }} />}>
+        <Suspense fallback={<Skeleton style={{ minHeight: '80px' }} />}>
           <Main toggleMobileMenu={toggleMobileMenu} />
         </Suspense>
         <Divider />
-        <Suspense fallback={<Skeleton style={{ minHeight: '60px' }} />}>
+        <Suspense fallback={<Skeleton style={{ minHeight: '53px' }} />}>
           <Navigation />
         </Suspense>
       </AppBar>

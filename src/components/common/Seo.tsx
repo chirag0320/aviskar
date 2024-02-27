@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
 import { Helmet } from "react-helmet"
 
-function Seo({ description, lang, meta, keywords, title }:any) {
+function Seo({ description, lang, meta, keywords, title }: any) {
   const { site } = useStaticQuery(graphql`
     query DefaultSEOQuery {
       site {
@@ -17,6 +17,8 @@ function Seo({ description, lang, meta, keywords, title }:any) {
   `)
 
   const metaDescription = description || site.siteMetadata.description
+  // Filter out the noindex meta tag
+  const filteredMeta = meta.filter((tag:any) => !((tag.name === 'robots' || tag.name === 'Googlebot') && tag.content === 'noindex'));
 
   return (
     <Helmet
@@ -56,6 +58,10 @@ function Seo({ description, lang, meta, keywords, title }:any) {
           name: `twitter:description`,
           content: metaDescription,
         },
+        {
+          name: `robots`,
+          content: `noindex`,
+        },
       ]
         .concat(
           keywords?.length > 0
@@ -65,7 +71,7 @@ function Seo({ description, lang, meta, keywords, title }:any) {
             }
             : []
         )
-        .concat(meta)}
+        .concat(filteredMeta)}
       title={title}
       titleTemplate={`%s | ${site.siteMetadata.title}`}
     />

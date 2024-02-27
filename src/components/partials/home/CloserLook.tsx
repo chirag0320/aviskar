@@ -6,7 +6,6 @@ import { Autoplay, Pagination, A11y } from 'swiper/modules'
 // Utils
 import { SectionHeading } from "../../common/Utils"
 import { TravelCard } from "../../common/Card"
-// const TravelCard = React.lazy(() => import('../../common/Card').then(module => ({ default: module.TravelCard })));
 import useApiRequest from '@/hooks/useAPIRequest'
 import { ENDPOINTS } from '@/utils/constants'
 
@@ -132,7 +131,7 @@ function CloserLook() {
         </Box>
       </Box>
       <Stack className="Action">
-        <Button variant="contained">Discover More</Button>
+        <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained">Discover More</Button>
       </Stack>
     </Container>
   )

@@ -22,6 +22,7 @@ export const wrapRootElement = ({ element }: any) => (
     </PersistGate>
   </Provider>
 );
+
 // // Wraps every page in a component
 // export const wrapPageElement = ({ element, props }:any) => {
 //   return <Layout {...props}>{element}</Layout>

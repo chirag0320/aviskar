@@ -3,7 +3,6 @@ import { Container, Stack, Box, ToggleButtonGroup, ToggleButton, Button, Card, S
 
 // Utils
 import { SectionHeading } from "../../common/Utils"
-// const ProductCard = lazy(() => import("../../common/Card").then((module) => ({ default: module.ProductCard })))
 import { ProductCard } from "../../common/Card"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { Idata, IpriceForEachId } from "./FeaturedProducts"
@@ -100,7 +99,7 @@ function PopularProducts() {
           }
         </Box>
         <Stack className="Action">
-          <Button className="DiscoverMore" variant="contained">Discover More</Button>
+          <Button className="DiscoverMore" name='DiscoverMore' aria-label="DiscoverMore" variant="contained">Discover More</Button>
         </Stack>
       </Box>
     </Container>
