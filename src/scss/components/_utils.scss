@@ -42,6 +42,7 @@
 .SectionHeading {
   text-align: center;
   .Title {
+    margin-bottom: 15px;
     @include media($sm) {
       font-size: pxToRem(26);
       line-height: pxToRem(35);
@@ -49,7 +50,6 @@
   }
   .Description {
     color: $greyRegent;
-    margin-top: 15px;
     @include media($md) {
       font-size: pxToRem(14);
     }
@@ -86,5 +86,29 @@
   gap: 8px;
   @include media($md) {
     flex-direction: initial;
+  }
+}
+
+.ck-content {
+  h2 {
+    font-size: pxToRem(40);
+    line-height: pxToRem(54);
+    font-weight: 700;
+    margin-bottom: 15px;
+    @include media($xl) {
+      font-size: pxToRem(26);
+      line-height: pxToRem(34);
+    }
+    @include media($md) {
+      font-size: pxToRem(24);
+      line-height: pxToRem(32);
+    }
+    @include media($sm) {
+      font-size: pxToRem(26);
+      line-height: pxToRem(35);
+    }
+    span {
+      font: inherit !important;
+    }
   }
 }
