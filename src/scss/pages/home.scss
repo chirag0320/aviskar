@@ -62,7 +62,9 @@
   }
   .ProductsWrapper {
     margin-top: 50px;
-    @include padding-horizontal(40);
+    @include media-min($md) {
+      @include padding-horizontal(40);
+    }
     @include media($md) {
       margin-top: 25px;
     }
