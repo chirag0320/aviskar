@@ -107,7 +107,7 @@
       font-size: pxToRem(26);
       line-height: pxToRem(35);
     }
-    span {
+    span, strong {
       font: inherit !important;
     }
   }
