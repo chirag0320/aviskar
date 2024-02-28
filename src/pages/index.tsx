@@ -40,13 +40,13 @@ function IndexPage() {
   useEffect(() => {
     const timeout1 = setTimeout(() => {
       setWait1(true);
-    }, 300); // Wait for 300ms before rendering the first component
+    }, 400); // Wait for 300ms before rendering the first component
     const timeout2 = setTimeout(() => {
       setWait2(true);
-    }, 800);
+    }, 900);
     const timeout3 = setTimeout(() => {
       setWait3(true)
-    }, 1000);
+    }, 1100);
     return () => {
       clearTimeout(timeout1)
       clearTimeout(timeout2)
@@ -64,7 +64,7 @@ function IndexPage() {
         />
         {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>}
         {configDetailsState?.sliderenableinhome?.value === false ? null : <Banner />}
-        <FeaturedProducts />
+        {wait1 && <Suspense fallback={<></>}> <FeaturedProducts /></Suspense>}
         {wait1 && <Suspense fallback={<></>}> <LookingFor /></Suspense>}
         {wait1 && <Suspense fallback={<></>}><PopularProducts /></Suspense>}
         {wait2 && <Suspense fallback={<></>}><DiscoverTreasure /></Suspense>}

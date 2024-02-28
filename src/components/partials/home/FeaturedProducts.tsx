@@ -116,7 +116,7 @@ function FeaturedProducts() {
             })
             .catch(error => {
               if (error.name !== 'AbortError') {
-                console.error(error);
+                // console.error(error);
               }
               clearTimeout(timeoutId);
               cancellationSource = null;
@@ -168,7 +168,7 @@ function FeaturedProducts() {
         spaceBetween: 20,
       },
       1440: {
-        slidesPerView: 4.5,
+        slidesPerView: 5.5,
         spaceBetween: 40,
       },
     },
