@@ -92,7 +92,7 @@
       }
       .swiper-pagination {
         position: static;
-        padding-top: 50px;
+        @include padding-vertical(50, 0);
         @include media($md) {
           display: none;
         }
