@@ -1,13 +1,14 @@
 .TravelCard {
   &.MuiCard-root {
     $horizontalSpacing: 20px;
-    box-shadow: $shadow3;
+    box-shadow: $shadow7;
     display: flex;
     flex-direction: column;
     height: 100%;
     border-radius: 20px;
+    @include transition;
     &:hover {
-      @include transition;
+      box-shadow: $shadow5;
       transform: scale(1.025);
     }
     .ImageLink {

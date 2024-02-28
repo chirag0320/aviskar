@@ -148,7 +148,7 @@ function FeaturedProducts() {
     },
     grabCursor: true,
     autoplay: {
-      delay: 5000,
+      delay: 8000,
     },
     breakpoints: {
       475: {
