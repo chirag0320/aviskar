@@ -18,7 +18,7 @@ function Seo({ description, lang, meta, keywords, title }: any) {
 
   const metaDescription = description || site.siteMetadata.description
   // Filter out the noindex meta tag
-  const filteredMeta = meta.filter((tag:any) => !((tag.name === 'robots' || tag.name === 'Googlebot') && tag.content === 'noindex'));
+  const filteredMeta = meta.filter((tag:any) => !((tag.name === 'robots' || tag.name === 'Googlebot') || tag.content === 'noindex'));
 
   return (
     <Helmet
@@ -57,10 +57,6 @@ function Seo({ description, lang, meta, keywords, title }: any) {
         {
           name: `twitter:description`,
           content: metaDescription,
-        },
-        {
-          name: `robots`,
-          content: `noindex`,
         },
       ]
         .concat(
