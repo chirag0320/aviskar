@@ -288,6 +288,9 @@
     }
     .MuiButton-root {
       padding: 13px 31px;
+      @include media($sm) {
+        @include padding-vertical(10);
+      }
     }
   }
 }
