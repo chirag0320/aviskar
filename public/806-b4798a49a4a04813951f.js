@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkqmint_store_frontend=self.webpackChunkqmint_store_frontend||[]).push([[806],{5806:function(e,n,t){t.r(n);var r=t(6540),u=t(1641),l=t(6942),a=t.n(l),c=t(2186);function m(){return r.createElement(r.Fragment,null,r.createElement(u.A,{className:a()("MenuButton",{Active:!1})},r.createElement(c.np,null)))}n.default=r.memo(m)}}]);
-//# sourceMappingURL=806-b4798a49a4a04813951f.js.map

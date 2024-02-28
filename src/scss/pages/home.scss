@@ -63,23 +63,19 @@
   .ProductsWrapper {
     margin-top: 50px;
     @include media-min($md) {
-      @include padding-horizontal(40);
+      @include padding-horizontal(24);
     }
     @include media($md) {
       margin-top: 25px;
     }
     .SwiperContainer {
       .swiper {
-        padding: 40px;
-        margin: -40px;
-        // padding-bottom: 40px;
-        // margin-bottom: -40px;
-        // @include padding-horizontal(40);
-        // @include margin-horizontal(-40);
-        // @include media($md) {
-        //   padding-bottom: 100px;
-        //   margin-bottom: -100px;
-        // }
+        @include padding-vertical(40);
+        @include margin-vertical(-40);
+        @include media-min($md) {
+          @include padding-horizontal(24);
+          @include margin-horizontal(-24);
+        }
         .swiper-wrapper {
           .swiper-slide {
             .ProductCard {
@@ -269,8 +265,12 @@
     }
     .SwiperContainer {
       .swiper {
-        padding: 40px;
-        margin: -40px;
+        @include padding-vertical(40);
+        @include margin-vertical(-40);
+        @include media-min($md) {
+          @include padding-horizontal(24);
+          @include margin-horizontal(-24);
+        }
       }
       .swiper-pagination {
         position: static;

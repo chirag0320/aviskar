@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkqmint_store_frontend=self.webpackChunkqmint_store_frontend||[]).push([[216],{7216:function(e,n,t){t.r(n);var o=t(6540),r=t(9067),s=t(7834),a=t(9881);function c(){var e;const n=(0,a.G)((e=>e.homePage.sectionDetails));return o.createElement(r.A,{id:"DiscoverTreasure",component:"section"},o.createElement(s.A,{className:"Container",dangerouslySetInnerHTML:{__html:null===(e=n[2])||void 0===e?void 0:e.htmlBody}}))}n.default=o.memo(c)}}]);
-//# sourceMappingURL=216-f47a8def529f2eac60a5.js.map
