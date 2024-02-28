@@ -14,13 +14,13 @@ module.exports = {
         path: `${__dirname}/src/assets/`,
       },
     },
-    {
-      resolve: `@builder.io/partytown`,
-      options: {
-        name: `assets`,
-        path: `${__dirname}/public/static/`,
-      },
-    },
+    // {
+    //   resolve: `@builder.io/partytown`,
+    //   options: {
+    //     name: `assets`,
+    //     path: `${__dirname}/public/static/`,
+    //   },
+    // },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -46,12 +46,12 @@ module.exports = {
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sass`,
-    {
-      resolve: `gatsby-plugin-webpack-bundle-analyser-v2`,
-      options: {
-        analyzerMode: 'server',
-        analyzerPort: 3001,
-      }
-    },
+    // {
+    //   resolve: `gatsby-plugin-webpack-bundle-analyser-v2`,
+    //   options: {
+    //     analyzerMode: 'server',
+    //     analyzerPort: 3001,
+    //   }
+    // },
   ],
 };

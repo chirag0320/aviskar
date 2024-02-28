@@ -21,7 +21,7 @@ export async function apicall(url: string, method: 'get' | 'post' = 'get', reque
       response = await axiosInstance.post(url, requestData);
     }
   } catch (error: any | Error | AxiosError) {
-    console.error('error', error)
+    // console.error('error', error)
   } finally {
   }
 }

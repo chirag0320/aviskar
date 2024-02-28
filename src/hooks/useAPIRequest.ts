@@ -37,7 +37,7 @@ const useApiRequest = (url: string, method: 'get' | 'post' = 'get', requestData:
                             })
                             .catch(error => {
                                 if (error.name !== 'AbortError') {
-                                    console.error(error);
+                                    // console.error(error);
                                 }
                             });
                     } else if (method === 'post') {
@@ -48,12 +48,12 @@ const useApiRequest = (url: string, method: 'get' | 'post' = 'get', requestData:
                             })
                             .catch(error => {
                                 if (error.name !== 'AbortError') {
-                                    console.error(error);
+                                    // console.error(error);
                                 }
                             });
                     }
                 } catch (error: any | Error | AxiosError) {
-                    console.error('error', error)
+                    // console.error('error', error)
                     setError(error);
                 } finally {
                     setTimeout(() => {
