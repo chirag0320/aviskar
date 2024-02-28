@@ -168,7 +168,7 @@ function FeaturedProducts() {
         spaceBetween: 20,
       },
       1440: {
-        slidesPerView: 5.5,
+        slidesPerView: 5,
         spaceBetween: 40,
       },
     },

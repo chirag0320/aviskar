@@ -65,6 +65,9 @@
     @include media-min($md) {
       @include padding-horizontal(24);
     }
+    @include media-min($xl) {
+      @include padding-horizontal(40);
+    }
     @include media($md) {
       margin-top: 25px;
     }
@@ -75,6 +78,10 @@
         @include media-min($md) {
           @include padding-horizontal(24);
           @include margin-horizontal(-24);
+        }
+        @include media-min($xl) {
+          @include padding-horizontal(40);
+          @include margin-horizontal(-40);
         }
         .swiper-wrapper {
           .swiper-slide {
