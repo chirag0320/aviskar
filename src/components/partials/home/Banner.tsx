@@ -71,7 +71,7 @@ function Banner() {
                     <SwiperSlide key={`BannerSlider-${index}`}>
                       <Box className="Wrapper" sx={{ position: 'relative', width: '100%', height: '100%' }}>
                         {<>
-                        {/* <StaticImage
+                          {/* <StaticImage
                           rel="prefetch"
                           loading="eager"
                           src={'../../../assets/images/loading.gif'}
@@ -79,12 +79,13 @@ function Banner() {
                           alt="background"
                           style={{visibility: tempImgHide ?'visible' :'hidden', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'fill' }}
                         />   */}
-                        <img
+                          <img
+                            className="BannerImage"
                             rel="prefetch"
                             loading="eager"
                             src={isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall}
                             alt="background"
-                            style={{ visibility: !tempImgHide ?'visible' :'hidden',position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'fill' }}
+                            style={{ visibility: !tempImgHide ? 'visible' : 'hidden' }}
                           /></>}
                       </Box>
                     </SwiperSlide>

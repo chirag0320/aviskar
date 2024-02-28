@@ -39,6 +39,7 @@ const HoverTooltip = React.memo((props: any) => {
       PopperProps={{ className: classNames("HoverTooltip", className), disablePortal: true }}
       slotProps={slotProps}
       arrow={arrow}
+      enterDelay={400}
     >
       {renderComponent}
     </Tooltip>

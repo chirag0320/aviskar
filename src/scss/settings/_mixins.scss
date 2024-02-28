@@ -29,7 +29,7 @@
 }
 
 // transition:: smooth
-@mixin transition($time: 200) {
+@mixin transition($time: 400) {
   transition: #{$time}ms all ease;
 }
 

@@ -21,7 +21,7 @@ const theme: any = createTheme({
     },
   },
   typography: {
-    fontFamily: "open sans,helvetica neue,Helvetica,Arial,sans-serif",
+    fontFamily: "'Montserrat', sans-serif",
     button: {
       lineHeight: 1.5,
     },

@@ -54,7 +54,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
             {(product?.priceWithDetails?.discount) && (product?.priceWithDetails?.discount !== 0) ? (<Typography variant="overline" className="Discount">${product?.priceWithDetails?.discount?.toFixed(2)} Off</Typography>) : null}
           </Stack>
           <Stack className="Bottom">
-            <Typography variant="overline" className="PriceMessage">{(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ? "As low As" : null}</Typography>
+            <Typography variant="overline" className="PriceMessage">{(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ? "As low As" : "Best Price"}</Typography>
             {/* @todo :- below will be static for now */}
             <Typography variant="overline" className="DiscountMessage">43% off the premium</Typography>
           </Stack>

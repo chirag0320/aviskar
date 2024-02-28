@@ -135,7 +135,7 @@ function FeaturedProducts() {
 
   const config = {
     slidesPerView: 1.3,
-    spaceBetween: 10,
+    spaceBetween: 16,
     pagination: {
       clickable: true,
     },

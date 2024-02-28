@@ -82,7 +82,7 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-
+            font-weight: 500;
             @include media($md) {
               display: none;
             }
@@ -113,6 +113,7 @@
           }
 
           .SignInButton {
+            align-self: stretch;
             @include media($xs) {
               @include padding-horizontal(9);
             }
@@ -156,7 +157,7 @@
           .MenuLink {
             text-transform: uppercase;
             text-decoration: none;
-            font-weight: 400;
+            font-weight: 500;
             @include transition;
             @include padding-vertical(19);
 

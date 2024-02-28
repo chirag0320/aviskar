@@ -18,10 +18,10 @@ function Main(props: any) {
   const { openMobileMenu, toggleMobileMenu } = (props)
   const mobile = useMediaQuery((theme: any) => theme.breakpoints.down('sm'))
   const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
-  const handleAuth = ()=>{
-    if(!isLoggedIn){
+  const handleAuth = () => {
+    if (!isLoggedIn) {
       navigate('/login')
-    }else{
+    } else {
       dispatch(LogOutUserAPI() as any)
     }
   }
@@ -35,7 +35,7 @@ function Main(props: any) {
           <LinkM href="tel:+61731848300" variant="overline" className="PhoneNumber"><Call />{configDetailsState?.companyphonenumber?.value}</LinkM>
           <SearchField />
           {/* <Link to={ENDPOINTS.login}> */}
-          <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton" variant="contained" color="success" startIcon={<Profile />}>{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Button>
+          <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton" variant="outlined" color="primary" startIcon={<Profile />}>{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Button>
           {/* </Link> */}
           <IconButton className="HamburgerButton" onClick={toggleMobileMenu}>{!openMobileMenu ? <HamburgerIcon /> : <CrossIcon />}</IconButton>
         </Stack>

@@ -6,6 +6,10 @@
     flex-direction: column;
     height: 100%;
     border-radius: 20px;
+    &:hover {
+      @include transition;
+      transform: scale(1.025);
+    }
     .ImageLink {
       img {
         width: 100%;
@@ -51,14 +55,17 @@
     position: relative;
     height: 100%;
     width: 100%;
+    box-shadow: $shadow7;
+    @include transition;
     &:hover {
       box-shadow: $shadow5;
+      transform: scale(1.025);
     }
     @include media($sm) {
-      max-width: 400px;
+      max-width: 320px;
       margin: auto;
     }
-    $horizontalSpacing: 15px;
+    $horizontalSpacing: 20px;
     $verticalSpacing: 40px;
     .ImageWrapper {
       position: relative;
@@ -72,9 +79,9 @@
         @include media-min($sm) {
           height: 300px;
         }
-        @include media-min($xl) {
-          height: 461px;
-        }
+        // @include media-min($xl) {
+        //   height: 400px;
+        // }
         img {
           object-fit: contain;
           height: 100%;
@@ -88,12 +95,6 @@
         right: 0;
         background-color: $white;
         margin-right: 6px;
-        @include media-min($sm) {
-          padding-bottom: 6px;
-        }
-        @include media-min($lg) {
-          padding-bottom: 12px;
-        }
       }
     }
     .MuiCardContent-root {
@@ -103,9 +104,6 @@
       padding: $horizontalSpacing $horizontalSpacing 13px;
       .ProductName {
         @include max-line(2);
-        @include media-min($xl) {
-          max-width: 277px;
-        }
         .MuiTypography-root {
           @include media($sm) {
             font-size: pxToRem(14);
@@ -163,7 +161,7 @@
       }
       .OfferBadge {
         position: absolute;
-        top: 19px;
+        top: 20px;
         right: 48px;
         padding: 3px 31px 3px 16px;
         color: $whiteMilk;
@@ -222,7 +220,6 @@
       }
       .PrimaryAction {
         letter-spacing: 1px;
-        @include padding-vertical(12);
       }
     }
   }

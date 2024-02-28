@@ -10,18 +10,15 @@
             display: grid;
             place-content: center;
             text-align: center;
-            height: 70vh;
+            // height: 70vh;
             color: $white;
             position: relative;
             background-color: $greyRegent;
-            @include media($sm) {
-              height: 300px;
-              padding-bottom: 24px;
-            }
+            // @include media($sm) {
+            //   height: auto;
+            // }
             .BannerImage {
-              position: absolute;
-              inset: 0;
-              object-fit: cover;
+              object-fit: contain;
               height: 100%;
               width: 100%;
             }
@@ -59,23 +56,28 @@
 }
 
 #FeaturedProducts {
-  @include padding-vertical(110, 70);
+  @include padding-vertical(70, 70);
   @include media($md) {
     @include padding-vertical(50);
   }
   .ProductsWrapper {
     margin-top: 50px;
+    @include padding-horizontal(40);
     @include media($md) {
       margin-top: 25px;
     }
     .SwiperContainer {
       .swiper {
-        padding-bottom: 40px;
-        margin-bottom: -40px;
-        @include media($md) {
-          padding-bottom: 100px;
-          margin-bottom: -100px;
-        }
+        padding: 40px;
+        margin: -40px;
+        // padding-bottom: 40px;
+        // margin-bottom: -40px;
+        // @include padding-horizontal(40);
+        // @include margin-horizontal(-40);
+        // @include media($md) {
+        //   padding-bottom: 100px;
+        //   margin-bottom: -100px;
+        // }
         .swiper-wrapper {
           .swiper-slide {
             .ProductCard {
@@ -90,11 +92,9 @@
       }
       .swiper-pagination {
         position: static;
+        padding-top: 50px;
         @include media($md) {
           display: none;
-        }
-        @include media-min($xl) {
-          padding-top: 15px;
         }
       }
     }
@@ -104,7 +104,6 @@
 #LookingFor {
   border: 1px solid $white;
   background-color: rgba($yellowFuel, 0.05);
-  @include padding-vertical(67, 59);
   @include media($md) {
     @include padding-vertical(40);
   }
@@ -181,12 +180,15 @@
     }
     .Action {
       justify-content: center;
-      margin-top: 33px;
+      margin-top: 50px;
       @include media($md) {
         margin-top: 32px;
       }
       .DiscoverMore {
-        padding: 13px 31px
+        padding: 13px 31px;
+        @include media($sm) {
+          @include padding-vertical(10);
+        }
       }
     }
   }
@@ -195,7 +197,6 @@
 #DiscoverTreasure {
   border: 1px solid $white;
   background-color: rgba($yellowFuel, 0.05);
-  @include padding-vertical(65, 59);
   .Container {
     .Wrapper {
       gap: 30px;
@@ -265,6 +266,10 @@
       @include padding-horizontal(200);
     }
     .SwiperContainer {
+      .swiper {
+        padding: 40px;
+        margin: -40px;
+      }
       .swiper-pagination {
         position: static;
         @include media($md) {
