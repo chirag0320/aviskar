@@ -44,17 +44,17 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
           <Stack className="Top">
             <Stack className="Left">
               <Typography variant="subtitle1" className="ActualPrice">${(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ?
-                (product?.priceWithDetails?.productLowestPrice) : product?.priceWithDetails?.price}</Typography>
+                (product?.priceWithDetails?.productLowestPrice?.toFixed(2)) : product?.priceWithDetails?.price?.toFixed(2)}</Typography>
               {(product?.priceWithDetails?.discount && product?.priceWithDetails?.discount !== 0)
                 ?
                 <Typography variant="overline" className="DiscountedPrice">
-                  ${(product?.priceWithDetails?.price + product?.priceWithDetails?.discount).toFixed(4)}</Typography>
+                  ${(product?.priceWithDetails?.price + product?.priceWithDetails?.discount).toFixed(2)}</Typography>
                 : null}
             </Stack>
             {(product?.priceWithDetails?.discount) && (product?.priceWithDetails?.discount !== 0) ? (<Typography variant="overline" className="Discount">${product?.priceWithDetails?.discount?.toFixed(2)} Off</Typography>) : null}
           </Stack>
           <Stack className="Bottom">
-            <Typography variant="overline" className="PriceMessage">{(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ? "As low As" : "Best Price"}</Typography>
+            <Typography variant="overline" className="PriceMessage">{(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ? "As low As" : "Best Price at"}</Typography>
             {/* @todo :- below will be static for now */}
             <Typography variant="overline" className="DiscountMessage">43% off the premium</Typography>
           </Stack>
