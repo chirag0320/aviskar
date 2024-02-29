@@ -2,14 +2,13 @@ import React from 'react'
 
 function LoanIcon() {
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="16" cy="16" r="16" fill="#EBEBEB" />
-      <path d="M22.5625 23.0269H9.4375C9.19588 23.0269 9 22.831 9 22.5894V21.5685C9 21.3269 9.19588 21.131 9.4375 21.131H22.5625C22.8041 21.131 23 21.3269 23 21.5685V22.5894C23 22.831 22.8041 23.0269 22.5625 23.0269Z" stroke="#23262B" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M15.8375 9.00432L9.27501 11.6877C9.10894 11.7541 9 11.9149 9 12.0939V13.2268C9 13.4685 9.19588 13.6643 9.4375 13.6643H22.5625C22.8041 13.6643 23 13.4685 23 13.2268V12.0939C23 11.9149 22.8911 11.7541 22.725 11.6877L16.1625 9.00432C16.0582 8.96258 15.9418 8.96258 15.8375 9.00432Z" stroke="#23262B" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M16 10.8645V11.7979" stroke="#23262B" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M12.2667 21.1311H10.4V13.6644H12.2667V21.1311Z" stroke="#23262B" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M16.9333 21.1311H15.0667V13.6644H16.9333V21.1311Z" stroke="#23262B" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M21.5999 21.1311H19.7333V13.6644H21.5999V21.1311Z" stroke="#23262B" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14.0625 15.0269H0.9375C0.695883 15.0269 0.5 14.831 0.5 14.5894V13.5685C0.5 13.3269 0.695883 13.131 0.9375 13.131H14.0625C14.3041 13.131 14.5 13.3269 14.5 13.5685V14.5894C14.5 14.831 14.3041 15.0269 14.0625 15.0269Z" stroke="#23262B" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M7.33751 1.00432L0.775013 3.68765C0.608938 3.75409 0.5 3.91495 0.5 4.09386V5.22681C0.5 5.46845 0.695883 5.66431 0.9375 5.66431H14.0625C14.3041 5.66431 14.5 5.46845 14.5 5.22681V4.09386C14.5 3.91495 14.3911 3.75409 14.225 3.68765L7.66252 1.00432C7.55819 0.962582 7.44181 0.962582 7.33751 1.00432Z" stroke="#23262B" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M7.5 2.86452V3.79785" stroke="#23262B" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3.76669 13.1311H1.90002V5.66444H3.76669V13.1311Z" stroke="#23262B" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8.43332 13.1311H6.56665V5.66444H8.43332V13.1311Z" stroke="#23262B" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M13.0999 13.1311H11.2333V5.66444H13.0999V13.1311Z" stroke="#23262B" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }

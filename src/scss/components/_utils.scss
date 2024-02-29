@@ -87,4 +87,15 @@
   @include media($md) {
     flex-direction: initial;
   }
+  .MuiIconButton-root {
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  &:hover {
+    .MuiIconButton-root {
+      background-color: rgba($black, 0.04);
+    }
+  }
 }

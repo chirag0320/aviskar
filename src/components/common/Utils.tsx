@@ -69,7 +69,7 @@ export const ProductStockStatus = React.memo(({ availability, colorClass, iconCl
 export const LinkWithIcon = React.memo(({ icon, href, text }: any) => {
   return (
     <Link href={href} className="LinkWithIcon">
-      {icon}
+      <IconButton>{icon}</IconButton>
       <Typography color="inherit" variant="overline" component="span">{text}</Typography>
     </Link>
   )

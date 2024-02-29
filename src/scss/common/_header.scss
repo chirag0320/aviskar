@@ -344,7 +344,7 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         padding: 15px 11px;
-        gap: 23px 11px;
+        gap: 11px;
 
         @include media($md) {
           grid-template-columns: repeat(1, 1fr);
