@@ -350,10 +350,9 @@
   width: 100%;
 
   &.MuiDrawer-root {
-    top: 120px;
-
+    top: calc(66px + 50px + 1px);
     &.ScrollActive {
-      top: 69px;
+      top: calc(66px + 1px);
 
       .MuiDrawer-paper {
         max-height: calc(100% - 69px);
