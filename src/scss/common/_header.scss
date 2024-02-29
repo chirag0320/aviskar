@@ -90,6 +90,9 @@
 
           .SearchField {
             .MuiInputBase-root {
+              font-size: pxToRem(14);
+              line-height: pxToRem(20);
+              padding-right: 8px;
               .MuiInputBase-input {
                 padding-left: 16px;
 
@@ -99,7 +102,15 @@
               }
 
               .MuiInputAdornment-root {
-                cursor: pointer;
+                margin-left: 0;
+                .MuiIconButton-root {
+                  width: auto;
+                  height: auto;
+                  svg {
+                    width: 18px;
+                    height: 18px;
+                  }
+                }
               }
             }
 
