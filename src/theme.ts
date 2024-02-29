@@ -334,7 +334,6 @@ const theme: any = createTheme({
         grouped: {
           margin: 0,
           border: "none",
-          fontStyle: "italic",
           minWidth: 153,
           paddingTop: 15,
           paddingBottom: 15,
