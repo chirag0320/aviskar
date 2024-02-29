@@ -24,7 +24,7 @@ function MobileMenu(props: any) {
       [subMenuId]: !prevOpenSubMenus[subMenuId]
     }))
   }
-  
+
   return (
     <Drawer
       id="MobileMenu"
@@ -39,39 +39,50 @@ function MobileMenu(props: any) {
       <Container className="HeaderContainer">
         <List component="nav">
           {categoriesList?.items?.length > 0 ?
-            categoriesList?.items?.map((category: any, categoryIndex: number) => {
+            categoriesList?.items?.map((category: any) => {
+              let hasSubcategory = category?.subCategories?.length > 0
               return (
-                <Fragment key={category.name}>
-                  <ListItemButton key={`ListItemButton-${category.name}`} className={classNames([openMenu[categoryIndex] ? "ExpandedMenu" : "CollapsedMenu"])} selected={categoryIndex === 0} onClick={() => handleClickMainMenu(categoryIndex)}>
+                <Fragment key={category.categoryId}>
+                  <ListItemButton
+                    key={`ListItemButton-${category.categoryId}`}
+                    className={classNames([openMenu[category.categoryId] ? "ExpandedMenu" : "CollapsedMenu"])}
+                    selected={category.categoryId === 0}
+                    onClick={() => handleClickMainMenu(category.categoryId)}
+                  >
                     <ListItemText primary={category.name} primaryTypographyProps={{ variant: "body2" }} />
-                    {openMenu[categoryIndex] ? <ArrowUp /> : <ArrowDown />}
+                    {hasSubcategory ?
+                      openMenu[category.categoryId] ? <ArrowUp /> : <ArrowDown />
+                      : null
+                    }
                   </ListItemButton>
-                  <Collapse key={`Collapse_${category.name}`} in={openMenu[categoryIndex]}>
-                    <List component="div">
-                      {category.subCategories.map((menu: any, menuIndex: number) => {
-                        return (
-                          <Fragment key={category.name}>
-                            <ListItemButton key={`SubMenu_${menu.categoryId}-${menu.name}`} selected={false} onClick={() => handleClickSubMenu(menu.categoryId)} sx={{ pl: 4 }}>
-                              <ListItemText primary={menu.name} primaryTypographyProps={{ variant: "body2" }} />
-                              {openSubMenu[menuIndex] ? <ArrowUp /> : <ArrowDown />}
-                            </ListItemButton>
-                            <Collapse key={`Collapse_${menu.categoryId}-${menu.name}`} in={openSubMenu[menu.categoryId]} sx={{ pl: 4 }}>
-                              <List component="div">
-                                {menu.subCategories.map((subCategory: any, subCategoryIndex: number) => {
-                                  return (
-                                    <ListItemButton key={`SubMenu_${subCategory.categoryId}-${subCategoryIndex}`} selected={false} sx={{ pl: 4 }}>
-                                      <ListItemText primary={subCategory.name} primaryTypographyProps={{ variant: "body2" }} />
-                                    </ListItemButton>
-                                  )
-                                })}
-                              </List>
-                            </Collapse>
-                          </Fragment>
-                        )
-                      })}
-                    </List>
-                  </Collapse>
-                  <Divider key={`Divider-${categoryIndex}`} />
+                  {hasSubcategory ?
+                    <Collapse key={`Collapse_${category.categoryId}`} in={openMenu[category.categoryId]}>
+                      <List component="div">
+                        {category.subCategories.map((menu: any, menuIndex: number) => {
+                          return (
+                            <Fragment key={menu.categoryId}>
+                              <ListItemButton key={`SubMenu_${menu.categoryId}-${menu.name}`} selected={false} onClick={() => handleClickSubMenu(menu.categoryId)} sx={{ pl: 4 }}>
+                                <ListItemText primary={menu.name} primaryTypographyProps={{ variant: "body2" }} />
+                                {openSubMenu[menu.categoryId] ? <ArrowUp /> : <ArrowDown />}
+                              </ListItemButton>
+                              <Collapse key={`Collapse_${menu.categoryId}-${menu.name}`} in={openSubMenu[menu.categoryId]} sx={{ pl: 4 }}>
+                                <List component="div">
+                                  {menu.subCategories.map((subCategory: any) => {
+                                    return (
+                                      <ListItemButton key={`SubMenu_${subCategory.categoryId}-${subCategory.name}`} selected={false} sx={{ pl: 4 }}>
+                                        <ListItemText primary={subCategory.name} primaryTypographyProps={{ variant: "body2" }} />
+                                      </ListItemButton>
+                                    )
+                                  })}
+                                </List>
+                              </Collapse>
+                            </Fragment>
+                          )
+                        })}
+                      </List>
+                    </Collapse> : null
+                  }
+                  <Divider key={`Divider-${category.categoryId}`} />
                 </Fragment>
               )
             }) : null}
