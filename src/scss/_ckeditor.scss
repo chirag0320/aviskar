@@ -6326,3 +6326,31 @@ span.ck-widget.html-object-embed {
   left: var(--ck-table-column-resizer-position-offset);
   right: unset;
 }
+
+.ck-content {
+  font-family: $fontFamily;
+  h2 {
+    font-size: pxToRem(40);
+    line-height: pxToRem(54);
+    font-weight: 700;
+    margin-bottom: 15px;
+    @include media($xl) {
+      font-size: pxToRem(26);
+      line-height: pxToRem(34);
+    }
+    @include media($md) {
+      font-size: pxToRem(24);
+      line-height: pxToRem(32);
+    }
+    @include media($sm) {
+      font-size: pxToRem(26);
+      line-height: pxToRem(35);
+    }
+    span {
+      font: inherit !important;
+      strong {
+        font: inherit !important;
+      }
+    }
+  }
+}
