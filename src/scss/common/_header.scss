@@ -165,6 +165,9 @@
           justify-content: space-between;
           align-items: center;
           gap: 40px;
+          @include media($lg) {
+            gap: 3vw;
+          }
           .MenuLink {
             text-transform: uppercase;
             text-decoration: none;
