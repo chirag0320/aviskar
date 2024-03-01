@@ -18,7 +18,7 @@ function SubMenu(props: { name: string, subcategories: Icategory[], singleMenu?:
             item?.subCategories?.length > 0 ? <SubMenu name={item.name} subcategories={item.subCategories} key={item.categoryId} /> :
               // @Note:: first menu render will be taken as main from css as per figma
               <ListItemButton key={item.name} href="#">
-                <ListItemText primary={item.name} primaryTypographyProps={{ variant: "caption" }} />
+                <ListItemText primary={item.name} primaryTypographyProps={{ variant: "overline" }} />
               </ListItemButton>
           )
         })}

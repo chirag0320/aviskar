@@ -2,6 +2,9 @@
   - Variable name for colors are generated from "https://colors.artyclick.com/color-name-finder/"
 */
 
+// Typography
+$fontFamily: 'Montserrat', sans-serif;
+
 // Breakpoints
 $xs: 425px;
 $sm: 600px;
@@ -20,6 +23,7 @@ $sinopia: #D13200;
 $success: #008001;
 $yellowFuel: #EAA22B;
 $dark: #1D2129;
+$black: #000000;
 $mirage: #212121;
 $elephant: #1C3049;
 $greyRegent: #86909C;
@@ -37,6 +41,7 @@ $shadow4: 0px 5px 8.4px 0px rgba(0, 0, 0, 0.11);
 $shadow5: 0px 10px 30px 0px rgba(0, 0, 0, 0.13);
 $shadow6: 0px 20px 30.6px 0px rgba(0, 0, 0, 0.06);
 $shadow7: 2px 4px 12px rgba(0, 0, 0, 0.08);
+$shadow8: 0px 20px 30px 0px #0000000F;
 
 // Text Shadow
 $textShadow1: 0px 11px 11.7px rgba(0, 0, 0, 0.25);

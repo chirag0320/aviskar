@@ -39,6 +39,7 @@ function MobileSecondaryMenu() {
             renderComponent={
               configDetailsState?.enablesearch?.value && <IconButton ref={searchButtonRef} className={classNames("MenuButton", { "Active": false })} onClick={toggleOpenSearch}><Search /></IconButton>
             }
+            lightTheme
             arrow
           >
             <Container>

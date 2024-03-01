@@ -1,10 +1,10 @@
 import React, { Suspense, lazy, useCallback, useState } from 'react'
-import { Box, Container, Link, Stack, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Button, Skeleton } from "@mui/material"
+import { Box, Container, Link, Stack, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Button, Skeleton, IconButton } from "@mui/material"
 import classNames from 'classnames'
 
 // Components
 // import CopyRight from "./CopyRight"
-const CopyRight = lazy(()=>import('./CopyRight'))
+const CopyRight = lazy(() => import('./CopyRight'))
 
 // Assets
 import { MapIcon, MailIcon, FacebookIcon, YoutubeIcon, TwitterIcon, FeedIcon, ChevronRight } from "../../assets/icons/index"
@@ -86,16 +86,16 @@ function index() {
               <Typography className="ConsentMessage" variant="body2">Your email is safe with us, we don't spam</Typography>
             </Box>
             <Stack className="SocialWrapper">
-              <Link target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}><FacebookIcon /></Link>
-              <Link target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}><YoutubeIcon /></Link>
-              <Link target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}><TwitterIcon /></Link>
-              <Link target={"_blank"} href={configDetailsState?.feedIcon?.value ?? window?.location?.href}><FeedIcon /></Link>
+              <IconButton target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}><FacebookIcon /></IconButton>
+              <IconButton target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}><YoutubeIcon /></IconButton>
+              <IconButton target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}><TwitterIcon /></IconButton>
+              <IconButton target={"_blank"} href={configDetailsState?.feedIcon?.value ?? window?.location?.href}><FeedIcon /></IconButton>
             </Stack>
           </Stack>
         </Stack>
       </Container>
-      <Suspense fallback={<Skeleton style={{height:'30px'}}/>}>
-      <CopyRight />
+      <Suspense fallback={<Skeleton style={{ height: '30px' }} />}>
+        <CopyRight />
       </Suspense>
     </Box>
   )

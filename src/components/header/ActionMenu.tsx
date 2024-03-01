@@ -38,6 +38,7 @@ function ActionMenu() {
       onClose={handleTooltipClose}
       onClickAway={handleClickAway}
       renderComponent={<IconButton ref={tooltipRef} className={classNames("MenuButton", { "Active": open })} onClick={handleTooltipOpen}><MenuIcon /></IconButton>}
+      lightTheme
       arrow
     >
       <Box className="Wrapper" key={'Wrapper'}>

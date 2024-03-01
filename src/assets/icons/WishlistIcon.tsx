@@ -2,10 +2,9 @@ import React from 'react'
 
 function WishlistIcon() {
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="16" cy="16" r="16" fill="#EBEBEB" />
-      <path fillRule="evenodd" clipRule="evenodd" d="M9.27405 15.7045C8.4833 13.2357 9.40744 10.4139 11.9993 9.57893C13.3627 9.13896 14.8675 9.39837 16.001 10.251C17.0732 9.42195 18.6334 9.14191 19.9953 9.57893C22.5871 10.4139 23.5172 13.2357 22.7272 15.7045C21.4964 19.6177 16.001 22.6319 16.001 22.6319C16.001 22.6319 10.546 19.6634 9.27405 15.7045Z" stroke="#23262B" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M18.9489 12.0947C19.7374 12.3497 20.2945 13.0535 20.3616 13.8796" stroke="#23262B" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fillRule="evenodd" clipRule="evenodd" d="M0.774048 7.70449C-0.0167043 5.23569 0.907437 2.4139 3.49931 1.57893C4.86267 1.13896 6.36753 1.39837 7.50097 2.25103C8.57324 1.42195 10.1334 1.14191 11.4953 1.57893C14.0871 2.4139 15.0172 5.23569 14.2272 7.70449C12.9964 11.6177 7.50097 14.6319 7.50097 14.6319C7.50097 14.6319 2.04603 11.6634 0.774048 7.70449Z" stroke="#23262B" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10.4489 4.09473C11.2374 4.34971 11.7945 5.0535 11.8616 5.87963" stroke="#23262B" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }

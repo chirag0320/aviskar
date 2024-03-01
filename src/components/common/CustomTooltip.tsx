@@ -3,7 +3,7 @@ import { ClickAwayListener, Tooltip, Box } from "@mui/material"
 import classNames from "classnames"
 
 const ClickTooltip = React.memo((props: any) => {
-  const { children, id, open, className, renderComponent, placement, onClose, onClickAway, slotProps, arrow } = props
+  const { children, id, open, className, renderComponent, placement, onClose, onClickAway, slotProps, arrow, lightTheme } = props
 
   return (
     <ClickAwayListener onClickAway={onClickAway}>
@@ -17,7 +17,7 @@ const ClickTooltip = React.memo((props: any) => {
           disableFocusListener
           disableHoverListener
           disableTouchListener
-          PopperProps={{ className, disablePortal: true }}
+          PopperProps={{ className: classNames({ "Light": lightTheme }, className), disablePortal: true }}
           slotProps={slotProps}
           arrow={arrow}
         >
@@ -29,14 +29,14 @@ const ClickTooltip = React.memo((props: any) => {
 })
 
 const HoverTooltip = React.memo((props: any) => {
-  const { children, id, className, renderComponent, placement, slotProps, arrow } = props
+  const { children, id, className, renderComponent, placement, slotProps, arrow, disablePortal, lightTheme } = props
 
   return (
     <Tooltip
       id={id}
       title={children}
       placement={placement}
-      PopperProps={{ className: classNames("HoverTooltip", className), disablePortal: true }}
+      PopperProps={{ className: classNames("HoverTooltip", { "Light": lightTheme }, className), disablePortal: disablePortal }}
       slotProps={slotProps}
       arrow={arrow}
       enterDelay={400}
