@@ -1,9 +1,7 @@
 .StockReturnWithName {
   &.MuiStack-root {
     align-items: center;
-    @include media-min($lg) {
-      gap: 10px;
-    }
+    gap: 10px;
     .StockReturn {
       align-items: center;
       gap: 3px;
