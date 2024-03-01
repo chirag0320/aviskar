@@ -54,6 +54,8 @@ function Navigation() {
                             {category.name}
                           </Button>
                         }
+                        disablePortal
+                        lightTheme
                       >
                         <MegaMenu subCategorys={category.subCategories} category={category} />
                       </HoverTooltip></Fragment>

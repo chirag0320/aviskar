@@ -1,12 +1,12 @@
 import React, { useState, useRef, Fragment } from "react"
-import { Stack, Box, Card, CardContent, CardActions, Typography, Button, Link, IconButton, Skeleton } from "@mui/material"
+import { Stack, Box, Card, CardContent, CardActions, Typography, Button, Link, IconButton } from "@mui/material"
 import classNames from 'classnames'
 
 // Components
-import { ClickTooltip } from "./CustomTooltip"
+import { ClickTooltip, HoverTooltip } from "./CustomTooltip"
 
 // Assets
-import { AddToCartIcon, StackIcon, OfferTagIcon, ChevronDown, ChevronUp, ArrowRight } from "../../assets/icons/index"
+import { AddToCartIcon, StackIcon, OfferTagIcon, ChevronDown, ChevronUp, ArrowRight, InfoIcon } from "../../assets/icons/index"
 
 // Utils
 import { ProductStockStatus } from "./Utils"
@@ -56,7 +56,19 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
           <Stack className="Bottom">
             <Typography variant="overline" className="PriceMessage">{(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ? "As low As" : "Best Price at"}</Typography>
             {/* @todo :- below will be static for now */}
-            <Typography variant="overline" className="DiscountMessage">43% off the premium</Typography>
+            <Stack className="RightSide">
+              <Typography variant="overline" className="DiscountMessage">
+                SAVE 43%
+              </Typography>
+              <HoverTooltip
+                placement="top-end"
+                className="TooltipProdductDiscount"
+                renderComponent={<IconButton className="InfoButton"><InfoIcon /></IconButton>}
+                arrow
+              >
+                This is a helper text to justify pricing discount.
+              </HoverTooltip>
+            </Stack>
           </Stack>
         </Stack>
         {product.tagName && <Typography className={classNames("OfferBadge")} sx={{ backgroundColor: product.tagColor }}>{product.tagName}</Typography>}
@@ -71,6 +83,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
             onClose={handleTooltipClose}
             onClickAway={handleClickAway}
             renderComponent={<Button ref={tooltipRef} className="OfferTag" variant="outlined" endIcon={open ? <ChevronUp /> : <ChevronDown />} onClick={handleTooltipOpen}><OfferTagIcon /></Button>}
+            lightTheme
             arrow
           >
             <Box className="Offers">

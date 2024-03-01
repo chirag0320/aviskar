@@ -396,14 +396,14 @@ const theme: any = createTheme({
     MuiTooltip: {
       styleOverrides: {
         arrow: {
-          color: "#FFFFFF",
+          // color: "#FFFFFF",
           fontSize: pxToRem(20),
         },
         tooltip: {
-          padding: 0,
-          color: "#1D2129",
-          backgroundColor: "#FFFFFF",
-          boxShadow: "0px 20px 30px 0px #0000000F",
+          // padding: 0,
+          // color: "#1D2129",
+          // backgroundColor: "#FFFFFF",
+          // boxShadow: "0px 20px 30px 0px #0000000F",
         },
         popper: {
           "&[data-popper-placement*='bottom']": {
