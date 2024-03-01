@@ -273,6 +273,9 @@ const theme: any = createTheme({
     },
     MuiIconButton: {
       styleOverrides: {
+        root: {
+          borderRadius: 8,
+        },
         sizeMedium: {
           height: 40,
           width: 40,
