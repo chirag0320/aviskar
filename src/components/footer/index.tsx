@@ -51,7 +51,7 @@ function index() {
               </Stack>
               <Stack className="MailWrapper About">
                 <MailIcon />
-                <Link href={"mailto:" + configDetailsState?.storeemail?.value} variant="body2" className="Mail">{configDetailsState?.storeemail?.value}</Link>
+                <Link href={"mailto:" + configDetailsState?.storecontactemail?.value} variant="body2" className="Mail">{configDetailsState?.storecontactemail?.value}</Link>
               </Stack>
             </Stack>
           </Stack>
