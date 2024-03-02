@@ -41,10 +41,25 @@
         .StockReturnWithName {
           border-right: 1px solid color-mix(in srgb, currentColor 50%, transparent);
           padding-right: $spaceBetweenChild;
+
           &.AfterStockReturnWithName {
             margin-right: $spaceBetweenChild;
           }
         }
+      }
+
+      .marquee-container {
+        cursor: all-scroll;
+        background: inherit;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .drag-span {
+        line-height: 50px;
+        position: relative;
+        user-select: none;
       }
     }
 
@@ -83,6 +98,7 @@
             align-items: center;
             gap: 4px;
             font-weight: 500;
+
             @include media($md) {
               display: none;
             }
@@ -114,6 +130,7 @@
 
           .SignInButton {
             align-self: stretch;
+
             @include media($xs) {
               @include padding-horizontal(9);
             }
@@ -154,6 +171,7 @@
           justify-content: space-between;
           align-items: center;
           gap: 40px;
+
           .MenuLink {
             text-transform: uppercase;
             text-decoration: none;
@@ -279,11 +297,13 @@
                         position: relative;
                         $textPosition: 12px;
                         color: $white;
+
                         img {
                           @include media-min($lg) {
                             max-width: 250px;
                           }
                         }
+
                         &:hover {
                           color: $yellowFuel;
                         }
