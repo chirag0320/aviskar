@@ -32,7 +32,7 @@ const PriceSlider = ({ minPrice, maxPrice }: { minPrice: number, maxPrice: numbe
             <Typography className="PriceRange">Price Range</Typography>
             <Typography variant="subtitle1">{`$${value[0]} - $${value[1]}`}</Typography>
             {renderPriceRange()}
-            <Typography className="AveragePrice" variant="body2">Average price: $41</Typography>
+            {/* <Typography className="AveragePrice" variant="body2">Average price: $41</Typography> */}
         </Box>
     )
 }

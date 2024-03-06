@@ -52,8 +52,10 @@ const SmallScreenFilters = ({ categoryData, renderList }: props) => {
                         >
                             <Tab label="Categories" value={0} />
                             <Tab label="Price Range" value={1} />
-                            {/* <Tab label={categoryFilterItems[0].label} value={2} />
-                            <Tab label={categoryFilterItems[1].label} value={3} /> */}
+                            <Tab label="Sort By" value={2} />
+                            {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
+                                <Tab key={filter} label={filter} value={index + 3} />
+                            ))}
                         </Tabs>
                         <TabPanel className="Category" value={tabValue} index={0}>
                             {renderList(categoryData.categories)}

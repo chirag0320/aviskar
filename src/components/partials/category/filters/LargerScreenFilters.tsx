@@ -4,7 +4,6 @@ import { categoryData } from '@/types/categoryData'
 import SortBy from './SortBy'
 import PriceSlider from './PriceSlider'
 
-
 interface props {
     categoryData: categoryData
     renderList: (data: any) => any

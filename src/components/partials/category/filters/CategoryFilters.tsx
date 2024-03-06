@@ -35,18 +35,20 @@ function CategoryFilters() {
 
   const renderList = (data: any) => {
     return (
-      <List>
-        {data.map((item: any, index: number) => (
-          <Fragment key={item.categoryId}>
-            <ListItem >
-              <ListItemButton href="#">
-                <ListItemText primary={item.name} primaryTypographyProps={{ variant: "body2" }} />
-              </ListItemButton>
-            </ListItem>
-            {(index !== data.length - 1) && <Divider key={`Divider-${item}`} />}
-          </Fragment>
-        ))}
-      </List>
+      <>
+        {
+          data.map((item: any, index: number) => (
+            <Fragment key={item.categoryId}>
+              <ListItem >
+                <ListItemButton href="#">
+                  <ListItemText primary={item.name} primaryTypographyProps={{ variant: "body2" }} />
+                </ListItemButton>
+              </ListItem>
+              {(index !== data.length - 1) && <Divider key={`Divider-${item}`} />}
+            </Fragment>
+          ))
+        }
+      </>
     )
   }
 
