@@ -1,5 +1,5 @@
 import React from "react"
-import { Stack, Box, Typography, IconButton, Link } from "@mui/material"
+import { Stack, Box, Typography, IconButton, Link, Container } from "@mui/material"
 import classNames from 'classnames'
 
 // Assets
@@ -53,6 +53,16 @@ export const SectionHeading = React.memo(({ title, description }: any) => {
     <Box className="SectionHeading">
       <Typography variant="h2" component="h2" className="Title">{title}</Typography>
       <Typography className="Description">{description}</Typography>
+    </Box>
+  )
+})
+
+export const PageTitle = React.memo(({ title, description }: any) => {
+  return (
+    <Box className="PageTitle">
+      <Container>
+        <Typography variant="h4" component="h2" className="Title">{title}</Typography>
+      </Container>
     </Box>
   )
 })
