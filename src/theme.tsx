@@ -1,10 +1,13 @@
-// import { createTheme } from '@mui/material/styles';
+import { Theme } from '@mui/material/';
 import createTheme from '@mui/material/styles/createTheme';
+
+// Assets
+import { ArrowDown, CheckboxCheckedIcon, CheckboxUncheckedIcon, RadioCheckedIcon, RadioUncheckedIcon } from './assets/icons/index';
 
 // Utils
 import { pxToRem } from './utils/helper';
 
-const theme: any = createTheme({
+const theme: Theme = createTheme({
   palette: {
     primary: {
       main: "#EAA22B",
@@ -46,6 +49,7 @@ const theme: any = createTheme({
         fontSize: pxToRem(26),
       },
     },
+    // 
     h4: {
       fontSize: pxToRem(32),
       fontWeight: 700,
@@ -115,7 +119,9 @@ const theme: any = createTheme({
         html: {
           width: '100%',
           height: '100%',
-          fontSize: '15px'
+          // '@media (max-width: 900px)': {
+          //   fontSize: '15px',
+          // },
         },
         body: {
           width: '100%',
@@ -144,7 +150,7 @@ const theme: any = createTheme({
     MuiBackdrop: {
       styleOverrides: {
         root: {
-          backgroundColor: "#1D2129B3",
+          backgroundColor: "#1D212980",
         },
       },
     },
@@ -160,8 +166,11 @@ const theme: any = createTheme({
           '@media (max-width: 900px)': {
             maxWidth: "initial",
           },
-          '@media (min-width: 900px) and (max-width: 1100px)': {
+          '@media (min-width: 900px)': {
             maxWidth: 1000,
+          },
+          '@media (min-width: 1200px)': {
+            maxWidth: "calc(1200px + 48px)", // 48px:: sum of horizontal padding
           },
           '@media (min-width: 1800px)': {
             paddingLeft: 0,
@@ -462,6 +471,85 @@ const theme: any = createTheme({
         root: {
           padding: 0,
         },
+      },
+    },
+    MuiSlider: {
+      defaultProps: {
+        valueLabelDisplay: "auto",
+      },
+      styleOverrides: {
+        root: {
+          height: 2,
+          padding: "6px 0",
+        },
+        rail: {
+          opacity: 0.5,
+          height: 1,
+        },
+        thumb: {
+          height: 14,
+          width: 14,
+          border: "2px solid currentColor",
+          backgroundColor: "#FFFFFF",
+          '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
+            boxShadow: 'inherit',
+          },
+          '&::before': {
+            display: 'none',
+          },
+        },
+      },
+    },
+    MuiAccordion: {
+      defaultProps: {
+        elevation: 0,
+        disableGutters: true,
+        square: true,
+      },
+      styleOverrides: {
+        root: {
+          '&::before': {
+            display: 'none',
+          },
+        },
+      },
+    },
+    MuiAccordionSummary: {
+      defaultProps: {
+        expandIcon: <ArrowDown />,
+      },
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          paddingTop: 0,
+          paddingBottom: 8,
+        },
+      },
+    },
+    MuiCheckbox: {
+      defaultProps: {
+        icon: <CheckboxUncheckedIcon />,
+        checkedIcon: <CheckboxCheckedIcon />,
+      },
+      styleOverrides: {
+        colorPrimary: {
+          "&.Mui-disabled": {
+            color: "#EAA22B",
+            opacity: 0.2,
+            "svg": {
+              "path:first-of-type": {
+                stroke: "#1D2129",
+              },
+            },
+          },
+        },
+      },
+    },
+    MuiRadio: {
+      defaultProps: {
+        icon: <RadioUncheckedIcon />,
+        checkedIcon: <RadioCheckedIcon />,
       },
     },
   },

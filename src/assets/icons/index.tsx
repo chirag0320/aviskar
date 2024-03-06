@@ -30,6 +30,12 @@ import CrossIcon from "./CrossIcon";
 import EyeOffIcon from "./EyeOffIcon";
 import EyeOnIcon from "./EyeOnIcon";
 import InfoIcon from "./InfoIcon";
+import CheckboxCheckedIcon from "./CheckboxCheckedIcon";
+import CheckboxUncheckedIcon from "./CheckboxUncheckedIcon";
+import RadioCheckedIcon from "./RadioCheckedIcon";
+import RadioUncheckedIcon from "./RadioUncheckedIcon";
+import SortbyIcon from "./SortbyIcon";
+import FilterIcon from "./FilterIcon";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
@@ -70,6 +76,12 @@ export {
   EyeOffIcon,
   EyeOnIcon,
   InfoIcon,
+  CheckboxCheckedIcon,
+  CheckboxUncheckedIcon,
+  RadioCheckedIcon,
+  RadioUncheckedIcon,
+  SortbyIcon,
+  FilterIcon,
 
   // Social
   FacebookIcon,

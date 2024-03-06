@@ -79,3 +79,156 @@ export const megaMenuItems = [
   ["COLLECTOR", "QMINT Rating", "Queensland", "Australia", "World", "Proof", "High Relief", "Graded", "Pre - Decimal", "Rare Coins", "Coin Care", "Sovereign Gold Coins"],
   ["Themes", "Black Friday Sale", "QMINT Select", "Flora", "Fauna", "Places", "Lunar", "Occasion", "Royals", "Series", "Objects", "Gifts", "Christmas"],
 ]
+
+export const categoryFilterItems = [
+  {
+    label: "Mint",
+    options: [
+      { id: '1', name: 'QueenslandMint', value: 'QueenslandMint', label: 'Queensland Mint', checked: true, disabled: true, },
+      { id: '2', name: 'ProductID', value: 'ProductID', label: 'Product ID', checked: true, },
+      { id: '3', name: 'SerialNumber', value: 'SerialNumber', label: 'Serial Number', checked: true, disabled: true, },
+    ],
+    row: false,
+  },
+  {
+    label: "Type",
+    options: [
+      { id: '1', name: 'coin', value: 'coin', label: 'Coin', checked: true, },
+      { id: '2 ', name: 'bar', value: 'bar', label: 'Bar', checked: true, },
+    ],
+    row: true,
+  },
+  {
+    label: "Availability",
+    options: [
+      { id: '1', name: 'All', value: 'All', label: 'All', checked: true, },
+      { id: '2', name: 'Available to Order', value: 'Available to Order', label: 'Available to Order', checked: true, disabled: true, },
+      { id: '3', name: 'In Stock', value: 'In Stock', label: 'In Stock', checked: true, disabled: true, },
+      { id: '4', name: 'New', value: 'New', label: 'New', checked: true, disabled: true, },
+    ],
+    row: false,
+  },
+  {
+    label: "Superfund Approved",
+    options: [
+      { id: '1', name: 'Yes', value: 'Yes', label: 'Yes' },
+      { id: '2 ', name: 'No', value: 'No', label: 'No' },
+    ],
+    row: true,
+  },
+  {
+    label: "Purity",
+    options: [
+      { id: '1', name: '9999', value: '9999', label: '9999' },
+      { id: '2 ', name: '999+', value: '999+', label: '999+' },
+    ],
+    row: false,
+  },
+  {
+    label: "Weight",
+    options: [
+      { id: '1', name: '9999', value: '9999', label: '9999' },
+      { id: '2 ', name: '999+', value: '999+', label: '999+' },
+    ],
+    row: false,
+  },
+  {
+    label: "Form",
+    options: [
+      { id: '1', name: '9999', value: '9999', label: '9999' },
+      { id: '2 ', name: '999+', value: '999+', label: '999+' },
+    ],
+    row: false,
+  },
+  {
+    label: "Variant",
+    options: [
+      { id: '1', name: '9999', value: '9999', label: '9999' },
+      { id: '2 ', name: '999+', value: '999+', label: '999+' },
+    ],
+    row: false,
+  },
+  {
+    label: "Series",
+    options: [
+      { id: '1', name: '9999', value: '9999', label: '9999' },
+      { id: '2 ', name: '999+', value: '999+', label: '999+' },
+    ],
+    row: false,
+  },
+  {
+    label: "Condition",
+    options: [
+      { id: '1', name: '9999', value: '9999', label: '9999' },
+      { id: '2 ', name: '999+', value: '999+', label: '999+' },
+    ],
+    row: false,
+  },
+  {
+    label: "Features",
+    options: [
+      { id: '1', name: '9999', value: '9999', label: '9999' },
+      { id: '2 ', name: '999+', value: '999+', label: '999+' },
+    ],
+    row: false,
+  },
+  {
+    label: "Origin",
+    options: [
+      { id: '1', name: '9999', value: '9999', label: '9999' },
+      { id: '2 ', name: '999+', value: '999+', label: '999+' },
+    ],
+    row: false,
+  },
+  {
+    label: "Theme",
+    options: [
+      { id: '1', name: '9999', value: '9999', label: '9999' },
+      { id: '2 ', name: '999+', value: '999+', label: '999+' },
+    ],
+    row: false,
+  },
+  {
+    label: "Monarch",
+    options: [
+      { id: '1', name: '9999', value: '9999', label: '9999' },
+      { id: '2 ', name: '999+', value: '999+', label: '999+' },
+    ],
+    row: false,
+  },
+  {
+    label: "Finish",
+    options: [
+      { id: '1', name: '9999', value: '9999', label: '9999' },
+      { id: '2 ', name: '999+', value: '999+', label: '999+' },
+    ],
+    row: false,
+  },
+  {
+    label: "Photo",
+    options: [
+      { id: '1', name: '9999', value: '9999', label: '9999' },
+      { id: '2 ', name: '999+', value: '999+', label: '999+' },
+    ],
+    row: false,
+  },
+  {
+    label: "By Mint",
+    options: [
+      { id: '1', name: '9999', value: '9999', label: '9999' },
+      { id: '2 ', name: '999+', value: '999+', label: '999+' },
+    ],
+    row: false,
+  },
+]
+
+export const sortByOptions = [
+  { id: '1', name: 'Most Popular', value: 'Most Popular', label: 'Most Popular', },
+  { id: '2', name: 'Price: Low to High', value: 'Price: Low to High', label: 'Price: Low to High' },
+  { id: '3', name: 'Price: High to Low', value: 'Price: High to Low', label: 'Price: High to Low' },
+  { id: '4', name: 'Weight: Ascending', value: 'Weight: Ascending', label: 'Weight: Ascending' },
+  { id: '5', name: 'Weight: Descending', value: 'Weight: Descending', label: 'Weight: Descending' },
+  { id: '6', name: 'Year: Ascending', value: 'Year: Ascending', label: 'Year: Ascending' },
+  { id: '7', name: 'Year: Descending', value: 'Year: Descending', label: 'Year: Descending' },
+  { id: '8', name: 'Highest Rated', value: 'Highest Rated', label: 'Highest Rated' },
+]

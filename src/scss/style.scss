@@ -5,17 +5,21 @@
 @import "settings/functions";
 
 // Components
+@import "components/scrollbar";
 @import "components/swiper";
 @import "components/utils";
 @import "components/mui";
 @import "components/card";
+@import "components/drawer";
+@import "components/dialog";
 
 // Common
 @import "common/header";
 @import "common/footer";
 
 // Pages
-@import "pages/home.scss";
 @import "pages/signin.scss";
+@import "pages/home.scss";
+@import "pages/category.scss";
 
 @import "_ckeditor.scss"

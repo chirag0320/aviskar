@@ -1,0 +1,52 @@
+#SortByDrawer {
+  &.MuiDrawer-root {
+    .MuiDrawer-paper {
+      border-radius: 15px 15px 0 0;
+      box-shadow: $shadow9;
+      .DrawerHeader {
+        border-bottom: 1px solid $mercury;
+        .Wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          @include padding-vertical(10);
+          .CloseButton {
+            color: rgba($elephant, 0.6);
+            margin-right: -10px;
+          }
+        }
+      }
+      .DrawerContent {
+        @include padding-vertical(4);
+        .InputRow {
+          .MuiFormControl-root {
+            .MuiFormGroup-root {
+              .MuiFormControlLabel-root {
+                justify-content: space-between;
+                gap: 8px;
+                @include margin-horizontal(0);
+                @include padding-vertical(3);
+                &:not(:last-of-type) {
+                  border-bottom: 1px solid rgba($dark, 0.1);
+                }
+                .MuiRadio-root {
+                  margin-right: -9px;
+                  &.Mui-checked + {
+                    .MuiFormControlLabel-label {
+                      font-weight: 600;
+                      opacity: 1;
+                    }
+                  }
+                }
+                .MuiFormControlLabel-label {
+                  font-weight: 400;
+                  opacity: 0.8;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

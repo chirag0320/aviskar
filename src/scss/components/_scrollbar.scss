@@ -1,0 +1,27 @@
+.ScrollbarBlue {
+  &::-webkit-scrollbar {
+    background-color: $white;
+    width: 8px;
+  }
+
+  /* background of the scrollbar except button or resizer */
+  &::-webkit-scrollbar-track {
+    background-color: $mercury;
+    border-radius: 16px;
+    overflow: hidden;
+    border: solid 30px transparent;
+  }
+
+  /* scrollbar itself */
+  &::-webkit-scrollbar-thumb {
+    background-color: $dark;
+    border-radius: 16px;
+    border: 2px solid $mercury;
+    background-clip: padding-box;
+  }
+
+  /* set button(top and bottom of the scrollbar) */
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+}

@@ -2,12 +2,12 @@ const path = require('path')
 const { copyLibFiles } = require('@builder.io/partytown/utils');
 
 exports.onPreBuild = async () => {
-  await copyLibFiles(path.join(__dirname, "public/static", "~partytown"));
+    await copyLibFiles(path.join(__dirname, "public/static", "~partytown"));
 };
 exports.onPreBootstrap = async () => {
     await copyLibFiles(path.join(__dirname, "public/static", "~partytown"));
-  };
-exports.onCreateWebpackConfig = ({ actions }:any) => {
+};
+exports.onCreateWebpackConfig = ({ actions }: any) => {
     actions.setWebpackConfig({
         resolve: {
             alias: {
@@ -16,4 +16,12 @@ exports.onCreateWebpackConfig = ({ actions }:any) => {
             },
         },
     })
+};
+exports.onCreateBabelConfig = ({ actions }: any) => {
+    actions.setBabelPlugin({
+        name: '@babel/plugin-transform-react-jsx',
+        options: {
+            runtime: 'automatic',
+        },
+    });
 };
