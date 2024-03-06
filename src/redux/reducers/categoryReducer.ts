@@ -4,21 +4,10 @@ import { createSlice } from '@reduxjs/toolkit'
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import ConfigServices, { IloginUserBody } from '@/apis/services/ConfigServices'
 import CategoryServices from '@/apis/services/CategoryServices'
-
+import { categoryData } from '@/types/categoryData'
 // Services
 
-interface categoryData {
-  loading: boolean,
-  items: [],
-  count: 0,
-  categories: [],
-  price: {
-    minPrice: number,
-    maxPrice: number
-  },
-  specifications: {},
-  manufactureres: []
-}
+
 
 interface filterQuery {
   search: string,
@@ -38,14 +27,14 @@ const initialState: categoryData = {
     minPrice: 0,
     maxPrice: 0
   },
-  specifications: {},
+  specifications: {
+  },
   manufactureres: []
 }
 
 export const getCategoryData = appCreateAsyncThunk(
   "getCategoryData",
   async ({ url, body }: { url: string, body: filterQuery }) => {
-    console.log(url, body);
     return await CategoryServices.getCategoryData(url, body);
   }
 )
@@ -63,22 +52,11 @@ export const categoryPageSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    // Get categories list
-    // builder.addCase(CategoriesListDetails.pending, (state, action) => {
-    //   state.loading = true
-    // })
-    // builder.addCase(CategoriesListDetails.fulfilled, (state, action) => {
-    //   state.categoriesList = { ...action?.payload?.data?.data, items: action?.payload?.data?.data?.items?.sort((a: any, b: any) => a?.categoryId - b?.categoryId) }
-    //   state.loading = false
-    // })
-    // builder.addCase(CategoriesListDetails.rejected, (state, action) => {
-    //   state.loading = false
-    // })
     builder.addCase(getCategoryData.pending, (state) => {
       state.loading = true;
     })
     builder.addCase(getCategoryData.fulfilled, (state, action) => {
-      const responseData = action.payload.data;
+      const responseData = action.payload.data.data;
       const additionalField = responseData.additionalField;
 
       if (additionalField && additionalField.filters) {

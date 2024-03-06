@@ -36,7 +36,7 @@ export interface IFeaturedProducts {
   tagColor: string,
   metalId: number,
   tierpriceapply: boolean,
-  priceWithDetails: null | IproductPrice
+  priceWithDetails: null | IproductPrice,
 }
 export interface Idata {
   data: {

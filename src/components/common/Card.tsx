@@ -43,13 +43,20 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
         <Stack className="ContentWrapper">
           <Stack className="Top">
             <Stack className="Left">
-              <Typography variant="subtitle1" className="ActualPrice">${(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ?
+              {product.productPrice !== 0 ? <Typography variant="subtitle1" className="ActualPrice">${product.productPrice}</Typography> : <><Typography variant="subtitle1" className="ActualPrice">${(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ?
+                (product?.priceWithDetails?.productLowestPrice?.toFixed(2)) : product?.priceWithDetails?.price?.toFixed(2)}</Typography>
+                {(product?.priceWithDetails?.discount && product?.priceWithDetails?.discount !== 0)
+                  ?
+                  <Typography variant="overline" className="DiscountedPrice">
+                    ${(product?.priceWithDetails?.price + product?.priceWithDetails?.discount).toFixed(2)}</Typography>
+                  : null}</>}
+              {/* <Typography variant="subtitle1" className="ActualPrice">${(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ?
                 (product?.priceWithDetails?.productLowestPrice?.toFixed(2)) : product?.priceWithDetails?.price?.toFixed(2)}</Typography>
               {(product?.priceWithDetails?.discount && product?.priceWithDetails?.discount !== 0)
                 ?
                 <Typography variant="overline" className="DiscountedPrice">
                   ${(product?.priceWithDetails?.price + product?.priceWithDetails?.discount).toFixed(2)}</Typography>
-                : null}
+                : null} */}
             </Stack>
             {(product?.priceWithDetails?.discount) && (product?.priceWithDetails?.discount !== 0) ? (<Typography variant="overline" className="Discount">${product?.priceWithDetails?.discount?.toFixed(2)} Off</Typography>) : null}
           </Stack>

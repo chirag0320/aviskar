@@ -104,7 +104,7 @@
               border: 1px solid $dividerColor;
               padding: 10px 8px 10px 0;
               .MuiList-root {
-                min-height: 200px;
+                // min-height: 200px;
                 max-height: 35vh;
                 overflow: auto;
                 @include padding-horizontal(12);
