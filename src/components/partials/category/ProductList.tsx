@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Box, Skeleton, Card } from "@mui/material"
+import { Box, Skeleton, Card, Pagination, Stack } from "@mui/material"
 
 // Components
 import { ProductCard } from "@/components/common/Card"
@@ -44,26 +44,31 @@ function ProductList() {
 
   return (
     <Box className="ProductList">
-      {
-        data?.data?.items?.length > 0 ? data?.data?.items?.map((product) => {
-          product.priceWithDetails = priceForEachId ? priceForEachId[product?.productId] : null;
-          return (
-            <ProductCard key={product.productId} product={product} />
-          )
-        })
-          :
-          Array(12).fill(0).map((_, index) => {
+      <Box className="ProductListWrapper">
+        {
+          data?.data?.items?.length > 0 ? data?.data?.items?.map((product) => {
+            product.priceWithDetails = priceForEachId ? priceForEachId[product?.productId] : null;
             return (
-              <Card className="ProductCard" key={index}>
-                <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
-                <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                  <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
-                  <Skeleton animation="wave" height={70} width="95%" />
-                </div>
-              </Card>
-            );
+              <ProductCard key={product.productId} product={product} />
+            )
           })
-      }
+            :
+            Array(12).fill(0).map((_, index) => {
+              return (
+                <Card className="ProductCard" key={index}>
+                  <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
+                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                    <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
+                    <Skeleton animation="wave" height={70} width="95%" />
+                  </div>
+                </Card>
+              );
+            })
+        }
+      </Box>
+      <Stack className="Pagination">
+        <Pagination count={10} shape="rounded" />
+      </Stack>
     </Box>
   )
 }
