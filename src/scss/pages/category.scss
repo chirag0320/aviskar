@@ -69,16 +69,6 @@
           @include padding-horizontal($containerSpacing);
           .MuiList-root {
             .MuiListItem-root {
-              &:first-of-type {
-                .MuiListItemButton-root {
-                  margin-top: -10px;
-                }
-              }
-              &:last-of-type {
-                .MuiListItemButton-root {
-                  padding-bottom: 0;
-                }
-              }
               .MuiListItemButton-root {
                 padding: 6px 0;
                 @include transition;
@@ -109,6 +99,16 @@
                 overflow: auto;
                 @include padding-horizontal(12);
                 .MuiListItem-root {
+                  &:first-of-type {
+                    .MuiListItemButton-root {
+                      margin-top: -10px;
+                    }
+                  }
+                  &:last-of-type {
+                    .MuiListItemButton-root {
+                      padding-bottom: 0;
+                    }
+                  }
                   .MuiListItemButton-root {
                     padding: 6px 0;
                     @include transition;
