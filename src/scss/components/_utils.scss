@@ -1,9 +1,7 @@
 .StockReturnWithName {
   &.MuiStack-root {
     align-items: center;
-    @include media-min($lg) {
-      gap: 10px;
-    }
+    gap: 10px;
     .StockReturn {
       align-items: center;
       gap: 3px;
@@ -87,28 +85,15 @@
   @include media($md) {
     flex-direction: initial;
   }
-}
-
-.ck-content {
-  h2 {
-    font-size: pxToRem(40);
-    line-height: pxToRem(54);
-    font-weight: 700;
-    margin-bottom: 15px;
-    @include media($xl) {
-      font-size: pxToRem(26);
-      line-height: pxToRem(34);
+  .MuiIconButton-root {
+    svg {
+      width: 24px;
+      height: 24px;
     }
-    @include media($md) {
-      font-size: pxToRem(24);
-      line-height: pxToRem(32);
-    }
-    @include media($sm) {
-      font-size: pxToRem(26);
-      line-height: pxToRem(35);
-    }
-    span, strong {
-      font: inherit !important;
+  }
+  &:hover {
+    .MuiIconButton-root {
+      background-color: rgba($black, 0.04);
     }
   }
 }

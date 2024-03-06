@@ -106,6 +106,9 @@
 
           .SearchField {
             .MuiInputBase-root {
+              font-size: pxToRem(14);
+              line-height: pxToRem(20);
+              padding-right: 8px;
               .MuiInputBase-input {
                 padding-left: 16px;
 
@@ -115,7 +118,15 @@
               }
 
               .MuiInputAdornment-root {
-                cursor: pointer;
+                margin-left: 0;
+                .MuiIconButton-root {
+                  width: auto;
+                  height: auto;
+                  svg {
+                    width: 18px;
+                    height: 18px;
+                  }
+                }
               }
             }
 
@@ -172,6 +183,9 @@
           align-items: center;
           gap: 40px;
 
+          @include media($lg) {
+            gap: 3vw;
+          }
           .MenuLink {
             text-transform: uppercase;
             text-decoration: none;
@@ -304,10 +318,29 @@
                           }
                         }
 
+                        @include transition;
                         &:hover {
                           color: $yellowFuel;
                         }
-
+                        .ImageWrapper {
+                          position: relative;
+                          border-radius: 16px;
+                          overflow: hidden;
+                          &::after {
+                            content: "";
+                            position: absolute;
+                            inset: 0;
+                            background: linear-gradient(360deg, #000000 0%, rgba(0, 0, 0, 0) 61.15%);
+                          }
+                          img {
+                            width: 100%;
+                            height: 160px;
+                            object-fit: cover;
+                            @include media-min($lg) {
+                              max-width: 250px;
+                            }
+                          }
+                        }
                         .MuiTypography-root {
                           position: absolute;
                           bottom: $textPosition;
@@ -350,7 +383,7 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         padding: 15px 11px;
-        gap: 23px 11px;
+        gap: 11px;
 
         @include media($md) {
           grid-template-columns: repeat(1, 1fr);
@@ -370,10 +403,9 @@
   width: 100%;
 
   &.MuiDrawer-root {
-    top: 120px;
-
+    top: calc(66px + 50px + 1px);
     &.ScrollActive {
-      top: 69px;
+      top: calc(66px + 1px);
 
       .MuiDrawer-paper {
         max-height: calc(100% - 69px);

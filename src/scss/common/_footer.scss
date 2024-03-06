@@ -212,10 +212,18 @@
       }
       .SocialWrapper {
         align-items: center;
-        gap: 20px;
+        gap: 8px;
         margin-top: 19px;
         @include media($md) {
           margin-top: 16px;
+        }
+        .MuiIconButton-root {
+          border-radius: 8px;
+          width: 34px;
+          height: 34px;
+          &:hover {
+            background-color: rgba($black, 0.3);
+          }
         }
       }
     }

@@ -29,6 +29,7 @@ import HamburgerIcon from "./HamburgerIcon";
 import CrossIcon from "./CrossIcon";
 import EyeOffIcon from "./EyeOffIcon";
 import EyeOnIcon from "./EyeOnIcon";
+import InfoIcon from "./InfoIcon";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
@@ -68,6 +69,7 @@ export {
   CrossIcon,
   EyeOffIcon,
   EyeOnIcon,
+  InfoIcon,
 
   // Social
   FacebookIcon,

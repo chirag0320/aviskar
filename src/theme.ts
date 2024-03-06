@@ -273,6 +273,9 @@ const theme: any = createTheme({
     },
     MuiIconButton: {
       styleOverrides: {
+        root: {
+          borderRadius: 8,
+        },
         sizeMedium: {
           height: 40,
           width: 40,
@@ -334,7 +337,6 @@ const theme: any = createTheme({
         grouped: {
           margin: 0,
           border: "none",
-          fontStyle: "italic",
           minWidth: 153,
           paddingTop: 15,
           paddingBottom: 15,
@@ -397,14 +399,14 @@ const theme: any = createTheme({
     MuiTooltip: {
       styleOverrides: {
         arrow: {
-          color: "#FFFFFF",
+          // color: "#FFFFFF",
           fontSize: pxToRem(20),
         },
         tooltip: {
-          padding: 0,
-          color: "#1D2129",
-          backgroundColor: "#FFFFFF",
-          boxShadow: "0px 20px 30px 0px #0000000F",
+          // padding: 0,
+          // color: "#1D2129",
+          // backgroundColor: "#FFFFFF",
+          // boxShadow: "0px 20px 30px 0px #0000000F",
         },
         popper: {
           "&[data-popper-placement*='bottom']": {

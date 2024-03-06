@@ -1,5 +1,5 @@
 import React from "react"
-import { TextField, InputAdornment } from "@mui/material"
+import { TextField, InputAdornment, IconButton } from "@mui/material"
 
 // Assets
 import { Search } from "../../assets/icons/index"
@@ -13,7 +13,9 @@ function SearchField() {
       className="SearchField"
       InputProps={{
         endAdornment: (
-          <InputAdornment position="end"><Search /></InputAdornment>
+          <InputAdornment position="end">
+            <IconButton><Search /></IconButton>
+          </InputAdornment>
         ),
       }}
     />
