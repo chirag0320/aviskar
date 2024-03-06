@@ -58,7 +58,20 @@
     }
   }
 }
-
+.PageTitle{
+  @include padding-vertical(34);
+  background-color: $whiteLilac;
+  @include media($sm) {
+    @include padding-vertical(20);
+  }
+  h2{
+    line-height: 36px;
+    @include media($sm) {
+      font-size: pxToRem(26);
+      line-height: pxToRem(33);
+    }
+  }
+}
 .ProductStockStatus {
   justify-content: center;
   align-items: center;

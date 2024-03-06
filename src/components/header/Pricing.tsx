@@ -1,15 +1,14 @@
 import React, { useMemo } from "react"
 import { Container, Stack, Box } from "@mui/material"
-import Marquee from "react-fast-marquee";
-
-// Assets
-// import astralia from "../../assets/flags/astralia.png"
 
 // Utils
 import { AfterStockReturnWithName, StockReturnWithName } from "../common/Utils"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { ENDPOINTS } from "@/utils/constants"
 import { useAppSelector } from "@/hooks"
+import DraggableMarquee from "./DraggableMarquee";
+// import Marquee from "./vipulMarquee"
+
 interface ItickerData {
   data: Array<{
     "name": string
@@ -55,12 +54,26 @@ function Pricing() {
           className="PricingHeader__Wrapper"
         >
           <img src={configDetailsState?.australiaflagurl?.value} alt="Australia flag" width={36} height={24} loading="eager" />
-          <Marquee pauseOnHover >
+          {/* <Marquee pauseOnHover >
             <Stack className="PricingHeader__Wrapper--Content">
               {renderedStockItems}
               {renderdTextAfterText}
             </Stack>
-          </Marquee>
+          </Marquee> */}
+          <DraggableMarquee>
+            <Stack className="PricingHeader__Wrapper--Content">
+              {renderedStockItems}
+              {renderdTextAfterText}
+              {renderedStockItems}
+              {renderdTextAfterText}
+            </Stack>
+          </DraggableMarquee>
+          {/* <Marquee >
+            <Stack className="PricingHeader__Wrapper--Content">
+              {renderedStockItems}
+              {renderdTextAfterText}
+            </Stack>
+          </Marquee> */}
         </Stack>
       </Container>
     </Box>

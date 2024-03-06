@@ -7,37 +7,46 @@
     height: 100%;
     border-radius: 20px;
     @include transition;
+
     &:hover {
       box-shadow: $shadow5;
       transform: scale(1.025);
     }
+
     .ImageLink {
       img {
         width: 100%;
         height: 250px;
         object-fit: cover;
+
         @include media($lg) {
           height: 200px;
         }
+
         @include media($md) {
           height: 175px;
         }
       }
     }
+
     .MuiCardContent-root {
       padding: $horizontalSpacing $horizontalSpacing 15px;
+
       .Place {
         @include max-line(2);
       }
+
       .Description {
         margin-top: 12px;
         color: $greyRegent;
         @include max-line(2);
       }
     }
+
     .MuiCardActions-root {
       margin-top: auto;
       padding: 0 $horizontalSpacing $horizontalSpacing;
+
       .MuiButton-root {
         .MuiButton-endIcon {
           svg {
@@ -49,6 +58,7 @@
     }
   }
 }
+
 .ProductCard {
   &.MuiCard-root {
     display: flex;
@@ -58,18 +68,23 @@
     width: 100%;
     box-shadow: $shadow7;
     @include transition;
+
     &:hover {
       box-shadow: $shadow5;
       transform: scale(1.025);
     }
+
     @include media($sm) {
       max-width: 320px;
       margin: auto;
     }
+
     $horizontalSpacing: 16px;
     $verticalSpacing: 40px;
+
     .ImageWrapper {
       position: relative;
+
       .ImageLink {
         display: flex;
         justify-content: center;
@@ -77,15 +92,18 @@
         flex-grow: 1;
         padding: $verticalSpacing $horizontalSpacing $verticalSpacing;
         height: 280px;
+
         @include media-min($sm) {
           height: 300px;
         }
+
         img {
           object-fit: contain;
           height: 100%;
           width: auto;
         }
       }
+
       .ProductStockStatus {
         position: absolute;
         bottom: 0;
@@ -95,13 +113,16 @@
         margin-right: 6px;
       }
     }
+
     .MuiCardContent-root {
       display: flex;
       flex-direction: column;
       flex-grow: 1;
       padding: $horizontalSpacing $horizontalSpacing 13px;
+
       .ProductName {
         @include max-line(2);
+
         .MuiTypography-root {
           @include media($sm) {
             font-size: pxToRem(14);
@@ -110,57 +131,71 @@
           }
         }
       }
+
       .ContentWrapper {
         flex-direction: column;
         flex-grow: 1;
         margin-top: 15px;
         gap: 4px;
+
         .Top {
           justify-content: space-between;
           align-items: center;
           margin-top: auto;
+
           .Left {
             align-items: center;
             gap: 8px;
+
             .DiscountedPrice {
               text-decoration: line-through;
               color: rgba($dark, 0.5);
             }
           }
+
           .Discount {
             color: $sinopia;
+
             @include media($sm) {
               font-size: pxToRem(13);
               line-height: pxToRem(24);
             }
           }
         }
+
         .Bottom {
           justify-content: space-between;
           align-items: center;
+
           .PriceMessage {
             color: rgba($dark, 0.5);
+
             @include media($sm) {
               font-size: pxToRem(12);
               line-height: pxToRem(28);
               font-weight: 500;
             }
           }
+
           .RightSide {
             align-items: center;
             gap: 4px;
+
             .DiscountMessage {
               color: $blueCyan;
+
               @include media($sm) {
                 font-size: pxToRem(13);
                 line-height: pxToRem(24);
                 font-weight: 600;
               }
             }
+
             .InfoButton {
               width: auto;
               height: auto;
               padding: 0;
+
               .MuiSvgIcon-root {
                 font-size: pxToRem(18);
               }
@@ -168,6 +203,7 @@
           }
         }
       }
+
       .OfferBadge {
         position: absolute;
         top: 20px;
@@ -177,6 +213,7 @@
         font-size: 14px;
         font-weight: 500;
         border-radius: 6px;
+
         @include media($md) {
           top: 16px;
           right: 40px;
@@ -184,43 +221,53 @@
         }
       }
     }
+
     .MuiCardActions-root {
       padding: 0 $horizontalSpacing $horizontalSpacing;
       margin-top: auto;
       gap: 15px;
+
       .ClickTooltipWrapper {
         align-self: stretch;
+
         .OfferTag {
           color: $dark;
           border-color: $mercury;
           height: 100%;
           min-width: 56px;
           @include padding-horizontal(8, 10);
+
           &:hover {
             border-color: $yellowFuel;
           }
         }
       }
+
       .MuiIconButton-root {
         position: absolute;
         $placement: 12px;
         top: $placement;
         border-radius: 50%;
+
         &.Stack {
           left: $placement;
         }
+
         &.AddToCart {
           right: calc($placement + 4px);
         }
       }
+
       .TooltipOfferTag {
         .MuiTooltip-tooltip {
           box-shadow: $shadow6;
+
           .Offers {
             display: grid;
             grid-template-columns: auto auto;
             gap: 0 16px;
             padding: 15px;
+
             .ItemPrice {
               font-weight: 700;
               line-height: pxToRem(28);
@@ -228,9 +275,91 @@
           }
         }
       }
+
       .PrimaryAction {
         letter-spacing: 1px;
       }
     }
   }
 }
+
+// Start :: membershipcard css
+// .MembershipCardLink{
+// border-radius: 20px;
+// @include transition;
+// &:hover {
+//   box-shadow: 14px 28px 43.29999923706055px 0px #0000001A;
+//   .UpgradPlanButton{
+//     background-color: $yellowFuel;
+//     color: $white;
+//   }
+// }
+.MembershipCard {
+  &.MuiCard-root {
+    text-align: center;
+    border-radius: 20px;
+    @include transition;
+    &:hover {
+      transform: scale(1.025);
+      box-shadow: 14px 28px 43.29999923706055px 0px #0000001A;
+
+      .UpgradPlanButton {
+        background-color: $yellowFuel;
+        color: $white;
+      }
+    }
+
+    .MuiCardContent-root {
+      padding: 0;
+      h3 {
+        line-height: 36px;
+        @include padding-vertical(17);
+        @include transition;
+        @include media($md) {
+          line-height: 30px;
+          font-size: 24px;
+        }
+
+      }
+
+      .Details {
+        padding: 13px 30px 14px;
+
+        .ContentWrapper {
+          padding: 10px 0;
+          justify-content: space-between;
+          border-bottom: 1px solid #0000000a;
+
+          .ContentTitle {
+            opacity: 80%;
+          }
+
+          .ContentValue {
+            font-size: 16px;
+          }
+        }
+      }
+
+    }
+
+    .MuiCardActions-root {
+      padding: 0 30px 30px;
+
+      .UpgradPlanButton {
+        padding: 12px 16px;
+        border-color: $yellowFuel;
+        line-height: 20px;
+        letter-spacing: 2%;
+        @include transition;
+
+        &:hover {
+          background-color: $yellowFuel;
+          color: $white;
+        }
+      }
+    }
+  }
+}
+
+// }
+// End :: membershipcard css

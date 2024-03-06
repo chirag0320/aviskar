@@ -278,6 +278,7 @@ const theme: Theme = createTheme({
           lineHeight: pxToRem(20),
           fontWeight: 600,
         },
+        
       },
     },
     MuiIconButton: {
