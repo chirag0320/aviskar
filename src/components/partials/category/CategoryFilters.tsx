@@ -25,7 +25,6 @@ const schema = yup.object().shape({
 })
 
 function CategoryFilters() {
-
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
   const [openFilterBy, toggleFilterBy] = useToggle(false)
   const [value, setValue] = useState<number[]>([20, 37])
