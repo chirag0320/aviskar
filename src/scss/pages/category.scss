@@ -69,16 +69,6 @@
           @include padding-horizontal($containerSpacing);
           .MuiList-root {
             .MuiListItem-root {
-              &:first-of-type {
-                .MuiListItemButton-root {
-                  margin-top: -10px;
-                }
-              }
-              &:last-of-type {
-                .MuiListItemButton-root {
-                  padding-bottom: 0;
-                }
-              }
               .MuiListItemButton-root {
                 padding: 6px 0;
                 @include transition;
@@ -109,6 +99,16 @@
                 overflow: auto;
                 @include padding-horizontal(12);
                 .MuiListItem-root {
+                  &:first-of-type {
+                    .MuiListItemButton-root {
+                      margin-top: -10px;
+                    }
+                  }
+                  &:last-of-type {
+                    .MuiListItemButton-root {
+                      padding-bottom: 0;
+                    }
+                  }
                   .MuiListItemButton-root {
                     padding: 6px 0;
                     @include transition;
@@ -190,35 +190,41 @@
       }
     }
     .ProductList {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      flex: 0.75;
-      gap: 30px;
-      // @include media-min($xxl) {
-      //   gap: 40px;
-      // }
-      @include media($lg) {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      @include media($md) {
-        grid-template-columns: repeat(2, 1fr);
-        flex: initial;
-        width: 100%;
-      }
-      @include media($sm) {
-        grid-template-columns: repeat(1, 1fr);
-      }
-      @include media-between($md, $mmd) {
-        gap: 20px;
-      }
-      .ProductCard {
+      .ProductListWrapper {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        flex: 0.75;
+        gap: 30px;
+        // @include media-min($xxl) {
+        //   gap: 40px;
+        // }
+        @include media($lg) {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        @include media($md) {
+          grid-template-columns: repeat(2, 1fr);
+          flex: initial;
+          width: 100%;
+        }
+        @include media($sm) {
+          grid-template-columns: repeat(1, 1fr);
+        }
         @include media-between($md, $mmd) {
-          .MuiCardActions-root {
-            .PrimaryAction {
-              letter-spacing: normal;
+          gap: 20px;
+        }
+        .ProductCard {
+          @include media-between($md, $mmd) {
+            .MuiCardActions-root {
+              .PrimaryAction {
+                letter-spacing: normal;
+              }
             }
           }
         }
+      }
+      .Pagination {
+        justify-content: center;
+        margin-top: 60px;
       }
     }
   }

@@ -6,6 +6,7 @@
 
 // Components
 @import "components/scrollbar";
+@import "components/ckeditor";
 @import "components/swiper";
 @import "components/utils";
 @import "components/mui";
@@ -22,5 +23,3 @@
 @import "pages/home.scss";
 @import "pages/category.scss";
 @import "pages/memberships.scss";
-
-@import "_ckeditor.scss"

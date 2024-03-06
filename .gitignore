@@ -22,7 +22,6 @@ dist/
 # Maven
 target/
 dist/
-public/
 
 # JetBrains IDE
 .idea/
@@ -49,3 +48,5 @@ Thumbs.db
 *.mov
 *.wmv
 
+#Custom
+public/
