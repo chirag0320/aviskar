@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, FormControl, Select, RadioGroup, FormControlLabel, FormLabel, Radio, FormHelperText, Checkbox, FormGroup, Switch, TextField, IconButton, InputAdornment } from '@mui/material'
-import { Controller } from 'react-hook-form'
+import { Controller, set } from 'react-hook-form'
 import classNames from 'classnames'
 
 // Hooks
@@ -37,7 +37,8 @@ interface RenderFieldProps {
   rows?: number
   control?: any
   autoComplete?: string
-  disabled?: boolean
+  disabled?: boolean,
+  getValues?: any,
   margin?: 'dense' | 'normal' | 'none'
   row?: boolean
   fullWidth?: boolean
@@ -48,16 +49,18 @@ interface RenderFieldProps {
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
   MenuProps?: Partial<MenuProps>
   children?: any
-  labelPlacement?: FormControlLabelProps['labelPlacement']
+  labelPlacement?: FormControlLabelProps['labelPlacement'],
+  setValue?: any
 }
 
 const RenderFields: React.FC<RenderFieldProps> = ({
   type,
   error,
-  register,
+  register = () => { },
   placeholder,
   label,
   name,
+  getValues,
   variant = 'filled',
   color = 'primary',
   children,
@@ -74,6 +77,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   fullWidth = true,
   row,
   readOnly,
+  setValue,
   onBlur,
   onKeyDown,
   MenuProps,
@@ -85,6 +89,8 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   ...otherProps
 }) => {
   const [passwordVisibility, togglePasswordVisibility] = useToggle(false)
+
+  // console.log(name,options);
 
   let fieldType = null
   switch (type) {
@@ -132,14 +138,13 @@ const RenderFields: React.FC<RenderFieldProps> = ({
     case 'radio':
       if (!options) return null
       fieldType = (
-        <FormControl margin={margin} fullWidth={fullWidth} {...(error ? { error: true } : {})}>
+        <FormControl margin={margin} fullWidth={fullWidth}>
           {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-          {/* <RadioGroup row={row} name={name} {...otherProps}> */}
           <Controller
             name={name}
             control={control}
             render={({ field }) => (
-              <RadioGroup value={field.value} row={row}>
+              <RadioGroup row={row} >
                 {options.map((radioOption) => (
                   <FormControlLabel
                     key={radioOption.id}
@@ -151,6 +156,12 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                         checkedIcon={checkedIcon}
                         disabled={disabled}
                         {...otherProps}
+                        onChange={(e) => {
+                          setValue(name, e.target.value)
+                          if (onChange) {
+                            onChange()
+                          }
+                        }}
                       />
                     }
                     label={radioOption.label}
@@ -161,7 +172,6 @@ const RenderFields: React.FC<RenderFieldProps> = ({
               </RadioGroup>
             )}
           />
-          {/* </RadioGroup> */}
         </FormControl>
       )
       break
@@ -175,27 +185,36 @@ const RenderFields: React.FC<RenderFieldProps> = ({
               options.map((checkboxOption) => (
                 <FormControlLabel
                   key={checkboxOption.id}
-                  value={checkboxOption.value}
-                  control={<Checkbox />}
+                  control={
+                    <Checkbox
+                      onChange={(e) => {
+                        setValue(name, {
+                          ...getValues(name), // Preserve existing values
+                          [checkboxOption.value]: e.target.checked // Update specific value
+                        });
+                        if (onChange) {
+                          onChange(); // Trigger onChange if provided
+                        }
+                      }}
+                    // checked={!!getValues(name)?.[checkboxOption.value]} // Check if the specific option is checked
+                    />
+                  }
                   label={checkboxOption.label}
                   disabled={checkboxOption.disabled}
-                  checked={checkboxOption.checked}
                   slotProps={{ typography: { variant: "body2" } }}
-                  {...register(name)}
                 />
               ))
             ) : (
               <FormControlLabel
-                value={value}
-                label={label}
                 control={<Checkbox />}
+                label={label}
                 {...register(name)}
               />
             )}
           </FormGroup>
         </FormControl>
-      )
-      break
+      );
+      break;
 
     case 'switch':
       fieldType = (

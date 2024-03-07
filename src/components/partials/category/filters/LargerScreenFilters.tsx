@@ -1,15 +1,53 @@
-import React from 'react'
-import { Accordion, AccordionDetails, AccordionSummary, Box, List, ListItem, ListItemText, Divider, Checkbox } from "@mui/material"
+import React, { useDeferredValue, useEffect, useState } from 'react'
+import { Accordion, AccordionDetails, AccordionSummary, Box, List, Divider } from "@mui/material"
 import { categoryData } from '@/types/categoryData'
 import SortBy from './SortBy'
 import PriceSlider from './PriceSlider'
+import RenderCheckboxField from './RenderCheckboxField'
+import useApiRequest from '@/hooks/useAPIRequest'
+import { ENDPOINTS } from '@/utils/constants'
+import { categoryRequestBody } from '@/types/categoryRequestBody'
+import { useAppDispatch, useAppSelector } from '@/hooks'
+import { getCategoryData } from '@/redux/reducers/categoryReducer'
 
 interface props {
-    categoryData: categoryData
     renderList: (data: any) => any
 }
 
-const LargerScreenFilters = ({ categoryData, renderList }: props) => {
+const requestBodyDefault: categoryRequestBody = {
+    search: "",
+    pageNo: 1,
+    pageSize: 12,
+    sortBy: "",
+    sortOrder: "",
+    filters: {
+        minPrice: 0,
+        maxPrice: 100,
+        specification: {}
+    }
+}
+
+const LargerScreenFilters = ({ renderList }: props) => {
+    const categoryData = useAppSelector(state => state.category)
+    const dispatch = useAppDispatch()
+
+    const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
+    const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
+
+    const debounce = useDeferredValue(selectedFilters);
+
+    useEffect(() => {
+        if (Object.keys(selectedFilters).length || selectedPrice) {
+            dispatch(getCategoryData(
+                {
+                    url: ENDPOINTS.getCategoryData,
+                    body: { ...requestBodyDefault, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters } }
+                }) as any)
+        }
+    }, [debounce, selectedPrice]);
+
+    console.log(selectedPrice);
+
     return (
         <Box className="CategoryFilters">
             <Box className="CategoriesWrapper">
@@ -44,8 +82,8 @@ const LargerScreenFilters = ({ categoryData, renderList }: props) => {
                 </Accordion>
             </Box>
             <Box className="FilterByWrapper">
-                <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} />
-                {Object.keys(categoryData.specifications).map((filter: any) => (
+                <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} />
+                {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
                     <Accordion key={filter} className="Divider">
                         <AccordionSummary
                             id={`${filter}-header`}
@@ -54,35 +92,27 @@ const LargerScreenFilters = ({ categoryData, renderList }: props) => {
                             {filter}
                         </AccordionSummary>
                         <AccordionDetails>
-                            {/* <RenderFields
-                  type="checkbox"
-                  register={register}
-                  name="Gender"
-                  error={errors.Gender}
-                  options={categoryData.specifications[filter as keyof typeof categoryData.specifications]}
-                  row={filter.row}
-                  margin="none"
-                /> */}
-                            {(categoryData.specifications[filter as keyof typeof categoryData.specifications] as string[]).map((item: any, index: number) =>
-                                <ListItem key={item}>
-                                    <Checkbox value={item} />
-                                    <ListItemText primary={item} primaryTypographyProps={{ variant: "body2" }} />
-                                </ListItem>
-                            )}
+                            <RenderCheckboxField
+                                filter={filter}
+                                options={(categoryData.specifications[filter as keyof typeof categoryData.specifications] as any[]).map((item, index) => {
+                                    return (
+                                        {
+                                            id: index,
+                                            value: item,
+                                            label: item,
+                                            disabled: false,
+                                        }
+                                    )
+                                }
+                                )}
+                                selectedFilters={selectedFilters}
+                                setSelectedFilters={setSelectedFilters} />
                         </AccordionDetails>
                     </Accordion>
                 ))}
-                {/* <Accordion className="Divider" defaultExpanded>
-            <AccordionSummary>
-              Popular tags
-            </AccordionSummary>
-            <AccordionDetails>
-              {renderList(subMenuItems)}
-            </AccordionDetails>
-          </Accordion> */}
             </Box>
         </Box>
     )
 }
 
-export default LargerScreenFilters
+export default React.memo(LargerScreenFilters)

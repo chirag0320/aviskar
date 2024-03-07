@@ -1,18 +1,19 @@
 import React, { Fragment, useState } from 'react'
 import { Button, Dialog, IconButton, DialogContent, DialogTitle, Stack, DialogActions, Tab, Tabs } from "@mui/material"
 import { CrossIcon, FilterIcon } from '@/assets/icons'
-import { useToggle } from '@/hooks'
+import { useAppSelector, useToggle } from '@/hooks'
 import TabPanel from '@/components/common/TabPanel'
 import PriceSlider from './PriceSlider'
 import RenderFields from '@/components/common/RenderFields'
 import { categoryData } from '@/types/categoryData'
 
 interface props {
-    categoryData: categoryData
     renderList: (data: any) => any
 }
 
-const SmallScreenFilters = ({ categoryData, renderList }: props) => {
+const SmallScreenFilters = ({renderList }: props) => {
+  const categoryData = useAppSelector(state => state.category)
+
     const [openFilterBy, toggleFilterBy] = useToggle(false)
     const [tabValue, setTabValue] = useState<number>(0)
 
@@ -61,7 +62,7 @@ const SmallScreenFilters = ({ categoryData, renderList }: props) => {
                             {renderList(categoryData.categories)}
                         </TabPanel>
                         <TabPanel value={tabValue} index={1}>
-                            <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} />
+                            {/* <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} /> */}
                         </TabPanel>
                         <TabPanel value={tabValue} index={2}>
                             {/* <RenderFields

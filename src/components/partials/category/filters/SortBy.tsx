@@ -37,6 +37,7 @@ import { useToggle } from "@/hooks"
 
 // Utils
 import RenderFields from "@/components/common/RenderFields"
+import { get } from "https"
 
 function SortBy() {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
@@ -44,13 +45,18 @@ function SortBy() {
   const {
     register,
     handleSubmit,
+    getValues,
     reset,
     control,
+    setValue,
     formState: { errors },
   } = useForm<UiFormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {},
   })
+
+  // console.log(getValues());
+
 
   const renderSortByFields = (labelPlacement: FormControlLabelProps['labelPlacement']) => {
     return (
@@ -58,12 +64,14 @@ function SortBy() {
         type="radio"
         control={control}
         register={register}
-        name="CompanySize"
+        name="Sort By"
         labelPlacement={labelPlacement}
         error={errors.CompanySize}
         options={sortByOptions}
         margin="none"
         fullWidth
+        setValue={setValue}
+        onChange={() => { console.log(getValues(), "wadesfrd") }}
       />
     )
   }

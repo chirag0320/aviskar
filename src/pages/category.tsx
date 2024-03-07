@@ -16,7 +16,7 @@ function Category() {
     service: getCategoryData, endPoint: ENDPOINTS.getCategoryData, body: {
       "search": "",
       "pageNo": 1,
-      "pageSize": -1,
+      "pageSize": 12,
       "sortBy": "",
       "sortOrder": "",
       "filters": {
@@ -36,14 +36,14 @@ function Category() {
         lang="en"
       />
       <Container id="PageCategory">
-        {isSmallScreen && (
+        {isSmallScreen ? (
           <Stack className="CategoryHeader">
             <SortBy />
             <CategoryFilters />
           </Stack>
-        )}
+        ) :null}
         <Stack className="MainContent">
-          {!isSmallScreen && <CategoryFilters />}
+          {!isSmallScreen ? <CategoryFilters />:null}
           <ProductList />
         </Stack>
       </Container>
