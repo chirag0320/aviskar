@@ -1,3 +1,4 @@
+import React from 'react';
 import { Theme } from '@mui/material/';
 import createTheme from '@mui/material/styles/createTheme';
 
@@ -6,6 +7,8 @@ import { ArrowDown, CheckboxCheckedIcon, CheckboxUncheckedIcon, RadioCheckedIcon
 
 // Utils
 import { pxToRem } from './utils/helper';
+import * as  variable from './scss/settings/variables.module.scss'
+
 
 const theme: Theme = createTheme({
   palette: {
@@ -200,6 +203,45 @@ const theme: Theme = createTheme({
         },
       },
     },
+
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
+          '&:hover': {
+            '.MuiOutlinedInput-notchedOutline': {
+              borderColor: `${variable.dark}33`,
+            },
+          },
+        },
+        input: {
+          paddingTop: 18.5,
+          paddingBottom: 18.5,
+          paddingLeft: 23,
+        },
+        notchedOutline: {
+          borderColor: `${variable.dark}33`,
+        },
+        multiline: {
+          padding: 0,
+        },
+      },
+    },
+    MuiSelect: {
+      defaultProps: {
+        IconComponent: ArrowDown,
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          color: variable.dark,
+          lineHeight: pxToRem(26),
+          marginBottom: 4,
+        },
+      },
+    },
+
     MuiInput: {
       defaultProps: {
         disableUnderline: true,
@@ -278,7 +320,7 @@ const theme: Theme = createTheme({
           lineHeight: pxToRem(20),
           fontWeight: 600,
         },
-        
+
       },
     },
     MuiIconButton: {
@@ -300,6 +342,8 @@ const theme: Theme = createTheme({
         root: {
           cursor: "pointer",
           color: "#1D2129",
+          overflowWrap: "anywhere",
+          // overflowWrap: anywhere;
           "&:hover": {
             color: "#EAA22B",
           },

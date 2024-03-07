@@ -61,7 +61,7 @@ export const PageTitle = React.memo(({ title, description }: any) => {
   return (
     <Box className="PageTitle">
       <Container>
-        <Typography variant="h4" component="h2" className="Title">{title}</Typography>
+        <Typography variant="h4" component="h2">{title}</Typography>
       </Container>
     </Box>
   )
