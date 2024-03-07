@@ -5,6 +5,7 @@ let c = 0
 const PriceSlider = ({ minPrice, maxPrice, setSelectedPrice }: { minPrice: number, maxPrice: number, setSelectedPrice: any }) => {
     const [value, setValue] = useState<number[]>([0, 100])
     const debouncedValue = useDebounce(value, 700);
+    
     useEffect(() => {
         if (c === 0) {
             c++

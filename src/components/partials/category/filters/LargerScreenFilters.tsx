@@ -26,6 +26,8 @@ const requestBodyDefault: categoryRequestBody = {
     }
 }
 
+
+
 const LargerScreenFilters = ({ renderList }: props) => {
     const categoryData = useAppSelector(state => state.category)
     const dispatch = useAppDispatch()

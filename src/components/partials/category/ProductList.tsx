@@ -4,11 +4,13 @@ import { Box, Skeleton, Card, Pagination, Stack } from "@mui/material"
 // Components
 import { ProductCard } from "@/components/common/Card"
 import { ENDPOINTS } from "@/utils/constants"
-import { Idata, IpriceForEachId } from "../home/FeaturedProducts"
+import { IFeaturedProducts, Idata, IpriceForEachId, IproductPrice } from "../home/FeaturedProducts"
 
 // Hooks
 import useApiRequest from "@/hooks/useAPIRequest"
 import { useAppSelector } from "@/hooks"
+import axiosInstance from '@/axiosfolder'
+import { categoryData } from "@/types/categoryData"
 
 const defaultData = {
   "search": "",
@@ -21,40 +23,71 @@ const defaultData = {
   }
 }
 
+let cancellationSource: AbortController | null = null;
+let timeoutId: number | any = null;
+
 function ProductList() {
   const [priceForEachId, setPriceForEachId] = useState<IpriceForEachId | null>(null)
-  const [productIds, setProductIds] = useState({})
-  const [dataforbody, setDataforbody] = useState<any>(defaultData)
-  // const { data }: Idata = useApiRequest(ENDPOINTS.getProduct, 'post', dataforbody);
-  // const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
-  const items = useAppSelector((state) => state.category.items);
+  const categoryData = useAppSelector((state) => state.category);
 
-  // useEffect(() => {
-  //   if (priceData?.data?.length > 0) {
-  //     const idwithpriceObj: any = {}
-  //     priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
-  //     setPriceForEachId(idwithpriceObj)
-  //   }
-  // }, [priceData])
 
-  // useEffect(() => {
-  //   if (data?.data?.items?.length > 0) {
-  //     const productIds = data?.data?.items?.map(product => product?.productId);
-  //     setProductIds({ productIds })
-  //   }
-  // }, [data])
+  useEffect(() => {
+    const ids = (categoryData.items as any[]).map((item) => item.productId as any);
 
-  // console.log(items)
+    const fetchData = async () => {
+      timeoutId && clearTimeout(timeoutId);
+      if (cancellationSource) {
+        cancellationSource.abort();
+      }
+
+      cancellationSource = new AbortController();
+
+      timeoutId = setTimeout(() => {
+        cancellationSource?.signal.addEventListener('abort', () => {
+          // If request was cancelled before completing, clear state
+          clearTimeout(timeoutId);
+          cancellationSource = null;
+        });
+
+        axiosInstance
+          .post('price/deSo8Uy3q0Cz2LZ4gBy0vQ', { productIds: ids }, { signal: cancellationSource?.signal }).then(response => {
+            // console.log(response);
+
+            if (response?.data?.data) {
+              const idwithpriceObj: any = {}
+              response?.data?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
+              setPriceForEachId(idwithpriceObj)
+            }
+            clearTimeout(timeoutId);
+            cancellationSource = null;
+          }).catch(error => {
+            if (error.name !== 'AbortError') {
+              // console.error(error);
+            }
+            clearTimeout(timeoutId);
+            cancellationSource = null;
+          });
+      }, 100)
+    }
+    fetchData();
+    return () => {
+      clearTimeout(timeoutId);
+      if (cancellationSource) {
+        cancellationSource.abort();
+      }
+    };
+  }, [categoryData])
 
   return (
     <Fragment>
       <Box className="ProductList">
         {
-          items.length > 0 ? items.map((product: any) => {
-            // product.priceWithDetails = priceForEachId ? priceForEachId[product?.productId] : null;
+          categoryData.items.length > 0 ? categoryData.items.map((product: any) => {
+            const updatedProduct = { ...product };
+            updatedProduct.priceWithDetails = priceForEachId ? priceForEachId[product?.productId] : null;
             return (
-              <ProductCard key={product.productId} product={product} />
-            )
+              <ProductCard key={product.productId} product={updatedProduct} />
+            );
           })
             :
             Array(6).fill(0).map((_, index) => {
