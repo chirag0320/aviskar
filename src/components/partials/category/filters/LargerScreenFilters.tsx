@@ -13,7 +13,7 @@ interface props {
     renderList: (data: any) => any
 }
 
-const requestBodyDefault: categoryRequestBody = {
+export const requestBodyDefault: categoryRequestBody = {
     search: "",
     pageNo: 1,
     pageSize: 12,
@@ -25,8 +25,6 @@ const requestBodyDefault: categoryRequestBody = {
         specification: {}
     }
 }
-
-
 
 const LargerScreenFilters = ({ renderList }: props) => {
     const categoryData = useAppSelector(state => state.category)

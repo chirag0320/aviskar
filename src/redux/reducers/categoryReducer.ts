@@ -2,12 +2,9 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // Types
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
-import ConfigServices, { IloginUserBody } from '@/apis/services/ConfigServices'
 import CategoryServices from '@/apis/services/CategoryServices'
 import { categoryData } from '@/types/categoryData'
 // Services
-
-
 
 interface filterQuery {
   search: string,

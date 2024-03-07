@@ -1,24 +1,38 @@
 import React, { Fragment, useState } from 'react'
 import { Button, Dialog, IconButton, DialogContent, DialogTitle, Stack, DialogActions, Tab, Tabs } from "@mui/material"
 import { CrossIcon, FilterIcon } from '@/assets/icons'
-import { useAppSelector, useToggle } from '@/hooks'
+import { useAppDispatch, useAppSelector, useToggle } from '@/hooks'
 import TabPanel from '@/components/common/TabPanel'
 import PriceSlider from './PriceSlider'
-import RenderFields from '@/components/common/RenderFields'
-import { categoryData } from '@/types/categoryData'
-
+import RenderCheckboxField from './RenderCheckboxField'
+import { ENDPOINTS } from '@/utils/constants'
+import { getCategoryData } from '@/redux/reducers/categoryReducer'
+import { requestBodyDefault } from './LargerScreenFilters'
 interface props {
     renderList: (data: any) => any
 }
 
-const SmallScreenFilters = ({renderList }: props) => {
-  const categoryData = useAppSelector(state => state.category)
-
+const SmallScreenFilters = ({ renderList }: props) => {
+    const categoryData = useAppSelector(state => state.category)
+    const dispatch = useAppDispatch()
+    const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
+    const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
     const [openFilterBy, toggleFilterBy] = useToggle(false)
     const [tabValue, setTabValue] = useState<number>(0)
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue)
+    }
+
+    const applyFilterHandler = async () => {
+        if (Object.keys(selectedFilters).length || (selectedPrice)) {
+            dispatch(getCategoryData(
+                {
+                    url: ENDPOINTS.getCategoryData,
+                    body: { ...requestBodyDefault, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters } }
+                }) as any)
+        }
+        toggleFilterBy()
     }
 
     return (
@@ -62,32 +76,31 @@ const SmallScreenFilters = ({renderList }: props) => {
                             {renderList(categoryData.categories)}
                         </TabPanel>
                         <TabPanel value={tabValue} index={1}>
-                            {/* <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} /> */}
+                            <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} />
                         </TabPanel>
-                        <TabPanel value={tabValue} index={2}>
-                            {/* <RenderFields
-                                type="checkbox"
-                                register={register}
-                                name="Gender"
-                                error={errors.Gender}
-                                options={categoryFilterItems[0].options}
-                                margin="none"
-                            /> */}
-                        </TabPanel>
-                        <TabPanel value={tabValue} index={3}>
-                            {/* <RenderFields
-                                type="checkbox"
-                                register={register}
-                                name="Gender"
-                                error={errors.Gender}
-                                options={categoryFilterItems[1].options}
-                                margin="none"
-                            /> */}
-                        </TabPanel>
+                        {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
+                            <TabPanel value={filter} index={index} key={filter}>
+                                <RenderCheckboxField
+                                    filter={filter}
+                                    options={(categoryData.specifications[filter as keyof typeof categoryData.specifications] as any[]).map((item, index) => {
+                                        return (
+                                            {
+                                                id: index,
+                                                value: item,
+                                                label: item,
+                                                disabled: false,
+                                            }
+                                        )
+                                    }
+                                    )}
+                                    selectedFilters={selectedFilters}
+                                    setSelectedFilters={setSelectedFilters} />
+                            </TabPanel>
+                        ))}
                     </Stack>
                 </DialogContent>
                 <DialogActions>
-                    <Button className="ApplyFilter" variant="contained" onClick={toggleFilterBy}>Apply Filter</Button>
+                    <Button className="ApplyFilter" variant="contained" onClick={applyFilterHandler}>Apply Filter</Button>
                 </DialogActions>
             </Dialog>
         </Fragment>
