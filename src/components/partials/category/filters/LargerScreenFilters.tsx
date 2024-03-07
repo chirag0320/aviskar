@@ -1,14 +1,13 @@
 import React, { useDeferredValue, useEffect, useState } from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Box, List, Divider } from "@mui/material"
-import { categoryData } from '@/types/categoryData'
 import SortBy from './SortBy'
 import PriceSlider from './PriceSlider'
 import RenderCheckboxField from './RenderCheckboxField'
-import useApiRequest from '@/hooks/useAPIRequest'
 import { ENDPOINTS } from '@/utils/constants'
 import { categoryRequestBody } from '@/types/categoryRequestBody'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { getCategoryData } from '@/redux/reducers/categoryReducer'
+import useDebounce from '@/hooks/useDebounce'
 
 interface props {
     renderList: (data: any) => any
@@ -34,10 +33,10 @@ const LargerScreenFilters = ({ renderList }: props) => {
     const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
     const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
 
-    const debounce = useDeferredValue(selectedFilters);
+    const debounce = useDebounce(selectedFilters, 700);
 
     useEffect(() => {
-        if (Object.keys(selectedFilters).length || selectedPrice) {
+        if (Object.keys(selectedFilters).length || (selectedPrice)) {
             dispatch(getCategoryData(
                 {
                     url: ENDPOINTS.getCategoryData,
@@ -45,8 +44,6 @@ const LargerScreenFilters = ({ renderList }: props) => {
                 }) as any)
         }
     }, [debounce, selectedPrice]);
-
-    console.log(selectedPrice);
 
     return (
         <Box className="CategoryFilters">
