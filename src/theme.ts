@@ -1,8 +1,9 @@
 // import { createTheme } from '@mui/material/styles';
-import createTheme from '@mui/material/styles/createTheme';
+import createTheme from "@mui/material/styles/createTheme";
 
 // Utils
-import { pxToRem } from './utils/helper';
+import { pxToRem } from "./utils/helper";
+import * as variable from "./scss/settings/variables.module.scss";
 
 const theme: any = createTheme({
   palette: {
@@ -30,11 +31,11 @@ const theme: any = createTheme({
       fontSize: pxToRem(40),
       lineHeight: pxToRem(54),
       fontWeight: 700,
-      '@media (max-width: 1440px)': {
+      "@media (max-width: 1440px)": {
         fontSize: pxToRem(26),
         lineHeight: pxToRem(34),
       },
-      '@media (max-width: 900px)': {
+      "@media (max-width: 900px)": {
         fontSize: pxToRem(24),
         lineHeight: pxToRem(32),
       },
@@ -42,7 +43,7 @@ const theme: any = createTheme({
     h3: {
       fontSize: pxToRem(36),
       fontWeight: 700,
-      '@media (max-width: 900px)': {
+      "@media (max-width: 900px)": {
         fontSize: pxToRem(26),
       },
     },
@@ -66,7 +67,7 @@ const theme: any = createTheme({
       fontSize: pxToRem(18),
       lineHeight: pxToRem(28),
       fontWeight: 700,
-      '@media (max-width: 900px)': {
+      "@media (max-width: 900px)": {
         fontSize: pxToRem(16),
         lineHeight: pxToRem(28),
       },
@@ -76,7 +77,7 @@ const theme: any = createTheme({
       fontSize: pxToRem(22),
       lineHeight: pxToRem(30),
       fontWeight: 500,
-      '@media (max-width: 900px)': {
+      "@media (max-width: 900px)": {
         fontSize: pxToRem(18),
         lineHeight: pxToRem(24),
       },
@@ -107,37 +108,37 @@ const theme: any = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
-        '*': {
-          boxSizing: 'border-box',
+        "*": {
+          boxSizing: "border-box",
           margin: 0,
           padding: 0,
         },
         html: {
-          width: '100%',
-          height: '100%',
-          fontSize: '15px'
+          width: "100%",
+          height: "100%",
+          fontSize: "15px",
         },
         body: {
-          width: '100%',
-          height: '100%',
+          width: "100%",
+          height: "100%",
         },
         img: {
-          verticalAlign: 'middle',
-          userSelect: 'none',
+          verticalAlign: "middle",
+          userSelect: "none",
           maxWidth: "100%",
           height: "auto",
         },
         svg: {
-          verticalAlign: 'middle',
+          verticalAlign: "middle",
         },
         video: {
-          verticalAlign: 'middle',
+          verticalAlign: "middle",
         },
-        '#root': {
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
+        "#root": {
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
         },
       },
     },
@@ -157,13 +158,13 @@ const theme: any = createTheme({
         root: {
           paddingLeft: 20,
           paddingRight: 20,
-          '@media (max-width: 900px)': {
+          "@media (max-width: 900px)": {
             maxWidth: "initial",
           },
-          '@media (min-width: 900px) and (max-width: 1100px)': {
+          "@media (min-width: 900px) and (max-width: 1100px)": {
             maxWidth: 1000,
           },
-          '@media (min-width: 1800px)': {
+          "@media (min-width: 1800px)": {
             paddingLeft: 0,
             paddingRight: 0,
           },
@@ -202,8 +203,8 @@ const theme: any = createTheme({
           marginTop: "8px !important",
         },
         input: {
-          '&:-webkit-autofill': {
-            borderRadius: 'inherit',
+          "&:-webkit-autofill": {
+            borderRadius: "inherit",
           },
         },
       },
@@ -263,13 +264,13 @@ const theme: any = createTheme({
           fontSize: pxToRem(16),
           lineHeight: pxToRem(20),
           fontWeight: 600,
+          padding: "17px 23px",
         },
         outlinedSizeLarge: {
           fontSize: pxToRem(16),
           lineHeight: pxToRem(20),
           fontWeight: 600,
         },
-        
       },
     },
     MuiIconButton: {
@@ -325,7 +326,8 @@ const theme: any = createTheme({
       },
       styleOverrides: {
         paper: {
-          boxShadow: "0px -2px 17.4px rgba(0, 0, 0, 0.05), 0px 5px 35.4px rgba(0, 0, 0, 0.07);",
+          boxShadow:
+            "0px -2px 17.4px rgba(0, 0, 0, 0.05), 0px 5px 35.4px rgba(0, 0, 0, 0.07);",
         },
       },
     },
@@ -351,11 +353,11 @@ const theme: any = createTheme({
             "&:hover": {
               color: "#EAA22B",
             },
-            '@media (max-width: 600px)': {
+            "@media (max-width: 600px)": {
               minWidth: 120,
             },
           },
-          '@media (max-width: 600px)': {
+          "@media (max-width: 600px)": {
             minWidth: 100,
           },
         },
@@ -465,7 +467,39 @@ const theme: any = createTheme({
         },
       },
     },
+    MuiTabs: {
+      styleOverrides: {
+        root: {
+          minHeight: 0,
+        },
+        flexContainer: {
+          justifyContent: "center",
+        },
+
+        indicator: {
+          display: "none",
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        textColorSecondary: {
+          padding: "13px 42.8px",
+          minHeight: 54,
+          borderRadius: 10,
+          fontSize: 16,
+          lineHeight: "28px",
+          fontWeight: 500,
+          "&.Mui-selected": {
+            backgroundColor: variable.elephant,
+            color: variable.white,
+            fontWeight: 700,
+          },
+        },
+      },
+    },
   },
+
   shape: {
     borderRadius: 8,
   },

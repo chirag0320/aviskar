@@ -5,6 +5,7 @@ import ArrowDown from "./ArrowDown";
 import ChevronDown from "./ChevronDown";
 import ChevronUp from "./ChevronUp";
 import ChevronRight from "./ChevronRight";
+import ChevronLeft from "./ChevronLeft";
 import Search from "./Search";
 import Profile from "./Profile";
 import Call from "./Call";
@@ -30,11 +31,13 @@ import CrossIcon from "./CrossIcon";
 import EyeOffIcon from "./EyeOffIcon";
 import EyeOnIcon from "./EyeOnIcon";
 import InfoIcon from "./InfoIcon";
+import SearchButtonIcon from "./SearchButtonIcon";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
 import YoutubeIcon from "./social/YoutubeIcon";
 import TwitterIcon from "./social/TwitterIcon";
+import InstagramIcon from "./social/InstagramIcon";
 import FeedIcon from "./social/FeedIcon";
 
 export {
@@ -45,6 +48,7 @@ export {
   ChevronDown,
   ChevronUp,
   ChevronRight,
+  ChevronLeft,
   Search,
   Profile,
   Call,
@@ -70,10 +74,12 @@ export {
   EyeOffIcon,
   EyeOnIcon,
   InfoIcon,
+  SearchButtonIcon,
 
   // Social
   FacebookIcon,
   YoutubeIcon,
   TwitterIcon,
+  InstagramIcon,
   FeedIcon,
-}
+};
