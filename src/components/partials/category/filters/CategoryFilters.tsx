@@ -3,7 +3,7 @@ import { useMediaQuery, Theme, ListItem, ListItemButton, ListItemText, Divider }
 
 import SmallScreenFilters from "./SmallScreenFilters"
 import LargerScreenFilters from "./LargerScreenFilters"
-import { SortingOption } from "@/types/sortOptions"
+import { navigate } from "gatsby"
 
 interface Props {
   setSelectedFilters: any,
@@ -14,6 +14,10 @@ interface Props {
 function CategoryFilters({ setSelectedFilters, setSelectedPrice, selectedFilters }: Props) {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
 
+  const navigatePageHandler = (categoryId: number, searchEngineFriendlyPageName: string) => {
+    navigate(`/${searchEngineFriendlyPageName}`, { state: { categoryId: categoryId } })
+  }
+
   const renderList = useCallback((data: any) => {
     return (
       <>
@@ -21,7 +25,7 @@ function CategoryFilters({ setSelectedFilters, setSelectedPrice, selectedFilters
           data.map((item: any, index: number) => (
             <Fragment key={item.categoryId}>
               <ListItem >
-                <ListItemButton href="#">
+                <ListItemButton href="#" onClick={() => navigatePageHandler(item.categoryId, item.searchEngineFriendlyPageName)}>
                   <ListItemText primary={item.name} primaryTypographyProps={{ variant: "body2" }} />
                 </ListItemButton>
               </ListItem>

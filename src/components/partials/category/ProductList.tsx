@@ -1,15 +1,11 @@
-import React, { useState, useEffect, Fragment } from "react"
+import React from "react"
 import { Box, Skeleton, Card, Pagination, Stack } from "@mui/material"
 
 // Components
 import { ProductCard } from "@/components/common/Card"
-import { ENDPOINTS } from "@/utils/constants"
-import { IpriceForEachId } from "../home/FeaturedProducts"
-
 // Hooks
-import useApiRequest from "@/hooks/useAPIRequest"
 import { useAppSelector } from "@/hooks"
-import { pageSize } from "@/pages/category"
+import { pageSize } from "@/pages/[category]"
 
 function ProductList({ page, setPage }: { page: number, setPage: any }) {
   const categoryData = useAppSelector((state) => state.category);
@@ -17,8 +13,6 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   }
-
-  // console.log(categoryData);
 
   return (
     <Box className="ProductList">
