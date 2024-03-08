@@ -19,22 +19,6 @@ interface props {
 
 const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice, selectedFilters }: props) => {
     const categoryData = useAppSelector(state => state.category)
-    // const dispatch = useAppDispatch()
-
-    // const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
-    // const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
-
-    // const debounce = useDebounce(selectedFilters, 700);
-
-    // useEffect(() => {
-    //     if (Object.keys(selectedFilters).length || (selectedPrice)) {
-    //         dispatch(getCategoryData(
-    //             {
-    //                 url: ENDPOINTS.getCategoryData,
-    //                 body: { ...requestBodyDefault, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters } }
-    //             }) as any)
-    //     }
-    // }, [debounce, selectedPrice]);
 
     return (
         <Box className="CategoryFilters">

@@ -14,10 +14,11 @@ import { useAppDispatch } from "@/hooks"
 import useDebounce from "@/hooks/useDebounce"
 import { categoryRequestBody } from "@/types/categoryRequestBody"
 
+export const pageSize = 12;
 export const requestBodyDefault: categoryRequestBody = {
   search: "",
   pageNo: 1,
-  pageSize: 12,
+  pageSize: pageSize,
   sortBy: "",
   sortOrder: "",
   filters: {
@@ -70,9 +71,12 @@ function Category() {
     }
   })
 
-  console.log(page + "page");
-
   const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
+
+  const categoryFilters = (
+    <CategoryFilters selectedFilters={selectedFilters} setSelectedPrice={setSelectedPrice} setSelectedFilters={setSelectedFilters} />
+  );
+
   return (
     <Layout>
       <Seo
@@ -84,11 +88,11 @@ function Category() {
         {isSmallScreen ? (
           <Stack className="CategoryHeader">
             <SortBy />
-            {/* <CategoryFilters /> */}
+            {categoryFilters}
           </Stack>
         ) : null}
         <Stack className="MainContent">
-          {!isSmallScreen ? <CategoryFilters selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} setSelectedPrice={setSelectedPrice} /> : null}
+          {!isSmallScreen ? categoryFilters : null}
           <ProductList page={page} setPage={setPage} />
         </Stack>
       </Container>

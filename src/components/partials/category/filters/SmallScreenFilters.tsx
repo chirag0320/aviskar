@@ -10,30 +10,29 @@ import { getCategoryData } from '@/redux/reducers/categoryReducer'
 
 interface props {
     renderList: (data: any) => any
+    setSelectedFiltersMobile: any,
+    setSelectedPriceMobile: any,
 }
 
-const SmallScreenFilters = ({ renderList }: props) => {
+const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedPriceMobile }: props) => {
     const categoryData = useAppSelector(state => state.category)
     const dispatch = useAppDispatch()
-    const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
-    const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
     const [openFilterBy, toggleFilterBy] = useToggle(false)
     const [tabValue, setTabValue] = useState<number>(0)
+
+    const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
+    const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue)
     }
 
-    // const applyFilterHandler = async () => {
-    //     if (Object.keys(selectedFilters).length || (selectedPrice)) {
-    //         dispatch(getCategoryData(
-    //             {
-    //                 url: ENDPOINTS.getCategoryData,
-    //                 body: { req , filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters } }
-    //             }) as any)
-    //     }
-    //     toggleFilterBy()
-    // }
+    const applyFilterHandler = async () => {
+        console.log(selectedFilters, selectedPrice);
+        setSelectedFiltersMobile(selectedFilters)
+        setSelectedPriceMobile(selectedPrice)
+        toggleFilterBy()
+    }
 
     return (
         <Fragment>
@@ -67,9 +66,8 @@ const SmallScreenFilters = ({ renderList }: props) => {
                         >
                             <Tab label="Categories" value={0} />
                             <Tab label="Price Range" value={1} />
-                            <Tab label="Sort By" value={2} />
                             {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
-                                <Tab key={filter} label={filter} value={index + 3} />
+                                <Tab key={filter} label={filter} value={index + 2} />
                             ))}
                         </Tabs>
                         <TabPanel className="Category" value={tabValue} index={0}>
@@ -79,7 +77,7 @@ const SmallScreenFilters = ({ renderList }: props) => {
                             <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} />
                         </TabPanel>
                         {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
-                            <TabPanel value={filter} index={index} key={filter}>
+                            <TabPanel value={tabValue} index={index + 2} key={filter}>
                                 <RenderCheckboxField
                                     filter={filter}
                                     options={(categoryData.specifications[filter as keyof typeof categoryData.specifications] as any[]).map((item, index) => {
@@ -100,7 +98,7 @@ const SmallScreenFilters = ({ renderList }: props) => {
                     </Stack>
                 </DialogContent>
                 <DialogActions>
-                    <Button className="ApplyFilter" variant="contained" onClick={() => { }}>Apply Filter</Button>
+                    <Button className="ApplyFilter" variant="contained" onClick={applyFilterHandler}>Apply Filter</Button>
                 </DialogActions>
             </Dialog>
         </Fragment>

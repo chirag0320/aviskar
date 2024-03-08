@@ -20,19 +20,6 @@ const schema = yup.object().shape({
 function CategoryFilters({ setSelectedFilters, setSelectedPrice, selectedFilters }: Props) {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
 
-  const categoryData = useAppSelector(state => state.category)
-
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   reset,
-  //   control,
-  //   formState: { errors },
-  // } = useForm<UiFormInputs>({
-  //   resolver: yupResolver(schema),
-  //   defaultValues: {},
-  // })
-
   const renderList = useCallback((data: any) => {
     return (
       <>
@@ -54,7 +41,7 @@ function CategoryFilters({ setSelectedFilters, setSelectedPrice, selectedFilters
 
   return (
     isSmallScreen ? (
-      <SmallScreenFilters renderList={renderList} />
+      <SmallScreenFilters renderList={renderList} setSelectedFiltersMobile={setSelectedFilters} setSelectedPriceMobile={setSelectedPrice} />
     ) : (
       <LargerScreenFilters renderList={renderList} setSelectedFilters={setSelectedFilters} setSelectedPrice={setSelectedPrice} selectedFilters={selectedFilters} />
     )

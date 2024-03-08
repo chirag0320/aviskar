@@ -9,6 +9,7 @@ import { IpriceForEachId } from "../home/FeaturedProducts"
 // Hooks
 import useApiRequest from "@/hooks/useAPIRequest"
 import { useAppSelector } from "@/hooks"
+import { pageSize } from "@/pages/category"
 
 function ProductList({ page, setPage }: { page: number, setPage: any }) {
   const [priceForEachId, setPriceForEachId] = useState<IpriceForEachId | null>(null)
@@ -36,8 +37,8 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
   }
 
   return (
-    <Fragment>
-      <Box className="ProductList">
+    <Box className="ProductList">
+      <Box className="ProductListWrapper">
         {
           categoryData.items.length > 0 ? categoryData.items.map((product: any) => {
             const updatedProduct = { ...product };
@@ -61,9 +62,9 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
         }
       </Box>
       <Stack className="Pagination">
-        <Pagination count={categoryData.count} page={page} shape="rounded" onChange={handlePageChange} />
+        <Pagination count={Math.floor(categoryData.count / pageSize)} page={page} shape="rounded" onChange={handlePageChange} />
       </Stack>
-    </Fragment>
+    </Box>
   )
 }
 
