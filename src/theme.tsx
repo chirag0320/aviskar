@@ -155,6 +155,9 @@ const theme: Theme = createTheme({
         root: {
           backgroundColor: "#1D212980",
         },
+        invisible: {
+          backgroundColor: "transparent",
+        },
       },
     },
     MuiContainer: {

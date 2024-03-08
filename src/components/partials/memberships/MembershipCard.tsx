@@ -3,26 +3,28 @@ import { Link, Typography, Card, CardContent, CardActions, Button, Stack, Box, }
 
 interface MembershipCardProps {
   bgcolor: string,
+  details: any,
   cardtitle: string,
 }
 
-function MembershipCard({ bgcolor, cardtitle }: MembershipCardProps) {
-  const opacityColor = `${bgcolor}33`; // '33' represents 20% opacity
+function MembershipCard({ bgcolor, cardtitle,details }: MembershipCardProps) {
+  console.log("🚀 ~ MembershipCard ~ details:", details)
+  const opacityColor = `${bgcolor}80`; // '33' represents 20% opacity
   return (
     <>
       <Card className="MembershipCard" sx={{
         border: `1px solid ${opacityColor}`,
         '&:hover': {
-          border: `1px solid ${bgcolor}`,
+          border: `1px solid ${bgcolor}e6`,
           '.CardTitle': {
-            backgroundColor: bgcolor,
+            backgroundColor: `${bgcolor}e6`,
           },
         },
       }}>
         <CardContent>
           <Typography className="CardTitle" variant='h4' sx={{ background: opacityColor }} component="h3">{cardtitle}</Typography>
-          <Box className="Details">
-            <Stack className="ContentWrapper">
+          <Box className="Details" dangerouslySetInnerHTML={{ __html: details }}>
+            {/* <Stack className="ContentWrapper">
               <Typography variant="body1" className="ContentTitle">Trade instantly:</Typography>
               <Typography variant="subtitle1" className="ContentValue">Yes</Typography>
             </Stack>
@@ -45,7 +47,7 @@ function MembershipCard({ bgcolor, cardtitle }: MembershipCardProps) {
             <Stack className="ContentWrapper">
               <Typography variant="body1" className="ContentTitle">Cash per day:</Typography>
               <Typography variant="subtitle1" className="ContentValue">4999</Typography>
-            </Stack>
+            </Stack> */}
           </Box>
         </CardContent>
         <CardActions>
