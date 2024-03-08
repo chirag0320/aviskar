@@ -3,7 +3,7 @@
 */
 
 // Typography
-$fontFamily: 'Montserrat', sans-serif;
+$fontFamily: "Montserrat", sans-serif;
 
 // Breakpoints
 $xs: 425px;
@@ -17,33 +17,29 @@ $xl: 1440px;
 $xxl: 1580px;
 
 // Colors
-$white: #FFFFFF;
-$whiteMilk: #FCFCFD;
-$error: #FF1F1F;
-$sinopia: #D13200;
+$white: #ffffff;
+$whiteMilk: #fcfcfd;
+$error: #ff1f1f;
+$sinopia: #d13200;
 $success: #008001;
-$yellowFuel: #EAA22B;
-$dark: #1D2129;
+$yellowFuel: #eaa22b;
+$dark: #1d2129;
 $black: #000000;
 $mirage: #212121;
-$elephant: #1C3049;
-$greyRegent: #86909C;
-$starDust: #9C9C9C;
-$blueCyan: #3491FA;
-$blueDress: #2A87F4;
-$mercury: #E5E6EB;
-$brownPale: #957C4F;
-$whiteLilac:#F7F8FA;
-$copper:#B87333;
-$silverSand:#C0C0C0;
-$goldTips:#E6B80B;
-$mercury:#DDE7EB;
-// :root {
-//   --copper: #B87333;
-//   --silverSand: #C0C0C0;
-//   --goldTips: #E6B80B;
-//   --mercury: #DDE7EB;
-// }
+$elephant: #1c3049;
+$greyRegent: #86909c;
+$starDust: #9c9c9c;
+$blueCyan: #3491fa;
+$blueDress: #2a87f4;
+$mercury: #e5e6eb;
+$brownPale: #957c4f;
+$whiteLilac: #f7f8fa;
+$copper: #b87333;
+$silverSand: #c0c0c0;
+$goldTips: #e6b80b;
+$mercury: #dde7eb;
+$paleGrey: #1d2129a6;
+$water: #e2e2e2;
 
 // Shadows
 $shadow1: 0px 9px 14.5px 0px rgba(194, 125, 11, 0.28);

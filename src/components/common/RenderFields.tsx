@@ -50,7 +50,8 @@ interface RenderFieldProps {
   MenuProps?: Partial<MenuProps>
   children?: any
   labelPlacement?: FormControlLabelProps['labelPlacement'],
-  setValue?: any
+  setValue?: any,
+  required?: boolean
 }
 
 const RenderFields: React.FC<RenderFieldProps> = ({
@@ -86,6 +87,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   endAdornment,
   control,
   labelPlacement,
+  required,
   ...otherProps
 }) => {
   const [passwordVisibility, togglePasswordVisibility] = useToggle(false)
@@ -104,6 +106,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
         >
           {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
           <Controller
+            control={control}
             render={({ field }) => (
               <Select
                 inputProps={{ id: name }}
@@ -113,6 +116,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 disabled={disabled}
                 variant={variant}
                 MenuProps={MenuProps}
+                required={required}
                 sx={
                   field.value === 'none'
                     ? {
@@ -316,7 +320,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
           margin={margin}
           {...(error ? { error: true } : {})}
         >
-          {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+          {label && <FormLabel htmlFor={name}>{label}{required && " *"}</FormLabel>}
           <TextField
             id={name}
             fullWidth={fullWidth}
@@ -328,6 +332,8 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             disabled={disabled}
             variant={variant}
             onKeyDown={onKeyDown}
+            required={required}
+            // label={label}
             InputProps={{ readOnly, onBlur, endAdornment }}
             {...register(name)}
             {...otherProps}

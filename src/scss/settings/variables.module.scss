@@ -1,8 +1,12 @@
-@import 'variables';
+@import "variables";
 
-:export{
-    copper:$copper;
-silverSand:$silverSand;
-goldTips:$goldTips;
-mercury:$mercury;
+:export {
+  greyRegent: $greyRegent;
+  copper: $copper;
+  silverSand: $silverSand;
+  goldTips: $goldTips;
+  mercury: $mercury;
+  dark: $dark;
+  elephant: $elephant;
+  white: $white;
 }
