@@ -106,7 +106,7 @@ function ContactUs() {
                     className='SelectReason'
                   >
                     <MenuItem value="none">Select reason</MenuItem>
-                    <MenuItem value="sdhjk">Inspect/audit metal In my Vault Storage account</MenuItem>
+                    <MenuItem value="Inspect/audit metal In my Vault Storage account">Inspect/audit metal In my Vault Storage account</MenuItem>
                     <MenuItem value="technology">Technology</MenuItem>
                     <MenuItem value="manufactorig">Manufactorig</MenuItem>
                   </RenderFields>

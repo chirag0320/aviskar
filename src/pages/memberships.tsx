@@ -11,7 +11,7 @@ import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { membershipPlanDetails } from "@/redux/reducers/homepageReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { useAppSelector } from "@/hooks";
-const colourForMembership:any={
+const colourForMembership: any = {
     gold: 'goldTips',
     palladium: 'palladium',
     platinum: 'mercury',
@@ -38,9 +38,9 @@ function Memberships() {
                     <Container>
                         <Box className="MembershipCardWrapper">
                             {
-                                Object.entries(mebershipPlanDetailsData).flatMap((item:any, index) => {
+                                Object.entries(mebershipPlanDetailsData).flatMap((item: any, index) => {
                                     return (
-                                      item[0] !== 'currentMemberShip' ? [ <MembershipCard bgcolor={variable[colourForMembership[item[0]]]} cardtitle={item[0] as string} details={item[1]}/>] : []
+                                        item[0] !== 'currentMemberShip' ? [<MembershipCard bgcolor={variable[colourForMembership[item[0]]]} cardtitle={item[0] as string} details={item[1]} />] : []
                                     )
                                 })
                             }

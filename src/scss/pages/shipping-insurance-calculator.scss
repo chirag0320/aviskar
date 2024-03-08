@@ -10,12 +10,30 @@
 
             .MetalWrapper,
             .WeightWrapper {
-                align-items: center;
+                align-items: flex-start;
                 gap: 53px;
+
+                .MuiFormLabel-root {
+                    margin-bottom: 16px;
+                }
+
+                .SelectMetal,
+                .Weight {
+                    width: 55%;
+                }
             }
 
             .MetalWrapper {
                 margin-bottom: 22px;
+            }
+
+            .MetalType,
+            .WeightType {
+                .MuiFormLabel-root {
+                    font-size: 18px;
+                    line-height: 28px;
+                    font-weight: 700;
+                }
             }
 
             .AddMetaltBtn {
@@ -30,9 +48,10 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 30px;
 
-            // @include media($xl) {
-            //     grid-template-columns: repeat(3, 1fr);
-            // }
+            @include media-min($xxl) {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
             @include media($md) {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -45,6 +64,20 @@
 
         .TotalWrapper {
             border: 1px solid $mercury;
+            border-radius: 10px;
+
+            .DataValueWrapper {
+                padding: 30px 19px;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid $mercury;
+
+                &.TotalValueWrapper {
+                    background-color: $palladium;
+                    border-radius: 0px 0px 10px 10px;
+                    border-bottom: none;
+                }
+            }
         }
     }
 }

@@ -95,6 +95,8 @@ function ShippingInsuranceCalculator() {
                                         name="MetalType"
                                         label="Metal Type"
                                         control={control}
+                                        margin='none'
+                                        className='MetalType'
                                         options={[
                                             { id: '1', name: 'Bar', value: 'Bar', label: 'Bar' },
                                             { id: '2 ', name: 'Coin', value: 'Coin', label: 'Coin' },
@@ -127,6 +129,8 @@ function ShippingInsuranceCalculator() {
                                         name="WeightType"
                                         label="Weight Type"
                                         control={control}
+                                        margin='none'
+                                        className='WeightType'
                                         options={[
                                             { id: '1', name: 'Ounces', value: 'Ounces', label: 'Ounces' },
                                             { id: '2 ', name: 'Grams', value: 'Grams', label: 'Grams' },
@@ -138,7 +142,6 @@ function ShippingInsuranceCalculator() {
                                 {/* <Box className="FormAction"> */}
                                 <Button className='AddMetaltBtn' size='large' variant="contained">Add Metal</Button>
                                 {/* </Box> */}
-
                             </Box>
                             <Box className="ShippingCardsWrapper">
                                 <ShippingCard cardtitle="Gold bars" />
@@ -151,7 +154,18 @@ function ShippingInsuranceCalculator() {
                                 <ShippingCard cardtitle="Platinum coins" />
                             </Box>
                             <Box className="TotalWrapper">
-
+                                <Stack className='DataValueWrapper'>
+                                    <Typography variant="body1" className="">Insurance</Typography>
+                                    <Typography variant="subtitle1" className="">$ 673.51</Typography>
+                                </Stack>
+                                <Stack className='DataValueWrapper'>
+                                    <Typography variant="body1" className="">Shipping</Typography>
+                                    <Typography variant="subtitle1" className="">$ 173.53</Typography>
+                                </Stack>
+                                <Stack className='DataValueWrapper TotalValueWrapper'>
+                                    <Typography variant="subtitle1" className="">Total</Typography>
+                                    <Typography variant="subtitle1" className="">$ 847.041</Typography>
+                                </Stack>
                             </Box>
                         </Box>
                     </Container>
