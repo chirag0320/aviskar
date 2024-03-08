@@ -13,6 +13,7 @@ export const ENDPOINTS = {
     login: '/login',
     loginUser: 'account/JO6SKzu1bEGLAizHldGDcg',
     ImpersonateSignIn: 'account/SdcEKDGa6sV',
+    BlogList: 'Blog/jk9mPhOPvkiq6luNZrwanA',
     logOutUser: 'account/VH7qPWBrFW1lA',
     forgotPasswordLink: "https://register.qmint.com/passwordrecovery",
     createMyAccount: "https://queenslandmint.com/register?returnUrl=",

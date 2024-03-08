@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Grid,
@@ -25,9 +25,27 @@ import * as variable from "../scss/settings/variables.module.scss";
 
 // Assets
 import { SearchButtonIcon } from "../assets/icons/index";
+import { useAppSelector } from "@/hooks";
+import useAPIoneTime from "@/hooks/useAPIoneTime";
+import { BlogList } from "@/redux/reducers/blogReducer";
+import { ENDPOINTS } from "@/utils/constants";
 
 function Blog() {
+  const { blogList } = useAppSelector((state) => state.blogPage)
+  console.log("🚀 ~ Blog ~ blogList:", blogList)
   const [value, setValue] = React.useState(1);
+  const [body,setbody] = useState({
+    "search": "",
+    "pageNo": 0,
+    "pageSize": -1,
+    "sortBy": "",
+    "sortOrder": "",
+    "filters": {
+      "keyword":null
+    }
+  })
+  
+  useAPIoneTime({ service: BlogList, endPoint: ENDPOINTS.BlogList, body })
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);

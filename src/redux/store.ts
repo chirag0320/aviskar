@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import homepageReducer from './reducers/homepageReducer'
+import blogReducer from './reducers/blogReducer'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 // Configuration for redux-persist
@@ -15,7 +16,8 @@ const persistConfig = {
 const persistedHomePageReducer = persistReducer(persistConfig, homepageReducer)
 const store = configureStore({
   reducer: {
-    homePage: persistedHomePageReducer
+    homePage: persistedHomePageReducer,
+    blogPage: blogReducer
     // profile: persistedProfileReducer,
     // contributor: persistedContributorReducer,
     // company: companyReducer,

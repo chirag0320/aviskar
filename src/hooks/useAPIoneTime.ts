@@ -14,7 +14,7 @@ const useAPIoneTime = ({ service, endPoint, body }: { service: any, endPoint: st
             }, 1500);
         }
         apiCall()
-    }, [])
+    }, [body])
 }
 
 export default useAPIoneTime
