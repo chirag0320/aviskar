@@ -12,9 +12,9 @@ function ChevronLeft() {
       <path
         d="M10 3L5 8L10 13"
         stroke="currentcolor"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

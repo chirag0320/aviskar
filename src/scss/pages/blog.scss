@@ -73,6 +73,11 @@
   }
   .PostFilter {
     margin-top: 40px;
+    .MuiTabs-root {
+      .MuiTabs-flexContainer {
+        flex-wrap: wrap;
+      }
+    }
     .TabPanel {
       margin-top: 60px;
       @include media($md) {
@@ -128,11 +133,7 @@
     }
     .MuiTypography-root {
       color: $dark;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2; /* limit to 2 lines */
+      @include max-line(2);
     }
   }
 }
