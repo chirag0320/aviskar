@@ -46,7 +46,6 @@ function ContactUs() {
     resolver: yupResolver(schema),
     defaultValues: {
       Reason: 'none', // Set the default value for the Reason field
-
     },
   })
 
@@ -106,7 +105,8 @@ function ContactUs() {
                     required
                     className='SelectReason'
                   >
-                    <MenuItem value="none">Inspect/audit metal In my Vault Storage account</MenuItem>
+                    <MenuItem value="none">Select reason</MenuItem>
+                    <MenuItem value="sdhjk">Inspect/audit metal In my Vault Storage account</MenuItem>
                     <MenuItem value="technology">Technology</MenuItem>
                     <MenuItem value="manufactorig">Manufactorig</MenuItem>
                   </RenderFields>

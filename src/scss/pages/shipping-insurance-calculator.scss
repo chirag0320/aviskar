@@ -1,0 +1,50 @@
+.ShippingInsuranceCalculator {
+    .ShippingInsuranceCalculatorPageContent {
+        padding: 70px 0 80px;
+
+        .SelectionWrapper {
+            margin-bottom: 50px;
+            padding: 50px;
+            border: 1px solid $mercury;
+            border-radius: 10px;
+
+            .MetalWrapper,
+            .WeightWrapper {
+                align-items: center;
+                gap: 53px;
+            }
+
+            .MetalWrapper {
+                margin-bottom: 22px;
+            }
+
+            .AddMetaltBtn {
+                margin-top: 50px;
+            }
+
+        }
+
+        .ShippingCardsWrapper {
+            margin-bottom: 50px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+
+            // @include media($xl) {
+            //     grid-template-columns: repeat(3, 1fr);
+            // }
+            @include media($md) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            @include media($sm) {
+                grid-template-columns: repeat(1, 1fr);
+                gap: 20px;
+            }
+        }
+
+        .TotalWrapper {
+            border: 1px solid $mercury;
+        }
+    }
+}

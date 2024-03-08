@@ -299,6 +299,7 @@
     text-align: center;
     border-radius: 20px;
     @include transition;
+
     &:hover {
       transform: scale(1.025);
       box-shadow: 14px 28px 43.29999923706055px 0px #0000001A;
@@ -311,10 +312,12 @@
 
     .MuiCardContent-root {
       padding: 0;
+
       h3 {
         line-height: 36px;
         @include padding-vertical(17);
         @include transition;
+
         @include media($md) {
           line-height: 30px;
           font-size: 24px;
@@ -363,3 +366,53 @@
 
 // }
 // End :: membershipcard css
+
+
+// Start :: shippingcard css
+.ShippingCard {
+  &.MuiCard-root {
+    position: relative;
+    padding: 20px;
+    border: 1px solid rgba($yellowFuel, 0.08);
+    border-radius: 15px;
+    box-shadow: 6px 6px 27px 0px rgba($black, 0.05);
+
+
+    .ShippingCardDetails {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 17px;
+
+      .MuiStack-root {
+        gap: 12px;
+        align-items: center;
+
+        .IconWrapper {
+          height: 50px;
+          width: 50px;
+          background-color: red;
+          object-fit: cover;
+          border-radius: 10px;
+        }
+      }
+    }
+
+    .CrossIconWithOutlineCircle {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 0;
+      height: 20px;
+      width: 20px;
+
+      svg {
+        height: 20px;
+        width: 20px;
+      }
+    }
+
+  }
+}
+
+// End :: shippingcard css
