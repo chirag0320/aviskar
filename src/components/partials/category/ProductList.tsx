@@ -28,56 +28,69 @@ let timeoutId: number | any = null;
 
 function ProductList() {
   const [priceForEachId, setPriceForEachId] = useState<IpriceForEachId | null>(null)
+  const [productIds, setProductIds] = useState({})
   const categoryData = useAppSelector((state) => state.category);
+  const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
 
+  // useEffect(() => {
+  //   const ids = (categoryData.items as any[]).map((item) => item.productId as any);
 
+  //   const fetchData = async () => {
+  //     timeoutId && clearTimeout(timeoutId);
+  //     if (cancellationSource) {
+  //       cancellationSource.abort();
+  //     }
+
+  //     cancellationSource = new AbortController();
+
+  //     timeoutId = setTimeout(() => {
+  //       cancellationSource?.signal.addEventListener('abort', () => {
+  //         // If request was cancelled before completing, clear state
+  //         clearTimeout(timeoutId);
+  //         cancellationSource = null;
+  //       });
+
+  //       axiosInstance
+  //         .post(ENDPOINTS.productPrices, { productIds: ids }, { signal: cancellationSource?.signal }).then(response => {
+  //           // console.log(response);
+
+  //           if (response?.data?.data) {
+  //             const idwithpriceObj: any = {}
+  //             response?.data?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
+  //             setPriceForEachId(idwithpriceObj)
+  //           }
+  //           clearTimeout(timeoutId);
+  //           cancellationSource = null;
+  //         }).catch(error => {
+  //           if (error.name !== 'AbortError') {
+  //             // console.error(error);
+  //           }
+  //           clearTimeout(timeoutId);
+  //           cancellationSource = null;
+  //         });
+  //     }, 100)
+  //   }
+  //   fetchData();
+  //   return () => {
+  //     clearTimeout(timeoutId);
+  //     if (cancellationSource) {
+  //       cancellationSource.abort();
+  //     }
+  //   };
+  // }, [categoryData])
   useEffect(() => {
-    const ids = (categoryData.items as any[]).map((item) => item.productId as any);
-
-    const fetchData = async () => {
-      timeoutId && clearTimeout(timeoutId);
-      if (cancellationSource) {
-        cancellationSource.abort();
-      }
-
-      cancellationSource = new AbortController();
-
-      timeoutId = setTimeout(() => {
-        cancellationSource?.signal.addEventListener('abort', () => {
-          // If request was cancelled before completing, clear state
-          clearTimeout(timeoutId);
-          cancellationSource = null;
-        });
-
-        axiosInstance
-          .post('price/deSo8Uy3q0Cz2LZ4gBy0vQ', { productIds: ids }, { signal: cancellationSource?.signal }).then(response => {
-            // console.log(response);
-
-            if (response?.data?.data) {
-              const idwithpriceObj: any = {}
-              response?.data?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
-              setPriceForEachId(idwithpriceObj)
-            }
-            clearTimeout(timeoutId);
-            cancellationSource = null;
-          }).catch(error => {
-            if (error.name !== 'AbortError') {
-              // console.error(error);
-            }
-            clearTimeout(timeoutId);
-            cancellationSource = null;
-          });
-      }, 100)
+    if (priceData?.data?.length > 0) {
+      const idwithpriceObj: any = {}
+      priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
+      setPriceForEachId(idwithpriceObj)
     }
-    fetchData();
-    return () => {
-      clearTimeout(timeoutId);
-      if (cancellationSource) {
-        cancellationSource.abort();
-      }
-    };
+  }, [priceData])
+  useEffect(() => {
+    if (categoryData?.items?.length > 0) {
+      const productIds = categoryData?.items?.map((product:any )=> product?.productId);
+      setProductIds({ productIds })
+    }
   }, [categoryData])
-
   return (
     <Fragment>
       <Box className="ProductList">
