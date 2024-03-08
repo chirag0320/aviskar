@@ -7,20 +7,26 @@ interface MembershipCardProps {
   cardtitle: string,
 }
 
-function MembershipCard({ bgcolor, cardtitle,details }: MembershipCardProps) {
+function MembershipCard({ bgcolor, cardtitle, details }: MembershipCardProps) {
   console.log("🚀 ~ MembershipCard ~ details:", details)
   const opacityColor = `${bgcolor}80`; // '33' represents 20% opacity
   return (
     <>
-      <Card className="MembershipCard" sx={{
-        border: `1px solid ${opacityColor}`,
-        '&:hover': {
-          border: `1px solid ${bgcolor}e6`,
-          '.CardTitle': {
-            backgroundColor: `${bgcolor}e6`,
+      <Card
+        className="MembershipCard "
+        sx={{
+          border: `1px solid ${opacityColor}`,
+          '&.ActiveCard': {
+            border: `1px solid ${bgcolor}`,
           },
-        },
-      }}>
+          '&:hover': {
+            border: `1px solid ${bgcolor}bf`,
+            '.CardTitle': {
+              backgroundColor: `${bgcolor}bf`,
+            },
+          },
+        }}
+      >
         <CardContent>
           <Typography className="CardTitle" variant='h4' sx={{ background: opacityColor }} component="h3">{cardtitle}</Typography>
           <Box className="Details" dangerouslySetInnerHTML={{ __html: details }}>
@@ -53,7 +59,7 @@ function MembershipCard({ bgcolor, cardtitle,details }: MembershipCardProps) {
         <CardActions>
           <Button name='upgradePlan' aria-label='upgradePlan' href="#" variant="outlined" size='large' className="UpgradPlanButton" fullWidth>Upgrade Plan</Button>
         </CardActions>
-      </Card>
+      </Card >
     </>
   )
 }

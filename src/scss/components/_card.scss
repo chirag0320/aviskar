@@ -301,14 +301,15 @@
     @include transition;
 
     &:hover {
-      transform: scale(1.025);
-      box-shadow: 14px 28px 43.29999923706055px 0px #0000001A;
+      // transform: scale(1.025);
+      // box-shadow: 14px 28px 43.29999923706055px 0px #0000001A;
 
       .UpgradPlanButton {
         background-color: $yellowFuel;
         color: $white;
       }
     }
+
 
     .MuiCardContent-root {
       padding: 0;
@@ -326,42 +327,44 @@
       }
 
       .Details {
-        ul{
+        ul {
           list-style: none;
           padding: 13px 30px 14px;
-        li {
-          padding: 10px 0;
-          justify-content: space-between;
-          border-bottom: 1px solid #0000000a;
 
-          // .ContentTitle {
+          li {
+            padding: 10px 0;
+            justify-content: space-between;
+            border-bottom: 1px solid #0000000a;
+
+            // .ContentTitle {
             opacity: 80%;
-          // }
+            // }
 
-          // .ContentValue {
+            // .ContentValue {
             font-size: 16px;
-          // }
+            // }
+          }
         }
       }
-      }
-// previously we are having this below detials css but now getting this from backend so need to chagne above css
-// .Details {
-//   padding: 13px 30px 14px;
 
-//   .ContentWrapper {
-//     padding: 10px 0;
-//     justify-content: space-between;
-//     border-bottom: 1px solid #0000000a;
+      // previously we are having this below detials css but now getting this from backend so need to chagne above css
+      // .Details {
+      //   padding: 13px 30px 14px;
 
-//     .ContentTitle {
-//       opacity: 80%;
-//     }
+      //   .ContentWrapper {
+      //     padding: 10px 0;
+      //     justify-content: space-between;
+      //     border-bottom: 1px solid #0000000a;
 
-//     .ContentValue {
-//       font-size: 16px;
-//     }
-//   }
-// }
+      //     .ContentTitle {
+      //       opacity: 80%;
+      //     }
+
+      //     .ContentValue {
+      //       font-size: 16px;
+      //     }
+      //   }
+      // }
     }
 
     .MuiCardActions-root {
@@ -380,6 +383,15 @@
         }
       }
     }
+  }
+
+  &.ActiveCard {
+    transform: scale(1.08);
+    box-shadow: 14px 28px 43.29999923706055px 0px #0000001A;
+
+    // .UpgradPlanButton{
+    //   background-color: ;
+    // }
   }
 }
 
