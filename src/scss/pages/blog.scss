@@ -1,16 +1,20 @@
 .HeroSection {
   margin-top: 50px;
+
   .PostWrapper {
     display: flex;
     margin-top: 50px;
     gap: 30px;
+
     @include media($lg) {
       flex-direction: column;
     }
+
     @include media($sm) {
       gap: 15px;
       margin-top: 30px;
     }
+
     .LeftPostWrapper {
       .PostCard {
         .PostImage {
@@ -19,30 +23,37 @@
         }
       }
     }
+
     .RightPostWrapper {
       display: flex;
       flex-direction: column;
       gap: 30px;
+
       @include media($sm) {
         gap: 15px;
       }
+
       .PostCard {
         display: flex;
         gap: 20px;
         align-items: center;
+
         @include media($sm) {
           flex-direction: column;
           gap: 15px;
         }
+
         .PostImage {
           height: 296px;
           width: 296px;
           object-fit: cover;
+
           @include media($sm) {
             height: 100%;
             width: 100%;
           }
         }
+
         .CardContentWrapper {
           .MuiCardContent-root {
             padding-top: 0;
@@ -55,14 +66,17 @@
 
 .DiscoverPost {
   margin-top: 80px;
+
   &__title {
     text-align: center;
   }
+
   .SearchWrapper {
     margin-top: 60px;
     justify-content: center;
     display: flex;
     gap: 20px;
+
     .MuiFormControl-root {
       .MuiInputBase-root {
         .MuiInputBase-input {
@@ -71,6 +85,7 @@
       }
     }
   }
+
   .PostFilter {
     margin-top: 40px;
     .MuiTabs-root {
@@ -80,6 +95,7 @@
     }
     .TabPanel {
       margin-top: 60px;
+
       @include media($md) {
         margin-top: 30px;
       }
@@ -94,22 +110,27 @@
     border-radius: 20px;
     max-height: 314px;
     height: 100%;
+
     @include media($lg) {
       max-height: 200px;
     }
   }
+
   .CardContentWrapper {
     .MuiCardContent-root {
       padding: 0;
       padding-top: 20px;
+
       .PostInfo {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         .UserInfo {
           display: flex;
           gap: 8px;
           align-items: center;
+
           .UserImage {
             width: 36px;
             height: 36px;
@@ -119,11 +140,14 @@
         }
       }
     }
+
     .MuiCardActions-root {
       .MuiButtonBase-root {
         line-height: 20px;
+
         .MuiButton-endIcon {
           margin-left: 10px;
+
           svg {
             width: 20px;
             height: 20px;
@@ -131,6 +155,7 @@
         }
       }
     }
+
     .MuiTypography-root {
       color: $dark;
       @include max-line(2);
