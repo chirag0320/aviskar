@@ -42,11 +42,11 @@ import SearchButtonIcon from "./SearchButtonIcon";
 // Social
 import FacebookIcon from "./social/FacebookIcon";
 import YoutubeIcon from "./social/YoutubeIcon";
-import FeedIcon from "./social/FeedIcon";
 import TwitterIcon from "./social/TwitterIcon";
+import InstagramIcon from "./social/InstagramIcon";
+import FeedIcon from "./social/FeedIcon";
 import BlueFacebookIcon from "./social/BlueFacebookIcon";
 import GoogleIcon from "./social/GoogleIcon";
-import InstagramIcon from "./social/InstagramIcon";
 import TwitterBirdIcon from "./social/TwitterBirdIcon";
 import WorldIcon from "./social/WorldIcon";
 import YouTubeTextIcon from "./social/YouTubeTextIcon";

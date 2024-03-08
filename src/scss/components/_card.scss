@@ -323,23 +323,42 @@
       }
 
       .Details {
-        padding: 13px 30px 14px;
-
-        .ContentWrapper {
+        ul{
+          list-style: none;
+          padding: 13px 30px 14px;
+        li {
           padding: 10px 0;
           justify-content: space-between;
           border-bottom: 1px solid #0000000a;
 
-          .ContentTitle {
+          // .ContentTitle {
             opacity: 80%;
-          }
+          // }
 
-          .ContentValue {
+          // .ContentValue {
             font-size: 16px;
-          }
+          // }
         }
       }
+      }
+// previously we are having this below detials css but now getting this from backend so need to chagne above css
+// .Details {
+//   padding: 13px 30px 14px;
 
+//   .ContentWrapper {
+//     padding: 10px 0;
+//     justify-content: space-between;
+//     border-bottom: 1px solid #0000000a;
+
+//     .ContentTitle {
+//       opacity: 80%;
+//     }
+
+//     .ContentValue {
+//       font-size: 16px;
+//     }
+//   }
+// }
     }
 
     .MuiCardActions-root {

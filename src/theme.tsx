@@ -125,7 +125,6 @@ const theme: Theme = createTheme({
           height: "100%",
           fontSize: "15px",
           // '@media (max-width: 900px)': {
-          //   fontSize: '15px',
           // },
         },
         body: {
@@ -156,6 +155,9 @@ const theme: Theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#1D212980",
+        },
+        invisible: {
+          backgroundColor: "transparent",
         },
       },
     },
