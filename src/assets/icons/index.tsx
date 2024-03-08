@@ -5,6 +5,7 @@ import ArrowDown from "./ArrowDown";
 import ChevronDown from "./ChevronDown";
 import ChevronUp from "./ChevronUp";
 import ChevronRight from "./ChevronRight";
+import ChevronLeft from "./ChevronLeft";
 import Search from "./Search";
 import Profile from "./Profile";
 import Call from "./Call";
@@ -36,6 +37,7 @@ import RadioCheckedIcon from "./RadioCheckedIcon";
 import RadioUncheckedIcon from "./RadioUncheckedIcon";
 import SortbyIcon from "./SortbyIcon";
 import FilterIcon from "./FilterIcon";
+import SearchButtonIcon from "./SearchButtonIcon";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
@@ -61,6 +63,7 @@ export {
   ChevronDown,
   ChevronUp,
   ChevronRight,
+  ChevronLeft,
   Search,
   Profile,
   Call,
@@ -92,6 +95,7 @@ export {
   RadioUncheckedIcon,
   SortbyIcon,
   FilterIcon,
+  SearchButtonIcon,
 
   // Social
   FacebookIcon,
@@ -107,4 +111,4 @@ export {
   Email,
   Calling,
   AddressIcon,
-}
+};

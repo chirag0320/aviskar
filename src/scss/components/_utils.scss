@@ -58,13 +58,13 @@
     }
   }
 }
-.PageTitle{
+.PageTitle {
   @include padding-vertical(34);
   background-color: $whiteLilac;
   @include media($sm) {
     @include padding-vertical(20);
   }
-  h2{
+  h2 {
     line-height: 36px;
     @include media($sm) {
       font-size: pxToRem(26);
@@ -72,6 +72,35 @@
     }
   }
 }
+
+.Breadcrumb {
+  .MuiBreadcrumbs-ol {
+    .MuiBreadcrumbs-li {
+      line-height: 20px;
+      a {
+        &.MuiTypography-root {
+          font-weight: 400;
+          line-height: 20px;
+          display: inline-block;
+        }
+      }
+      p {
+        &.MuiTypography-root {
+          font-weight: 600;
+          line-height: 20px;
+        }
+      }
+    }
+    .MuiBreadcrumbs-separator {
+      svg {
+        path {
+          stroke: $paleGrey;
+        }
+      }
+    }
+  }
+}
+
 .ProductStockStatus {
   justify-content: center;
   align-items: center;
