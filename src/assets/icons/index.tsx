@@ -5,6 +5,7 @@ import ArrowDown from "./ArrowDown";
 import ChevronDown from "./ChevronDown";
 import ChevronUp from "./ChevronUp";
 import ChevronRight from "./ChevronRight";
+import ChevronLeft from "./ChevronLeft";
 import Search from "./Search";
 import Profile from "./Profile";
 import Call from "./Call";
@@ -36,12 +37,23 @@ import RadioCheckedIcon from "./RadioCheckedIcon";
 import RadioUncheckedIcon from "./RadioUncheckedIcon";
 import SortbyIcon from "./SortbyIcon";
 import FilterIcon from "./FilterIcon";
+import SearchButtonIcon from "./SearchButtonIcon";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
 import YoutubeIcon from "./social/YoutubeIcon";
-import TwitterIcon from "./social/TwitterIcon";
 import FeedIcon from "./social/FeedIcon";
+import TwitterIcon from "./social/TwitterIcon";
+import BlueFacebookIcon from "./social/BlueFacebookIcon";
+import GoogleIcon from "./social/GoogleIcon";
+import InstagramIcon from "./social/InstagramIcon";
+import TwitterBirdIcon from "./social/TwitterBirdIcon";
+import WorldIcon from "./social/WorldIcon";
+import YouTubeTextIcon from "./social/YouTubeTextIcon";
+import Email from "./social/Email";
+import Calling from "./social/Calling";
+import AddressIcon from "./social/AddressIcon";
+
 
 export {
   ArrowLeft,
@@ -51,6 +63,7 @@ export {
   ChevronDown,
   ChevronUp,
   ChevronRight,
+  ChevronLeft,
   Search,
   Profile,
   Call,
@@ -82,10 +95,20 @@ export {
   RadioUncheckedIcon,
   SortbyIcon,
   FilterIcon,
+  SearchButtonIcon,
 
   // Social
   FacebookIcon,
   YoutubeIcon,
   TwitterIcon,
   FeedIcon,
-}
+  BlueFacebookIcon,
+  GoogleIcon,
+  TwitterBirdIcon,
+  InstagramIcon,
+  WorldIcon,
+  YouTubeTextIcon,
+  Email,
+  Calling,
+  AddressIcon,
+};

@@ -1,0 +1,194 @@
+#SocialNetwork {
+    padding: 35px 90px 35px 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 15px;
+    background-color: rgba($mercury, 0.5);
+
+    @include media($md) {
+        padding: 35px;
+    }
+
+    @include media($ssm) {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .SocialNetworkTitle {
+        line-height: 36px;
+
+        @include media($md) {
+            line-height: 33px;
+        }
+    }
+
+    .SocialMediaHandler {
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+
+        @include media($md) {
+            gap: 10px;
+        }
+
+        @include media($sm) {
+            gap: 13px;
+            flex-wrap: wrap;
+        }
+
+        .SocialMediaLink {
+            background-color: $white;
+            height: 64px;
+            width: 64px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 0.61px solid rgba($dark, 0.2);
+            @include transition;
+
+            &:hover {
+                border: 0.61px solid rgba($dark, .5);
+            }
+
+            @include media($md) {
+                height: 54px;
+                width: 54px;
+            }
+        }
+    }
+}
+
+.ContactUsPage {
+    padding-bottom: 70px;
+
+    @include media($md) {
+        padding-bottom: 60px;
+    }
+
+    .Title {
+        line-height: 36px;
+        letter-spacing: -1px;
+
+        @include media($md) {
+            font-size: 26px;
+            line-height: 33px;
+        }
+    }
+
+    .ContactCardsWrapper {
+        padding-top: 72px;
+        gap: 30px;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        @include media($xl) {
+            gap: 20px;
+        }
+
+        @include media($md) {
+            padding-top: 60px;
+        }
+
+
+        .ContactCard {
+            padding: 35px 30px 30px 30px;
+            border: 1px solid $mercury;
+            border-radius: 10px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 17px;
+            width: calc(33.33% - 30px);
+
+            @include media($md) {
+                width: calc(50% - 20px);
+                padding: 20px;
+            }
+
+            @include media($sm) {
+                width: calc(85% - 20px);
+            }
+
+
+            .IconWrapper {
+                height: 58px;
+                width: 58px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: $yellowFuel;
+
+                .OriginalIcon {
+                    height: auto;
+                    width: auto;
+                }
+            }
+        }
+    }
+
+    .GetInTouchWrapper {
+        padding: 66px 0 87px;
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        gap: 41px;
+
+        @include media($xl) {
+            gap: 30px;
+        }
+
+        @include media($md) {
+            flex-direction: column;
+            padding: 50px 0 50px;
+
+        }
+
+
+        .GetInTouchLeftForm {
+            flex: 1;
+
+            #GetintouchForm {
+                margin-top: 28px;
+
+                .InputRow {
+                    margin-bottom: 38px;
+
+                    &.EnquiryTexaea {
+                        margin-bottom: 28px;
+                    }
+                }
+
+                .SelectReason {
+                    svg {
+                        color: rgba($dark, 0.65);
+                        right: 17px;
+                    }
+                }
+
+                .FormAction {
+                    .GetInTouchSubmitBtn {
+                        padding-left: 59px;
+                        padding-right: 59px;
+                    }
+                }
+
+            }
+        }
+
+        .GetInTouchRightMap {
+            flex: 1;
+
+            iframe {
+                height: 100%;
+                border-radius: 20px;
+                width: 100%;
+                aspect-ratio: 16 / 9;
+
+            }
+        }
+    }
+}
