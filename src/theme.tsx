@@ -122,8 +122,8 @@ const theme: Theme = createTheme({
         html: {
           width: '100%',
           height: '100%',
+          fontSize: '15px',
           // '@media (max-width: 900px)': {
-          //   fontSize: '15px',
           // },
         },
         body: {
@@ -169,10 +169,10 @@ const theme: Theme = createTheme({
           '@media (max-width: 900px)': {
             maxWidth: "initial",
           },
-          '@media (min-width: 900px)': {
+          '@media (min-width: 900px) and (max-width: 1200px)': {
             maxWidth: 1000,
           },
-          '@media (min-width: 1200px)': {
+          '@media (min-width: 1200px) and (max-width: 1580px)': {
             maxWidth: "calc(1200px + 48px)", // 48px:: sum of horizontal padding
           },
           '@media (min-width: 1800px)': {

@@ -7,9 +7,16 @@ import { Box, Grid, Container, Typography } from "@mui/material"
 import { PageTitle } from "@/components/common/Utils"
 import MembershipCard from "@/components/partials/memberships/MembershipCard";
 import * as  variable from '../scss/settings/variables.module.scss'
+import useAPIoneTime from "@/hooks/useAPIoneTime";
+import { membershipPlanDetails } from "@/redux/reducers/homepageReducer";
+import { ENDPOINTS } from "@/utils/constants";
+import { useAppSelector } from "@/hooks";
 
 
 function Memberships() {
+    const { mebershipPlanDetailsData } = useAppSelector((state) => state.homePage)
+    console.log("🚀 ~ Memberships ~ mebershipPlanDetailsData:", mebershipPlanDetailsData)
+    useAPIoneTime({ service: membershipPlanDetails, endPoint: ENDPOINTS.membership })
     return (
         <Layout>
             <>
