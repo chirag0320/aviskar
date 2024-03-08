@@ -7,7 +7,7 @@ import PriceSlider from './PriceSlider'
 import RenderCheckboxField from './RenderCheckboxField'
 import { ENDPOINTS } from '@/utils/constants'
 import { getCategoryData } from '@/redux/reducers/categoryReducer'
-import { requestBodyDefault } from './LargerScreenFilters'
+
 interface props {
     renderList: (data: any) => any
 }
@@ -24,16 +24,16 @@ const SmallScreenFilters = ({ renderList }: props) => {
         setTabValue(newValue)
     }
 
-    const applyFilterHandler = async () => {
-        if (Object.keys(selectedFilters).length || (selectedPrice)) {
-            dispatch(getCategoryData(
-                {
-                    url: ENDPOINTS.getCategoryData,
-                    body: { ...requestBodyDefault, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters } }
-                }) as any)
-        }
-        toggleFilterBy()
-    }
+    // const applyFilterHandler = async () => {
+    //     if (Object.keys(selectedFilters).length || (selectedPrice)) {
+    //         dispatch(getCategoryData(
+    //             {
+    //                 url: ENDPOINTS.getCategoryData,
+    //                 body: { req , filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters } }
+    //             }) as any)
+    //     }
+    //     toggleFilterBy()
+    // }
 
     return (
         <Fragment>
@@ -100,7 +100,7 @@ const SmallScreenFilters = ({ renderList }: props) => {
                     </Stack>
                 </DialogContent>
                 <DialogActions>
-                    <Button className="ApplyFilter" variant="contained" onClick={applyFilterHandler}>Apply Filter</Button>
+                    <Button className="ApplyFilter" variant="contained" onClick={() => { }}>Apply Filter</Button>
                 </DialogActions>
             </Dialog>
         </Fragment>

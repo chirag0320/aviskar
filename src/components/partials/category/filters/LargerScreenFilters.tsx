@@ -10,40 +10,31 @@ import { getCategoryData } from '@/redux/reducers/categoryReducer'
 import useDebounce from '@/hooks/useDebounce'
 
 interface props {
-    renderList: (data: any) => any
+    renderList: (data: any) => any,
+    selectedFilters: { [key: string]: string[] },
+    setSelectedFilters: any,
+    setSelectedPrice: any,
 }
 
-export const requestBodyDefault: categoryRequestBody = {
-    search: "",
-    pageNo: 1,
-    pageSize: 12,
-    sortBy: "",
-    sortOrder: "",
-    filters: {
-        minPrice: 0,
-        maxPrice: 100,
-        specification: {}
-    }
-}
 
-const LargerScreenFilters = ({ renderList }: props) => {
+const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice, selectedFilters }: props) => {
     const categoryData = useAppSelector(state => state.category)
-    const dispatch = useAppDispatch()
+    // const dispatch = useAppDispatch()
 
-    const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
-    const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
+    // const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
+    // const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
 
-    const debounce = useDebounce(selectedFilters, 700);
+    // const debounce = useDebounce(selectedFilters, 700);
 
-    useEffect(() => {
-        if (Object.keys(selectedFilters).length || (selectedPrice)) {
-            dispatch(getCategoryData(
-                {
-                    url: ENDPOINTS.getCategoryData,
-                    body: { ...requestBodyDefault, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters } }
-                }) as any)
-        }
-    }, [debounce, selectedPrice]);
+    // useEffect(() => {
+    //     if (Object.keys(selectedFilters).length || (selectedPrice)) {
+    //         dispatch(getCategoryData(
+    //             {
+    //                 url: ENDPOINTS.getCategoryData,
+    //                 body: { ...requestBodyDefault, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters } }
+    //             }) as any)
+    //     }
+    // }, [debounce, selectedPrice]);
 
     return (
         <Box className="CategoryFilters">
