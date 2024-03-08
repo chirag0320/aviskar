@@ -1,0 +1,106 @@
+.PostDescription {
+  padding: 50px 0 80px;
+  .BackButton {
+    color: $dark;
+    font-size: 16px;
+    line-height: 26px;
+  }
+  .PostUploadInfo {
+    margin-top: 18px;
+  }
+  .ContentWrapper {
+    .PostThumbnail {
+      img {
+        width: 100%;
+        max-height: 700px;
+        object-fit: cover;
+        border-radius: 20px;
+        @include media($lg) {
+          max-height: 600px;
+        }
+        @include media($md) {
+          max-height: 400px;
+        }
+      }
+    }
+    .PostContent {
+      padding-bottom: 60px;
+      & > * {
+        margin-top: 14px;
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+    }
+    .FooterContent {
+      justify-content: space-between;
+      align-items: flex-end;
+      @include media($md) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+      .Left {
+        .SocialIconWrapper {
+          margin-top: 16px;
+          gap: 12px;
+          .SocialIcon {
+            background-color: $water;
+            border-radius: 50%;
+            svg {
+              path {
+                fill: $dark;
+              }
+            }
+          }
+        }
+      }
+      .Right {
+        display: flex;
+        gap: 11.5px;
+        @include media($md) {
+          flex-wrap: wrap;
+        }
+        .MuiChip-root {
+          font-size: 14px;
+          line-height: 20px;
+          font-weight: 600;
+          padding: 4px 13.3px;
+          height: auto;
+          .MuiChip-label {
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+  .RecentPosts {
+    margin-top: 50px;
+  }
+}
+.NewsLetter {
+  background: #eaa22b0d;
+  padding: 70px 0;
+  .NewsLetterWrapper {
+    text-align: center;
+    .NewsLetterBox {
+      margin-top: 40px;
+      gap: 16px;
+      display: flex;
+      justify-content: center;
+      .MuiFormControl-root {
+        width: 394px;
+        .MuiInputBase-root {
+          .MuiInputBase-input {
+            padding: 12px;
+          }
+        }
+      }
+    }
+    .TermsCondition {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 26px;
+    }
+  }
+}

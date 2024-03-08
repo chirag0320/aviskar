@@ -24,7 +24,8 @@ interface CreateGuidelineState {
     ordersCount: number
   } | null,
   isLoggedIn: boolean,
-  loadingForSignIn: boolean
+  loadingForSignIn: boolean,
+  mebershipPlanDetailsData: any
 }
 const initialState: CreateGuidelineState = {
   configDetails: {},
@@ -36,7 +37,8 @@ const initialState: CreateGuidelineState = {
   categoriesList: {},
   userDetails: null,
   isLoggedIn: false,
-  loadingForSignIn:false
+  loadingForSignIn: false,
+  mebershipPlanDetailsData: {}
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -76,6 +78,12 @@ export const ImpersonateSignInAPI = appCreateAsyncThunk(
     return await ConfigServices.ImpersonateSignIn(token)
   }
 )
+export const membershipPlanDetails = appCreateAsyncThunk(
+  'membershipPlanDetails/status',
+  async ({ url }: { url: string }) => {
+    return await ConfigServices.membershipPlanDetails(url)
+  }
+)
 // export const add = appCreateAsyncThunk(
 //   'add/status',
 //   async (data: GuidelineTitleParams) => {
@@ -103,6 +111,7 @@ export const createHomepageSlice = createSlice({
   reducers: {
     resetWholeHomePageData: (state) => {
       state.configDetails = {}
+      state.mebershipPlanDetailsData = {}
     },
     setLoadingTrue: (state) => {
       state.loading = true
@@ -125,6 +134,19 @@ export const createHomepageSlice = createSlice({
       state.loading = false
     })
     builder.addCase(configDetails.rejected, (state, action) => {
+      state.loading = false
+    })
+
+    // Get membership plan data
+    builder.addCase(membershipPlanDetails.pending, (state, action) => {
+      state.loading = true
+    })
+    builder.addCase(membershipPlanDetails.fulfilled, (state, action) => {
+      state.mebershipPlanDetailsData = action?.payload?.data?.data
+      console.log("🚀 ~ builder.addCase ~ action?.payload?.data?.data:", action?.payload?.data?.data)
+      state.loading = false
+    })
+    builder.addCase(membershipPlanDetails.rejected, (state, action) => {
       state.loading = false
     })
 

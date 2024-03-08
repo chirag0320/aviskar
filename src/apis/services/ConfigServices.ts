@@ -12,6 +12,12 @@ class ConfigServices {
     //   throw new Error(error)
     // })
   }
+  static async membershipPlanDetails(url: string) {
+    return axiosInstance.get(url)
+    // .then((res) => res.data).catch((error) => {
+    //   throw new Error(error)
+    // })
+  }
   static async homePageSectiondetails(url: string) {
     return axiosInstance.get(url)
     // .then((res) => res.data).catch((error) => {
