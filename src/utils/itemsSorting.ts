@@ -6,8 +6,6 @@ export const sortByMostPopular = (items: Product[]) => {
     return [...showOnHomepage, ...notShowOnHomepage];
 }
 
-// type ProductWithLivePrice = Product & { livePrice: number };
-
 export const sortByPriceLowToHigh = (items: any[]) => {
     const sortedItems = [...items].sort((a, b) => {
         return a.priceWithDetails.price - b.priceWithDetails.price;
