@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useMediaQuery, Theme, Box, Button, Container, Drawer, IconButton, Typography, } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -33,15 +33,21 @@ const schema = yup.object().shape({
 })
 
 // Hooks
-import { useToggle } from "@/hooks"
+import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 
 // Utils
 import RenderFields from "@/components/common/RenderFields"
-import { get } from "https"
+import { SortingOption } from "@/types/sortOptions"
+import { setSortedItems } from "@/redux/reducers/categoryReducer"
+import { sortByMostPopular, sortByPriceHighToLow, sortByPriceLowToHigh } from "@/utils/itemsSorting"
 
 function SortBy() {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
   const [openSortBy, toggleSortBy] = useToggle(false)
+  const [sortBy, setSortBy] = useState<SortingOption | null>(null);
+  const dispatch = useAppDispatch();
+  const items = useAppSelector(state => state.category.items);
+
   const {
     register,
     handleSubmit,
@@ -55,8 +61,34 @@ function SortBy() {
     defaultValues: {},
   })
 
-  // console.log(getValues());
 
+  useEffect(() => {
+    if (!sortBy) return;
+
+    if (sortBy == SortingOption.Popular) {
+      dispatch(setSortedItems(sortByMostPopular(items)));
+    }
+    else if (sortBy == SortingOption.PriceHighToLow) {
+      dispatch(setSortedItems(sortByPriceHighToLow(items)));
+    }
+    else if (sortBy == SortingOption.PriceLowToHigh) {
+      dispatch(setSortedItems(sortByPriceLowToHigh(items)));
+    }
+  }, [sortBy])
+
+  const handleChange = () => {
+    const value = Object.values(getValues())[0]
+
+    if (value === SortingOption.Popular) {
+      setSortBy(SortingOption.Popular)
+    }
+    else if (value === SortingOption.PriceHighToLow) {
+      setSortBy(SortingOption.PriceHighToLow)
+    }
+    else if (value === SortingOption.PriceLowToHigh) {
+      setSortBy(SortingOption.PriceLowToHigh)
+    }
+  }
 
   const renderSortByFields = (labelPlacement: FormControlLabelProps['labelPlacement']) => {
     return (
@@ -71,7 +103,7 @@ function SortBy() {
         margin="none"
         fullWidth
         setValue={setValue}
-        onChange={() => { console.log(getValues(), "wadesfrd") }}
+        onChange={handleChange}
       />
     )
   }

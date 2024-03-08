@@ -1,21 +1,15 @@
 import React, { Fragment, useCallback } from "react"
-import { useMediaQuery, Theme, Box, List, ListItem, ListItemButton, ListItemText, Divider } from "@mui/material"
-import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
+import { useMediaQuery, Theme, ListItem, ListItemButton, ListItemText, Divider } from "@mui/material"
 
-// Hooks
-import { useAppSelector } from "@/hooks"
 import SmallScreenFilters from "./SmallScreenFilters"
 import LargerScreenFilters from "./LargerScreenFilters"
+import { SortingOption } from "@/types/sortOptions"
 
 interface Props {
-  setSelectedFilters: any, setSelectedPrice: any, selectedFilters: { [key: string]: string[] }
+  setSelectedFilters: any,
+  setSelectedPrice: any,
+  selectedFilters: { [key: string]: string[] }
 }
-
-const schema = yup.object().shape({
-  Gender: yup.array().required().nullable(),
-})
 
 function CategoryFilters({ setSelectedFilters, setSelectedPrice, selectedFilters }: Props) {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))

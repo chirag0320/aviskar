@@ -46,6 +46,18 @@ export const categoryPageSlice = createSlice({
     setLoadingFalse: (state) => {
       state.loading = false
     },
+    setSortedItems: (state, action) => {
+      state.items = action.payload
+    },
+    setPriceForEachItem: (state, action: any) => {
+      const priceForEachId = action.payload;
+
+      state.items.forEach((item: any) => {
+        if (priceForEachId[item.productId]) {
+          item.priceWithDetails = priceForEachId[item.productId]
+        }
+      })
+    }
   },
 
   extraReducers: (builder) => {
@@ -77,6 +89,6 @@ export const categoryPageSlice = createSlice({
   },
 })
 
-export const { setLoadingTrue, setLoadingFalse } = categoryPageSlice.actions;
+export const { setLoadingTrue, setLoadingFalse, setSortedItems, setPriceForEachItem } = categoryPageSlice.actions;
 
 export default categoryPageSlice.reducer

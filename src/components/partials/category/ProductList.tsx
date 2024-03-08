@@ -12,39 +12,23 @@ import { useAppSelector } from "@/hooks"
 import { pageSize } from "@/pages/category"
 
 function ProductList({ page, setPage }: { page: number, setPage: any }) {
-  const [priceForEachId, setPriceForEachId] = useState<IpriceForEachId | null>(null)
-  const [productIds, setProductIds] = useState({})
   const categoryData = useAppSelector((state) => state.category);
-  const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
-
-  useEffect(() => {
-    if (priceData?.data?.length > 0) {
-      const idwithpriceObj: any = {}
-      priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
-      setPriceForEachId(idwithpriceObj)
-    }
-  }, [priceData])
-
-  useEffect(() => {
-    if (categoryData?.items?.length > 0) {
-      const productIds = categoryData?.items?.map((product: any) => product?.productId);
-      setProductIds({ productIds })
-    }
-  }, [categoryData])
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   }
 
+  // console.log(categoryData);
+
   return (
     <Box className="ProductList">
       <Box className="ProductListWrapper">
         {
-          categoryData.items.length > 0 ? categoryData.items.map((product: any) => {
-            const updatedProduct = { ...product };
-            updatedProduct.priceWithDetails = priceForEachId ? priceForEachId[product?.productId] : null;
+          categoryData?.items?.length > 0 ? categoryData.items.map((product: any) => {
+            // const updatedProduct = { ...product };
+            // updatedProduct.priceWithDetails = priceForEachId ? priceForEachId[product?.productId] : null;
             return (
-              <ProductCard key={product.productId} product={updatedProduct} />
+              <ProductCard key={product.productId} product={product} />
             );
           })
             :
