@@ -31,24 +31,40 @@ import { BlogList } from "@/redux/reducers/blogReducer";
 import { ENDPOINTS } from "@/utils/constants";
 
 function Blog() {
-  const { blogList } = useAppSelector((state) => state.blogPage)
+  const { blogList }: any = useAppSelector((state) => state.blogPage)
   console.log("🚀 ~ Blog ~ blogList:", blogList)
+  // const debounce = usedeb
   const [value, setValue] = React.useState(1);
-  const [body,setbody] = useState({
+  const [body, setbody] = useState<any>({
     "search": "",
     "pageNo": 0,
     "pageSize": -1,
     "sortBy": "",
     "sortOrder": "",
     "filters": {
-      "keyword":null
+      "keyword": null
     }
   })
-  
+
   useAPIoneTime({ service: BlogList, endPoint: ENDPOINTS.BlogList, body })
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+    console.log("🚀 ~ handleChange ~ newValue:", newValue)
+    setValue(newValue)
+    setbody(() => {
+      return (
+        {
+          "search": "",
+          "pageNo": 0,
+          "pageSize": -1,
+          "sortBy": "",
+          "sortOrder": "",
+          "filters": {
+            "keyword": (newValue ?? null) as any
+          }
+        }
+      )
+    })
   };
 
   return (
@@ -68,11 +84,11 @@ function Blog() {
           </Typography>
           <Box className="PostWrapper">
             <Stack className="LeftPostWrapper">
-              <PostCard />
+              <PostCard details={blogList?.items?.[0]} />
             </Stack>
             <Stack className="RightPostWrapper">
-              <PostCard />
-              <PostCard />
+              {blogList?.items?.[1] ? <PostCard details={blogList?.items?.[1]} /> : null}
+              {blogList?.items?.[2] ? <PostCard details={blogList?.items?.[2]} /> : null}
             </Stack>
           </Box>
         </Container>
@@ -114,16 +130,40 @@ function Blog() {
               sx={{ flexWrap: "wrap" }}
             >
               <Tab label="All Blog" value={1} />
-              <Tab label="News" value={2} />
-              <Tab label="Insights" value={3} />
-              <Tab label="Gold" value={4} />
-              <Tab label="Silver" value={5} />
-              <Tab label="Platinum" value={6} />
-              <Tab label="Community" value={7} />
-              <Tab label="Resources" value={8} />
+              <Tab label="News" value={'news'} />
+              <Tab label="Insights" value={'insights'} />
+              <Tab label="Gold" value={'gold'} />
+              <Tab label="Silver" value={'silver'} />
+              <Tab label="Platinum" value={'platinum'} />
+              <Tab label="Community" value={'community'} />
+              <Tab label="Resources" value={'resources'} />
             </Tabs>
 
-            <TabPanel index={1} value={value}>
+            <TabPanel index={value as any} value={value}>
+              <Grid
+                container
+                rowSpacing={{ md: 6.25, xs: 4 }}
+                columnSpacing={{ md: 3.75, xs: 2 }}
+              >
+                {blogList?.items?.map((item: any) => {
+                  return (
+                    <Grid item md={4} sm={6} key={item?.id}>
+                      <PostCard details={item} />
+                    </Grid>
+                  )
+                })}
+                {/* <Grid item md={4} sm={6}>
+                  <PostCard />
+                </Grid>
+                <Grid item md={4} sm={6}>
+                  <PostCard />
+                </Grid> */}
+              </Grid>
+              {blogList?.items?.length > 0 ? <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
+                <Button variant="contained">Load More</Button>
+              </Stack> : null}
+            </TabPanel>
+            {/* <TabPanel index={3} value={value}>
               <Grid
                 container
                 rowSpacing={{ md: 6.25, xs: 4 }}
@@ -142,8 +182,8 @@ function Blog() {
               <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
                 <Button variant="contained">Load More</Button>
               </Stack>
-            </TabPanel>
-            <TabPanel index={2} value={value}>
+            </TabPanel> */}
+            {/* <TabPanel index={2} value={value}>
               <Grid
                 container
                 rowSpacing={{ md: 6.25, xs: 4 }}
@@ -197,7 +237,7 @@ function Blog() {
             </TabPanel>
             <TabPanel index={8} value={value}>
               Item Three
-            </TabPanel>
+            </TabPanel> */}
           </Box>
         </Container>
       </Box>

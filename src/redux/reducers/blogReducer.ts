@@ -6,11 +6,11 @@ import ConfigServices, { IloginUserBody } from '@/apis/services/ConfigServices'
 import BlogServices from '@/apis/services/blogServices'
 
 interface BlogState {
-    blogList: any[],
+    blogList: {},
     loading: boolean
 }
 const initialState: BlogState = {
-    blogList: [],
+    blogList: {},
     loading: false
 }
 
