@@ -422,9 +422,20 @@
         .IconWrapper {
           height: 50px;
           width: 50px;
-          background-color: red;
           object-fit: cover;
           border-radius: 10px;
+
+          .GoldBarIcon {
+            height: 100%;
+            width: 100%;
+            display: inline-block;
+
+            svg {
+              height: 50px;
+              width: 50px;
+            }
+          }
+
         }
       }
     }

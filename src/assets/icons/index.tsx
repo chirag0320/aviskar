@@ -39,6 +39,7 @@ import SortbyIcon from "./SortbyIcon";
 import FilterIcon from "./FilterIcon";
 import CrossIconWithOutlineCircle from "./CrossIconWithOutlineCircle";
 import SearchButtonIcon from "./SearchButtonIcon";
+import GoldBarIcon from "./GoldBarIcon";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
@@ -98,6 +99,7 @@ export {
   FilterIcon,
   CrossIconWithOutlineCircle,
   SearchButtonIcon,
+  GoldBarIcon,
 
   // Social
   FacebookIcon,

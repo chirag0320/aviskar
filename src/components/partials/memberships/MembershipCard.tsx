@@ -13,7 +13,7 @@ function MembershipCard({ bgcolor, cardtitle, details }: MembershipCardProps) {
   return (
     <>
       <Card
-        className="MembershipCard "
+        className="MembershipCard"
         sx={{
           border: `1px solid ${opacityColor}`,
           '&.ActiveCard': {

@@ -1,8 +1,8 @@
 import React from 'react'
-import { Typography, Card, CardContent, Stack, Box, IconButton, } from "@mui/material"
+import { Typography, Card, CardContent, Stack, Box, IconButton, Icon, } from "@mui/material"
 
 // Assets
-import { CrossIconWithOutlineCircle } from "../../../assets/icons/index"
+import { CrossIconWithOutlineCircle, GoldBarIcon } from "../../../assets/icons/index"
 
 interface ShippingCardProps {
     cardtitle: string,
@@ -15,7 +15,7 @@ function ShippingCard({ cardtitle }: ShippingCardProps) {
                 <Box className="ShippingCardDetails">
                     <Stack>
                         <Box className="IconWrapper">
-                            {/* <Icon className="MetalIcon"></Icon> */}
+                            <Icon className='GoldBarIcon'><GoldBarIcon /></Icon>
                         </Box>
                         <Typography variant="subtitle2" className="MetalName">{cardtitle}</Typography>
                     </Stack>
