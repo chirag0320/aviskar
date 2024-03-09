@@ -1,0 +1,41 @@
+.GreyTable {
+  .MuiTable-root {
+    border: 1px solid rgba($dark, 0.1);
+    .MuiTableHead-root {
+      background-color: rgba($mercury, 0.5);
+      .MuiTableRow-root {
+        .MuiTableCell-root {
+          @include padding-vertical(17);
+        }
+      }
+    }
+    .MuiTableBody-root {
+      .MuiTableRow-root {
+        .MuiTableCell-root {
+          padding: 0;
+          border-bottom: none;
+          &:first-of-type {
+            .MuiDivider-root {
+              margin-left: 20px;
+            }
+          }
+          &:last-of-type {
+            .MuiDivider-root {
+              margin-right: 20px;
+            }
+          }
+          .MuiTypography-root {
+            @include padding-vertical(7);
+          }
+        }
+        &:last-of-type {
+          .MuiTableCell-root {
+            .MuiDivider-root {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -4,6 +4,7 @@ import ArrowUp from "./ArrowUp";
 import ArrowDown from "./ArrowDown";
 import ChevronDown from "./ChevronDown";
 import ChevronUp from "./ChevronUp";
+import ChevronUpRounded from "./ChevronUpRounded";
 import ChevronRight from "./ChevronRight";
 import ChevronLeft from "./ChevronLeft";
 import Search from "./Search";
@@ -19,6 +20,7 @@ import ContainedCrossIcon from "./ContainedCrossIcon";
 import OfferTagIcon from "./OfferTagIcon";
 import MapIcon from "./MapIcon";
 import MailIcon from "./MailIcon";
+import MailIcon1 from "./MailIcon1";
 import VaultIcon from "./VaultIcon";
 import SellToUsIcon from "./SellToUsIcon";
 import CalculatorIcon from "./CalculatorIcon";
@@ -38,6 +40,13 @@ import RadioUncheckedIcon from "./RadioUncheckedIcon";
 import SortbyIcon from "./SortbyIcon";
 import FilterIcon from "./FilterIcon";
 import SearchButtonIcon from "./SearchButtonIcon";
+import DeleteIcon from "./DeleteIcon";
+import MinusIcon from "./MinusIcon";
+import PlusIcon from "./PlusIcon";
+import HeartIcon from "./HeartIcon";
+import AlarmIcon from "./AlarmIcon";
+import CameraIcon from "./CameraIcon";
+import TimerIcon from "./TimerIcon";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
@@ -47,6 +56,7 @@ import TwitterIcon from "./social/TwitterIcon";
 import BlueFacebookIcon from "./social/BlueFacebookIcon";
 import GoogleIcon from "./social/GoogleIcon";
 import InstagramIcon from "./social/InstagramIcon";
+import InstagramIcon1 from "./social/InstagramIcon1";
 import TwitterBirdIcon from "./social/TwitterBirdIcon";
 import WorldIcon from "./social/WorldIcon";
 import YouTubeTextIcon from "./social/YouTubeTextIcon";
@@ -62,6 +72,7 @@ export {
   ArrowDown,
   ChevronDown,
   ChevronUp,
+  ChevronUpRounded,
   ChevronRight,
   ChevronLeft,
   Search,
@@ -77,6 +88,7 @@ export {
   OfferTagIcon,
   MapIcon,
   MailIcon,
+  MailIcon1,
   VaultIcon,
   SellToUsIcon,
   CalculatorIcon,
@@ -96,6 +108,13 @@ export {
   SortbyIcon,
   FilterIcon,
   SearchButtonIcon,
+  DeleteIcon,
+  MinusIcon,
+  PlusIcon,
+  HeartIcon,
+  AlarmIcon,
+  CameraIcon,
+  TimerIcon,
 
   // Social
   FacebookIcon,
@@ -106,6 +125,7 @@ export {
   GoogleIcon,
   TwitterBirdIcon,
   InstagramIcon,
+  InstagramIcon1,
   WorldIcon,
   YouTubeTextIcon,
   Email,

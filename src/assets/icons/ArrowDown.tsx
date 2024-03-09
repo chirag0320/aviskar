@@ -12,7 +12,7 @@ function ArrowDown(props: SvgIconProps) {
       {...props}
     >
       <g opacity="0.8">
-        <path d="M15 8.00733L10 13.0073L5 8.00732" fill="none" stroke="#1D2129" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M15 8.00733L10 13.0073L5 8.00732" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       </g>
     </SvgIcon>
   )
