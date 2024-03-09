@@ -3,6 +3,7 @@
     padding-top: 50px;
     .AboutWrapper {
       $dividerColor: rgba($dark, 0.1);
+      align-items: flex-start;
       gap: 2vw;
       @include media-min($xxl) {
         gap: 80px;
@@ -12,7 +13,46 @@
       }
       .ProductImages {
         flex: 1;
-        border: 1px solid $dividerColor;
+        max-width: 50%;
+        @include media($md) {
+          max-width: 100%;
+        }
+        .swiper {
+          .swiper-wrapper {
+            .swiper-slide {
+              .ImageWrapper {
+                justify-content: center;
+                align-items: center;
+                img {
+                  max-height: 300px;
+                  @include media-min($lg) {
+                    max-height: 420px;
+                  }
+                }
+              }
+            }
+          }
+          &.MainThumbnail {
+            background-color: rgba($dark, 0.03);
+            margin-bottom: 30px;
+            .swiper-wrapper {
+              .swiper-slide {
+                padding: 20px;
+              }
+            }
+          }
+          &.SupportImages {
+            padding-bottom: 20px;
+            .swiper-wrapper {
+              .swiper-slide {
+                img {
+                  object-fit: contain;
+                  object-position: center;
+                }
+              }
+            }
+          }
+        }
       }
       .ProductAbout {
         $spacing: 20;

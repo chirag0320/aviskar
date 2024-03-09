@@ -12,6 +12,7 @@ import type { SelectChangeEvent } from "@mui/material"
 import TabPanel from "@/components/common/TabPanel"
 import RenderFields from "@/components/common/RenderFields"
 import { PriceChangeReturn, ProductStockStatus, ProductUpdateCountdown } from "@/components/common/Utils"
+import ProductImages from "./ProductImages"
 
 // Assets
 import { AlarmIcon, CameraIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MailIcon, MailIcon1, MinusIcon, PlusIcon, TwitterIcon } from "@/assets/icons"
@@ -82,7 +83,7 @@ function AboutProduct() {
   return (
     <Box className="AboutProduct">
       <Stack className="AboutWrapper">
-        <Box className="ProductImages"></Box>
+        <ProductImages />
         <Box className="ProductAbout">
           <form>
             <Box className="Heading">
