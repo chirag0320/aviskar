@@ -17,7 +17,10 @@ export const ENDPOINTS = {
     forgotPasswordLink: "https://register.qmint.com/passwordrecovery",
     createMyAccount: "https://queenslandmint.com/register?returnUrl=",
     membership: "Checkout/rsBDWqaTLMJauU",
-    getCategoryData: "category/nRuA1KTPi0q4Outgqr39qw"
+    getCategoryData: "category/nRuA1KTPi0q4Outgqr39qw",
+    getContactUsConfiguration: "ContactUs/gGu8GSaHhEWKVZICJLtoeg",
+    reasonsForContact : "ContactUs/zdT918BBCkKYQBI2D1D0fw",
+    saveContactUsDetails : "ContactUs/jn1Gr1IOubQbzQV5S"
 }
 export const StoreData = {
     storeCode: 12,

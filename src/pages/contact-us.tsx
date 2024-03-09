@@ -1,58 +1,22 @@
 import React from 'react'
 import Seo from "../components/common/Seo"
 import Layout from "@/components/common/Layout";
-import { Box, Container, Typography, Stack, Icon, Link, MenuItem, Button, } from "@mui/material"
-import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-
+import { Box, Container, Typography, Stack, Icon, Link } from "@mui/material"
 // Utils
 import { PageTitle } from "@/components/common/Utils"
 import SocialNetwork from "@/components/partials/contactus/SocialNetwork";
 
 // Assets
 import { AddressIcon, Calling, Email, } from "../assets/icons/index"
-
-// Components
-import RenderFields from '../components/common/RenderFields'
-
-
-interface GetInTouchInputs {
-  Reason: string
-  Name: string
-  Email: string
-  Phone: string
-  Enquiry: string
-}
-
-const schema = yup.object().shape({
-  Reason: yup.string(),
-  Name: yup.string(),
-  Email: yup.string(),
-  Phone: yup.string(),
-  Enquiry: yup.string(),
-})
-
+import ContactUsForm from '@/components/partials/contactus/ContactUsForm';
+import useAPIoneTime from '@/hooks/useAPIoneTime';
+import { getConfiguration, getReasonsForContactUs } from '@/redux/reducers/contactUs';
+import { ENDPOINTS } from '@/utils/constants';
+import Map from '@/components/partials/contactus/Map';
 
 function ContactUs() {
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    control,
-    formState: { errors },
-  } = useForm<GetInTouchInputs>({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      Reason: 'none', // Set the default value for the Reason field
-
-    },
-  })
-
-  const onSubmit = (data: any) => {
-    console.log(data)
-  }
+  useAPIoneTime({ service: getReasonsForContactUs, endPoint: ENDPOINTS.reasonsForContact })
+  useAPIoneTime({ service: getConfiguration, endPoint: ENDPOINTS.getContactUsConfiguration })
 
   return (
     <Layout>
@@ -91,77 +55,8 @@ function ContactUs() {
               </Box>
             </Stack>
             <Box className="GetInTouchWrapper">
-              <Box className="GetInTouchLeftForm">
-                <Typography variant="h4" component="h2" className="Title">Get In Touch</Typography>
-                <form onSubmit={handleSubmit(onSubmit)} id="GetintouchForm">
-                  <RenderFields
-                    type="select"
-                    register={register}
-                    error={errors.Reason}
-                    name="Reason"
-                    label="Reason:"
-                    control={control}
-                    variant='outlined'
-                    margin='none'
-                    required
-                    className='SelectReason'
-                  >
-                    <MenuItem value="none">Inspect/audit metal In my Vault Storage account</MenuItem>
-                    <MenuItem value="technology">Technology</MenuItem>
-                    <MenuItem value="manufactorig">Manufactorig</MenuItem>
-                  </RenderFields>
-                  <RenderFields
-                    register={register}
-                    error={errors.Name}
-                    name="Name"
-                    label="Your name:"
-                    placeholder="Enter your name."
-                    variant='outlined'
-                    margin='none'
-                    required
-                  />
-                  <RenderFields
-                    register={register}
-                    error={errors.Name}
-                    name="Email"
-                    label="Your email:"
-                    placeholder="Enter your email address."
-                    variant='outlined'
-                    margin='none'
-                    required
-                  />
-                  <RenderFields
-                    register={register}
-                    error={errors.Name}
-                    name="Phone"
-                    label="Your phone:"
-                    placeholder="Enter your phone number."
-                    variant='outlined'
-                    margin='none'
-                    required
-                  />
-                  <RenderFields
-                    register={register}
-                    error={errors.Name}
-                    name="Enquiry"
-                    label="Enquiry:"
-                    placeholder="Enter your enquiry."
-                    variant='outlined'
-                    multiline={true}
-                    rows={7}
-                    className='EnquiryTexaea'
-                    margin='none'
-                    required
-                  />
-                  <Box className="FormAction">
-                    <Button className='GetInTouchSubmitBtn' variant="contained" type="submit">Submit</Button>
-                  </Box>
-                </form>
-
-              </Box>
-              <Box className="GetInTouchRightMap">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.9114285233754!2d72.50376677607713!3d23.02702407917064!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e9b398e5880f1%3A0x32614b29d1226274!2sShivalik%20Shilp!5e0!3m2!1sen!2sin!4v1709713953852!5m2!1sen!2sin" width="600" height="450" loading="lazy" ></iframe>
-              </Box>
+              <ContactUsForm />
+              <Map />
             </Box>
             <SocialNetwork />
           </Container>

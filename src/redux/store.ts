@@ -3,6 +3,7 @@ import homepageReducer from './reducers/homepageReducer'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import categoryReducer from './reducers/categoryReducer'
+import contactUsPageReducer from './reducers/contactUs'
 // Configuration for redux-persist
 const persistConfig = {
   key: 'root',
@@ -11,13 +12,14 @@ const persistConfig = {
     'configDetails',
     'loading',
     'sectionDetails',
-    'categoriesList','isLoggedIn','userDetails'], // Reducers you want to persist
+    'categoriesList', 'isLoggedIn', 'userDetails'], // Reducers you want to persist
 }
 const persistedHomePageReducer = persistReducer(persistConfig, homepageReducer)
 const store = configureStore({
   reducer: {
     homePage: persistedHomePageReducer,
-    category : categoryReducer
+    category: categoryReducer,
+    contactUs: contactUsPageReducer
 
     // profile: persistedProfileReducer,
     // contributor: persistedContributorReducer,
