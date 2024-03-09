@@ -7,6 +7,7 @@ import Seo from "@/components/common/Seo"
 import CategoryFilters from "@/components/partials/category/filters/CategoryFilters"
 import ProductList from "@/components/partials/category/ProductList"
 import SortBy from "@/components/partials/category/filters/SortBy"
+import { PageTitle } from "@/components/common/Utils"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { getCategoryData, setPriceForEachItem, setSortedItems } from "@/redux/reducers/categoryReducer"
 import { ENDPOINTS } from "@/utils/constants"
@@ -112,6 +113,7 @@ function Category() {
         title="Category"
         lang="en"
       />
+      <PageTitle title="QMINT Direct" />
       <Container id="PageCategory">
         {isSmallScreen ? (
           <Stack className="CategoryHeader">

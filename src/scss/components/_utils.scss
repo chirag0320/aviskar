@@ -61,7 +61,7 @@
 .PageTitle {
   @include padding-vertical(34);
   background-color: $whiteLilac;
-  @include media($sm) {
+  @include media($md) {
     @include padding-vertical(20);
   }
   h2 {
