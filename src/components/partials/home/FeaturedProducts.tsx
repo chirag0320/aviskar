@@ -36,7 +36,7 @@ export interface IFeaturedProducts {
   tagColor: string,
   metalId: number,
   tierpriceapply: boolean,
-  priceWithDetails: null | IproductPrice
+  priceWithDetails: null | IproductPrice,
 }
 export interface Idata {
   data: {
@@ -104,7 +104,7 @@ function FeaturedProducts() {
           });
 
           axiosInstance
-            .post('price/deSo8Uy3q0Cz2LZ4gBy0vQ', { productIds: ids }, { signal: cancellationSource?.signal })
+            .post(ENDPOINTS.productPrices, { productIds: ids }, { signal: cancellationSource?.signal })
             .then(response => {
               if (response?.data?.data) {
                 const idwithpriceObj: any = {}
