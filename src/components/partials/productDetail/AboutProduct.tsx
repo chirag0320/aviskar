@@ -87,7 +87,7 @@ function AboutProduct() {
         <Box className="ProductAbout">
           <form>
             <Box className="Heading">
-              <Typography className="ProductName" variant="h4">1oz Queensland Mint Kangaroo Gold Cast bar</Typography>
+              <Typography className="ProductName" variant="h4">Queensland Mint Kangaroo Gold Cast bar</Typography>
               <Typography>#1 customer choice in gold bars</Typography>
             </Box>
             <Divider />
