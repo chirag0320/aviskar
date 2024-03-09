@@ -139,3 +139,17 @@
     }
   }
 }
+
+.ProductUpdateCountdown {
+  align-items: center;
+  gap: 6px;
+}
+
+.PriceChangeReturn {
+  align-items: center;
+  gap: 4px;
+  padding: 7px;
+  color: $white;
+  border-radius: 5px;
+  background-color: $success;
+}

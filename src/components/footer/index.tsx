@@ -86,9 +86,9 @@ function index() {
               <Typography className="ConsentMessage" variant="body2">Your email is safe with us, we don't spam</Typography>
             </Box>
             <Stack className="SocialWrapper">
-              <IconButton target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}><FacebookIcon /></IconButton>
+              <IconButton target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}><FacebookIcon fontSize="small" /></IconButton>
               <IconButton target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}><YoutubeIcon /></IconButton>
-              <IconButton target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}><TwitterIcon /></IconButton>
+              <IconButton target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}><TwitterIcon fontSize="small" /></IconButton>
               <IconButton target={"_blank"} href={configDetailsState?.feedIcon?.value ?? window?.location?.href}><FeedIcon /></IconButton>
             </Stack>
           </Stack>

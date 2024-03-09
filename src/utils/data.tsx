@@ -232,3 +232,18 @@ export const sortByOptions = [
   // { id: '7', name: 'Year: Descending', value: 'Year: Descending', label: 'Year: Descending' },
   // { id: '8', name: 'Highest Rated', value: 'Highest Rated', label: 'Highest Rated' },
 ]
+
+export const qmintRating = [
+  {
+    name: "Overall",
+    percentage: 37.8,
+  },
+  {
+    name: "Outer Pack",
+    percentage: 40,
+  },
+  {
+    name: "Inner Pack",
+    percentage: 60,
+  },
+]
