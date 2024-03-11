@@ -37,7 +37,10 @@ import RadioCheckedIcon from "./RadioCheckedIcon";
 import RadioUncheckedIcon from "./RadioUncheckedIcon";
 import SortbyIcon from "./SortbyIcon";
 import FilterIcon from "./FilterIcon";
+import CrossIconWithOutlineCircle from "./CrossIconWithOutlineCircle";
 import SearchButtonIcon from "./SearchButtonIcon";
+import GoldBarIcon from "./GoldBarIcon";
+import GreenConfirmationIcon from "./GreenConfirmationIcon";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
@@ -95,7 +98,10 @@ export {
   RadioUncheckedIcon,
   SortbyIcon,
   FilterIcon,
+  CrossIconWithOutlineCircle,
   SearchButtonIcon,
+  GoldBarIcon,
+  GreenConfirmationIcon,
 
   // Social
   FacebookIcon,

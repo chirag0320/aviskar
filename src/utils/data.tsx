@@ -39,7 +39,7 @@ export const actionMenuItems = [
   {
     text: "Calculators",
     icon: <CalculatorIcon />,
-    href: "#",
+    href: "/storage-calculator",
     key: 'enablecalculators'
   },
   {
