@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import useDebounce from "@/hooks/useDebounce"
 import { categoryRequestBody } from "@/types/categoryRequestBody"
 import useApiRequest from "@/hooks/useAPIRequest"
+import { navigate } from "gatsby"
 
 export const pageSize = 12;
 export const requestBodyDefault: categoryRequestBody = {
@@ -39,9 +40,20 @@ function Category({ location }: { location: any }) {
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
     const categoryData = useAppSelector(state => state.category);
 
-    const debounce = useDebounce(selectedFilters, 700);
+    const debounceFilter = useDebounce(selectedFilters, 700);
+    const debouncePrice = useDebounce(selectedPrice, 700);
 
+    function checkthevalueAndNavigate(value: any) {
+        if (!value) {
+            navigate('/')
+            return true
+        }
+        return false
+    }
     useEffect(() => {
+        if (checkthevalueAndNavigate(location?.state?.categoryId)) {
+            return
+        }
         if (Object.keys(selectedFilters).length || (selectedPrice)) {
             dispatch(getCategoryData(
                 {
@@ -49,20 +61,20 @@ function Category({ location }: { location: any }) {
                     body: { ...requestBodyDefault, pageNo: page, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters } }
                 }) as any)
         }
-    }, [debounce, selectedPrice]);
+    }, [debounceFilter, debouncePrice]);
 
     useEffect(() => {
+        if (checkthevalueAndNavigate(location?.state?.categoryId)) {
+            return
+        }
         setSelectedFilters((prev) => ({}));
         setSelectedPrice(() => null);
-
-        // console.log(selectedFilters,selectedPrice);
-
         dispatch(getCategoryData(
             {
                 url: ENDPOINTS.getCategoryData + `/${location.state.categoryId}`,
                 body: { ...requestBodyDefault, pageNo: page, filters: { specification: {} } }
             }) as any)
-    }, [page])
+    }, [page, location.pathname])
 
 
     useEffect(() => {

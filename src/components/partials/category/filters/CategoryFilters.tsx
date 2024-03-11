@@ -16,6 +16,8 @@ function CategoryFilters({ setSelectedFilters, setSelectedPrice, selectedFilters
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
 
   const navigatePageHandler = (categoryId: number, searchEngineFriendlyPageName: string) => {
+    console.log("🚀 ~ navigatePageHandler ~ searchEngineFriendlyPageName:", searchEngineFriendlyPageName)
+    console.log("🚀 ~ navigatePageHandler ~ categoryId:", categoryId)
     navigate(`/${searchEngineFriendlyPageName}`, { state: { categoryId: categoryId } })
   }
 
@@ -26,7 +28,7 @@ function CategoryFilters({ setSelectedFilters, setSelectedPrice, selectedFilters
           data.map((item: any, index: number) => (
             <Fragment key={item.categoryId}>
               <ListItem>
-                <ListItemButton href="#" onClick={() => navigatePageHandler(item.categoryId, item.searchEngineFriendlyPageName)}>
+                <ListItemButton onClick={() => navigatePageHandler(item.categoryId, item.searchEngineFriendlyPageName)}>
                   <ListItemText primary={item.name} primaryTypographyProps={{ variant: "body2" }} />
                 </ListItemButton>
               </ListItem>
