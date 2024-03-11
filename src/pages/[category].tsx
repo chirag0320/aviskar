@@ -51,27 +51,27 @@ function Category({ location }: { location: any }) {
         return false
     }
     useEffect(() => {
-        if (checkthevalueAndNavigate(location?.state?.categoryId)) {
-            return
-        }
+        // if (checkthevalueAndNavigate(location?.state?.categoryId)) {
+        //     return
+        // }
         if (Object.keys(selectedFilters).length || (selectedPrice)) {
             dispatch(getCategoryData(
                 {
-                    url: ENDPOINTS.getCategoryData + `/${location.state.categoryId}`,
+                    url: ENDPOINTS.getCategoryData + `/${location.pathname}`,
                     body: { ...requestBodyDefault, pageNo: page, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters } }
                 }) as any)
         }
     }, [debounceFilter, debouncePrice]);
 
     useEffect(() => {
-        if (checkthevalueAndNavigate(location?.state?.categoryId)) {
-            return
-        }
+        // if (checkthevalueAndNavigate(location?.state?.categoryId)) {
+        //     return
+        // }
         setSelectedFilters((prev) => ({}));
         setSelectedPrice(() => null);
         dispatch(getCategoryData(
             {
-                url: ENDPOINTS.getCategoryData + `/${location.state.categoryId}`,
+                url: ENDPOINTS.getCategoryData + `/${location.pathname}`,
                 body: { ...requestBodyDefault, pageNo: page, filters: { specification: {} } }
             }) as any)
     }, [page, location.pathname])
