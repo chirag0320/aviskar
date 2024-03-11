@@ -1,8 +1,9 @@
 import RenderFields from '@/components/common/RenderFields'
-import React, { useTransition } from 'react'
+import React, { useEffect, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { log } from 'console'
 
 const schema = yup.object().shape({
     Gender: yup.array().required().nullable(),
@@ -13,19 +14,25 @@ interface props {
     options: any,
     selectedFilters: { [key: string]: string[] },
     setSelectedFilters: any,
+    page: number
 }
 
-const RenderCheckboxField = ({ filter, options, setSelectedFilters }: props) => {
+const RenderCheckboxField = ({ filter, options, setSelectedFilters, page }: props) => {
     const [isPending, startTransition] = useTransition();
     const {
         register,
         getValues,
         setValue,
+        reset,
         formState: { errors },
     } = useForm<{ Gender: string }>({
         resolver: yupResolver(schema),
         defaultValues: {},
     })
+
+    useEffect(() => {
+        reset();
+    }, [page])
 
     const onCheckboxChange = () => {
         startTransition(() => {

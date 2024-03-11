@@ -166,6 +166,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                             onChange()
                           }
                         }}
+                        checked={field.value === radioOption.value}
                       />
                     }
                     label={radioOption.label}
@@ -200,7 +201,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                           onChange(); // Trigger onChange if provided
                         }
                       }}
-                    // checked={!!getValues(name)?.[checkboxOption.value]} // Check if the specific option is checked
+                      checked={!!getValues(name)?.[checkboxOption.value]}
                     />
                   }
                   label={checkboxOption.label}

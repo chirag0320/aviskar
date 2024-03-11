@@ -2,9 +2,15 @@ import useDebounce from '@/hooks/useDebounce'
 import { Box, Slider, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 let c = 0
-const PriceSlider = ({ minPrice, maxPrice, setSelectedPrice }: { minPrice: number, maxPrice: number, setSelectedPrice: any }) => {
-    const [value, setValue] = useState<number[]>([0, 100])
+
+const defaultPrice = [0, 100]
+const PriceSlider = ({ minPrice, maxPrice, setSelectedPrice, page }: { minPrice: number, maxPrice: number, setSelectedPrice: any, page: number }) => {
+    const [value, setValue] = useState<number[]>([minPrice, maxPrice])
     const debouncedValue = useDebounce(value, 700);
+
+    // useEffect(() => {
+    //     setValue([minPrice, maxPrice])
+    // }, [page])
 
     useEffect(() => {
         if (c === 0) {

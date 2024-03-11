@@ -34,7 +34,7 @@ export interface IdispatchType {
 function SignInPage() {
   const { configDetails: configDetailsState, loadingForSignIn } = useAppSelector((state) => state.homePage)
   const [passwordVisible, setPasswordVisible] = useState(false)
-  const [loadingForNavigate,setLoadingForNavigate] = useState(false)
+  const [loadingForNavigate, setLoadingForNavigate] = useState(false)
   const [loginError, setLoginError] = useState<string | null>(null);
   const dispatch: Dispatch<any> = useAppDispatch()
   const togglePasswordVisibility = () => {
@@ -50,11 +50,11 @@ function SignInPage() {
     }
     navigate("/");
   };
-function navigateToRegister(){
-  setLoadingForNavigate(true)
-  navigate(ENDPOINTS.createMyAccount + StoreData.returnUrl);
-  setLoadingForNavigate(false)
-}
+  function navigateToRegister() {
+    setLoadingForNavigate(true)
+    navigate(ENDPOINTS.createMyAccount + StoreData.returnUrl);
+    setLoadingForNavigate(false)
+  }
   return (
     <Box id="SignInPage">
       <Container maxWidth="sm" >

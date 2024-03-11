@@ -13,11 +13,18 @@ export const ENDPOINTS = {
     login: '/login',
     loginUser: 'account/JO6SKzu1bEGLAizHldGDcg',
     ImpersonateSignIn: 'account/SdcEKDGa6sV',
+    BlogList: 'Blog/jk9mPhOPvkiq6luNZrwanA',
+    BlogDetails: 'Blog/71pfOKTeVEupzihE5QeGGQ',
+    NewsList: 'News/yXO7kEBPR0WMiRINsNssAQ',
+    NewsDetails: 'News/DoSnNVHaXUqBd12mBffQTA',
     logOutUser: 'account/VH7qPWBrFW1lA',
     forgotPasswordLink: "https://register.qmint.com/passwordrecovery",
     createMyAccount: "https://queenslandmint.com/register?returnUrl=",
     membership: "Checkout/rsBDWqaTLMJauU",
-    getCategoryData : "category/nRuA1KTPi0q4Outgqr39qw/571"
+    getCategoryData: "category/nRuA1KTPi0q4Outgqr39qw",
+    getContactUsConfiguration: "ContactUs/gGu8GSaHhEWKVZICJLtoeg",
+    reasonsForContact : "ContactUs/zdT918BBCkKYQBI2D1D0fw",
+    saveContactUsDetails : "ContactUs/jn1Gr1IOubQbzQV5S"
 }
 export const StoreData = {
     storeCode: 12,

@@ -7,3 +7,8 @@ export const stockStatus:any = {
   profit: 'profit',
   loss: 'loss',
 }
+export function formatDate(dateString:any) {
+  const options:any = { year: 'numeric', month: 'long', day: 'numeric' };
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', options);
+}
