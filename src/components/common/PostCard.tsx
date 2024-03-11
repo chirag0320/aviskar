@@ -14,6 +14,8 @@ import {
 
 // Assets
 import { ArrowRight } from "../../assets/icons/index";
+import { navigate } from "gatsby";
+import { formatDate } from "@/utils/common";
 
 function PostCard({details}:any) {
   return (
@@ -29,9 +31,9 @@ function PostCard({details}:any) {
           <Stack className="PostInfo">
             <Box className="UserInfo">
               <img className="UserImage" src="https://picsum.photos/200" />
-              <Typography variant="body1">Admin</Typography>
+              <Typography variant="body1">{details?.createdBy}</Typography>
             </Box>
-            <Typography variant="body1">need to add Createddate</Typography>
+            <Typography variant="body1">{formatDate(details?.createdOnUtc)}</Typography>
           </Stack>
           <Typography variant="subtitle2" sx={{ mt: 1.875 }}>
             {details?.title}
@@ -46,7 +48,9 @@ function PostCard({details}:any) {
           </Typography>
         </CardContent>
         <CardActions sx={{ mt: 1.25, p: 0 }}>
-          <Button variant="text" endIcon={<ArrowRight />}>
+          <Button variant="text" endIcon={<ArrowRight />} onClick={()=>{
+            navigate(`/blog/${details?.friendlyName}`)
+          }}>
             Discover More
           </Button>
         </CardActions>

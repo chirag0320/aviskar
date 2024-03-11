@@ -2,15 +2,16 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // Types
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
-import ConfigServices, { IloginUserBody } from '@/apis/services/ConfigServices'
-import BlogServices from '@/apis/services/blogServices'
+import BlogServices from '@/apis/services/blogAndNewsServices'
 
 interface BlogState {
     blogList: {},
+    blogDetailsData:{}
     loading: boolean
 }
 const initialState: BlogState = {
     blogList: {},
+    blogDetailsData:{},
     loading: false
 }
 
@@ -20,13 +21,19 @@ export const BlogList = appCreateAsyncThunk(
         return await BlogServices.BlogList(body)
     }
 )
-
+export const BlogDetailsAPI = appCreateAsyncThunk(
+    'BlogDetails/status',
+    async ({ params }: { params:{pathName: 'string'} }) => {
+        return await BlogServices.BlogDetails(params?.pathName)
+    }
+)
 export const blogpageSlice = createSlice({
     name: 'homepage',
     initialState,
     reducers: {
         resetWholeBlogPageData: (state) => {
-            state.blogList = []
+            state.blogList = {}
+            state.blogDetailsData={}
         },
         setLoadingTrue: (state) => {
             state.loading = true
@@ -46,6 +53,17 @@ export const blogpageSlice = createSlice({
             state.loading = false
         })
         builder.addCase(BlogList.rejected, (state, action) => {
+            state.loading = false
+        })
+        // Get Blog details
+        builder.addCase(BlogDetailsAPI.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(BlogDetailsAPI.fulfilled, (state, action) => {
+            state.blogDetailsData = action.payload.data.data
+            state.loading = false
+        })
+        builder.addCase(BlogDetailsAPI.rejected, (state, action) => {
             state.loading = false
         })
     },

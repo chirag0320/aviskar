@@ -21,20 +21,21 @@ import PostCard from "@/components/common/PostCard";
 import { Breadcrumb } from "@/components/common/Utils";
 
 // CSS Variable
-import * as variable from "../scss/settings/variables.module.scss";
+import * as variable from "../../scss/settings/variables.module.scss";
 
 // Assets
-import { SearchButtonIcon } from "../assets/icons/index";
+import { SearchButtonIcon } from "../../assets/icons/index";
 import { useAppSelector } from "@/hooks";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { BlogList } from "@/redux/reducers/blogReducer";
 import { ENDPOINTS } from "@/utils/constants";
+import useDebounce from "@/hooks/useDebounce";
 
 function Blog() {
   const { blogList }: any = useAppSelector((state) => state.blogPage)
-  console.log("🚀 ~ Blog ~ blogList:", blogList)
-  // const debounce = usedeb
-  const [value, setValue] = React.useState(1);
+  const [value, setValue] = React.useState<any>('all');
+  const [searchValue, setSearchValue] = useState<string>('')
+
   const [body, setbody] = useState<any>({
     "search": "",
     "pageNo": 0,
@@ -45,26 +46,18 @@ function Blog() {
       "keyword": null
     }
   })
+  const debounce = useDebounce(body, 500)
 
-  useAPIoneTime({ service: BlogList, endPoint: ENDPOINTS.BlogList, body })
+
+  useAPIoneTime({ service: BlogList, endPoint: ENDPOINTS.BlogList, body: debounce })
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    console.log("🚀 ~ handleChange ~ newValue:", newValue)
-    setValue(newValue)
-    setbody(() => {
-      return (
-        {
-          "search": "",
-          "pageNo": 0,
-          "pageSize": -1,
-          "sortBy": "",
-          "sortOrder": "",
-          "filters": {
-            "keyword": (newValue ?? null) as any
-          }
-        }
-      )
-    })
+    setValue(newValue as any)
+    setbody((prev: any) => ({
+      ...prev, "filters": {
+        "keyword": (((newValue as any) === 'all') ? null : newValue)
+      }
+    }))
   };
 
   return (
@@ -112,6 +105,11 @@ function Blog() {
               id="Search-Blog"
               placeholder="Search Blog"
               variant="outlined"
+              value={searchValue}
+              onChange={(e) => {
+                setSearchValue(e.target.value)
+                setbody((prev: any) => ({ ...prev, "search": e.target.value, }))
+              }}
             />
             <Button
               variant="contained"
@@ -129,7 +127,7 @@ function Blog() {
               textColor="secondary"
               sx={{ flexWrap: "wrap" }}
             >
-              <Tab label="All Blog" value={1} />
+              <Tab label="All Blog" value={'all'} />
               <Tab label="News" value={'news'} />
               <Tab label="Insights" value={'insights'} />
               <Tab label="Gold" value={'gold'} />
@@ -160,7 +158,7 @@ function Blog() {
                 </Grid> */}
               </Grid>
               {blogList?.items?.length > 0 ? <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                <Button variant="contained">Load More</Button>
+                {/* <Button variant="contained">Load More</Button> */}
               </Stack> : null}
             </TabPanel>
             {/* <TabPanel index={3} value={value}>
