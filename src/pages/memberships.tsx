@@ -11,6 +11,8 @@ import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { membershipPlanDetails } from "@/redux/reducers/homepageReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { useAppSelector } from "@/hooks";
+
+
 const colourForMembership: any = {
     gold: 'goldTips',
     palladium: 'palladium',

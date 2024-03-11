@@ -40,6 +40,7 @@ import FilterIcon from "./FilterIcon";
 import CrossIconWithOutlineCircle from "./CrossIconWithOutlineCircle";
 import SearchButtonIcon from "./SearchButtonIcon";
 import GoldBarIcon from "./GoldBarIcon";
+import GreenConfirmationIcon from "./GreenConfirmationIcon";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
@@ -100,6 +101,7 @@ export {
   CrossIconWithOutlineCircle,
   SearchButtonIcon,
   GoldBarIcon,
+  GreenConfirmationIcon,
 
   // Social
   FacebookIcon,
