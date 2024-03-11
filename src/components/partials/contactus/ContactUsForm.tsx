@@ -53,6 +53,9 @@ const ContactUsForm = () => {
         reset();
     }
 
+    console.log(loading);
+    
+
     return (
         <Box className="GetInTouchLeftForm">
             <Typography variant="h4" component="h2" className="Title">Get In Touch</Typography>

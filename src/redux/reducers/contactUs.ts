@@ -73,7 +73,7 @@ export const contactUsPageSlice = createSlice({
         builder.addCase(getConfiguration.fulfilled, (state, action) => {
             const responseData = action.payload.data.data;
             console.log(responseData);
-            
+
 
             const config: {
                 [key: string]: ConfigDetails
@@ -91,6 +91,17 @@ export const contactUsPageSlice = createSlice({
             state.html = config;
         })
         builder.addCase(getConfiguration.rejected, (state) => {
+            state.loading = false;
+        })
+
+        // save contact data
+        builder.addCase(saveContactUsDetails.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(saveContactUsDetails.fulfilled, (state, action) => {
+            state.loading = false;
+        })
+        builder.addCase(saveContactUsDetails.rejected, (state) => {
             state.loading = false;
         })
     },
