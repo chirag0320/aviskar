@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Skeleton, Card, Pagination, Stack } from "@mui/material"
+import { Box, Skeleton, Card, Pagination, Stack, Typography } from "@mui/material"
 
 // Components
 import { ProductCard } from "@/components/common/Card"
@@ -17,19 +17,20 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
   return (
     <Box className="ProductList">
       <Box className="ProductListWrapper">
+
         {
-          categoryData?.items?.length > 0 ? categoryData.items.map((product: any) => {
-            // const updatedProduct = { ...product };
-            // updatedProduct.priceWithDetails = priceForEachId ? priceForEachId[product?.productId] : null;
-            return (
-              <ProductCard key={product.productId} product={product} />
-            );
-          })
-            :
+          !categoryData.loading ? (
+            categoryData?.items?.length > 0 ? categoryData.items.map((product: any) => {
+              return (
+                <ProductCard key={product.productId} product={product} />
+              );
+            })
+              : <Typography variant="body1">Record not found</Typography>
+          ) : (
             Array(6).fill(0).map((_, index) => {
               return (
                 <Card className="ProductCard" key={index}>
-                  <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
+                  <Skeleton animation="wave" height={350} width={300} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
                   <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                     <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
                     <Skeleton animation="wave" height={70} width="95%" />
@@ -37,6 +38,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
                 </Card>
               )
             })
+          )
         }
       </Box>
       <Stack className="Pagination">

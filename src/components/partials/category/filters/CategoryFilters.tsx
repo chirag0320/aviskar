@@ -8,10 +8,11 @@ import { navigate } from "gatsby"
 interface Props {
   setSelectedFilters: any,
   setSelectedPrice: any,
-  selectedFilters: { [key: string]: string[] }
+  selectedFilters: { [key: string]: string[] },
+  page: number
 }
 
-function CategoryFilters({ setSelectedFilters, setSelectedPrice, selectedFilters }: Props) {
+function CategoryFilters({ setSelectedFilters, setSelectedPrice, selectedFilters, page }: Props) {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
 
   const navigatePageHandler = (categoryId: number, searchEngineFriendlyPageName: string) => {
@@ -24,7 +25,7 @@ function CategoryFilters({ setSelectedFilters, setSelectedPrice, selectedFilters
         {
           data.map((item: any, index: number) => (
             <Fragment key={item.categoryId}>
-              <ListItem >
+              <ListItem>
                 <ListItemButton href="#" onClick={() => navigatePageHandler(item.categoryId, item.searchEngineFriendlyPageName)}>
                   <ListItemText primary={item.name} primaryTypographyProps={{ variant: "body2" }} />
                 </ListItemButton>
@@ -41,7 +42,7 @@ function CategoryFilters({ setSelectedFilters, setSelectedPrice, selectedFilters
     isSmallScreen ? (
       <SmallScreenFilters renderList={renderList} setSelectedFiltersMobile={setSelectedFilters} setSelectedPriceMobile={setSelectedPrice} />
     ) : (
-      <LargerScreenFilters renderList={renderList} setSelectedFilters={setSelectedFilters} setSelectedPrice={setSelectedPrice} selectedFilters={selectedFilters} />
+      <LargerScreenFilters renderList={renderList} setSelectedFilters={setSelectedFilters} setSelectedPrice={setSelectedPrice} selectedFilters={selectedFilters} page={page} />
     )
   )
 }

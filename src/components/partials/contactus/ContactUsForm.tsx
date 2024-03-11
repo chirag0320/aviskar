@@ -27,6 +27,7 @@ const schema = yup.object().shape({
 
 const ContactUsForm = () => {
     const reasonsForContact = useAppSelector(state => state.contactUs.reasonsForContact);
+    const loading = useAppSelector(state => state.contactUs.loading);
     const dispatch = useAppDispatch();
 
     const {
@@ -39,9 +40,8 @@ const ContactUsForm = () => {
         resolver: yupResolver(schema)
     })
 
-    const onSubmit = (data: any) => {
-        console.log(data);
-        dispatch(saveContactUsDetails({
+    const onSubmit = async (data: any) => {
+        await dispatch(saveContactUsDetails({
             url: ENDPOINTS.saveContactUsDetails, body: {
                 ReasonId: data.reason,
                 Email: data.email,
@@ -50,6 +50,7 @@ const ContactUsForm = () => {
                 PhoneNumber: data.phone
             }
         }) as any);
+        reset();
     }
 
     return (
@@ -116,7 +117,7 @@ const ContactUsForm = () => {
                 // required
                 />
                 <Box className="FormAction">
-                    <Button className='GetInTouchSubmitBtn' variant="contained" type="submit">Submit</Button>
+                    <Button className='GetInTouchSubmitBtn' variant="contained" type="submit" disabled={loading}>Submit</Button>
                 </Box>
             </form>
         </Box>

@@ -35,7 +35,6 @@ function Category({ location }: { location: any }) {
     const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
     const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
 
-    // const [priceForEachId, setPriceForEachId] = useState<IpriceForEachId | null>(null)
     const [productIds, setProductIds] = useState({})
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
     const categoryData = useAppSelector(state => state.category);
@@ -53,10 +52,15 @@ function Category({ location }: { location: any }) {
     }, [debounce, selectedPrice]);
 
     useEffect(() => {
+        setSelectedFilters((prev) => ({}));
+        setSelectedPrice(() => null);
+
+        // console.log(selectedFilters,selectedPrice);
+
         dispatch(getCategoryData(
             {
                 url: ENDPOINTS.getCategoryData + `/${location.state.categoryId}`,
-                body: { ...requestBodyDefault, pageNo: page, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters } }
+                body: { ...requestBodyDefault, pageNo: page, filters: { specification: {} } }
             }) as any)
     }, [page])
 
@@ -79,25 +83,10 @@ function Category({ location }: { location: any }) {
         }
     }, [categoryData.specifications])
 
-    // useAPIoneTime({
-    //   service: getCategoryData, endPoint: ENDPOINTS.getCategoryData, body: {
-    //     "search": "",
-    //     "pageNo": 1,
-    //     "pageSize": 12,
-    //     "sortBy": "",
-    //     "sortOrder": "",
-    //     "filters": {
-    //       "minPrice": 0,
-    //       "maxPrice": 100,
-    //       "specification": {}
-    //     }
-    //   }
-    // })
-
     const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
 
     const categoryFilters = (
-        <CategoryFilters selectedFilters={selectedFilters} setSelectedPrice={setSelectedPrice} setSelectedFilters={setSelectedFilters} />
+        <CategoryFilters selectedFilters={selectedFilters} setSelectedPrice={setSelectedPrice} setSelectedFilters={setSelectedFilters} page={page} />
     );
 
     return (
@@ -110,7 +99,7 @@ function Category({ location }: { location: any }) {
             <Container id="PageCategory">
                 {isSmallScreen ? (
                     <Stack className="CategoryHeader">
-                        <SortBy />
+                        <SortBy page={page} />
                         {categoryFilters}
                     </Stack>
                 ) : null}
