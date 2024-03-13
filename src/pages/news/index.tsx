@@ -79,11 +79,11 @@ function News() {
           </Typography>
           <Box className="PostWrapper">
             <Stack className="LeftPostWrapper">
-              <PostCard details={newsList?.items?.[0]} navigate={() => navigate(`/news/${newsList?.items?.[0]?.friendlyName}`)}/>
+              <PostCard isNews={true} details={newsList?.items?.[0]} navigate={() => navigate(`/news/${newsList?.items?.[0]?.friendlyName}`)}/>
             </Stack>
             <Stack className="RightPostWrapper">
-              {newsList?.items?.[1] ? <PostCard details={newsList?.items?.[1]} navigate={() => navigate(`/news/${newsList?.items?.[1]?.friendlyName}`)} /> : null}
-              {newsList?.items?.[2] ? <PostCard details={newsList?.items?.[2]} navigate={() => navigate(`/news/${newsList?.items?.[2]?.friendlyName}`)}/> : null}
+              {newsList?.items?.[1] ? <PostCard isNews={true} details={newsList?.items?.[1]} navigate={() => navigate(`/news/${newsList?.items?.[1]?.friendlyName}`)} /> : null}
+              {newsList?.items?.[2] ? <PostCard isNews={true} details={newsList?.items?.[2]} navigate={() => navigate(`/news/${newsList?.items?.[2]?.friendlyName}`)}/> : null}
             </Stack>
           </Box>
         </Container>
@@ -148,7 +148,7 @@ function News() {
                 {newsList?.items?.map((item: any) => {
                   return (
                     <Grid item md={4} sm={6} key={item?.id}>
-                      <PostCard details={item} navigate={() => navigate(`/news/${item?.friendlyName}`)} />
+                      <PostCard isNews={true} details={item} navigate={() => navigate(`/news/${item?.friendlyName}`)} />
                     </Grid>
                   )
                 })}

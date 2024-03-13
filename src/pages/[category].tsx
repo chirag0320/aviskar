@@ -43,17 +43,7 @@ function Category({ location }: { location: any }) {
     const debounceFilter = useDebounce(selectedFilters, 700);
     const debouncePrice = useDebounce(selectedPrice, 700);
 
-    function checkthevalueAndNavigate(value: any) {
-        if (!value) {
-            navigate('/')
-            return true
-        }
-        return false
-    }
     useEffect(() => {
-        // if (checkthevalueAndNavigate(location?.state?.categoryId)) {
-        //     return
-        // }
         if (Object.keys(selectedFilters).length || (selectedPrice)) {
             dispatch(getCategoryData(
                 {
@@ -64,9 +54,6 @@ function Category({ location }: { location: any }) {
     }, [debounceFilter, debouncePrice]);
 
     useEffect(() => {
-        // if (checkthevalueAndNavigate(location?.state?.categoryId)) {
-        //     return
-        // }
         setSelectedFilters((prev) => ({}));
         setSelectedPrice(() => null);
         dispatch(getCategoryData(
@@ -79,7 +66,6 @@ function Category({ location }: { location: any }) {
 
     useEffect(() => {
         if (priceData?.data?.length > 0) {
-            // console.log("🚀 ~ useEffect ~ priceData:", priceData)
             const idwithpriceObj: any = {}
             priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
             // setPriceForEachId(() => idwithpriceObj)

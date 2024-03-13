@@ -26,13 +26,20 @@ const initialState: categoryData = {
   },
   specifications: {
   },
-  manufactureres: []
+  manufactureres: [],
+  productDetailsData:{}
 }
 
 export const getCategoryData = appCreateAsyncThunk(
   "getCategoryData",
   async ({ url, body }: { url: string, body: filterQuery }) => {
     return await CategoryServices.getCategoryData(url, body);
+  }
+)
+export const getProductDetailsData = appCreateAsyncThunk(
+  "getProductDetailsData",
+  async ({ url }: { url: string}) => {
+    return await CategoryServices.getProductDetailsData(url);
   }
 )
 
@@ -61,6 +68,7 @@ export const categoryPageSlice = createSlice({
   },
 
   extraReducers: (builder) => {
+    // category Data
     builder.addCase(getCategoryData.pending, (state) => {
       state.loading = true;
     })
@@ -86,6 +94,20 @@ export const categoryPageSlice = createSlice({
     builder.addCase(getCategoryData.rejected, (state) => {
       state.loading = false;
     })
+    
+    // product Details Data
+    builder.addCase(getProductDetailsData.pending, (state) => {
+      state.loading = true;
+    })
+    builder.addCase(getProductDetailsData.fulfilled, (state, action) => {
+      state.productDetailsData = action.payload.data.data
+      state.loading = false;
+
+    })
+    builder.addCase(getProductDetailsData.rejected, (state) => {
+      state.loading = false;
+    })
+
   },
 })
 

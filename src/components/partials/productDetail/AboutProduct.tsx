@@ -19,6 +19,10 @@ import { AlarmIcon, CameraIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIc
 
 // Data
 import { qmintRating } from "@/utils/data"
+import { useAppSelector } from "@/hooks"
+import useApiRequest from "@/hooks/useAPIRequest"
+import { ENDPOINTS } from "@/utils/constants"
+import { valueChangeForPrice } from "@/utils/common"
 
 function createData(
   quantity: string,
@@ -32,7 +36,12 @@ const rows = [
   createData('50 - 99', "$3079.15"),
   createData('100+', "$3076.15"),
 ];
-
+enum timeRangeEnum {
+  hour = 1,
+  week = 2,
+  month = 3,
+  year = 4
+}
 interface ProductInputs {
   Quantity: string
 }
@@ -42,10 +51,18 @@ const schema = yup.object().shape({
 })
 
 
-function AboutProduct() {
+function AboutProduct({ productId }: any) {
+  const { productDetailsData } = useAppSelector((state) => state.category)
+  console.log("🚀 ~ AboutProduct ~ productDetailsData:", productDetailsData)
+
+  const [quentityCount, setQuentityCount] = useState<number>(1)
+  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+  const [productIds] = useState({ productIds: [Number(productId)] })
+  const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
+  const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
+  const { data: progressData } = useApiRequest(urlForThePriceRange, 'get');
   const [tabValue, setTabValue] = useState<number>(0)
-  const [value, setValue] = useState<number>(250)
-  const [priceHistoryDuration, setPriceHistoryDuration] = useState<string>('24H')
+  const [priceHistoryDuration, setPriceHistoryDuration] = useState<string>('hour')
 
   const {
     register,
@@ -64,6 +81,7 @@ function AboutProduct() {
 
   const handlePriceHistoryDuration = (event: SelectChangeEvent) => {
     setPriceHistoryDuration(event.target.value as string);
+    setUrlForThePriceRange(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', timeRangeEnum[event?.target?.value as any]))
   }
 
   const renderRatingSlider = (name: string, percentage: number) => {
@@ -80,40 +98,54 @@ function AboutProduct() {
     )
   }
 
+  const handleQuentityUpdate = (type: 'plus' | 'minus') => {
+    switch (type) {
+      case "minus":
+        setQuentityCount((prev) => prev - 1 < 1 ? 1 : prev - 1)
+        break;
+
+      case "plus":
+        setQuentityCount((prev) => prev + 1)
+        break;
+      default:
+        break;
+    }
+  }
   return (
     <Box className="AboutProduct">
       <Stack className="AboutWrapper">
-        <ProductImages />
+        <ProductImages productImages={productDetailsData?.imageUrls} />
         <Box className="ProductAbout">
           <form>
             <Box className="Heading">
-              <Typography className="ProductName" variant="h4">Queensland Mint Kangaroo Gold Cast bar</Typography>
-              <Typography>#1 customer choice in gold bars</Typography>
+              <Typography className="ProductName" variant="h4">{productDetailsData?.name}</Typography>
+              <Typography>{productDetailsData?.shortDescription}</Typography>
             </Box>
             <Divider />
             <Box className="PricingDetails">
               <Stack className="Top">
                 <Stack className="Left">
-                  <Typography className="ProductValue" variant="subtitle2">$249.90</Typography>
-                  <Typography className="DiscountValue" variant="overline">$30.00 Off</Typography>
-                  <PriceChangeReturn percentage="0.75" />
+                  <Typography className="ProductValue" variant="subtitle2">${priceData?.data?.[0]?.price}</Typography>
+                  {priceData?.data?.[0]?.discount !== 0 ?   <Typography className="DiscountValue" variant="overline">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
+                  <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
+                  {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
                 </Stack>
                 <Stack className="Right">
                   <ProductUpdateCountdown />
-                  <Typography className="DiscountMessage" variant="overline">43% off the premium</Typography>
+                  <Typography className="DiscountMessage" variant="overline">{configDetailsState?.productboxdiscounttext?.value}</Typography>
                 </Stack>
               </Stack>
               <Stack className="Bottom">
                 <Stack className="SliderWrapper">
                   <Stack className="PriceMinMax">
-                    <Typography>Low: <Typography variant="titleLarge">$200</Typography></Typography>
-                    <Typography>High: <Typography variant="titleLarge">$269</Typography></Typography>
+                    <Typography>Low: <Typography variant="titleLarge">${progressData?.data?.minPrice}</Typography></Typography>
+                    <Typography>High: <Typography variant="titleLarge">${progressData?.data?.maxPrice}</Typography></Typography>
                   </Stack>
                   <Slider
                     className="Slider"
-                    value={value}
-                    min={200}
-                    max={269}
+                    value={priceData?.data?.[0]?.price}
+                    min={progressData?.data?.minPrice}
+                    max={progressData?.data?.maxPrice}
                     disabled
                   />
                 </Stack>
@@ -123,23 +155,26 @@ function AboutProduct() {
                   value={priceHistoryDuration}
                   onChange={handlePriceHistoryDuration}
                 >
-                  <MenuItem value="24H">24H</MenuItem>
-                  <MenuItem value="1W">1W</MenuItem>
-                  <MenuItem value="1M">1M</MenuItem>
-                  <MenuItem value="1Y">1Y</MenuItem>
+                  <MenuItem value="hour">24H</MenuItem>
+                  <MenuItem value="week">1W</MenuItem>
+                  <MenuItem value="month">1M</MenuItem>
+                  <MenuItem value="year">1Y</MenuItem>
                 </Select>
               </Stack>
             </Box>
             <Divider />
             <Stack className="OrderDetails">
-              <ProductStockStatus availability="Available to Order" colorClass="green-circle" />
-              <Typography className="ProductMessage" variant="overline">New Direct from Mint</Typography>
-              <Typography className="ShipmentDetail" variant="overline">Ship or collect after 14 Jan 2024</Typography>
+              <ProductStockStatus availability={productDetailsData?.availability} colorClass={productDetailsData?.colorClass} iconClass={productDetailsData?.iconClass} />
+              <Typography className="ProductMessage" variant="overline">{productDetailsData?.condition}</Typography>
+              <Typography className="ShipmentDetail" variant="overline">{productDetailsData?.description}</Typography>
             </Stack>
             <Divider />
             <Stack className="OrderActions">
               <Stack className="QuantityWrapper">
-                <IconButton className="Minus"><MinusIcon /></IconButton>
+                <IconButton id='minus' className="Minus" onClick={(e) => {
+                  e.stopPropagation()
+                  handleQuentityUpdate('minus')
+                }}><MinusIcon /></IconButton>
                 <RenderFields
                   color="primary"
                   register={register}
@@ -147,8 +182,13 @@ function AboutProduct() {
                   name="Quantity"
                   margin='none'
                   fullWidth={false}
+                  value={quentityCount as any}
+                  disabled={true}
                 />
-                <IconButton className="Plus"><PlusIcon /></IconButton>
+                <IconButton id='plus' className="Plus" onClick={(e) => {
+                  e.stopPropagation()
+                  handleQuentityUpdate('plus')
+                }}><PlusIcon /></IconButton>
               </Stack>
               <Stack className="Right">
                 <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />}>Add to cart</Button>
@@ -173,15 +213,15 @@ function AboutProduct() {
             </Stack> */}
             <Divider />
             <Stack className="AdditionalDetails">
-              <Accordion defaultExpanded>
+              {priceData?.data?.tierPriceList?.length > 0 ? <><Accordion defaultExpanded>
                 <AccordionSummary>
                   <Typography variant="titleLarge">Discounts Available</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi, nulla architecto. Id, tempora minima! Nam doloremque et omnis labore quo aliquid, dolor quidem recusandae cum perferendis? Delectus, quos ipsa! Odio?
                 </AccordionDetails>
-              </Accordion>
-              <Accordion defaultExpanded>
+              </Accordion></> : null}
+              {productDetailsData?.isGradingShow ? <Accordion defaultExpanded>
                 <AccordionSummary>
                   <Typography variant="titleLarge">QMINT Rating</Typography>
                 </AccordionSummary>
@@ -192,43 +232,43 @@ function AboutProduct() {
                     ))}
                   </Stack>
                 </AccordionDetails>
-              </Accordion>
+              </Accordion> : null}
             </Stack>
-            <Divider />
-            <Box className="PromotionalDetails">
-              <Accordion defaultExpanded>
-                <AccordionSummary>
-                  <Typography variant="titleLarge">Promo Pack Content</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <TableContainer className="GreyTable">
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell align="center"><Typography variant="subtitle1">Quantity</Typography></TableCell>
-                          <TableCell align="center"><Typography variant="subtitle1">Price</Typography></TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {rows.map((row) => (
-                          <TableRow key={row.quantity} >
-                            <TableCell align="center">
-                              <Typography>{row.quantity}</Typography>
-                              <Divider />
-                            </TableCell>
-                            <TableCell align="center">
-                              <Typography>{row.price}</Typography>
-                              <Divider />
-                            </TableCell>
+            {productDetailsData?.bulkProduct?.length > 0 ? <><Divider />
+              <Box className="PromotionalDetails">
+                <Accordion defaultExpanded>
+                  <AccordionSummary>
+                    <Typography variant="titleLarge">Promo Pack Content</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <TableContainer className="GreyTable">
+                      <Table size="small">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell align="center"><Typography variant="subtitle1">Quantity</Typography></TableCell>
+                            <TableCell align="center"><Typography variant="subtitle1">Price</Typography></TableCell>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
-            <Divider />
+                        </TableHead>
+                        <TableBody>
+                          {rows.map((row) => (
+                            <TableRow key={row.quantity} >
+                              <TableCell align="center">
+                                <Typography>{row.quantity}</Typography>
+                                <Divider />
+                              </TableCell>
+                              <TableCell align="center">
+                                <Typography>{row.price}</Typography>
+                                <Divider />
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+              <Divider /></> : null}
             <Stack className="InfoMessage">
               <CameraIcon />
               <Typography variant="body2">Your purchase will match the quality of the product shown. Dates will be of our choosing and may or may not vary, determined by stock on hand.</Typography>
@@ -244,34 +284,35 @@ function AboutProduct() {
           aria-label="Product description tabs"
           variant="fullWidth"
         >
-          <Tab label="Product Description" value={0} />
-          <Tab label="Additional Information" value={1} />
-          <Tab label="Rating & Reviews" value={2} />
+          {productDetailsData?.isProductDescriptionShow ? <Tab label="Product Description" value={0} /> : null}
+          {productDetailsData?.isAdditionalInformationShow ? <Tab label="Additional Information" value={1} /> : null}
+          {productDetailsData?.isRatingReviewShow ? <Tab label="Rating & Reviews" value={2} /> : null}
         </Tabs>
-        <TabPanel value={tabValue} index={0}>
+        {productDetailsData?.isProductDescriptionShow ? <TabPanel value={tabValue} index={0}>
           <Typography variant="h4" className="TabTitle">Product Description</Typography>
           <Box className="ScrollbarWrapper">
-            <Box className="Content ScrollbarBlue">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!
+            <Box className="Content ScrollbarBlue" dangerouslySetInnerHTML={{
+              __html: productDetailsData?.fullDescription
+            }}>
             </Box>
           </Box>
-        </TabPanel>
-        <TabPanel value={tabValue} index={1}>
+        </TabPanel> : null}
+        {productDetailsData?.isAdditionalInformationShow ? <TabPanel value={tabValue} index={1}>
           <Typography variant="h4" className="TabTitle">Additional Information</Typography>
           <Box className="ScrollbarWrapper">
             <Box className="Content ScrollbarBlue">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!
             </Box>
           </Box>
-        </TabPanel>
-        <TabPanel value={tabValue} index={2}>
+        </TabPanel> : null}
+        {productDetailsData?.isRatingReviewShow ? <TabPanel value={tabValue} index={2}>
           <Typography variant="h4" className="TabTitle">Rating & Reviews</Typography>
           <Box className="ScrollbarWrapper">
             <Box className="Content ScrollbarBlue">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!
             </Box>
           </Box>
-        </TabPanel>
+        </TabPanel> : null}
       </Stack>
     </Box>
   )

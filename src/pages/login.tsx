@@ -36,10 +36,13 @@ function SignInPage() {
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [loadingForNavigate, setLoadingForNavigate] = useState(false)
   const [loginError, setLoginError] = useState<string | null>(null);
+
   const dispatch: Dispatch<any> = useAppDispatch()
+
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible)
   }
+
   const { register, handleSubmit, formState: { errors, touchedFields } } = useForm();
 
   const onSubmit = async (data: any) => {
@@ -50,11 +53,13 @@ function SignInPage() {
     }
     navigate("/");
   };
+
   function navigateToRegister() {
     setLoadingForNavigate(true)
     navigate(ENDPOINTS.createMyAccount + StoreData.returnUrl);
     setLoadingForNavigate(false)
   }
+  
   return (
     <Box id="SignInPage">
       <Container maxWidth="sm" >
