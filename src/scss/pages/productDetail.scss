@@ -12,6 +12,8 @@
         flex-direction: column;
       }
       .ProductImages {
+        position: sticky;
+        top: calc(132px + 40px); // 132px: header hegiht
         flex: 1;
         max-width: 50%;
         @include media($md) {
@@ -46,6 +48,7 @@
             .swiper-wrapper {
               .swiper-slide {
                 img {
+                  cursor: pointer;
                   object-fit: contain;
                   object-position: center;
                 }
