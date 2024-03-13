@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Stack, MenuItem, Button } from "@mui/material"
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup'
@@ -41,7 +41,6 @@ const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
     })
 
     const handleFormSubmission = (data: any) => {
-        // console.log("🚀 ~ handleFormSubmission ~ data:", data)
         const calculatorData = {
             Metal: Number(data.SelectMetal),
             MetalType: Number(data.MetalType),
@@ -50,16 +49,21 @@ const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
         }
 
         dispatch(addCalculator(calculatorData));
-
+        reset();
+    }
+    useEffect(() => {
         dispatch(saveCalculatorsData({
             url: ENDPOINTS.saveCalculators,
             body: {
                 CalculatorType: CalculatorType,
-                CalculatorData: [...calculators, calculatorData]
+                CalculatorData: [...calculators]
             }
         }) as any);
-        reset();
-    }
+
+        return () => {
+
+        }
+    }, [calculators?.length])
 
     return (
         <form onSubmit={handleSubmit(handleFormSubmission)}>

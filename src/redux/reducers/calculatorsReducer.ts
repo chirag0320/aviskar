@@ -58,7 +58,8 @@ export const calculatorsPagesSlice = createSlice({
             state.calculators.push(calculatorData);
         },
         removeCalculator(state, action) {
-            const calculatorId = action.payload;
+            const calculatorIndex = action.payload;
+            state.calculators.splice(calculatorIndex,1)
         }
     },
 
@@ -67,11 +68,11 @@ export const calculatorsPagesSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(saveCalculatorsData.fulfilled, (state, action) => {
-            const responseData = action.payload.data.data;
+            const responseData = action?.payload?.data?.data;
 
-            state.shipping = responseData.shipping
-            state.insurance = responseData.insurance
-            state.vaultStorage = responseData.vaultStorage
+            state.shipping = responseData?.shipping
+            state.insurance = responseData?.insurance
+            state.vaultStorage = responseData?.vaultStorage
             state.loading = false;
         })
         builder.addCase(saveCalculatorsData.rejected, (state) => {
@@ -80,6 +81,6 @@ export const calculatorsPagesSlice = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse,addCalculator } = calculatorsPagesSlice.actions;
+export const { setLoadingTrue, setLoadingFalse,addCalculator, removeCalculator } = calculatorsPagesSlice.actions;
 
 export default calculatorsPagesSlice.reducer

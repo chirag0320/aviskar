@@ -11,6 +11,7 @@ import { AddToCartIcon, StackIcon, OfferTagIcon, ChevronDown, ChevronUp, ArrowRi
 // Utils
 import { ProductStockStatus } from "./Utils"
 import { IFeaturedProducts } from "../partials/home/FeaturedProducts"
+import { navigate } from "gatsby"
 interface Iproduct {
   product: IFeaturedProducts
 }
@@ -113,18 +114,20 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
 }
 
 export const TravelCard = (props: any) => {
-  const { place, description, imageUrl } = props
+  const { place, description, imageUrl, friendlyName } = props
   return (
     <Card className="TravelCard">
-      <Link className="ImageLink" href="#">
+      <Link className="ImageLink">
         <img src={imageUrl} alt="Travel image" loading="lazy" />
       </Link>
       <CardContent>
-        <Link className="Place" href="#"><Typography variant="subtitle2" component="h3">{place}</Typography></Link>
+        <Link className="Place"><Typography variant="subtitle2" component="h3">{place}</Typography></Link>
         <Typography className="Description">{description}</Typography>
       </CardContent>
       <CardActions>
-        <Button name='discoverMore' aria-label="discoverMore" href="#" endIcon={<ArrowRight />}>Discover More</Button>
+        <Button name='discoverMore' aria-label="discoverMore"  endIcon={<ArrowRight />} onClick={()=>{
+          navigate(`blog/${friendlyName}`)
+        }}>Discover More</Button>
       </CardActions>
     </Card>
   )

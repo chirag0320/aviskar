@@ -3,14 +3,18 @@ import { Typography, Card, CardContent, Stack, Box, IconButton, Icon, } from "@m
 
 // Assets
 import { CrossIconWithOutlineCircle, GoldBarIcon } from "../../../assets/icons/index"
+import { useAppDispatch } from '@/hooks'
+import { removeCalculator } from '@/redux/reducers/calculatorsReducer'
 
 interface CalculatorCardProps {
     title: string,
     weight: string,
     weightType: string
+    index: number
 }
 
-function CalculatorCard({ title, weight, weightType}: CalculatorCardProps) {
+function CalculatorCard({ title, weight, weightType, index}: CalculatorCardProps) {
+    const dispatch = useAppDispatch()
     return (
         <>
             <Card className="ShippingCard">
@@ -23,7 +27,9 @@ function CalculatorCard({ title, weight, weightType}: CalculatorCardProps) {
                     </Stack>
                     <Typography variant="subtitle1" className="MetalWeight">{`${weight} ${weightType}`}</Typography>
                 </Box>
-                <IconButton className="CrossIconWithOutlineCircle"><CrossIconWithOutlineCircle /></IconButton>
+                <IconButton className="CrossIconWithOutlineCircle" onClick={()=>{
+                    dispatch(removeCalculator(index))
+                }}><CrossIconWithOutlineCircle /></IconButton>
             </Card>
         </>
     )

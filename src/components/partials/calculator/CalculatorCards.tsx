@@ -7,13 +7,13 @@ import { Calculator } from '@/redux/reducers/calculatorsReducer'
 
 const CalculatorCards = () => {
     const calculators = useAppSelector(state => state.calculators.calculators);
-    // console.log(calculators);
 
     return (
         <Box className="CardsWrapper">
             {/* Note :- Make unique key later */}
             {calculators.map((cal: Calculator, index: number) => (
                 <CalculatorCard
+                    index={index}
                     key={cal.Metal + "#" + index}
                     title={Metals[cal.Metal as keyof typeof Metals]}
                     weight={cal.MetalWeight.toString()}
