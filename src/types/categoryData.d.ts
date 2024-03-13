@@ -8,5 +8,6 @@ export interface categoryData {
         maxPrice: number
     },
     specifications: {},
-    manufactureres: []
+    manufactureres: [],
+    productDetailsData: any
 }

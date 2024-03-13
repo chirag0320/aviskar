@@ -11,6 +11,7 @@ import { AddToCartIcon, StackIcon, OfferTagIcon, ChevronDown, ChevronUp, ArrowRi
 // Utils
 import { ProductStockStatus } from "./Utils"
 import { IFeaturedProducts } from "../partials/home/FeaturedProducts"
+import { navigate } from "gatsby"
 interface Iproduct {
   product: IFeaturedProducts
 }
@@ -104,7 +105,9 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
             </Box>
           </ClickTooltip>
         ) : null}
-        <Button name='discoverMore' aria-label='discoverMore' href="#" variant="contained" className="PrimaryAction" fullWidth>Discover More</Button>
+        <Button name='discoverMore' aria-label='discoverMore' variant="contained" onClick={()=>{
+          navigate(`/product-details/${product?.productId}`) //friendlypagename
+        }} className="PrimaryAction" fullWidth>Discover More</Button>
         {product.isBundle && <IconButton className="Outlined Stack"><StackIcon /></IconButton>}
         <IconButton className="Outlined AddToCart"><AddToCartIcon /></IconButton>
       </CardActions>

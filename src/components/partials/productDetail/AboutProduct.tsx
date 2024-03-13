@@ -19,6 +19,7 @@ import { AlarmIcon, CameraIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIc
 
 // Data
 import { qmintRating } from "@/utils/data"
+import { useAppSelector } from "@/hooks"
 
 function createData(
   quantity: string,
@@ -43,6 +44,8 @@ const schema = yup.object().shape({
 
 
 function AboutProduct() {
+  const { productDetailsData } = useAppSelector((state) => state.category)
+  console.log("🚀 ~ ProductDetail ~ productDetailsData:", productDetailsData)
   const [tabValue, setTabValue] = useState<number>(0)
   const [value, setValue] = useState<number>(250)
   const [priceHistoryDuration, setPriceHistoryDuration] = useState<string>('24H')
@@ -83,18 +86,18 @@ function AboutProduct() {
   return (
     <Box className="AboutProduct">
       <Stack className="AboutWrapper">
-        <ProductImages />
+        <ProductImages productImages={productDetailsData?.imageUrls}/>
         <Box className="ProductAbout">
           <form>
             <Box className="Heading">
-              <Typography className="ProductName" variant="h4">Queensland Mint Kangaroo Gold Cast bar</Typography>
-              <Typography>#1 customer choice in gold bars</Typography>
+              <Typography className="ProductName" variant="h4">{productDetailsData?.name}</Typography>
+              <Typography>{productDetailsData?.shortDescription}</Typography>
             </Box>
             <Divider />
             <Box className="PricingDetails">
               <Stack className="Top">
                 <Stack className="Left">
-                  <Typography className="ProductValue" variant="subtitle2">$249.90</Typography>
+                  <Typography className="ProductValue" variant="subtitle2">${productDetailsData?.productPrice}</Typography>
                   <Typography className="DiscountValue" variant="overline">$30.00 Off</Typography>
                   <PriceChangeReturn percentage="0.75" />
                 </Stack>
@@ -132,7 +135,7 @@ function AboutProduct() {
             </Box>
             <Divider />
             <Stack className="OrderDetails">
-              <ProductStockStatus availability="Available to Order" colorClass="green-circle" />
+              <ProductStockStatus availability={productDetailsData?.availability} colorClass={productDetailsData?.colorClass} iconClass={productDetailsData?.iconClass} />
               <Typography className="ProductMessage" variant="overline">New Direct from Mint</Typography>
               <Typography className="ShipmentDetail" variant="overline">Ship or collect after 14 Jan 2024</Typography>
             </Stack>

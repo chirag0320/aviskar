@@ -25,11 +25,11 @@ const defaultData = {
   }
 }
 
-function RelatedProduct() {
+function RelatedProduct({relatedProductsList}:any) {
   const [priceForEachId, setPriceForEachId] = useState<IpriceForEachId | null>(null)
   const [productIds, setProductIds] = useState({})
   const [dataforbody, setDataforbody] = useState<any>(defaultData)
-  const { data }: Idata = useApiRequest(ENDPOINTS.getProduct, 'post', dataforbody);
+  // const { data }: Idata = useApiRequest(ENDPOINTS.getProduct, 'post', dataforbody);
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
 
   useEffect(() => {
@@ -41,11 +41,11 @@ function RelatedProduct() {
   }, [priceData])
 
   useEffect(() => {
-    if (data?.data?.items?.length > 0) {
-      const productIds = data?.data?.items?.map(product => product?.productId);
+    if (relatedProductsList?.length > 0) {
+      const productIds = relatedProductsList?.map((product:any) => product?.productId);
       setProductIds({ productIds })
     }
-  }, [data])
+  }, [relatedProductsList])
 
   return (
     <Box className="RelatedProduct">
@@ -55,7 +55,7 @@ function RelatedProduct() {
       />
       <Box className="ProductList">
         {
-          data?.data?.items?.length > 0 ? data?.data?.items?.map((product) => {
+          relatedProductsList?.length > 0 ? relatedProductsList?.map((product:any) => {
             product.priceWithDetails = priceForEachId ? priceForEachId[product?.productId] : null;
             return (
               <ProductCard key={product.productId} product={product} />

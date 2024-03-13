@@ -23,8 +23,9 @@ export const ENDPOINTS = {
     membership: "Checkout/rsBDWqaTLMJauU",
     getCategoryData: "category/nRuA1KTPi0q4Outgqr39qw",
     getContactUsConfiguration: "ContactUs/gGu8GSaHhEWKVZICJLtoeg",
-    reasonsForContact : "ContactUs/zdT918BBCkKYQBI2D1D0fw",
-    saveContactUsDetails : "ContactUs/jn1Gr1IOubQbzQV5S"
+    reasonsForContact: "ContactUs/zdT918BBCkKYQBI2D1D0fw",
+    saveContactUsDetails: "ContactUs/jn1Gr1IOubQbzQV5S",
+    productDetails: "product/{{product-id}}/wb5rqwFBf0ua22kGp0Hlhw"
 }
 export const StoreData = {
     storeCode: 12,

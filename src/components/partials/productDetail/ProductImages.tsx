@@ -6,10 +6,7 @@ import { FreeMode, Navigation, Thumbs } from 'swiper/modules'
 // Types
 import { type Swiper as SwiperTypes } from "swiper"
 
-// Data
-import { productImages } from "@/utils/data"
-
-function ProductImages() {
+function ProductImages({ productImages }: any) {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperTypes | null>(null)
 
   return (
@@ -21,13 +18,13 @@ function ProductImages() {
           modules={[FreeMode, Thumbs]}
           spaceBetween={10}
         >
-          {productImages.map((image) => (
-            <SwiperSlide key={image}>
+          {productImages?.length > 0 ? productImages.map((url: any) => (
+            <SwiperSlide key={url}>
               <Stack className="ImageWrapper">
-                <img src={image} />
+                <img src={url} />
               </Stack>
             </SwiperSlide>
-          ))}
+          )) : null}
         </Swiper>
         <Swiper
           className="SupportImages"
@@ -64,11 +61,11 @@ function ProductImages() {
             },
           }}
         >
-          {productImages.map((image) => (
-            <SwiperSlide key={image}>
-              <img src={image} />
+          {productImages?.length > 0 ? productImages?.map((url: any) => (
+            <SwiperSlide key={url}>
+              <img src={url} />
             </SwiperSlide>
-          ))}
+          )) : null}
         </Swiper>
       </Box>
     </Box>
