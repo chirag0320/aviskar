@@ -53,7 +53,7 @@ import YouTubeTextIcon from "./social/YouTubeTextIcon";
 import Email from "./social/Email";
 import Calling from "./social/Calling";
 import AddressIcon from "./social/AddressIcon";
-
+import OrdersIcon from "./OrdersIcon";
 
 export {
   ArrowLeft,
@@ -111,4 +111,5 @@ export {
   Email,
   Calling,
   AddressIcon,
+  OrdersIcon,
 };

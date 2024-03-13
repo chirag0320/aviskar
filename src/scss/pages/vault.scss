@@ -1,0 +1,70 @@
+.VaultPage {
+  .HeroSection {
+    margin-top: 70px;
+    .HeroSectionWrapper {
+      display: flex;
+      flex-direction: row;
+      gap: 30px;
+      .Left {
+        width: 50%;
+        flex: 0 0 auto;
+        .VaultStats {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 30px;
+          margin-top: 45px;
+        }
+      }
+      .Right {
+        width: 50%;
+        flex: 0 0 auto;
+        #Banner {
+          .SwiperContainer {
+            .swiper {
+              .swiper-wrapper {
+                .swiper-slide {
+                  .Wrapper {
+                    border-radius: 15px;
+                    .BannerImage {
+                      visibility: visible !important;
+                      border-radius: 15px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .RewardSection {
+    .rewardText {
+      font-size: 30px;
+      line-height: 23px;
+    }
+    .rewardPoints {
+      line-height: 36px;
+      font-weight: 700;
+    }
+  }
+
+  .AccountInformation {
+    margin-bottom: 80px;
+    .AccountInformationText {
+      font-size: 30px;
+      line-height: 23px;
+    }
+    .MuiBox-root {
+      display: flex;
+      gap: 30px;
+    }
+    .AccountInformationCard {
+      box-shadow: 6px 6px 27px 0px #0000000d;
+      border: 1px solid #e1e6ef14;
+      padding: 10px 20px;
+      max-width: 436px;
+      width: 100%;
+    }
+  }
+}

@@ -301,7 +301,7 @@
     @include transition;
     &:hover {
       transform: scale(1.025);
-      box-shadow: 14px 28px 43.29999923706055px 0px #0000001A;
+      box-shadow: 14px 28px 43.29999923706055px 0px #0000001a;
 
       .UpgradPlanButton {
         background-color: $yellowFuel;
@@ -319,7 +319,6 @@
           line-height: 30px;
           font-size: 24px;
         }
-
       }
 
       .Details {
@@ -339,7 +338,6 @@
           }
         }
       }
-
     }
 
     .MuiCardActions-root {
@@ -363,3 +361,83 @@
 
 // }
 // End :: membershipcard css
+
+.PostCard {
+  .PostImage {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    max-height: 314px;
+    height: 100%;
+    @include media($lg) {
+      max-height: 200px;
+    }
+  }
+  .CardContentWrapper {
+    .MuiCardContent-root {
+      padding: 0;
+      padding-top: 20px;
+      .PostInfo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .UserInfo {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          .UserImage {
+            width: 36px;
+            height: 36px;
+            object-fit: cover;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+    .MuiCardActions-root {
+      .MuiButtonBase-root {
+        line-height: 20px;
+        .MuiButton-endIcon {
+          margin-left: 10px;
+          svg {
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+    }
+    .MuiTypography-root {
+      color: $dark;
+      @include max-line(2);
+    }
+  }
+}
+
+.StatsCard {
+  background: rgb(52 145 250 / 6%);
+  border-radius: 15px;
+  .MuiCardContent-root {
+    padding: 16px;
+  }
+  .TopWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .BottomWrapper {
+    margin-top: 23px;
+    justify-content: space-between;
+    align-items: center;
+    .StatNumber {
+      line-height: 36px;
+    }
+    .MuiIconButton-root {
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+      background-color: $yellowFuel;
+      border-radius: 50%;
+      color: $white;
+    }
+  }
+}

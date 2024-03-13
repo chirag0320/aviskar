@@ -42,156 +42,168 @@ function BlogDetails() {
 
   return (
     <Layout>
-      <Breadcrumb page1={"Blog"} page2={"Blog"} page3={"Blog"} />
-      <Box className="PostDescription">
-        <Container>
-          <Button
-            className="BackButton"
-            variant="text"
-            startIcon={<ChevronLeft />}
-          >
-            All Posts
-          </Button>
-          <Typography variant="h2" component="h2" sx={{ mt: 6 }}>
-            The Divine Luster: Gold’s Role in Religious History
-          </Typography>
-          <Stack className="PostUploadInfo" gap={6}>
-            <Box>
-              <Typography variant="body1">Written by</Typography>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "700", lineHeight: "28px", mt: 1.25 }}
-              >
-                Cameron Williamson
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="body1">Published on</Typography>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "700", lineHeight: "28px", mt: 1.25 }}
-              >
-                11 Jan 2024
-              </Typography>
-            </Box>
-          </Stack>
-          <Box className="ContentWrapper">
-            <Box className="PostThumbnail" sx={{ mt: 6 }}>
-              <img
-                src="https://picsum.photos/200"
-                alt="https://picsum.photos/200"
-              />
-            </Box>
-            <Box className="PostContent" sx={{ mt: 7.5 }}>
-              <Typography variant="subtitle1">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.
-                Eiusmod tempor. incididu nt ut labore et dolore magna aliqua. Ut
-                enim. ad minim veniam, uis nostrud exerc itation ullamco.
-                Laboris nisi.
-              </Typography>
-              <Typography variant="body1">
-                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit
-                aut fugit, sed quia consequuntur magni dolores eos qui ratione
-                voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem
-                ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia
-                non numquam eius modi tempora incidunt ut labore et dolore
-                magnam aliquam quaerat voluptatem.Lorem ipsum dolor sit amet,
-                consectetur adipisicing elit sed. Eiusmod tempor. incididu nt ut
-                labore et dolore magna aliqua. Ut enim. ad minim veniam, uis
-                nostrud exerc itation ullamco. Laboris nisi. ut aliquip ex ea
-                commodo consequat. Duis aute irure dolr. inreprehen derit in
-                voluptate velit esse cillum dolore. Eu fugiat nulla pariatur.
-              </Typography>
-            </Box>
-            <Stack className="FooterContent">
-              <Box className="Left">
-                <Typography variant="subtitle1">Share this post</Typography>
-                <Stack className="SocialIconWrapper">
-                  <IconButton className="SocialIcon" aria-label="Facebook Icon">
-                    <FacebookIcon />
-                  </IconButton>
-                  <IconButton className="SocialIcon" aria-label="Facebook Icon">
-                    <TwitterIcon />
-                  </IconButton>
-                  <IconButton className="SocialIcon" aria-label="Facebook Icon">
-                    <InstagramIcon />
-                  </IconButton>
-                </Stack>
+      <Box className="BlogDetailPage">
+        <Breadcrumb page1={"Blog"} page2={"Blog"} page3={"Blog"} />
+        <Box className="PostDescription">
+          <Container>
+            <Button
+              className="BackButton"
+              variant="text"
+              startIcon={<ChevronLeft />}
+            >
+              All Posts
+            </Button>
+            <Typography variant="h2" component="h2" sx={{ mt: 6 }}>
+              The Divine Luster: Gold’s Role in Religious History
+            </Typography>
+            <Stack className="PostUploadInfo" gap={6}>
+              <Box>
+                <Typography variant="body1">Written by</Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ fontWeight: "700", lineHeight: "28px", mt: 1.25 }}
+                >
+                  Cameron Williamson
+                </Typography>
               </Box>
-              <Box className="Right">
-                <Chip label="Tag one" />
-                <Chip label="Tag two" />
-                <Chip label="Tag three" />
-                <Chip label="Tag four" />
+              <Box>
+                <Typography variant="body1">Published on</Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ fontWeight: "700", lineHeight: "28px", mt: 1.25 }}
+                >
+                  11 Jan 2024
+                </Typography>
               </Box>
             </Stack>
-          </Box>
-        </Container>
-        <Container>
-          <Box className="DiscoverPost">
-            <Box className="DiscoverPost__title">
+            <Box className="ContentWrapper">
+              <Box className="PostThumbnail" sx={{ mt: 6 }}>
+                <img
+                  src="https://picsum.photos/200"
+                  alt="https://picsum.photos/200"
+                />
+              </Box>
+              <Box className="PostContent" sx={{ mt: 7.5 }}>
+                <Typography variant="subtitle1">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit sed.
+                  Eiusmod tempor. incididu nt ut labore et dolore magna aliqua.
+                  Ut enim. ad minim veniam, uis nostrud exerc itation ullamco.
+                  Laboris nisi.
+                </Typography>
+                <Typography variant="body1">
+                  Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut
+                  odit aut fugit, sed quia consequuntur magni dolores eos qui
+                  ratione voluptatem sequi nesciunt. Neque porro quisquam est,
+                  qui dolorem ipsum quia dolor sit amet, consectetur, adipisci
+                  velit, sed quia non numquam eius modi tempora incidunt ut
+                  labore et dolore magnam aliquam quaerat voluptatem.Lorem ipsum
+                  dolor sit amet, consectetur adipisicing elit sed. Eiusmod
+                  tempor. incididu nt ut labore et dolore magna aliqua. Ut enim.
+                  ad minim veniam, uis nostrud exerc itation ullamco. Laboris
+                  nisi. ut aliquip ex ea commodo consequat. Duis aute irure
+                  dolr. inreprehen derit in voluptate velit esse cillum dolore.
+                  Eu fugiat nulla pariatur.
+                </Typography>
+              </Box>
+              <Stack className="FooterContent">
+                <Box className="Left">
+                  <Typography variant="subtitle1">Share this post</Typography>
+                  <Stack className="SocialIconWrapper">
+                    <IconButton
+                      className="SocialIcon"
+                      aria-label="Facebook Icon"
+                    >
+                      <FacebookIcon />
+                    </IconButton>
+                    <IconButton
+                      className="SocialIcon"
+                      aria-label="Facebook Icon"
+                    >
+                      <TwitterIcon />
+                    </IconButton>
+                    <IconButton
+                      className="SocialIcon"
+                      aria-label="Facebook Icon"
+                    >
+                      <InstagramIcon />
+                    </IconButton>
+                  </Stack>
+                </Box>
+                <Box className="Right">
+                  <Chip label="Tag one" />
+                  <Chip label="Tag two" />
+                  <Chip label="Tag three" />
+                  <Chip label="Tag four" />
+                </Box>
+              </Stack>
+            </Box>
+          </Container>
+          <Container>
+            <Box className="DiscoverPost">
+              <Box className="DiscoverPost__title">
+                <Typography variant="h2" component="h2">
+                  Related posts
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ mt: 1.875, color: variable.greyRegent }}
+                >
+                  Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry.
+                </Typography>
+              </Box>
+              <Box className="RecentPosts">
+                <Grid
+                  container
+                  rowSpacing={{ md: 6.25, xs: 4 }}
+                  columnSpacing={{ md: 3.75, xs: 2 }}
+                >
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Box>
+          </Container>
+        </Box>
+        <Box className="NewsLetter">
+          <Container>
+            <Box className="NewsLetterWrapper">
               <Typography variant="h2" component="h2">
-                Related posts
+                Subscribe to our newsletter
               </Typography>
               <Typography
                 variant="body1"
-                sx={{ mt: 1.875, color: variable.greyRegent }}
+                sx={{ mt: 3, color: variable.greyRegent }}
               >
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+                Subscribe to learn about new products, new market trends and
+                updates.
+              </Typography>
+              <Box className="NewsLetterBox">
+                <TextField
+                  id="NewsLetter"
+                  placeholder="Your Email Address"
+                  variant="outlined"
+                />
+                <Button variant="contained">Subscribe</Button>
+              </Box>
+              <Typography
+                className="TermsCondition"
+                variant="body1"
+                sx={{ mt: 2 }}
+              >
+                By clicking Sign Up you're confirming that you agree with our
+                Terms and Conditions.
               </Typography>
             </Box>
-            <Box className="RecentPosts">
-              <Grid
-                container
-                rowSpacing={{ md: 6.25, xs: 4 }}
-                columnSpacing={{ md: 3.75, xs: 2 }}
-              >
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
-        </Container>
-      </Box>
-      <Box className="NewsLetter">
-        <Container>
-          <Box className="NewsLetterWrapper">
-            <Typography variant="h2" component="h2">
-              Subscribe to our newsletter
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ mt: 3, color: variable.greyRegent }}
-            >
-              Subscribe to learn about new products, new market trends and
-              updates.
-            </Typography>
-            <Box className="NewsLetterBox">
-              <TextField
-                id="NewsLetter"
-                placeholder="Your Email Address"
-                variant="outlined"
-              />
-              <Button variant="contained">Subscribe</Button>
-            </Box>
-            <Typography
-              className="TermsCondition"
-              variant="body1"
-              sx={{ mt: 2 }}
-            >
-              By clicking Sign Up you're confirming that you agree with our
-              Terms and Conditions.
-            </Typography>
-          </Box>
-        </Container>
+          </Container>
+        </Box>
       </Box>
     </Layout>
   );
