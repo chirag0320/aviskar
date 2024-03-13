@@ -41,6 +41,10 @@ import CrossIconWithOutlineCircle from "./CrossIconWithOutlineCircle";
 import SearchButtonIcon from "./SearchButtonIcon";
 import GoldBarIcon from "./GoldBarIcon";
 import GreenConfirmationIcon from "./GreenConfirmationIcon";
+import UpdateIcon from "./UpdateIcon";
+import DeleteIcon from "./DeleteIcon";
+import RightArrow from "./RightArrow";
+import LeftArrow from "./LeftArrow";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
@@ -102,6 +106,10 @@ export {
   SearchButtonIcon,
   GoldBarIcon,
   GreenConfirmationIcon,
+  UpdateIcon,
+  DeleteIcon,
+  RightArrow,
+  LeftArrow,
 
   // Social
   FacebookIcon,

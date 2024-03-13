@@ -1,0 +1,221 @@
+.ShoppingCartPage {
+    .ShoppingCartContent {
+        padding: 30px 0 80px;
+        display: flex;
+        gap: 29px;
+
+        @include media($lg) {
+            flex-direction: column;
+        }
+
+        .MuiTypography-root {
+            color: $dark;
+        }
+
+        .ShoppingCartDetails {
+            width: 64%;
+
+            @include media($lg) {
+                width: 100%;
+            }
+
+
+
+            .ShoppingProductsDetailsWrapper {
+                border: 1px solid rgba($dark, 0.1);
+                border-radius: 20px;
+                padding: 25px 35px 25px 25px;
+                margin-bottom: 30px;
+
+                .abc {
+                    border: 1px solid rgba($dark, 0.1);
+                    border-radius: 15px;
+                    margin-bottom: 20px;
+                    padding: 15px;
+                    gap: 30px;
+
+                    .ProductDetailsWrapper {
+                        width: 68%;
+                        gap: 30px;
+                        justify-content: space-between;
+
+                        img {
+                            height: 140px;
+                            width: 140px;
+                        }
+
+                        .ShippindDate {
+                            font-weight: 400;
+                        }
+
+                        .UpdateWrapper {
+                            gap: 6px;
+                            align-items: center;
+
+
+                            .UpdatesIcon {
+                                height: 22px;
+                                width: 22px;
+                                display: inline-block;
+                            }
+
+                            .UpdateTime {
+                                font-size: 12px;
+                                line-height: 26px;
+                                font-weight: 400;
+                            }
+                        }
+
+                    }
+
+                    .PriceQuentityWrapper {
+                        gap: 40px;
+                        width: 32%;
+                    }
+
+                }
+
+                .Note {
+                    font-size: 16px;
+                    line-height: 28px;
+                    font-weight: 700;
+                }
+            }
+
+            .BottomCartActionsWrapper {
+                justify-content: space-between;
+                align-items: center;
+
+                @include media($ssm) {
+                    flex-direction: column;
+                    gap: 20px;
+                }
+
+                .LeftArrow {
+                    svg {
+                        color: $white;
+                        height: 16px;
+                        width: 16px;
+                        margin-right: 5px;
+                    }
+                }
+
+                .ClearUpdateCartWrapper {
+                    align-items: center;
+                    gap: 40px;
+
+                    @include media($ssm) {
+                        gap: 20px;
+                    }
+
+                    @include media($sm) {
+                        flex-direction: column;
+                    }
+
+
+                    .ClearShoppingCart {
+                        font-size: 16px;
+                        line-height: 22px;
+                        font-weight: 600;
+                    }
+
+                    .UpdateCartBtn {
+                        @include media-min($xxl) {
+                            min-width: 241px;
+                        }
+                    }
+                }
+
+
+            }
+        }
+
+        .OrderSummaryDetailsWrapper {
+            width: 36%;
+            border: 1px solid rgba($dark, 0.1);
+            border-radius: 20px;
+            max-height: 458px;
+
+            @include media($lg) {
+                width: 100%;
+                max-height: 100%;
+            }
+
+
+            .OrderSummaryContent {
+                padding: 30px;
+                border-bottom: 1px solid rgba($dark, 0.1);
+
+                .OrderSummaryTitle {
+                    margin-bottom: 30px;
+                }
+
+                .SubtotalWrapper,
+                .DeliveryWrapper,
+                .TotalWrapper {
+                    justify-content: space-between;
+
+                    @include media($sm) {
+                        flex-direction: column;
+                    }
+                }
+
+                .SubtotalWrapper {
+                    margin-bottom: 30px;
+
+                    .SubtotalValue {
+                        color: rgba($dark, 0.8);
+                    }
+                }
+
+                .DeliveryWrapper {
+                    margin-bottom: 20px;
+
+                    .DeliveryValue {
+                        color: rgba($dark, 0.8);
+
+                    }
+                }
+
+                .AddCouponWrapper {
+                    border-top: 1px solid rgba($dark, 0.1);
+                    border-bottom: 1px solid rgba($dark, 0.1);
+                    padding: 20px 0;
+                    display: flex;
+                    gap: 15px;
+
+                    .MuiTypography-root {
+                        color: $yellowFuel;
+                        // letter-spacing: -1px;
+
+                        // margin-right: 7px;
+                    }
+
+                    .RightArrow {
+                        svg {
+                            color: $white;
+                            height: 16px;
+                            width: 16px;
+                        }
+
+                    }
+                }
+
+                .TotalWrapper {
+                    margin-top: 30px;
+                }
+            }
+
+            .ProceedtoCheckoutBtn {
+                margin: 30px auto;
+                display: block;
+
+                @include media-min($xxl) {
+                    min-width: 281px;
+                }
+
+            }
+        }
+
+    }
+}
