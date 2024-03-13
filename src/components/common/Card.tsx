@@ -12,10 +12,12 @@ import { AddToCartIcon, StackIcon, OfferTagIcon, ChevronDown, ChevronUp, ArrowRi
 import { ProductStockStatus } from "./Utils"
 import { IFeaturedProducts } from "../partials/home/FeaturedProducts"
 import { navigate } from "gatsby"
+import { useAppSelector } from "@/hooks"
 interface Iproduct {
   product: IFeaturedProducts
 }
 export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
+  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const [open, setOpen] = useState(false)
   const tooltipRef: any = useRef(null)
   const handleTooltipClose = (event: any) => {
@@ -67,7 +69,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
             {/* @todo :- below will be static for now */}
             <Stack className="RightSide">
               <Typography variant="overline" className="DiscountMessage">
-                SAVE 43%
+                {configDetailsState?.productboxdiscounttext?.value}
               </Typography>
               <HoverTooltip
                 placement="top-end"

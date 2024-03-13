@@ -61,18 +61,18 @@ function RelatedProduct({relatedProductsList}:any) {
               <ProductCard key={product.productId} product={product} />
             )
           })
-            :
-            Array(12).fill(0).map((_, index) => {
-              return (
-                <Card className="ProductCard" key={index}>
-                  <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
-                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                    <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
-                    <Skeleton animation="wave" height={70} width="95%" />
-                  </div>
-                </Card>
-              );
-            })
+            : 'No data found page upcoming'
+            // Array(12).fill(0).map((_, index) => {
+            //   return (
+            //     <Card className="ProductCard" key={index}>
+            //       <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
+            //       <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+            //         <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
+            //         <Skeleton animation="wave" height={70} width="95%" />
+            //       </div>
+            //     </Card>
+            //   );
+            // })
         }
       </Box>
     </Box>

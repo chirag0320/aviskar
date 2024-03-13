@@ -25,7 +25,8 @@ export const ENDPOINTS = {
     getContactUsConfiguration: "ContactUs/gGu8GSaHhEWKVZICJLtoeg",
     reasonsForContact: "ContactUs/zdT918BBCkKYQBI2D1D0fw",
     saveContactUsDetails: "ContactUs/jn1Gr1IOubQbzQV5S",
-    productDetails: "product/{{product-id}}/wb5rqwFBf0ua22kGp0Hlhw"
+    productDetails: "product/{{product-id}}/wb5rqwFBf0ua22kGp0Hlhw",
+    priceForprogressbar: "price/{{product-id}}/jGnpTVO8S0aP1590ehZu3g?hZHxveDw={{timeinterval}}"
 }
 export const StoreData = {
     storeCode: 12,

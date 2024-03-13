@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Stack,
   Box,
@@ -23,6 +23,7 @@ import {
   TimerIcon,
   ChevronUpRounded,
 } from "../../assets/icons/index";
+import useRemainingTime from "@/hooks/useRemainingTime";
 interface Iprops {
   name: string;
   value: number;
@@ -201,20 +202,21 @@ export const LinkWithIcon = React.memo(({ icon, href, text }: any) => {
 });
 
 export const ProductUpdateCountdown = React.memo(() => {
+  const { remainingTime } = useRemainingTime()
   return (
     <Stack className="ProductUpdateCountdown">
       <TimerIcon />
-      <Typography variant="bodySmall">Updates in 45 Sec</Typography>
+      <Typography variant="bodySmall">Updates in {remainingTime} Sec</Typography>
     </Stack>
   )
 })
 
-export const PriceChangeReturn = React.memo(({ percentage }: any) => {
+export const PriceChangeReturn = React.memo(({ percentage }: {percentage:string}) => {
   return (
-    <Stack className="PriceChangeReturn">
+    <Stack className={classNames("PriceChangeReturn", [Number(percentage) === 0 ? "Nuetral" : Number(percentage) > 0 ? "Success" : "Error"])}>
       <ChevronUpRounded />
       <Typography variant="overline">{percentage}%</Typography>
-    </Stack>
+    </Stack >
   )
 })
 
