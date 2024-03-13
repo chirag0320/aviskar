@@ -51,10 +51,7 @@ const ContactUsForm = () => {
             }
         }) as any);
         reset();
-    }
-
-    console.log(loading);
-    
+    }    
 
     return (
         <Box className="GetInTouchLeftForm">

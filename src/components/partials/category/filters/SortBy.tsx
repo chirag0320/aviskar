@@ -37,7 +37,7 @@ import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 
 // Utils
 import RenderFields from "@/components/common/RenderFields"
-import { SortingOption } from "@/types/sortOptions"
+import { SortingOption } from "@/types/enums"
 import { setSortedItems } from "@/redux/reducers/categoryReducer"
 import { sortByMostPopular, sortByPriceHighToLow, sortByPriceLowToHigh } from "@/utils/itemsSorting"
 

@@ -1,0 +1,146 @@
+import React from 'react'
+import { Box, Stack, MenuItem, Button } from "@mui/material"
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import RenderFields from '@/components/common/RenderFields';
+import { MetalTypes, Metals, WeightTypes } from '@/types/enums';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { addCalculator, saveCalculatorsData } from '@/redux/reducers/calculatorsReducer';
+import { ENDPOINTS } from '@/utils/constants';
+
+interface Inputs {
+    SelectMetal?: number,
+    Weight?: number,
+    MetalType?: number,
+    WeightType?: number
+}
+
+const schema = yup.object().shape({
+    SelectMetal: yup.string().required(),
+    Weight: yup.number().required(),
+    MetalType: yup.string().required(),
+    WeightType: yup.string().required()
+});
+
+const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
+    const dispatch = useAppDispatch();
+    const loading = useAppSelector(state => state.calculators.loading);
+    const calculators = useAppSelector(state => state.calculators.calculators);
+
+    const {
+        register,
+        reset,
+        handleSubmit,
+        clearErrors,
+        control,
+        setValue,
+        formState: { errors },
+    } = useForm<Inputs>({
+        resolver: yupResolver(schema)
+    })
+
+    const handleFormSubmission = (data: any) => {
+        // console.log("🚀 ~ handleFormSubmission ~ data:", data)
+        const calculatorData = {
+            Metal: Number(data.SelectMetal),
+            MetalType: Number(data.MetalType),
+            MetalWeight: data.Weight,
+            MetalWeightType: Number(data.WeightType)
+        }
+
+        dispatch(addCalculator(calculatorData));
+
+        dispatch(saveCalculatorsData({
+            url: ENDPOINTS.saveCalculators,
+            body: {
+                CalculatorType: CalculatorType,
+                CalculatorData: [...calculators, calculatorData]
+            }
+        }) as any);
+        reset();
+    }
+
+    return (
+        <form onSubmit={handleSubmit(handleFormSubmission)}>
+            <Box className="SelectionWrapper">
+                <Stack
+                    className='MetalWrapper'>
+                    <RenderFields
+                        type="select"
+                        register={register}
+                        error={errors.SelectMetal}
+                        name="SelectMetal"
+                        label="Select Metal"
+                        setValue={setValue}
+                        control={control}
+                        variant='outlined'
+                        margin='none'
+                        className='SelectMetal'
+                    >
+                        {/* {Note:- refer to types/enums.ts file for reference} */}
+                        <MenuItem value="1">Gold</MenuItem>
+                        <MenuItem value="2">Silver</MenuItem>
+                        <MenuItem value="3">Platinum</MenuItem>
+                        <MenuItem value="4">Palladium</MenuItem>
+                        <MenuItem value="11">Copper</MenuItem>
+                    </RenderFields>
+                    {/* {Note:- refer to types/enums.ts file for reference for value of the input} */}
+                    <RenderFields
+                        type="radio"
+                        register={register}
+                        error={errors.MetalType}
+                        name="MetalType"
+                        setValue={setValue}
+                        label="Metal Type"
+                        control={control}
+                        margin='none'
+                        className='MetalType'
+                        options={[
+                            { id: '1', name: 'Bar', value: '0', label: 'Bar' },
+                            { id: '2 ', name: 'Coin', value: '1', label: 'Coin' },
+                        ]}
+                        row
+                        onChange={() => clearErrors("MetalType")} // Clear error on selection
+                    />
+                </Stack>
+                <Stack className='WeightWrapper'>
+                    <RenderFields
+                        register={register}
+                        error={errors.Weight}
+                        name="Weight"
+                        label="Weight"
+                        type="number"
+                        placeholder="Enter Weight"
+                        control={control}
+                        variant='outlined'
+                        margin='none'
+                        className='Weight'
+                    />
+                    {/* {Note:- refer to types/enums.ts file for reference for value of the input} */}
+                    <RenderFields
+                        type="radio"
+                        register={register}
+                        error={errors.WeightType}
+                        name="WeightType"
+                        label="Weight Type"
+                        control={control}
+                        setValue={setValue}
+                        margin='none'
+                        className='WeightType'
+                        onChange={() => clearErrors("WeightType")} // Clear error on selection
+                        options={[
+                            { id: '1', name: 'Ounces', value: '0', label: 'Ounces' },
+                            { id: '2 ', name: 'Grams', value: '1', label: 'Grams' },
+                            { id: '3 ', name: 'Kilograms', value: '2', label: 'Kilograms' },
+                        ]}
+                        row
+                    />
+                </Stack>
+                <Button className='AddMetaltBtn' size='large' variant="contained" type="submit" disabled={loading}>Add Metal</Button>
+            </Box>
+        </form>
+    )
+}
+
+export default MetalForm

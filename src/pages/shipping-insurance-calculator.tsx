@@ -8,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 // Utils
 import { PageTitle } from "@/components/common/Utils"
-import ShippingCard from "@/components/partials/shipping-insurance-calculator/ShippingCard";
+import ShippingCard from "@/components/partials/shipping-insurance-calculator/CalculatorCard";
 
 // Components
 import RenderFields from '../components/common/RenderFields'

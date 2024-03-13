@@ -24,7 +24,8 @@ export const ENDPOINTS = {
     getCategoryData: "category/nRuA1KTPi0q4Outgqr39qw",
     getContactUsConfiguration: "ContactUs/gGu8GSaHhEWKVZICJLtoeg",
     reasonsForContact : "ContactUs/zdT918BBCkKYQBI2D1D0fw",
-    saveContactUsDetails : "ContactUs/jn1Gr1IOubQbzQV5S"
+    saveContactUsDetails : "ContactUs/jn1Gr1IOubQbzQV5S",
+    saveCalculators : "calculator/WOGEEHFLeeZisCtFqHdkfpdUrLN"
 }
 export const StoreData = {
     storeCode: 12,

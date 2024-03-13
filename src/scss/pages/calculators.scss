@@ -1,5 +1,5 @@
-.ShippingInsuranceCalculator {
-    .ShippingInsuranceCalculatorPageContent {
+.Calculator {
+    .CalculatorPageContent {
         padding: 72px 0 80px;
 
         @include media($sm) {
@@ -75,7 +75,7 @@
 
         }
 
-        .ShippingCardsWrapper {
+        .CardsWrapper {
             margin-bottom: 50px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -105,18 +105,18 @@
                 align-items: center;
                 border-bottom: 1px solid $mercury;
 
-                &.TotalValueWrapper {
+                &.TotalValueNestedWrapper {
                     background-color: $palladium;
                     border-radius: 0px 0px 10px 10px;
                     border-bottom: none;
                 }
             }
 
-            &.StorageTotalValueWrapper {
+            &.TotalValueWrapper {
                 border: none;
                 border-radius: 10px;
 
-                .TotalValueWrapper {
+                .TotalValueNestedWrapper {
                     border-radius: 10px;
                     padding: 22px 30px;
 
