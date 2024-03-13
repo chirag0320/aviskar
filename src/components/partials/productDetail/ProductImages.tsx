@@ -1,7 +1,10 @@
-import React, { useRef, useState } from "react"
+import React, { useState } from "react"
 import { Box, Stack } from "@mui/material"
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules'
+import {
+  GlassMagnifier,
+} from "react-image-magnifiers";
 
 // Types
 import { type Swiper as SwiperTypes } from "swiper"
@@ -24,7 +27,13 @@ function ProductImages() {
           {productImages.map((image) => (
             <SwiperSlide key={image}>
               <Stack className="ImageWrapper">
-                <img src={image} />
+                <GlassMagnifier
+                  imageSrc={image}
+                  imageAlt="Product image"
+                  className="Magnifier"
+                  magnifierSize="50%"
+                  square
+                />
               </Stack>
             </SwiperSlide>
           ))}
