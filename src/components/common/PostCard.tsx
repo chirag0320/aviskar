@@ -17,7 +17,7 @@ import { ArrowRight } from "../../assets/icons/index";
 import { navigate } from "gatsby";
 import { formatDate } from "@/utils/common";
 
-function PostCard({details}:any) {
+function PostCard({details,navigate}:any) {
   return (
     <Card className="PostCard">
       <img
@@ -49,7 +49,7 @@ function PostCard({details}:any) {
         </CardContent>
         <CardActions sx={{ mt: 1.25, p: 0 }}>
           <Button variant="text" endIcon={<ArrowRight />} onClick={()=>{
-            navigate(`/blog/${details?.friendlyName}`)
+           navigate()
           }}>
             Discover More
           </Button>

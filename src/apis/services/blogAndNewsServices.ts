@@ -23,8 +23,8 @@ class BlogServices {
   static async NewsList(data:any) {
     return axiosInstance.post(ENDPOINTS.NewsList, data)
   }
-  static async NewsDetails(params:any) {
-    return axiosInstance.get(ENDPOINTS.NewsDetails)
+  static async NewsDetails(pathName:any) {
+    return axiosInstance.get(ENDPOINTS.NewsDetails  + '/' + pathName)
   }
 }
 export default BlogServices

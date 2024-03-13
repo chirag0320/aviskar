@@ -24,7 +24,7 @@ export const NewsList = appCreateAsyncThunk(
 export const NewsDetailsAPI = appCreateAsyncThunk(
     'NewsDetailsAPI/status',
     async ({ params }: { params: any }) => {
-        return await BlogAndNewsServices.NewsDetails(params)
+        return await BlogAndNewsServices.NewsDetails(params?.pathName)
     }
 )
 export const NewsPageSlice = createSlice({

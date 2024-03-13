@@ -79,7 +79,7 @@ function BlogDetails({ params }: any) {
                 variant="body1"
                 sx={{ fontWeight: "700", lineHeight: "28px", mt: 1.25 }}
               >
-                {formatDate(blogDetailsData?.createdBy)}
+                {formatDate(blogDetailsData?.createdOnUtc)}
               </Typography>
             </Box>
           </Stack>
