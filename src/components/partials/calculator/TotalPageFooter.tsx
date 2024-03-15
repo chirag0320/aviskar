@@ -1,14 +1,16 @@
-import { Box, Stack } from '@mui/material'
-import React from 'react'
+// import { Box, Stack } from '@mui/material'
+// import React from 'react'
 
-const TotalPageFooter = ({ children }: { children: any }) => {
-    return (
-        <Box className="TotalWrapper TotalValueWrapper">
-            <Stack className='DataValueWrapper TotalValueNestedWrapper'>
-                {children}
-            </Stack>
-        </Box>
-    )
-}
+// const TotalPageFooter = ({ calculatorType }: { calculatorType: number }) => {
+//     return (
+//         <Box className="TotalWrapper TotalValueWrapper">
+//             <Stack
+//                 className='DataValueWrapper TotalValueNestedWrapper'>
+//                 <Typography variant="body1" className="">Total Vault Storage</Typography>
+//                             <Typography variant="subtitle1" className="">${calculators.shipping + calculators.insurance}</Typography>
+//             </Stack>
+//         </Box>
+//     )
+// }
 
-export default TotalPageFooter
+// export default TotalPageFooter

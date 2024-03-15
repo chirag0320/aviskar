@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import Seo from "../components/common/Seo"
-import { Box, Container, Typography } from "@mui/material"
+import { Box, Container, Stack, Typography } from "@mui/material"
 import Layout from "@/components/common/Layout";
 
 import { PageTitle } from "@/components/common/Utils"
 
 import MetalForm from '@/components/partials/calculator/MetalForm';
 import CalculatorCards from '@/components/partials/calculator/CalculatorCards';
-import TotalPageFooter from '@/components/partials/calculator/TotalPageFooter';
+// import TotalPageFooter from '@/components/partials/calculator/TotalPageFooter';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { saveCalculatorsData } from '@/redux/reducers/calculatorsReducer';
 import { ENDPOINTS } from '@/utils/constants';
@@ -42,10 +42,13 @@ function Calculator() {
                     <Box className='CalculatorPageContent'>
                         <MetalForm CalculatorType={1} />
                         <CalculatorCards />
-                        <TotalPageFooter >
-                            <Typography variant="body1" className="">Total Vault Storage</Typography>
-                            <Typography variant="subtitle1" className="">${vaultStorage}</Typography>
-                        </TotalPageFooter>
+                        <Box className="TotalWrapper TotalValueWrapper">
+                            <Stack
+                                className='DataValueWrapper TotalValueNestedWrapper'>
+                                <Typography variant="body1" className="">Total Vault Storage</Typography>
+                                <Typography variant="subtitle1" className="">${vaultStorage}</Typography>
+                            </Stack>
+                        </Box>
                     </Box>
                 </Container>
             </Box>

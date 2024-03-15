@@ -103,12 +103,17 @@
                 padding: 19px 30px;
                 justify-content: space-between;
                 align-items: center;
-                border-bottom: 1px solid $mercury;
+                // border-bottom: 1px solid $mercury;
+                border: 1px solid $mercury;
 
                 &.TotalValueNestedWrapper {
                     background-color: $palladium;
                     border-radius: 0px 0px 10px 10px;
                     border-bottom: none;
+                }
+
+                &.ValueNestedWrapper{
+                    background-color: white;
                 }
             }
 
