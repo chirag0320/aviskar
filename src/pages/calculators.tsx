@@ -23,7 +23,7 @@ const Calculators = () => {
                 <Button onClick={() => navigate("/shipping-calculator")} className="CalculatorLink">
                     <CalculatorCard
                         title="Shipping Calculator"
-                        calculatorType={1}
+                        calculatorType={0}
                     />
                 </Button>
             </Box>
