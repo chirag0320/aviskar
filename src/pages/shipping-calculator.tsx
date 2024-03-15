@@ -35,7 +35,7 @@ function Calculator() {
             />
             <Box id="Calculator" className='Calculator' component="section">
                 <Box className="TitleWrapper">
-                    <PageTitle title="Shipping Insurance Calculator" />
+                    <PageTitle title="Shipping Calculator" />
                 </Box>
                 <Container>
                     <Box className='CalculatorPageContent'>
