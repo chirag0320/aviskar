@@ -1,5 +1,5 @@
 import React from 'react'
-import CalculatorCard from '../shipping-insurance-calculator/CalculatorCard'
+import CalculatorCard from './CalculatorCard'
 import { Box } from '@mui/material'
 import { useAppSelector } from '@/hooks'
 import { Metals, WeightTypes } from '@/types/enums'
@@ -18,6 +18,8 @@ const CalculatorCards = () => {
                     title={Metals[cal.Metal as keyof typeof Metals]}
                     weight={cal.MetalWeight.toString()}
                     weightType={WeightTypes[cal.MetalWeightType as keyof typeof WeightTypes]}
+                    metal={cal.Metal}
+                    metalType={cal.MetalType}
                 />
             ))}
         </Box>

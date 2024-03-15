@@ -401,6 +401,11 @@
 
 // Start :: shippingcard css
 .ShippingCard {
+  .IconCaculatorsPage{
+    svg{
+      stroke: $yellowFuel
+    }
+  }
   &.MuiCard-root {
     position: relative;
     padding: 20px;

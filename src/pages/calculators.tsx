@@ -1,5 +1,6 @@
 import Layout from "@/components/common/Layout";
 import Seo from "@/components/common/Seo";
+import CalculatorCard from "@/components/partials/calculator/CalculatorCard";
 import { Box, Button } from "@mui/material";
 import { navigate } from "gatsby";
 import React from "react"
@@ -13,8 +14,18 @@ const Calculators = () => {
                 lang="en"
             />
             <Box className="AllCalculators">
-                <Button className="CalculatorLink" variant="contained" onClick={() => navigate("/vault-calculator")}>Vault Calculator</Button>
-                <Button className="CalculatorLink" variant="contained" onClick={() => navigate("/shipping-calculator")}>Shipping Calculator</Button>
+                <Button onClick={() => navigate("/vault-calculator")} className="CalculatorLink">
+                    <CalculatorCard
+                        title="Vault Calculator"
+                        calculatorType={1}
+                    />
+                </Button>
+                <Button onClick={() => navigate("/shipping-calculator")} className="CalculatorLink">
+                    <CalculatorCard
+                        title="Shipping Calculator"
+                        calculatorType={1}
+                    />
+                </Button>
             </Box>
         </Layout>
     )

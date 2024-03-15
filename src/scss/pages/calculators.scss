@@ -4,7 +4,11 @@
     justify-content: space-around;
 
     .CalculatorLink {
-        margin: auto;
+        .ShippingCard {
+            &:hover {
+                background-color: #ebc486;
+            }
+        }
     }
 
     @include media($md) {
