@@ -5,19 +5,39 @@
       display: flex;
       flex-direction: row;
       gap: 30px;
+      @include media($lg) {
+        flex-direction: column;
+        gap: 15px;
+      }
       .Left {
         width: 50%;
         flex: 0 0 auto;
+        flex: 1;
+        @include media($lg) {
+          width: 100%;
+          order: 2;
+        }
         .VaultStats {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 30px;
           margin-top: 45px;
+          @include media($lg) {
+            gap: 15px;
+          }
+          @include media($sm) {
+            grid-template-columns: repeat(1, 1fr);
+          }
         }
       }
       .Right {
         width: 50%;
         flex: 0 0 auto;
+        flex: 1;
+        @include media($lg) {
+          width: 100%;
+          order: 1;
+        }
         #Banner {
           .SwiperContainer {
             .swiper {
@@ -28,6 +48,7 @@
                     .BannerImage {
                       visibility: visible !important;
                       border-radius: 15px;
+                      max-height: 630px;
                     }
                   }
                 }
@@ -38,14 +59,108 @@
       }
     }
   }
+  .UserStats {
+    .UserStatsWrapper {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-top: 45px;
+      @include media($lg) {
+        margin-top: 30px;
+        gap: 15px;
+      }
+      @include media($mmd) {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+  }
+  .UserInfo {
+    margin-top: 50px;
+    .UserInfoWrapper {
+      display: flex;
+      gap: 30px;
+      @include media($lg) {
+        flex-direction: column;
+      }
+      .Left {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        width: 46%;
+        flex: 0 0 auto;
+        flex: 1;
+        @include media($lg) {
+          width: 100%;
+          order: 2;
+          gap: 15px;
+        }
+        @include media($sm) {
+          grid-template-columns: repeat(1, 1fr);
+        }
+      }
+      .Right {
+        width: 54%;
+        flex: 0 0 auto;
+        flex: 1;
+        @include media($lg) {
+          width: 100%;
+          order: 1;
+        }
+        #Banner {
+          .SwiperContainer {
+            .swiper {
+              .swiper-wrapper {
+                .swiper-slide {
+                  .Wrapper {
+                    border-radius: 15px;
+                    .BannerImage {
+                      visibility: visible !important;
+                      border-radius: 15px;
+                      max-height: 630px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .RecentOrders {
+    margin-top: 50px;
+    .RecentOrdersWrapper {
+      .RecentOrdersTitleWrapper {
+        justify-content: space-between;
+        .MuiTypography-h4 {
+          font-size: 30px;
+          line-height: 23px;
+          font-weight: 500;
+        }
+        .MuiButton-root {
+          font-size: 16px;
+          line-height: 22px;
+          font-weight: 600;
+          color: $dark;
+        }
+      }
+    }
+  }
   .RewardSection {
+    .MuiContainer-root {
+      padding-bottom: 24px;
+      border-bottom: 1px solid $mercury;
+    }
     .rewardText {
       font-size: 30px;
       line-height: 23px;
+      display: inline-block;
     }
     .rewardPoints {
       line-height: 36px;
       font-weight: 700;
+      display: inline-block;
+      margin-left: 16px;
     }
   }
 
@@ -58,9 +173,13 @@
     .MuiBox-root {
       display: flex;
       gap: 30px;
+      @include media($sm) {
+        gap: 15px;
+        flex-direction: column;
+      }
     }
     .AccountInformationCard {
-      box-shadow: 6px 6px 27px 0px #0000000d;
+      box-shadow: $shadow10;
       border: 1px solid #e1e6ef14;
       padding: 10px 20px;
       max-width: 436px;

@@ -38,6 +38,8 @@ import RadioUncheckedIcon from "./RadioUncheckedIcon";
 import SortbyIcon from "./SortbyIcon";
 import FilterIcon from "./FilterIcon";
 import SearchButtonIcon from "./SearchButtonIcon";
+import FilledUpButton from "./FilledUpButton";
+import OptionsIcon from "./OptionsIcon";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
@@ -96,6 +98,8 @@ export {
   SortbyIcon,
   FilterIcon,
   SearchButtonIcon,
+  FilledUpButton,
+  OptionsIcon,
 
   // Social
   FacebookIcon,

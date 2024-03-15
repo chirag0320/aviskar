@@ -9,10 +9,12 @@ import {
   Button,
   Link,
   IconButton,
+  Icon,
 } from "@mui/material";
 import classNames from "classnames";
 
 // Components
+import LineBarChart from "./LineChart";
 import { ClickTooltip, HoverTooltip } from "./CustomTooltip";
 
 // Assets
@@ -25,6 +27,8 @@ import {
   ArrowRight,
   InfoIcon,
   OrdersIcon,
+  FilledUpButton,
+  OptionsIcon,
 } from "../../assets/icons/index";
 
 // Utils
@@ -241,6 +245,104 @@ export const StatsCard = (props: any) => {
             <ArrowRight />
           </IconButton>
         </Stack>
+      </CardContent>
+    </Card>
+  );
+};
+export const UserStatsCard = (props: any) => {
+  const { place, description, bgColor } = props;
+  return (
+    <Card className="UserStatsCard" style={{ borderColor: bgColor }}>
+      <CardContent
+        sx={{
+          "&:after": {
+            border: `50px solid ${bgColor}`,
+          },
+          "&:before": {
+            background: bgColor,
+          },
+        }}
+      >
+        <Box className="TopWrapper">
+          <Box className="Return Profit">
+            {/* pass Profit and Loss class */}
+            <Typography variant="h4">$1030.80</Typography>
+            <Typography variant="body1">
+              <FilledUpButton />
+              4.50 (0.44%)
+            </Typography>
+          </Box>
+          <IconButton>
+            <OptionsIcon />
+          </IconButton>
+        </Box>
+        <Box className="BottomWrapper">
+          <Box className="Left">
+            <OrdersIcon />
+            <Typography variant="subtitle2" component="h3">
+              View Orders
+            </Typography>
+          </Box>
+          <Typography variant="body1">Live</Typography>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
+
+export const LineChartCard = (props: any) => {
+  const { place, description, bgColor } = props;
+  return (
+    <Card className="LineChartCard" style={{ borderColor: bgColor }}>
+      <CardContent
+        sx={{
+          "&:after": {
+            border: `50px solid ${bgColor}`,
+          },
+          "&:before": {
+            background: bgColor,
+          },
+        }}
+      >
+        <Box className="TopWrapper">
+          <Box className="Left">
+            {/* pass Profit and Loss class */}
+            <Typography variant="subtitle2">My Vault</Typography>
+            <Typography variant="body1" sx={{ mt: 0.75 }}>
+              Current
+            </Typography>
+            <Typography variant="h4" sx={{ mt: 0.5 }}>
+              1030.80
+            </Typography>
+          </Box>
+          <Box className="Right">
+            <IconButton>
+              <OptionsIcon />
+            </IconButton>
+            <Typography variant="body1">3 Day Range</Typography>
+          </Box>
+        </Box>
+        <Box className="BottomWrapper">
+          <Box className="Chart">
+            <LineBarChart />
+          </Box>
+          <Box className="RangeBar">
+            <Box className="Price">
+              <Typography variant="body1">907.5</Typography>
+              <Typography variant="body1">1040.3</Typography>
+            </Box>
+            <Box className="HLCircuit">
+              <Typography variant="caption">LOW</Typography>
+              <Box className="HLCircuitRange">
+                <Box className="UpArrow" sx={{ left: "20%" }}>
+                  {/* add percentage in left to slide arrowAicon */}
+                  <FilledUpButton />
+                </Box>
+              </Box>
+              <Typography variant="caption">HIGH</Typography>
+            </Box>
+          </Box>
+        </Box>
       </CardContent>
     </Card>
   );

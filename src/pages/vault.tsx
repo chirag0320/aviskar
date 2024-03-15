@@ -25,17 +25,18 @@ import { SwiperNavigation } from "@/components/common/Utils";
 
 // Components
 import Layout from "@/components/common/Layout";
-import { StatsCard } from "@/components/common/Card";
+import RecentOrderTable from "@/components/common/RecentOrderTable";
+import {
+  StatsCard,
+  UserStatsCard,
+  LineChartCard,
+} from "@/components/common/Card";
 
 // Utils
 import { Breadcrumb } from "@/components/common/Utils";
 
-// CSS Variable
-import * as variable from "../scss/settings/variables.module.scss";
-
 // Assets
-import { SearchButtonIcon } from "../assets/icons/index";
-import { ConstantApiLoader } from "@/components/header/Loader";
+import { ArrowRight } from "../assets/icons/index";
 
 interface VaultProps {
   id: number;
@@ -178,10 +179,114 @@ function Vault() {
                         )}
                       </>
                     )}
-                    {<SwiperNavigation />}
                   </Box>
                 </Box>
               </Box>
+            </Box>
+          </Container>
+        </Box>
+        <Box className="UserStats" sx={{ mt: 9.625 }}>
+          <Container>
+            <Box className="UserStatsWrapper">
+              <UserStatsCard bgColor="#3491fa14" />
+              <UserStatsCard bgColor="rgb(234 162 43 / 5%)" />
+              <UserStatsCard bgColor="rgb(255 31 31 / 5%)" />
+              <LineChartCard />
+              <LineChartCard />
+              <LineChartCard />
+            </Box>
+          </Container>
+        </Box>
+        <Box className="UserInfo">
+          <Container>
+            <Box className="UserInfoWrapper">
+              <Box className="Left">
+                <StatsCard bgColor="rgb(52 145 250 / 6%)" />
+                <StatsCard bgColor="rgb(234 162 43 / 6%)" />
+                <StatsCard bgColor="rgb(255 31 31 / 6%)" />
+                <StatsCard bgColor="rgb(0 128 1 / 6%)" />
+              </Box>
+              <Box className="Right">
+                <Box id="Banner" component="section" key={"banner"}>
+                  <Box className="SwiperContainer">
+                    {data?.data?.length > 0 ? (
+                      <Swiper {...config}>
+                        <>
+                          {data?.data?.map(
+                            (item: VaultProps, index: number) => {
+                              return (
+                                <SwiperSlide key={`BannerSlider-${index}`}>
+                                  <Box
+                                    className="Wrapper"
+                                    sx={{
+                                      position: "relative",
+                                      width: "100%",
+                                      height: "100%",
+                                    }}
+                                  >
+                                    {
+                                      <>
+                                        <img
+                                          className="BannerImage"
+                                          rel="prefetch"
+                                          loading="eager"
+                                          src={
+                                            isLargeScreen
+                                              ? item.cdnUrlLarge
+                                              : item.cdnUrlSmall
+                                          }
+                                          alt="background"
+                                        />
+                                      </>
+                                    }
+                                  </Box>
+                                </SwiperSlide>
+                              );
+                            }
+                          )}
+                        </>
+                      </Swiper>
+                    ) : (
+                      <>
+                        {!isMobile ? (
+                          <Skeleton
+                            animation="wave"
+                            height="75vh"
+                            width="100vw"
+                            style={{
+                              transform: "none",
+                              margin: "auto",
+                              borderRadius: "0px",
+                            }}
+                          />
+                        ) : (
+                          <Skeleton
+                            animation="wave"
+                            height="300px"
+                            width="100vw"
+                            style={{
+                              transform: "none",
+                              margin: "auto",
+                              borderRadius: "0px",
+                            }}
+                          />
+                        )}
+                      </>
+                    )}
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Container>
+        </Box>
+        <Box className="RecentOrders">
+          <Container>
+            <Box className="RecentOrdersWrapper">
+              <Stack className="RecentOrdersTitleWrapper">
+                <Typography variant="h4">Recent Orders</Typography>
+                <Button endIcon={<ArrowRight />}>View All</Button>
+              </Stack>
+              <RecentOrderTable />
             </Box>
           </Container>
         </Box>
@@ -193,7 +298,7 @@ function Vault() {
             </Typography>
           </Container>
         </Box>
-        <Box className="AccountInformation" sx={{ mt: 5.5 }}>
+        <Box className="AccountInformation" sx={{ mt: 2.5 }}>
           <Container>
             <Typography className="AccountInformationText">
               AccountInformation
