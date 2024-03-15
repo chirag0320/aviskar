@@ -1,0 +1,155 @@
+.OrderDetailsPage {
+    .OrderDetailsContent {
+        margin: 80px 0;
+        border: 1px solid rgba($blueCyan, 0.2);
+        border-radius: 15px;
+
+        .Font16 {
+            font-size: 16px;
+        }
+
+        .OrderDetailsWrapper {
+            padding: 20px 30px 40px;
+            background-color: rgba($blueCyan, 0.15);
+            border-radius: 14px 14px 0 0;
+
+            // .PdfIcon {
+            //     height: 26px;
+            //     width: 26px;
+
+            //     svg {
+            //         height: 100%;
+            //         width: 100%;
+            //     }
+            // }
+
+            .OrderID {
+                margin: 7px 0 24px;
+            }
+
+            .OrderDetails {
+                // gap: 47px;
+                justify-content: space-between;
+
+                p {
+                    margin-bottom: 3px;
+                }
+
+                // .MuiTypography-subtitle1 {
+                //     font-size: 16px;
+                // }
+
+                .OrderStatusWrapper {
+                    p {
+                        margin-bottom: 11px;
+                    }
+
+                    .RedButton {
+                        font-size: 14px;
+                        line-height: 20px;
+                        font-weight: 600;
+                        padding: 5px 15px;
+                        border-radius: 31px;
+                        background-color: $error;
+                    }
+                }
+            }
+        }
+
+        .AddressWrapper {
+            display: flex;
+            // justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba($blueCyan, 0.15);
+
+
+            .BillingWrapper,
+            .ShippingWrapper {
+                padding: 30px 30px 12px 30px;
+                flex: 0.5;
+
+                .AddressTitle {
+                    margin-bottom: 25px;
+                }
+
+                .CommonBottomMargin {
+                    margin-bottom: 10px;
+                }
+            }
+
+            .ShippingWrapper {
+                border-left: 1px solid rgba($blueCyan, 0.15);
+            }
+        }
+
+        .OrderDetailTable {
+            margin: 40px 30px 30px;
+        }
+
+        .TotalShippingDetailsWrapper {
+            padding: 30px;
+            background-color: rgba($blueCyan, 0.15);
+            justify-content: space-between;
+            align-items: center;
+
+            .SubtotalShippingWrapper {
+                align-items: center;
+                gap: 141px;
+            }
+
+
+            .TotalWrapper {
+                text-align: right;
+
+                .TotalValue {
+                    font-size: 30px;
+                    line-height: 23px;
+                    margin: 12px 0;
+                }
+            }
+
+
+        }
+
+        .KeyPoints {
+            margin: 30px;
+        }
+
+        .CardsWrapper {
+            margin: 0 30px 30px;
+            display: flex;
+            gap: 36px;
+            align-items: stretch;
+
+            .Card {
+                padding: 20px;
+                border: 1px solid rgba($yellowFuel, 0.08);
+                border-radius: 15px;
+                width: 33%;
+                box-shadow: 6px 6px 27px 0px #0000000D;
+
+                .IconTitleWrapper {
+                    align-items: center;
+                    gap: 20px;
+                    margin-bottom: 20px;
+
+                    span {
+                        height: 44px;
+                        width: 44px;
+                        border-radius: 50%;
+                        border: 1px solid $yellowFuel;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                }
+
+                .lineHeight25 {
+                    line-height: 25px;
+                    display: inline-block;
+                }
+            }
+        }
+
+    }
+}
