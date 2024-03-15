@@ -106,6 +106,7 @@ function CloserLook() {
                 data?.data?.items?.map((destination) => (
                   <SwiperSlide key={destination.id}>
                     <TravelCard
+                      friendlyName={destination?.friendlyName}
                       place={destination.title}
                       description={destination.bodyOverview}
                       imageUrl={destination.imageUrl}

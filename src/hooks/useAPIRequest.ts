@@ -5,7 +5,7 @@ import axiosInstance from '@/axiosfolder';
 import { useAppDispatch } from '.';
 import { setLoadingFalse, setLoadingTrue } from '@/redux/reducers/homepageReducer';
 
-const useApiRequest = (url: string, method: 'get' | 'post' = 'get', requestData: any = null, pollInterval: number | null = null): any => {
+const useApiRequest = (url: string, method: 'get' | 'post' = 'get', requestData: any = null, pollInterval: number | null = null): { data:any, loading:boolean, error:string} => {
     const dispatch = useAppDispatch()
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);

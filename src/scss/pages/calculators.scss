@@ -1,0 +1,15 @@
+.AllCalculators {
+    padding: 100px 0px;
+    display: flex;
+    justify-content: space-around;
+
+    .CalculatorLink {
+        margin: auto;
+    }
+
+    @include media($md) {
+        height: 100%;
+        flex-direction: column;
+        gap: 20px;
+    }
+}

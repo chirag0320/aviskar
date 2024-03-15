@@ -37,11 +37,11 @@ import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 
 // Utils
 import RenderFields from "@/components/common/RenderFields"
-import { SortingOption } from "@/types/sortOptions"
+import { SortingOption } from "@/types/enums"
 import { setSortedItems } from "@/redux/reducers/categoryReducer"
 import { sortByMostPopular, sortByPriceHighToLow, sortByPriceLowToHigh } from "@/utils/itemsSorting"
 
-function SortBy() {
+function SortBy({ page }: { page: number }) {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
   const [openSortBy, toggleSortBy] = useToggle(false)
   const [sortBy, setSortBy] = useState<SortingOption | null>(null);
@@ -61,6 +61,9 @@ function SortBy() {
     defaultValues: {},
   })
 
+  useEffect(() => {
+    reset();
+  }, [page])
 
   useEffect(() => {
     if (!sortBy) return;
@@ -104,6 +107,7 @@ function SortBy() {
         fullWidth
         setValue={setValue}
         onChange={handleChange}
+        getValues={getValues}
       />
     )
   }

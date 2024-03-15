@@ -23,8 +23,9 @@ const colourForMembership: any = {
 
 function Memberships() {
     const { mebershipPlanDetailsData } = useAppSelector((state) => state.homePage)
-    console.log("🚀 ~ Memberships ~ mebershipPlanDetailsData:", mebershipPlanDetailsData)
+
     useAPIoneTime({ service: membershipPlanDetails, endPoint: ENDPOINTS.membership })
+
     return (
         <Layout>
             <>

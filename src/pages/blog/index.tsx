@@ -30,6 +30,7 @@ import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { BlogList } from "@/redux/reducers/blogReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import useDebounce from "@/hooks/useDebounce";
+import { navigate } from "gatsby";
 
 function Blog() {
   const { blogList }: any = useAppSelector((state) => state.blogPage)
@@ -146,7 +147,7 @@ function Blog() {
                 {blogList?.items?.map((item: any) => {
                   return (
                     <Grid item md={4} sm={6} key={item?.id}>
-                      <PostCard details={item} />
+                      <PostCard details={item} navigate={() => navigate(`/blog/${item?.friendlyName}`)} />
                     </Grid>
                   )
                 })}

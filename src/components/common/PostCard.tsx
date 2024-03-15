@@ -17,7 +17,8 @@ import { ArrowRight } from "../../assets/icons/index";
 import { navigate } from "gatsby";
 import { formatDate } from "@/utils/common";
 
-function PostCard({details}:any) {
+function PostCard({ details, navigate, isNews = false }: any) {
+  console.log("🚀 ~ PostCard ~ isNews:", isNews)
   return (
     <Card className="PostCard">
       <img
@@ -33,7 +34,7 @@ function PostCard({details}:any) {
               <img className="UserImage" src="https://picsum.photos/200" />
               <Typography variant="body1">{details?.createdBy}</Typography>
             </Box>
-            <Typography variant="body1">{formatDate(details?.createdOnUtc)}</Typography>
+            <Typography variant="body1">{formatDate(isNews ? details?.createdOnUtc : details?.createdOnUtc)}</Typography>
           </Stack>
           <Typography variant="subtitle2" sx={{ mt: 1.875 }}>
             {details?.title}
@@ -41,15 +42,15 @@ function PostCard({details}:any) {
             eiusmod tempor incididunt ut labore et. */}
           </Typography>
           <Typography variant="body1" sx={{ mt: 1.25 }}>
-            {details?.bodyOverview}
+            {isNews ? details?.shortDescription : details?.bodyOverview}
             {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamc. */}
           </Typography>
         </CardContent>
         <CardActions sx={{ mt: 1.25, p: 0 }}>
-          <Button variant="text" endIcon={<ArrowRight />} onClick={()=>{
-            navigate(`/blog/${details?.friendlyName}`)
+          <Button variant="text" endIcon={<ArrowRight />} onClick={() => {
+            navigate()
           }}>
             Discover More
           </Button>

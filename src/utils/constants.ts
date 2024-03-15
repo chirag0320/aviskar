@@ -21,7 +21,13 @@ export const ENDPOINTS = {
     forgotPasswordLink: "https://register.qmint.com/passwordrecovery",
     createMyAccount: "https://queenslandmint.com/register?returnUrl=",
     membership: "Checkout/rsBDWqaTLMJauU",
-    getCategoryData : "category/nRuA1KTPi0q4Outgqr39qw/571"
+    getCategoryData: "category/nRuA1KTPi0q4Outgqr39qw",
+    getContactUsConfiguration: "ContactUs/gGu8GSaHhEWKVZICJLtoeg",
+    reasonsForContact : "ContactUs/zdT918BBCkKYQBI2D1D0fw",
+    saveContactUsDetails : "ContactUs/jn1Gr1IOubQbzQV5S",
+    saveCalculators : "calculator/WOGEEHFLeeZisCtFqHdkfpdUrLN",
+    productDetails: "product/{{product-id}}/wb5rqwFBf0ua22kGp0Hlhw",
+    priceForprogressbar: "price/{{product-id}}/jGnpTVO8S0aP1590ehZu3g?hZHxveDw={{timeinterval}}"
 }
 export const StoreData = {
     storeCode: 12,

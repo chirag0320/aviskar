@@ -12,3 +12,12 @@ export function formatDate(dateString:any) {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-US', options);
 }
+
+export function progressBarLogic({currentprice,min,max}:any){
+  console.log("🚀 ~ progressBarLogic ~ {currentprice,min,max}:", {currentprice,min,max},'calcualted price',((currentprice - min ) / (max - min)) * 100)
+  return ((currentprice - min ) / (max - min)) * 100
+}
+
+export function valueChangeForPrice({currentprice,yesterdayprice}:{currentprice:number,yesterdayprice:number}){
+ return (((currentprice - yesterdayprice)/ yesterdayprice) * 100).toFixed(2)
+}

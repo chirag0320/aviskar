@@ -35,16 +35,16 @@ import {
 import { formatDate } from "@/utils/common";
 import useApiRequest from "@/hooks/useAPIRequest";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
-import { BlogDetailsAPI } from "@/redux/reducers/blogReducer";
 import { useAppSelector } from "@/hooks";
 import useSubscription from "@/hooks/useSubscription";
 import { navigate } from "gatsby";
+import { NewsDetailsAPI } from "@/redux/reducers/newsReducer";
 
 function NewsDetails({ params }: any) {
-  const { blogDetailsData, blogList }: any = useAppSelector((state) => state.blogPage)
-  console.log("🚀 ~ BlogDetails ~ params:", blogDetailsData)
+  const { newsDetailsData,newsList }: any = useAppSelector((state) => state.newsPage)
+  console.log("🚀 ~ newsDetails ~ parnewsDetailsDataams:", newsDetailsData)
   const { email, handleEmailChange, subscribe, loadingForEmailSub } = useSubscription()
-  useAPIoneTime({ service: BlogDetailsAPI, params: { pathName: params?.['blog-details-friendly-name'] } })
+  useAPIoneTime({ service: NewsDetailsAPI, params: { pathName: params?.['news-details-friendly-name'] } })
   return (
     <Layout>
       <Breadcrumb page1={"Blog"} page2={"Blog"} page3={"Blog"} />
@@ -61,7 +61,7 @@ function NewsDetails({ params }: any) {
             All Posts
           </Button>
           <Typography variant="h2" component="h2" sx={{ mt: 6 }}>
-            {blogDetailsData?.title}
+            {newsDetailsData?.title}
           </Typography>
           <Stack className="PostUploadInfo" gap={6}>
             <Box>
@@ -70,7 +70,7 @@ function NewsDetails({ params }: any) {
                 variant="body1"
                 sx={{ fontWeight: "700", lineHeight: "28px", mt: 1.25 }}
               >
-                Cameron Williamson
+                {newsDetailsData?.createdBy}
               </Typography>
             </Box>
             <Box>
@@ -79,22 +79,22 @@ function NewsDetails({ params }: any) {
                 variant="body1"
                 sx={{ fontWeight: "700", lineHeight: "28px", mt: 1.25 }}
               >
-                {formatDate(new Date())}
+                {formatDate(new Date(newsDetailsData?.createdDate))}
               </Typography>
             </Box>
           </Stack>
           <Box className="ContentWrapper">
             <Box className="PostThumbnail" sx={{ mt: 6 }}>
               <img
-                src="https://picsum.photos/200"
+                src={newsDetailsData?.imageUrl}
                 alt="https://picsum.photos/200"
               />
             </Box>
             <Box className="PostContent" sx={{ mt: 7.5 }}>
               <Typography variant="subtitle1">
-                {blogDetailsData?.bodyOverview}
+                {newsDetailsData?.shortDescription}
               </Typography>
-              <Typography variant="body1" dangerouslySetInnerHTML={{ __html: blogDetailsData?.body }}>
+              <Typography variant="body1" dangerouslySetInnerHTML={{ __html: newsDetailsData?.fullDescription }}>
               </Typography>
             </Box>
             <Stack className="FooterContent">
@@ -113,7 +113,7 @@ function NewsDetails({ params }: any) {
                 </Stack>
               </Box>
               <Box className="Right">
-                {blogDetailsData?.tags?.split(',')?.map((tagName: string) => <Chip label={tagName} />)}
+                {newsDetailsData?.tags?.split(',')?.map((tagName: string) => <Chip label={tagName} />)}
                 {/* <Chip label="Tag one" />
                 <Chip label="Tag two" />
                 <Chip label="Tag three" />
@@ -123,7 +123,7 @@ function NewsDetails({ params }: any) {
           </Box>
         </Container>
         <Container>
-          {blogList?.items?.length > 0 ? <Box className="DiscoverPost">
+          {newsList?.items?.length > 0 ? <Box className="DiscoverPost">
             <Box className="DiscoverPost__title">
               <Typography variant="h2" component="h2">
                 Related posts
@@ -142,7 +142,7 @@ function NewsDetails({ params }: any) {
                 rowSpacing={{ md: 6.25, xs: 4 }}
                 columnSpacing={{ md: 3.75, xs: 2 }}
               >
-                {blogList?.items?.map((item: any) => {
+                {newsList?.items?.map((item: any) => {
                   return (
                     <Grid item md={4} sm={6} key={item?.id}>
                       <PostCard details={item} />
