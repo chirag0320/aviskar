@@ -28,7 +28,7 @@ function ShoppingCart() {
                             <Box className="ShoppingCartDetails">
                                 <Box className="ShoppingProductsDetailsWrapper">
                                     {/* <Stack className='def'> */}
-                                    <Stack className='abc'>
+                                    <Stack className='ProductInfo'>
                                         <Stack className='ProductDetailsWrapper'>
                                             <img src={LogoGoldCoin} alt="Logo" />
                                             <Box>
@@ -51,7 +51,7 @@ function ShoppingCart() {
                                             <Icon className='DeleteIcon'><DeleteIcon /></Icon>
                                         </Stack>
                                     </Stack>
-                                    <Stack className='abc'>
+                                    <Stack className='ProductInfo'>
                                         <Stack className='ProductDetailsWrapper'>
                                             <img src={LogoGoldCoin} alt="Logo" />
                                             <Box>
@@ -74,7 +74,7 @@ function ShoppingCart() {
                                             <Icon className='DeleteIcon'><DeleteIcon /></Icon>
                                         </Stack>
                                     </Stack>
-                                    <Stack className='abc'>
+                                    <Stack className='ProductInfo'>
                                         <Stack className='ProductDetailsWrapper'>
                                             <img src={LogoGoldCoin} alt="Logo" />
                                             <Box>
@@ -97,7 +97,7 @@ function ShoppingCart() {
                                             <Icon className='DeleteIcon'><DeleteIcon /></Icon>
                                         </Stack>
                                     </Stack>
-                                    <Stack className='abc'>
+                                    <Stack className='ProductInfo'>
                                         <Stack className='ProductDetailsWrapper'>
                                             <img src={LogoGoldCoin} alt="Logo" />
                                             <Box>
