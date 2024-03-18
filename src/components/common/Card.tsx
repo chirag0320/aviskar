@@ -108,7 +108,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
           </ClickTooltip>
         ) : null}
         <Button name='discoverMore' aria-label='discoverMore' variant="contained" onClick={()=>{
-          navigate(`/product-details/${product?.productId}`) //friendlypagename
+          navigate(`/product-details/${product?.friendlypagename}`) //friendlypagename
         }} className="PrimaryAction" fullWidth>Discover More</Button>
         {product.isBundle && <IconButton className="Outlined Stack"><StackIcon /></IconButton>}
         <IconButton className="Outlined AddToCart"><AddToCartIcon /></IconButton>

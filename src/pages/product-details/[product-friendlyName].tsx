@@ -15,9 +15,10 @@ import { useAppSelector } from "@/hooks"
 function ProductDetail({ params }: any) {
   const { productDetailsData } = useAppSelector((state) => state.category)
   console.log("🚀 ~ ProductDetail ~ productDetailsData:", productDetailsData)
-  console.log("🚀 ~ ProductDetail ~ params:", params)
-  useAPIoneTime({ service: getProductDetailsData, endPoint: ENDPOINTS.productDetails.replace('{{product-id}}',params?.["product-friendlyName"] //params?.["product-friendlyName"]
-  ) })
+  useAPIoneTime({
+    service: getProductDetailsData, endPoint: ENDPOINTS.productDetails.replace('{{product-id}}', params?.["product-friendlyName"] //params?.["product-friendlyName"]
+    )
+  })
   return (
     <Layout>
       <Seo
@@ -27,10 +28,8 @@ function ProductDetail({ params }: any) {
       />
       <Breadcrumb page1={"Shop"} page2={"Products"} page3={"2024 1oz Lunar Series III Year of the Dragon Silver Coin"} />
       <Container id="PageProductDetail">
-        <AboutProduct productId={
-          params?.["product-friendlyName"] //params?.["product-friendlyName"]
-        }/>
-        <RelatedProduct relatedProductsList={structuredClone(productDetailsData?.relatedProducts)}/>
+        {productDetailsData?.productId && <AboutProduct productId={productDetailsData?.productId} />}
+        {productDetailsData?.relatedProducts?.length > 0 && <RelatedProduct relatedProductsList={structuredClone(productDetailsData?.relatedProducts)} />}
       </Container>
     </Layout>
   )
