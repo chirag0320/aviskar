@@ -1,18 +1,24 @@
 import React, { useState, useRef, Fragment } from "react"
-import { Stack, Box, Card, CardContent, CardActions, Typography, Button, Link, IconButton } from "@mui/material"
+import { Stack, Box, Card, CardContent, CardActions, Typography, Button, Link, IconButton, CardMedia, TextField, Select, MenuItem, Divider } from "@mui/material"
 import classNames from 'classnames'
+
+// Type
+import type { SelectChangeEvent } from "@mui/material"
 
 // Components
 import { ClickTooltip, HoverTooltip } from "./CustomTooltip"
 
 // Assets
-import { AddToCartIcon, StackIcon, OfferTagIcon, ChevronDown, ChevronUp, ArrowRight, InfoIcon } from "../../assets/icons/index"
+import { AddToCartIcon, StackIcon, OfferTagIcon, ChevronDown, ChevronUp, ArrowRight, InfoIcon, Delete1Icon, MinusIcon, PlusIcon, SelectDropdown } from "../../assets/icons/index"
 
 // Utils
-import { ProductStockStatus } from "./Utils"
+import { ProductStockStatus, ProductUpdateCountdown } from "./Utils"
 import { IFeaturedProducts } from "../partials/home/FeaturedProducts"
 import { navigate } from "gatsby"
+import { deliveryMethodMessage } from "@/utils/common"
 import { useAppSelector } from "@/hooks"
+import { productImages } from "@/utils/data"
+
 interface Iproduct {
   product: IFeaturedProducts
 }
@@ -73,8 +79,8 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
               </Typography>
               <HoverTooltip
                 placement="top-end"
-                className="TooltipProdductDiscount"
                 renderComponent={<IconButton className="InfoButton"><InfoIcon /></IconButton>}
+                infoTooltip
                 arrow
               >
                 This is a helper text to justify pricing discount.
@@ -107,7 +113,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
             </Box>
           </ClickTooltip>
         ) : null}
-        <Button name='discoverMore' aria-label='discoverMore' variant="contained" onClick={()=>{
+        <Button name='discoverMore' aria-label='discoverMore' variant="contained" onClick={() => {
           navigate(`/product-details/${product?.productId}`) //friendlypagename
         }} className="PrimaryAction" fullWidth>Discover More</Button>
         {product.isBundle && <IconButton className="Outlined Stack"><StackIcon /></IconButton>}
@@ -129,10 +135,91 @@ export const TravelCard = (props: any) => {
         <Typography className="Description">{description}</Typography>
       </CardContent>
       <CardActions>
-        <Button name='discoverMore' aria-label="discoverMore"  endIcon={<ArrowRight />} onClick={()=>{
+        <Button name='discoverMore' aria-label="discoverMore" endIcon={<ArrowRight />} onClick={() => {
           navigate(`blog/${friendlyName}`)
         }}>Discover More</Button>
       </CardActions>
     </Card>
+  )
+}
+
+export const CartCard = (data: any) => {
+  const [deliveryMethod, setDeliveryMethod] = useState<string>('SecureShipping')
+  const handleDeliveryMethod = (event: SelectChangeEvent) => {
+    setDeliveryMethod(event.target.value as string);
+  }
+
+  return (
+    <Card className="CartCard">
+      <CardMedia
+        component="img"
+        image={data.data}
+        alt="Product image"
+      />
+      <CardContent>
+        <Stack className="TopWrapper">
+          <Box className="LeftWrapper">
+            <Typography className="Name" component="p" variant="titleLarge">2024 1oz Lunar Series III Year of the Dragon Silver Coin</Typography>
+            <Typography variant="body2">Ships by 04 Jan 2024 or collect immediately</Typography>
+          </Box>
+          <Box className="RightWrapper">
+            <Typography className="LivePrice" variant="body2">Live Price</Typography>
+            <Typography variant="body2">Qty.</Typography>
+            <Typography variant="subtitle1">$3557.70</Typography>
+            <Stack className="Quantity">
+              <IconButton className="Minus"><MinusIcon /></IconButton>
+              <TextField />
+              <IconButton className="Plus"><PlusIcon /></IconButton>
+            </Stack>
+            <IconButton className="DeleteButton"><Delete1Icon /></IconButton>
+          </Box>
+        </Stack>
+        <Stack className="BottomWrapper">
+          <Stack className="LeftSide">
+            <Stack className="DeliveryMethod">
+              <Typography className="Label" variant="titleLarge">Delivery Method:</Typography>
+              <Select
+                color="secondary"
+                className="DeliveryMethodSelect"
+                value={deliveryMethod}
+                onChange={handleDeliveryMethod}
+                IconComponent={SelectDropdown}
+              >
+                <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
+                <MenuItem value="VaultStorage">Vault Storage</MenuItem>
+              </Select>
+            </Stack>
+            <ProductUpdateCountdown />
+          </Stack>
+          <Stack className="RightSide">
+            <Typography className="ShippingMessage" variant="body2">{deliveryMethodMessage.noSecureShipping}</Typography>
+          </Stack>
+        </Stack>
+      </CardContent>
+    </Card >
+  )
+}
+
+export const CartCardAbstract = (data: any) => {
+
+  return (
+    <Card className="CartCardAbstract">
+      <CardContent>
+        <CardMedia
+          component="img"
+          image={data.data}
+          alt="Product image"
+        />
+        <Stack className="Wrapper">
+          <Box className="About">
+            <Typography className="Name" variant="titleLarge" component="p">2024 1oz Lunar Series III Year of the Dragon Silver Coin</Typography>
+            <Typography>Qty: 03</Typography>
+          </Box>
+          <Typography variant="subtitle1">$10673.1</Typography>
+        </Stack>
+      </CardContent>
+      <Divider />
+      <Typography className="DeliveryMethod" variant="overline" component="p">Delivery Method: <Typography variant="inherit" component="span">Secure Shipping</Typography></Typography>
+    </Card >
   )
 }
