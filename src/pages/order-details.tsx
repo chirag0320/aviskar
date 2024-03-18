@@ -77,19 +77,19 @@ function orderDetails() {
                                 <Typography variant="subtitle2" className="OrderID">Order : SEP-0026112024</Typography>
                                 <Stack className="OrderDetails">
                                     <Box className="OrderDateWrapper">
-                                        <Typography variant="body1" className="">Order Date</Typography>
+                                        <Typography variant="body1">Order Date</Typography>
                                         <Typography variant="subtitle1" className="Font16">Tuesday, September 26, 2023</Typography>
                                     </Box>
                                     <Box className="OrderTimeWrapper">
-                                        <Typography variant="body1" className="">Order Time</Typography>
+                                        <Typography variant="body1">Order Time</Typography>
                                         <Typography variant="subtitle1" className="Font16">10:46 AM</Typography>
                                     </Box>
                                     <Box className="OrderNumberWrapper">
-                                        <Typography variant="body1" className="">Order Number</Typography>
+                                        <Typography variant="body1">Order Number</Typography>
                                         <Typography variant="subtitle1" className="Font16">273323931</Typography>
                                     </Box>
                                     <Box className="OrderStatusWrapper">
-                                        <Typography variant="body1" className="">Order Status</Typography>
+                                        <Typography variant="body1">Order Status</Typography>
                                         <Stack sx={{ gap: "10px" }} className="ButtonsWrapper">
                                             <Button variant="contained" size="small" className="RedButton">Cancelled</Button>
                                             <Button variant="contained" size="small" className="RedButton">Approved Cancellation</Button>
@@ -97,11 +97,11 @@ function orderDetails() {
 
                                     </Box>
                                     <Box className="PaymentWrapper">
-                                        <Typography variant="body1" className="">Payment</Typography>
+                                        <Typography variant="body1">Payment</Typography>
                                         <Typography variant="subtitle1" className="Font16">Bank Transfer</Typography>
                                     </Box>
                                     <Box className="DeliveryWrapper">
-                                        <Typography variant="body1" className="">Delivery</Typography>
+                                        <Typography variant="body1">Delivery</Typography>
                                         <Typography variant="subtitle1" className="Font16">Secure Shipping</Typography>
                                     </Box>
                                 </Stack>
@@ -118,8 +118,8 @@ function orderDetails() {
                                         <Typography variant="body1">Phone </Typography><Typography variant="subtitle1" className='Font16'> : 917228040585</Typography>
                                     </Stack>
                                     <Typography variant="body1" className="CommonBottomMargin">65, McMullen Road Sunshine Coast, Queensland <br /> 4069, Australia</Typography>
-                                    <Stack sx={{ gap: "10px", alignItems: "center" }} className="">
-                                        <Typography variant="body1" className="">Account Type: </Typography><Typography variant="subtitle1" className='Font16'>Individual</Typography>
+                                    <Stack sx={{ gap: "10px", alignItems: "center" }}   >
+                                        <Typography variant="body1">Account Type: </Typography><Typography variant="subtitle1" className='Font16'>Individual</Typography>
                                     </Stack>
                                 </Box>
                                 <Box className="ShippingWrapper">
@@ -174,19 +174,19 @@ function orderDetails() {
                                 <Stack className='SubtotalShippingWrapper'>
                                     <Box className="Subtotal">
                                         <Typography variant="body1" sx={{ marginBottom: "2px" }}>Subtotal</Typography>
-                                        <Typography variant="subtitle1" className="">$ 8933.13</Typography>
+                                        <Typography variant="subtitle1"   >$ 8933.13</Typography>
                                     </Box>
                                     <Box className="SecureShipping">
                                         <Typography variant="body1" sx={{ marginBottom: "2px" }}>Secure Shipping</Typography>
-                                        <Typography variant="subtitle1" className="">$ 120.22</Typography>
+                                        <Typography variant="subtitle1"   >$ 120.22</Typography>
                                     </Box>
                                 </Stack>
                                 <Box className="TotalWrapper">
-                                    <Typography variant="body1" className="">Total</Typography>
+                                    <Typography variant="body1">Total</Typography>
                                     <Typography variant="subtitle2" className="TotalValue">$ 9240.35</Typography>
                                     <Stack sx={{ gap: "12px" }}>
-                                        <Typography variant="overline" className="">GST Included:</Typography>
-                                        <Typography variant="overline" className="">$ 819.30</Typography>
+                                        <Typography variant="overline">GST Included:</Typography>
+                                        <Typography variant="overline">$ 819.30</Typography>
                                     </Stack>
                                 </Box>
                             </Stack>
@@ -195,7 +195,7 @@ function orderDetails() {
                                 <Box className="Card SecureShippingCard">
                                     <Stack className='IconTitleWrapper'>
                                         <Icon className="AddToCartIcon"><AddToCartIcon /></Icon>
-                                        <Typography variant="subtitle2" className="">Secure shipping</Typography>
+                                        <Typography variant="subtitle2">Secure shipping</Typography>
                                     </Stack>
                                     <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>Details including carrier, tracking code and ETA will be sent via separate email once payment has cleared. Follow the progress of your shipment in real time by clicking on the link in the email.</Typography>
                                     <Link variant="overline" className="lineHeight25">https://queenslandmint.com/secure-shipping</Link>
@@ -203,7 +203,7 @@ function orderDetails() {
                                 <Box className="Card PaymentCard">
                                     <Stack className='IconTitleWrapper'>
                                         <Icon><AddToCartIcon /></Icon>
-                                        <Typography variant="subtitle2" className="">Secure shipping</Typography>
+                                        <Typography variant="subtitle2">Secure shipping</Typography>
                                     </Stack>
                                     <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>Bank transfer payments are free and required <br />within 24 hours of order Commonwealth Bank <br />
                                         Account Name: <Typography
@@ -218,7 +218,7 @@ function orderDetails() {
                                 <Box className="Card SellingCard">
                                     <Stack className='IconTitleWrapper'>
                                         <Icon><AddToCartIcon /></Icon>
-                                        <Typography variant="subtitle2" className="">Secure shipping</Typography>
+                                        <Typography variant="subtitle2">Secure shipping</Typography>
                                     </Stack>
                                     <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>Details including carrier, tracking code and
                                         ETA will be sent via separate email once payment has cleared. Follow the progress of your shipment in real time by clicking on the link in the email.</Typography>

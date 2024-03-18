@@ -53,8 +53,6 @@ import TimerIcon from "./TimerIcon";
 import GoldBarIcon from "./GoldBarIcon";
 import GreenConfirmationIcon from "./GreenConfirmationIcon";
 import PdfIcon from "./PdfIcon";
-import UpdateIcon from "./UpdateIcon";
-import DeleteIcon from "./DeleteIcon";
 import RightArrow from "./RightArrow";
 import LeftArrow from "./LeftArrow";
 
@@ -131,8 +129,6 @@ export {
   GoldBarIcon,
   GreenConfirmationIcon,
   PdfIcon,
-  UpdateIcon,
-  DeleteIcon,
   RightArrow,
   LeftArrow,
 
