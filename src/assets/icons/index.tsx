@@ -4,6 +4,7 @@ import ArrowUp from "./ArrowUp";
 import ArrowDown from "./ArrowDown";
 import ChevronDown from "./ChevronDown";
 import ChevronUp from "./ChevronUp";
+import ChevronUpRounded from "./ChevronUpRounded";
 import ChevronRight from "./ChevronRight";
 import ChevronLeft from "./ChevronLeft";
 import Search from "./Search";
@@ -19,6 +20,7 @@ import ContainedCrossIcon from "./ContainedCrossIcon";
 import OfferTagIcon from "./OfferTagIcon";
 import MapIcon from "./MapIcon";
 import MailIcon from "./MailIcon";
+import MailIcon1 from "./MailIcon1";
 import VaultIcon from "./VaultIcon";
 import SellToUsIcon from "./SellToUsIcon";
 import CalculatorIcon from "./CalculatorIcon";
@@ -37,18 +39,29 @@ import RadioCheckedIcon from "./RadioCheckedIcon";
 import RadioUncheckedIcon from "./RadioUncheckedIcon";
 import SortbyIcon from "./SortbyIcon";
 import FilterIcon from "./FilterIcon";
+import CrossIconWithOutlineCircle from "./CrossIconWithOutlineCircle";
 import SearchButtonIcon from "./SearchButtonIcon";
 import FilledUpButton from "./FilledUpButton";
 import OptionsIcon from "./OptionsIcon";
+import DeleteIcon from "./DeleteIcon";
+import MinusIcon from "./MinusIcon";
+import PlusIcon from "./PlusIcon";
+import HeartIcon from "./HeartIcon";
+import AlarmIcon from "./AlarmIcon";
+import CameraIcon from "./CameraIcon";
+import TimerIcon from "./TimerIcon";
+import GoldBarIcon from "./GoldBarIcon";
+import GreenConfirmationIcon from "./GreenConfirmationIcon";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
 import YoutubeIcon from "./social/YoutubeIcon";
-import FeedIcon from "./social/FeedIcon";
 import TwitterIcon from "./social/TwitterIcon";
+import InstagramIcon from "./social/InstagramIcon";
+import FeedIcon from "./social/FeedIcon";
 import BlueFacebookIcon from "./social/BlueFacebookIcon";
 import GoogleIcon from "./social/GoogleIcon";
-import InstagramIcon from "./social/InstagramIcon";
+import InstagramIcon1 from "./social/InstagramIcon1";
 import TwitterBirdIcon from "./social/TwitterBirdIcon";
 import WorldIcon from "./social/WorldIcon";
 import YouTubeTextIcon from "./social/YouTubeTextIcon";
@@ -64,6 +77,7 @@ export {
   ArrowDown,
   ChevronDown,
   ChevronUp,
+  ChevronUpRounded,
   ChevronRight,
   ChevronLeft,
   Search,
@@ -79,6 +93,7 @@ export {
   OfferTagIcon,
   MapIcon,
   MailIcon,
+  MailIcon1,
   VaultIcon,
   SellToUsIcon,
   CalculatorIcon,
@@ -97,9 +112,19 @@ export {
   RadioUncheckedIcon,
   SortbyIcon,
   FilterIcon,
+  CrossIconWithOutlineCircle,
   SearchButtonIcon,
   FilledUpButton,
   OptionsIcon,
+  DeleteIcon,
+  MinusIcon,
+  PlusIcon,
+  HeartIcon,
+  AlarmIcon,
+  CameraIcon,
+  TimerIcon,
+  GoldBarIcon,
+  GreenConfirmationIcon,
 
   // Social
   FacebookIcon,
@@ -110,6 +135,7 @@ export {
   GoogleIcon,
   TwitterBirdIcon,
   InstagramIcon,
+  InstagramIcon1,
   WorldIcon,
   YouTubeTextIcon,
   Email,

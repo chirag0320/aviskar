@@ -21,6 +21,9 @@ const theme: Theme = createTheme({
       main: "#1D2129",
       contrastText: "#EAA22B",
     },
+    success: {
+      main: variable.success,
+    },
     divider: "#1d212933",
     tonalOffset: 0.1,
     text: {
@@ -53,10 +56,15 @@ const theme: Theme = createTheme({
         fontSize: pxToRem(26),
       },
     },
-    // 
+    // Display Small
     h4: {
       fontSize: pxToRem(32),
+      lineHeight: pxToRem(36),
       fontWeight: 700,
+      "@media (max-width: 900px)": {
+        fontSize: pxToRem(22),
+        lineHeight: pxToRem(30),
+      },
     },
     // Title Medium
     body1: {
@@ -96,6 +104,18 @@ const theme: Theme = createTheme({
       fontWeight: 600,
       textTransform: "initial",
     },
+    // Title Large
+    titleLarge: {
+      fontSize: pxToRem(16),
+      lineHeight: pxToRem(28),
+      fontWeight: 700,
+    },
+    // Body Small
+    bodySmall: {
+      fontSize: pxToRem(12),
+      lineHeight: pxToRem(26),
+      fontWeight: 400,
+    },
     // Body Medium
     caption: {
       fontSize: pxToRem(13),
@@ -125,7 +145,6 @@ const theme: Theme = createTheme({
           height: "100%",
           fontSize: "15px",
           // '@media (max-width: 900px)': {
-          //   fontSize: '15px',
           // },
         },
         body: {
@@ -156,6 +175,9 @@ const theme: Theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#1D212980",
+        },
+        invisible: {
+          backgroundColor: "transparent",
         },
       },
     },
@@ -188,6 +210,13 @@ const theme: Theme = createTheme({
       defaultProps: {
         flexDirection: "row",
         useFlexGap: true,
+      },
+    },
+    MuiTypography: {
+      defaultProps: {
+        variantMapping: {
+          bodySmall: "p",
+        },
       },
     },
     MuiFilledInput: {
@@ -522,9 +551,6 @@ const theme: Theme = createTheme({
       },
     },
     MuiSlider: {
-      defaultProps: {
-        valueLabelDisplay: "auto",
-      },
       styleOverrides: {
         root: {
           height: 2,

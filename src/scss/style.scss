@@ -14,6 +14,7 @@
 @import "components/drawer";
 @import "components/dialog";
 @import "components/recentOrderTable";
+@import "components/table";
 
 // Common
 @import "common/header";
@@ -25,6 +26,10 @@
 @import "pages/category.scss";
 @import "pages/memberships.scss";
 @import "pages/contactus.scss";
+@import "pages/specificCalculator.scss";
+@import "pages/calculators.scss";
 @import "pages/blog.scss";
 @import "pages/blogDetails.scss";
 @import "pages/vault.scss";
+@import "pages/productDetail.scss";
+@import "pages/order-confirmation.scss";
