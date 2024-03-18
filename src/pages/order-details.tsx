@@ -1,10 +1,61 @@
-import React from 'react'
+import * as React from "react";
 import Seo from "../components/common/Seo"
 import Layout from "@/components/common/Layout";
-import { Box, Link, Container, Typography, Button, Stack, Icon } from "@mui/material"
+import {
+    Box, Link, Container, Typography, Button, Stack, Icon, Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Chip,
+} from "@mui/material"
 import { AddToCartIcon, PdfIcon } from '@/assets/icons';
+import StatusImage from '../assets/images/StatusImage.png';
 
 
+
+function createData(
+    Name: string,
+    Price: string,
+    Quantity: string,
+    Total: string,
+) {
+    return { Name, Price, Quantity, Total };
+}
+const rows = [
+    createData(
+        "Test Accounting Product",
+        "$38.39",
+        "1",
+        "$38.39",
+    ),
+    createData(
+        "2024 1oz Lunar Series III Year of the Dragon Silver Coin",
+        "$38.39",
+        "1",
+        "$38.39",
+    ),
+    createData(
+        "100g Queensland Mint Kangaroo Gold Cast Bar",
+        "$38.39",
+        "1",
+        "$38.39",
+    ),
+    createData(
+        "2024 1oz Lunar Series III Year of the Dragon Silver Coin",
+        "$38.39",
+        "1",
+        "$38.39",
+    ),
+    createData(
+        "100g Queensland Mint Kangaroo Gold Cast Bar",
+        "$38.39",
+        "1",
+        "$38.39",
+    ),
+];
 
 function orderDetails() {
     return (
@@ -18,9 +69,10 @@ function orderDetails() {
                 <Box id="OrderDetailsPage" className='OrderDetailsPage' component="section">
                     <Container>
                         <Box className="OrderDetailsContent">
+                            <img src={StatusImage} className="StatusImage" alt="StatusImage" />
                             <Box className="OrderDetailsWrapper">
-                                <Box sx={{ textAlign: "right" }}>
-                                    <Button sx={{ gap: "12px" }} className='PDF invoiceBtn' size='large' variant="contained"><Icon className='PdfIcon'><PdfIcon /></Icon>PDF invoice</Button>
+                                <Box className='PDFBtnWrapper'>
+                                    <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained"><Icon className='PdfIcon'><PdfIcon /></Icon>PDF invoice</Button>
                                 </Box>
                                 <Typography variant="subtitle2" className="OrderID">Order : SEP-0026112024</Typography>
                                 <Stack className="OrderDetails">
@@ -38,7 +90,7 @@ function orderDetails() {
                                     </Box>
                                     <Box className="OrderStatusWrapper">
                                         <Typography variant="body1" className="">Order Status</Typography>
-                                        <Stack sx={{ gap: "10px" }}>
+                                        <Stack sx={{ gap: "10px" }} className="ButtonsWrapper">
                                             <Button variant="contained" size="small" className="RedButton">Cancelled</Button>
                                             <Button variant="contained" size="small" className="RedButton">Approved Cancellation</Button>
                                         </Stack>
@@ -84,8 +136,39 @@ function orderDetails() {
                                 </Box>
                             </Box>
 
-                            <Box className="OrderDetailTable">
-                            </Box>
+                            {/* <Box className="OrderDetailTableWrapper"> */}
+                            <TableContainer
+                                className="OrderDetailTableWrapper"
+                                sx={{}}
+                            // component={Paper}
+                            >
+                                <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell sx={{ minWidth: "40%" }}>Name</TableCell>
+                                            <TableCell sx={{ minWidth: "15%" }}>Price</TableCell>
+                                            <TableCell sx={{ minWidth: "10%" }}>Quantity</TableCell>
+                                            <TableCell sx={{ minWidth: "15%" }}>Total</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {rows.map((row) => (
+                                            <TableRow
+                                                key={row.Name}
+                                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    {row.Name}
+                                                </TableCell>
+                                                <TableCell>{row.Price}</TableCell>
+                                                <TableCell>{row.Quantity}</TableCell>
+                                                <TableCell>{row.Total}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            {/* </Box> */}
 
                             <Stack className='TotalShippingDetailsWrapper'>
                                 <Stack className='SubtotalShippingWrapper'>
@@ -111,7 +194,7 @@ function orderDetails() {
                             <Box className="CardsWrapper">
                                 <Box className="Card SecureShippingCard">
                                     <Stack className='IconTitleWrapper'>
-                                        <Icon className=""><AddToCartIcon /></Icon>
+                                        <Icon className="AddToCartIcon"><AddToCartIcon /></Icon>
                                         <Typography variant="subtitle2" className="">Secure shipping</Typography>
                                     </Stack>
                                     <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>Details including carrier, tracking code and ETA will be sent via separate email once payment has cleared. Follow the progress of your shipment in real time by clicking on the link in the email.</Typography>
