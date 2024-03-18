@@ -323,7 +323,6 @@
           line-height: 30px;
           font-size: 24px;
         }
-
       }
 
       .Details {
@@ -398,9 +397,275 @@
 // }
 // End :: membershipcard css
 
+.PostCard {
+  .PostImage {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    max-height: 314px;
+    height: 100%;
+    @include media($lg) {
+      max-height: 200px;
+    }
+  }
+  .CardContentWrapper {
+    .MuiCardContent-root {
+      padding: 0;
+      padding-top: 20px;
+      .PostInfo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .UserInfo {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          .UserImage {
+            width: 36px;
+            height: 36px;
+            object-fit: cover;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+    .MuiCardActions-root {
+      .MuiButtonBase-root {
+        line-height: 20px;
+        .MuiButton-endIcon {
+          margin-left: 10px;
+          svg {
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+    }
+    .MuiTypography-root {
+      color: $dark;
+      @include max-line(2);
+    }
+  }
+}
+
+.StatsCard {
+  background: rgb(52 145 250 / 6%);
+  border-radius: 15px;
+  .MuiCardContent-root {
+    padding: 16px;
+  }
+  .TopWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .BottomWrapper {
+    margin-top: 23px;
+    justify-content: space-between;
+    align-items: center;
+    .StatNumber {
+      line-height: 36px;
+    }
+    .MuiIconButton-root {
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+      background-color: $yellowFuel;
+      border-radius: 50%;
+      color: $white;
+    }
+  }
+}
+
+.UserStatsCard {
+  border-radius: 15px;
+  box-shadow: $shadow10;
+  border: 1px solid #3491fa14;
+  .MuiCardContent-root {
+    padding: 20px;
+    position: relative;
+    @include media($lg) {
+      padding: 15px;
+    }
+    &:after {
+      width: 214px;
+      height: 214px;
+      border-radius: 50%;
+      position: absolute;
+      content: "";
+      // border: 50px solid;
+      top: 0;
+      left: 0;
+      transform: translate(-45%, -45%);
+      @include media($lg) {
+        width: 150px;
+        height: 150px;
+      }
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      height: 203px;
+      width: 203px;
+      // background-color: #3491fa14;
+      bottom: -40%;
+      transform: translateY(40%);
+      right: -10%;
+      border-radius: 50%;
+      @include media($lg) {
+        width: 150px;
+        height: 150px;
+      }
+    }
+  }
+  .TopWrapper {
+    display: flex;
+    justify-content: space-between;
+    .Return {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      .MuiTypography-h4 {
+        display: inline-block;
+      }
+      .MuiTypography-body1 {
+        display: inline-block;
+        color: $success;
+
+        svg {
+          margin-right: 4px;
+        }
+      }
+      &.Loss {
+        .MuiTypography-body1 {
+          color: $error;
+          svg {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+    .MuiButtonBase-root {
+      padding: 0;
+      width: 15px;
+      height: 15px;
+      color: $dark;
+    }
+  }
+  .BottomWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 10px;
+    margin-top: 35px;
+    .Left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+}
+
+.LineChartCard {
+  border-radius: 15px;
+  background-color: rgb(221 231 235 / 30%);
+  .MuiCardContent-root {
+    padding: 20px;
+    position: relative;
+  }
+  .TopWrapper {
+    display: flex;
+    justify-content: space-between;
+    .Right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 13px;
+
+      .MuiButtonBase-root {
+        padding: 0;
+        width: 15px;
+        height: 15px;
+        color: $dark;
+      }
+    }
+  }
+  .BottomWrapper {
+    background-color: $white;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 5px;
+    padding: 24px 15px 17px;
+    border-radius: 11px;
+    .Chart {
+      svg {
+        g {
+          &:first-of-type {
+            path {
+              fill: aliceblue;
+            }
+          }
+        }
+      }
+    }
+    .RangeBar {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      .Price {
+        display: flex;
+        justify-content: space-between;
+        .MuiTypography-body1 {
+          line-height: 11px;
+        }
+      }
+      .HLCircuit {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+        .HLCircuitRange {
+          background-color: rgb(52 145 250 / 20%);
+          height: 3px;
+          border-radius: 33px;
+          flex: 1;
+          margin: 0 5px;
+          color: $blueCyan;
+          position: relative;
+          .MuiTypography-caption {
+            line-height: 9px;
+          }
+          .UpArrow {
+            position: absolute;
+            height: 14px;
+            bottom: 0;
+            @include transition;
+            svg {
+              width: 14px;
+              height: 14px;
+            }
+          }
+        }
+      }
+      .MuiTypography-root {
+        &.MuiTypography-body1 {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
 
 // Start :: shippingcard css
 .ShippingCard {
+  .IconCaculatorsPage{
+    svg{
+      stroke: $yellowFuel
+    }
+  }
   &.MuiCard-root {
     position: relative;
     padding: 20px;

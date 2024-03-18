@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Box, Stack, Tabs, Tab, Typography, Slider, Select, MenuItem, Divider, Button, IconButton, TextField, Icon, Accordion, AccordionDetails, AccordionSummary, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import { Box, Stack, Tabs, Tab, Typography, Slider, Select, MenuItem, Divider, Button, IconButton, TextField, Icon, Accordion, AccordionDetails, AccordionSummary, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, createStyles } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -23,6 +23,7 @@ import { useAppSelector } from "@/hooks"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { ENDPOINTS } from "@/utils/constants"
 import { valueChangeForPrice } from "@/utils/common"
+import useCallAPI from "@/hooks/useCallAPI"
 
 function createData(
   quantity: string,
@@ -52,18 +53,34 @@ const schema = yup.object().shape({
 
 
 function AboutProduct({ productId }: any) {
+  const styles: any = createStyles({
+    tableBody: {
+      border: '1px solid #ddd', // border around the table body
+    },
+    tableRow: {
+      '&:nth-of-type(odd)': {
+        backgroundColor: '#f2f2f2', // alternate row background color
+      },
+    },
+    tableCell: {
+      padding: '8px', // cell padding
+      borderBottom: '1px solid #ddd', // bottom border for each cell
+      wordWrap: 'break-word',
+    },
+  });
   const { productDetailsData } = useAppSelector((state) => state.category)
-  console.log("🚀 ~ AboutProduct ~ productDetailsData:", productDetailsData)
-
-  const [quentityCount, setQuentityCount] = useState<number>(1)
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+
+  const [quentityCount, setQuentityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
   const [productIds] = useState({ productIds: [Number(productId)] })
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
-  const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
-  const { data: progressData } = useApiRequest(urlForThePriceRange, 'get');
   const [tabValue, setTabValue] = useState<number>(0)
   const [priceHistoryDuration, setPriceHistoryDuration] = useState<string>('hour')
 
+  const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
+
+  const { data: progressData } = useApiRequest(urlForThePriceRange, 'get');
+  const { loading: loadingForAddToCart, error: errorForAddToCart, apiCallFunction } = useCallAPI()
   const {
     register,
     handleSubmit,
@@ -101,11 +118,15 @@ function AboutProduct({ productId }: any) {
   const handleQuentityUpdate = (type: 'plus' | 'minus') => {
     switch (type) {
       case "minus":
-        setQuentityCount((prev) => prev - 1 < 1 ? 1 : prev - 1)
+        if (productDetailsData?.minimumCartQty !== quentityCount) {
+          setQuentityCount((prev) => prev - 1 < 1 ? 1 : prev - 1)
+        }
         break;
 
       case "plus":
-        setQuentityCount((prev) => prev + 1)
+        if (productDetailsData?.maximumCartQty !== quentityCount) {
+          setQuentityCount((prev) => prev + 1)
+        }
         break;
       default:
         break;
@@ -126,7 +147,7 @@ function AboutProduct({ productId }: any) {
               <Stack className="Top">
                 <Stack className="Left">
                   <Typography className="ProductValue" variant="subtitle2">${priceData?.data?.[0]?.price}</Typography>
-                  {priceData?.data?.[0]?.discount !== 0 ?   <Typography className="DiscountValue" variant="overline">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
+                  {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue" variant="overline">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
                   <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
                   {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
                 </Stack>
@@ -191,7 +212,12 @@ function AboutProduct({ productId }: any) {
                 }}><PlusIcon /></IconButton>
               </Stack>
               <Stack className="Right">
-                <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />}>Add to cart</Button>
+                <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={() => {
+                  apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+                    "productId": productId,
+                    "quantity": quentityCount
+                  } as any)
+                }} disabled={loadingForAddToCart}>Add to cart</Button>
                 <Button size="large" variant="outlined">Buy now</Button>
               </Stack>
             </Stack>
@@ -213,12 +239,41 @@ function AboutProduct({ productId }: any) {
             </Stack> */}
             <Divider />
             <Stack className="AdditionalDetails">
-              {priceData?.data?.tierPriceList?.length > 0 ? <><Accordion defaultExpanded>
+              {priceData?.data?.[0]?.tierPriceList?.length > 0 ? <><Accordion defaultExpanded>
                 <AccordionSummary>
                   <Typography variant="titleLarge">Discounts Available</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi, nulla architecto. Id, tempora minima! Nam doloremque et omnis labore quo aliquid, dolor quidem recusandae cum perferendis? Delectus, quos ipsa! Odio?
+                  <TableContainer className="GreyTable">
+                    <Table size="small">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="center"><Typography variant="subtitle1">Quantity</Typography></TableCell>
+                          <TableCell align="center"><Typography variant="subtitle1">Price</Typography></TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {priceData?.data?.[0]?.tierPriceList.map((priceData: {
+                          discount: number,
+                          fromQty: number,
+                          price: number,
+                          taxPrice: number,
+                          toQty: number,
+                        }, index: any) => (
+                          <TableRow key={`pricedata-${index}`} >
+                            <TableCell align="center">
+                              <Typography>{priceData?.fromQty + '-' + priceData?.toQty}</Typography>
+                              <Divider />
+                            </TableCell>
+                            <TableCell align="center" style={{ wordWrap: "break-word" }}>
+                              <Typography>{priceData?.price}</Typography>
+                              <Divider />
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                 </AccordionDetails>
               </Accordion></> : null}
               {productDetailsData?.isGradingShow ? <Accordion defaultExpanded>
@@ -227,8 +282,8 @@ function AboutProduct({ productId }: any) {
                 </AccordionSummary>
                 <AccordionDetails>
                   <Stack className="RatingsList">
-                    {qmintRating.map((rating) => (
-                      renderRatingSlider(rating.name, rating.percentage)
+                    {productDetailsData?.parentProductGradings?.map((grading: any) => (
+                      renderRatingSlider(grading.gradeType, grading.productGradingPercentage)
                     ))}
                   </Stack>
                 </AccordionDetails>
@@ -246,18 +301,18 @@ function AboutProduct({ productId }: any) {
                         <TableHead>
                           <TableRow>
                             <TableCell align="center"><Typography variant="subtitle1">Quantity</Typography></TableCell>
-                            <TableCell align="center"><Typography variant="subtitle1">Price</Typography></TableCell>
+                            <TableCell align="center"><Typography variant="subtitle1">Product Name</Typography></TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {rows.map((row) => (
-                            <TableRow key={row.quantity} >
+                          {productDetailsData?.bulkProduct.map((bulkProduct: { quantity: number, productName: any }) => (
+                            <TableRow key={bulkProduct.quantity} >
                               <TableCell align="center">
-                                <Typography>{row.quantity}</Typography>
+                                <Typography>{bulkProduct.quantity}</Typography>
                                 <Divider />
                               </TableCell>
-                              <TableCell align="center">
-                                <Typography>{row.price}</Typography>
+                              <TableCell align="left" style={{ wordWrap: "break-word" }}>
+                                <Typography>{bulkProduct.productName}</Typography>
                                 <Divider />
                               </TableCell>
                             </TableRow>
@@ -301,7 +356,31 @@ function AboutProduct({ productId }: any) {
           <Typography variant="h4" className="TabTitle">Additional Information</Typography>
           <Box className="ScrollbarWrapper">
             <Box className="Content ScrollbarBlue">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod itaque atque dolorum culpa. Doloribus labore, nulla iste distinctio provident, quasi impedit consequatur aperiam sapiente repudiandae eum doloremque explicabo. In, atque!
+              <TableContainer className="GreyTable">
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      {/* <TableCell align="center"><Typography variant="subtitle1">specifications</Typography></TableCell> */}
+                      {/* <TableCell align="center"><Typography variant="subtitle1">Product Name</Typography></TableCell> */}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody style={styles.tableBody}>
+                    {Object.entries(productDetailsData?.specifications)?.map((bulkProduct: any, index) => (
+                      <TableRow key={index} style={{ ...styles.tableRow }}>
+                        <TableCell align="center" style={styles.tableCell}>
+                          <Typography>{index + 1}</Typography>
+                        </TableCell>
+                        <TableCell align="left" style={{ ...styles.tableCell }}>
+                          <Typography>{bulkProduct[0]}</Typography>
+                        </TableCell>
+                        <TableCell align="left" style={{ ...styles.tableCell }}>
+                          <Typography>{bulkProduct[1]}</Typography>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Box>
           </Box>
         </TabPanel> : null}
