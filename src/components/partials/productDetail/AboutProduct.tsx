@@ -71,14 +71,13 @@ function AboutProduct({ productId }: any) {
   const { productDetailsData } = useAppSelector((state) => state.category)
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
 
-  const [quentityCount, setQuentityCount] = useState<number>(1)
+  const [quentityCount, setQuentityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
   const [productIds] = useState({ productIds: [Number(productId)] })
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
   const [tabValue, setTabValue] = useState<number>(0)
   const [priceHistoryDuration, setPriceHistoryDuration] = useState<string>('hour')
 
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
-  console.log("🚀 ~ AboutProduct ~ priceData:", priceData?.data?.[0]?.tierPriceList)
 
   const { data: progressData } = useApiRequest(urlForThePriceRange, 'get');
   const { loading: loadingForAddToCart, error: errorForAddToCart, apiCallFunction } = useCallAPI()
@@ -119,11 +118,15 @@ function AboutProduct({ productId }: any) {
   const handleQuentityUpdate = (type: 'plus' | 'minus') => {
     switch (type) {
       case "minus":
-        setQuentityCount((prev) => prev - 1 < 1 ? 1 : prev - 1)
+        if (productDetailsData?.minimumCartQty !== quentityCount) {
+          setQuentityCount((prev) => prev - 1 < 1 ? 1 : prev - 1)
+        }
         break;
 
       case "plus":
-        setQuentityCount((prev) => prev + 1)
+        if (productDetailsData?.maximumCartQty !== quentityCount) {
+          setQuentityCount((prev) => prev + 1)
+        }
         break;
       default:
         break;
