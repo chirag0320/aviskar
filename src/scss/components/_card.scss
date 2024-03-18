@@ -565,6 +565,17 @@
     margin-top: 5px;
     padding: 24px 15px 17px;
     border-radius: 11px;
+    .Chart {
+      svg {
+        g {
+          &:first-of-type {
+            path {
+              fill: aliceblue;
+            }
+          }
+        }
+      }
+    }
     .RangeBar {
       display: flex;
       flex-direction: column;
