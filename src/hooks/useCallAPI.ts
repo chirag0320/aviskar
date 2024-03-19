@@ -6,7 +6,7 @@ const useCallAPI = () => {
     const [error, setError] = useState(null);
 
     const apiCallFunction = useCallback(
-        async (url: string, requestType = 'GET', data = null, params = null) => {
+        async (url: string, requestType = 'GET', data = null, params:any = null) => {
             setLoading(true);
             setError(null);
 
@@ -17,7 +17,11 @@ const useCallAPI = () => {
                         response = await axiosInstance.get(url, { params });
                         break;
                     case 'POST':
-                        response = await axiosInstance.post(url, data);
+                        let headers = {}
+                        if (params) {
+                            headers = params
+                        }
+                        response = await axiosInstance.post(url, data, { headers });
                         break;
                     // Add other request types as needed
                     default:

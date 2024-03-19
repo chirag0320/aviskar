@@ -75,3 +75,114 @@
     }
   }
 }
+
+#TermsServices {
+  &.MuiDialog-root {
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        max-width: $mmd;
+        .DialogHeader {
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px;
+          color: $elephant;
+          .CloseButton {
+            margin-right: -10px;
+          }
+        }
+        .MuiDialogContent-root {
+          max-height: 313px;
+          margin-right: 16px;
+          @include padding-horizontal(20);
+        }
+        .MuiDialogActions-root {
+          justify-content: flex-start;
+          gap: 16px;
+          padding: 25px 20px 20px;
+          .MuiButton-root {
+            min-width: 157px;
+          }
+        }
+      }
+    }
+  }
+}
+
+#UpdateAddress {
+  &.MuiDialog-root {
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        .DialogHeader {
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px;
+          .CloseButton {
+            margin-right: -10px;
+          }
+        }
+        .MuiDialogContent-root {
+          @include padding-horizontal(20);
+          .AllFields {
+            flex-direction: column;
+            gap: 20px;
+            .Column {
+              gap: 20px;
+              @include media($xs) {
+                flex-wrap: wrap;
+              }
+            }
+            .InputRow {
+              width: 100%;
+              .MuiInputBase-input {
+                padding: 14px;
+              }
+            }
+          }
+        }
+        .MuiDialogActions-root {
+          padding: 20px;
+          gap: 20px;
+        }
+      }
+    }
+  }
+}
+
+#SelectAddress {
+  &.MuiDialog-root {
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        width: 100%;
+        .DialogHeader {
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px 20px 0;
+          .CloseButton {
+            margin-right: -10px;
+          }
+        }
+        .MuiDialogContent-root {
+          padding: 20px;
+          .MuiInputBase-root {
+            .MuiSelect-select {
+              white-space: normal;
+              .MuiTypography-root {
+                display: block;
+              }
+            }
+          }
+          .MuiMenu-paper {
+            max-width: $sm;
+            .MuiList-root {
+              .MuiMenuItem-root {
+                flex-direction: column;
+                align-items: flex-start;
+                white-space: normal;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

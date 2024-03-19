@@ -1,6 +1,5 @@
 import React from 'react';
 import { Theme } from '@mui/material/';
-// import { createTheme } from '@mui/material/styles';
 import createTheme from "@mui/material/styles/createTheme";
 
 // Assets
@@ -347,6 +346,10 @@ const theme: Theme = createTheme({
           fontWeight: 600,
           padding: "17px 23px",
         },
+        outlinedSizeMedium: {
+          fontSize: "1rem",
+          padding: "8px 18px",
+        },
         outlinedSizeLarge: {
           fontSize: pxToRem(16),
           lineHeight: pxToRem(20),
@@ -658,7 +661,6 @@ const theme: Theme = createTheme({
       },
     },
   },
-
   shape: {
     borderRadius: 8,
   },
