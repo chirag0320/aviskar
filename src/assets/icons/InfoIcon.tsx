@@ -1,10 +1,25 @@
-import React from 'react'
-import { SvgIcon } from '@mui/material'
+import React from "react"
+import { SvgIcon } from "@mui/material"
 
 function InfoIcon() {
   return (
-    <SvgIcon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 7H13V9H11V7ZM11 11H13V17H11V11Z"></path>
+    <SvgIcon
+      width="14"
+      height="14"
+      viewBox="0 0 14 14"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_561_650)">
+        <circle cx="7.0013" cy="6.99984" r="5.83333" fill="none" stroke="#1D2129" strokeOpacity="0.8" strokeWidth="0.875" />
+        <path d="M7 9.91663V6.41663" stroke="#1D2129" strokeOpacity="0.8" strokeWidth="0.875" strokeLinecap="round" />
+        <circle cx="0.583333" cy="0.583333" r="0.583333" transform="matrix(1 0 0 -1 6.41797 5.25)" fill="#1D2129" fillOpacity="0.8" />
+      </g>
+      <defs>
+        <clipPath id="clip0_561_650">
+          <rect width="14" height="14" fill="white" />
+        </clipPath>
+      </defs>
     </SvgIcon>
   )
 }
