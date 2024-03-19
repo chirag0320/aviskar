@@ -60,7 +60,6 @@ export const StockReturnWithName = React.memo(
         <Typography variant="overline" component="span" className="Name">
           {name} {value}
         </Typography>
-        <img src={charturl} width={90} height={20} />
         <Stack
           className={classNames("StockReturn")}
           sx={{
@@ -70,11 +69,15 @@ export const StockReturnWithName = React.memo(
               : null,
           }}
         >
-          <Typography variant="body2" component="span" className="Value">
-            {percentage}%
-          </Typography>
+          <Box className="FlipContainer">
+            <Box className="Flipper">
+              <Typography variant="body2" component="span" className="Value Front">{percentage}%</Typography>
+              <Typography variant="body2" component="span" className="Value Back">{Math.round((7 + percentage) * 100) / 100}$</Typography>
+            </Box>
+          </Box>
           {status ? <ChevronUp /> : <ChevronDown />}
         </Stack>
+        <img src={charturl} width={90} height={20} />
       </Stack>
     );
   }
