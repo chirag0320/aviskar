@@ -48,24 +48,6 @@
                             font-weight: 400;
                         }
 
-                        .UpdateWrapper {
-                            gap: 6px;
-                            align-items: center;
-
-
-                            .UpdatesIcon {
-                                height: 22px;
-                                width: 22px;
-                                display: inline-block;
-                            }
-
-                            .UpdateTime {
-                                font-size: 12px;
-                                line-height: 26px;
-                                font-weight: 400;
-                            }
-                        }
-
                     }
 
                     .PriceQuentityWrapper {
@@ -186,9 +168,6 @@
 
                     .MuiTypography-root {
                         color: $yellowFuel;
-                        // letter-spacing: -1px;
-
-                        // margin-right: 7px;
                     }
 
                     .RightArrow {
