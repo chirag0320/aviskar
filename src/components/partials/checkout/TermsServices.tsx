@@ -32,6 +32,7 @@ function TermsServices() {
         dialogTitle="Terms of services"
         onClose={toggleTermsServices}
         primaryActionText="Agree"
+        actions
       >
         <Typography variant="body2" gutterBottom>Your order is about to be locked at the agreed market price. Please review our terms of service before confirming your order. Should you require clarification or additional information please contact our support team on +61 7 3184 8300.</Typography>
         <Typography variant="body2" gutterBottom>You will also have the opportunity to review this Agreement during initial registration and before you confirm an order with Queensland Mint. The definitions of terms and phrases as well as general rules for interpreting this Agreement are contained at the end of this Agreement.</Typography>

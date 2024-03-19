@@ -59,6 +59,7 @@ function UpdateAddress(props: UpdateAddress) {
       onClose={onClose}
       primaryActionText="Save"
       maxWidth="sm"
+      actions
     >
       <Stack className="AllFields">
         <Stack className="Column">
