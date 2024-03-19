@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Stack,
   Box,
@@ -7,6 +7,7 @@ import {
   Link,
   Container,
   Breadcrumbs,
+  Icon,
 } from "@mui/material";
 import classNames from "classnames";
 import * as variable from "../../scss/settings/variables.module.scss";
@@ -201,6 +202,7 @@ export const LinkWithIcon = React.memo(({ icon, href, text }: any) => {
   );
 });
 
+// Start :: original code
 export const ProductUpdateCountdown = React.memo(() => {
   const { remainingTime } = useRemainingTime()
   return (
@@ -210,8 +212,27 @@ export const ProductUpdateCountdown = React.memo(() => {
     </Stack>
   )
 })
+// End :: original code
 
-export const PriceChangeReturn = React.memo(({ percentage }: {percentage:string}) => {
+// Start :: Trial  code
+// export const ProductUpdateCountdown = React.memo(({ }) => {
+//   const { remainingTime } = useRemainingTime()
+//   const fillPercentage = ((60 - parseInt(remainingTime)) / 60) * 100;
+
+//   return (
+//     <Stack className="ProductUpdateCountdown">
+//       <Icon className='TimerIcon'>
+//         <div className="FilledCircle" >
+//           <div className="WhiteCircle"></div>
+//         </div>
+//       </Icon>
+//       <Typography variant="bodySmall">Updates in {remainingTime} Sec</Typography>
+//     </Stack>
+//   );
+// });
+// End :: Trial code
+
+export const PriceChangeReturn = React.memo(({ percentage }: { percentage: string }) => {
   return (
     <Stack className={classNames("PriceChangeReturn", [Number(percentage) === 0 ? "Nuetral" : Number(percentage) > 0 ? "Success" : "Error"])}>
       <ChevronUpRounded />

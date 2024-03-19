@@ -8,7 +8,7 @@ import { DeleteIcon, RightArrow, LeftArrow, TimerIcon } from '@/assets/icons';
 
 
 // Utils
-import { PageTitle } from "@/components/common/Utils"
+import { PageTitle, ProductUpdateCountdown } from "@/components/common/Utils"
 
 function ShoppingCart() {
     return (
@@ -27,17 +27,15 @@ function ShoppingCart() {
                         <Box className="ShoppingCartContent">
                             <Box className="ShoppingCartDetails">
                                 <Box className="ShoppingProductsDetailsWrapper">
-                                    {/* <Stack className='def'> */}
                                     <Stack className='ProductInfo'>
                                         <Stack className='ProductDetailsWrapper'>
                                             <img src={LogoGoldCoin} alt="Logo" />
                                             <Box>
                                                 <Typography variant="subtitle1"  >2024 1oz Lunar Series III Year of the Dragon Silver Coin </Typography>
                                                 <Typography variant="body2" className="ShippindDate">Ships by 04 Jan 2024 or collect immediately </Typography>
-                                                <Stack className='UpdateWrapper'>
-                                                    <Icon className='UpdatesIcon'><TimerIcon /></Icon>
-                                                    <Typography variant="subtitle1" className="UpdateTime">Updates in 45 Sec </Typography>
-                                                </Stack>
+
+                                                <ProductUpdateCountdown />
+
                                             </Box>
                                         </Stack>
                                         <Stack className='PriceQuentityWrapper'>
@@ -57,10 +55,7 @@ function ShoppingCart() {
                                             <Box>
                                                 <Typography variant="subtitle1"  >2024 1oz Lunar Series III Year of the Dragon Silver Coin </Typography>
                                                 <Typography variant="body2" className="ShippindDate">Ships by 04 Jan 2024 or collect immediately </Typography>
-                                                <Stack className='UpdateWrapper'>
-                                                    <Icon className='UpdatesIcon'><TimerIcon /></Icon>
-                                                    <Typography variant="subtitle1" className="UpdateTime">Updates in 45 Sec </Typography>
-                                                </Stack>
+                                                <ProductUpdateCountdown />
                                             </Box>
                                         </Stack>
                                         <Stack className='PriceQuentityWrapper'>
@@ -80,10 +75,8 @@ function ShoppingCart() {
                                             <Box>
                                                 <Typography variant="subtitle1"  >2024 1oz Lunar Series III Year of the Dragon Silver Coin </Typography>
                                                 <Typography variant="body2" className="ShippindDate">Ships by 04 Jan 2024 or collect immediately </Typography>
-                                                <Stack className='UpdateWrapper'>
-                                                    <Icon className='UpdatesIcon'><TimerIcon /></Icon>
-                                                    <Typography variant="subtitle1" className="UpdateTime">Updates in 45 Sec </Typography>
-                                                </Stack>
+                                                <ProductUpdateCountdown />
+
                                             </Box>
                                         </Stack>
                                         <Stack className='PriceQuentityWrapper'>
@@ -103,10 +96,7 @@ function ShoppingCart() {
                                             <Box>
                                                 <Typography variant="subtitle1"  >2024 1oz Lunar Series III Year of the Dragon Silver Coin </Typography>
                                                 <Typography variant="body2" className="ShippindDate">Ships by 04 Jan 2024 or collect immediately </Typography>
-                                                <Stack className='UpdateWrapper'>
-                                                    <Icon className='UpdatesIcon'><TimerIcon /></Icon>
-                                                    <Typography variant="subtitle1" className="UpdateTime">Updates in 45 Sec </Typography>
-                                                </Stack>
+                                                <ProductUpdateCountdown />
                                             </Box>
                                         </Stack>
                                         <Stack className='PriceQuentityWrapper'>
@@ -120,7 +110,6 @@ function ShoppingCart() {
                                             <Icon className='DeleteIcon'><DeleteIcon /></Icon>
                                         </Stack>
                                     </Stack>
-                                    {/* </Stack> */}
                                     <Typography variant="body1"><Typography component="span" className="Note">Note:</Typography> Prices are live prices and will be locked on confirm order. </Typography>
                                 </Box>
                                 <Stack className="BottomCartActionsWrapper">
