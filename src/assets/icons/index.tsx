@@ -58,7 +58,6 @@ import CashIcon from "./CashIcon";
 import CardIcon from "./CardIcon";
 import SelectDropdown from "./SelectDropdown";
 import OutlinedCheckIcon from "./OutlinedCheckIcon";
-import OptionsIcon from "./OptionsIcon";
 import Map1Icon from "./Map1Icon";
 import Map2Icon from "./Map2Icon";
 import PencilIcon from "./PencilIcon";
@@ -125,7 +124,6 @@ export {
   CrossIconWithOutlineCircle,
   SearchButtonIcon,
   FilledUpButton,
-  OptionsIcon,
   DeleteIcon,
   Delete1Icon,
   MinusIcon,
