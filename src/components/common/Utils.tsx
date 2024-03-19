@@ -24,6 +24,7 @@ import {
   ChevronUpRounded,
 } from "../../assets/icons/index";
 import useRemainingTime from "@/hooks/useRemainingTime";
+import CountDownTimer from "../partials/productDetail/CountDownTImer";
 interface Iprops {
   name: string;
   value: number;
@@ -205,13 +206,13 @@ export const ProductUpdateCountdown = React.memo(() => {
   const { remainingTime } = useRemainingTime()
   return (
     <Stack className="ProductUpdateCountdown">
-      <TimerIcon />
+      <CountDownTimer />
       <Typography variant="bodySmall">Updates in {remainingTime} Sec</Typography>
     </Stack>
   )
 })
 
-export const PriceChangeReturn = React.memo(({ percentage }: {percentage:string}) => {
+export const PriceChangeReturn = React.memo(({ percentage }: { percentage: string }) => {
   return (
     <Stack className={classNames("PriceChangeReturn", [Number(percentage) === 0 ? "Nuetral" : Number(percentage) > 0 ? "Success" : "Error"])}>
       <ChevronUpRounded />
