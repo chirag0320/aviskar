@@ -15,6 +15,7 @@
       }
       .LeftPostWrapper {
         width: 50%;
+        flex: 1;
         @include media($lg) {
           width: 100%;
         }
@@ -33,6 +34,7 @@
         flex-direction: column;
         gap: 30px;
         width: 50%;
+        flex: 1;
         @include media($lg) {
           width: 100%;
         }
