@@ -30,6 +30,10 @@
           padding: 15px 20px;
           border-radius: 16px;
           border: 1px solid $yellowFuel;
+          &.AccountField {
+            position: relative;
+            padding: 0;
+          }
           .Value {
             .Address {
               color: $greyRegent;
@@ -37,14 +41,42 @@
             }
           }
           .AccountSelect {
-            margin-right: -16px;
             .MuiSelect-select {
-              width: 40px;
-              height: 40px;
-              opacity: 0;
+              @include padding-vertical(30);
+              @include media($sm) {
+                padding-bottom: 80px;
+              }
+            }
+            .MuiSelect-icon {
+              margin-right: 6px;
             }
             .MuiOutlinedInput-notchedOutline {
               display: none;
+            }
+          }
+          .MembershipWrapper {
+            position: absolute;
+            right: 70px;
+            z-index: 1;
+            @include media($sm) {
+              bottom: 20px;
+              right: auto;
+              left: 23px;
+            }
+            .Label {
+              color: $greyRegent;
+            }
+            .Wrapper {
+              align-items: center;
+              gap: 8px;
+              margin-top: 4px;
+              .Badge {
+                align-items: center;
+                color: $white;
+                padding: 3px 10px;
+                border-radius: 6px;
+                background-color: $copper;
+              }
             }
           }
           .OptionButton {
@@ -67,25 +99,6 @@
                 }
               }
             }
-          }
-        }
-      }
-      .MembershipWrapper {
-        margin-left: auto;
-        margin-right: 30px;
-        .Label {
-          color: $greyRegent;
-        }
-        .Wrapper {
-          align-items: center;
-          gap: 8px;
-          margin-top: 4px;
-          .Badge {
-            align-items: center;
-            color: $white;
-            padding: 3px 10px;
-            border-radius: 6px;
-            background-color: $copper;
           }
         }
       }

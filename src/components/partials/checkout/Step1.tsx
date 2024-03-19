@@ -45,10 +45,7 @@ function Step1() {
     <StepWrapper title="Step 1" className="Step1">
       <Box className="FieldWrapper">
         <Typography className="Label" variant="subtitle1">Select Your Account</Typography>
-        <Stack className="Field">
-          <Box className="Value">
-            <Typography className="Name" variant="titleLarge">Cameron Williamson (Individual)</Typography>
-          </Box>
+        <Stack className="Field AccountField">
           <Box className="MembershipWrapper">
             <Typography className="Label" variant="body2">Current Membership:</Typography>
             <Stack className="Wrapper">
@@ -62,8 +59,9 @@ function Step1() {
             value={selectAccount}
             onChange={handleSelectAccount}
             IconComponent={SelectDropdown}
+            fullWidth
           >
-            <MenuItem value="DifferentMethod">Different Method</MenuItem>
+            <MenuItem value="DifferentMethod">Cameron Williamson (Individual)</MenuItem>
             <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
             <MenuItem value="VaultStorage">Vault Storage</MenuItem>
           </Select>
