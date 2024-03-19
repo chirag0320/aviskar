@@ -200,7 +200,7 @@ function AboutProduct({ productId }: any) {
             </Stack>
             <Divider />
             <Stack className="OrderActions">
-              {isLoggedIn || configDetailsState?.buybuttonenableforguests?.value ? <><Stack className="QuantityWrapper">
+              {(isLoggedIn || configDetailsState?.buybuttonenableforguests?.value) ? (!productDetailsData?.disableBuyButton && <><Stack className="QuantityWrapper">
                 <IconButton id='minus' className="Minus" onClick={(e) => {
                   e.stopPropagation()
                   handleQuentityUpdate('minus')
@@ -228,7 +228,9 @@ function AboutProduct({ productId }: any) {
                     } as any)
                   }} disabled={loadingForAddToCart}>Add to cart</Button>
                   <Button size="large" variant="outlined">Buy now</Button>
-                </Stack></> : <Button size="large" color="success" variant="contained" onClick={() => {
+                </Stack></>)
+                :
+                <Button size="large" color="success" variant="contained" onClick={() => {
                   navigate('/login')
                 }}>Register to Buy</Button>}
             </Stack>
@@ -335,10 +337,10 @@ function AboutProduct({ productId }: any) {
                 </Accordion>
               </Box>
               <Divider /></> : null}
-            <Stack className="InfoMessage">
+            {!!productDetailsData?.imagesCondition && <Stack className="InfoMessage">
               <CameraIcon />
-              <Typography variant="body2">Your purchase will match the quality of the product shown. Dates will be of our choosing and may or may not vary, determined by stock on hand.</Typography>
-            </Stack>
+              <Typography variant="body2">{productDetailsData?.imagesCondition}</Typography>
+            </Stack>}
           </form>
         </Box>
       </Stack>
