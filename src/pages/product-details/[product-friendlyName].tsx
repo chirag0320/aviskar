@@ -14,7 +14,6 @@ import { useAppSelector } from "@/hooks"
 
 function ProductDetail({ params }: any) {
   const { productDetailsData } = useAppSelector((state) => state.category)
-  console.log("🚀 ~ ProductDetail ~ productDetailsData:", productDetailsData)
   useAPIoneTime({
     service: getProductDetailsData, endPoint: ENDPOINTS.productDetails.replace('{{product-id}}', params?.["product-friendlyName"] //params?.["product-friendlyName"]
     )

@@ -24,6 +24,7 @@ import useApiRequest from "@/hooks/useAPIRequest"
 import { ENDPOINTS } from "@/utils/constants"
 import { valueChangeForPrice } from "@/utils/common"
 import useCallAPI from "@/hooks/useCallAPI"
+import { navigate } from "gatsby"
 
 function createData(
   quantity: string,
@@ -69,7 +70,9 @@ function AboutProduct({ productId }: any) {
     },
   });
   const { productDetailsData } = useAppSelector((state) => state.category)
-  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+  console.log("🚀 ~ AboutProduct ~ productDetailsData:", productDetailsData)
+  const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
+  console.log("🚀 ~ AboutProduct ~ configDetailsState:", configDetailsState, isLoggedIn)
 
   const [quentityCount, setQuentityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
   const [productIds] = useState({ productIds: [Number(productId)] })
@@ -144,7 +147,7 @@ function AboutProduct({ productId }: any) {
             </Box>
             <Divider />
             <Box className="PricingDetails">
-              <Stack className="Top">
+              {(isLoggedIn || configDetailsState?.productpriceenableforguests?.value) ? <><Stack className="Top">
                 <Stack className="Left">
                   <Typography className="ProductValue" variant="subtitle2">${priceData?.data?.[0]?.price}</Typography>
                   {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue" variant="overline">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
@@ -156,42 +159,48 @@ function AboutProduct({ productId }: any) {
                   <Typography className="DiscountMessage" variant="overline">{configDetailsState?.productboxdiscounttext?.value}</Typography>
                 </Stack>
               </Stack>
-              <Stack className="Bottom">
-                <Stack className="SliderWrapper">
-                  <Stack className="PriceMinMax">
-                    <Typography>Low: <Typography variant="titleLarge">${progressData?.data?.minPrice}</Typography></Typography>
-                    <Typography>High: <Typography variant="titleLarge">${progressData?.data?.maxPrice}</Typography></Typography>
+                <Stack className="Bottom">
+                  <Stack className="SliderWrapper">
+                    <Stack className="PriceMinMax">
+                      <Typography>Low: <Typography variant="titleLarge">${progressData?.data?.minPrice}</Typography></Typography>
+                      <Typography>High: <Typography variant="titleLarge">${progressData?.data?.maxPrice}</Typography></Typography>
+                    </Stack>
+                    <Slider
+                      className="Slider"
+                      value={priceData?.data?.[0]?.price}
+                      min={progressData?.data?.minPrice}
+                      max={progressData?.data?.maxPrice}
+                      disabled
+                    />
                   </Stack>
-                  <Slider
-                    className="Slider"
-                    value={priceData?.data?.[0]?.price}
-                    min={progressData?.data?.minPrice}
-                    max={progressData?.data?.maxPrice}
-                    disabled
-                  />
-                </Stack>
-                <Select
-                  color="secondary"
-                  className="PriceHistorySelect"
-                  value={priceHistoryDuration}
-                  onChange={handlePriceHistoryDuration}
-                >
-                  <MenuItem value="hour">24H</MenuItem>
-                  <MenuItem value="week">1W</MenuItem>
-                  <MenuItem value="month">1M</MenuItem>
-                  <MenuItem value="year">1Y</MenuItem>
-                </Select>
-              </Stack>
+                  <Select
+                    color="secondary"
+                    className="PriceHistorySelect"
+                    value={priceHistoryDuration}
+                    onChange={handlePriceHistoryDuration}
+                  >
+                    <MenuItem value="hour">24H</MenuItem>
+                    <MenuItem value="week">1W</MenuItem>
+                    <MenuItem value="month">1M</MenuItem>
+                    <MenuItem value="year">1Y</MenuItem>
+                  </Select>
+                </Stack></> : <Button size="large" variant="outlined" onClick={() => {
+                  navigate('/login')
+                }}>Activate Live Price</Button>}
             </Box>
             <Divider />
             <Stack className="OrderDetails">
-              <ProductStockStatus availability={productDetailsData?.availability} colorClass={productDetailsData?.colorClass} iconClass={productDetailsData?.iconClass} />
-              <Typography className="ProductMessage" variant="overline">{productDetailsData?.condition}</Typography>
-              <Typography className="ShipmentDetail" variant="overline">{productDetailsData?.description}</Typography>
+              {isLoggedIn || configDetailsState?.availabilityenableforguests?.value ?
+                <><ProductStockStatus availability={productDetailsData?.availability} colorClass={productDetailsData?.colorClass} iconClass={productDetailsData?.iconClass} />
+                  <Typography className="ProductMessage" variant="overline">{productDetailsData?.condition}</Typography>
+                  <Typography className="ShipmentDetail" variant="overline">{productDetailsData?.description}</Typography></>
+                :
+                <Typography className="ProductMessage" variant="overline">{configDetailsState?.membershipunloacktext?.value}</Typography>
+              }
             </Stack>
             <Divider />
             <Stack className="OrderActions">
-              <Stack className="QuantityWrapper">
+              {isLoggedIn || configDetailsState?.buybuttonenableforguests?.value ? <><Stack className="QuantityWrapper">
                 <IconButton id='minus' className="Minus" onClick={(e) => {
                   e.stopPropagation()
                   handleQuentityUpdate('minus')
@@ -211,15 +220,17 @@ function AboutProduct({ productId }: any) {
                   handleQuentityUpdate('plus')
                 }}><PlusIcon /></IconButton>
               </Stack>
-              <Stack className="Right">
-                <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={() => {
-                  apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
-                    "productId": productId,
-                    "quantity": quentityCount
-                  } as any)
-                }} disabled={loadingForAddToCart}>Add to cart</Button>
-                <Button size="large" variant="outlined">Buy now</Button>
-              </Stack>
+                <Stack className="Right">
+                  <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={() => {
+                    apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+                      "productId": productId,
+                      "quantity": quentityCount
+                    } as any)
+                  }} disabled={loadingForAddToCart}>Add to cart</Button>
+                  <Button size="large" variant="outlined">Buy now</Button>
+                </Stack></> : <Button size="large" color="success" variant="contained" onClick={() => {
+                  navigate('/login')
+                }}>Register to Buy</Button>}
             </Stack>
             <Divider />
             {/* <Stack className="SocialConnects">
@@ -238,7 +249,7 @@ function AboutProduct({ productId }: any) {
               </Box>
             </Stack> */}
             <Divider />
-            <Stack className="AdditionalDetails">
+            {(priceData?.data?.[0]?.tierPriceList?.length > 0 || productDetailsData?.isGradingShow) ? <Stack className="AdditionalDetails">
               {priceData?.data?.[0]?.tierPriceList?.length > 0 ? <><Accordion defaultExpanded>
                 <AccordionSummary>
                   <Typography variant="titleLarge">Discounts Available</Typography>
@@ -276,7 +287,7 @@ function AboutProduct({ productId }: any) {
                   </TableContainer>
                 </AccordionDetails>
               </Accordion></> : null}
-              {productDetailsData?.isGradingShow ? <Accordion defaultExpanded>
+              {productDetailsData?.isGradingShow ? <><Accordion defaultExpanded>
                 <AccordionSummary>
                   <Typography variant="titleLarge">QMINT Rating</Typography>
                 </AccordionSummary>
@@ -287,9 +298,9 @@ function AboutProduct({ productId }: any) {
                     ))}
                   </Stack>
                 </AccordionDetails>
-              </Accordion> : null}
-            </Stack>
-            {productDetailsData?.bulkProduct?.length > 0 ? <><Divider />
+              </Accordion> <Divider /></> : null}
+            </Stack> : null}
+            {productDetailsData?.bulkProduct?.length > 0 ? <>
               <Box className="PromotionalDetails">
                 <Accordion defaultExpanded>
                   <AccordionSummary>
