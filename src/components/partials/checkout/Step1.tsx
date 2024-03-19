@@ -22,7 +22,7 @@ function Step1() {
   const [addressTitle, setAddressTitle] = useState<string>("Add")
   const [selectAccount, setSelectAccount] = useState<string>('DifferentMethod')
   const [openUpdateAddress, toggleUpdateAddress] = useToggle(false)
-  const [openSelectAddress, toggleSelectAddress] = useToggle(true)
+  const [openSelectAddress, toggleSelectAddress] = useToggle(false)
   const [openAlertDialog, toggleAlertDialog] = useToggle(false)
   const tooltipRef: any = useRef(null)
   const handleTooltipClose = (event: any) => {
