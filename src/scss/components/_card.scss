@@ -310,7 +310,6 @@
       }
     }
 
-
     .MuiCardContent-root {
       padding: 0;
 
@@ -386,7 +385,7 @@
 
   &.ActiveCard {
     transform: scale(1.08);
-    box-shadow: 14px 28px 43.29999923706055px 0px #0000001A;
+    box-shadow: 14px 28px 43.29999923706055px 0px #0000001a;
 
     // .UpgradPlanButton{
     //   background-color: ;
@@ -398,6 +397,7 @@
 // End :: membershipcard css
 
 .PostCard {
+  width: 100%;
   .PostImage {
     width: 100%;
     object-fit: cover;
@@ -661,9 +661,9 @@
 
 // Start :: shippingcard css
 .ShippingCard {
-  .IconCaculatorsPage{
-    svg{
-      stroke: $yellowFuel
+  .IconCaculatorsPage {
+    svg {
+      stroke: $yellowFuel;
     }
   }
   &.MuiCard-root {
@@ -672,7 +672,6 @@
     border: 1px solid rgba($yellowFuel, 0.08);
     border-radius: 15px;
     box-shadow: 6px 6px 27px 0px rgba($black, 0.05);
-
 
     .ShippingCardDetails {
       display: flex;
@@ -700,7 +699,6 @@
               width: 50px;
             }
           }
-
         }
       }
     }
@@ -718,7 +716,6 @@
         width: 20px;
       }
     }
-
   }
 }
 
