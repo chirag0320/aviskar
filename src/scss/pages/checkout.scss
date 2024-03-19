@@ -1,0 +1,303 @@
+#PageCheckout {
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+  @include padding-vertical(30, 80);
+  @include media($lg) {
+    flex-direction: column;
+  }
+  .StepWrapper {
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid rgba($dark, 0.1);
+    @include media($xs) {
+      @include padding-horizontal(10);
+    }
+  }
+  .AllSteps {
+    flex-direction: column;
+    gap: 25px;
+    @include media-min($lg) {
+      width: 65%;
+    }
+    .Step1 {
+      .FieldWrapper {
+        margin-top: 20px;
+        .Field {
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 20px;
+          padding: 15px 20px;
+          border-radius: 16px;
+          border: 1px solid $yellowFuel;
+          &.AccountField {
+            position: relative;
+            padding: 0;
+          }
+          .Value {
+            .Address {
+              color: $greyRegent;
+              margin-top: 8px;
+            }
+          }
+          .AccountSelect {
+            .MuiSelect-select {
+              @include padding-vertical(30);
+              @include media($sm) {
+                padding-bottom: 80px;
+              }
+            }
+            .MuiSelect-icon {
+              margin-right: 6px;
+            }
+            .MuiOutlinedInput-notchedOutline {
+              display: none;
+            }
+          }
+          .MembershipWrapper {
+            position: absolute;
+            right: 70px;
+            z-index: 1;
+            @include media($sm) {
+              bottom: 20px;
+              right: auto;
+              left: 23px;
+            }
+            .Label {
+              color: $greyRegent;
+            }
+            .Wrapper {
+              align-items: center;
+              gap: 8px;
+              margin-top: 4px;
+              .Badge {
+                align-items: center;
+                color: $white;
+                padding: 3px 10px;
+                border-radius: 6px;
+                background-color: $copper;
+              }
+            }
+          }
+          .OptionButton {
+            margin-right: -16px;
+          }
+          .AddressTooltip {
+            .MuiTooltip-tooltip {
+              box-shadow: $shadow11;
+              .MuiList-root {
+                .MuiListItem-root {
+                  &:not(:last-of-type) {
+                    border-bottom: 1px solid rgba($palladium, 0.4);
+                  }
+                  .MuiListItemButton-root {
+                    gap: 12px;
+                    .MuiListItemIcon-root {
+                      min-width: initial;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .SameAddressCheckbox {
+        margin-left: 0;
+        margin-top: 10px;
+        gap: 8px;
+        .MuiCheckbox-root {
+          padding: 0;
+        }
+      }
+      .AlertDialog {
+        &.MuiDialog-root {
+          .MuiDialog-container {
+            .MuiDialog-paper {
+              padding: 20px;
+              .MuiDialogContent-root {
+                @include padding-vertical(15);
+              }
+              .MuiDialogActions-root {
+                gap: 20px;
+                .MuiButton-root {
+                  flex: 1;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .Step2 {
+      .StepHeader {
+        .HeaderWrapper {
+          justify-content: space-between;
+          margin-top: 20px;
+          .Title {
+            .InfoButton {
+              padding: 0;
+              width: auto;
+              height: auto;
+              font-size: 1.2rem;
+              margin-bottom: 4px;
+              margin-left: 6px;
+              .MuiSvgIcon-root {
+                font-size: inherit;
+              }
+            }
+          }
+          .DeliveryMethodSelect {
+            font-weight: 700;
+            line-height: pxToRem(28);
+            .MuiSelect-select {
+              padding-left: 0;
+              @include padding-vertical(0);
+            }
+            .MuiOutlinedInput-notchedOutline {
+              display: none;
+            }
+          }
+        }
+        .DeliveryCheckbox {
+          gap: 8px;
+          margin-left: initial;
+          @include margin-vertical(8, 16);
+          .MuiCheckbox-root {
+            padding: 0;
+          }
+          .MuiFormControlLabel-label {
+            margin-left: initial;
+          }
+        }
+      }
+      .ProductList {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .StepNote {
+        margin-top: 20px;
+      }
+    }
+    .Step3 {
+      .PaymentMethod {
+        align-items: center;
+        gap: 10px 30px;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 20px;
+        border: 1px solid rgba($dark, 0.1);
+        @include media($sm) {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        @include media-min($lg) {
+          gap: 2vw;
+        }
+        .RadioLabelWithIcon {
+          gap: 11px;
+          align-items: center;
+          .Wrapper {
+            flex-direction: column;
+            .Label {
+              white-space: nowrap;
+              .InfoButton {
+                padding: 0;
+                width: auto;
+                height: auto;
+                margin-left: 6px;
+                margin-bottom: 2px;
+                .MuiSvgIcon-root {
+                  font-size: pxToRem(16);
+                }
+              }
+            }
+          }
+        }
+        .MuiFormGroup-root {
+          gap: 8px;
+          flex: 1;
+          @include media($sm) {
+            flex-direction: column;
+          }
+          .MuiFormControlLabel-root {
+            flex-grow: 1;
+            max-width: 250px;
+          }
+        }
+      }
+    }
+    .TermsService {
+      .Condition {
+        @include margin-vertical(14, 6);
+        .ReadMore {
+          font: inherit;
+          font-weight: 600;
+          vertical-align: baseline;
+          margin-left: 4px;
+        }
+      }
+      .Checkbox {
+        color: rgba($dark, 0.8);
+        margin-bottom: -10px;
+      }
+    }
+  }
+  .OrderSummary {
+    width: 100%;
+    @include media-min($lg) {
+      width: 35%;
+    }
+    .ProductList {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+      @include media-between($md, $lg) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .PricingDetails {
+      margin-top: 50px;
+      .MuiDivider-root {
+        border-color: rgba($dark, 0.1);
+        @include margin-vertical(14);
+      }
+      .PricingItem {
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+      .TotalItem {
+        margin-top: 30px;
+      }
+      .PaymentMethod {
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid rgba($dark, 0.1);
+        margin-top: 30px;
+        .Message {
+          color: rgba($dark, 0.6);
+          .MuiTypography-root {
+            color: $dark;
+          }
+        }
+      }
+      .ActionDivider {
+        margin: 30px -25px;
+      }
+      .ActionWrapper {
+        justify-content: space-between;
+        margin-top: 30px;
+        .MuiButton-text {
+          text-decoration: none;
+        }
+        .MuiButton-contained {
+          @include padding-horizontal(24);
+        }
+      }
+    }
+  }
+}

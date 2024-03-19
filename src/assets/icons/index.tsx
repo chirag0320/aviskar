@@ -44,6 +44,7 @@ import SearchButtonIcon from "./SearchButtonIcon";
 import FilledUpButton from "./FilledUpButton";
 import OptionsIcon from "./OptionsIcon";
 import DeleteIcon from "./DeleteIcon";
+import Delete1Icon from "./Delete1Icon";
 import MinusIcon from "./MinusIcon";
 import PlusIcon from "./PlusIcon";
 import HeartIcon from "./HeartIcon";
@@ -55,6 +56,14 @@ import GreenConfirmationIcon from "./GreenConfirmationIcon";
 import UpdateIcon from "./UpdateIcon";
 import RightArrow from "./RightArrow";
 import LeftArrow from "./LeftArrow";
+import BankIcon from "./BankIcon";
+import CashIcon from "./CashIcon";
+import CardIcon from "./CardIcon";
+import SelectDropdown from "./SelectDropdown";
+import OutlinedCheckIcon from "./OutlinedCheckIcon";
+import Map1Icon from "./Map1Icon";
+import Map2Icon from "./Map2Icon";
+import PencilIcon from "./PencilIcon";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
@@ -118,8 +127,8 @@ export {
   CrossIconWithOutlineCircle,
   SearchButtonIcon,
   FilledUpButton,
-  OptionsIcon,
   DeleteIcon,
+  Delete1Icon,
   MinusIcon,
   PlusIcon,
   HeartIcon,
@@ -131,6 +140,15 @@ export {
   UpdateIcon,
   RightArrow,
   LeftArrow,
+  BankIcon,
+  CashIcon,
+  CardIcon,
+  SelectDropdown,
+  OutlinedCheckIcon,
+  OptionsIcon,
+  Map1Icon,
+  Map2Icon,
+  PencilIcon,
 
   // Social
   FacebookIcon,

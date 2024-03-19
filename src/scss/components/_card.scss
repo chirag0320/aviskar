@@ -661,8 +661,8 @@
 
 // Start :: shippingcard css
 .ShippingCard {
-  .IconCaculatorsPage{
-    svg{
+  .IconCaculatorsPage {
+    svg {
       stroke: $yellowFuel
     }
   }
@@ -723,3 +723,162 @@
 }
 
 // End :: shippingcard css
+
+.CartCard {
+  &.MuiCard-root {
+    display: flex;
+    align-items: center;
+    border-radius: 16px;
+    border: 1px solid rgba($dark, 0.1);
+    padding: 15px;
+    gap: 20px;
+    @include media($sm) {
+      flex-wrap: wrap;
+    }
+    .MuiCardMedia-root {
+      max-height: 140px;
+      object-fit: contain;
+      @include media-min($sm) {
+        width: initial;
+      }
+    }
+    .MuiCardContent-root {
+      padding: 0;
+      .TopWrapper {
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        .LeftWrapper {
+          .Name {
+            margin-bottom: 4px;
+          }
+        }
+        .RightWrapper {
+          display: grid;
+          align-items: center;
+          gap: 8px 40px;
+          flex-shrink: 0;
+          @include media($xs) {
+            gap: 8px 20px;
+          }
+          .LivePrice {
+            color: $success;
+          }
+          .Quantity {
+            border: 1px solid $palladium;
+            border-radius: 8px;
+            overflow: hidden;
+            .MuiIconButton-root {
+              border-radius: initial;
+              height: 32px;
+              &.Minus {
+                border-right: 1px solid $palladium;
+              }
+              &.Plus {
+                border-left: 1px solid $palladium;
+              }
+            }
+            .MuiTextField-root {
+              width: 40px;
+              .MuiInputBase-root {
+                height: 100%;
+                .MuiInputBase-input {
+                  padding: 0;
+                  height: inherit;
+                  text-align: center;
+                }
+                .MuiOutlinedInput-notchedOutline {
+                  display: none;
+                }
+              }
+            }
+          }
+          .DeleteButton {
+            grid-row-start: 1;
+            grid-row-end: 3;
+            grid-column-start: 3;
+            grid-column-end: 4;
+          }
+        }
+      }
+      .BottomWrapper {
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        .LeftSide {
+          flex-direction: column;
+          gap: 10px;
+          flex-wrap: wrap;
+          .DeliveryMethod {
+            gap: 8px;
+            .Label {
+              color: rgba($dark, 0.6);
+            }
+            .DeliveryMethodSelect {
+              font-weight: 700;
+              line-height: pxToRem(28);
+              .MuiSelect-select {
+                padding-left: 0;
+                @include padding-vertical(0);
+              }
+              .MuiOutlinedInput-notchedOutline {
+                display: none;
+              }
+            }
+          }
+        }
+        .RightSide {
+          .ShippingMessage {
+            background-color: rgba($error, 0.05);
+            color: $redCoral;
+            border-radius: 4px;
+            padding: 3px 7px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.CartCardAbstract {
+  &.MuiCard-root {
+    padding: 15px;
+    border-radius: 16px;
+    border: 1px solid rgba($dark, 0.1);
+    .MuiCardMedia-root {
+      max-height: 80px;
+      object-fit: contain;
+      width: initial;
+    }
+    .MuiCardContent-root {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0;
+      @include media($xs) {
+        flex-direction: column;
+      }
+      .Wrapper {
+        align-items: center;
+        gap: 16px;
+        .About {
+          .Name {
+            margin-bottom: 8px;
+          }
+        }
+      }
+    }
+    .MuiDivider-root {
+      border-color: rgba($dark, 0.1);
+      @include margin-vertical(10);
+    }
+    .DeliveryMethod {
+      color: rgba($dark, 0.6);
+      .MuiTypography-root {
+        color: $dark;
+      }
+    }
+  }
+}

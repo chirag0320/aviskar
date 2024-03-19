@@ -12,6 +12,7 @@ import DraggableMarquee from "./DraggableMarquee";
 interface ItickerData {
   data: Array<{
     "name": string
+    "charturl": string
     "current": number
     "position": 0 | 1 | 2
     "percentage": number,
@@ -34,7 +35,8 @@ function Pricing() {
       tickertype: configDetailsState?.tickertype?.value,
     }
     return data?.data?.map((stock) => (
-      <StockReturnWithName key={stock.name} name={stock.name} value={stock.current} status={stock.position === 1} percentage={stock.percentage} tickerStyle={tickerStyle} />
+      console.log("stock:", stock),
+      <StockReturnWithName key={stock.name} name={stock.name} value={stock.current} charturl={stock.charturl} status={stock.position === 1} percentage={stock.percentage} tickerStyle={tickerStyle} />
     ));
   }, [data]);
   const renderdTextAfterText = useMemo(() => {
@@ -54,12 +56,6 @@ function Pricing() {
           className="PricingHeader__Wrapper"
         >
           <img src={configDetailsState?.australiaflagurl?.value} alt="Australia flag" width={36} height={24} loading="eager" />
-          {/* <Marquee pauseOnHover >
-            <Stack className="PricingHeader__Wrapper--Content">
-              {renderedStockItems}
-              {renderdTextAfterText}
-            </Stack>
-          </Marquee> */}
           <DraggableMarquee>
             <Stack className="PricingHeader__Wrapper--Content">
               {renderedStockItems}
@@ -68,12 +64,6 @@ function Pricing() {
               {renderdTextAfterText}
             </Stack>
           </DraggableMarquee>
-          {/* <Marquee >
-            <Stack className="PricingHeader__Wrapper--Content">
-              {renderedStockItems}
-              {renderdTextAfterText}
-            </Stack>
-          </Marquee> */}
         </Stack>
       </Container>
     </Box>

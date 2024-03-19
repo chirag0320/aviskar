@@ -27,6 +27,7 @@ import useRemainingTime from "@/hooks/useRemainingTime";
 interface Iprops {
   name: string;
   value: number;
+  charturl?: string;
   status: boolean;
   percentage: number;
   tickerStyle?: {
@@ -47,7 +48,7 @@ interface ProductStockStatus {
 }
 
 export const StockReturnWithName = React.memo(
-  ({ name, value, status, percentage, tickerStyle }: Iprops) => {
+  ({ name, value, charturl, status, percentage, tickerStyle }: Iprops) => {
     return (
       <Stack
         className={classNames(
@@ -59,6 +60,7 @@ export const StockReturnWithName = React.memo(
         <Typography variant="overline" component="span" className="Name">
           {name} {value}
         </Typography>
+        <img src={charturl} width={90} height={20} />
         <Stack
           className={classNames("StockReturn")}
           sx={{
@@ -211,7 +213,7 @@ export const ProductUpdateCountdown = React.memo(() => {
   )
 })
 
-export const PriceChangeReturn = React.memo(({ percentage }: {percentage:string}) => {
+export const PriceChangeReturn = React.memo(({ percentage }: { percentage: string }) => {
   return (
     <Stack className={classNames("PriceChangeReturn", [Number(percentage) === 0 ? "Nuetral" : Number(percentage) > 0 ? "Success" : "Error"])}>
       <ChevronUpRounded />
