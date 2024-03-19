@@ -14,13 +14,16 @@ import { ChevronDown, ChevronUp, Map1Icon, Map2Icon, OfferTagIcon, OptionsIcon, 
 import { ClickTooltip } from "@/components/common/CustomTooltip"
 import StepWrapper from "./StepWrapper"
 import UpdateAddress from "./UpdateAddress"
+import SelectAddress from "./SelectAddress"
 import AlertDialog from "./AlertDialog"
 
 function Step1() {
   const [open, setOpen] = useState<boolean>(false)
   const [addressTitle, setAddressTitle] = useState<string>("Add")
-  const [openUpdateAddress, toggleUpdateAddress] = useToggle(true)
-  const [openAlertDialog, toggleAlertDialog] = useToggle(true)
+  const [selectAccount, setSelectAccount] = useState<string>('DifferentMethod')
+  const [openUpdateAddress, toggleUpdateAddress] = useToggle(false)
+  const [openSelectAddress, toggleSelectAddress] = useToggle(true)
+  const [openAlertDialog, toggleAlertDialog] = useToggle(false)
   const tooltipRef: any = useRef(null)
   const handleTooltipClose = (event: any) => {
     setOpen(false)
@@ -33,7 +36,7 @@ function Step1() {
       setOpen(false)
     }
   }
-  const [selectAccount, setSelectAccount] = useState<string>('DifferentMethod')
+
   const handleSelectAccount = (event: SelectChangeEvent) => {
     setSelectAccount(event.target.value as string);
   }
@@ -94,7 +97,7 @@ function Step1() {
                 </ListItemButton>
               </ListItem>
               <ListItem>
-                <ListItemButton>
+                <ListItemButton onClick={toggleSelectAddress}>
                   <ListItemIcon>
                     <Map2Icon />
                   </ListItemIcon>
@@ -131,6 +134,7 @@ function Step1() {
       </Box>
       <UpdateAddress open={openUpdateAddress} dialogTitle={addressTitle + " Address"} onClose={toggleUpdateAddress} />
       <AlertDialog open={openAlertDialog} onClose={toggleAlertDialog} />
+      <SelectAddress open={openSelectAddress} onClose={toggleSelectAddress} />
     </StepWrapper>
   )
 }

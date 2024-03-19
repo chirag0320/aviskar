@@ -147,3 +147,42 @@
     }
   }
 }
+
+#SelectAddress {
+  &.MuiDialog-root {
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        width: 100%;
+        .DialogHeader {
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px 20px 0;
+          .CloseButton {
+            margin-right: -10px;
+          }
+        }
+        .MuiDialogContent-root {
+          padding: 20px;
+          .MuiInputBase-root {
+            .MuiSelect-select {
+              white-space: normal;
+              .MuiTypography-root {
+                display: block;
+              }
+            }
+          }
+          .MuiMenu-paper {
+            max-width: $sm;
+            .MuiList-root {
+              .MuiMenuItem-root {
+                flex-direction: column;
+                align-items: flex-start;
+                white-space: normal;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

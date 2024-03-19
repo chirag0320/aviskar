@@ -16,10 +16,11 @@ interface StyledDialog {
   primaryActionText?: string
   secondaryActionText?: string
   maxWidth?: Breakpoint
+  actions?: boolean
 }
 
 function StyledDialog(props: StyledDialog) {
-  const { open, children, id, dialogTitle, onClose, primaryActionText, secondaryActionText, maxWidth } = props
+  const { open, children, id, dialogTitle, onClose, primaryActionText, secondaryActionText, maxWidth, actions } = props
 
   return (
     <Dialog
@@ -41,14 +42,14 @@ function StyledDialog(props: StyledDialog) {
       <DialogContent className="ScrollbarBlue">
         {children}
       </DialogContent>
-      <DialogActions>
+      {actions && <DialogActions>
         <Button variant="outlined" onClick={onClose}>
           {secondaryActionText ? secondaryActionText : "Close"}
         </Button>
         <Button variant="contained" onClick={onClose}>
           {primaryActionText ? primaryActionText : "Yes"}
         </Button>
-      </DialogActions>
+      </DialogActions>}
     </Dialog>
   )
 }
