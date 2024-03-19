@@ -1,15 +1,38 @@
-import React, { useState, useRef, Fragment } from "react"
-import { Stack, Box, Card, CardContent, CardActions, Typography, Button, Link, IconButton, CardMedia, TextField, Select, MenuItem, Divider } from "@mui/material"
-import classNames from 'classnames'
+import React, { useState, useRef, Fragment } from "react";
+import {
+  Stack,
+  Box,
+  Card,
+  CardContent,
+  CardActions,
+  Typography,
+  Button,
+  Link,
+  IconButton, CardMedia, TextField, Select, MenuItem, Divider,
+  Icon,
+} from "@mui/material";
+import classNames from "classnames";
 
 // Type
 import type { SelectChangeEvent } from "@mui/material"
 
 // Components
-import { ClickTooltip, HoverTooltip } from "./CustomTooltip"
+import LineBarChart from "./LineChart";
+import { ClickTooltip, HoverTooltip } from "./CustomTooltip";
 
 // Assets
-import { AddToCartIcon, StackIcon, OfferTagIcon, ChevronDown, ChevronUp, ArrowRight, InfoIcon, Delete1Icon, MinusIcon, PlusIcon, SelectDropdown } from "../../assets/icons/index"
+import {
+  AddToCartIcon,
+  StackIcon,
+  OfferTagIcon,
+  ChevronDown,
+  ChevronUp,
+  ArrowRight,
+  InfoIcon, Delete1Icon, MinusIcon, PlusIcon, SelectDropdown,
+  OrdersIcon,
+  FilledUpButton,
+  OptionsIcon,
+} from "../../assets/icons/index";
 
 // Utils
 import { ProductStockStatus, ProductUpdateCountdown } from "./Utils"
@@ -20,23 +43,23 @@ import { useAppSelector } from "@/hooks"
 import { productImages } from "@/utils/data"
 
 interface Iproduct {
-  product: IFeaturedProducts
+  product: IFeaturedProducts;
 }
 export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const [open, setOpen] = useState(false)
   const tooltipRef: any = useRef(null)
   const handleTooltipClose = (event: any) => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
   const handleTooltipOpen = () => {
-    setOpen(!open)
-  }
+    setOpen(!open);
+  };
   const handleClickAway = (event: any) => {
     if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
-      setOpen(false)
+      setOpen(false);
     }
-  }
+  };
 
   return (
     <Card className="ProductCard" key={product.productId}>
@@ -44,10 +67,15 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
         <Link className="ImageLink" href="#">
           <img src={product.imageUrl} alt="Product image" loading="lazy" />
         </Link>
-        <ProductStockStatus availability={product.availability} colorClass={product.colorClass} iconClass={product.iconClass} />
+        <ProductStockStatus
+          availability={product.availability}
+          colorClass={product.colorClass}
+          iconClass={product.iconClass}
+        />
       </Stack>
       <CardContent>
-        <Link className="ProductName" href="#"><Typography component="h3">{product.productName}</Typography>
+        <Link className="ProductName" href="#">
+          <Typography component="h3">{product.productName}</Typography>
         </Link>
         <Stack className="ContentWrapper">
           <Stack className="Top">
@@ -65,13 +93,28 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
               {(product?.priceWithDetails?.discount && product?.priceWithDetails?.discount !== 0)
                 ?
                 <Typography variant="overline" className="DiscountedPrice">
-                  ${(product?.priceWithDetails?.price + product?.priceWithDetails?.discount).toFixed(2)}</Typography>
+                  $
+                  {(
+                    product?.priceWithDetails?.price +
+                    product?.priceWithDetails?.discount
+                  ).toFixed(2)}
+                </Typography>
                 : null}
             </Stack>
-            {(product?.priceWithDetails?.discount) && (product?.priceWithDetails?.discount !== 0) ? (<Typography variant="overline" className="Discount">${product?.priceWithDetails?.discount?.toFixed(2)} Off</Typography>) : null}
+            {product?.priceWithDetails?.discount &&
+              product?.priceWithDetails?.discount !== 0 ? (
+              <Typography variant="overline" className="Discount">
+                ${product?.priceWithDetails?.discount?.toFixed(2)} Off
+              </Typography>
+            ) : null}
           </Stack>
           <Stack className="Bottom">
-            <Typography variant="overline" className="PriceMessage">{(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ? "As low As" : "Best Price at"}</Typography>
+            <Typography variant="overline" className="PriceMessage">
+              {product?.priceWithDetails?.tierPriceList &&
+                product?.priceWithDetails?.tierPriceList?.length > 0
+                ? "As low As"
+                : "Best Price at"}
+            </Typography>
             {/* @todo :- below will be static for now */}
             <Stack className="RightSide">
               <Typography variant="overline" className="DiscountMessage">
@@ -79,7 +122,11 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
               </Typography>
               <HoverTooltip
                 placement="top-end"
-                renderComponent={<IconButton className="InfoButton"><InfoIcon /></IconButton>}
+                renderComponent={
+                  <IconButton className="InfoButton">
+                    <InfoIcon />
+                  </IconButton>
+                }
                 infoTooltip
                 arrow
               >
@@ -88,40 +135,66 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
             </Stack>
           </Stack>
         </Stack>
-        {product.tagName && <Typography className={classNames("OfferBadge")} sx={{ backgroundColor: product.tagColor }}>{product.tagName}</Typography>}
+        {product.tagName && (
+          <Typography
+            className={classNames("OfferBadge")}
+            sx={{ backgroundColor: product.tagColor }}
+          >
+            {product.tagName}
+          </Typography>
+        )}
         {/* <Typography className={classNames("OfferBadge", [product.tagColor ? "Blue" : "Red"])}>{product.tagName ? "Sale" : "Top Pick"}</Typography> */}
       </CardContent>
       <CardActions>
-        {(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ? (
+        {product?.priceWithDetails?.tierPriceList &&
+          product?.priceWithDetails?.tierPriceList?.length > 0 ? (
           <ClickTooltip
             open={open}
             className="TooltipOfferTag"
             placement="top-start"
             onClose={handleTooltipClose}
             onClickAway={handleClickAway}
-            renderComponent={<Button ref={tooltipRef} className="OfferTag" variant="outlined" endIcon={open ? <ChevronUp /> : <ChevronDown />} onClick={handleTooltipOpen}><OfferTagIcon /></Button>}
+            renderComponent={
+              <Button
+                ref={tooltipRef}
+                className="OfferTag"
+                variant="outlined"
+                endIcon={open ? <ChevronUp /> : <ChevronDown />}
+                onClick={handleTooltipOpen}
+              >
+                <OfferTagIcon />
+              </Button>
+            }
             lightTheme
             arrow
           >
             <Box className="Offers">
               {product?.priceWithDetails?.tierPriceList?.map((price) => {
-                return (<Fragment key={`${price.fromQty} - ${price.toQty} ${price.price}`}>
-                  <Typography className="Item">{price.fromQty} - {price.toQty} Items</Typography>
-                  <Typography className="ItemPrice">${price.price}</Typography>
-                </Fragment>)
+                return (
+                  <Fragment
+                    key={`${price.fromQty} - ${price.toQty} ${price.price}`}
+                  >
+                    <Typography className="Item">
+                      {price.fromQty} - {price.toQty} Items
+                    </Typography>
+                    <Typography className="ItemPrice">
+                      ${price.price}
+                    </Typography>
+                  </Fragment>
+                );
               })}
             </Box>
           </ClickTooltip>
         ) : null}
         <Button name='discoverMore' aria-label='discoverMore' variant="contained" onClick={() => {
-          navigate(`/product-details/${product?.productId}`) //friendlypagename
+          navigate(`/product-details/${product?.friendlypagename}`) //friendlypagename
         }} className="PrimaryAction" fullWidth>Discover More</Button>
         {product.isBundle && <IconButton className="Outlined Stack"><StackIcon /></IconButton>}
         <IconButton className="Outlined AddToCart"><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
-  )
-}
+  );
+};
 
 export const TravelCard = (props: any) => {
   const { place, description, imageUrl, friendlyName } = props
@@ -140,8 +213,131 @@ export const TravelCard = (props: any) => {
         }}>Discover More</Button>
       </CardActions>
     </Card>
-  )
-}
+  );
+};
+
+export const StatsCard = (props: any) => {
+  const { place, description, bgColor } = props;
+  return (
+    <Card className="StatsCard" style={{ background: bgColor }}>
+      <CardContent>
+        <Box className="TopWrapper">
+          <OrdersIcon />
+          <Typography variant="subtitle2" component="h3">
+            View Orders
+          </Typography>
+        </Box>
+        <Stack className="BottomWrapper">
+          <Typography className="StatNumber" variant="h4">
+            5
+          </Typography>
+          <IconButton>
+            <ArrowRight />
+          </IconButton>
+        </Stack>
+      </CardContent>
+    </Card>
+  );
+};
+export const UserStatsCard = (props: any) => {
+  const { place, description, bgColor } = props;
+  return (
+    <Card className="UserStatsCard" style={{ borderColor: bgColor }}>
+      <CardContent
+        sx={{
+          "&:after": {
+            border: `50px solid ${bgColor}`,
+          },
+          "&:before": {
+            background: bgColor,
+          },
+        }}
+      >
+        <Box className="TopWrapper">
+          <Box className="Return Profit">
+            {/* pass Profit and Loss class */}
+            <Typography variant="h4">$1030.80</Typography>
+            <Typography variant="body1">
+              <FilledUpButton />
+              4.50 (0.44%)
+            </Typography>
+          </Box>
+          <IconButton>
+            <OptionsIcon />
+          </IconButton>
+        </Box>
+        <Box className="BottomWrapper">
+          <Box className="Left">
+            <OrdersIcon />
+            <Typography variant="subtitle2" component="h3">
+              View Orders
+            </Typography>
+          </Box>
+          <Typography variant="body1">Live</Typography>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
+
+export const LineChartCard = (props: any) => {
+  const { place, description, bgColor } = props;
+  return (
+    <Card className="LineChartCard" style={{ borderColor: bgColor }}>
+      <CardContent
+        sx={{
+          "&:after": {
+            border: `50px solid ${bgColor}`,
+          },
+          "&:before": {
+            background: bgColor,
+          },
+        }}
+      >
+        <Box className="TopWrapper">
+          <Box className="Left">
+            {/* pass Profit and Loss class */}
+            <Typography variant="subtitle2">My Vault</Typography>
+            <Typography variant="body1" sx={{ mt: 0.75 }}>
+              Current
+            </Typography>
+            <Typography variant="h4" sx={{ mt: 0.5 }}>
+              1030.80
+            </Typography>
+          </Box>
+          <Box className="Right">
+            <IconButton>
+              <OptionsIcon />
+            </IconButton>
+            <Typography variant="body1">3 Day Range</Typography>
+          </Box>
+        </Box>
+        <Box className="BottomWrapper">
+          <Box className="Chart">
+            <LineBarChart />
+          </Box>
+          <Box className="RangeBar">
+            <Box className="Price">
+              <Typography variant="body1">907.5</Typography>
+              <Typography variant="body1">1040.3</Typography>
+            </Box>
+            <Box className="HLCircuit">
+              <Typography variant="caption">LOW</Typography>
+              <Box className="HLCircuitRange">
+                <Box className="UpArrow" sx={{ left: "20%" }}>
+                  {/* add percentage in left to slide arrowAicon */}
+                  <FilledUpButton />
+                </Box>
+              </Box>
+              <Typography variant="caption">HIGH</Typography>
+            </Box>
+          </Box>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
+
 
 export const CartCard = (data: any) => {
   const [deliveryMethod, setDeliveryMethod] = useState<string>('SecureShipping')

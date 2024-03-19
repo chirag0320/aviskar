@@ -91,7 +91,7 @@ function Blog() {
         <Container>
           <Box className="DiscoverPost__title">
             <Typography variant="h2" component="h2">
-              Discover Blog Posts
+              Our Latest Blog Post
             </Typography>
             <Typography
               variant="body1"
@@ -171,11 +171,45 @@ function Blog() {
                 <Grid item md={4} sm={6}>
                   <PostCard />
                 </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
+                <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
+                  <Button variant="contained">Load More</Button>
+                </Stack>
+              </TabPanel>
+              <TabPanel index={2} value={value}>
+                <Grid
+                  container
+                  rowSpacing={{ md: 6.25, xs: 4 }}
+                  columnSpacing={{ md: 3.75, xs: 2 }}
+                >
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
                 </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
+                <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
+                  <Button variant="contained">Load More</Button>
+                </Stack>
+              </TabPanel>
+              <TabPanel index={3} value={value}>
+                <Grid
+                  container
+                  rowSpacing={{ md: 6.25, xs: 4 }}
+                  columnSpacing={{ md: 3.75, xs: 2 }}
+                >
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
                 </Grid>
               </Grid>
               <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>

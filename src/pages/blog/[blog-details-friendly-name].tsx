@@ -126,14 +126,30 @@ function BlogDetails({ params }: any) {
           {blogList?.items?.length > 0 ? <Box className="DiscoverPost">
             <Box className="DiscoverPost__title">
               <Typography variant="h2" component="h2">
-                Related posts
+                Subscribe to our newsletter
               </Typography>
               <Typography
                 variant="body1"
-                sx={{ mt: 1.875, color: variable.greyRegent }}
+                sx={{ mt: 3, color: variable.greyRegent }}
               >
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+                Subscribe to learn about new products, new market trends and
+                updates.
+              </Typography>
+              <Box className="NewsLetterBox">
+                <TextField
+                  id="NewsLetter"
+                  placeholder="Your Email Address"
+                  variant="outlined"
+                />
+                <Button variant="contained">Subscribe</Button>
+              </Box>
+              <Typography
+                className="TermsCondition"
+                variant="body1"
+                sx={{ mt: 2 }}
+              >
+                By clicking Sign Up you're confirming that you agree with our
+                Terms and Conditions.
               </Typography>
             </Box>
             <Box className="RecentPosts">

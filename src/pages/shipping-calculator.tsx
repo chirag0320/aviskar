@@ -14,15 +14,14 @@ import { ENDPOINTS } from '@/utils/constants';
 
 function Calculator() {
     const dispatch = useAppDispatch();
-    const calculators = useAppSelector(state => state.calculators.calculators)
-    const vaultStorage = useAppSelector(state => state.calculators.vaultStorage)
+    const calculators = useAppSelector(state => state.calculators)
 
     useEffect(() => {
         dispatch(saveCalculatorsData({
             url: ENDPOINTS.saveCalculators,
             body: {
-                CalculatorType: 1,
-                CalculatorData: calculators
+                CalculatorType: 0,
+                CalculatorData: calculators.calculators
             }
         }) as any);
     }, [])
@@ -36,17 +35,28 @@ function Calculator() {
             />
             <Box id="Calculator" className='Calculator' component="section">
                 <Box className="TitleWrapper">
-                    <PageTitle title="Vault" />
+                    <PageTitle title="Shipping Calculator" />
                 </Box>
                 <Container>
                     <Box className='CalculatorPageContent'>
-                        <MetalForm CalculatorType={1} />
+                        <MetalForm CalculatorType={0} />
                         <CalculatorCards />
+                        {/* <TotalPageFooter /> */}
                         <Box className="TotalWrapper TotalValueWrapper">
                             <Stack
-                                className='DataValueWrapper TotalValueNestedWrapper'>
-                                <Typography variant="body1" className="">Total Vault Storage</Typography>
-                                <Typography variant="subtitle1" className="">${vaultStorage}</Typography>
+                                className='DataValueWrapper ValueNestedWrapper' style={{ borderTopLeftRadius: "10px", borderTopRightRadius: "10px" }}>
+                                <Typography variant="body1" className="">Shipping</Typography>
+                                <Typography variant="subtitle1" className="">${calculators.shipping}</Typography>
+                            </Stack>
+                            <Stack
+                                className='DataValueWrapper ValueNestedWrapper'>
+                                <Typography variant="body1" className="">Insurance</Typography>
+                                <Typography variant="subtitle1" className="">${calculators.insurance}</Typography>
+                            </Stack>
+                            <Stack
+                                className='DataValueWrapper TotalValueNestedWrapper' style={{ borderTopLeftRadius: "0px", borderTopRightRadius: "0px" }}>
+                                <Typography variant="body1" className="">Total</Typography>
+                                <Typography variant="subtitle1" className="">${calculators.shipping + calculators.insurance}</Typography>
                             </Stack>
                         </Box>
                     </Box>

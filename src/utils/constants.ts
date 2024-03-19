@@ -23,11 +23,12 @@ export const ENDPOINTS = {
     membership: "Checkout/rsBDWqaTLMJauU",
     getCategoryData: "category/nRuA1KTPi0q4Outgqr39qw",
     getContactUsConfiguration: "ContactUs/gGu8GSaHhEWKVZICJLtoeg",
-    reasonsForContact : "ContactUs/zdT918BBCkKYQBI2D1D0fw",
-    saveContactUsDetails : "ContactUs/jn1Gr1IOubQbzQV5S",
-    saveCalculators : "calculator/WOGEEHFLeeZisCtFqHdkfpdUrLN",
-    productDetails: "product/{{product-id}}/wb5rqwFBf0ua22kGp0Hlhw",
-    priceForprogressbar: "price/{{product-id}}/jGnpTVO8S0aP1590ehZu3g?hZHxveDw={{timeinterval}}"
+    reasonsForContact: "ContactUs/zdT918BBCkKYQBI2D1D0fw",
+    saveContactUsDetails: "ContactUs/jn1Gr1IOubQbzQV5S",
+    saveCalculators: "calculator/WOGEEHFLeeZisCtFqHdkfpdUrLN",
+    productDetails: "product/wb5rqwFBf0ua22kGp0Hlhw/{{product-id}}",
+    priceForprogressbar: "price/{{product-id}}/jGnpTVO8S0aP1590ehZu3g?hZHxveDw={{timeinterval}}",
+    addToCartProduct: "shoppingcart/CxdrQaZ030ekw4jdCgWWKA"
 }
 export const StoreData = {
     storeCode: 12,

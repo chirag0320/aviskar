@@ -41,6 +41,8 @@ import SortbyIcon from "./SortbyIcon";
 import FilterIcon from "./FilterIcon";
 import CrossIconWithOutlineCircle from "./CrossIconWithOutlineCircle";
 import SearchButtonIcon from "./SearchButtonIcon";
+import FilledUpButton from "./FilledUpButton";
+import OptionsIcon from "./OptionsIcon";
 import DeleteIcon from "./DeleteIcon";
 import Delete1Icon from "./Delete1Icon";
 import MinusIcon from "./MinusIcon";
@@ -76,7 +78,7 @@ import YouTubeTextIcon from "./social/YouTubeTextIcon";
 import Email from "./social/Email";
 import Calling from "./social/Calling";
 import AddressIcon from "./social/AddressIcon";
-
+import OrdersIcon from "./OrdersIcon";
 
 export {
   ArrowLeft,
@@ -122,6 +124,8 @@ export {
   FilterIcon,
   CrossIconWithOutlineCircle,
   SearchButtonIcon,
+  FilledUpButton,
+  OptionsIcon,
   DeleteIcon,
   Delete1Icon,
   MinusIcon,
@@ -157,4 +161,5 @@ export {
   Email,
   Calling,
   AddressIcon,
+  OrdersIcon,
 };
