@@ -7,6 +7,7 @@ import { ProductCard } from "../../common/Card"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { Idata, IpriceForEachId } from "./FeaturedProducts"
 import { ENDPOINTS } from "@/utils/constants"
+import { navigate } from "gatsby"
 const defaultData = {
   "search": "",
   "pageNo": 0,
@@ -99,7 +100,9 @@ function PopularProducts() {
           }
         </Box>
         <Stack className="Action">
-          <Button className="DiscoverMore" name='DiscoverMore' aria-label="DiscoverMore" variant="contained">Discover More</Button>
+          <Button className="DiscoverMore" name='DiscoverMore' aria-label="DiscoverMore" variant="contained" onClick={()=>{
+            navigate('/shop')
+          }}>Discover More</Button>
         </Stack>
       </Box>
     </Container>

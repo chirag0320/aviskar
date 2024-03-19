@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Stack,
   Box,
@@ -20,7 +20,10 @@ import {
   ArrowRight,
   ContainedCheckIcon,
   ContainedCrossIcon,
+  TimerIcon,
+  ChevronUpRounded,
 } from "../../assets/icons/index";
+import useRemainingTime from "@/hooks/useRemainingTime";
 interface Iprops {
   name: string;
   value: number;
@@ -31,6 +34,18 @@ interface Iprops {
     tickerboxfontcolor?: string;
   };
 }
+
+interface SectionHeading {
+  title: string
+  description: string
+}
+
+interface ProductStockStatus {
+  availability: string
+  colorClass?: string
+  iconClass?: string
+}
+
 export const StockReturnWithName = React.memo(
   ({ name, value, status, percentage, tickerStyle }: Iprops) => {
     return (
@@ -88,7 +103,7 @@ export const SwiperNavigation = React.memo(() => {
   );
 });
 
-export const SectionHeading = React.memo(({ title, description }: any) => {
+export const SectionHeading = React.memo(({ title, description }: SectionHeading) => {
   return (
     <Box className="SectionHeading">
       <Typography variant="h2" component="h2" className="Title">
@@ -156,7 +171,7 @@ export const Breadcrumb = React.memo(({ page1, page2, page3 }: any) => {
 });
 
 export const ProductStockStatus = React.memo(
-  ({ availability, colorClass, iconClass }: any) => {
+  ({ availability, colorClass, iconClass }: ProductStockStatus) => {
     return (
       <Stack
         className={classNames("ProductStockStatus", [
@@ -185,6 +200,26 @@ export const LinkWithIcon = React.memo(({ icon, href, text }: any) => {
     </Link>
   );
 });
+
+export const ProductUpdateCountdown = React.memo(() => {
+  const { remainingTime } = useRemainingTime()
+  return (
+    <Stack className="ProductUpdateCountdown">
+      <TimerIcon />
+      <Typography variant="bodySmall">Updates in {remainingTime} Sec</Typography>
+    </Stack>
+  )
+})
+
+export const PriceChangeReturn = React.memo(({ percentage }: {percentage:string}) => {
+  return (
+    <Stack className={classNames("PriceChangeReturn", [Number(percentage) === 0 ? "Nuetral" : Number(percentage) > 0 ? "Success" : "Error"])}>
+      <ChevronUpRounded />
+      <Typography variant="overline">{percentage}%</Typography>
+    </Stack >
+  )
+})
+
 export function isActionRejected(str: string): boolean {
   const parts = str.split("/");
   const state = parts[parts.length - 1];

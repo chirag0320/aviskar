@@ -14,6 +14,7 @@ import useApiRequest from '@/hooks/useAPIRequest'
 import { ENDPOINTS } from '@/utils/constants'
 import { useAppSelector } from '@/hooks'
 import { apicall, trimAllSpaceFromString } from '@/utils/helper'
+import useSubscription from '@/hooks/useSubscription'
 export interface FooterLink {
   linkTitle: string;
   linkUrl: string;
@@ -28,16 +29,7 @@ export interface FooterSection {
 function index() {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { data }: { data: { data: FooterSection[] } } = useApiRequest(ENDPOINTS.getFooterLink);
-  const [email, setEmail] = useState('');
-  const subscribe = useCallback(async () => {
-    if (email?.length > 3) {
-      await apicall(ENDPOINTS.postSubscribeNewsletter, 'post', { email })
-      setEmail('')
-    }
-  }, [email])
-  const handleEmailChange = (e: any) => {
-    setEmail(e.target.value)
-  }
+const { email, handleEmailChange,subscribe } = useSubscription()
   return (
     <Box id="MainFooterSection" component="footer">
       <Container className="Container">
@@ -86,9 +78,9 @@ function index() {
               <Typography className="ConsentMessage" variant="body2">Your email is safe with us, we don't spam</Typography>
             </Box>
             <Stack className="SocialWrapper">
-              <IconButton target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}><FacebookIcon /></IconButton>
+              <IconButton target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}><FacebookIcon fontSize="small" /></IconButton>
               <IconButton target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}><YoutubeIcon /></IconButton>
-              <IconButton target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}><TwitterIcon /></IconButton>
+              <IconButton target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}><TwitterIcon fontSize="small" /></IconButton>
               <IconButton target={"_blank"} href={configDetailsState?.feedIcon?.value ?? window?.location?.href}><FeedIcon /></IconButton>
             </Stack>
           </Stack>

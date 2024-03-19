@@ -8,6 +8,7 @@ import { SectionHeading } from "../../common/Utils"
 import { TravelCard } from "../../common/Card"
 import useApiRequest from '@/hooks/useAPIRequest'
 import { ENDPOINTS } from '@/utils/constants'
+import { navigate } from 'gatsby'
 
 const dataforbody = {
   "search": "",
@@ -106,6 +107,7 @@ function CloserLook() {
                 data?.data?.items?.map((destination) => (
                   <SwiperSlide key={destination.id}>
                     <TravelCard
+                      friendlyName={destination?.friendlyName}
                       place={destination.title}
                       description={destination.bodyOverview}
                       imageUrl={destination.imageUrl}
@@ -131,7 +133,9 @@ function CloserLook() {
         </Box>
       </Box>
       <Stack className="Action">
-        <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained">Discover More</Button>
+        <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained" onClick={()=>{
+          navigate('/blog')
+        }}>Discover More</Button>
       </Stack>
     </Container>
   )

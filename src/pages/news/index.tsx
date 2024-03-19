@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Grid,
@@ -21,16 +21,45 @@ import PostCard from "@/components/common/PostCard";
 import { Breadcrumb } from "@/components/common/Utils";
 
 // CSS Variable
-import * as variable from "../scss/settings/variables.module.scss";
+import * as variable from "../../scss/settings/variables.module.scss";
 
 // Assets
-import { SearchButtonIcon } from "../assets/icons/index";
+import { SearchButtonIcon } from "../../assets/icons/index";
+import { useAppSelector } from "@/hooks";
+import useAPIoneTime from "@/hooks/useAPIoneTime";
+import { NewsList } from "@/redux/reducers/newsReducer";
+import { ENDPOINTS } from "@/utils/constants";
+import useDebounce from "@/hooks/useDebounce";
+import { navigate } from "gatsby";
 
-function Blog() {
-  const [value, setValue] = React.useState(1);
+function News() {
+  const { newsList }: any = useAppSelector((state) => state.newsPage)
+  console.log("🚀 ~ News ~ newsList:", newsList)
+  const [value, setValue] = React.useState<any>('all');
+  const [searchValue, setSearchValue] = useState<string>('')
+
+  const [body, setbody] = useState<any>({
+    "search": "",
+    "pageNo": 0,
+    "pageSize": -1,
+    "sortBy": "",
+    "sortOrder": "",
+    "filters": {
+      "keyword": null
+    }
+  })
+  const debounce = useDebounce(body, 500)
+
+
+  useAPIoneTime({ service: NewsList, endPoint: ENDPOINTS.BlogList, body: debounce })
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+    setValue(newValue as any)
+    setbody((prev: any) => ({
+      ...prev, "filters": {
+        "keyword": (((newValue as any) === 'all') ? null : newValue)
+      }
+    }))
   };
 
   return (
@@ -39,7 +68,7 @@ function Blog() {
       <Box className="HeroSection">
         <Container>
           <Typography variant="h2" component="h2">
-            Our Latest Blog Post
+            Our Latest News Post
           </Typography>
           <Typography
             variant="body1"
@@ -50,11 +79,11 @@ function Blog() {
           </Typography>
           <Box className="PostWrapper">
             <Stack className="LeftPostWrapper">
-              <PostCard />
+              <PostCard isNews={true} details={newsList?.items?.[0]} navigate={() => navigate(`/news/${newsList?.items?.[0]?.friendlyName}`)}/>
             </Stack>
             <Stack className="RightPostWrapper">
-              <PostCard />
-              <PostCard />
+              {newsList?.items?.[1] ? <PostCard isNews={true} details={newsList?.items?.[1]} navigate={() => navigate(`/news/${newsList?.items?.[1]?.friendlyName}`)} /> : null}
+              {newsList?.items?.[2] ? <PostCard isNews={true} details={newsList?.items?.[2]} navigate={() => navigate(`/news/${newsList?.items?.[2]?.friendlyName}`)}/> : null}
             </Stack>
           </Box>
         </Container>
@@ -78,6 +107,11 @@ function Blog() {
               id="Search-Blog"
               placeholder="Search Blog"
               variant="outlined"
+              value={searchValue}
+              onChange={(e) => {
+                setSearchValue(e.target.value)
+                setbody((prev: any) => ({ ...prev, "search": e.target.value, }))
+              }}
             />
             <Button
               variant="contained"
@@ -95,17 +129,41 @@ function Blog() {
               textColor="secondary"
               sx={{ flexWrap: "wrap" }}
             >
-              <Tab label="All Blog" value={1} />
-              <Tab label="News" value={2} />
-              <Tab label="Insights" value={3} />
-              <Tab label="Gold" value={4} />
-              <Tab label="Silver" value={5} />
-              <Tab label="Platinum" value={6} />
-              <Tab label="Community" value={7} />
-              <Tab label="Resources" value={8} />
+              {/* <Tab label="All Blog" value={'all'} />
+              <Tab label="News" value={'news'} />
+              <Tab label="Insights" value={'insights'} />
+              <Tab label="Gold" value={'gold'} />
+              <Tab label="Silver" value={'silver'} />
+              <Tab label="Platinum" value={'platinum'} />
+              <Tab label="Community" value={'community'} />
+              <Tab label="Resources" value={'resources'} /> */}
             </Tabs>
 
-            <TabPanel index={1} value={value}>
+            <TabPanel index={value as any} value={value}>
+              <Grid
+                container
+                rowSpacing={{ md: 6.25, xs: 4 }}
+                columnSpacing={{ md: 3.75, xs: 2 }}
+              >
+                {newsList?.items?.map((item: any) => {
+                  return (
+                    <Grid item md={4} sm={6} key={item?.id}>
+                      <PostCard isNews={true} details={item} navigate={() => navigate(`/news/${item?.friendlyName}`)} />
+                    </Grid>
+                  )
+                })}
+                {/* <Grid item md={4} sm={6}>
+                  <PostCard />
+                </Grid>
+                <Grid item md={4} sm={6}>
+                  <PostCard />
+                </Grid> */}
+              </Grid>
+              {newsList?.items?.length > 0 ? <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
+                {/* <Button variant="contained">Load More</Button> */}
+              </Stack> : null}
+            </TabPanel>
+            {/* <TabPanel index={3} value={value}>
               <Grid
                 container
                 rowSpacing={{ md: 6.25, xs: 4 }}
@@ -124,8 +182,8 @@ function Blog() {
               <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
                 <Button variant="contained">Load More</Button>
               </Stack>
-            </TabPanel>
-            <TabPanel index={2} value={value}>
+            </TabPanel> */}
+            {/* <TabPanel index={2} value={value}>
               <Grid
                 container
                 rowSpacing={{ md: 6.25, xs: 4 }}
@@ -179,7 +237,7 @@ function Blog() {
             </TabPanel>
             <TabPanel index={8} value={value}>
               Item Three
-            </TabPanel>
+            </TabPanel> */}
           </Box>
         </Container>
       </Box>
@@ -187,4 +245,4 @@ function Blog() {
   );
 }
 
-export default Blog;
+export default News;

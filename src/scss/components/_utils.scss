@@ -61,7 +61,7 @@
 .PageTitle {
   @include padding-vertical(34);
   background-color: $whiteLilac;
-  @include media($sm) {
+  @include media($md) {
     @include padding-vertical(20);
   }
   h2 {
@@ -136,6 +136,36 @@
   &:hover {
     .MuiIconButton-root {
       background-color: rgba($black, 0.04);
+    }
+  }
+}
+
+.ProductUpdateCountdown {
+  align-items: center;
+  gap: 6px;
+}
+
+.PriceChangeReturn {
+  
+  align-items: center;
+  gap: 4px;
+  padding: 7px;
+  color: $white;
+  border-radius: 5px;
+  &.Success {
+    background-color: $success;
+  }
+  &.Error {
+    background-color: $error;
+    svg {
+      rotate: 180deg;
+    }
+  }
+  &.Nuetral {
+    background-color: $yellowFuel;
+    svg {
+      // rotate: 180deg;
+      display: none;
     }
   }
 }

@@ -39,7 +39,7 @@ export const actionMenuItems = [
   {
     text: "Calculators",
     icon: <CalculatorIcon />,
-    href: "#",
+    href: "/calculators",
     key: 'enablecalculators'
   },
   {
@@ -231,4 +231,28 @@ export const sortByOptions = [
   // { id: '6', name: 'Year: Ascending', value: 'Year: Ascending', label: 'Year: Ascending' },
   // { id: '7', name: 'Year: Descending', value: 'Year: Descending', label: 'Year: Descending' },
   // { id: '8', name: 'Highest Rated', value: 'Highest Rated', label: 'Highest Rated' },
+]
+
+export const qmintRating = [
+  {
+    name: "Overall",
+    percentage: 37.8,
+  },
+  {
+    name: "Outer Pack",
+    percentage: 40,
+  },
+  {
+    name: "Inner Pack",
+    percentage: 60,
+  },
+]
+
+export const productImages = [
+  "https://imagestoragecdn.blob.core.windows.net/documents/100g-Queensland-Mint-Gold-Cast-Bar-Front-min_210320221703508.png",
+  "https://imagestoragecdn.blob.core.windows.net/documents/10oz-Queensland-Mint-Silver-Bar-Ultra-Shine-Duo-Strike-feature_210320221903236.png",
+  "https://imagestoragecdn.blob.core.windows.net/documents/QMint-5oz-gold-Bar-min_210320221703215.png",
+  "https://imagestoragecdn.blob.core.windows.net/documents/a-2007-Six-Coin-Gold-Set-Perth-Mint-OPEN_210320221703591.png",
+  "https://imagestoragecdn.blob.core.windows.net/documents/2022-AustralianKangaroo-Silver-1oz-StraightOn_210320221903152.png",
+  "https://imagestoragecdn.blob.core.windows.net/documents/QMint-2oz-gold-Bar-Front-min_210320221703362.png",
 ]
