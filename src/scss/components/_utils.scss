@@ -3,32 +3,38 @@
     flex-shrink: 0;
     align-items: center;
     gap: 10px;
+
     .StockReturn {
       align-items: center;
       gap: 3px;
     }
+
     &.Boxes {
       .StockReturn {
         padding: 0 4px 1px 4px;
         border-radius: 2px;
       }
+
       &.Profit {
         .StockReturn {
           background-color: $success;
         }
       }
+
       &.Loss {
         .StockReturn {
           background-color: $error;
         }
       }
     }
+
     &.Text {
       &.Profit {
         .StockReturn {
           color: $success;
         }
       }
+
       &.Loss {
         .StockReturn {
           color: $error;
@@ -40,18 +46,23 @@
 
 .SectionHeading {
   text-align: center;
+
   .Title {
     margin-bottom: 15px;
+
     @include media($sm) {
       font-size: pxToRem(26);
       line-height: pxToRem(35);
     }
   }
+
   .Description {
     color: $greyRegent;
+
     @include media($md) {
       font-size: pxToRem(14);
     }
+
     @include media($sm) {
       font-size: pxToRem(12);
       line-height: pxToRem(22);
@@ -59,14 +70,18 @@
     }
   }
 }
+
 .PageTitle {
   @include padding-vertical(34);
   background-color: $whiteLilac;
+
   @include media($md) {
     @include padding-vertical(20);
   }
+
   h2 {
     line-height: 36px;
+
     @include media($sm) {
       font-size: pxToRem(26);
       line-height: pxToRem(33);
@@ -78,6 +93,7 @@
   .MuiBreadcrumbs-ol {
     .MuiBreadcrumbs-li {
       line-height: 20px;
+
       a {
         &.MuiTypography-root {
           font-weight: 400;
@@ -85,6 +101,7 @@
           display: inline-block;
         }
       }
+
       p {
         &.MuiTypography-root {
           font-weight: 600;
@@ -92,6 +109,7 @@
         }
       }
     }
+
     .MuiBreadcrumbs-separator {
       svg {
         path {
@@ -106,15 +124,18 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
+
   .Message {
     @include media($sm) {
       font-size: pxToRem(12);
       line-height: pxToRem(24);
     }
   }
+
   &.Available {
     color: $success;
   }
+
   &.NotAvailable {
     color: $error;
   }
@@ -125,15 +146,18 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+
   @include media($md) {
     flex-direction: initial;
   }
+
   .MuiIconButton-root {
     svg {
       width: 24px;
       height: 24px;
     }
   }
+
   &:hover {
     .MuiIconButton-root {
       background-color: rgba($black, 0.04);
@@ -153,17 +177,22 @@
   padding: 7px;
   color: $white;
   border-radius: 5px;
+
   &.Success {
     background-color: $success;
   }
+
   &.Error {
     background-color: $error;
+
     svg {
       rotate: 180deg;
     }
   }
+
   &.Nuetral {
     background-color: $yellowFuel;
+
     svg {
       // rotate: 180deg;
       display: none;

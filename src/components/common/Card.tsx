@@ -340,6 +340,7 @@ export const LineChartCard = (props: any) => {
 
 
 export const CartCard = (data: any) => {
+  const { hideDeliveryMethod, hideRightSide } = data; // Prop to hide delivery method section
   const [deliveryMethod, setDeliveryMethod] = useState<string>('SecureShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     setDeliveryMethod(event.target.value as string);
@@ -372,24 +373,30 @@ export const CartCard = (data: any) => {
         </Stack>
         <Stack className="BottomWrapper">
           <Stack className="LeftSide">
-            <Stack className="DeliveryMethod">
-              <Typography className="Label" variant="titleLarge">Delivery Method:</Typography>
-              <Select
-                color="secondary"
-                className="DeliveryMethodSelect"
-                value={deliveryMethod}
-                onChange={handleDeliveryMethod}
-                IconComponent={SelectDropdown}
-              >
-                <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
-                <MenuItem value="VaultStorage">Vault Storage</MenuItem>
-              </Select>
-            </Stack>
+            {!hideDeliveryMethod && (
+              <Stack className="DeliveryMethod">
+                <Typography className="Label" variant="titleLarge">Delivery Method:</Typography>
+                <Select
+                  color="secondary"
+                  className="DeliveryMethodSelect"
+                  value={deliveryMethod}
+                  onChange={handleDeliveryMethod}
+                  IconComponent={SelectDropdown}
+                >
+                  <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
+                  <MenuItem value="VaultStorage">Vault Storage</MenuItem>
+                </Select>
+              </Stack>
+            )}
+
             <ProductUpdateCountdown />
           </Stack>
-          <Stack className="RightSide">
-            <Typography className="ShippingMessage" variant="body2">{deliveryMethodMessage.noSecureShipping}</Typography>
-          </Stack>
+          {!hideRightSide && (
+            <Stack className="RightSide">
+              <Typography className="ShippingMessage" variant="body2">{deliveryMethodMessage.noSecureShipping}</Typography>
+            </Stack>
+          )}
+
         </Stack>
       </CardContent>
     </Card >
