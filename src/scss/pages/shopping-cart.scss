@@ -24,38 +24,17 @@
             .ShoppingProductsDetailsWrapper {
                 border: 1px solid rgba($dark, 0.1);
                 border-radius: 20px;
-                padding: 25px 35px 25px 25px;
+                padding: 25px;
                 margin-bottom: 30px;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
 
-                .ProductInfo {
-                    border: 1px solid rgba($dark, 0.1);
-                    border-radius: 15px;
-                    margin-bottom: 20px;
-                    padding: 15px;
-                    gap: 30px;
-
-                    .ProductDetailsWrapper {
-                        width: 68%;
-                        gap: 30px;
-                        justify-content: space-between;
-
-                        img {
-                            height: 140px;
-                            width: 140px;
-                        }
-
-                        .ShippindDate {
-                            font-weight: 400;
-                        }
-
-                    }
-
-                    .PriceQuentityWrapper {
-                        gap: 40px;
-                        width: 32%;
-                    }
-
+                @include media($xs) {
+                    padding-left: 10px;
+                    padding-right: 10px;
                 }
+
 
                 .Note {
                     font-size: 16px;
@@ -74,12 +53,20 @@
                 }
 
                 .LeftArrow {
-                    svg {
-                        color: $white;
-                        height: 16px;
-                        width: 16px;
+                    text-decoration: none;
+                    font-size: 16px;
+                    line-height: 28px;
+                    font-weight: 700;
+
+                    .MuiButton-startIcon {
                         margin-right: 5px;
+
+                        svg {
+                            font-size: 16px;
+                        }
                     }
+
+
                 }
 
                 .ClearUpdateCartWrapper {
@@ -99,6 +86,7 @@
                         font-size: 16px;
                         line-height: 22px;
                         font-weight: 600;
+                        text-decoration: none;
                     }
 
                     .UpdateCartBtn {
@@ -171,10 +159,21 @@
                     }
 
                     .RightArrow {
+                        text-decoration: none;
+                        font-size: 16px;
+                        line-height: 28px;
+                        font-weight: 700;
+
+                        @include media($xs) {
+                            font-size: 15px;
+                        }
+
                         svg {
-                            color: $white;
-                            height: 16px;
-                            width: 16px;
+                            font-size: 16px;
+
+                            @include media($xs) {
+                                font-size: 15px;
+                            }
                         }
 
                     }

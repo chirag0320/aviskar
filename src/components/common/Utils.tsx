@@ -204,7 +204,6 @@ export const LinkWithIcon = React.memo(({ icon, href, text }: any) => {
   );
 });
 
-// Start :: original code
 export const ProductUpdateCountdown = React.memo(() => {
   const { remainingTime } = useRemainingTime()
   return (
@@ -214,25 +213,7 @@ export const ProductUpdateCountdown = React.memo(() => {
     </Stack>
   )
 })
-// End :: original code
 
-// Start :: Trial  code
-// export const ProductUpdateCountdown = React.memo(({ }) => {
-//   const { remainingTime } = useRemainingTime()
-//   const fillPercentage = ((60 - parseInt(remainingTime)) / 60) * 100;
-
-//   return (
-//     <Stack className="ProductUpdateCountdown">
-//       <Icon className='TimerIcon'>
-//         <div className="FilledCircle" >
-//           <div className="WhiteCircle"></div>
-//         </div>
-//       </Icon>
-//       <Typography variant="bodySmall">Updates in {remainingTime} Sec</Typography>
-//     </Stack>
-//   );
-// });
-// End :: Trial code
 
 export const PriceChangeReturn = React.memo(({ percentage }: { percentage: string }) => {
   return (

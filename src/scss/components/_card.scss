@@ -398,28 +398,34 @@
 
 .PostCard {
   width: 100%;
+
   .PostImage {
     width: 100%;
     object-fit: cover;
     border-radius: 20px;
     max-height: 314px;
     height: 100%;
+
     @include media($lg) {
       max-height: 200px;
     }
   }
+
   .CardContentWrapper {
     .MuiCardContent-root {
       padding: 0;
       padding-top: 20px;
+
       .PostInfo {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         .UserInfo {
           display: flex;
           gap: 8px;
           align-items: center;
+
           .UserImage {
             width: 36px;
             height: 36px;
@@ -429,11 +435,14 @@
         }
       }
     }
+
     .MuiCardActions-root {
       .MuiButtonBase-root {
         line-height: 20px;
+
         .MuiButton-endIcon {
           margin-left: 10px;
+
           svg {
             width: 20px;
             height: 20px;
@@ -441,6 +450,7 @@
         }
       }
     }
+
     .MuiTypography-root {
       color: $dark;
       @include max-line(2);
@@ -451,21 +461,26 @@
 .StatsCard {
   background: rgb(52 145 250 / 6%);
   border-radius: 15px;
+
   .MuiCardContent-root {
     padding: 16px;
   }
+
   .TopWrapper {
     display: flex;
     align-items: center;
     gap: 10px;
   }
+
   .BottomWrapper {
     margin-top: 23px;
     justify-content: space-between;
     align-items: center;
+
     .StatNumber {
       line-height: 36px;
     }
+
     .MuiIconButton-root {
       width: 36px;
       height: 36px;
@@ -481,12 +496,15 @@
   border-radius: 15px;
   box-shadow: $shadow10;
   border: 1px solid #3491fa14;
+
   .MuiCardContent-root {
     padding: 20px;
     position: relative;
+
     @include media($lg) {
       padding: 15px;
     }
+
     &:after {
       width: 214px;
       height: 214px;
@@ -497,11 +515,13 @@
       top: 0;
       left: 0;
       transform: translate(-45%, -45%);
+
       @include media($lg) {
         width: 150px;
         height: 150px;
       }
     }
+
     &::before {
       content: "";
       position: absolute;
@@ -512,22 +532,27 @@
       transform: translateY(40%);
       right: -10%;
       border-radius: 50%;
+
       @include media($lg) {
         width: 150px;
         height: 150px;
       }
     }
   }
+
   .TopWrapper {
     display: flex;
     justify-content: space-between;
+
     .Return {
       display: flex;
       align-items: center;
       gap: 14px;
+
       .MuiTypography-h4 {
         display: inline-block;
       }
+
       .MuiTypography-body1 {
         display: inline-block;
         color: $success;
@@ -536,15 +561,18 @@
           margin-right: 4px;
         }
       }
+
       &.Loss {
         .MuiTypography-body1 {
           color: $error;
+
           svg {
             transform: rotate(180deg);
           }
         }
       }
     }
+
     .MuiButtonBase-root {
       padding: 0;
       width: 15px;
@@ -552,12 +580,14 @@
       color: $dark;
     }
   }
+
   .BottomWrapper {
     display: flex;
     justify-content: space-between;
     align-items: end;
     gap: 10px;
     margin-top: 35px;
+
     .Left {
       display: flex;
       align-items: center;
@@ -569,13 +599,16 @@
 .LineChartCard {
   border-radius: 15px;
   background-color: rgb(221 231 235 / 30%);
+
   .MuiCardContent-root {
     padding: 20px;
     position: relative;
   }
+
   .TopWrapper {
     display: flex;
     justify-content: space-between;
+
     .Right {
       display: flex;
       flex-direction: column;
@@ -591,6 +624,7 @@
       }
     }
   }
+
   .BottomWrapper {
     background-color: $white;
     display: flex;
@@ -600,6 +634,7 @@
     margin-top: 5px;
     padding: 24px 15px 17px;
     border-radius: 11px;
+
     .Chart {
       svg {
         g {
@@ -611,22 +646,27 @@
         }
       }
     }
+
     .RangeBar {
       display: flex;
       flex-direction: column;
       width: 100%;
+
       .Price {
         display: flex;
         justify-content: space-between;
+
         .MuiTypography-body1 {
           line-height: 11px;
         }
       }
+
       .HLCircuit {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-top: 10px;
+
         .HLCircuitRange {
           background-color: rgb(52 145 250 / 20%);
           height: 3px;
@@ -635,14 +675,17 @@
           margin: 0 5px;
           color: $blueCyan;
           position: relative;
+
           .MuiTypography-caption {
             line-height: 9px;
           }
+
           .UpArrow {
             position: absolute;
             height: 14px;
             bottom: 0;
             @include transition;
+
             svg {
               width: 14px;
               height: 14px;
@@ -650,6 +693,7 @@
           }
         }
       }
+
       .MuiTypography-root {
         &.MuiTypography-body1 {
           font-weight: 600;
@@ -666,6 +710,7 @@
       stroke: $yellowFuel;
     }
   }
+
   &.MuiCard-root {
     position: relative;
     padding: 20px;
@@ -729,67 +774,94 @@
     border: 1px solid rgba($dark, 0.1);
     padding: 15px;
     gap: 20px;
+
     @include media($sm) {
       flex-wrap: wrap;
     }
+
     .MuiCardMedia-root {
       max-height: 140px;
       object-fit: contain;
+
       @include media-min($sm) {
         width: initial;
       }
     }
+
     .MuiCardContent-root {
       padding: 0;
+
       .TopWrapper {
         justify-content: space-between;
-        flex-wrap: wrap;
         gap: 16px;
+
+        @include media($xxl) {
+          flex-wrap: wrap;
+        }
+
         .LeftWrapper {
           .Name {
             margin-bottom: 4px;
           }
         }
+
         .RightWrapper {
           display: grid;
           align-items: center;
           gap: 8px 40px;
           flex-shrink: 0;
+
           @include media($xs) {
-            gap: 8px 20px;
+            gap: 8px 16px;
           }
+
           .LivePrice {
             color: $success;
+            font-weight: 600;
           }
+
           .Quantity {
             border: 1px solid $palladium;
             border-radius: 8px;
             overflow: hidden;
+
             .MuiIconButton-root {
               border-radius: initial;
               height: 32px;
+
+              @include media($xs) {
+                height: 28px;
+                width: 28px;
+              }
+
               &.Minus {
                 border-right: 1px solid $palladium;
               }
+
               &.Plus {
                 border-left: 1px solid $palladium;
               }
             }
+
             .MuiTextField-root {
               width: 40px;
+
               .MuiInputBase-root {
                 height: 100%;
+
                 .MuiInputBase-input {
                   padding: 0;
                   height: inherit;
                   text-align: center;
                 }
+
                 .MuiOutlinedInput-notchedOutline {
                   display: none;
                 }
               }
             }
           }
+
           .DeleteButton {
             grid-row-start: 1;
             grid-row-end: 3;
@@ -798,34 +870,42 @@
           }
         }
       }
+
       .BottomWrapper {
         justify-content: space-between;
         align-items: flex-start;
         gap: 10px;
         flex-wrap: wrap;
         margin-top: 10px;
+
         .LeftSide {
           flex-direction: column;
           gap: 10px;
           flex-wrap: wrap;
+
           .DeliveryMethod {
             gap: 8px;
+
             .Label {
               color: rgba($dark, 0.6);
             }
+
             .DeliveryMethodSelect {
               font-weight: 700;
               line-height: pxToRem(28);
+
               .MuiSelect-select {
                 padding-left: 0;
                 @include padding-vertical(0);
               }
+
               .MuiOutlinedInput-notchedOutline {
                 display: none;
               }
             }
           }
         }
+
         .RightSide {
           .ShippingMessage {
             background-color: rgba($error, 0.05);
@@ -844,22 +924,27 @@
     padding: 15px;
     border-radius: 16px;
     border: 1px solid rgba($dark, 0.1);
+
     .MuiCardMedia-root {
       max-height: 80px;
       object-fit: contain;
       width: initial;
     }
+
     .MuiCardContent-root {
       display: flex;
       align-items: center;
       gap: 10px;
       padding: 0;
+
       @include media($xs) {
         flex-direction: column;
       }
+
       .Wrapper {
         align-items: center;
         gap: 16px;
+
         .About {
           .Name {
             margin-bottom: 8px;
@@ -867,12 +952,15 @@
         }
       }
     }
+
     .MuiDivider-root {
       border-color: rgba($dark, 0.1);
       @include margin-vertical(10);
     }
+
     .DeliveryMethod {
       color: rgba($dark, 0.6);
+
       .MuiTypography-root {
         color: $dark;
       }

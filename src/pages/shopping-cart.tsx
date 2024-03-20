@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Seo from "../components/common/Seo"
 import Layout from "@/components/common/Layout";
 import { Box, Container, Typography, Stack, Button, Icon } from "@mui/material"
@@ -9,8 +9,11 @@ import { DeleteIcon, RightArrow, LeftArrow, TimerIcon } from '@/assets/icons';
 
 // Utils
 import { PageTitle, ProductUpdateCountdown } from "@/components/common/Utils"
+import { CartCard } from "@/components/common/Card"
+import { productImages } from '@/utils/data';
 
 function ShoppingCart() {
+
     return (
         <Layout>
             <>
@@ -27,97 +30,17 @@ function ShoppingCart() {
                         <Box className="ShoppingCartContent">
                             <Box className="ShoppingCartDetails">
                                 <Box className="ShoppingProductsDetailsWrapper">
-                                    <Stack className='ProductInfo'>
-                                        <Stack className='ProductDetailsWrapper'>
-                                            <img src={LogoGoldCoin} alt="Logo" />
-                                            <Box>
-                                                <Typography variant="subtitle1"  >2024 1oz Lunar Series III Year of the Dragon Silver Coin </Typography>
-                                                <Typography variant="body2" className="ShippindDate">Ships by 04 Jan 2024 or collect immediately </Typography>
-
-                                                <ProductUpdateCountdown />
-
-                                            </Box>
-                                        </Stack>
-                                        <Stack className='PriceQuentityWrapper'>
-                                            <Box className='PriceWrapper'>
-                                                <Typography variant="body2">Live Price </Typography>
-                                                <Typography variant="subtitle1">$3557.70 </Typography>
-                                            </Box>
-                                            <Box className='QuentityWrapper'>
-                                                <Typography variant="body2">Qty.</Typography>
-                                            </Box>
-                                            <Icon className='DeleteIcon'><DeleteIcon /></Icon>
-                                        </Stack>
-                                    </Stack>
-                                    <Stack className='ProductInfo'>
-                                        <Stack className='ProductDetailsWrapper'>
-                                            <img src={LogoGoldCoin} alt="Logo" />
-                                            <Box>
-                                                <Typography variant="subtitle1"  >2024 1oz Lunar Series III Year of the Dragon Silver Coin </Typography>
-                                                <Typography variant="body2" className="ShippindDate">Ships by 04 Jan 2024 or collect immediately </Typography>
-                                                <ProductUpdateCountdown />
-                                            </Box>
-                                        </Stack>
-                                        <Stack className='PriceQuentityWrapper'>
-                                            <Box className='PriceWrapper'>
-                                                <Typography variant="body2">Live Price </Typography>
-                                                <Typography variant="subtitle1">$3557.70 </Typography>
-                                            </Box>
-                                            <Box className='QuentityWrapper'>
-                                                <Typography variant="body2">Qty.</Typography>
-                                            </Box>
-                                            <Icon className='DeleteIcon'><DeleteIcon /></Icon>
-                                        </Stack>
-                                    </Stack>
-                                    <Stack className='ProductInfo'>
-                                        <Stack className='ProductDetailsWrapper'>
-                                            <img src={LogoGoldCoin} alt="Logo" />
-                                            <Box>
-                                                <Typography variant="subtitle1"  >2024 1oz Lunar Series III Year of the Dragon Silver Coin </Typography>
-                                                <Typography variant="body2" className="ShippindDate">Ships by 04 Jan 2024 or collect immediately </Typography>
-                                                <ProductUpdateCountdown />
-
-                                            </Box>
-                                        </Stack>
-                                        <Stack className='PriceQuentityWrapper'>
-                                            <Box className='PriceWrapper'>
-                                                <Typography variant="body2">Live Price </Typography>
-                                                <Typography variant="subtitle1">$3557.70 </Typography>
-                                            </Box>
-                                            <Box className='QuentityWrapper'>
-                                                <Typography variant="body2">Qty.</Typography>
-                                            </Box>
-                                            <Icon className='DeleteIcon'><DeleteIcon /></Icon>
-                                        </Stack>
-                                    </Stack>
-                                    <Stack className='ProductInfo'>
-                                        <Stack className='ProductDetailsWrapper'>
-                                            <img src={LogoGoldCoin} alt="Logo" />
-                                            <Box>
-                                                <Typography variant="subtitle1"  >2024 1oz Lunar Series III Year of the Dragon Silver Coin </Typography>
-                                                <Typography variant="body2" className="ShippindDate">Ships by 04 Jan 2024 or collect immediately </Typography>
-                                                <ProductUpdateCountdown />
-                                            </Box>
-                                        </Stack>
-                                        <Stack className='PriceQuentityWrapper'>
-                                            <Box className='PriceWrapper'>
-                                                <Typography variant="body2">Live Price </Typography>
-                                                <Typography variant="subtitle1">$3557.70 </Typography>
-                                            </Box>
-                                            <Box className='QuentityWrapper'>
-                                                <Typography variant="body2">Qty.</Typography>
-                                            </Box>
-                                            <Icon className='DeleteIcon'><DeleteIcon /></Icon>
-                                        </Stack>
-                                    </Stack>
+                                    {productImages.map((product) => {
+                                        return (
+                                            <CartCard data={product} hideDeliveryMethod={true} hideRightSide={true} />
+                                        )
+                                    })}
                                     <Typography variant="body1"><Typography component="span" className="Note">Note:</Typography> Prices are live prices and will be locked on confirm order. </Typography>
                                 </Box>
                                 <Stack className="BottomCartActionsWrapper">
-                                    <Stack>
-                                        <Icon className='LeftArrow'><LeftArrow /></Icon><Typography variant="subtitle1">Continue Shopping </Typography>
-                                    </Stack>
+                                    <Button className='LeftArrow' startIcon={<LeftArrow />} color='secondary'> Continue Shopping</Button>
                                     <Stack className='ClearUpdateCartWrapper'>
-                                        <Typography className="ClearShoppingCart">Clear Shopping Cart </Typography>
+                                        <Button className="ClearShoppingCart" color='secondary'>Clear Shopping Cart</Button>
                                         <Button className='UpdateCartBtn' size='large' variant="contained">Update Shopping Cart</Button>
                                     </Stack>
                                 </Stack>
@@ -134,7 +57,7 @@ function ShoppingCart() {
                                         <Typography variant="body1" className='DeliveryValue'>Calculated during checkout </Typography>
                                     </Stack>
                                     <Box className="AddCouponWrapper">
-                                        <Typography variant="subtitle1">Add coupon or gift card </Typography> <Icon className='RightArrow'><RightArrow /></Icon>
+                                        <Button className='RightArrow' endIcon={<RightArrow />}> Add coupon or gift card</Button>
                                     </Box>
                                     <Stack className='TotalWrapper'>
                                         <Typography variant="subtitle1">Total </Typography>
