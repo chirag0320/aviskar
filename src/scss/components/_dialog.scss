@@ -192,3 +192,35 @@
     }
   }
 }
+
+#EmailFriend {
+  &.MuiDialog-root {
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        width: 100%;
+        .DialogHeader {
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px 20px 0;
+          .MuiDialogTitle-root {
+            flex: 1;
+          }
+          .CloseButton {
+            margin-right: -10px;
+          }
+        }
+        .MuiDialogContent-root {
+          padding: 20px;
+          .AllFields {
+            flex-direction: column;
+            gap: 20px;
+          }
+          .ActionWrapper {
+            gap: 16px;
+            margin-top: 30px;
+          }
+        }
+      }
+    }
+  }
+}
