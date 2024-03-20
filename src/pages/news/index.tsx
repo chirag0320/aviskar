@@ -34,7 +34,6 @@ import { navigate } from "gatsby";
 
 function News() {
   const { newsList }: any = useAppSelector((state) => state.newsPage)
-  console.log("🚀 ~ News ~ newsList:", newsList)
   const [value, setValue] = React.useState<any>('all');
   const [searchValue, setSearchValue] = useState<string>('')
 

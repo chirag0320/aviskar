@@ -12,7 +12,6 @@ function MembershipCard({ bgcolor, cardtitle, details }: MembershipCardProps) {
   const { mebershipPlanDetailsData } = useAppSelector((state) => state.homePage)
   const isCurrentPlan = cardtitle?.toLocaleLowerCase() === mebershipPlanDetailsData?.currentMemberShip?.toLocaleLowerCase()
   const opacityColor = `${bgcolor}80`; // '33' represents 20% opacity
-  console.log("🚀 ~ MembershipCard ~ cardtitle?.toLocaleLowerCase() === mebershipPlanDetailsData?.currentMemberShip?.toLocaleLowerCase():", cardtitle?.toLocaleLowerCase() === mebershipPlanDetailsData?.currentMemberShip?.toLocaleLowerCase())
   return (
     <>
       <Card

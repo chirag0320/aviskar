@@ -42,7 +42,6 @@ import { NewsDetailsAPI } from "@/redux/reducers/newsReducer";
 
 function NewsDetails({ params }: any) {
   const { newsDetailsData,newsList }: any = useAppSelector((state) => state.newsPage)
-  console.log("🚀 ~ newsDetails ~ parnewsDetailsDataams:", newsDetailsData)
   const { email, handleEmailChange, subscribe, loadingForEmailSub } = useSubscription()
   useAPIoneTime({ service: NewsDetailsAPI, params: { pathName: params?.['news-details-friendly-name'] } })
   return (

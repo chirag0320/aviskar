@@ -39,7 +39,6 @@ function EmailFriend(props: EmailFriend) {
   })
 
   const onSubmit = (data: any) => {
-    console.log("data:", data);
     onClose()
   }
 

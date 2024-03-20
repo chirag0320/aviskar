@@ -199,7 +199,6 @@ export const ProductStockStatus = React.memo(
   }
 );
 export const LinkWithIcon = React.memo(({ icon, href, text }: any) => {
-  console.log("🚀 ~ LinkWithIcon ~ href:", href)
   return (
     <Link className="LinkWithIcon" onClick={() => {
       navigate(href)

@@ -44,7 +44,6 @@ function BlogDetails({ params }: any) {
   const { blogDetailsData, blogList }: any = useAppSelector(
     (state) => state.blogPage
   );
-  console.log("🚀 ~ BlogDetails ~ params:", blogDetailsData);
   const { email, handleEmailChange, subscribe, loadingForEmailSub } =
     useSubscription();
   useAPIoneTime({

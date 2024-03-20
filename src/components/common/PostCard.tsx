@@ -17,7 +17,6 @@ import { ArrowRight } from "../../assets/icons/index";
 import { formatDate } from "@/utils/common";
 
 function PostCard({ details, navigate, isNews = false }: any) {
-  console.log("🚀 ~ PostCard ~ isNews:", isNews)
   return (
     <Card className="PostCard">
       <img

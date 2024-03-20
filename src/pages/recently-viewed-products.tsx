@@ -18,8 +18,6 @@ function RecentlyViewedProducts() {
   const [productIds, setProductId] = useState<any>(recentlyViewedProducts)
   const [priceForEachId, setPriceForEachId] = useState<IpriceForEachId | null>(null)
 
-  console.log("🚀 ~ RecentlyViewedProducts ~ recentlyViewedProducts:", recentlyViewedProducts)
-  
   useEffect(() => {
     setProductId({ productIds: recentlyViewedProducts })
   }, [recentlyViewedProducts])

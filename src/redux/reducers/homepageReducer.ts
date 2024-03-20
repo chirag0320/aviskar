@@ -123,10 +123,8 @@ export const createHomepageSlice = createSlice({
     },
     setRecentlyViewedProduct: (state, action) => {
       const newProductId = action.payload;
-      console.log("🚀 ~ newProductId:", newProductId)
       // Check if the product already exists in the recently viewed list
       const existingIndex = state.recentlyViewedProducts.findIndex(productId => productId === newProductId);
-      console.log("🚀 ~ existingIndex:", existingIndex)
       if (existingIndex === -1) {
         // Product does not exist, add it to the list
         state.recentlyViewedProducts.unshift(newProductId);
@@ -162,7 +160,6 @@ export const createHomepageSlice = createSlice({
     })
     builder.addCase(membershipPlanDetails.fulfilled, (state, action) => {
       state.mebershipPlanDetailsData = action?.payload?.data?.data
-      console.log("🚀 ~ builder.addCase ~ action?.payload?.data?.data:", action?.payload?.data?.data)
       state.loading = false
     })
     builder.addCase(membershipPlanDetails.rejected, (state, action) => {
