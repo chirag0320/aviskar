@@ -276,6 +276,13 @@
         }
       }
 
+      .TooltipStack {
+        .MuiTooltip-tooltip {
+          box-shadow: $shadow11;
+          padding: 16px;
+        }
+      }
+
       .PrimaryAction {
         letter-spacing: 1px;
       }
@@ -389,7 +396,7 @@
 
     // box-shadow: 14px 28px 43.3px 0px #eed0a0;
 
-    .UpgradPlanButton{
+    .UpgradPlanButton {
       background-color: $yellowFuel;
       color: $white;
     }
