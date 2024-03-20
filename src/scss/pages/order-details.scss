@@ -1,0 +1,262 @@
+.OrderDetailsPage {
+    .OrderDetailsContent {
+        position: relative;
+        margin: 86px 0 80px;
+        border: 1px solid rgba($blueCyan, 0.2);
+        border-radius: 15px;
+
+        .Font16 {
+            font-size: 16px;
+        }
+
+        .StatusImage {
+            position: absolute;
+            top: 20px;
+            left: -10px;
+        }
+
+
+        .OrderDetailsWrapper {
+            padding: 20px 30px 40px;
+            background-color: rgba($blueCyan, 0.15);
+            border-radius: 14px 14px 0 0;
+
+            @include media($xs) {
+                padding-top: 70px;
+            }
+
+            .PDFBtnWrapper {
+                text-align: right;
+
+                @include media($xs) {
+                    text-align: left;
+                    margin-bottom: 20px;
+                }
+            }
+
+            .OrderID {
+                margin: 7px 0 24px;
+            }
+
+            .OrderDetails {
+                justify-content: flex-start;
+                gap: 20px 40px;
+                flex-wrap: wrap;
+
+                @include media-min($xl) {
+                    justify-content: space-between;
+                }
+
+                @include media($llg) {
+                    gap: 40px 70px;
+                }
+
+                @include media($xs) {
+                    gap: 30px 50px;
+                }
+
+                p {
+                    margin-bottom: 3px;
+                }
+
+                .OrderStatusWrapper {
+                    p {
+                        margin-bottom: 11px;
+                    }
+
+                    .ButtonsWrapper {
+                        @include media($xs) {
+                            flex-direction: column;
+                        }
+
+                        .RedButton {
+                            font-size: 14px;
+                            line-height: 20px;
+                            font-weight: 600;
+                            padding: 5px 15px;
+                            border-radius: 31px;
+                            background-color: $error;
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+        .AddressWrapper {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba($blueCyan, 0.15);
+
+            @include media($ssm) {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+
+            .BillingWrapper,
+            .ShippingWrapper {
+                padding: 34px 30px 20px 30px;
+                width: 50%;
+
+                @include media($ssm) {
+                    width: 100%;
+                }
+
+                .AddressTitle {
+                    margin-bottom: 25px;
+                }
+
+                .CommonBottomMargin {
+                    margin-bottom: 10px;
+                }
+            }
+
+            .ShippingWrapper {
+                border-left: 1px solid rgba($blueCyan, 0.15);
+
+                @include media($ssm) {
+                    border-left: none;
+                    padding-top: 20px;
+                }
+            }
+        }
+
+        .OrderDetailTableWrapper {
+            margin: 40px 30px 30px;
+            border: 1px solid rgba($blueCyan, 0.15);
+            border-radius: 20px;
+            width: auto;
+
+            .OrderDetailTable {
+                thead {
+                    background-color: rgba($blueCyan, 0.15);
+                    border-radius: 19px 19px 0 0;
+                }
+
+                .MuiTableCell-root {
+                    border: none;
+                    font-size: 16px;
+                    line-height: 26px;
+                    font-weight: 500;
+                }
+
+                .css-uingyf-MuiTableRow-root {
+                    border-top: 1px solid rgba($blueCyan, 0.15);
+                }
+
+            }
+        }
+
+
+        .TotalShippingDetailsWrapper {
+            padding: 30px;
+            background-color: rgba($blueCyan, 0.15);
+            justify-content: space-between;
+            align-items: center;
+
+            @include media($sm) {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 30px;
+            }
+
+
+            .SubtotalShippingWrapper {
+                align-items: center;
+                gap: 141px;
+
+                @include media($md) {
+                    gap: 90px;
+                }
+
+                @include media($xs) {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 20px;
+                }
+
+            }
+
+
+            .TotalWrapper {
+                text-align: right;
+
+                @include media($sm) {
+                    text-align: left;
+                }
+
+                .TotalValue {
+                    font-size: 30px;
+                    line-height: 23px;
+                    margin: 12px 0;
+
+                    @include media($sm) {
+                        font-size: 25px;
+                    }
+                }
+            }
+
+
+        }
+
+        .KeyPoints {
+            margin: 30px;
+            word-wrap: break-word;
+        }
+
+        .CardsWrapper {
+            margin: 0 30px 30px;
+            display: flex;
+            gap: 36px;
+            align-items: stretch;
+            justify-content: space-between;
+            flex-wrap: wrap;
+
+            .Card {
+                padding: 20px;
+                border: 1px solid rgba($yellowFuel, 0.08);
+                border-radius: 15px;
+                width: calc(33% - 36px);
+                box-shadow: 6px 6px 27px 0px #0000000D;
+
+                @include media($lg) {
+                    width: calc(50% - 26px);
+                }
+
+                @include media($ssm) {
+                    width: 100%;
+                }
+
+
+                .IconTitleWrapper {
+                    align-items: center;
+                    gap: 20px;
+                    margin-bottom: 20px;
+
+                    @include media($xs) {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+
+                    span {
+                        height: 44px;
+                        width: 44px;
+                        border-radius: 50%;
+                        border: 1px solid $yellowFuel;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                }
+
+                .lineHeight25 {
+                    line-height: 25px;
+                    display: inline-block;
+                }
+            }
+        }
+
+    }
+}

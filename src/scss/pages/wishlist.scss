@@ -1,0 +1,87 @@
+#Pagewishlist {
+  @include padding-vertical(80);
+  @include media($md) {
+    @include padding-vertical(40);
+  }
+  .MuiTableContainer-root {
+    .MuiTable-root {
+      min-width: 700px;
+      .MuiTableBody-root {
+        .MuiTableRow-root {
+          .MuiTableCell-root {
+            img {
+              min-width: 100px;
+            }
+            .MuiButton-text {
+              text-decoration: none;
+            }
+            .Quantity {
+              width: fit-content;
+              overflow: hidden;
+              border-radius: 8px;
+              border: 1px solid $palladium;
+              .MuiIconButton-root {
+                border-radius: initial;
+                height: 32px;
+                &.Minus {
+                  border-right: 1px solid $palladium;
+                }
+                &.Plus {
+                  border-left: 1px solid $palladium;
+                }
+              }
+              .MuiTextField-root {
+                width: 40px;
+                .MuiInputBase-root {
+                  height: 100%;
+                  .MuiInputBase-input {
+                    padding: 0;
+                    height: inherit;
+                    text-align: center;
+                  }
+                  .MuiOutlinedInput-notchedOutline {
+                    display: none;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .ActionWrapper {
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+    .MuiButton-root {
+      @include media($sm) {
+        flex-grow: 1;
+      }
+      @include media-min($md) {
+        @include padding-horizontal(30);
+      }
+    }
+    .Left {
+      flex-wrap: wrap;
+      flex-grow: 1;
+      gap: 20px;
+    }
+    .Right {
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      flex-grow: 1;
+      gap: 20px;
+    }
+  }
+  .WishlistLink {
+    margin-top: 50px;
+    .MuiButton-text {
+      text-align: left;
+      text-decoration: none;
+      margin-top: 6px;
+      overflow-wrap: anywhere;
+    }
+  }
+}

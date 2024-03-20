@@ -44,8 +44,9 @@ import { productImages } from "@/utils/data"
 
 interface Iproduct {
   product: IFeaturedProducts;
+  stickyProduct?: boolean
 }
-export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
+export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Iproduct) => {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const [open, setOpen] = useState(false)
   const tooltipRef: any = useRef(null)
@@ -62,7 +63,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
   };
 
   return (
-    <Card className="ProductCard" key={product.productId}>
+    <Card className={classNames("ProductCard", { "Sticky": stickyProduct })} key={product.productId}>
       <Stack className="ImageWrapper">
         <Link className="ImageLink" href="#">
           <img src={product.imageUrl} alt="Product image" loading="lazy" />
@@ -340,6 +341,7 @@ export const LineChartCard = (props: any) => {
 
 
 export const CartCard = (data: any) => {
+  const { hideDeliveryMethod, hideRightSide } = data; // Prop to hide delivery method section
   const [deliveryMethod, setDeliveryMethod] = useState<string>('SecureShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     setDeliveryMethod(event.target.value as string);
@@ -372,24 +374,30 @@ export const CartCard = (data: any) => {
         </Stack>
         <Stack className="BottomWrapper">
           <Stack className="LeftSide">
-            <Stack className="DeliveryMethod">
-              <Typography className="Label" variant="titleLarge">Delivery Method:</Typography>
-              <Select
-                color="secondary"
-                className="DeliveryMethodSelect"
-                value={deliveryMethod}
-                onChange={handleDeliveryMethod}
-                IconComponent={SelectDropdown}
-              >
-                <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
-                <MenuItem value="VaultStorage">Vault Storage</MenuItem>
-              </Select>
-            </Stack>
+            {!hideDeliveryMethod && (
+              <Stack className="DeliveryMethod">
+                <Typography className="Label" variant="titleLarge">Delivery Method:</Typography>
+                <Select
+                  color="secondary"
+                  className="DeliveryMethodSelect"
+                  value={deliveryMethod}
+                  onChange={handleDeliveryMethod}
+                  IconComponent={SelectDropdown}
+                >
+                  <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
+                  <MenuItem value="VaultStorage">Vault Storage</MenuItem>
+                </Select>
+              </Stack>
+            )}
+
             <ProductUpdateCountdown />
           </Stack>
-          <Stack className="RightSide">
-            <Typography className="ShippingMessage" variant="body2">{deliveryMethodMessage.noSecureShipping}</Typography>
-          </Stack>
+          {!hideRightSide && (
+            <Stack className="RightSide">
+              <Typography className="ShippingMessage" variant="body2">{deliveryMethodMessage.noSecureShipping}</Typography>
+            </Stack>
+          )}
+
         </Stack>
       </CardContent>
     </Card >

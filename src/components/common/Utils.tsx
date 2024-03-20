@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Stack,
   Box,
@@ -7,6 +7,7 @@ import {
   Link,
   Container,
   Breadcrumbs,
+  Icon,
 } from "@mui/material";
 import classNames from "classnames";
 import * as variable from "../../scss/settings/variables.module.scss";
@@ -25,6 +26,7 @@ import {
 } from "../../assets/icons/index";
 import useRemainingTime from "@/hooks/useRemainingTime";
 import { navigate } from "gatsby";
+import CountDownTimer from "../partials/productDetail/CountDownTImer";
 interface Iprops {
   name: string;
   value: number;
@@ -61,7 +63,6 @@ export const StockReturnWithName = React.memo(
         <Typography variant="overline" component="span" className="Name">
           {name} {value}
         </Typography>
-        <img src={charturl} width={90} height={20} />
         <Stack
           className={classNames("StockReturn")}
           sx={{
@@ -71,11 +72,15 @@ export const StockReturnWithName = React.memo(
               : null,
           }}
         >
-          <Typography variant="body2" component="span" className="Value">
-            {percentage}%
-          </Typography>
+          <Box className="FlipContainer">
+            <Box className="Flipper">
+              <Typography variant="body2" component="span" className="Value Front">{percentage}%</Typography>
+              <Typography variant="body2" component="span" className="Value Back">{Math.round((7 + percentage) * 100) / 100}$</Typography>
+            </Box>
+          </Box>
           {status ? <ChevronUp /> : <ChevronDown />}
         </Stack>
+        <img src={charturl} width={90} height={20} />
       </Stack>
     );
   }
@@ -211,11 +216,12 @@ export const ProductUpdateCountdown = React.memo(() => {
   const { remainingTime } = useRemainingTime()
   return (
     <Stack className="ProductUpdateCountdown">
-      <TimerIcon />
+      <CountDownTimer />
       <Typography variant="bodySmall">Updates in {remainingTime} Sec</Typography>
     </Stack>
   )
 })
+
 
 export const PriceChangeReturn = React.memo(({ percentage }: { percentage: string }) => {
   return (

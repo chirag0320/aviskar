@@ -53,6 +53,9 @@ import CameraIcon from "./CameraIcon";
 import TimerIcon from "./TimerIcon";
 import GoldBarIcon from "./GoldBarIcon";
 import GreenConfirmationIcon from "./GreenConfirmationIcon";
+import PdfIcon from "./PdfIcon";
+import RightArrow from "./RightArrow";
+import LeftArrow from "./LeftArrow";
 import BankIcon from "./BankIcon";
 import CashIcon from "./CashIcon";
 import CardIcon from "./CardIcon";
@@ -134,6 +137,9 @@ export {
   TimerIcon,
   GoldBarIcon,
   GreenConfirmationIcon,
+  PdfIcon,
+  RightArrow,
+  LeftArrow,
   BankIcon,
   CashIcon,
   CardIcon,

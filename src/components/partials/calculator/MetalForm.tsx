@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RenderFields from '@/components/common/RenderFields';
-import { MetalTypes, Metals, WeightTypes } from '@/types/enums';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { addCalculator, saveCalculatorsData } from '@/redux/reducers/calculatorsReducer';
 import { ENDPOINTS } from '@/utils/constants';
@@ -17,10 +16,10 @@ interface Inputs {
 }
 
 const schema = yup.object().shape({
-    SelectMetal: yup.string().required(),
+    SelectMetal: yup.string().required("Metal selection is required"),
     Weight: yup.number().required(),
-    MetalType: yup.string().required(),
-    WeightType: yup.string().required()
+    MetalType: yup.string().required("Metal type is required field"),
+    WeightType: yup.string().required("Weight type is required field")
 });
 
 const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
@@ -82,7 +81,7 @@ const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
                         margin='none'
                         className='SelectMetal'
                     >
-                        {/* {Note:- refer to types/enums.ts file for reference} */}
+                        {/* {Note:- refer to types/enums.ts file for reference of value of input} */}
                         <MenuItem value="1">Gold</MenuItem>
                         <MenuItem value="2">Silver</MenuItem>
                         <MenuItem value="3">Platinum</MenuItem>
