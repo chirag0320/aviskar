@@ -44,8 +44,9 @@ import { productImages } from "@/utils/data"
 
 interface Iproduct {
   product: IFeaturedProducts;
+  stickyProduct?: boolean
 }
-export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
+export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Iproduct) => {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const [open, setOpen] = useState(false)
   const tooltipRef: any = useRef(null)
@@ -62,7 +63,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
   };
 
   return (
-    <Card className="ProductCard" key={product.productId}>
+    <Card className={classNames("ProductCard", { "Sticky": stickyProduct })} key={product.productId}>
       <Stack className="ImageWrapper">
         <Link className="ImageLink" href="#">
           <img src={product.imageUrl} alt="Product image" loading="lazy" />
