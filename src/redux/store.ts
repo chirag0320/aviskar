@@ -1,3 +1,4 @@
+import checkoutPageReducer from './reducers/checkoutReducer';
 import { configureStore } from '@reduxjs/toolkit'
 import homepageReducer from './reducers/homepageReducer'
 import blogReducer from './reducers/blogReducer'
@@ -32,9 +33,8 @@ const store = configureStore({
     shoppingCart: shoppingCartReducer,
     blogPage: persistReducer(persistConfig, blogReducer),
     newsPage: persistReducer(persistConfig, newsReducer),
-    calculators: persistReducer(persistConfig, calculatorsReducer)
-
-
+    calculators: persistReducer(persistConfig, calculatorsReducer),
+    checkoutPage: checkoutPageReducer,
     // profile: persistedProfileReducer,
     // contributor: persistedContributorReducer,
     // company: companyReducer,

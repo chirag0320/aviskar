@@ -349,10 +349,11 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
   }
 
   return (
+    cartItem && Object.keys(cartItem)?.length > 0 && 
     <Card className="CartCard">
       <CardMedia
         component="img"
-        image={cartItem.imageUrl}
+        image={cartItem?.imageUrl}
         alt="Product image"
       />
       <CardContent>
