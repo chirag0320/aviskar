@@ -35,7 +35,6 @@ function Pricing() {
       tickertype: configDetailsState?.tickertype?.value,
     }
     return data?.data?.map((stock) => (
-      console.log("stock:", stock),
       <StockReturnWithName key={stock.name} name={stock.name} value={stock.current} charturl={stock.charturl} status={stock.position === 1} percentage={stock.percentage} tickerStyle={tickerStyle} />
     ));
   }, [data]);

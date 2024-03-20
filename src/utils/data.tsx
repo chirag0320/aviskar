@@ -57,7 +57,7 @@ export const actionMenuItems = [
   {
     text: "Recent",
     icon: <RecentIcon />,
-    href: "#",
+    href: "/recently-viewed-products",
     key: 'enablerecent'
   },
   {

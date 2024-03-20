@@ -24,6 +24,7 @@ import {
   ChevronUpRounded,
 } from "../../assets/icons/index";
 import useRemainingTime from "@/hooks/useRemainingTime";
+import { navigate } from "gatsby";
 interface Iprops {
   name: string;
   value: number;
@@ -193,8 +194,11 @@ export const ProductStockStatus = React.memo(
   }
 );
 export const LinkWithIcon = React.memo(({ icon, href, text }: any) => {
+  console.log("🚀 ~ LinkWithIcon ~ href:", href)
   return (
-    <Link href={href} className="LinkWithIcon">
+    <Link className="LinkWithIcon" onClick={() => {
+      navigate(href)
+    }}>
       <IconButton>{icon}</IconButton>
       <Typography color="inherit" variant="overline" component="span">
         {text}

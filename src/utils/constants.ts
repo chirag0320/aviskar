@@ -28,7 +28,8 @@ export const ENDPOINTS = {
     saveCalculators: "calculator/WOGEEHFLeeZisCtFqHdkfpdUrLN",
     productDetails: "product/wb5rqwFBf0ua22kGp0Hlhw/{{product-id}}",
     priceForprogressbar: "price/{{product-id}}/jGnpTVO8S0aP1590ehZu3g?hZHxveDw={{timeinterval}}",
-    addToCartProduct: "shoppingcart/CxdrQaZ030ekw4jdCgWWKA"
+    addToCartProduct: "shoppingcart/CxdrQaZ030ekw4jdCgWWKA",
+    recentlyViewdProducts: 'product/dS99jwa0akmwbLKOuSs9dA'
 }
 export const StoreData = {
     storeCode: 12,

@@ -25,7 +25,8 @@ interface CreateGuidelineState {
   } | null,
   isLoggedIn: boolean,
   loadingForSignIn: boolean,
-  mebershipPlanDetailsData: any
+  mebershipPlanDetailsData: any,
+  recentlyViewedProducts: any[]
 }
 const initialState: CreateGuidelineState = {
   configDetails: {},
@@ -38,7 +39,8 @@ const initialState: CreateGuidelineState = {
   userDetails: null,
   isLoggedIn: false,
   loadingForSignIn: false,
-  mebershipPlanDetailsData: {}
+  mebershipPlanDetailsData: {},
+  recentlyViewedProducts:[]
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -119,6 +121,22 @@ export const createHomepageSlice = createSlice({
     setLoadingFalse: (state) => {
       state.loading = false
     },
+    setRecentlyViewedProduct: (state, action) => {
+      const newProductId = action.payload;
+      console.log("🚀 ~ newProductId:", newProductId)
+      // Check if the product already exists in the recently viewed list
+      const existingIndex = state.recentlyViewedProducts.findIndex(productId => productId === newProductId);
+      console.log("🚀 ~ existingIndex:", existingIndex)
+      if (existingIndex === -1) {
+        // Product does not exist, add it to the list
+        state.recentlyViewedProducts.push(newProductId);
+      } else {
+        // Product already exists, remove it from its current position and add it to the beginning of the list
+        state.recentlyViewedProducts.splice(existingIndex, 1);
+        state.recentlyViewedProducts.unshift(newProductId);
+      }
+    }
+    
   },
 
   extraReducers: (builder) => {
@@ -217,6 +235,6 @@ export const createHomepageSlice = createSlice({
   },
 })
 
-export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse } = createHomepageSlice.actions
+export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct } = createHomepageSlice.actions
 
 export default createHomepageSlice.reducer
