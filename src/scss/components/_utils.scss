@@ -1,5 +1,6 @@
 .StockReturnWithName {
   &.MuiStack-root {
+    flex-shrink: 0;
     align-items: center;
     gap: 10px;
     .StockReturn {
@@ -146,7 +147,7 @@
 }
 
 .PriceChangeReturn {
-  
+
   align-items: center;
   gap: 4px;
   padding: 7px;

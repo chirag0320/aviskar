@@ -385,11 +385,14 @@
 
   &.ActiveCard {
     transform: scale(1.08);
-    box-shadow: 14px 28px 43.29999923706055px 0px #0000001a;
+    box-shadow: 6px 6px 12px #eed0a0;
 
-    // .UpgradPlanButton{
-    //   background-color: ;
-    // }
+    // box-shadow: 14px 28px 43.3px 0px #eed0a0;
+
+    .UpgradPlanButton{
+      background-color: $yellowFuel;
+      color: $white;
+    }
   }
 }
 

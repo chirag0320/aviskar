@@ -13,6 +13,7 @@ const persistConfig = {
   storage,
   whitelist: [
     'configDetails',
+    'userDetails',
     'loading',
     'sectionDetails',
     'categoriesList', 'isLoggedIn', 'userDetails', 'blogList', 'mewsList', 'calculators'], // Reducers you want to persist

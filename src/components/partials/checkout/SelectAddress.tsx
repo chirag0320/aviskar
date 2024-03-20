@@ -1,22 +1,15 @@
 
-import React, { useState } from "react"
-import { Box, MenuItem, Select, Stack, Typography } from "@mui/material"
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-
-// Hooks
-import { useToggle } from "@/hooks"
+import React, { useEffect, useState } from "react"
+import { MenuItem, Select, Typography } from "@mui/material"
 
 // Type
 import type { SelectChangeEvent } from "@mui/material"
 
 // Assets
-import { ChevronDown, ChevronUp, Map1Icon, Map2Icon, OfferTagIcon, OptionsIcon, PencilIcon, SelectDropdown } from "@/assets/icons"
+import { SelectDropdown } from "@/assets/icons"
 
 // Componenets
 import StyledDialog from "@/components/common/StyledDialog"
-import RenderFields from '@/components/common/RenderFields';
 
 interface SelectAddress {
   open: boolean
@@ -30,6 +23,12 @@ function SelectAddress(props: SelectAddress) {
   const handleSelectAccount = (event: SelectChangeEvent) => {
     setSelectAccount(event.target.value as string);
   }
+  const x = document.getElementById('menu-')
+  useEffect(() => {
+    x?.addEventListener('click', () => {
+      onClose()
+    })
+  }, [x])
   return (
     <StyledDialog
       id="SelectAddress"
@@ -39,6 +38,7 @@ function SelectAddress(props: SelectAddress) {
       primaryActionText="Save"
     >
       <Select
+        open
         color="secondary"
         className="AccountSelect"
         value={selectAccount}
