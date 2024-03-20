@@ -11,7 +11,7 @@ function MegaMenu({ subCategorys, category }: { subCategorys: Icategory[], categ
       <Stack className="MegaMenu__Wrapper">
         <Stack className="Left">
           {subCategorys.map((item: Icategory) => (
-            <SubMenu name={item.name} subcategories={item.subCategories} key={item.categoryId} />
+            <SubMenu name={item.name} subcategories={item.subCategories} key={item.categoryId} searchEngineFriendlyPageName={item.searchEngineFriendlyPageName} />
           ))}
         </Stack>
         <Stack className="Right">
