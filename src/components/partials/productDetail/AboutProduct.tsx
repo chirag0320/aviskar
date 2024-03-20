@@ -70,9 +70,7 @@ function AboutProduct({ productId }: any) {
     },
   });
   const { productDetailsData } = useAppSelector((state) => state.category)
-  console.log("🚀 ~ AboutProduct ~ productDetailsData:", productDetailsData)
   const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
-  console.log("🚀 ~ AboutProduct ~ configDetailsState:", configDetailsState, isLoggedIn)
 
   const [quantityCount, setQuantityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
   const [productIds] = useState({ productIds: [Number(productId)] })
@@ -227,7 +225,12 @@ function AboutProduct({ productId }: any) {
                       "quantity": quantityCount
                     } as any)
                   }} disabled={loadingForAddToCart}>Add to cart</Button>
-                  <Button size="large" variant="outlined">Buy now</Button>
+                  <Button size="large" variant="outlined" onClick={()=>{
+                    if(!isLoggedIn){
+                      navigate('/login')
+                      return
+                    }
+                  }}>Buy now</Button>
                 </Stack></>)
                 :
                 <Button size="large" color="success" variant="contained" onClick={() => {

@@ -192,3 +192,90 @@
     }
   }
 }
+
+#EmailFriend {
+  &.MuiDialog-root {
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        width: 100%;
+        .DialogHeader {
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px 20px 0;
+          .MuiDialogTitle-root {
+            flex: 1;
+          }
+          .CloseButton {
+            margin-right: -10px;
+          }
+        }
+        .MuiDialogContent-root {
+          padding: 20px;
+          .AllFields {
+            flex-direction: column;
+            gap: 20px;
+          }
+          .ActionWrapper {
+            gap: 16px;
+            margin-top: 30px;
+          }
+        }
+      }
+    }
+  }
+}
+
+#AlertDialog {
+  &.MuiDialog-root {
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        padding: 20px;
+        .MuiDialogContent-root {
+          @include padding-vertical(15);
+        }
+        .MuiDialogActions-root {
+          gap: 20px;
+          .MuiButton-root {
+            flex: 1;
+          }
+        }
+      }
+    }
+  }
+}
+
+#OTPConfirmation {
+  &.MuiDialog-root {
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        width: 100%;
+        .DialogHeader {
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px 20px 0;
+          .CloseButton {
+            margin-right: -10px;
+          }
+        }
+        .MuiDialogContent-root {
+          padding: 30px 20px 20px;
+          .MuiTextField-root {
+            .MuiInputBase-root {
+              font-size: pxToRem(20);
+              .MuiInputBase-input {
+                padding: 10px 20px;
+              }
+            }
+          }
+        }
+        .ActionWrapper {
+          gap: 20px;
+          margin-top: 30px;
+          .MuiButton-root {
+            flex: 1;
+          }
+        }
+      }
+    }
+  }
+}

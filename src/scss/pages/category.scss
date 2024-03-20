@@ -214,6 +214,10 @@
           gap: 20px;
         }
         .ProductCard {
+          &.Sticky {
+            grid-column-start: -1;
+            grid-column-end: 1;
+          }
           @include media-between($md, $mmd) {
             .MuiCardActions-root {
               .PrimaryAction {
