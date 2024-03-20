@@ -16,6 +16,7 @@
 @import "components/recentOrderTable";
 @import "components/table";
 @import "components/circularProgressbar";
+@import "components/formFields";
 
 // Common
 @import "common/header";
@@ -41,3 +42,5 @@
 @import "pages/order-details.scss";
 @import "pages/checkout.scss";
 @import "pages/compare-products.scss";
+@import "pages/recentlyViewedProducts.scss";
+@import "pages/wishlist.scss";

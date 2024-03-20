@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Box, Container } from "@mui/material"
 
 // Componenets
@@ -7,335 +7,31 @@ import Seo from "@/components/common/Seo"
 import { PageTitle } from "@/components/common/Utils"
 import { ProductCard } from "@/components/common/Card"
 import RecordNotFound from "@/components/common/RecordNotFound"
+import { useAppSelector } from "@/hooks"
+import useAPIoneTime from "@/hooks/useAPIoneTime"
+import useApiRequest from "@/hooks/useAPIRequest"
+import { ENDPOINTS } from "@/utils/constants"
+import { IpriceForEachId } from "@/components/partials/home/FeaturedProducts"
 
 function RecentlyViewedProducts() {
-  const categoryData = [
-    {
-      "productId": 9168,
-      "categoryId": 571,
-      "productName": "1 oz Litecoin Silver Round",
-      "shortDescription": "Litecoin Cryptocurrency on a Silver Coin",
-      "friendlypagename": "1-oz-litecoin-silver-round",
-      "disableBuyButton": false,
-      "displayOrder": 9,
-      "imageUrl": "https://qmintstoremedia.blob.core.windows.net/pictures/products/litecoinobverse_120320242303149.png?sv=2018-03-28&sr=b&sig=tFcohTXAM6kTFcro41JKdlBxiMC%2BpfHodXOOvcjwdhM%3D&st=2024-03-11T13%3A50%3A14Z&se=3024-03-12T13%3A50%3A14Z&sp=r&c=638458482149870981",
-      "parentProductId": 1876,
-      "isFeatureProduct": false,
-      "productPrice": 0.000000000,
-      "premiumDiscount": 0,
-      "productWeight": 0,
-      "showOnHomepage": false,
-      "colorClass": "green-circle",
-      "iconClass": "fa fa-check-circle",
-      "availability": "In Stock",
-      "stock": 24,
-      "isBundle": false,
-      "marketingTagId": 0,
-      "tagName": null,
-      "tagColor": null,
-      "metalId": 18,
-      "tierpriceapply": false,
-      "bulkProduct": []
-    },
-    {
-      "productId": 6950,
-      "categoryId": 571,
-      "productName": "1/2oz American Building Block Silver Bars",
-      "shortDescription": "1/2oz American 2x4 Building Block Bars",
-      "friendlypagename": "12oz-american-building-block-silver-bars",
-      "disableBuyButton": false,
-      "displayOrder": 10,
-      "imageUrl": "https://qmintstoremedia.blob.core.windows.net/pictures/products/1-2oz-building-block-silver-bars_120320242303576.png?sv=2018-03-28&sr=b&sig=Nn%2BJo4qtcmYt87dJ4dvzutwHjAF2fNdXiPOTHWi7XoE%3D&st=2024-03-11T13%3A48%3A57Z&se=3024-03-12T13%3A48%3A57Z&sp=r&c=638458481376345149",
-      "parentProductId": 1342,
-      "isFeatureProduct": false,
-      "productPrice": 0.000000000,
-      "premiumDiscount": 0,
-      "productWeight": 0,
-      "showOnHomepage": false,
-      "colorClass": "green-circle",
-      "iconClass": "fa fa-check-circle",
-      "availability": "In Stock",
-      "stock": 10,
-      "isBundle": false,
-      "marketingTagId": 0,
-      "tagName": null,
-      "tagColor": null,
-      "metalId": 18,
-      "tierpriceapply": false,
-      "bulkProduct": []
-    },
-    {
-      "productId": 6030,
-      "categoryId": 571,
-      "productName": "1/2oz Aztec Calendar Silver Round",
-      "shortDescription": "Smallest denomination historical replica",
-      "friendlypagename": "1-2oz-aztec-silver-round",
-      "disableBuyButton": false,
-      "displayOrder": 11,
-      "imageUrl": "https://qmintstoremedia.blob.core.windows.net/pictures/products/1-2oz-silver-round-aztec-calendar-obv_120320242303343.png?sv=2018-03-28&sr=b&sig=IfDV65cORY0fLbFX1yhVzjZV0A8HZheEFbug05Iumc4%3D&st=2024-03-11T13%3A48%3A34Z&se=3024-03-12T13%3A48%3A34Z&sp=r&c=638458481143530510",
-      "parentProductId": 1137,
-      "isFeatureProduct": false,
-      "productPrice": 0.000000000,
-      "premiumDiscount": 0,
-      "productWeight": 0,
-      "showOnHomepage": false,
-      "colorClass": "red-circle",
-      "iconClass": "fa fa-times-circle",
-      "availability": "Sold Out",
-      "stock": 0,
-      "isBundle": false,
-      "marketingTagId": 0,
-      "tagName": null,
-      "tagColor": null,
-      "metalId": 18,
-      "tierpriceapply": false,
-      "bulkProduct": []
-    },
-    {
-      "productId": 7841,
-      "categoryId": 571,
-      "productName": "1/2oz DMCC Burj Khalifa Gold Coin",
-      "shortDescription": "The Burj Khalifa Gold Coin by DMCC",
-      "friendlypagename": "12oz-dmcc-burj-khalifa-gold-coin",
-      "disableBuyButton": false,
-      "displayOrder": 12,
-      "imageUrl": "https://qmintstoremedia.blob.core.windows.net/pictures/products/1-2oz-dmcc-burj-khalifa-gold-coin_120320242303442.png?sv=2018-03-28&sr=b&sig=mW5OHZRZxVHSN%2BZjg50NIiiVpK25r%2BX9g31A1ti5oaE%3D&st=2024-03-11T13%3A48%3A44Z&se=3024-03-12T13%3A48%3A44Z&sp=r&c=638458481243003453",
-      "parentProductId": 1229,
-      "isFeatureProduct": false,
-      "productPrice": 0.000000000,
-      "premiumDiscount": 0,
-      "productWeight": 0,
-      "showOnHomepage": false,
-      "colorClass": "red-circle",
-      "iconClass": "fa fa-times-circle",
-      "availability": "Sold Out",
-      "stock": 0,
-      "isBundle": false,
-      "marketingTagId": 0,
-      "tagName": null,
-      "tagColor": null,
-      "metalId": 17,
-      "tierpriceapply": false,
-      "bulkProduct": []
-    },
-    {
-      "productId": 4548,
-      "categoryId": 571,
-      "productName": "qqqqqq1/2oz Queensland Mint Kangaroo Gold Cast Bar",
-      "shortDescription": "Ideal entry-level gold investment bar",
-      "friendlypagename": "1-2-oz-queensland-mint-gold-cast-bar",
-      "disableBuyButton": false,
-      "displayOrder": 13,
-      "imageUrl": "https://qmintstoremedia.blob.core.windows.net/pictures/products/QMINT-0.5oz-gold-bar-front2-min_120320242303164.png?sv=2018-03-28&sr=b&sig=8D%2BSB0c1XKIPJPL8AlykTHOtxE4%2BdMOpoGShtMcDpYQ%3D&st=2024-03-11T13%3A47%3A16Z&se=3024-03-12T13%3A47%3A16Z&sp=r&c=638458480364419772",
-      "parentProductId": 107,
-      "isFeatureProduct": false,
-      "productPrice": 0.000000000,
-      "premiumDiscount": 0,
-      "productWeight": 0,
-      "showOnHomepage": false,
-      "colorClass": "green-circle",
-      "iconClass": "fa fa-check-circle",
-      "availability": "Available to Order",
-      "stock": 109,
-      "isBundle": false,
-      "marketingTagId": 0,
-      "tagName": null,
-      "tagColor": null,
-      "metalId": 17,
-      "tierpriceapply": false,
-      "bulkProduct": []
-    },
-    {
-      "productId": 6092,
-      "categoryId": 571,
-      "productName": "1/4oz Silver Building Block",
-      "shortDescription": "Small denomination building block",
-      "friendlypagename": "1-4oz-silver-building-block-bar",
-      "disableBuyButton": false,
-      "displayOrder": 14,
-      "imageUrl": "https://qmintstoremedia.blob.core.windows.net/pictures/products/1-4oz-Silver-2x4-Builder-Block-Front-min_120320242303401.png?sv=2018-03-28&sr=b&sig=g%2FFNdR8GJb5m6HKOu45PqTOC%2BeBSTlwkv8jHy1uBG4I%3D&st=2024-03-11T13%3A48%3A40Z&se=3024-03-12T13%3A48%3A40Z&sp=r&c=638458481202016899",
-      "parentProductId": 1189,
-      "isFeatureProduct": false,
-      "productPrice": 0.000000000,
-      "premiumDiscount": 0,
-      "productWeight": 0,
-      "showOnHomepage": false,
-      "colorClass": "red-circle",
-      "iconClass": "fa fa-times-circle",
-      "availability": "Sold Out",
-      "stock": 0,
-      "isBundle": false,
-      "marketingTagId": 0,
-      "tagName": null,
-      "tagColor": null,
-      "metalId": 18,
-      "tierpriceapply": false,
-      "bulkProduct": []
-    },
-    {
-      "productId": 6068,
-      "categoryId": 571,
-      "productName": "10 x 1/10th oz Gold Valcambi CombiBar™ (In Assay with serial number)",
-      "shortDescription": "Convenient and divisible gold",
-      "friendlypagename": "10-x-1-10th-oz-gold-valcambi-combibar-in-assay-with-serial-number",
-      "disableBuyButton": false,
-      "displayOrder": 15,
-      "imageUrl": "https://qmintstoremedia.blob.core.windows.net/pictures/products/10-x-1-10-oz-gold-valcambi-combibar-in-assay_120320242303336.png?sv=2018-03-28&sr=b&sig=2N1TAAeZwvafoxwBR%2BUjQ4E1IkouzyO%2BJ3foJHR%2BsCk%3D&st=2024-03-11T13%3A48%3A33Z&se=3024-03-12T13%3A48%3A33Z&sp=r&c=638458481137156441",
-      "parentProductId": 1132,
-      "isFeatureProduct": false,
-      "productPrice": 0.000000000,
-      "premiumDiscount": 0,
-      "productWeight": 0,
-      "showOnHomepage": false,
-      "colorClass": "red-circle",
-      "iconClass": "fa fa-times-circle",
-      "availability": "Sold Out",
-      "stock": 0,
-      "isBundle": false,
-      "marketingTagId": 0,
-      "tagName": null,
-      "tagColor": null,
-      "metalId": 17,
-      "tierpriceapply": false,
-      "bulkProduct": []
-    },
-    {
-      "productId": 4884,
-      "categoryId": 571,
-      "productName": "100PK 1966 Australian 50 Cent Silver Rounds (80%)",
-      "shortDescription": "First and only mintage of the Silver Australian 50c round",
-      "friendlypagename": "100x1966-Australian-Silver-50c-Round",
-      "disableBuyButton": false,
-      "displayOrder": 16,
-      "imageUrl": null,
-      "parentProductId": 1005,
-      "isFeatureProduct": false,
-      "productPrice": 1318.180000000,
-      "premiumDiscount": 0,
-      "productWeight": 0,
-      "showOnHomepage": false,
-      "colorClass": "red-circle",
-      "iconClass": "fa fa-times-circle",
-      "availability": "Sold Out",
-      "stock": 0,
-      "isBundle": false,
-      "marketingTagId": 0,
-      "tagName": null,
-      "tagColor": null,
-      "metalId": 18,
-      "tierpriceapply": false,
-      "bulkProduct": []
-    },
-    {
-      "productId": 4346,
-      "categoryId": 571,
-      "productName": "10oz Queensland Mint Kangaroo Silver Cast Bar",
-      "shortDescription": "Polished finish with iconic Kangaroo Logo",
-      "friendlypagename": "10oz-qmint-silver-cast-bar",
-      "disableBuyButton": false,
-      "displayOrder": 17,
-      "imageUrl": "https://qmintstoremedia.blob.core.windows.net/pictures/products/10oz-qmint-silver-cast-bar-min-png-min_120320242303178.png?sv=2018-03-28&sr=b&sig=ZQITYfF%2F4x3gWGJWlNpyBt7j2mps11q5I4xxDEzcXqU%3D&st=2024-03-11T13%3A47%3A17Z&se=3024-03-12T13%3A47%3A17Z&sp=r&c=638458480378924738",
-      "parentProductId": 158,
-      "isFeatureProduct": false,
-      "productPrice": 0.000000000,
-      "premiumDiscount": 0,
-      "productWeight": 0,
-      "showOnHomepage": false,
-      "colorClass": "red-circle",
-      "iconClass": "fa fa-times-circle",
-      "availability": "Sold Out",
-      "stock": -4,
-      "isBundle": false,
-      "marketingTagId": 0,
-      "tagName": null,
-      "tagColor": null,
-      "metalId": 18,
-      "tierpriceapply": false,
-      "bulkProduct": []
-    },
-    {
-      "productId": 4882,
-      "categoryId": 571,
-      "productName": "10PK 1966 Australian 50 Cent Silver Rounds (80%)",
-      "shortDescription": "First and only mintage of the Silver Australian 50c round",
-      "friendlypagename": "10x1966-Australian-Silver-50c-Round",
-      "disableBuyButton": false,
-      "displayOrder": 18,
-      "imageUrl": null,
-      "parentProductId": 1001,
-      "isFeatureProduct": false,
-      "productPrice": 140.910000000,
-      "premiumDiscount": 0,
-      "productWeight": 0,
-      "showOnHomepage": false,
-      "colorClass": "green-circle",
-      "iconClass": "fa fa-check-circle",
-      "availability": "In Stock",
-      "stock": 9,
-      "isBundle": false,
-      "marketingTagId": 0,
-      "tagName": null,
-      "tagColor": null,
-      "metalId": 18,
-      "tierpriceapply": false,
-      "bulkProduct": []
-    },
-    {
-      "productId": 9141,
-      "categoryId": 571,
-      "productName": "12oz Silver Building Blocks - 40 Piece Accessory Set",
-      "shortDescription": "Accessorise your Silver Collection",
-      "friendlypagename": "silver-building-block-40-piece-accessory-set-12oz",
-      "disableBuyButton": false,
-      "displayOrder": 19,
-      "imageUrl": "https://qmintstoremedia.blob.core.windows.net/pictures/products/40pcaccessoryblockback1_120320242303088.png?sv=2018-03-28&sr=b&sig=SJgWJW9zY3ORgGMg%2BkXNY4qfPcNmBjdrBFh1goyhN8M%3D&st=2024-03-11T13%3A49%3A08Z&se=3024-03-12T13%3A49%3A08Z&sp=r&c=638458481488711924",
-      "parentProductId": 1428,
-      "isFeatureProduct": false,
-      "productPrice": 0.000000000,
-      "premiumDiscount": 0,
-      "productWeight": 0,
-      "showOnHomepage": false,
-      "colorClass": "red-circle",
-      "iconClass": "fa fa-times-circle",
-      "availability": "Sold Out",
-      "stock": 0,
-      "isBundle": false,
-      "marketingTagId": 0,
-      "tagName": null,
-      "tagColor": null,
-      "metalId": 18,
-      "tierpriceapply": false,
-      "bulkProduct": []
-    },
-    {
-      "productId": 3330,
-      "categoryId": 571,
-      "productName": "2014 Australian 1oz Silver Kangaroo High Relief Proof Coin in Presentation Box",
-      "shortDescription": "High Relief Silver Proof Coin in Presentation Sleeve",
-      "friendlypagename": "2014-Australian-1oz-Silver-Kangaroo-High-Relief-Proof-Coin-in-Presentation-Box",
-      "disableBuyButton": false,
-      "displayOrder": 20,
-      "imageUrl": "https://qmintstoremedia.blob.core.windows.net/pictures/products/2014-1oz-kangaroo-high-relief-coin-reverse-min_12032024230350.png?sv=2018-03-28&sr=b&sig=aAz8dgP0xkMN26B6hZV11HD3OvW08Bv%2Bet0dd1jTDnk%3D&st=2024-03-11T13%3A47%3A50Z&se=3024-03-12T13%3A47%3A50Z&sp=r&c=638458480701024556",
-      "parentProductId": 768,
-      "isFeatureProduct": false,
-      "productPrice": 0.000000000,
-      "premiumDiscount": 0,
-      "productWeight": 0,
-      "showOnHomepage": false,
-      "colorClass": "green-circle",
-      "iconClass": "fa fa-check-circle",
-      "availability": "In Stock",
-      "stock": 1,
-      "isBundle": false,
-      "marketingTagId": 0,
-      "tagName": null,
-      "tagColor": null,
-      "metalId": 18,
-      "tierpriceapply": false,
-      "bulkProduct": []
-    }
-  ]
+  const { recentlyViewedProducts } = useAppSelector((state) => state.homePage)
+  const [productIds, setProductId] = useState<any>(recentlyViewedProducts)
+  const [priceForEachId, setPriceForEachId] = useState<IpriceForEachId | null>(null)
 
+  useEffect(() => {
+    setProductId({ productIds: recentlyViewedProducts })
+  }, [recentlyViewedProducts])
+
+  const { data }: any = useApiRequest(ENDPOINTS.recentlyViewdProducts, 'post',productIds);
+  const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
+
+  useEffect(() => {
+    if (priceData?.data?.length > 0) {
+      const idwithpriceObj: any = {}
+      priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
+      setPriceForEachId(idwithpriceObj)
+    }
+  }, [priceData])
   return (
     <Layout>
       <Seo
@@ -346,8 +42,9 @@ function RecentlyViewedProducts() {
       <PageTitle title="Recently viewed products" />
       <Container id="PageRecentlyViewedProducts">
         <Box className="ProductList">
-          {categoryData.length > 0 ?
-            categoryData.map((product: any) => {
+          {data?.data?.length > 0 ?
+            data?.data?.map((product: any) => {
+              product.priceWithDetails = priceForEachId ? priceForEachId[product?.productId] : null;
               return (
                 <ProductCard key={product.productId} product={product} />
               )

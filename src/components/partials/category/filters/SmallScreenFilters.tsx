@@ -28,7 +28,6 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
     }
 
     const applyFilterHandler = async () => {
-        console.log(selectedFilters, selectedPrice);
         setSelectedFiltersMobile(selectedFilters)
         setSelectedPriceMobile(selectedPrice)
         toggleFilterBy()
