@@ -29,6 +29,9 @@ export const ENDPOINTS = {
     productDetails: "product/wb5rqwFBf0ua22kGp0Hlhw/{{product-id}}",
     priceForprogressbar: "price/{{product-id}}/jGnpTVO8S0aP1590ehZu3g?hZHxveDw={{timeinterval}}",
     addToCartProduct: "shoppingcart/CxdrQaZ030ekw4jdCgWWKA",
+    getShoppingCartData: "shoppingcart/QcKa33GRtUanfuqzmFFM6A",
+    updateShoppingCartData : "shoppingcart/OVixigTa9U6RcJbCK7pV2Q",
+    clearShoppingCartData : "shoppingcart/7I7YbS9bX0asi1DVUXT60w",
     recentlyViewdProducts: 'product/dS99jwa0akmwbLKOuSs9dA'
 }
 export const StoreData = {

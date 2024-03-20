@@ -72,7 +72,7 @@ function AboutProduct({ productId }: any) {
   const { productDetailsData } = useAppSelector((state) => state.category)
   const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
 
-  const [quentityCount, setQuentityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
+  const [quantityCount, setQuantityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
   const [productIds] = useState({ productIds: [Number(productId)] })
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
   const [tabValue, setTabValue] = useState<number>(0)
@@ -119,14 +119,14 @@ function AboutProduct({ productId }: any) {
   const handleQuentityUpdate = (type: 'plus' | 'minus') => {
     switch (type) {
       case "minus":
-        if (productDetailsData?.minimumCartQty !== quentityCount) {
-          setQuentityCount((prev) => prev - 1 < 1 ? 1 : prev - 1)
+        if (productDetailsData?.minimumCartQty !== quantityCount) {
+          setQuantityCount((prev) => prev - 1 < 1 ? 1 : prev - 1)
         }
         break;
 
       case "plus":
-        if (productDetailsData?.maximumCartQty !== quentityCount) {
-          setQuentityCount((prev) => prev + 1)
+        if (productDetailsData?.maximumCartQty !== quantityCount) {
+          setQuantityCount((prev) => prev + 1)
         }
         break;
       default:
@@ -210,7 +210,7 @@ function AboutProduct({ productId }: any) {
                   name="Quantity"
                   margin='none'
                   fullWidth={false}
-                  value={quentityCount as any}
+                  value={quantityCount as any}
                   disabled={true}
                 />
                 <IconButton id='plus' className="Plus" onClick={(e) => {
@@ -222,7 +222,7 @@ function AboutProduct({ productId }: any) {
                   <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={() => {
                     apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
                       "productId": productId,
-                      "quantity": quentityCount
+                      "quantity": quantityCount
                     } as any)
                   }} disabled={loadingForAddToCart}>Add to cart</Button>
                   <Button size="large" variant="outlined" onClick={()=>{

@@ -7,6 +7,7 @@ import categoryReducer from './reducers/categoryReducer'
 import contactUsPageReducer from './reducers/contactUs'
 import newsReducer from './reducers/newsReducer'
 import calculatorsReducer from './reducers/calculatorsReducer'
+import shoppingCartReducer from './reducers/shoppingCartReducer'
 // Configuration for redux-persist
 const persistConfig = {
   key: 'root',
@@ -28,6 +29,7 @@ const store = configureStore({
     homePage: persistReducer(persistConfig, homepageReducer),
     category: categoryReducer,
     contactUs: contactUsPageReducer,
+    shoppingCart: shoppingCartReducer,
     blogPage: persistReducer(persistConfig, blogReducer),
     newsPage: persistReducer(persistConfig, newsReducer),
     calculators: persistReducer(persistConfig, calculatorsReducer)
