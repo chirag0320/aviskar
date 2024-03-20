@@ -13,6 +13,7 @@ import { useAppSelector } from "@/hooks"
 
 // Utils
 import { subMenuItems } from "../../utils/data"
+import { Link } from "gatsby"
 export interface Icategory {
   categoryId: number,
   name: string,
@@ -76,7 +77,11 @@ function Navigation() {
           </Stack>
           <Stack className="RightPart">
             {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
-            {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}><CartMenu /></Suspense> : null}
+            {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
+              <Link to="/shopping-cart">
+                <CartMenu />
+              </Link>
+            </Suspense> : null}
             <ActionMenu />
           </Stack>
         </Stack>
