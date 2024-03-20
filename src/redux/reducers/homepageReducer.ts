@@ -129,7 +129,8 @@ export const createHomepageSlice = createSlice({
       console.log("🚀 ~ existingIndex:", existingIndex)
       if (existingIndex === -1) {
         // Product does not exist, add it to the list
-        state.recentlyViewedProducts.push(newProductId);
+        state.recentlyViewedProducts.unshift(newProductId);
+        state.recentlyViewedProducts = state?.recentlyViewedProducts?.length > 20 ? state.recentlyViewedProducts.splice(0,20) : state.recentlyViewedProducts
       } else {
         // Product already exists, remove it from its current position and add it to the beginning of the list
         state.recentlyViewedProducts.splice(existingIndex, 1);
