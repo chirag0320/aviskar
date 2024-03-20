@@ -35,7 +35,6 @@ const CountDownTimer = () => {
     };
 
     return (
-        <div className="clock">
             <div className="progress-bar">
                 <CircularProgressbar
                     value={(seconds / 60) * 100}
@@ -49,7 +48,6 @@ const CountDownTimer = () => {
                     strokeWidth={50} // Customize progress bar thickness
                 />
             </div>
-        </div>
     );
 };
 
