@@ -110,24 +110,6 @@
           padding: 0;
         }
       }
-      .AlertDialog {
-        &.MuiDialog-root {
-          .MuiDialog-container {
-            .MuiDialog-paper {
-              padding: 20px;
-              .MuiDialogContent-root {
-                @include padding-vertical(15);
-              }
-              .MuiDialogActions-root {
-                gap: 20px;
-                .MuiButton-root {
-                  flex: 1;
-                }
-              }
-            }
-          }
-        }
-      }
     }
     .Step2 {
       .StepHeader {
