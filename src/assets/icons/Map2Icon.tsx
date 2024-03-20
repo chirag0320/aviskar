@@ -5,13 +5,13 @@ function Map2Icon() {
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="16" cy="16" r="16" fill="#E5E6EB" />
       <path d="M22.9934 18.5099C22.4608 17.3868 21.3166 16.6101 19.991 16.6101C18.1568 16.6101 16.6699 18.097 16.6699 19.9312" fill="#1D2129" />
-      <path d="M22.9934 18.5099C22.4608 17.3868 21.3166 16.6101 19.991 16.6101C18.1568 16.6101 16.6699 18.097 16.6699 19.9312" stroke="#1D2129" stroke-width="0.8" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M22.9934 18.5099C22.4608 17.3868 21.3166 16.6101 19.991 16.6101C18.1568 16.6101 16.6699 18.097 16.6699 19.9312" stroke="#1D2129" strokeWidth="0.8" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M22.1855 18.6646H22.8892C23.1223 18.6646 23.3113 18.4755 23.3113 18.2424V17.5388" fill="#1D2129" />
-      <path d="M22.1855 18.6646H22.8892C23.1223 18.6646 23.3113 18.4755 23.3113 18.2424V17.5388" stroke="#1D2129" stroke-width="0.8" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M22.1855 18.6646H22.8892C23.1223 18.6646 23.3113 18.4755 23.3113 18.2424V17.5388" stroke="#1D2129" strokeWidth="0.8" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M16.9941 21.3332C17.5227 22.4667 18.6724 23.2522 20.0056 23.2522C21.8398 23.2522 23.3126 21.7653 23.3126 19.9312" fill="#1D2129" />
-      <path d="M16.9941 21.3332C17.5227 22.4667 18.6724 23.2522 20.0056 23.2522C21.8398 23.2522 23.3126 21.7653 23.3126 19.9312" stroke="#1D2129" stroke-width="0.8" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M16.9941 21.3332C17.5227 22.4667 18.6724 23.2522 20.0056 23.2522C21.8398 23.2522 23.3126 21.7653 23.3126 19.9312" stroke="#1D2129" strokeWidth="0.8" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M17.7816 21.1977H17.0921C16.8589 21.1977 16.6699 21.3867 16.6699 21.6199V22.3235" fill="#1D2129" />
-      <path d="M17.7816 21.1977H17.0921C16.8589 21.1977 16.6699 21.3867 16.6699 21.6199V22.3235" stroke="#1D2129" stroke-width="0.8" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M17.7816 21.1977H17.0921C16.8589 21.1977 16.6699 21.3867 16.6699 21.6199V22.3235" stroke="#1D2129" strokeWidth="0.8" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M14.9463 17.8267C12.9847 17.8267 11.3945 16.2365 11.3945 14.2749C11.3945 12.3133 12.9847 10.7231 14.9463 10.7231C16.9079 10.7231 18.4981 12.3133 18.4981 14.2749" fill="#1D2129" />
       <path d="M14.9463 17.8267C12.9847 17.8267 11.3945 16.2365 11.3945 14.2749C11.3945 12.3133 12.9847 10.7231 14.9463 10.7231C16.9079 10.7231 18.4981 12.3133 18.4981 14.2749" stroke="#1D2129" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M14.7424 23.9829C12.476 20.3973 8.69153 18.3829 8.6875 14.2673C8.69149 10.8145 11.4917 8.01674 14.9454 8.01674C18.3991 8.01674 21.1992 10.8145 21.2032 14.2673" fill="#1D2129" />
