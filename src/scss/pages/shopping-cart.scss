@@ -1,0 +1,199 @@
+.ShoppingCartPage {
+    .ShoppingCartContent {
+        padding: 30px 0 80px;
+        display: flex;
+        gap: 29px;
+
+        @include media($lg) {
+            flex-direction: column;
+        }
+
+        .MuiTypography-root {
+            color: $dark;
+        }
+
+        .ShoppingCartDetails {
+            width: 64%;
+
+            @include media($lg) {
+                width: 100%;
+            }
+
+
+
+            .ShoppingProductsDetailsWrapper {
+                border: 1px solid rgba($dark, 0.1);
+                border-radius: 20px;
+                padding: 25px;
+                margin-bottom: 30px;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+
+                @include media($xs) {
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
+
+
+                .Note {
+                    font-size: 16px;
+                    line-height: 28px;
+                    font-weight: 700;
+                }
+            }
+
+            .BottomCartActionsWrapper {
+                justify-content: space-between;
+                align-items: center;
+
+                @include media($ssm) {
+                    flex-direction: column;
+                    gap: 20px;
+                }
+
+                .LeftArrow {
+                    text-decoration: none;
+                    font-size: 16px;
+                    line-height: 28px;
+                    font-weight: 700;
+
+                    .MuiButton-startIcon {
+                        margin-right: 5px;
+
+                        svg {
+                            font-size: 16px;
+                        }
+                    }
+
+
+                }
+
+                .ClearUpdateCartWrapper {
+                    align-items: center;
+                    gap: 40px;
+
+                    @include media($ssm) {
+                        gap: 20px;
+                    }
+
+                    @include media($sm) {
+                        flex-direction: column;
+                    }
+
+
+                    .ClearShoppingCart {
+                        font-size: 16px;
+                        line-height: 22px;
+                        font-weight: 600;
+                        text-decoration: none;
+                    }
+
+                    .UpdateCartBtn {
+                        @include media-min($xxl) {
+                            min-width: 241px;
+                        }
+                    }
+                }
+
+
+            }
+        }
+
+        .OrderSummaryDetailsWrapper {
+            width: 36%;
+            border: 1px solid rgba($dark, 0.1);
+            border-radius: 20px;
+            max-height: 458px;
+
+            @include media($lg) {
+                width: 100%;
+                max-height: 100%;
+            }
+
+
+            .OrderSummaryContent {
+                padding: 30px;
+                border-bottom: 1px solid rgba($dark, 0.1);
+
+                .OrderSummaryTitle {
+                    margin-bottom: 30px;
+                }
+
+                .SubtotalWrapper,
+                .DeliveryWrapper,
+                .TotalWrapper {
+                    justify-content: space-between;
+
+                    @include media($sm) {
+                        flex-direction: column;
+                    }
+                }
+
+                .SubtotalWrapper {
+                    margin-bottom: 30px;
+
+                    .SubtotalValue {
+                        color: rgba($dark, 0.8);
+                    }
+                }
+
+                .DeliveryWrapper {
+                    margin-bottom: 20px;
+
+                    .DeliveryValue {
+                        color: rgba($dark, 0.8);
+
+                    }
+                }
+
+                .AddCouponWrapper {
+                    border-top: 1px solid rgba($dark, 0.1);
+                    border-bottom: 1px solid rgba($dark, 0.1);
+                    padding: 20px 0;
+                    display: flex;
+                    gap: 15px;
+
+                    .MuiTypography-root {
+                        color: $yellowFuel;
+                    }
+
+                    .RightArrow {
+                        text-decoration: none;
+                        font-size: 16px;
+                        line-height: 28px;
+                        font-weight: 700;
+
+                        @include media($xs) {
+                            font-size: 15px;
+                        }
+
+                        svg {
+                            font-size: 16px;
+
+                            @include media($xs) {
+                                font-size: 15px;
+                            }
+                        }
+
+                    }
+                }
+
+                .TotalWrapper {
+                    margin-top: 30px;
+                }
+            }
+
+            .ProceedtoCheckoutBtn {
+                margin: 30px auto;
+                display: block;
+
+                @include media-min($xxl) {
+                    min-width: 281px;
+                }
+
+            }
+        }
+
+    }
+}
