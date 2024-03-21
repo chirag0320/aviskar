@@ -39,7 +39,7 @@ export const ENDPOINTS = {
     deleteWishListData: "wishlist/PARNGc8fSUerxSmM65X06A",
     addToWishList: "wishlist/rPpCvZNFeEOtE0ESOjGGeQ",
     addWishListToShoppingCart: "Wishlist/nxJzG70390aEbLTm6J0Qsg",
-    checkoutDetails: 'Checkout/xT3hjqkBFESvUfuMu8T70A',,
+    checkoutDetails: 'Checkout/xT3hjqkBFESvUfuMu8T70A',
     addOrEditAddress: "myvault/mIKu7TMRFUW49i97slxpDg"
 }
 export const StoreData = {
