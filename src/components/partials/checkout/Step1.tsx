@@ -43,11 +43,11 @@ function Step1() {
     }
     if (checkoutPageData?.shippingAddressDetails?.[0]) {
       setShippingAddress(checkoutPageData?.shippingAddressDetails?.[0])
-      dispatch(updateFinalDataForTheCheckout({ shippingAddress }))
+      dispatch(updateFinalDataForTheCheckout({ shippingAddress: checkoutPageData?.shippingAddressDetails?.[0] }))
     }
     if (checkoutPageData?.billingAddressDetails?.[0]) {
       setBillingAddress(checkoutPageData?.billingAddressDetails?.[0])
-      dispatch(updateFinalDataForTheCheckout({ billingAddress }))
+      dispatch(updateFinalDataForTheCheckout({ billingAddress: checkoutPageData?.billingAddressDetails?.[0] }))
     }
   }, [checkoutPageData])
 

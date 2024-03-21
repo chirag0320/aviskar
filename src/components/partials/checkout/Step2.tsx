@@ -66,7 +66,9 @@ function Step2() {
     setDeliveryMethods(deliveryMethods)
     dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: quantities, deliveryMethodsWithProductId: deliveryMethod }))
   }, [checkoutPageData?.shoppingCartItems])
-
+  useEffect(() => {
+    dispatch(updateFinalDataForTheCheckout({ cartItemsWithLivePrice }))
+  }, [cartItemsWithLivePrice])
 
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     setDeliveryMethod(event.target.value as string);
@@ -96,12 +98,12 @@ function Step2() {
     dispatch(updateFinalDataForTheCheckout({ deliveryMethodsWithProductId: updatedCartItem }))
   }
 
-  const changeDeliveryMethodOfProduct = (productId: number,method:any) => {
+  const changeDeliveryMethodOfProduct = (productId: number, method: any) => {
     const updatedDeliverymethod = { ...deliveryMethods, [productId]: method }
     setQuantities(updatedDeliverymethod)
     dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: updatedDeliverymethod }))
   }
-  
+
   return (
     <StepWrapper title="Step 2" className="Step2">
       <Box className="StepHeader">

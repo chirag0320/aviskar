@@ -14,7 +14,8 @@ import { OutlinedCheckIcon } from "@/assets/icons"
 import OTPConfirmation from "./OTPConfirmation"
 
 function OrderSummary() {
-  const { } = useAppSelector((state) => state.checkoutPage)
+  const { finalDataForTheCheckout} = useAppSelector((state) => state.checkoutPage)
+  console.log("🚀 ~ OrderSummary ~ finalDataForTheCheckout:", finalDataForTheCheckout)
   const [openOTPConfirmation, toggleOTPConfirmation] = useToggle(false)
   const renderPricingItem = (title: string, value: string) => {
     return (
