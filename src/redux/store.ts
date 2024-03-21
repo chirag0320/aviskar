@@ -1,3 +1,4 @@
+import checkoutPageReducer from './reducers/checkoutReducer';
 import { configureStore } from '@reduxjs/toolkit'
 import homepageReducer from './reducers/homepageReducer'
 import blogReducer from './reducers/blogReducer'
@@ -9,6 +10,7 @@ import newsReducer from './reducers/newsReducer'
 import calculatorsReducer from './reducers/calculatorsReducer'
 import shoppingCartReducer from './reducers/shoppingCartReducer'
 import compareProductsReducer from './reducers/compareProductsReducer'
+import wishListReducer from './reducers/wishListReducer'
 // Configuration for redux-persist
 const persistConfig = {
   key: 'root',
@@ -34,7 +36,9 @@ const store = configureStore({
     blogPage: persistReducer(persistConfig, blogReducer),
     newsPage: persistReducer(persistConfig, newsReducer),
     calculators: persistReducer(persistConfig, calculatorsReducer),
+    checkoutPage: checkoutPageReducer,
     compareProducts: persistReducer(persistConfig, compareProductsReducer),
+    wishList : wishListReducer
 
 
     // profile: persistedProfileReducer,

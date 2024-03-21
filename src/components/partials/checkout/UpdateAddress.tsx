@@ -1,15 +1,19 @@
 
 import React, { useState } from "react"
-import { Autocomplete, MenuItem, SelectChangeEvent, Stack, TextField } from "@mui/material"
+import { Autocomplete, MenuItem, SelectChangeEvent, Button, Stack, TextField } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
+// Hooks
+import { useAppDispatch, useToggle } from "@/hooks"
 
 // Componenets
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
+import { addOrEditAddress } from "@/redux/reducers/checkoutReducer";
+import { ENDPOINTS } from "@/utils/constants";
 
 interface UpdateAddress {
   open: boolean
@@ -32,11 +36,23 @@ interface Inputs {
 }
 
 const schema = yup.object().shape({
-  SelectMetal: yup.string().required(),
+  // SelectMetal: yup.string().required(),
+  FirstName: yup.string().required(),
+  LastName: yup.string().required(),
+  Company: yup.string().required(),
+  Contact: yup.string().required(),
+  Email: yup.string().email().required(),
+  Address1: yup.string().required(),
+  Address2: yup.string(),
+  City: yup.string().required(),
+  Country: yup.string().required(),
+  State: yup.string().required(),
+  Code: yup.string().required()
 })
 
 function UpdateAddress(props: UpdateAddress) {
   const { open, dialogTitle, onClose } = props
+  const dispatch = useAppDispatch();
   const [selectCountry, setSelectAccount] = useState<string>('none')
 
   const {
@@ -45,6 +61,7 @@ function UpdateAddress(props: UpdateAddress) {
     handleSubmit,
     clearErrors,
     control,
+    getValues,
     setValue,
     formState: { errors },
   } = useForm<Inputs>({
@@ -53,6 +70,12 @@ function UpdateAddress(props: UpdateAddress) {
       Country: "none",
     },
   })
+
+  const onSubmit = (data: any) => {
+    // const prepareData = 
+    // dispatch(addOrEditAddress(ENDPOINTS.addOrEditAddress) , data));
+    // onClose();
+  }
 
   const handleSelectAccount = (event: SelectChangeEvent) => {
     setSelectAccount(event.target.value as string)
@@ -66,122 +89,132 @@ function UpdateAddress(props: UpdateAddress) {
       onClose={onClose}
       primaryActionText="Save"
       maxWidth="sm"
-      actions
     >
-      <Stack className="AllFields">
-        <Stack className="Column">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack className="AllFields" >
+          <Stack className="Column">
+            <RenderFields
+              register={register}
+              error={errors.FirstName}
+              name="FirstName"
+              placeholder="Enter first name"
+              control={control}
+              variant='outlined'
+              margin='none'
+            />
+            <RenderFields
+              register={register}
+              error={errors.LastName}
+              name="LastName"
+              placeholder="Enter last name"
+              control={control}
+              variant='outlined'
+              margin='none'
+            />
+          </Stack>
           <RenderFields
             register={register}
-            error={errors.FirstName}
-            name="FirstName"
-            placeholder="Enter first name"
+            error={errors.Company}
+            name="Company"
+            placeholder="Enter company"
+            control={control}
+            variant='outlined'
+            margin='none'
+          />
+          <Stack className="Column">
+            <RenderFields
+              register={register}
+              error={errors.Contact}
+              name="Contact"
+              type="number"
+              placeholder="Enter contact"
+              control={control}
+              variant='outlined'
+              margin='none'
+            />
+            <RenderFields
+              register={register}
+              error={errors.Email}
+              name="Email"
+              placeholder="Enter email id"
+              control={control}
+              variant='outlined'
+              margin='none'
+            />
+          </Stack>
+          <GoogleMaps />
+          <RenderFields
+            register={register}
+            error={errors.Address1}
+            name="Address1"
+            placeholder="Enter address line 1"
             control={control}
             variant='outlined'
             margin='none'
           />
           <RenderFields
             register={register}
-            error={errors.LastName}
-            name="LastName"
-            placeholder="Enter last name"
+            error={errors.Address2}
+            name="Address2"
+            placeholder="Enter address line 2"
             control={control}
             variant='outlined'
             margin='none'
           />
+          <Stack className="Column">
+            <RenderFields
+              register={register}
+              error={errors.City}
+              name="City"
+              placeholder="Enter city"
+              control={control}
+              variant='outlined'
+              margin='none'
+            />
+            <RenderFields
+              type="select"
+              register={register}
+              error={errors.Country}
+              name="Country"
+              placeholder="Enter country"
+              control={control}
+              variant='outlined'
+              margin='none'
+            >
+              <MenuItem value="none">Select country</MenuItem>
+              <MenuItem value="India">India</MenuItem>
+              <MenuItem value="Astralia">Astralia</MenuItem>
+              <MenuItem value="America">America</MenuItem>
+            </RenderFields>
+          </Stack>
+          <Stack className="Column">
+            <Autocomplete
+              disablePortal
+              options={top100Films}
+              renderInput={(params) => <TextField placeholder="Enter state" {...params} />}
+              fullWidth
+            />
+            <RenderFields
+              type="number"
+              register={register}
+              error={errors.Code}
+              name="Code"
+              placeholder="Enter pin code"
+              control={control}
+              variant='outlined'
+              margin='none'
+            />
+          </Stack>
         </Stack>
-        <RenderFields
-          register={register}
-          error={errors.Company}
-          name="Company"
-          placeholder="Enter company"
-          control={control}
-          variant='outlined'
-          margin='none'
-        />
-        <Stack className="Column">
-          <RenderFields
-            register={register}
-            error={errors.Contact}
-            name="Contact"
-            placeholder="Enter contact"
-            control={control}
-            variant='outlined'
-            margin='none'
-          />
-          <RenderFields
-            register={register}
-            error={errors.Email}
-            name="Email"
-            placeholder="Enter email id"
-            control={control}
-            variant='outlined'
-            margin='none'
-          />
+        <Stack className="ActionWrapper">
+          <Button variant="outlined" onClick={onClose}>
+            Close
+          </Button>
+          <Button variant="contained" type="submit">
+            Submit
+          </Button>
         </Stack>
-        <GoogleMaps />
-        <RenderFields
-          register={register}
-          error={errors.Address1}
-          name="Address1"
-          placeholder="Enter address line 1"
-          control={control}
-          variant='outlined'
-          margin='none'
-        />
-        <RenderFields
-          register={register}
-          error={errors.Address2}
-          name="Address2"
-          placeholder="Enter address line 2"
-          control={control}
-          variant='outlined'
-          margin='none'
-        />
-        <Stack className="Column">
-          <RenderFields
-            register={register}
-            error={errors.City}
-            name="City"
-            placeholder="Enter city"
-            control={control}
-            variant='outlined'
-            margin='none'
-          />
-          <RenderFields
-            type="select"
-            register={register}
-            error={errors.Country}
-            name="Country"
-            placeholder="Enter country"
-            control={control}
-            variant='outlined'
-            margin='none'
-          >
-            <MenuItem value="none">Select country</MenuItem>
-            <MenuItem value="India">India</MenuItem>
-            <MenuItem value="Astralia">Astralia</MenuItem>
-            <MenuItem value="America">America</MenuItem>
-          </RenderFields>
-        </Stack>
-        <Stack className="Column">
-          <Autocomplete
-            disablePortal
-            options={top100Films}
-            renderInput={(params) => <TextField placeholder="Enter state" {...params} />}
-            fullWidth
-          />
-          <RenderFields
-            type="number"
-            register={register}
-            error={errors.Code}
-            name="Code"
-            placeholder="Enter pin code"
-            control={control}
-            variant='outlined'
-            margin='none'
-          />
-        </Stack>
-      </Stack>
+      </form>
     </StyledDialog>
   )
 }

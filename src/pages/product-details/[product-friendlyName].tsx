@@ -36,7 +36,7 @@ function ProductDetail({ params }: any) {
         title="Category"
         lang="en"
       />
-      <Breadcrumb page1={"Shop"} page2={"Products"} page3={"2024 1oz Lunar Series III Year of the Dragon Silver Coin"} />
+      <Breadcrumb page1={"Shop"} page2={"Products"} page3={params?.["product-friendlyName"]} />
       <Container id="PageProductDetail">
         <Toaster>
           The product has been added to your <Button href="#">product comparison</Button>

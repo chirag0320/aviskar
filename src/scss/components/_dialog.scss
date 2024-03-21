@@ -151,10 +151,11 @@
               }
             }
           }
-        }
-        .MuiDialogActions-root {
-          padding: 20px;
-          gap: 20px;
+          .ActionWrapper {
+            justify-content: flex-end;
+            gap: 20px;
+            @include padding-vertical(20);
+          }
         }
       }
     }

@@ -213,6 +213,12 @@
     .TermsService {
       .Condition {
         @include margin-vertical(14, 6);
+        .TermsService_html{
+          p{
+            display: inline;
+            margin: 0;
+          }
+        }
         .ReadMore {
           font: inherit;
           font-weight: 600;

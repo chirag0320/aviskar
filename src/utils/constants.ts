@@ -30,10 +30,17 @@ export const ENDPOINTS = {
     priceForprogressbar: "price/{{product-id}}/jGnpTVO8S0aP1590ehZu3g?hZHxveDw={{timeinterval}}",
     addToCartProduct: "shoppingcart/CxdrQaZ030ekw4jdCgWWKA",
     getShoppingCartData: "shoppingcart/QcKa33GRtUanfuqzmFFM6A",
-    updateShoppingCartData : "shoppingcart/OVixigTa9U6RcJbCK7pV2Q",
-    clearShoppingCartData : "shoppingcart/7I7YbS9bX0asi1DVUXT60w",
+    updateShoppingCartData: "shoppingcart/OVixigTa9U6RcJbCK7pV2Q",
+    deleteShoppingCartData: "shoppingcart/7I7YbS9bX0asi1DVUXT60w",
     recentlyViewdProducts: 'product/dS99jwa0akmwbLKOuSs9dA',
-    compareProducts : "product/v07u2ZDwV0mGrWHpPYzaKA"
+    compareProducts: "product/v07u2ZDwV0mGrWHpPYzaKA",
+    getWishListData: "wishlist/wCngGbDM3EWvUW9fG7JwdQ",
+    updateWishListData: "wishlist/I2HAwstMhkGuGyEsHuHDtg",
+    deleteWishListData: "wishlist/PARNGc8fSUerxSmM65X06A",
+    addToWishList: "wishlist/rPpCvZNFeEOtE0ESOjGGeQ",
+    addWishListToShoppingCart: "Wishlist/nxJzG70390aEbLTm6J0Qsg",
+    checkoutDetails: 'Checkout/xT3hjqkBFESvUfuMu8T70A',
+    addOrEditAddress: "myvault/mIKu7TMRFUW49i97slxpDg"
 }
 export const StoreData = {
     storeCode: 12,

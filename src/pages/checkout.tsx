@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Box, Container, Stack } from "@mui/material"
 
 // Componenets
@@ -12,8 +12,14 @@ import Step1 from "@/components/partials/checkout/Step1"
 import Step2 from "@/components/partials/checkout/Step2"
 import Step3 from "@/components/partials/checkout/Step3"
 import OrderSummary from "@/components/partials/checkout/OrderSummary"
+import useAPIoneTime from "@/hooks/useAPIoneTime"
+import { getCheckoutPageData } from "@/redux/reducers/checkoutReducer"
+import { ENDPOINTS } from "@/utils/constants"
+import { useAppSelector } from "@/hooks"
 
 function Checkout() {
+  const [state] = useState({service:getCheckoutPageData, endPoint:ENDPOINTS.checkoutDetails})
+  useAPIoneTime(state)
   return (
     <Layout>
       <Seo

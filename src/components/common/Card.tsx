@@ -372,10 +372,11 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
   }
 
   return (
-    cartItem && <Card className="CartCard">
+    cartItem && Object.keys(cartItem)?.length > 0 && 
+    <Card className="CartCard">
       <CardMedia
         component="img"
-        image={cartItem.imageUrl}
+        image={cartItem?.imageUrl}
         alt="Product image"
       />
       <CardContent>
@@ -389,11 +390,11 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
             <Typography variant="body2">Qty.</Typography>
             <Typography variant="subtitle1">${cartItem.LivePriceDetails.price}</Typography>
             <Stack className="Quantity">
-              <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.productId)}><MinusIcon /></IconButton>
+              <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.id)} disabled={quantity === 1}><MinusIcon /></IconButton>
               <TextField value={quantity} disabled />
-              <IconButton className="Plus" onClick={() => increaseQuantity(cartItem.productId)}><PlusIcon /></IconButton>
+              <IconButton className="Plus" onClick={() => increaseQuantity(cartItem.id)}><PlusIcon /></IconButton>
             </Stack>
-            <IconButton className="DeleteButton" onClick={() => removeItem(cartItem.productId)}><Delete1Icon /></IconButton>
+            <IconButton className="DeleteButton" onClick={() => removeItem(cartItem.id)}><Delete1Icon /></IconButton>
           </Box>
         </Stack>
         <Stack className="BottomWrapper">
