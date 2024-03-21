@@ -50,6 +50,10 @@ export const shoppingCart = createSlice({
         resetSubTotal: (state) => {
             state.subTotal = 0
         },
+        clearShoppingCart: (state) => {
+            state.cartItems = [];
+            state.subTotal = 0;
+        },
         updateSubTotal: (state, action) => {
             state.subTotal += action.payload;
             state.subTotal = Math.round((state.subTotal + Number.EPSILON) * 100) / 100
@@ -93,6 +97,6 @@ export const shoppingCart = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotal, resetSubTotal } = shoppingCart.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotal, resetSubTotal ,clearShoppingCart} = shoppingCart.actions
 
 export default shoppingCart.reducer
