@@ -15,7 +15,7 @@ import { PriceChangeReturn, ProductStockStatus, ProductUpdateCountdown } from "@
 import ProductImages from "./ProductImages"
 
 // Assets
-import { AlarmIcon, CameraIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MailIcon, MailIcon1, MinusIcon, PlusIcon, TwitterIcon } from "@/assets/icons"
+import { AlarmIcon, CameraIcon, CompareIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MinusIcon, PlusIcon, TwitterIcon } from "@/assets/icons"
 
 // Data
 import { qmintRating } from "@/utils/data"
@@ -249,8 +249,8 @@ function AboutProduct({ productId }: any) {
                 <Typography variant="overline">Wishlist</Typography>
               </Button>
               <Button color="secondary" className="IconWithText">
-                <Box className="IconWrapper"><MailIcon1 /></Box>
-                <Typography variant="overline">Email To A Friend</Typography>
+                <Box className="IconWrapper"><CompareIcon /></Box>
+                <Typography variant="overline">Compare</Typography>
               </Button>
               <Button color="secondary" className="IconWithText" onClick={() => { addIntoComapreProduct(productId) }}>
                 <Box className="IconWrapper"><AlarmIcon /></Box>
