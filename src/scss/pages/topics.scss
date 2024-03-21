@@ -1,0 +1,6 @@
+#PageTopics {
+  @include padding-vertical(80);
+  @include media($md) {
+    @include padding-vertical(40);
+  }
+}
