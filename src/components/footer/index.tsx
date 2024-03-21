@@ -29,7 +29,7 @@ export interface FooterSection {
 function index() {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { data }: { data: { data: FooterSection[] } } = useApiRequest(ENDPOINTS.getFooterLink);
-const { email, handleEmailChange,subscribe } = useSubscription()
+  const { email, handleEmailChange, subscribe } = useSubscription()
   return (
     <Box id="MainFooterSection" component="footer">
       <Container className="Container">
@@ -78,10 +78,10 @@ const { email, handleEmailChange,subscribe } = useSubscription()
               <Typography className="ConsentMessage" variant="body2">Your email is safe with us, we don't spam</Typography>
             </Box>
             <Stack className="SocialWrapper">
-              <IconButton target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}><FacebookIcon fontSize="small" /></IconButton>
-              <IconButton target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}><YoutubeIcon /></IconButton>
-              <IconButton target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}><TwitterIcon fontSize="small" /></IconButton>
-              <IconButton target={"_blank"} href={configDetailsState?.feedIcon?.value ?? window?.location?.href}><FeedIcon /></IconButton>
+              <IconButton title="Follow us on Facebook" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}><FacebookIcon fontSize="small" /></IconButton>
+              <IconButton title="Follow us on Youtube" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}><YoutubeIcon /></IconButton>
+              <IconButton title="Follow us on Twitter" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}><TwitterIcon fontSize="small" /></IconButton>
+              <IconButton title="Follow us on Feed" target={"_blank"} href={configDetailsState?.feedIcon?.value ?? window?.location?.href}><FeedIcon /></IconButton>
             </Stack>
           </Stack>
         </Stack>

@@ -37,7 +37,7 @@ function ActionMenu() {
       placement="bottom-end"
       onClose={handleTooltipClose}
       onClickAway={handleClickAway}
-      renderComponent={<IconButton ref={tooltipRef} className={classNames("MenuButton", { "Active": open })} onClick={handleTooltipOpen}><MenuIcon /></IconButton>}
+      renderComponent={<IconButton ref={tooltipRef} aria-label='MenuButton' className={classNames("MenuButton", { "Active": open })} onClick={handleTooltipOpen}><MenuIcon /></IconButton>}
       lightTheme
       arrow
     >

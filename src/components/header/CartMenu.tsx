@@ -8,7 +8,7 @@ import { CartIcon } from "../../assets/icons/index"
 function CartMenu() {
   return (
     <>
-      <IconButton className={classNames("MenuButton", { "Active": false })}><CartIcon /></IconButton>
+      <IconButton aria-label='cartIcon' className={classNames("MenuButton", { "Active": false })}><CartIcon /></IconButton>
     </>
   )
 }

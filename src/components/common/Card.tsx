@@ -164,6 +164,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                 variant="outlined"
                 endIcon={open ? <ChevronUp /> : <ChevronDown />}
                 onClick={handleTooltipOpen}
+                aria-label='OfferTag'
               >
                 <OfferTagIcon />
               </Button>
@@ -192,8 +193,8 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
         <Button name='discoverMore' aria-label='discoverMore' variant="contained" onClick={() => {
           navigate(`/product-details/${product?.friendlypagename}`) //friendlypagename
         }} className="PrimaryAction" fullWidth>Discover More</Button>
-        {product.isBundle && <IconButton className="Outlined Stack"><StackIcon /></IconButton>}
-        <IconButton className="Outlined AddToCart"><AddToCartIcon /></IconButton>
+        {product.isBundle && <IconButton aria-label='StackIcon' className="Outlined Stack"><StackIcon /></IconButton>}
+        <IconButton aria-label='AddToCartIcon' className="Outlined AddToCart"><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
   );

@@ -8,7 +8,7 @@ import { ActivityIcon } from "../../assets/icons/index"
 function ChartMenu() {
   return (
     <>
-      <IconButton className={classNames("MenuButton", { "Active": false })}><ActivityIcon /></IconButton>
+      <IconButton aria-label='chartIcon' className={classNames("MenuButton", { "Active": false })}><ActivityIcon /></IconButton>
     </>
   )
 }
