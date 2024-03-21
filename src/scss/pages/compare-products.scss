@@ -1,0 +1,59 @@
+.CompareProductsWrapper {
+    padding: 70px 0;
+
+    .ClearList {
+        margin-bottom: 30px;
+    }
+
+    .CompareProductTableWrapper {
+        box-shadow: none;
+        border-radius: 0;
+
+
+
+        .CompareProductTable {
+            border: 1px solid rgba(227, 228, 229, 1);
+            border: 1px solid #f6f6f6;
+
+            .MuiTableCell-root {
+                font-size: 16px;
+                line-height: 26px;
+                font-weight: 400;
+            }
+
+            .ProductName {
+                color: $yellowFuel;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+            .StickyCell {
+                position: sticky;
+                left: -1px;
+                z-index: 5;
+                font-weight: 600;
+                background-color: #f6f6f6;
+
+                // &:nth-child(odd) {
+                //     background-color: $white;
+                // }
+            }
+
+            // tr {
+            //     &:nth-child(odd) {
+            //         background-color: $white;
+            //     }
+
+            //     &:nth-child(odd) {
+            //         background-color: #f6f6f6;
+            //     }
+            // }
+
+            .ProductImage {
+                height: 140px;
+                width: 140px;
+                object-fit: contain;
+            }
+        }
+    }
+}
