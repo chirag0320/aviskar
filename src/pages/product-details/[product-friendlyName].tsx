@@ -15,6 +15,8 @@ import { setRecentlyViewedProduct } from "@/redux/reducers/homepageReducer"
 
 function ProductDetail({ params }: any) {
   const { productDetailsData } = useAppSelector((state) => state.category)
+  const { productIds } = useAppSelector((state) => state.compareProducts)
+  console.log("🚀 ~ action.payload: productids", productIds)
   const dispatch = useAppDispatch()
   useAPIoneTime({
     service: getProductDetailsData, endPoint: ENDPOINTS.productDetails.replace('{{product-id}}', params?.["product-friendlyName"] //params?.["product-friendlyName"]
