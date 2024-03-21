@@ -32,7 +32,8 @@ export const ENDPOINTS = {
     getShoppingCartData: "shoppingcart/QcKa33GRtUanfuqzmFFM6A",
     updateShoppingCartData : "shoppingcart/OVixigTa9U6RcJbCK7pV2Q",
     clearShoppingCartData : "shoppingcart/7I7YbS9bX0asi1DVUXT60w",
-    recentlyViewdProducts: 'product/dS99jwa0akmwbLKOuSs9dA'
+    recentlyViewdProducts: 'product/dS99jwa0akmwbLKOuSs9dA',
+    compareProducts : "product/v07u2ZDwV0mGrWHpPYzaKA"
 }
 export const StoreData = {
     storeCode: 12,

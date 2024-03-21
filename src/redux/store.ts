@@ -8,6 +8,7 @@ import contactUsPageReducer from './reducers/contactUs'
 import newsReducer from './reducers/newsReducer'
 import calculatorsReducer from './reducers/calculatorsReducer'
 import shoppingCartReducer from './reducers/shoppingCartReducer'
+import compareProductsReducer from './reducers/compareProductsReducer'
 // Configuration for redux-persist
 const persistConfig = {
   key: 'root',
@@ -17,7 +18,7 @@ const persistConfig = {
     'userDetails',
     'loading',
     'sectionDetails',
-    'categoriesList', 'isLoggedIn', 'userDetails', 'blogList', 'newsList', 'calculators','recentlyViewedProducts'], // Reducers you want to persist
+    'categoriesList', 'isLoggedIn', 'userDetails', 'blogList', 'newsList', 'calculators','recentlyViewedProducts','productIds'], // Reducers you want to persist
 }
 // const persistedHomePageReducer = persistReducer(persistConfig, homepageReducer)
 // const persistedblogReducer = persistReducer(persistConfig, blogReducer)
@@ -32,7 +33,8 @@ const store = configureStore({
     shoppingCart: shoppingCartReducer,
     blogPage: persistReducer(persistConfig, blogReducer),
     newsPage: persistReducer(persistConfig, newsReducer),
-    calculators: persistReducer(persistConfig, calculatorsReducer)
+    calculators: persistReducer(persistConfig, calculatorsReducer),
+    compareProducts: persistReducer(persistConfig, compareProductsReducer),
 
 
     // profile: persistedProfileReducer,
@@ -45,7 +47,7 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware: any) =>
     getDefaultMiddleware({
-      serializableCheck: false,
+      serializableCheck: true,
     }),
 })
 const persistor = persistStore(store)

@@ -19,12 +19,13 @@ import { AlarmIcon, CameraIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIc
 
 // Data
 import { qmintRating } from "@/utils/data"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { ENDPOINTS } from "@/utils/constants"
 import { valueChangeForPrice } from "@/utils/common"
 import useCallAPI from "@/hooks/useCallAPI"
 import { navigate } from "gatsby"
+import { addProductToCompare } from "@/redux/reducers/compareProductsReducer"
 
 function createData(
   quantity: string,
@@ -54,6 +55,7 @@ const schema = yup.object().shape({
 
 
 function AboutProduct({ productId }: any) {
+  const dispatch = useAppDispatch();
   const styles: any = createStyles({
     tableBody: {
       border: '1px solid #ddd', // border around the table body
@@ -225,8 +227,8 @@ function AboutProduct({ productId }: any) {
                       "quantity": quantityCount
                     } as any)
                   }} disabled={loadingForAddToCart}>Add to cart</Button>
-                  <Button size="large" variant="outlined" onClick={()=>{
-                    if(!isLoggedIn){
+                  <Button size="large" variant="outlined" onClick={() => {
+                    if (!isLoggedIn) {
                       navigate('/login')
                       return
                     }
@@ -238,21 +240,24 @@ function AboutProduct({ productId }: any) {
                 }}>Register to Buy</Button>}
             </Stack>
             <Divider />
-            {/* <Stack className="SocialConnects">
+            <Stack className="SocialConnects">
               <Box className="Left">
                 <Button className="">
                   <HeartIcon className="Icon" />
                   <Typography variant="overline">Wishlist</Typography>
                 </Button>
+
                 <MailIcon1 className="Icon" />
-                <AlarmIcon className="Icon" />
+                <Button className="" onClick={() => dispatch(addProductToCompare(productId))}>
+                  <AlarmIcon className="Icon" />
+                </Button>
               </Box>
               <Box className="Right">
                 <IconButton className="Icon"><InstagramIcon1 /></IconButton>
                 <IconButton className="Icon"><FacebookIcon /></IconButton>
                 <IconButton className="Icon"><TwitterIcon /></IconButton>
               </Box>
-            </Stack> */}
+            </Stack>
             <Divider />
             {(priceData?.data?.[0]?.tierPriceList?.length > 0 || productDetailsData?.isGradingShow) ? <Stack className="AdditionalDetails">
               {priceData?.data?.[0]?.tierPriceList?.length > 0 ? <><Accordion defaultExpanded>
