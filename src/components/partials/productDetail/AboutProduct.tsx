@@ -19,12 +19,13 @@ import { AlarmIcon, CameraIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIc
 
 // Data
 import { qmintRating } from "@/utils/data"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { ENDPOINTS } from "@/utils/constants"
 import { valueChangeForPrice } from "@/utils/common"
 import useCallAPI from "@/hooks/useCallAPI"
 import { navigate } from "gatsby"
+import { addProductToCompare } from "@/redux/reducers/compareProductsReducer"
 
 function createData(
   quantity: string,
@@ -54,6 +55,7 @@ const schema = yup.object().shape({
 
 
 function AboutProduct({ productId }: any) {
+  const dispatch = useAppDispatch();
   const styles: any = createStyles({
     tableBody: {
       border: '1px solid #ddd', // border around the table body
@@ -132,6 +134,9 @@ function AboutProduct({ productId }: any) {
       default:
         break;
     }
+  }
+  const addIntoComapreProduct = (id: any) => {
+    dispatch(addProductToCompare(id))
   }
   return (
     <Box className="AboutProduct">
@@ -247,7 +252,7 @@ function AboutProduct({ productId }: any) {
                 <Box className="IconWrapper"><MailIcon1 /></Box>
                 <Typography variant="overline">Email To A Friend</Typography>
               </Button>
-              <Button color="secondary" className="IconWithText">
+              <Button color="secondary" className="IconWithText" onClick={() => { addIntoComapreProduct(productId) }}>
                 <Box className="IconWrapper"><AlarmIcon /></Box>
                 <Typography variant="overline">Price Alert</Typography>
               </Button>
