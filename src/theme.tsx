@@ -326,8 +326,8 @@ const theme: Theme = createTheme({
           },
         },
         textSecondary: {
-          fontSize: pxToRem(14),
-          lineHeight: pxToRem(20),
+          fontSize: "14px",
+          lineHeight: "20px",
           fontWeight: 600,
           textDecoration: "underline",
           "&:hover": {
