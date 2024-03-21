@@ -63,7 +63,7 @@ export const actionMenuItems = [
   {
     text: "Compare",
     icon: <CompareIcon />,
-    href: "#",
+    href: "/compare-products",
     key: 'enablecompare'
   },
 ]
