@@ -13,7 +13,7 @@ import { useAppSelector } from "@/hooks"
 
 // Utils
 import { subMenuItems } from "../../utils/data"
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 export interface Icategory {
   categoryId: number,
   name: string,
@@ -48,6 +48,7 @@ function Navigation() {
                           <Button
                             aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                             color="secondary"
+                            onClick={() => navigate(`/${category.searchEngineFriendlyPageName}`)}
                             className={classNames("MenuLink")}
                             disableRipple
                             name={category?.searchEngineFriendlyPageName ?? category.name}
@@ -61,7 +62,7 @@ function Navigation() {
                         <MegaMenu subCategorys={category.subCategories} category={category} />
                       </HoverTooltip></Fragment>
                       : <Fragment key={category.name}><Button
-                        href="#"
+                        onClick={() => navigate(`/${category.searchEngineFriendlyPageName}`)}
                         color="secondary"
                         aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                         name={category?.searchEngineFriendlyPageName ?? category.name}
