@@ -16,8 +16,6 @@ function CategoryFilters({ setSelectedFilters, setSelectedPrice, selectedFilters
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
 
   const navigatePageHandler = (categoryId: number, searchEngineFriendlyPageName: string) => {
-    console.log("🚀 ~ navigatePageHandler ~ searchEngineFriendlyPageName:", searchEngineFriendlyPageName)
-    console.log("🚀 ~ navigatePageHandler ~ categoryId:", categoryId)
     navigate(`/${searchEngineFriendlyPageName}`, { state: { categoryId: categoryId } })
   }
 

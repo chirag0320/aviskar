@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Stack,
   Box,
@@ -7,6 +7,7 @@ import {
   Link,
   Container,
   Breadcrumbs,
+  Icon,
 } from "@mui/material";
 import classNames from "classnames";
 import * as variable from "../../scss/settings/variables.module.scss";
@@ -24,6 +25,8 @@ import {
   ChevronUpRounded,
 } from "../../assets/icons/index";
 import useRemainingTime from "@/hooks/useRemainingTime";
+import { navigate } from "gatsby";
+import CountDownTimer from "../partials/productDetail/CountDownTImer";
 interface Iprops {
   name: string;
   value: number;
@@ -197,7 +200,9 @@ export const ProductStockStatus = React.memo(
 );
 export const LinkWithIcon = React.memo(({ icon, href, text }: any) => {
   return (
-    <Link href={href} className="LinkWithIcon">
+    <Link className="LinkWithIcon" onClick={() => {
+      navigate(href)
+    }}>
       <IconButton>{icon}</IconButton>
       <Typography color="inherit" variant="overline" component="span">
         {text}
@@ -210,11 +215,12 @@ export const ProductUpdateCountdown = React.memo(() => {
   const { remainingTime } = useRemainingTime()
   return (
     <Stack className="ProductUpdateCountdown">
-      <TimerIcon />
+      <CountDownTimer />
       <Typography variant="bodySmall">Updates in {remainingTime} Sec</Typography>
     </Stack>
   )
 })
+
 
 export const PriceChangeReturn = React.memo(({ percentage }: { percentage: string }) => {
   return (

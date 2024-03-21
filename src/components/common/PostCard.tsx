@@ -14,11 +14,9 @@ import {
 
 // Assets
 import { ArrowRight } from "../../assets/icons/index";
-import { navigate } from "gatsby";
 import { formatDate } from "@/utils/common";
 
 function PostCard({ details, navigate, isNews = false }: any) {
-  console.log("🚀 ~ PostCard ~ isNews:", isNews)
   return (
     <Card className="PostCard">
       <img

@@ -72,8 +72,6 @@ export const contactUsPageSlice = createSlice({
         })
         builder.addCase(getConfiguration.fulfilled, (state, action) => {
             const responseData = action.payload.data.data;
-            console.log(responseData);
-
 
             const config: {
                 [key: string]: ConfigDetails

@@ -19,7 +19,6 @@ export function formatDate(dateString: any) {
 }
 
 export function progressBarLogic({ currentprice, min, max }: any) {
-  console.log("🚀 ~ progressBarLogic ~ {currentprice,min,max}:", { currentprice, min, max }, 'calcualted price', ((currentprice - min) / (max - min)) * 100)
   return ((currentprice - min) / (max - min)) * 100
 }
 

@@ -13,6 +13,7 @@ import { useAppSelector } from "@/hooks"
 
 // Utils
 import { subMenuItems } from "../../utils/data"
+import { Link, navigate } from "gatsby"
 export interface Icategory {
   categoryId: number,
   name: string,
@@ -47,6 +48,7 @@ function Navigation() {
                           <Button
                             aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                             color="secondary"
+                            onClick={() => navigate(`/${category.searchEngineFriendlyPageName}`)}
                             className={classNames("MenuLink")}
                             disableRipple
                             name={category?.searchEngineFriendlyPageName ?? category.name}
@@ -60,7 +62,7 @@ function Navigation() {
                         <MegaMenu subCategorys={category.subCategories} category={category} />
                       </HoverTooltip></Fragment>
                       : <Fragment key={category.name}><Button
-                        href="#"
+                        onClick={() => navigate(`/${category.searchEngineFriendlyPageName}`)}
                         color="secondary"
                         aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                         name={category?.searchEngineFriendlyPageName ?? category.name}
@@ -76,7 +78,11 @@ function Navigation() {
           </Stack>
           <Stack className="RightPart">
             {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
-            {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}><CartMenu /></Suspense> : null}
+            {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
+              <Link to="/shopping-cart">
+                <CartMenu />
+              </Link>
+            </Suspense> : null}
             <ActionMenu />
           </Stack>
         </Stack>

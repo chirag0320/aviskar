@@ -7,6 +7,7 @@ import categoryReducer from './reducers/categoryReducer'
 import contactUsPageReducer from './reducers/contactUs'
 import newsReducer from './reducers/newsReducer'
 import calculatorsReducer from './reducers/calculatorsReducer'
+import shoppingCartReducer from './reducers/shoppingCartReducer'
 // Configuration for redux-persist
 const persistConfig = {
   key: 'root',
@@ -16,21 +17,22 @@ const persistConfig = {
     'userDetails',
     'loading',
     'sectionDetails',
-    'categoriesList', 'isLoggedIn', 'userDetails', 'blogList', 'mewsList', 'calculators'], // Reducers you want to persist
+    'categoriesList', 'isLoggedIn', 'userDetails', 'blogList', 'newsList', 'calculators','recentlyViewedProducts'], // Reducers you want to persist
 }
-const persistedHomePageReducer = persistReducer(persistConfig, homepageReducer)
-const persistedblogReducer = persistReducer(persistConfig, blogReducer)
-const persistednewsReducer = persistReducer(persistConfig, newsReducer)
-const persistedCalculator = persistReducer(persistConfig, calculatorsReducer)
+// const persistedHomePageReducer = persistReducer(persistConfig, homepageReducer)
+// const persistedblogReducer = persistReducer(persistConfig, blogReducer)
+// const persistednewsReducer = persistReducer(persistConfig, newsReducer)
+// const persistedCalculator = persistReducer(persistConfig, calculatorsReducer)
 
 const store = configureStore({
   reducer: {
-    homePage: persistedHomePageReducer,
+    homePage: persistReducer(persistConfig, homepageReducer),
     category: categoryReducer,
     contactUs: contactUsPageReducer,
-    blogPage: persistedblogReducer,
-    newsPage: persistednewsReducer,
-    calculators: persistedCalculator
+    shoppingCart: shoppingCartReducer,
+    blogPage: persistReducer(persistConfig, blogReducer),
+    newsPage: persistReducer(persistConfig, newsReducer),
+    calculators: persistReducer(persistConfig, calculatorsReducer)
 
 
     // profile: persistedProfileReducer,

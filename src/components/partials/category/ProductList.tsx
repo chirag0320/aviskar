@@ -22,7 +22,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
           !categoryData.loading ? (
             categoryData?.items?.length > 0 ? categoryData.items.map((product: any) => {
               return (
-                <ProductCard key={product.productId} product={product} />
+                <ProductCard key={product.productId} product={product} stickyProduct={false} />
               );
             })
               : <Typography variant="body1">Record not found</Typography>

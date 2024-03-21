@@ -41,11 +41,14 @@ import { navigate } from "gatsby"
 import { deliveryMethodMessage } from "@/utils/common"
 import { useAppSelector } from "@/hooks"
 import { productImages } from "@/utils/data"
+import { CartItem } from "@/types/shoppingCart";
+import { CartItemsWithLivePriceDetails } from "../partials/shopping-cart/CartDetails";
 
 interface Iproduct {
   product: IFeaturedProducts;
+  stickyProduct?: boolean
 }
-export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
+export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Iproduct) => {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const [open, setOpen] = useState(false)
   const tooltipRef: any = useRef(null)
@@ -62,7 +65,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product }: Iproduct) => {
   };
 
   return (
-    <Card className="ProductCard" key={product.productId}>
+    <Card className={classNames("ProductCard", { "Sticky": stickyProduct })} key={product.productId}>
       <Stack className="ImageWrapper">
         <Link className="ImageLink" href="#">
           <img src={product.imageUrl} alt="Product image" loading="lazy" />
@@ -362,7 +365,7 @@ export const LineChartCard = (props: any) => {
 };
 
 
-export const CartCard = (data: any) => {
+export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem }: { cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any }) => {
   const [deliveryMethod, setDeliveryMethod] = useState<string>('SecureShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     setDeliveryMethod(event.target.value as string);
@@ -372,47 +375,53 @@ export const CartCard = (data: any) => {
     <Card className="CartCard">
       <CardMedia
         component="img"
-        image={data.data}
+        image={cartItem.imageUrl}
         alt="Product image"
       />
       <CardContent>
         <Stack className="TopWrapper">
           <Box className="LeftWrapper">
-            <Typography className="Name" component="p" variant="titleLarge">2024 1oz Lunar Series III Year of the Dragon Silver Coin</Typography>
-            <Typography variant="body2">Ships by 04 Jan 2024 or collect immediately</Typography>
+            <Typography className="Name" component="p" variant="titleLarge">{cartItem.productName}</Typography>
+            <Typography variant="body2">{cartItem.shippingInfo}</Typography>
           </Box>
           <Box className="RightWrapper">
             <Typography className="LivePrice" variant="body2">Live Price</Typography>
             <Typography variant="body2">Qty.</Typography>
-            <Typography variant="subtitle1">$3557.70</Typography>
+            <Typography variant="subtitle1">${cartItem.LivePriceDetails.price}</Typography>
             <Stack className="Quantity">
-              <IconButton className="Minus"><MinusIcon /></IconButton>
-              <TextField />
-              <IconButton className="Plus"><PlusIcon /></IconButton>
+              <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.productId)}><MinusIcon /></IconButton>
+              <TextField value={quantity} disabled />
+              <IconButton className="Plus" onClick={() => increaseQuantity(cartItem.productId)}><PlusIcon /></IconButton>
             </Stack>
-            <IconButton className="DeleteButton"><Delete1Icon /></IconButton>
+            <IconButton className="DeleteButton" onClick={() => removeItem(cartItem.productId)}><Delete1Icon /></IconButton>
           </Box>
         </Stack>
         <Stack className="BottomWrapper">
           <Stack className="LeftSide">
-            <Stack className="DeliveryMethod">
-              <Typography className="Label" variant="titleLarge">Delivery Method:</Typography>
-              <Select
-                color="secondary"
-                className="DeliveryMethodSelect"
-                value={deliveryMethod}
-                onChange={handleDeliveryMethod}
-                IconComponent={SelectDropdown}
-              >
-                <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
-                <MenuItem value="VaultStorage">Vault Storage</MenuItem>
-              </Select>
-            </Stack>
+            {!hideDeliveryMethod && (
+              <Stack className="DeliveryMethod">
+                <Typography className="Label" variant="titleLarge">Delivery Method:</Typography>
+                <Select
+                  color="secondary"
+                  className="DeliveryMethodSelect"
+                  value={deliveryMethod}
+                  onChange={handleDeliveryMethod}
+                  IconComponent={SelectDropdown}
+                >
+                  <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
+                  <MenuItem value="VaultStorage">Vault Storage</MenuItem>
+                </Select>
+              </Stack>
+            )}
+
             <ProductUpdateCountdown />
           </Stack>
-          <Stack className="RightSide">
-            <Typography className="ShippingMessage" variant="body2">{deliveryMethodMessage.noSecureShipping}</Typography>
-          </Stack>
+          {!hideRightSide && (
+            <Stack className="RightSide">
+              <Typography className="ShippingMessage" variant="body2">{deliveryMethodMessage.noSecureShipping}</Typography>
+            </Stack>
+          )}
+
         </Stack>
       </CardContent>
     </Card >
