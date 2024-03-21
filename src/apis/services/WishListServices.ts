@@ -16,6 +16,10 @@ class WishListServices {
     static async addToWishList(url: string, wishListQuery: any) {
         return axiosInstance.post(url, wishListQuery);
     }
+
+    static async addToWishListToShoppingCart(url: string, items: any) {
+        return axiosInstance.patch(url, items);
+    }
 }
 
 export default WishListServices

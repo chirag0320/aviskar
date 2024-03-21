@@ -42,6 +42,13 @@ export const addToWishList = appCreateAsyncThunk(
     }
 )
 
+export const addToWishListToShoppingCart = appCreateAsyncThunk(
+    "addToWishListToShoppingCart",
+    async ({ url, body }: { url: string, body: any }) => {
+        return await WishListServices.addToWishListToShoppingCart(url, body);
+    }
+)
+
 export const wishListPageSlice = createSlice({
     name: 'wishList',
     initialState,
@@ -68,7 +75,6 @@ export const wishListPageSlice = createSlice({
         })
 
         // add to wishlist
-
         builder.addCase(addToWishList.pending, (state) => {
             state.loading = true
         })
@@ -79,6 +85,48 @@ export const wishListPageSlice = createSlice({
             state.loading = false
         })
         builder.addCase(addToWishList.rejected, (state) => {
+            state.loading = false
+        })
+
+        // update wish listdata
+        builder.addCase(updateWishListData.pending, (state) => {
+            state.loading = true
+        })
+        builder.addCase(updateWishListData.fulfilled, (state, action) => {
+            // console.log(action.payload.data);
+
+            // // state.wishListItems = action.payload.data.data.items
+            state.loading = false
+        })
+        builder.addCase(updateWishListData.rejected, (state) => {
+            state.loading = false
+        })
+
+        // delete wish list data
+        builder.addCase(deleteWishListData.pending, (state) => {
+            state.loading = true
+        })
+        builder.addCase(deleteWishListData.fulfilled, (state, action) => {
+            // console.log(action.payload.data);
+
+            // // state.wishListItems = action.payload.data.data.items
+            state.loading = false
+        })
+        builder.addCase(deleteWishListData.rejected, (state) => {
+            state.loading = false
+        })
+
+        // addWishlist to shopping cart
+        builder.addCase(addToWishListToShoppingCart.pending, (state) => {
+            state.loading = true
+        })
+        builder.addCase(addToWishListToShoppingCart.fulfilled, (state, action) => {
+            // console.log(action.payload.data);
+
+            // // state.wishListItems = action.payload.data.data.items
+            state.loading = false
+        })
+        builder.addCase(addToWishListToShoppingCart.rejected, (state) => {
             state.loading = false
         })
     },

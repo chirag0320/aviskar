@@ -7,7 +7,7 @@ import { CartItem } from '@/types/shoppingCart'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { MinusIcon, PlusIcon } from '@/assets/icons'
 import { updateShoppingCartData } from '@/redux/reducers/shoppingCartReducer'
-import { deleteWishListData } from '@/redux/reducers/wishListReducer'
+import { addToWishListToShoppingCart, deleteWishListData } from '@/redux/reducers/wishListReducer'
 
 const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }) => {
     const wishListstate = useAppSelector(state => state.wishList)
@@ -18,7 +18,6 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
     const [wishListItemsWithLivePrice, setWishListItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
     const [selectedItems, setSelectedItems] = useState<{ [key: number]: boolean }>([])
-    console.log("🚀 ~ WishListDetails ~ selectedItems:", selectedItems)
 
     useEffect(() => {
         if (priceData?.data?.length > 0) {
@@ -64,6 +63,8 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
     }
 
     const updateWishListHandler = async () => {
+        console.log("Hello");
+        
         const itemsWithQuantity = Object.keys(quantities).map((item: any) => {
             return {
                 id: item,
@@ -74,12 +75,30 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
         await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
     }
 
-    const removeSelectedItemsHandler = async() => {
-        dispatch(deleteWishListData({ url: ENDPOINTS.deleteWishListData, body: [...Object.keys(selectedItems)] }) as any)
+    const removeSelectedItemsHandler = async () => {
+        const checkedItems: number[] = [];
+        for (const item in selectedItems) {
+            if (selectedItems[item]) {
+                checkedItems.push(Number(item));
+            }
+        }
+        await dispatch(deleteWishListData({ url: ENDPOINTS.deleteWishListData, body: checkedItems }) as any)
     }
 
-    const addSelectedItemsHandler = () => {
+    const addToCartSelectedItemsHandler = async () => {
         // await dispatch(deleteWishListData())
+        const checkedItemsWithQuantity: { [key: string]: number }[] = [];
+
+        for (const item in selectedItems) {
+            if (selectedItems[item]) {
+                checkedItemsWithQuantity.push({
+                    id: Number(item),
+                    quantity: quantities[item]
+                })
+            }
+        }
+
+        await dispatch(addToWishListToShoppingCart({ url: ENDPOINTS.addWishListToShoppingCart, body: checkedItemsWithQuantity }) as any)
     }
 
     const handleCheckboxChange = (id: number) => {
@@ -129,7 +148,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                 </Stack>
                 <Stack className="Right">
                     <Button color="primary" variant="outlined" onClick={removeSelectedItemsHandler}>Remove</Button>
-                    <Button color="primary" variant="contained" onClick={addSelectedItemsHandler}>Add to cart</Button>
+                    <Button color="primary" variant="contained" onClick={addToCartSelectedItemsHandler}>Add to cart</Button>
                 </Stack>
             </Stack>
         </Fragment>

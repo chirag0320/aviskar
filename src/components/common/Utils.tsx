@@ -139,20 +139,27 @@ export const Breadcrumb = React.memo(({ page1, page2, page3 }: any) => {
     >
       <Container>
         <Breadcrumbs aria-label="breadcrumb" separator={<ChevronRight />}>
-          <Link underline="hover" color="inherit" href="/" variant="body2">
+          <Link underline="hover" color="inherit" variant="body2" onClick={
+            ()=>{
+              navigate('/')
+            }
+          }>
             Home
           </Link>
           {page1 ? (
-            <Typography
+            <Link
               color={page1 && !page2 && !page3 ? variable.dark : "inherit"}
               variant="body2"
+              onClick={()=>{
+                navigate('/shop')
+              }}
             >
               {page1}
-            </Typography>
+            </Link>
           ) : (
             ""
           )}
-          {page2 ? (
+          {/* {page2 ? (
             <Typography
               color={page2 && !page3 ? variable.dark : "inherit"}
               variant="body2"
@@ -161,7 +168,7 @@ export const Breadcrumb = React.memo(({ page1, page2, page3 }: any) => {
             </Typography>
           ) : (
             ""
-          )}
+          )} */}
           {page3 ? (
             <Typography
               color={page3 ? variable.dark : "inherit"}
