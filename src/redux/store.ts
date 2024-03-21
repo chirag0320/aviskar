@@ -45,7 +45,7 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware: any) =>
     getDefaultMiddleware({
-      serializableCheck: false,
+      serializableCheck: true
     }),
 })
 const persistor = persistStore(store)

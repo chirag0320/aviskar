@@ -1,8 +1,8 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { Box, Button, Checkbox, FormControlLabel, Icon, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Select, Stack, Typography } from "@mui/material"
 
 // Hooks
-import { useToggle } from "@/hooks"
+import { useAppSelector, useToggle } from "@/hooks"
 
 // Type
 import type { SelectChangeEvent } from "@mui/material"
@@ -16,11 +16,20 @@ import StepWrapper from "./StepWrapper"
 import UpdateAddress from "./UpdateAddress"
 import SelectAddress from "./SelectAddress"
 import AlertDialog from "./AlertDialog"
+import { navigate } from "gatsby"
 
 function Step1() {
+  const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
+  console.log("🚀 ~ Checkout ~ checkoutPageData: Step1", checkoutPageData)
   const [open, setOpen] = useState<boolean>(false)
+  const [isBillingAndShipingAddressSame, setisBillingAndShipingAddressSame] = useState<boolean>(false)
   const [addressTitle, setAddressTitle] = useState<string>("Add")
-  const [selectAccount, setSelectAccount] = useState<string>('DifferentMethod')
+  const [selectAccount, setSelectAccount] = useState<any>(checkoutPageData?.customers?.[0]!)
+  useEffect(() => {
+    if (checkoutPageData?.customers?.[0]) {
+      setSelectAccount(checkoutPageData?.customers?.[0]!)
+    }
+  }, [checkoutPageData?.customers])
   const [openUpdateAddress, toggleUpdateAddress] = useToggle(false)
   const [openSelectAddress, toggleSelectAddress] = useToggle(false)
   const [openAlertDialog, toggleAlertDialog] = useToggle(false)
@@ -44,6 +53,7 @@ function Step1() {
     setAddressTitle(type)
     toggleUpdateAddress()
   }
+
   return (
     <StepWrapper title="Step 1" className="Step1">
       <Box className="FieldWrapper">
@@ -52,11 +62,13 @@ function Step1() {
           <Box className="MembershipWrapper">
             <Typography className="Label" variant="body2">Current Membership:</Typography>
             <Stack className="Wrapper">
-              <Stack className="Badge"><Typography variant="overline">Copper</Typography></Stack>
-              <Button href="#">Click here to upgrade</Button>
+              <Stack className="Badge"><Typography variant="overline">{selectAccount?.membershipName}</Typography></Stack>
+              <Button onClick={()=>{
+                navigate('/membership')
+              }}>Click here to upgrade</Button>
             </Stack>
           </Box>
-          <Select
+          {checkoutPageData?.customers && checkoutPageData?.customers?.length > 0 && selectAccount && <Select
             color="secondary"
             className="AccountSelect"
             value={selectAccount}
@@ -64,10 +76,8 @@ function Step1() {
             IconComponent={SelectDropdown}
             fullWidth
           >
-            <MenuItem value="DifferentMethod">Cameron Williamson (Individual)</MenuItem>
-            <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
-            <MenuItem value="VaultStorage">Vault Storage</MenuItem>
-          </Select>
+            {checkoutPageData?.customers?.map((customer) => <MenuItem value={customer as any}>{customer.firstName + ' ' + customer.lastName + ' ' + "(" + customer?.accounttype + ")"}</MenuItem>)}
+          </Select>}
         </Stack>
       </Box>
       <Box className="FieldWrapper">
@@ -119,7 +129,9 @@ function Step1() {
       <FormControlLabel
         name="SameAddress"
         className="SameAddressCheckbox"
-        control={<Checkbox />}
+        control={<Checkbox checked={isBillingAndShipingAddressSame} onChange={()=>{
+          setisBillingAndShipingAddressSame((prev)=>!prev)
+        }}/>}
         label="My Billing and shipping addresses are same"
       />
       <Box className="FieldWrapper">
@@ -134,7 +146,7 @@ function Step1() {
       </Box>
       <UpdateAddress open={openUpdateAddress} dialogTitle={addressTitle + " Address"} onClose={toggleUpdateAddress} />
       <AlertDialog open={openAlertDialog} onClose={toggleAlertDialog} />
-      <SelectAddress open={openSelectAddress} onClose={toggleSelectAddress} />
+      <SelectAddress open={openSelectAddress} onClose={toggleSelectAddress} listOfAddress={true ? checkoutPageData?.billingAddressDetails : checkoutPageData?.shippingAddressDetails }/>
     </StepWrapper>
   )
 }
