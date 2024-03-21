@@ -354,6 +354,7 @@ const theme: Theme = createTheme({
           fontSize: pxToRem(16),
           lineHeight: pxToRem(20),
           fontWeight: 600,
+          padding: "16px 23px",
         },
       },
     },
