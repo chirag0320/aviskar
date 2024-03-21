@@ -10,6 +10,8 @@ import { IproductPrice } from '../home/FeaturedProducts'
 import { resetSubTotal, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
 import { set } from 'react-hook-form'
 import { navigate } from 'gatsby'
+import { apicall } from '@/utils/helper'
+import useDebounce from '@/hooks/useDebounce'
 
 export type CartItemsWithLivePriceDetails = CartItem & {
     LivePriceDetails: IproductPrice
@@ -24,7 +26,10 @@ const CartDetails = () => {
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
     const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
-
+    const changeInQuantities = useDebounce(quantities, 500)
+    useEffect(() => {
+        updateCartHandler(false)
+    }, [changeInQuantities])
     useEffect(() => {
         if (priceData?.data?.length > 0) {
             const idwithpriceObj: any = {}
@@ -47,7 +52,7 @@ const CartDetails = () => {
 
             setCartItemsWithLivePrice(cartItemsWithLivePrice)
         }
-    }, [priceData])
+    }, [priceData, cartItems])
 
     useEffect(() => {
         if (cartItems.length > 0) {
@@ -94,7 +99,7 @@ const CartDetails = () => {
         // }
     }
 
-    const updateCartHandler = async () => {
+    const updateCartHandler = async (isapiCallNeeded?: boolean) => {
         let subTotal = 0;
         const itemsWithQuantity = cartItemsWithLivePrice.map((item: CartItemsWithLivePriceDetails) => {
             subTotal += (item.LivePriceDetails.price * quantities[item.productId]);
@@ -105,7 +110,9 @@ const CartDetails = () => {
         })
         dispatch(resetSubTotal());
         dispatch(updateSubTotal(subTotal))
-        await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
+        if (isapiCallNeeded) {
+            await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
+        }
     }
 
     const clearCartHandler = async () => {
@@ -127,7 +134,7 @@ const CartDetails = () => {
                 <Button className='LeftArrow' startIcon={<LeftArrow />} color='secondary' onClick={() => navigate("/shop")}> Continue Shopping</Button>
                 <Stack className='ClearUpdateCartWrapper'>
                     <Button className="ClearShoppingCart" color='secondary' onClick={clearCartHandler} disabled={loading}>Clear Shopping Cart</Button>
-                    <Button className='UpdateCartBtn' size='large' variant="contained" onClick={updateCartHandler} disabled={loading}>Update Shopping Cart</Button>
+                    <Button className='UpdateCartBtn' size='large' variant="contained" onClick={() => updateCartHandler(true)} disabled={loading}>Update Shopping Cart</Button>
                 </Stack>
             </Stack>
         </Box>

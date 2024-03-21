@@ -34,7 +34,8 @@ export const ENDPOINTS = {
     clearShoppingCartData : "shoppingcart/7I7YbS9bX0asi1DVUXT60w",
     recentlyViewdProducts: 'product/dS99jwa0akmwbLKOuSs9dA',
     checkoutDetails: 'Checkout/xT3hjqkBFESvUfuMu8T70A',
-    compareProducts : "product/v07u2ZDwV0mGrWHpPYzaKA"
+    compareProducts : "product/v07u2ZDwV0mGrWHpPYzaKA",
+    addOrEditAddress : "myvault/mIKu7TMRFUW49i97slxpDg"
 }
 export const StoreData = {
     storeCode: 12,

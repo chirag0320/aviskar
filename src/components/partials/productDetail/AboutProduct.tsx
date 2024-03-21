@@ -224,11 +224,12 @@ function AboutProduct({ productId }: any) {
                 }}><PlusIcon /></IconButton>
               </Stack>
                 <Stack className="Right">
-                  <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={() => {
-                    apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+                  <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={async () => {
+                    await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
                       "productId": productId,
                       "quantity": quantityCount
                     } as any)
+                    navigate('/shopping-cart')
                   }} disabled={loadingForAddToCart}>Add to cart</Button>
                   <Button size="large" variant="outlined" onClick={() => {
                     if (!isLoggedIn) {

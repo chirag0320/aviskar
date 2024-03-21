@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, Checkbox, FormControlLabel, IconButton, MenuItem, Select, Stack, Typography } from "@mui/material"
 
 // Type
@@ -10,15 +10,81 @@ import { CartCard } from "@/components/common/Card"
 import { InfoIcon, SelectDropdown } from "@/assets/icons"
 import { HoverTooltip } from "@/components/common/CustomTooltip"
 import { productImages } from "@/utils/data"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
+import { shopingCartItem, updateSubTotalCheckoutPage } from "@/redux/reducers/checkoutReducer"
+import { ENDPOINTS } from "@/utils/constants"
+import useApiRequest from "@/hooks/useAPIRequest"
+import { CartItemsWithLivePriceDetails } from "../shopping-cart/CartDetails"
 
 function Step2() {
-  // const {checkoutPageData} = useAppSelector((state)=>state.checkoutPage)
-  // console.log("🚀 ~ Checkout ~ checkoutPageData:", checkoutPageData)
+  const dispatch = useAppDispatch()
+  const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
   const [deliveryMethod, setDeliveryMethod] = useState<string>('DifferentMethod')
+  const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
+  const [productIds, setProductIds] = useState({})
+  const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
+  const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
+
+  useEffect(() => {
+    if (priceData?.data?.length > 0) {
+      const idwithpriceObj: any = {}
+      priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
+
+      let subTotal = 0;
+      const cartItemsWithLivePrice = checkoutPageData?.shoppingCartItems.map((item: shopingCartItem) => {
+        subTotal += (idwithpriceObj?.[item.productId]?.price * item.quantity)
+        return {
+          ...item,
+          LivePriceDetails: idwithpriceObj[item.productId]
+        }
+      })
+
+      dispatch(updateSubTotalCheckoutPage(subTotal))
+
+      // const subTotal = cartItemsWithLivePrice.reduce((acc: number, item: CartItemsWithLivePriceDetails) => {
+      //     return acc + (item.LivePriceDetails.price * item.quantity)
+      // }, 0)
+
+      setCartItemsWithLivePrice(cartItemsWithLivePrice!)
+    }
+  }, [priceData, checkoutPageData?.shoppingCartItems])
+
+  useEffect(() => {
+    if (checkoutPageData?.shoppingCartItems?.length! > 0) {
+      const productIds = checkoutPageData?.shoppingCartItems.map((item: shopingCartItem) => item.productId);
+      setProductIds({ productIds })
+    }
+
+    let quantities: any = {}
+    checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
+      quantities[item.productId] = item.quantity
+    })
+    setQuantities(quantities)
+  }, [checkoutPageData?.shoppingCartItems])
+
+
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     setDeliveryMethod(event.target.value as string);
   }
+
+  const increaseQuantity = (productId: number) => {
+    setQuantities({ ...quantities, [productId]: quantities[productId] + 1 })
+  }
+
+  const decreaseQuantity = (productId: number) => {
+    if (quantities[productId] === 1) {
+      // setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId));
+    }
+    else {
+      setQuantities({ ...quantities, [productId]: quantities[productId] - 1 })
+    }
+  }
+
+  const removeItemFromCart = (productId: number) => {
+    setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId));
+  }
+
+  console.log("🚀 ~ Checkout ~ checkoutPageData:", checkoutPageData)
   return (
     <StepWrapper title="Step 2" className="Step2">
       <Box className="StepHeader">
@@ -53,122 +119,9 @@ function Step2() {
         />
       </Box>
       <Stack className="ProductList">
-        {[
-    {
-        "id": 20206,
-        "shoppingCartTypeId": 1,
-        "customerId": 74038,
-        "productId": 6134,
-        "storeCode": 12,
-        "quantity": 1,
-        "productName": "1oz Queensland Mint Silver Crown",
-        "shortDescription": "Stunning Silver Crown with Ultra Shine",
-        "friendlypagename": "1oz-queensland-mint-silver-crown",
-        "imageUrl": "https://qmintstoremedia.blob.core.windows.net/pictures/products/queensland-mint-silver-crown-story_120320242303434.jpeg?sv=2018-03-28&sr=b&sig=ueMA3EBSQsOygx2mJnnVTm3wI5OxBdV7eywwEwbMPmA%3D&st=2024-03-11T13%3A48%3A43Z&se=3024-03-12T13%3A48%3A43Z&sp=r&c=638458481234177677",
-        "productPrice": 0,
-        "premiumDiscount": 0,
-        "productWeight": 31.1,
-        "parentProductId": 1221,
-        "colorClass": "green-circle",
-        "iconClass": "fa fa-check-circle",
-        "availability": "In Stock",
-        "shippingInfo": "Ships by Mar 28 2024 12:00AM or collect immediately",
-        "stock": 17074,
-        "shippingMethod": [
-            1,
-            2,
-            3
-        ],
-        "shippableCountrys": [
-            6
-        ],
-        "LivePriceDetails": {
-            "productId": 6134,
-            "price": 46.62,
-            "discount": 0,
-            "productLowestPrice": 36.62,
-            "tierOff": 10,
-            "taxPrice": 3.33,
-            "tierPriceList": [
-                {
-                    "fromQty": 1,
-                    "toQty": 19,
-                    "price": 46.52,
-                    "discount": 0,
-                    "taxPrice": 4.23
-                },
-                {
-                    "fromQty": 20,
-                    "toQty": 99,
-                    "price": 44.32,
-                    "discount": 0,
-                    "taxPrice": 4.03
-                },
-                {
-                    "fromQty": 100,
-                    "toQty": 499,
-                    "price": 42.12,
-                    "discount": 0,
-                    "taxPrice": 3.83
-                },
-                {
-                    "fromQty": 500,
-                    "toQty": 999,
-                    "price": 41.02,
-                    "discount": 0,
-                    "taxPrice": 3.73
-                },
-                {
-                    "fromQty": 1000,
-                    "toQty": 999999,
-                    "price": 36.62,
-                    "discount": 0,
-                    "taxPrice": 3.33
-                }
-            ]
-        }
-    },
-    {
-        "id": 18235,
-        "shoppingCartTypeId": 1,
-        "customerId": 74038,
-        "productId": 3287,
-        "storeCode": 12,
-        "quantity": 1,
-        "productName": "1oz Queensland Mint Kangaroo Gold Cast bar",
-        "shortDescription": "#1 customer choice in gold bars",
-        "friendlypagename": "1oz-queensland-mint-gold-cast-bar",
-        "imageUrl": "https://qmintstoremedia.blob.core.windows.net/pictures/products/1oz-Queensland-Mint-Gold-Cast-Bar-Front-min_120320242303248.png?sv=2018-03-28&sr=b&sig=6XDtoxPWueW9OQgCGgjtlAtPeQW9MNeVZIfm35BSCB4%3D&st=2024-03-11T13%3A47%3A24Z&se=3024-03-12T13%3A47%3A24Z&sp=r&c=638458480448154933",
-        "productPrice": 0,
-        "premiumDiscount": 0,
-        "productWeight": 31.1,
-        "parentProductId": 314,
-        "colorClass": "green-circle",
-        "iconClass": "fa fa-check-circle",
-        "availability": "Available to Order",
-        "shippingInfo": "Ship or collect after Apr  4 2024 12:00AM",
-        "stock": 306,
-        "shippingMethod": [
-            1,
-            2,
-            3
-        ],
-        "shippableCountrys": [
-            6
-        ],
-        "LivePriceDetails": {
-            "productId": 3287,
-            "price": 3396.53,
-            "discount": 0,
-            "productLowestPrice": 3396.53,
-            "tierOff": 0,
-            "taxPrice": 0,
-            "tierPriceList": []
-        }
-    }
-].map((cartItem) => {
+        {cartItemsWithLivePrice?.length > 0 && cartItemsWithLivePrice?.map((cartItem) => {
           return (
-            <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={false} hideRightSide={true} quantity={100} increaseQuantity={()=>{}} decreaseQuantity={()=>{}} removeItem={()=>{}} />
+            <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={false} hideRightSide={true} quantity={quantities[cartItem.productId]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
           )
         })}
       </Stack>

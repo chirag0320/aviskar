@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 // Types
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import CheckoutPageServices from '@/apis/services/checkoutCartServices'
-type customerDetails={
+import { any } from 'prop-types'
+export type customerDetails = {
     "customerId": number,
     "email": string,
     "firstName": string,
@@ -15,6 +16,30 @@ type customerDetails={
     "membershipid": number,
     "membershipName": any
 }
+export type shopingCartItem = {
+    "id": number,
+    "shoppingCartTypeId": number,
+    "customerId": number,
+    "productId": number,
+    "storeCode": number,
+    "quantity": number,
+    "productName": string,
+    "shortDescription": string,
+    "friendlypagename": string,
+    "imageUrl": string,
+    "productPrice": number,
+    "premiumDiscount": number,
+    "productWeight": number,
+    "parentProductId": number,
+    "colorClass": string,
+    "iconClass": string,
+    "availability": string,
+    "shippingInfo": string,
+    "stock": number,
+    "shippingMethod": any[],
+    "shippableCountrys": any[]
+}
+
 interface CheckoutPageState {
     loading: boolean,
     checkoutPageData: {
@@ -67,31 +92,7 @@ interface CheckoutPageState {
                 "countryName": string
             },
         ],
-        "shoppingCartItems": [
-            {
-                "id": number,
-                "shoppingCartTypeId": number,
-                "customerId": number,
-                "productId": number,
-                "storeCode": number,
-                "quantity": number,
-                "productName": string,
-                "shortDescription": string,
-                "friendlypagename": string,
-                "imageUrl": string,
-                "productPrice": number,
-                "premiumDiscount": number,
-                "productWeight": number,
-                "parentProductId": number,
-                "colorClass": string,
-                "iconClass": string,
-                "availability": string,
-                "shippingInfo": string,
-                "stock": number,
-                "shippingMethod": any[],
-                "shippableCountrys": any[]
-            }
-        ],
+        "shoppingCartItems": shopingCartItem[],
         "termsConditions": {
             "name": string,
             "value": string
@@ -136,6 +137,13 @@ export const getCheckoutPageData = appCreateAsyncThunk(
     }
 )
 
+export const addOrEditAddress = appCreateAsyncThunk(
+    "addOrEditAddress",
+    async ({url ,body} : {url : string , body : any}) => {
+
+    }
+)
+
 export const checkoutPage = createSlice({
     name: 'checkoutPage',
     initialState,
@@ -146,10 +154,10 @@ export const checkoutPage = createSlice({
         setLoadingFalse: (state) => {
             state.loading = false
         },
-        resetSubTotal: (state) => {
+        resetSubTotalCheckoutPage: (state) => {
             state.subTotal = 0
         },
-        updateSubTotal: (state, action) => {
+        updateSubTotalCheckoutPage: (state, action) => {
             state.subTotal += action.payload;
             state.subTotal = Math.round((state.subTotal + Number.EPSILON) * 100) / 100
         }
@@ -170,6 +178,6 @@ export const checkoutPage = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotal, resetSubTotal } = checkoutPage.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage } = checkoutPage.actions
 
 export default checkoutPage.reducer
