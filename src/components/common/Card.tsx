@@ -372,7 +372,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
   }
 
   return (
-    <Card className="CartCard">
+    cartItem && <Card className="CartCard">
       <CardMedia
         component="img"
         image={cartItem.imageUrl}
