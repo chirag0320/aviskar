@@ -179,6 +179,7 @@
             .MuiMenu-paper {
               max-width: $sm;
               .MuiList-root {
+                max-height: 300px;
                 .MuiMenuItem-root {
                   flex-direction: column;
                   align-items: flex-start;
