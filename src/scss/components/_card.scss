@@ -225,7 +225,6 @@
     .MuiCardActions-root {
       padding: 0 $horizontalSpacing $horizontalSpacing;
       margin-top: auto;
-      gap: 15px;
 
       .ClickTooltipWrapper {
         align-self: stretch;
@@ -235,6 +234,7 @@
           border-color: $mercury;
           height: 100%;
           min-width: 56px;
+          margin-right: 15px;
           @include padding-horizontal(8, 10);
 
           &:hover {
