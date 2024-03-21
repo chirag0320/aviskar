@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, FormControlLabel, IconButton, Radio, RadioGroup, Stack, Typography } from "@mui/material"
 
 // Componenets
@@ -7,11 +7,16 @@ import { HoverTooltip } from "@/components/common/CustomTooltip"
 
 // Assets
 import { InfoIcon, BankIcon, CashIcon, CardIcon } from "@/assets/icons"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
+import { updateFinalDataForTheCheckout } from "@/redux/reducers/checkoutReducer"
 
 function Step3() {
+  const dispatch = useAppDispatch()
   const [paymentType, setPaymentType] = useState('BankTransfer')
   const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
+  useEffect(()=>{
+    dispatch(updateFinalDataForTheCheckout({ paymentType }))
+  },[paymentType])
   const renderRadioLabelWithIcon = (label: string, icon: React.ReactElement, price?: string) => {
     return (
       <Stack className="RadioLabelWithIcon">
@@ -38,7 +43,7 @@ function Step3() {
     <StepWrapper title="Step 3" className="Step3">
       <Stack className="PaymentMethod">
         <Typography variant="subtitle1">Select your payment method</Typography>
-        <RadioGroup name="payment-method" defaultValue="BankTransfer" row value={paymentType} onChange={(e)=>{
+        <RadioGroup name="payment-method" defaultValue="BankTransfer" row value={paymentType} onChange={(e) => {
           setPaymentType(e.target.value)
         }}>
           {checkoutPageData?.storeDetail?.isBankTransfer && <FormControlLabel value="BankTransfer" control={<Radio />} label={renderRadioLabelWithIcon("Bank Transfer", <BankIcon />)} />}
