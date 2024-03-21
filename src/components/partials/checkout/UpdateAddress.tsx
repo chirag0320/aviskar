@@ -1,16 +1,18 @@
 
 import React from "react"
-import { Box, Stack, Typography } from "@mui/material"
+import { Box, Button, Stack, Typography } from "@mui/material"
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // Hooks
-import { useToggle } from "@/hooks"
+import { useAppDispatch, useToggle } from "@/hooks"
 
 // Componenets
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from '@/components/common/RenderFields';
+import { addOrEditAddress } from "@/redux/reducers/checkoutReducer";
+import { ENDPOINTS } from "@/utils/constants";
 
 interface UpdateAddress {
   open: boolean
@@ -33,11 +35,23 @@ interface Inputs {
 }
 
 const schema = yup.object().shape({
-  SelectMetal: yup.string().required(),
+  // SelectMetal: yup.string().required(),
+  FirstName : yup.string().required(),
+  LastName : yup.string().required(),
+  Company : yup.string().required(),
+  Contact : yup.string().required(),
+  Email: yup.string().email().required(),
+  Address1 : yup.string().required(),
+  Address2 : yup.string(),
+  City : yup.string().required(),
+  Country : yup.string().required(), 
+  State : yup.string().required(),
+  Code : yup.string().required()
 });
 
 function UpdateAddress(props: UpdateAddress) {
   const { open, dialogTitle, onClose } = props
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -45,11 +59,18 @@ function UpdateAddress(props: UpdateAddress) {
     handleSubmit,
     clearErrors,
     control,
+    getValues,
     setValue,
     formState: { errors },
   } = useForm<Inputs>({
     resolver: yupResolver(schema)
   })
+
+  const onSubmit = (data : any) => {
+    // const prepareData = 
+    // dispatch(addOrEditAddress(ENDPOINTS.addOrEditAddress) , data));
+    // onClose();
+  }
 
   return (
     <StyledDialog
@@ -59,10 +80,10 @@ function UpdateAddress(props: UpdateAddress) {
       onClose={onClose}
       primaryActionText="Save"
       maxWidth="sm"
-      actions
     >
-      <Stack className="AllFields">
-        <Stack className="Column">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack className="AllFields" >
+        <Stack className="Column">  
           <RenderFields
             register={register}
             error={errors.FirstName}
@@ -96,6 +117,7 @@ function UpdateAddress(props: UpdateAddress) {
             register={register}
             error={errors.Contact}
             name="Contact"
+            type="number"
             placeholder="Enter contact"
             control={control}
             variant='outlined'
@@ -170,7 +192,16 @@ function UpdateAddress(props: UpdateAddress) {
             margin='none'
           />
         </Stack>
+        </Stack>
+        <Stack className="ActionWrapper">
+        <Button variant="outlined" onClick={onClose}>
+          Close
+        </Button>
+        <Button variant="contained" type="submit">
+          Submit
+        </Button>
       </Stack>
+      </form>
     </StyledDialog>
   )
 }

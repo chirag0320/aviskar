@@ -158,7 +158,7 @@ function Vault() {
                           <Skeleton
                             animation="wave"
                             height="75vh"
-                            width="100vw"
+                            width="100%"
                             style={{
                               transform: "none",
                               margin: "auto",
@@ -169,7 +169,7 @@ function Vault() {
                           <Skeleton
                             animation="wave"
                             height="300px"
-                            width="100vw"
+                            width="100%"
                             style={{
                               transform: "none",
                               margin: "auto",
@@ -252,7 +252,7 @@ function Vault() {
                           <Skeleton
                             animation="wave"
                             height="75vh"
-                            width="100vw"
+                            width="100%"
                             style={{
                               transform: "none",
                               margin: "auto",
@@ -263,7 +263,7 @@ function Vault() {
                           <Skeleton
                             animation="wave"
                             height="300px"
-                            width="100vw"
+                            width="100%"
                             style={{
                               transform: "none",
                               margin: "auto",
