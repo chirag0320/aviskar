@@ -193,6 +193,7 @@ function UpdateAddress(props: UpdateAddress) {
               options={top100Films}
               renderInput={(params) => <TextField placeholder="Enter state" {...params} />}
               fullWidth
+              freeSolo
             />
             <RenderFields
               type="number"

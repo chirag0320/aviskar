@@ -112,6 +112,8 @@
   &.MuiDialog-root {
     .MuiDialog-container {
       .MuiDialog-paper {
+        width: 100%;
+        max-width: 800px;
         .DialogHeader {
           justify-content: space-between;
           align-items: center;
