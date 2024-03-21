@@ -1,7 +1,8 @@
+import checkoutPageReducer from './reducers/checkoutReducer';
 import { configureStore } from '@reduxjs/toolkit'
 import homepageReducer from './reducers/homepageReducer'
 import blogReducer from './reducers/blogReducer'
-import { persistStore, persistReducer } from 'redux-persist'
+import { persistStore, persistReducer, PERSIST, FLUSH, REHYDRATE, PAUSE, PURGE, REGISTER } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import categoryReducer from './reducers/categoryReducer'
 import contactUsPageReducer from './reducers/contactUs'
@@ -35,6 +36,7 @@ const store = configureStore({
     blogPage: persistReducer(persistConfig, blogReducer),
     newsPage: persistReducer(persistConfig, newsReducer),
     calculators: persistReducer(persistConfig, calculatorsReducer),
+    checkoutPage: checkoutPageReducer,
     compareProducts: persistReducer(persistConfig, compareProductsReducer),
     wishList : wishListReducer
 
@@ -47,9 +49,11 @@ const store = configureStore({
     // campaign: campaignReducer,
     // searchVideo: searchVideoReducer,
   },
-  middleware: (getDefaultMiddleware: any) =>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: true,
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
     }),
 })
 const persistor = persistStore(store)

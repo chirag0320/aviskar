@@ -1,6 +1,7 @@
-import React, { Fragment, useState } from "react"
+import React, { Fragment, useEffect, useState } from "react"
 import { Drawer, List, ListItemButton, ListItemText, Container, Divider, Collapse } from "@mui/material"
 import classNames from 'classnames'
+import { useLocation } from '@reach/router';
 
 // Assets
 import { ArrowDown, ArrowUp } from '../../assets/icons/index'
@@ -9,8 +10,10 @@ import { ArrowDown, ArrowUp } from '../../assets/icons/index'
 import { useAppSelector } from "@/hooks"
 function MobileMenu(props: any) {
   const { open, toggleMobileMenu, trigger } = props
+  const location = useLocation();
   const [openMenu, setOpenMenu] = useState<any>({})
   const [openSubMenu, setOpenSubMenu] = useState<any>({})
+  const [isHomePage, setIsHomePage] = useState<boolean>(false)
   const { categoriesList } = useAppSelector((state) => state.homePage)
 
   const handleClickMainMenu = (menuId: any) => {
@@ -25,10 +28,16 @@ function MobileMenu(props: any) {
     }))
   }
 
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setIsHomePage(true)
+    }
+  }, [])
+
   return (
     <Drawer
       id="MobileMenu"
-      className={classNames({ "ScrollActive": trigger })}
+      className={classNames({ "ScrollActive": trigger, "isHomePage": isHomePage })}
       open={open}
       variant="temporary"
       onClose={toggleMobileMenu}

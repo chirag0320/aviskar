@@ -210,7 +210,7 @@ export const LinkWithIcon = React.memo(({ icon, href, text }: any) => {
     <Link className="LinkWithIcon" onClick={() => {
       navigate(href)
     }}>
-      <IconButton>{icon}</IconButton>
+      <IconButton LinkComponent="div" className="IconWrapper" href="#">{icon}</IconButton>
       <Typography color="inherit" variant="overline" component="span">
         {text}
       </Typography>
