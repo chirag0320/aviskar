@@ -135,6 +135,9 @@ function AboutProduct({ productId }: any) {
         break;
     }
   }
+  const addIntoComapreProduct=(id:any)=>{
+    dispatch(addProductToCompare(id))
+  }
   return (
     <Box className="AboutProduct">
       <Stack className="AboutWrapper">
@@ -248,7 +251,7 @@ function AboutProduct({ productId }: any) {
                 </Button>
 
                 <MailIcon1 className="Icon" />
-                <Button className="" onClick={() => dispatch(addProductToCompare(productId))}>
+                <Button className="" onClick={() => {addIntoComapreProduct(productId)}}>
                   <AlarmIcon className="Icon" />
                 </Button>
               </Box>

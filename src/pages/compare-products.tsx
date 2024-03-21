@@ -13,21 +13,24 @@ import { clearCompareList, compareProducts, getCompareProducts, removeProductFro
 import { ENDPOINTS } from "@/utils/constants";
 
 function CompareProducts() {
-    const compareProductsState = useAppSelector((state) => state.compareProducts);
+    const { productIds, comparedProducts, specificationKeys } = useAppSelector((state) => state.compareProducts);
     const dispatch = useAppDispatch();
 
-    console.log('compareProductsState', compareProductsState?.productIds);
-    
+    console.log('compareProductsState', productIds);
+
 
     useEffect(() => {
         const fetchCompareProducts = async () => {
-            if (compareProductsState.productIds.length > 0) {
-                await dispatch(getCompareProducts({ url: ENDPOINTS.compareProducts, body: { productIds: compareProductsState.productIds } }) as any);
+            if (productIds.length > 0) {
+                await dispatch(getCompareProducts({ url: ENDPOINTS.compareProducts, body: { productIds: productIds } }) as any);
             }
         }
         fetchCompareProducts();
-    }, [compareProductsState.productIds])
+    }, [productIds])
 
+    const removeProduct = (id:any) => {
+        dispatch(removeProductFromCompare(id))
+    }
     return (
         <Layout>
             <Seo
@@ -41,7 +44,7 @@ function CompareProducts() {
                 </Box>
                 <Container>
                     <Box className="CompareProductsWrapper">
-                        {compareProductsState.productIds.length > 0 ? (
+                        {productIds.length > 0 ? (
                             <Fragment>
                                 <Button variant="contained" color="primary" className="ClearList" onClick={() => dispatch(clearCompareList())}>Clear List</Button>
                                 <TableContainer
@@ -53,7 +56,7 @@ function CompareProducts() {
                                         <TableHead>
                                             <TableRow>
                                                 <TableCell className="StickyCell" style={{ minWidth: 200 }}>&nbsp;</TableCell>
-                                                {compareProductsState.comparedProducts.map((product, index) => (
+                                                {comparedProducts.map((product, index) => (
                                                     <TableCell sx={{ minWidth: { lg: "459px", xs: "400px" } }} key={product.productId} align="center">
                                                         <Link to={`/product-details/${product.productName}`} className="ProductName">{product.productName}</Link>
                                                     </TableCell>
@@ -61,10 +64,10 @@ function CompareProducts() {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {compareProductsState.specificationKeys.map((attribute) => (
+                                            {specificationKeys.map((attribute) => (
                                                 <TableRow key={attribute}>
                                                     <TableCell className="StickyCell">{attribute}</TableCell>
-                                                    {compareProductsState.comparedProducts.map((product, index) => (
+                                                    {comparedProducts.map((product, index) => (
                                                         <TableCell align="center" key={product.productId} className={attribute === 'ProductName' ? 'ProductName' : ''}>
                                                             {attribute === 'ProductName' ? (
                                                                 <Link to={`/product-details/${product.productName}`} className="productNameLink">{product.productName}</Link>
@@ -79,9 +82,9 @@ function CompareProducts() {
                                             ))}
                                             <TableRow>
                                                 <TableCell className="StickyCell">Delete</TableCell>
-                                                {compareProductsState.comparedProducts.map((product) => (
+                                                {comparedProducts.map((product) => (
                                                     <TableCell key={product.productId} align="center">
-                                                        <IconButton className="DeleteButton" onClick={() => dispatch(removeProductFromCompare(product.productId))}><Delete1Icon /></IconButton>
+                                                        <IconButton className="DeleteButton" onClick={() => { removeProduct(product.productId) }}><Delete1Icon /></IconButton>
                                                     </TableCell>
                                                 ))}
                                             </TableRow>

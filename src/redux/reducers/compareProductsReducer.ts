@@ -41,11 +41,12 @@ export const compareProducts = createSlice({
             console.log("🚀 ~ action.payload:", action.payload)
 
             if (!state.productIds.includes(productId) && state.productIds.length < 5) {
-                state.productIds.push(productId)
+                state.productIds = [...state.productIds, productId]
             }
         },
         removeProductFromCompare: (state, action) => {
-            state.productIds = structuredClone(state.productIds).filter((id) => id !== action.payload)
+            console.log("🚀 ~ action.payload:", action)
+            state.productIds = state.productIds.filter((id) => id !== action.payload)
         },
         clearCompareList: (state) => {
             state.productIds = []
@@ -71,6 +72,6 @@ export const compareProducts = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, addProductToCompare, removeProductFromCompare ,clearCompareList} = compareProducts.actions
+export const { setLoadingTrue, setLoadingFalse, addProductToCompare, removeProductFromCompare, clearCompareList } = compareProducts.actions
 
 export default compareProducts.reducer
