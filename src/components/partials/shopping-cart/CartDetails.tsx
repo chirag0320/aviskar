@@ -63,16 +63,12 @@ const CartDetails = () => {
     }
 
     const decreaseQuantity = (id: number) => {
-        if (quantities[id] === 1) {
-            removeItemFromCart(id);
-        }
-        else {
-            setQuantities({ ...quantities, [id]: quantities[id] - 1 })
-        }
+        setQuantities({ ...quantities, [id]: quantities[id] - 1 })
     }
 
     const removeItemFromCart = async (id: number) => {
-        // setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== id));        
+        // optimistic update needs(currentlt not)
+        setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== id));        
         await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: [id] }) as any);
     }
 
@@ -95,9 +91,6 @@ const CartDetails = () => {
         for (const id in quantities) {
             ids.push(Number(id));
         }
-
-        // console.log(ids);
-
 
         await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: ids }) as any)
         dispatch(resetSubTotal());

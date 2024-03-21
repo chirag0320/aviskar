@@ -366,7 +366,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
             <Typography variant="body2">Qty.</Typography>
             <Typography variant="subtitle1">${cartItem.LivePriceDetails.price}</Typography>
             <Stack className="Quantity">
-              <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.id)}><MinusIcon /></IconButton>
+              <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.id)} disabled={quantity === 1}><MinusIcon /></IconButton>
               <TextField value={quantity} disabled />
               <IconButton className="Plus" onClick={() => increaseQuantity(cartItem.id)}><PlusIcon /></IconButton>
             </Stack>
