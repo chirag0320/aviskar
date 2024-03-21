@@ -51,7 +51,7 @@ export const actionMenuItems = [
   {
     text: "Wishlist",
     icon: <WishlistIcon />,
-    href: "#",
+    href: "/wishlist",
     key: 'enablewishlist'
   },
   {

@@ -7,6 +7,7 @@ import { CartItem } from '@/types/shoppingCart'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { MinusIcon, PlusIcon } from '@/assets/icons'
 import { updateShoppingCartData } from '@/redux/reducers/shoppingCartReducer'
+import { deleteWishListData } from '@/redux/reducers/wishListReducer'
 
 const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }) => {
     const wishListstate = useAppSelector(state => state.wishList)
@@ -16,6 +17,8 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
     const [wishListItemsWithLivePrice, setWishListItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
+    const [selectedItems, setSelectedItems] = useState<{ [key: number]: boolean }>([])
+    console.log("🚀 ~ WishListDetails ~ selectedItems:", selectedItems)
 
     useEffect(() => {
         if (priceData?.data?.length > 0) {
@@ -40,9 +43,13 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
         }
 
         let quantities: any = {}
+        let checkedItems: any = {}
         wishListstate.wishListItems.forEach((item: CartItem) => {
+            checkedItems[item.id] = false
             quantities[item.id] = item.quantity
         })
+
+        setSelectedItems(checkedItems)
         setQuantities(quantities)
     }, [wishListstate.wishListItems])
 
@@ -67,6 +74,18 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
         await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
     }
 
+    const removeSelectedItemsHandler = async() => {
+        dispatch(deleteWishListData({ url: ENDPOINTS.deleteWishListData, body: [...Object.keys(selectedItems)] }) as any)
+    }
+
+    const addSelectedItemsHandler = () => {
+        // await dispatch(deleteWishListData())
+    }
+
+    const handleCheckboxChange = (id: number) => {
+        setSelectedItems({ ...selectedItems, [id]: !selectedItems[id] })
+    }
+
     return (
         <Fragment>
             <TableContainer>
@@ -84,7 +103,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                         {wishListItemsWithLivePrice.map((item) => (
                             <TableRow key={item.productId}>
                                 <TableCell padding="checkbox">
-                                    <Checkbox />
+                                    <Checkbox checked={selectedItems[item.id]} onChange={() => handleCheckboxChange(item.id)} />
                                 </TableCell>
                                 <TableCell align="left"><img src={item.imageUrl} width={100} height={100} /></TableCell>
                                 <TableCell><Button href="#" color="secondary">{item.productName}</Button></TableCell>
@@ -96,7 +115,8 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                                         <IconButton className="Plus" onClick={() => increaseQuantity(item.id)}><PlusIcon /></IconButton>
                                     </Stack>
                                 </TableCell>
-                                <TableCell>123</TableCell>
+                                {/* round to 2 */}
+                                <TableCell>{(quantities[item.id] * item.LivePriceDetails.price).toFixed(2)}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -108,8 +128,8 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                     <Button color="primary" variant="outlined" onClick={toggleEmailFriend}>Email a friend</Button>
                 </Stack>
                 <Stack className="Right">
-                    <Button color="primary" variant="outlined">Remove</Button>
-                    <Button color="primary" variant="contained">Add to cart</Button>
+                    <Button color="primary" variant="outlined" onClick={removeSelectedItemsHandler}>Remove</Button>
+                    <Button color="primary" variant="contained" onClick={addSelectedItemsHandler}>Add to cart</Button>
                 </Stack>
             </Stack>
         </Fragment>

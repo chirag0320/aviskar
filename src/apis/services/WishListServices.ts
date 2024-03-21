@@ -10,7 +10,7 @@ class WishListServices {
     }
 
     static async deleteWishListData(url: string, deleteWishListQuery: any) {
-        return axiosInstance.delete(url, deleteWishListQuery);
+        return axiosInstance.post(url, deleteWishListQuery);
     }
 
     static async addToWishList(url: string, wishListQuery: any) {
