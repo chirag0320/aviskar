@@ -7,7 +7,7 @@ import { ENDPOINTS } from '@/utils/constants'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { IproductPrice } from '../home/FeaturedProducts'
-import { resetSubTotal, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
+import { deleteShoppingCartData, resetSubTotal, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
 import { set } from 'react-hook-form'
 import { navigate } from 'gatsby'
 import { apicall } from '@/utils/helper'
@@ -46,10 +46,6 @@ const CartDetails = () => {
 
             dispatch(updateSubTotal(subTotal))
 
-            // const subTotal = cartItemsWithLivePrice.reduce((acc: number, item: CartItemsWithLivePriceDetails) => {
-            //     return acc + (item.LivePriceDetails.price * item.quantity)
-            // }, 0)
-
             setCartItemsWithLivePrice(cartItemsWithLivePrice)
         }
     }, [priceData, cartItems])
@@ -62,50 +58,32 @@ const CartDetails = () => {
 
         let quantities: any = {}
         cartItems.forEach((item: CartItem) => {
-            quantities[item.productId] = item.quantity
+            quantities[item.id] = item.quantity
         })
         setQuantities(quantities)
     }, [cartItems])
 
-    const increaseQuantity = (productId: number) => {
-        setQuantities({ ...quantities, [productId]: quantities[productId] + 1 })
-
-        // const item = cartItemsWithLivePrice.find((item: CartItemsWithLivePriceDetails) => item.productId === productId);
-        // if (item) {
-        //     setSubTotal((prevSubTotal) => prevSubTotal + item.LivePriceDetails.price);
-        // }
+    const increaseQuantity = (id: number) => {
+        setQuantities({ ...quantities, [id]: quantities[id] + 1 })
     }
 
-    const decreaseQuantity = (productId: number) => {
-        if (quantities[productId] === 1) {
-            setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId));
-        }
-        else {
-            setQuantities({ ...quantities, [productId]: quantities[productId] - 1 })
-        }
-
-        const item = cartItemsWithLivePrice.find((item: CartItemsWithLivePriceDetails) => item.productId === productId);
-        // if (item) {
-        //     setSubTotal((prevSubTotal) => prevSubTotal - item.LivePriceDetails.price);
-        // }
+    const decreaseQuantity = (id: number) => {
+        setQuantities({ ...quantities, [id]: quantities[id] - 1 })
     }
 
-    const removeItemFromCart = (productId: number) => {
-        setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId));
-
-        const item = cartItemsWithLivePrice.find((item: CartItemsWithLivePriceDetails) => item.productId === productId);
-        // if (item) {
-        //     setSubTotal((prevSubTotal) => prevSubTotal - (item.LivePriceDetails.price * item.quantity));
-        // }
+    const removeItemFromCart = async (id: number) => {
+        // optimistic update needs(currentlt not)
+        setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== id));        
+        await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: [id] }) as any);
     }
 
     const updateCartHandler = async (isapiCallNeeded?: boolean) => {
         let subTotal = 0;
         const itemsWithQuantity = cartItemsWithLivePrice.map((item: CartItemsWithLivePriceDetails) => {
-            subTotal += (item.LivePriceDetails.price * quantities[item.productId]);
+            subTotal += (item.LivePriceDetails.price * quantities[item.id]);
             return {
-                id: item.productId,
-                quantity: quantities[item.productId]
+                id: item.id,
+                quantity: quantities[item.id]
             }
         })
         dispatch(resetSubTotal());
@@ -116,7 +94,12 @@ const CartDetails = () => {
     }
 
     const clearCartHandler = async () => {
-        await dispatch(updateShoppingCartData({ url: ENDPOINTS.clearShoppingCartData, body: [] }) as any)
+        const ids: number[] = [];
+        for (const id in quantities) {
+            ids.push(Number(id));
+        }
+
+        await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: ids }) as any)
         dispatch(resetSubTotal());
     }
 
@@ -125,7 +108,7 @@ const CartDetails = () => {
             <Box className="ShoppingProductsDetailsWrapper">
                 {cartItemsWithLivePrice.map((cartItem) => {
                     return (
-                        <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={true} hideRightSide={true} quantity={quantities[cartItem.productId]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
+                        <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={true} hideRightSide={true} quantity={quantities[cartItem.id]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
                     )
                 })}
                 <Typography variant="body1"><Typography component="span" className="Note">Note:</Typography> Prices are live prices and will be locked on confirm order. </Typography>

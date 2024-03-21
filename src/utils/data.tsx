@@ -51,7 +51,7 @@ export const actionMenuItems = [
   {
     text: "Wishlist",
     icon: <WishlistIcon />,
-    href: "#",
+    href: "/wishlist",
     key: 'enablewishlist'
   },
   {
@@ -63,7 +63,7 @@ export const actionMenuItems = [
   {
     text: "Compare",
     icon: <CompareIcon />,
-    href: "#",
+    href: "/compare-products",
     key: 'enablecompare'
   },
 ]
