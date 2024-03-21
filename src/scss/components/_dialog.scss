@@ -137,6 +137,19 @@
                 padding: 14px;
               }
             }
+            .MuiAutocomplete-root {
+              .MuiTextField-root {
+                .MuiAutocomplete-inputRoot {
+                  padding: 0;
+                  .MuiAutocomplete-input {
+                    padding: 14px;
+                  }
+                  .MuiAutocomplete-endAdornment {
+                    position: static;
+                  }
+                }
+              }
+            }
           }
         }
         .MuiDialogActions-root {

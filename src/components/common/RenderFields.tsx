@@ -117,10 +117,11 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 variant={variant}
                 MenuProps={MenuProps}
                 required={required}
+                displayEmpty
                 sx={
-                  field.value === 'none'
+                  field.value === 'none' || field.value === ''
                     ? {
-                      color: "#86909C",
+                      color: "#1d21296b",
                     }
                     : {
                       color: "#1D2129",

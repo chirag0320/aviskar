@@ -42,6 +42,7 @@
           }
           .AccountSelect {
             .MuiSelect-select {
+              white-space: normal;
               @include padding-vertical(30);
               @include media($sm) {
                 padding-bottom: 80px;
