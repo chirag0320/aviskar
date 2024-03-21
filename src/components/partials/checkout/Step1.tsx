@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback, useMemo } from "react"
 import { Box, Button, Checkbox, FormControlLabel, Icon, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Select, Stack, Typography } from "@mui/material"
 
 // Hooks
-import { useAppSelector, useToggle } from "@/hooks"
+import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 
 // Type
 import type { SelectChangeEvent } from "@mui/material"
@@ -17,8 +17,10 @@ import UpdateAddress from "./UpdateAddress"
 import SelectAddress from "./SelectAddress"
 import AlertDialog from "./AlertDialog"
 import { navigate } from "gatsby"
+import { updateFinalDataForTheCheckout } from "@/redux/reducers/checkoutReducer"
 
 function Step1() {
+  const dispatch = useAppDispatch()
   const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
   const [shippingAddress, setShippingAddress] = useState<any>(checkoutPageData?.shippingAddressDetails?.[0])
   const [billingAddress, setBillingAddress] = useState<any>(checkoutPageData?.billingAddressDetails?.[0])
@@ -37,18 +39,22 @@ function Step1() {
   useEffect(() => {
     if (checkoutPageData?.customers?.[0]) {
       setSelectAccount(checkoutPageData?.customers?.[0]!)
+      dispatch(updateFinalDataForTheCheckout({ userAccount: checkoutPageData?.customers?.[0] }))
     }
     if (checkoutPageData?.shippingAddressDetails?.[0]) {
       setShippingAddress(checkoutPageData?.shippingAddressDetails?.[0])
+      dispatch(updateFinalDataForTheCheckout({ shippingAddress }))
     }
     if (checkoutPageData?.billingAddressDetails?.[0]) {
       setBillingAddress(checkoutPageData?.billingAddressDetails?.[0])
+      dispatch(updateFinalDataForTheCheckout({ billingAddress }))
     }
   }, [checkoutPageData])
 
   useMemo(() => {
     if (isBillingAndShipingAddressSame) {
       setShippingAddress(billingAddress)
+      dispatch(updateFinalDataForTheCheckout({ shippingAddress: billingAddress }))
     }
   }, [isBillingAndShipingAddressSame, shippingAddress, billingAddress])
 
@@ -78,6 +84,7 @@ function Step1() {
 
   const handleSelectAccount = useCallback((event: SelectChangeEvent) => {
     setSelectAccount(event.target.value as string);
+    dispatch(updateFinalDataForTheCheckout({ userAccount: event.target.value }))
   }, [])
 
   const handleUpdateAddress = useCallback((type: string) => {
@@ -88,9 +95,11 @@ function Step1() {
   const handleAddressUpdate = useCallback((addressData: any, isbilling: any) => {
     if (isbilling) {
       setBillingAddress(addressData)
+      dispatch(updateFinalDataForTheCheckout({ billingAddress }))
     }
     if (!isbilling) {
       setShippingAddress(addressData)
+      dispatch(updateFinalDataForTheCheckout({ shippingAddress }))
     }
   }, [openBillingAddreddOptions, openShipingAddreddOptions])
 

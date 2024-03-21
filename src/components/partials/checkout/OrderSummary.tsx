@@ -2,7 +2,7 @@ import React from "react"
 import { Typography, Button, Divider, Stack, Box } from "@mui/material"
 
 // Hooks
-import { useToggle } from "@/hooks"
+import { useAppSelector, useToggle } from "@/hooks"
 
 // Componenets
 import StepWrapper from "./StepWrapper"
@@ -14,6 +14,7 @@ import { OutlinedCheckIcon } from "@/assets/icons"
 import OTPConfirmation from "./OTPConfirmation"
 
 function OrderSummary() {
+  const { } = useAppSelector((state) => state.checkoutPage)
   const [openOTPConfirmation, toggleOTPConfirmation] = useToggle(false)
   const renderPricingItem = (title: string, value: string) => {
     return (

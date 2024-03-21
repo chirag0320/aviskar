@@ -11,7 +11,7 @@ import { InfoIcon, SelectDropdown } from "@/assets/icons"
 import { HoverTooltip } from "@/components/common/CustomTooltip"
 import { productImages } from "@/utils/data"
 import { useAppDispatch, useAppSelector } from "@/hooks"
-import { shopingCartItem, updateSubTotalCheckoutPage } from "@/redux/reducers/checkoutReducer"
+import { shopingCartItem, updateFinalDataForTheCheckout, updateSubTotalCheckoutPage } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { CartItemsWithLivePriceDetails } from "../shopping-cart/CartDetails"
@@ -19,8 +19,9 @@ import { CartItemsWithLivePriceDetails } from "../shopping-cart/CartDetails"
 function Step2() {
   const dispatch = useAppDispatch()
   const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
-  const [deliveryMethod, setDeliveryMethod] = useState<string>('DifferentMethod')
+  const [deliveryMethod, setDeliveryMethod] = useState<'DifferentMethod' | 'VaultStorage' | 'SecureShipping'>('DifferentMethod')
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
+  const [deliveryMethods, setDeliveryMethods] = useState<{ [key: number]: string }>({})
   const [productIds, setProductIds] = useState({})
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
   const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
@@ -56,19 +57,26 @@ function Step2() {
     }
 
     let quantities: any = {}
+    let deliveryMethods: any = {}
     checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
       quantities[item.productId] = item.quantity
+      deliveryMethods[item.productId] = 'SecureShipping'
     })
     setQuantities(quantities)
+    setDeliveryMethods(deliveryMethods)
+    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: quantities, deliveryMethodsWithProductId: deliveryMethod }))
   }, [checkoutPageData?.shoppingCartItems])
 
 
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     setDeliveryMethod(event.target.value as string);
+    dispatch(updateFinalDataForTheCheckout({ parentDeliveryMethod: event.target.value }))
   }
 
   const increaseQuantity = (productId: number) => {
-    setQuantities({ ...quantities, [productId]: quantities[productId] + 1 })
+    const updatedQuantities = { ...quantities, [productId]: quantities[productId] + 1 }
+    setQuantities(updatedQuantities)
+    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: updatedQuantities }))
   }
 
   const decreaseQuantity = (productId: number) => {
@@ -76,15 +84,24 @@ function Step2() {
       // setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId));
     }
     else {
-      setQuantities({ ...quantities, [productId]: quantities[productId] - 1 })
+      const updatedQuantities = { ...quantities, [productId]: quantities[productId] - 1 }
+      setQuantities(updatedQuantities)
+      dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: updatedQuantities }))
     }
   }
 
   const removeItemFromCart = (productId: number) => {
-    setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId));
+    const updatedCartItem = cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId)
+    setCartItemsWithLivePrice(updatedCartItem);
+    dispatch(updateFinalDataForTheCheckout({ deliveryMethodsWithProductId: updatedCartItem }))
   }
 
-  console.log("🚀 ~ Checkout ~ checkoutPageData:", checkoutPageData)
+  const changeDeliveryMethodOfProduct = (productId: number,method:any) => {
+    const updatedDeliverymethod = { ...deliveryMethods, [productId]: method }
+    setQuantities(updatedDeliverymethod)
+    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: updatedDeliverymethod }))
+  }
+  
   return (
     <StepWrapper title="Step 2" className="Step2">
       <Box className="StepHeader">
@@ -121,7 +138,7 @@ function Step2() {
       <Stack className="ProductList">
         {cartItemsWithLivePrice?.length > 0 && cartItemsWithLivePrice?.map((cartItem) => {
           return (
-            <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={false} hideRightSide={true} quantity={quantities[cartItem.productId]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
+            <CartCard changeDeliveryMethodOfProduct={changeDeliveryMethodOfProduct} isDifferentMethod={deliveryMethod === 'DifferentMethod'} deliveryMethodOfParent={deliveryMethod} key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={false} hideRightSide={true} quantity={quantities[cartItem.productId]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
           )
         })}
       </Stack>
