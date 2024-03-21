@@ -71,3 +71,27 @@
     }
   }
 }
+
+.MuiSnackbar-root {
+  .MuiAlert-root {
+    &.MuiAlert-filledInfo {
+      background-color: rgba($black, 0.8);
+      .MuiAlert-message {
+        .MuiButton-text {
+          @include transition;
+          &:hover {
+            color: $yellowFuel;
+            text-decoration: underline;
+          }
+        }
+      }
+      .MuiAlert-action {
+        .MuiIconButton-root {
+          &:hover {
+            background-color: rgba($white, 0.3);
+          }
+        }
+      }
+    }
+  }
+}
