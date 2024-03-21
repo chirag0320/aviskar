@@ -403,12 +403,15 @@
   width: 100%;
 
   &.MuiDrawer-root {
-    top: calc(66px + 50px + 1px);
+    top: calc(67px + 1px);
+    &.isHomePage {
+      top: calc(67px + 50px + 1px);
+    }
     &.ScrollActive {
-      top: calc(66px + 1px);
+      top: calc(67px + 1px);
 
       .MuiDrawer-paper {
-        max-height: calc(100% - 69px);
+        max-height: calc(100% - 67px - 1px);
       }
     }
 
