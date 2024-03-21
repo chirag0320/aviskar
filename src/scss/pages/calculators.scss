@@ -1,19 +1,24 @@
-.AllCalculators {
-    padding: 100px 0px;
-    display: flex;
-    justify-content: space-around;
+#PageCalculators {
+    @include padding-vertical(80);
+    @include media($md) {
+        @include padding-vertical(40);
+    }
+    .AllCalculators {
+        display: flex;
+        justify-content: space-around;
 
-    .CalculatorLink {
-        .ShippingCard {
-            &:hover {
-                background-color: #ebc486;
+        .CalculatorLink {
+            .ShippingCard {
+                &:hover {
+                    background-color: #ebc486;
+                }
             }
         }
-    }
 
-    @include media($md) {
-        height: 100%;
-        flex-direction: column;
-        gap: 20px;
+        @include media($md) {
+            height: 100%;
+            flex-direction: column;
+            gap: 20px;
+        }
     }
 }

@@ -9,7 +9,7 @@ const Seo = lazy(() => import("../components/common/Seo"))
 
 function FourZeroFour() {
   return (
-    <Suspense fallback={<Box sx={{ height: '100vh', width: '100vw' }}></Box>}>
+    <Suspense fallback={<Box sx={{ height: '100vh', width: '100%' }}></Box>}>
       <Layout>
         <Seo
           title="404"

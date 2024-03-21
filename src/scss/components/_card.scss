@@ -715,6 +715,9 @@
 
 // Start :: shippingcard css
 .ShippingCard {
+  @include media($sm) {
+    width: 100%;
+  }
   .IconCaculatorsPage {
     svg {
       stroke: $yellowFuel;

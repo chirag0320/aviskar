@@ -20,6 +20,7 @@ function ProductImages({ productImages }: any) {
           thumbs={{ swiper: thumbsSwiper }}
           modules={[FreeMode, Thumbs]}
           spaceBetween={10}
+          allowTouchMove={false}
         >
           {productImages?.length > 0 ? productImages.map((url: any) => (
             <SwiperSlide key={url}>
@@ -77,7 +78,7 @@ function ProductImages({ productImages }: any) {
           )) : null}
         </Swiper>
       </Box>
-    </Box>
+    </Box >
   )
 }
 
