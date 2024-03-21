@@ -26,6 +26,7 @@ import { valueChangeForPrice } from "@/utils/common"
 import useCallAPI from "@/hooks/useCallAPI"
 import { navigate } from "gatsby"
 import { addProductToCompare } from "@/redux/reducers/compareProductsReducer"
+import { addToWishList } from "@/redux/reducers/wishListReducer"
 
 function createData(
   quantity: string,
@@ -135,6 +136,7 @@ function AboutProduct({ productId }: any) {
         break;
     }
   }
+
   return (
     <Box className="AboutProduct">
       <Stack className="AboutWrapper">
@@ -242,7 +244,15 @@ function AboutProduct({ productId }: any) {
             <Divider />
             <Stack className="SocialConnects">
               <Box className="Left">
-                <Button className="">
+                <Button className="" onClick={async () => {
+                  await dispatch(addToWishList({
+                    url: ENDPOINTS.addToWishList,
+                    body: {
+                      productId: productId,
+                      quantity: 1
+                    }
+                  }) as any)
+                }}>
                   <HeartIcon className="Icon" />
                   <Typography variant="overline">Wishlist</Typography>
                 </Button>

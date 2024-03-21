@@ -33,7 +33,11 @@ export const ENDPOINTS = {
     updateShoppingCartData : "shoppingcart/OVixigTa9U6RcJbCK7pV2Q",
     clearShoppingCartData : "shoppingcart/7I7YbS9bX0asi1DVUXT60w",
     recentlyViewdProducts: 'product/dS99jwa0akmwbLKOuSs9dA',
-    compareProducts : "product/v07u2ZDwV0mGrWHpPYzaKA"
+    compareProducts : "product/v07u2ZDwV0mGrWHpPYzaKA",
+    getWishListData: "wishlist/wCngGbDM3EWvUW9fG7JwdQ",
+    updateWishListData: "wishlist/I2HAwstMhkGuGyEsHuHDtg",
+    deleteWishListData: "wishlist/PARNGc8fSUerxSmM65X06A",
+    addToWishList: "wishlist/rPpCvZNFeEOtE0ESOjGGeQ",
 }
 export const StoreData = {
     storeCode: 12,
