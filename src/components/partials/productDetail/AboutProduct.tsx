@@ -15,7 +15,7 @@ import { PriceChangeReturn, ProductStockStatus, ProductUpdateCountdown } from "@
 import ProductImages from "./ProductImages"
 
 // Assets
-import { AlarmIcon, CameraIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MailIcon, MailIcon1, MinusIcon, PlusIcon, TwitterIcon } from "@/assets/icons"
+import { AlarmIcon, CameraIcon, CompareIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MinusIcon, PlusIcon, TwitterIcon } from "@/assets/icons"
 
 // Data
 import { qmintRating } from "@/utils/data"
@@ -135,7 +135,7 @@ function AboutProduct({ productId }: any) {
         break;
     }
   }
-  const addIntoComapreProduct=(id:any)=>{
+  const addIntoComapreProduct = (id: any) => {
     dispatch(addProductToCompare(id))
   }
   return (
@@ -245,22 +245,21 @@ function AboutProduct({ productId }: any) {
             </Stack>
             <Divider />
             <Stack className="SocialConnects">
-              <Box className="Left">
-                <Button className="">
-                  <HeartIcon className="Icon" />
-                  <Typography variant="overline">Wishlist</Typography>
-                </Button>
-
-                <MailIcon1 className="Icon" />
-                <Button className="" onClick={() => {addIntoComapreProduct(productId)}}>
-                  <AlarmIcon className="Icon" />
-                </Button>
-              </Box>
-              <Box className="Right">
-                <IconButton className="Icon"><InstagramIcon1 /></IconButton>
-                <IconButton className="Icon"><FacebookIcon /></IconButton>
-                <IconButton className="Icon"><TwitterIcon /></IconButton>
-              </Box>
+              <Button color="secondary" className="IconWithText">
+                <Box className="IconWrapper"><HeartIcon /></Box>
+                <Typography variant="overline">Wishlist</Typography>
+              </Button>
+              <Button color="secondary" className="IconWithText">
+                <Box className="IconWrapper"><CompareIcon /></Box>
+                <Typography variant="overline">Compare</Typography>
+              </Button>
+              <Button color="secondary" className="IconWithText" onClick={() => { addIntoComapreProduct(productId) }}>
+                <Box className="IconWrapper"><AlarmIcon /></Box>
+                <Typography variant="overline">Price Alert</Typography>
+              </Button>
+              <IconButton href="#" target="_blank" className="IconWrapper"><InstagramIcon1 /></IconButton>
+              <IconButton href="#" target="_blank" className="IconWrapper"><FacebookIcon /></IconButton>
+              <IconButton href="#" target="_blank" className="IconWrapper"><TwitterIcon /></IconButton>
             </Stack>
             <Divider />
             {(priceData?.data?.[0]?.tierPriceList?.length > 0 || productDetailsData?.isGradingShow) ? <Stack className="AdditionalDetails">

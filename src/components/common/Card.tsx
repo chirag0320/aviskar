@@ -192,7 +192,30 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
         <Button name='discoverMore' aria-label='discoverMore' variant="contained" onClick={() => {
           navigate(`/product-details/${product?.friendlypagename}`) //friendlypagename
         }} className="PrimaryAction" fullWidth>Discover More</Button>
-        {product.isBundle && <IconButton className="Outlined Stack"><StackIcon /></IconButton>}
+        {product.isBundle &&
+          <ClickTooltip
+            open={open}
+            className="TooltipStack"
+            placement="bottom-start"
+            onClose={handleTooltipClose}
+            onClickAway={handleClickAway}
+            renderComponent={
+              <IconButton
+                ref={tooltipRef}
+                className="Outlined Stack"
+                onClick={handleTooltipOpen}
+              >
+                <StackIcon />
+              </IconButton>
+            }
+            lightTheme
+            arrow
+          >
+            <Box className="Content">
+              <Typography variant="body2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, consequuntur. </Typography>
+            </Box>
+          </ClickTooltip>
+        }
         <IconButton className="Outlined AddToCart"><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
