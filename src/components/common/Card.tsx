@@ -365,14 +365,15 @@ export const LineChartCard = (props: any) => {
 };
 
 
-export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem }: { cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any }) => {
+export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct }: { cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
   const [deliveryMethod, setDeliveryMethod] = useState<string>('SecureShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     setDeliveryMethod(event.target.value as string);
+    changeDeliveryMethodOfProduct(cartItem.productId, event.target.value)
   }
 
   return (
-    cartItem && Object.keys(cartItem)?.length > 0 && 
+    cartItem && Object.keys(cartItem)?.length > 0 &&
     <Card className="CartCard">
       <CardMedia
         component="img"
@@ -405,9 +406,10 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
                 <Select
                   color="secondary"
                   className="DeliveryMethodSelect"
-                  value={deliveryMethod}
+                  value={!isDifferentMethod ? deliveryMethodOfParent : deliveryMethod}
                   onChange={handleDeliveryMethod}
                   IconComponent={SelectDropdown}
+                  disabled={!isDifferentMethod}
                 >
                   <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
                   <MenuItem value="VaultStorage">Vault Storage</MenuItem>
