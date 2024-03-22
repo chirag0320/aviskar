@@ -42,7 +42,6 @@ function MobileMenu(props: any) {
       variant="temporary"
       onClose={toggleMobileMenu}
       anchor="top"
-      disablePortal
       disableScrollLock
     >
       <Container className="HeaderContainer">
