@@ -25,3 +25,6 @@ export function progressBarLogic({ currentprice, min, max }: any) {
 export function valueChangeForPrice({ currentprice, yesterdayprice }: { currentprice: number, yesterdayprice: number }) {
   return (((currentprice - yesterdayprice) / yesterdayprice) * 100).toFixed(2)
 }
+export function roundOfThePrice(price:number){
+return  Math.round((price + Number.EPSILON) * 100) / 100
+}
