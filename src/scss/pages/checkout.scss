@@ -1,17 +1,25 @@
 #PageCheckout {
   display: flex;
-  align-items: flex-start;
   gap: 25px;
   @include padding-vertical(30, 80);
+  @include media-min($lg) {
+    align-items: flex-start;
+  }
   @include media($lg) {
     flex-direction: column;
+    @include padding-vertical(40);
+  }
+  @include media($xs) {
+    gap: 15px;
+    @include padding-horizontal(15);
   }
   .StepWrapper {
     padding: 25px;
     border-radius: 20px;
     border: 1px solid rgba($dark, 0.1);
     @include media($xs) {
-      @include padding-horizontal(10);
+      padding: 15px;
+      border-radius: 10px;
     }
   }
   .AllSteps {
@@ -19,6 +27,9 @@
     gap: 25px;
     @include media-min($lg) {
       width: 65%;
+    }
+    @include media($xs) {
+      gap: 15px;
     }
     .Step1 {
       .FieldWrapper {
@@ -30,9 +41,13 @@
           padding: 15px 20px;
           border-radius: 16px;
           border: 1px solid $yellowFuel;
+          @include media($xs) {
+            border-radius: 8px;
+          }
           &.AccountField {
             position: relative;
             padding: 0;
+            min-height: 82px;
           }
           .Value {
             .Address {
@@ -116,7 +131,9 @@
       .StepHeader {
         .HeaderWrapper {
           justify-content: space-between;
+          flex-wrap: wrap;
           margin-top: 20px;
+          gap: 4px;
           .Title {
             .InfoButton {
               padding: 0;
@@ -177,6 +194,9 @@
         @include media-min($lg) {
           gap: 2vw;
         }
+        @include media($xs) {
+          border-radius: 8px;
+        }
         .RadioLabelWithIcon {
           gap: 11px;
           align-items: center;
@@ -213,8 +233,8 @@
     .TermsService {
       .Condition {
         @include margin-vertical(14, 6);
-        .TermsService_html{
-          p{
+        .TermsService_html {
+          p {
             display: inline;
             margin: 0;
           }
@@ -233,7 +253,6 @@
     }
   }
   .OrderSummary {
-    width: 100%;
     @include media-min($lg) {
       width: 35%;
     }
@@ -248,6 +267,9 @@
     }
     .PricingDetails {
       margin-top: 50px;
+      @include media($sm) {
+        margin-top: 30px;
+      }
       .MuiDivider-root {
         border-color: rgba($dark, 0.1);
         @include margin-vertical(14);
@@ -259,6 +281,9 @@
       }
       .TotalItem {
         margin-top: 30px;
+        @include media($sm) {
+          margin-top: 20px;
+        }
       }
       .PaymentMethod {
         align-items: center;
@@ -267,6 +292,9 @@
         border-radius: 8px;
         border: 1px solid rgba($dark, 0.1);
         margin-top: 30px;
+        @include media($sm) {
+          margin-top: 20px;
+        }
         .Message {
           color: rgba($dark, 0.6);
           .MuiTypography-root {
@@ -275,11 +303,14 @@
         }
       }
       .ActionDivider {
-        margin: 30px -25px;
+        margin: 30px -25px 0px;
+        @include media($xs) {
+          @include margin-horizontal(-10);
+        }
       }
       .ActionWrapper {
         justify-content: space-between;
-        margin-top: 30px;
+        margin-top: 25px;
         .MuiButton-text {
           text-decoration: none;
         }
