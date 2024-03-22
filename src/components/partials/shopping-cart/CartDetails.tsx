@@ -110,7 +110,7 @@ const CartDetails = () => {
     return (
         <Box className="ShoppingCartDetails">
             <Box className="ShoppingProductsDetailsWrapper">
-                {cartItemsWithLivePrice.map((cartItem) => {
+                {cartItemsWithLivePrice?.length > 0 && cartItemsWithLivePrice?.map((cartItem) => {
                     return (
                         <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={true} hideRightSide={true} quantity={quantities[cartItem.id]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
                     )

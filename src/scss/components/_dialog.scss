@@ -28,7 +28,7 @@
                   text-transform: initial;
                   border-bottom: 1px solid $mercury;
                   background-color: rgba($mercury, 0.2);
-
+                  text-align: left;
                   &.Mui-selected {
                     font-weight: 700;
                   }
@@ -99,8 +99,12 @@
           justify-content: flex-start;
           gap: 16px;
           padding: 25px 20px 20px;
+          flex-wrap: wrap;
           .MuiButton-root {
             min-width: 157px;
+            @include media($sm) {
+              flex-grow: 1;
+            }
           }
         }
       }

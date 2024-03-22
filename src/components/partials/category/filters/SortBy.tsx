@@ -134,7 +134,7 @@ function SortBy({ page }: { page: number }) {
             <Box className="DrawerHeader">
               <Container className="Wrapper">
                 <Typography variant="subtitle2">SORT BY</Typography>
-                <IconButton className="CloseButton" onClick={toggleSortBy}><CrossIcon /></IconButton>
+                <IconButton className="CloseButton" onClick={toggleSortBy}><CrossIcon fontSize="inherit" /></IconButton>
               </Container>
             </Box>
             <Box className="DrawerContent">

@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Typography, Button, Divider, Stack, Box } from "@mui/material"
 
 // Hooks
-import { useAppSelector, useToggle } from "@/hooks"
+import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 
 // Componenets
 import StepWrapper from "./StepWrapper"
@@ -12,11 +12,54 @@ import { productImages } from "@/utils/data"
 import { CartCardAbstract } from "@/components/common/Card"
 import { OutlinedCheckIcon } from "@/assets/icons"
 import OTPConfirmation from "./OTPConfirmation"
-import { roundOfThePrice } from "@/utils/common"
+import { roundOfThePrice, shipmentTypeToEnum } from "@/utils/common"
+import useAPIoneTime from "@/hooks/useAPIoneTime"
+import { getCraditCardCharges, getInsuranceAndTaxDetailsCalculation } from "@/redux/reducers/checkoutReducer"
+import { ENDPOINTS } from "@/utils/constants"
+interface Product {
+  productId: number;
+  qty: number;
+  price: number;
+  shippingMethod: number;
+  LivePriceDetails?: any;
+}
+
+interface Body {
+  products: Product[];
+  Postcode: string;
+  CountryId: number;
+}
 
 function OrderSummary() {
-  const { finalDataForTheCheckout,subTotal} = useAppSelector((state) => state.checkoutPage)
+  const dispatch = useAppDispatch()
+  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges } = useAppSelector((state) => state.checkoutPage)
   console.log("🚀 ~ OrderSummary ~ finalDataForTheCheckout:", finalDataForTheCheckout)
+  const [body, setBody] = useState<Body | null>(null)
+  const [totalValueNeedToPayFromCraditCart, setTotalValueNeedToPayFromCraditCart] = useState<any>({ OrderTotal: 0 })
+  useEffect(() => {
+    setBody({
+      Postcode: finalDataForTheCheckout?.shippingAddress?.postcode?.toString(),
+      CountryId: finalDataForTheCheckout?.shippingAddress?.country,
+      products: finalDataForTheCheckout?.cartItemsWithLivePrice?.map((item: Product) => {
+        return ({
+          productId: item.productId,
+          qty: finalDataForTheCheckout?.quantitiesWithProductId?.[item?.productId],
+          price: item?.LivePriceDetails?.price,
+          shippingMethod: shipmentTypeToEnum[finalDataForTheCheckout?.deliveryMethodsWithProductId?.[item?.productId]]
+        })
+      })
+    })
+  }, [finalDataForTheCheckout])
+  useAPIoneTime({ service: getInsuranceAndTaxDetailsCalculation, endPoint: ENDPOINTS.calculateInsuranceAndTaxDetails, body })
+  useEffect(() => {
+    if (finalDataForTheCheckout?.paymentType === "CreditCard") {
+      dispatch(getCraditCardCharges({
+        url: ENDPOINTS.calculateCraditCardCharges, body: {
+          "OrderTotal": Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(insuranceAndTaxCalculation?.vaultStorageFee) + Number(subTotal)
+        }
+      }))
+    }
+  }, [subTotal, finalDataForTheCheckout, insuranceAndTaxCalculation])
   const [openOTPConfirmation, toggleOTPConfirmation] = useToggle(false)
   const renderPricingItem = (title: string, value: string) => {
     return (
@@ -30,24 +73,26 @@ function OrderSummary() {
   return (
     <StepWrapper title="Order Summary" className="OrderSummary">
       <Box className="ProductList">
-        {finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 && finalDataForTheCheckout?.cartItemsWithLivePrice?.map((product:any) => {
+        {finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 && finalDataForTheCheckout?.cartItemsWithLivePrice?.map((product: any) => {
           return (
-            <CartCardAbstract product={product} quantity={finalDataForTheCheckout?.quantitiesWithProductId?.[product?.productId]} deliveryMethod={finalDataForTheCheckout?.deliveryMethodsWithProductId?.[product?.productId]}/>
+            <CartCardAbstract product={product} quantity={finalDataForTheCheckout?.quantitiesWithProductId?.[product?.productId]} deliveryMethod={finalDataForTheCheckout?.deliveryMethodsWithProductId?.[product?.productId]} />
           )
         })}
       </Box>
       <Box className="PricingDetails">
-        {renderPricingItem("Subtotal",roundOfThePrice(subTotal as any) as any )}
+        {renderPricingItem("Subtotal", '$'+roundOfThePrice(subTotal as any) as any)}
         <Divider />
-        {renderPricingItem("Secure Shipping", "$120.22")}
-        {renderPricingItem("Vault storage", "$90.22")}
+        {renderPricingItem("Secure Shipping", `$${insuranceAndTaxCalculation?.secureShippingFeeIncludingTax}`)}
+        {renderPricingItem("Vault storage", `$${insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax}`)}
         <Divider />
-        {renderPricingItem("Credit Card Fees", "$81.27")}
-        <Divider />
-        {renderPricingItem("GST Included", "$819.30")}
+        {finalDataForTheCheckout?.paymentType === 'CreditCard' && renderPricingItem("Credit Card Fees", craditCardCharges?.creditCardFeeIncludingTax)}
+        {finalDataForTheCheckout?.paymentType === 'CreditCard' && < Divider />}
+        {renderPricingItem("GST Included", `$${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingTax) + Number(insuranceAndTaxCalculation?.vaultStorageTax) + Number(finalDataForTheCheckout?.cartItemsWithLivePrice?.reduce((total: number, product: {
+          LivePriceDetails: { taxPrice: number }
+        }) => total + product.LivePriceDetails.taxPrice, 0)))}`)}
         <Stack className="PricingItem TotalItem">
           <Typography variant="subtitle1">Total</Typography>
-          <Typography variant="subtitle1">$9240.35</Typography>
+          <Typography variant="subtitle1">${Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax)}</Typography>
         </Stack>
         <Stack className="PaymentMethod">
           <OutlinedCheckIcon />

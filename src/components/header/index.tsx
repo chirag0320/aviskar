@@ -32,7 +32,7 @@ const Index = () => {
       <AppBar position={trigger ? "fixed" : "static"}>
         {loading && <PageLoader />}
         <Suspense fallback={<Skeleton style={{ minHeight: '80px' }} />}>
-          <Main toggleMobileMenu={toggleMobileMenu} />
+          <Main toggleMobileMenu={toggleMobileMenu} openMobileMenu={openMobileMenu} />
         </Suspense>
         <Divider />
         <Suspense fallback={<Skeleton style={{ minHeight: '53px' }} />}>
