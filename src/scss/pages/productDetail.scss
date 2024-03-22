@@ -136,6 +136,7 @@
             .Bottom {
               gap: 30px;
               align-items: center;
+              flex-wrap: wrap;
               @include media($sm) {
                 gap: 18px;
               }

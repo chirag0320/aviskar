@@ -19,7 +19,7 @@ function TermsServices() {
   const [openTermsServices, toggleTermsServices] = useToggle(false)
   const [readedTermAndServices, toggleReadedTermAndServices] = useToggle(false)
   useEffect(() => {
-    dispatch(updateFinalDataForTheCheckout({termAndServiceIsRead: readedTermAndServices}))
+    dispatch(updateFinalDataForTheCheckout({ termAndServiceIsRead: readedTermAndServices }))
   }, [readedTermAndServices])
   return (
     <>
@@ -34,7 +34,7 @@ function TermsServices() {
           className="Checkbox"
           control={<Checkbox checked={readedTermAndServices} onChange={() => {
             toggleReadedTermAndServices()
-          }}/>}
+          }} />}
           label="I have read and agree to the terms of service."
         />
       </StepWrapper>
@@ -46,11 +46,12 @@ function TermsServices() {
         primaryActionText="Agree"
         actions
       >
-        <Container dangerouslySetInnerHTML={{
+        <Box className="Content" dangerouslySetInnerHTML={{
           __html: checkoutPageData?.termsConditions?.value
-        }}>
+        }}
+        >
 
-        </Container>
+        </Box>
       </StyledDialog>
     </>
   )
