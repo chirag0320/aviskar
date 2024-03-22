@@ -43,12 +43,15 @@ import { useAppSelector } from "@/hooks"
 import { productImages } from "@/utils/data"
 import { CartItem } from "@/types/shoppingCart";
 import { CartItemsWithLivePriceDetails } from "../partials/shopping-cart/CartDetails";
+import useCallAPI from "@/hooks/useCallAPI";
+import { ENDPOINTS } from "@/utils/constants";
 
 interface Iproduct {
   product: IFeaturedProducts;
   stickyProduct?: boolean
 }
 export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Iproduct) => {
+  const { loading: loadingForAddToCart, error: errorForAddToCart, apiCallFunction } = useCallAPI()
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const [open, setOpen] = useState(false)
   const tooltipRef: any = useRef(null)
@@ -216,7 +219,12 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             </Box>
           </ClickTooltip>
         }
-        <IconButton className="Outlined AddToCart"><AddToCartIcon /></IconButton>
+        <IconButton className="Outlined AddToCart" onClick={async () => {
+          await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+            "productId": product.productId,
+            "quantity": 1
+          } as any)
+        }}><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
   );
@@ -372,7 +380,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
   }
 
   return (
-    cartItem && Object.keys(cartItem)?.length > 0 && 
+    cartItem && Object.keys(cartItem)?.length > 0 &&
     <Card className="CartCard">
       <CardMedia
         component="img"
