@@ -173,6 +173,12 @@ export const addOrEditAddress = appCreateAsyncThunk(
 
     }
 )
+export const checkValidationOnConfirmOrder = appCreateAsyncThunk(
+    "checkValidationOnConfirmOrder",
+    async ({ url, body }: { url: string, body: any }) => {
+        return await CheckoutPageServices.checkValidationOnConfirmOrder(url, body)
+    }
+)
 
 export const checkoutPage = createSlice({
     name: 'checkoutPage',
@@ -228,6 +234,17 @@ export const checkoutPage = createSlice({
             state.loading = false;
         })
         builder.addCase(getCraditCardCharges.rejected, (state, action) => {
+            state.loading = false
+        })
+        // checkValidationOnConfirmOrder
+        builder.addCase(checkValidationOnConfirmOrder.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(checkValidationOnConfirmOrder.fulfilled, (state, action) => {
+            console.log(action.payload.data);
+            state.loading = false;
+        })
+        builder.addCase(checkValidationOnConfirmOrder.rejected, (state, action) => {
             state.loading = false
         })
     },

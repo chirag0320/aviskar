@@ -14,7 +14,7 @@ import { OutlinedCheckIcon } from "@/assets/icons"
 import OTPConfirmation from "./OTPConfirmation"
 import { roundOfThePrice, shipmentTypeToEnum } from "@/utils/common"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
-import { getCraditCardCharges, getInsuranceAndTaxDetailsCalculation } from "@/redux/reducers/checkoutReducer"
+import { checkValidationOnConfirmOrder, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
 interface Product {
   productId: number;
@@ -22,6 +22,18 @@ interface Product {
   price: number;
   shippingMethod: number;
   LivePriceDetails?: any;
+}
+
+// enum PaymentMethod{
+//   CreditCard = 3,
+//   BankTransfer = 2,
+//   Cash = 1
+// }
+
+const paymentMethodEnum: { [key: string]: number } = {
+  "CreditCard": 3,
+  "BankTransfer": 2,
+  "Cash": 1
 }
 
 interface Body {
@@ -70,6 +82,19 @@ function OrderSummary() {
     )
   }
 
+  const onConfirmOrderHandler = () => {
+    dispatch(checkValidationOnConfirmOrder({
+      url: ENDPOINTS.checkValidationOnConfirmOrder, body: {
+        PaymentMethodEnum: paymentMethodEnum[finalDataForTheCheckout?.paymentType],
+        OrderTotal: Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax),
+        // static
+        IsRewardPointUsed: false,
+        UsedRewardPoints: 0,
+        UsedRewardPointAmount: 0.00
+      }
+    }))
+  }
+
   return (
     <StepWrapper title="Order Summary" className="OrderSummary">
       <Box className="ProductList">
@@ -80,7 +105,7 @@ function OrderSummary() {
         })}
       </Box>
       <Box className="PricingDetails">
-        {renderPricingItem("Subtotal", '$'+roundOfThePrice(subTotal as any) as any)}
+        {renderPricingItem("Subtotal", '$' + roundOfThePrice(subTotal as any) as any)}
         <Divider />
         {renderPricingItem("Secure Shipping", `$${insuranceAndTaxCalculation?.secureShippingFeeIncludingTax}`)}
         {renderPricingItem("Vault storage", `$${insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax}`)}
@@ -101,7 +126,8 @@ function OrderSummary() {
         <Divider className="ActionDivider" />
         <Stack className="ActionWrapper">
           <Button color="secondary">Continue Shopping</Button>
-          <Button variant="contained" onClick={toggleOTPConfirmation} disabled={!finalDataForTheCheckout?.termAndServiceIsRead}>Confirm Order</Button>
+          {/* <Button variant="contained" onClick={toggleOTPConfirmation} disabled={!finalDataForTheCheckout?.termAndServiceIsRead}>Confirm Order</Button> */}
+          <Button variant="contained" onClick={onConfirmOrderHandler} disabled={!finalDataForTheCheckout?.termAndServiceIsRead}>Confirm Order</Button>
         </Stack>
       </Box>
       <OTPConfirmation open={openOTPConfirmation} onClose={toggleOTPConfirmation} />
