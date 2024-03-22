@@ -9,7 +9,7 @@ const useToggle = (initialState: boolean = false): [boolean, () => void] => {
   // This function change the boolean value to it's opposite value
   const toggle = useCallback(() => {
     setState((currentState) => !currentState)
-  }, [])
+  }, [state])
 
   return [state, toggle]
 }

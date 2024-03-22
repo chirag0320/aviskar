@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Typography, Button, FormControlLabel, Checkbox, Container, Box } from "@mui/material"
 
 // Componenets
@@ -6,15 +6,21 @@ import StepWrapper from "./StepWrapper"
 import StyledDialog from "@/components/common/StyledDialog"
 
 // Hooks
-import { useAppSelector, useToggle } from "@/hooks"
+import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 
 // Data
 import { userData } from "@/utils/data"
+import { updateFinalDataForTheCheckout } from "@/redux/reducers/checkoutReducer"
 
 function TermsServices() {
+  const dispatch = useAppDispatch()
   const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
   console.log("🚀 ~ Checkout ~ checkoutPageData:", checkoutPageData)
   const [openTermsServices, toggleTermsServices] = useToggle(false)
+  const [readedTermAndServices, toggleReadedTermAndServices] = useToggle(false)
+  useEffect(() => {
+    dispatch(updateFinalDataForTheCheckout({termAndServiceIsRead: readedTermAndServices}))
+  }, [readedTermAndServices])
   return (
     <>
       <StepWrapper title="Terms of service" className="TermsService">
@@ -26,7 +32,9 @@ function TermsServices() {
         </Typography>
         <FormControlLabel
           className="Checkbox"
-          control={<Checkbox />}
+          control={<Checkbox checked={readedTermAndServices} onChange={() => {
+            toggleReadedTermAndServices()
+          }}/>}
           label="I have read and agree to the terms of service."
         />
       </StepWrapper>
