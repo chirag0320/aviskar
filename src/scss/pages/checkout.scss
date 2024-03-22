@@ -9,6 +9,9 @@
     flex-direction: column;
     @include padding-vertical(40);
   }
+  @include media($sm) {
+    @include padding-vertical(30);
+  }
   @include media($xs) {
     gap: 15px;
     @include padding-horizontal(15);
