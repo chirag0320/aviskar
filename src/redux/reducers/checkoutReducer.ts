@@ -170,7 +170,7 @@ export const getCraditCardCharges = appCreateAsyncThunk(
 export const addOrEditAddress = appCreateAsyncThunk(
     "addOrEditAddress",
     async ({ url, body }: { url: string, body: any }) => {
-
+        return await CheckoutPageServices.addOrEditAddress(url, body)
     }
 )
 export const checkValidationOnConfirmOrder = appCreateAsyncThunk(

@@ -23,7 +23,7 @@ function Step1() {
   const dispatch = useAppDispatch()
   const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
   const [shippingAddress, setShippingAddress] = useState<any>(checkoutPageData?.shippingAddressDetails?.[0])
-  const [billingAddress, setBillingAddress] = useState<any>(checkoutPageData?.billingAddressDetails?.[0])
+  const [billingAddress, setBillingAddress] = useState<any>(checkoutPageData?.billingAddressDetails?.[0]);
   const [openShipingAddreddOptions, setOpenShipingAddreddOptions] = useState<boolean>(false)
   const [isBillingAddress, setIsBillingAddress] = useState<boolean>(false)
   const [openBillingAddreddOptions, setOpenBillingAddreddOptions] = useState<boolean>(false)
@@ -35,6 +35,7 @@ function Step1() {
   const [openAlertDialog, toggleAlertDialog] = useToggle(false)
   const tooltipRef: any = useRef(null)
   const shipingtooltipRef: any = useRef(null)
+
 
   useEffect(() => {
     if (checkoutPageData?.customers?.[0]) {
@@ -231,7 +232,7 @@ function Step1() {
           </ClickTooltip>
         </Stack>
       </Box>
-      <UpdateAddress open={openUpdateAddress} dialogTitle={addressTitle + " Address"} onClose={toggleUpdateAddress} />
+      <UpdateAddress open={openUpdateAddress} dialogTitle={addressTitle + " Address"} onClose={toggleUpdateAddress} existingAddress={addressTitle == "Add" ? null : billingAddress} />
       <AlertDialog open={openAlertDialog} onClose={toggleAlertDialog} />
       <SelectAddress isbillingAddress={isBillingAddress} open={openSelectAddress} onClose={toggleSelectAddress} listOfAddress={isBillingAddress ? checkoutPageData?.billingAddressDetails : checkoutPageData?.shippingAddressDetails} handleAddressUpdate={handleAddressUpdate} />
     </StepWrapper>

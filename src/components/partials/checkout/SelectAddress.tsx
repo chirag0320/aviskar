@@ -15,7 +15,7 @@ interface SelectAddress {
   open: boolean
   onClose: () => void
   listOfAddress: any
-  handleAddressUpdate:()=>void
+  handleAddressUpdate: any
   isbillingAddress: boolean
 }
 export type address = {
@@ -43,7 +43,7 @@ export type address = {
 
 
 function SelectAddress(props: SelectAddress) {
-  const { open, onClose, listOfAddress, handleAddressUpdate,isbillingAddress } = props
+  const { open, onClose, listOfAddress, handleAddressUpdate, isbillingAddress } = props
   const [selectAccount, setSelectAccount] = useState<string>(listOfAddress?.[0])
 
   const handleSelectAccount = (event: SelectChangeEvent) => {
@@ -57,7 +57,7 @@ function SelectAddress(props: SelectAddress) {
       onClose()
     })
   }, [x])
-  
+
   return (
     <StyledDialog
       id="SelectAddress"

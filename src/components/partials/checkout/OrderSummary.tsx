@@ -45,7 +45,6 @@ interface Body {
 function OrderSummary() {
   const dispatch = useAppDispatch()
   const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges } = useAppSelector((state) => state.checkoutPage)
-  console.log("🚀 ~ OrderSummary ~ finalDataForTheCheckout:", finalDataForTheCheckout)
   const [body, setBody] = useState<Body | null>(null)
   const [totalValueNeedToPayFromCraditCart, setTotalValueNeedToPayFromCraditCart] = useState<any>({ OrderTotal: 0 })
   useEffect(() => {

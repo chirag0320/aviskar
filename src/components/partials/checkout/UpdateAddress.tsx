@@ -19,6 +19,7 @@ interface UpdateAddress {
   open: boolean
   dialogTitle: string
   onClose: () => void
+  existingAddress?: any
 }
 
 interface Inputs {
@@ -45,23 +46,21 @@ const schema = yup.object().shape({
   Address1: yup.string().required(),
   Address2: yup.string(),
   City: yup.string().required(),
-  Country: yup.string().required(),
   State: yup.string().required(),
+  Country: yup.string().required(),
   Code: yup.string().required()
 })
 
 function UpdateAddress(props: UpdateAddress) {
-  const { open, dialogTitle, onClose } = props
+  const { open, dialogTitle, onClose, existingAddress } = props
+  console.log("🚀 ~ UpdateAddress ~ existingAddress:", existingAddress)
   const dispatch = useAppDispatch();
-  const [selectCountry, setSelectAccount] = useState<string>('none')
 
   const {
     register,
     reset,
     handleSubmit,
-    clearErrors,
     control,
-    getValues,
     setValue,
     formState: { errors },
   } = useForm<Inputs>({
@@ -71,14 +70,49 @@ function UpdateAddress(props: UpdateAddress) {
     },
   })
 
-  const onSubmit = (data: any) => {
-    // const prepareData = 
-    // dispatch(addOrEditAddress(ENDPOINTS.addOrEditAddress) , data));
-    // onClose();
-  }
+  const onAddressFormSubmitHandler = (data: any) => {
+    console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
+    // console.log(data);
+    // dispatch(addOrEditAddress(ENDPOINTS.addOrEditAddress,))
 
-  const handleSelectAccount = (event: SelectChangeEvent) => {
-    setSelectAccount(event.target.value as string)
+    const addressQuery = {
+      firstName: data.FirstName,
+      lastName: data.LastName,
+      company: data.Company,
+      phoneNumber: data.Contact,
+      email: data.Email,
+      // static
+      isVerified: true,
+      addressLine1: data.Address1,
+      addressLine2: data.Address2,
+      city: data.City,
+      // static
+      stateId: 1,
+      stateName: "koi bhi",
+      postcode: data.Code,
+      // static
+      countryId: 1,
+    }
+
+    if (existingAddress) {
+      dispatch(addOrEditAddress({
+        url: ENDPOINTS.addOrEditAddress,
+        body: {
+          ...addressQuery,
+          addressId: existingAddress.addressId
+        }
+      }))
+    }
+    else {
+      dispatch(addOrEditAddress({
+        url: ENDPOINTS.addOrEditAddress,
+        body: {
+          ...addressQuery
+        }
+      }))
+    }
+    onClose()
+    reset()
   }
 
   return (
@@ -90,7 +124,7 @@ function UpdateAddress(props: UpdateAddress) {
       primaryActionText="Save"
       maxWidth="sm"
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onAddressFormSubmitHandler)}>
         <Stack className="AllFields" >
           <Stack className="Column">
             <RenderFields
@@ -99,12 +133,14 @@ function UpdateAddress(props: UpdateAddress) {
               name="FirstName"
               placeholder="Enter first name"
               control={control}
+              value={existingAddress?.firstName}
               variant='outlined'
               margin='none'
             />
             <RenderFields
               register={register}
               error={errors.LastName}
+              value={existingAddress?.lastName}
               name="LastName"
               placeholder="Enter last name"
               control={control}
@@ -116,6 +152,7 @@ function UpdateAddress(props: UpdateAddress) {
             register={register}
             error={errors.Company}
             name="Company"
+            value={existingAddress?.company}
             placeholder="Enter company"
             control={control}
             variant='outlined'
@@ -126,6 +163,7 @@ function UpdateAddress(props: UpdateAddress) {
               register={register}
               error={errors.Contact}
               name="Contact"
+              value={existingAddress?.phone1}
               type="number"
               placeholder="Enter contact"
               control={control}
@@ -136,6 +174,7 @@ function UpdateAddress(props: UpdateAddress) {
               register={register}
               error={errors.Email}
               name="Email"
+              value={existingAddress?.email}
               placeholder="Enter email id"
               control={control}
               variant='outlined'
@@ -147,6 +186,7 @@ function UpdateAddress(props: UpdateAddress) {
             register={register}
             error={errors.Address1}
             name="Address1"
+            value={existingAddress?.addressLine1}
             placeholder="Enter address line 1"
             control={control}
             variant='outlined'
@@ -156,6 +196,7 @@ function UpdateAddress(props: UpdateAddress) {
             register={register}
             error={errors.Address2}
             name="Address2"
+            value={existingAddress?.addressLine2}
             placeholder="Enter address line 2"
             control={control}
             variant='outlined'
@@ -165,6 +206,7 @@ function UpdateAddress(props: UpdateAddress) {
             <RenderFields
               register={register}
               error={errors.City}
+              value={existingAddress?.city}
               name="City"
               placeholder="Enter city"
               control={control}
@@ -176,16 +218,18 @@ function UpdateAddress(props: UpdateAddress) {
               register={register}
               error={errors.Country}
               name="Country"
+              defaultValue={existingAddress?.countryName}  // Set defaultValue based on existingAddress?.countryName
               placeholder="Enter country"
               control={control}
               variant='outlined'
               margin='none'
             >
-              <MenuItem value="none">Select country</MenuItem>
-              <MenuItem value="India">India</MenuItem>
-              <MenuItem value="Astralia">Astralia</MenuItem>
-              <MenuItem value="America">America</MenuItem>
+              <MenuItem value="none" selected={!existingAddress}>Select country</MenuItem>
+              <MenuItem value="India" selected={existingAddress?.countryName == 'India'}>India</MenuItem>
+              <MenuItem value="Australia" selected={existingAddress?.countryName == 'Australia'}>Australia</MenuItem>
+              <MenuItem value="USA" selected={existingAddress?.countryName == 'USA'}>USA</MenuItem>
             </RenderFields>
+
           </Stack>
           <Stack className="Column">
             <Autocomplete
@@ -193,6 +237,11 @@ function UpdateAddress(props: UpdateAddress) {
               options={top100Films}
               renderInput={(params) => <TextField placeholder="Enter state" {...params} />}
               fullWidth
+              value={existingAddress?.stateName}
+              onChange={(_, value: any) => {
+                // setStateName(value?.label);
+                setValue('State', value?.label);
+              }}
               freeSolo
             />
             <RenderFields
@@ -200,23 +249,24 @@ function UpdateAddress(props: UpdateAddress) {
               register={register}
               error={errors.Code}
               name="Code"
+              value={existingAddress?.postcode}
               placeholder="Enter pin code"
               control={control}
               variant='outlined'
               margin='none'
             />
           </Stack>
-        </Stack>
-        <Stack className="ActionWrapper">
-          <Button variant="outlined" onClick={onClose}>
-            Close
-          </Button>
-          <Button variant="contained" type="submit">
-            Submit
-          </Button>
+          <Stack className="ActionWrapper">
+            <Button variant="outlined" onClick={onClose}>
+              Close
+            </Button>
+            <Button variant="contained" type="submit">
+              Submit
+            </Button>
+          </Stack>
         </Stack>
       </form>
-    </StyledDialog>
+    </StyledDialog >
   )
 }
 
