@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Container, LinearProgress, CircularProgress } from "@mui/material"
 
-const PageLoader=React.memo(()=> {
+const PageLoader = React.memo(() => {
   const [progress, setProgress] = useState<number>(0)
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const PageLoader=React.memo(()=> {
   )
 }
 )
-const ConstantApiLoader=React.memo(() =>{
+const ConstantApiLoader = React.memo(() => {
   const [progress, setProgress] = useState<number>(0)
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const ConstantApiLoader=React.memo(() =>{
   }, [])
 
   return (
-    <LinearProgress className="ConstantApiLoader" color="secondary" variant="determinate" value={progress} />
+    <LinearProgress title="ConstantApiLoader" className="ConstantApiLoader" color="secondary" variant="determinate" value={progress} />
   )
 }
 )

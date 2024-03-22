@@ -38,7 +38,7 @@ import {
 import { ProductStockStatus, ProductUpdateCountdown } from "./Utils"
 import { IFeaturedProducts } from "../partials/home/FeaturedProducts"
 import { navigate } from "gatsby"
-import { deliveryMethodMessage } from "@/utils/common"
+import { deliveryMethodMessage, roundOfThePrice } from "@/utils/common"
 import { useAppSelector } from "@/hooks"
 import { productImages } from "@/utils/data"
 import { CartItem } from "@/types/shoppingCart";
@@ -167,6 +167,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                 variant="outlined"
                 endIcon={open ? <ChevronUp /> : <ChevronDown />}
                 onClick={handleTooltipOpen}
+                aria-label='OfferTag'
               >
                 <OfferTagIcon />
               </Button>
@@ -205,6 +206,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             renderComponent={
               <IconButton
                 ref={tooltipRef}
+                aria-label='StackIcon'
                 className="Outlined Stack"
                 onClick={handleTooltipOpen}
               >
@@ -373,10 +375,11 @@ export const LineChartCard = (props: any) => {
 };
 
 
-export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem }: { cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any }) => {
+export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct }: { cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
   const [deliveryMethod, setDeliveryMethod] = useState<string>('SecureShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     setDeliveryMethod(event.target.value as string);
+    changeDeliveryMethodOfProduct(cartItem.productId, event.target.value)
   }
 
   return (
@@ -413,9 +416,10 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
                 <Select
                   color="secondary"
                   className="DeliveryMethodSelect"
-                  value={deliveryMethod}
+                  value={!isDifferentMethod ? deliveryMethodOfParent : deliveryMethod}
                   onChange={handleDeliveryMethod}
                   IconComponent={SelectDropdown}
+                  disabled={!isDifferentMethod}
                 >
                   <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
                   <MenuItem value="VaultStorage">Vault Storage</MenuItem>
@@ -437,26 +441,25 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
   )
 }
 
-export const CartCardAbstract = (data: any) => {
-
+export const CartCardAbstract = ({product,quantity,deliveryMethod}:any) => {
   return (
     <Card className="CartCardAbstract">
       <CardContent>
         <CardMedia
           component="img"
-          image={data.data}
+          image={product?.imageUrl}
           alt="Product image"
         />
         <Stack className="Wrapper">
           <Box className="About">
-            <Typography className="Name" variant="titleLarge" component="p">2024 1oz Lunar Series III Year of the Dragon Silver Coin</Typography>
-            <Typography>Qty: 03</Typography>
+            <Typography className="Name" variant="titleLarge" component="p">{product?.productName}</Typography>
+            <Typography>Qty: {quantity}</Typography>
           </Box>
-          <Typography variant="subtitle1">$10673.1</Typography>
+          <Typography variant="subtitle1">${roundOfThePrice((product?.LivePriceDetails?.price)*(quantity))}</Typography>
         </Stack>
       </CardContent>
       <Divider />
-      <Typography className="DeliveryMethod" variant="overline" component="p">Delivery Method: <Typography variant="inherit" component="span">Secure Shipping</Typography></Typography>
+      <Typography className="DeliveryMethod" variant="overline" component="p">Delivery Method: <Typography variant="inherit" component="span">{deliveryMethod}</Typography></Typography>
     </Card >
   )
 }

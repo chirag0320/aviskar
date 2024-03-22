@@ -122,12 +122,14 @@ interface CheckoutPageState {
         },
         "customerId": number
     } | null,
-    subTotal: number
+    subTotal: number,
+    finalDataForTheCheckout: any
 }
 const initialState: CheckoutPageState = {
     loading: false,
     checkoutPageData: null,
-    subTotal: 0
+    subTotal: 0,
+    finalDataForTheCheckout:null
 }
 
 export const getCheckoutPageData = appCreateAsyncThunk(
@@ -160,6 +162,9 @@ export const checkoutPage = createSlice({
         updateSubTotalCheckoutPage: (state, action) => {
             state.subTotal += action.payload;
             state.subTotal = Math.round((state.subTotal + Number.EPSILON) * 100) / 100
+        },
+        updateFinalDataForTheCheckout:(state,action)=>{
+            state.finalDataForTheCheckout = {...state.finalDataForTheCheckout,...action.payload}
         }
     },
 
@@ -178,6 +183,6 @@ export const checkoutPage = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage } = checkoutPage.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout } = checkoutPage.actions
 
 export default checkoutPage.reducer

@@ -456,6 +456,15 @@ const theme: Theme = createTheme({
         },
       },
     },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          '&[data-value="none"]': {
+            display: 'none',
+          },
+        },
+      },
+    },
     MuiList: {
       defaultProps: {
         disablePadding: true,
@@ -527,6 +536,9 @@ const theme: Theme = createTheme({
       styleOverrides: {
         container: {
           boxShadow: "none",
+        },
+        paper: {
+          margin: 20,
         },
       },
     },

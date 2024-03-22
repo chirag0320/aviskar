@@ -37,7 +37,7 @@ function MobileSecondaryMenu() {
             onClose={toggleOpenSearch}
             onClickAway={handleClickAway}
             renderComponent={
-              configDetailsState?.enablesearch?.value && <IconButton ref={searchButtonRef} className={classNames("MenuButton", { "Active": false })} onClick={toggleOpenSearch}><Search /></IconButton>
+              configDetailsState?.enablesearch?.value && <IconButton aria-label='SearchButton' ref={searchButtonRef} className={classNames("MenuButton", { "Active": false })} onClick={toggleOpenSearch}><Search /></IconButton>
             }
             lightTheme
             arrow
@@ -46,7 +46,7 @@ function MobileSecondaryMenu() {
               <SearchField />
             </Container>
           </ClickTooltip>
-          <IconButton className={classNames("MenuButton", { "Active": false })} href="tel:+61731848300"><Call /></IconButton>
+          <IconButton title='Call us' className={classNames("MenuButton", { "Active": false })} href="tel:+61731848300"><Call /></IconButton>
           {configDetailsState?.enablechart?.value ? <ChartMenu /> : null}
           {configDetailsState?.enablecart?.value ? <CartMenu /> : null}
           <ActionMenu />

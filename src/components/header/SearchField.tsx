@@ -14,7 +14,7 @@ function SearchField() {
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
-            <IconButton><Search /></IconButton>
+            <IconButton aria-label='SearchButton'><Search /></IconButton>
           </InputAdornment>
         ),
       }}

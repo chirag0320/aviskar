@@ -79,7 +79,7 @@ function Navigation() {
           <Stack className="RightPart">
             {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
             {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
-              <Link to="/shopping-cart">
+              <Link area-label="shopping-cart-link" to="/shopping-cart">
                 <CartMenu />
               </Link>
             </Suspense> : null}

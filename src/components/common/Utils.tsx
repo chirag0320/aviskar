@@ -80,7 +80,7 @@ export const StockReturnWithName = React.memo(
           </Box>
           {status ? <ChevronUp /> : <ChevronDown />}
         </Stack>
-        <img src={charturl} width={90} height={20} />
+        <img alt="ChartImage" src={charturl} width={90} height={20} />
       </Stack>
     );
   }

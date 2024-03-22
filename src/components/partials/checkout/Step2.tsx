@@ -11,19 +11,22 @@ import { InfoIcon, SelectDropdown } from "@/assets/icons"
 import { HoverTooltip } from "@/components/common/CustomTooltip"
 import { productImages } from "@/utils/data"
 import { useAppDispatch, useAppSelector } from "@/hooks"
-import { shopingCartItem, updateSubTotalCheckoutPage } from "@/redux/reducers/checkoutReducer"
+import { resetSubTotalCheckoutPage, shopingCartItem, updateFinalDataForTheCheckout, updateSubTotalCheckoutPage } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { CartItemsWithLivePriceDetails } from "../shopping-cart/CartDetails"
+import useDebounce from "@/hooks/useDebounce"
 
 function Step2() {
   const dispatch = useAppDispatch()
   const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
-  const [deliveryMethod, setDeliveryMethod] = useState<string>('DifferentMethod')
+  const [deliveryMethod, setDeliveryMethod] = useState<'DifferentMethod' | 'VaultStorage' | 'SecureShipping'>('DifferentMethod')
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
+  const [deliveryMethods, setDeliveryMethods] = useState<{ [key: number]: string }>({})
   const [productIds, setProductIds] = useState({})
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
   const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
+  const changeInQuantities = useDebounce(quantities, 500)
 
   useEffect(() => {
     if (priceData?.data?.length > 0) {
@@ -38,7 +41,7 @@ function Step2() {
           LivePriceDetails: idwithpriceObj[item.productId]
         }
       })
-
+      dispatch(resetSubTotalCheckoutPage())
       dispatch(updateSubTotalCheckoutPage(subTotal))
 
       // const subTotal = cartItemsWithLivePrice.reduce((acc: number, item: CartItemsWithLivePriceDetails) => {
@@ -48,6 +51,19 @@ function Step2() {
       setCartItemsWithLivePrice(cartItemsWithLivePrice!)
     }
   }, [priceData, checkoutPageData?.shoppingCartItems])
+  useEffect(() => {
+    if (priceData?.data?.length > 0) {
+      const idwithpriceObj: any = {}
+      priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
+
+      let subTotal = 0;
+      cartItemsWithLivePrice.map((item: shopingCartItem) => {
+        subTotal += (idwithpriceObj?.[item.productId]?.price * quantities[item.productId])
+      })
+      dispatch(resetSubTotalCheckoutPage())
+      dispatch(updateSubTotalCheckoutPage(subTotal))
+    }
+  }, [priceData, changeInQuantities, cartItemsWithLivePrice, checkoutPageData?.shoppingCartItems])
 
   useEffect(() => {
     if (checkoutPageData?.shoppingCartItems?.length! > 0) {
@@ -56,35 +72,68 @@ function Step2() {
     }
 
     let quantities: any = {}
+    let deliveryMethods: any = {}
     checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
       quantities[item.productId] = item.quantity
+      deliveryMethods[item.productId] = 'SecureShipping'
     })
     setQuantities(quantities)
+    setDeliveryMethods(deliveryMethods)
+    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: quantities, deliveryMethodsWithProductId: deliveryMethods }))
   }, [checkoutPageData?.shoppingCartItems])
-
-
+  useEffect(() => {
+    dispatch(updateFinalDataForTheCheckout({ cartItemsWithLivePrice }))
+  }, [cartItemsWithLivePrice])
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
-    setDeliveryMethod(event.target.value as string);
+    setDeliveryMethod(event.target.value as any);
+    const makeObject: any = { parentDeliveryMethod: event.target.value }
+    let deliveryMethods: any = {}
+    if (event.target.value !== 'DifferentMethod') {
+      checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
+        deliveryMethods[item.productId] = event.target.value
+      })
+      makeObject['deliveryMethodsWithProductId'] = deliveryMethods
+    } else {
+      checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
+        deliveryMethods[item.productId] = 'SecureShipping'
+      })
+      makeObject['deliveryMethodsWithProductId'] = deliveryMethods
+    }
+    dispatch(updateFinalDataForTheCheckout(makeObject))
   }
 
   const increaseQuantity = (productId: number) => {
-    setQuantities({ ...quantities, [productId]: quantities[productId] + 1 })
+    const productIdOfId = cartItemsWithLivePrice.find((item) => item.id === productId)
+    const updatedQuantities = { ...quantities, [productIdOfId?.productId ?? productId]: quantities[productIdOfId?.productId ?? productId] + 1 }
+    setQuantities(updatedQuantities)
+    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: updatedQuantities }))
   }
 
   const decreaseQuantity = (productId: number) => {
+    const productIdOfId = cartItemsWithLivePrice.find((item) => item.id === productId)
+
     if (quantities[productId] === 1) {
       // setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId));
     }
     else {
-      setQuantities({ ...quantities, [productId]: quantities[productId] - 1 })
+      const updatedQuantities = { ...quantities, [productIdOfId?.productId ?? productId]: quantities[productIdOfId?.productId ?? productId] - 1 }
+      setQuantities(updatedQuantities)
+      dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: updatedQuantities }))
     }
   }
 
   const removeItemFromCart = (productId: number) => {
-    setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId));
+    const updatedCartItem = cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId)
+    setCartItemsWithLivePrice(updatedCartItem);
+    dispatch(updateFinalDataForTheCheckout({ cartItemsWithLivePrice: updatedCartItem }))
   }
 
-  console.log("🚀 ~ Checkout ~ checkoutPageData:", checkoutPageData)
+  const changeDeliveryMethodOfProduct = (productId: number, method: any) => {
+    const updatedDeliverymethod = { ...deliveryMethods, [productId]: method }
+    setDeliveryMethods(updatedDeliverymethod)
+    dispatch(updateFinalDataForTheCheckout({ deliveryMethodsWithProductId: updatedDeliverymethod }))
+  }
+
   return (
     <StepWrapper title="Step 2" className="Step2">
       <Box className="StepHeader">
@@ -121,7 +170,7 @@ function Step2() {
       <Stack className="ProductList">
         {cartItemsWithLivePrice?.length > 0 && cartItemsWithLivePrice?.map((cartItem) => {
           return (
-            <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={false} hideRightSide={true} quantity={quantities[cartItem.productId]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
+            <CartCard changeDeliveryMethodOfProduct={changeDeliveryMethodOfProduct} isDifferentMethod={deliveryMethod === 'DifferentMethod'} deliveryMethodOfParent={deliveryMethod} key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={false} hideRightSide={true} quantity={quantities[cartItem.productId]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
           )
         })}
       </Stack>
