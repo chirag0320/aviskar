@@ -99,7 +99,7 @@ function CloserLook() {
         title="Take a closer look"
         description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
       />
-      <Box className="DestinationWrapper">
+      <Container className="DestinationWrapper" maxWidth="lg">
         <Box className="SwiperContainer">
           <Swiper {...config} >
             {
@@ -131,9 +131,9 @@ function CloserLook() {
             }
           </Swiper>
         </Box>
-      </Box>
+      </Container>
       <Stack className="Action">
-        <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained" onClick={()=>{
+        <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained" onClick={() => {
           navigate('/blog')
         }}>Discover More</Button>
       </Stack>
