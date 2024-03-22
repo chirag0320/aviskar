@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Button, Checkbox, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
+import { Button, Checkbox, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import useApiRequest from '@/hooks/useAPIRequest'
 import { CartItemsWithLivePriceDetails } from '../shopping-cart/CartDetails'
 import { ENDPOINTS } from '@/utils/constants'
@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks'
 import { MinusIcon, PlusIcon } from '@/assets/icons'
 import { updateShoppingCartData } from '@/redux/reducers/shoppingCartReducer'
 import { addToWishListToShoppingCart, deleteWishListData } from '@/redux/reducers/wishListReducer'
+import { navigate } from 'gatsby'
 
 const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }) => {
     const wishListstate = useAppSelector(state => state.wishList)
@@ -18,6 +19,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
     const [wishListItemsWithLivePrice, setWishListItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
     const [selectedItems, setSelectedItems] = useState<{ [key: number]: boolean }>([])
+    const [isWishListUpdated, setIsWishListUpdated] = useState(false)
 
     useEffect(() => {
         if (priceData?.data?.length > 0) {
@@ -54,17 +56,17 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
 
     const increaseQuantity = (id: number) => {
         setQuantities({ ...quantities, [id]: quantities[id] + 1 })
+        setIsWishListUpdated(true)
     }
 
     const decreaseQuantity = (id: number) => {
         if (quantities[id] !== 1) {
             setQuantities({ ...quantities, [id]: quantities[id] - 1 })
         }
+        setIsWishListUpdated(true)
     }
 
     const updateWishListHandler = async () => {
-        console.log("Hello");
-        
         const itemsWithQuantity = Object.keys(quantities).map((item: any) => {
             return {
                 id: item,
@@ -72,6 +74,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
             }
         })
 
+        setIsWishListUpdated(false)
         await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
     }
 
@@ -82,6 +85,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                 checkedItems.push(Number(item));
             }
         }
+        setWishListItemsWithLivePrice(wishListItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => !checkedItems.includes(item.id)));
         await dispatch(deleteWishListData({ url: ENDPOINTS.deleteWishListData, body: checkedItems }) as any)
     }
 
@@ -99,6 +103,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
         }
 
         await dispatch(addToWishListToShoppingCart({ url: ENDPOINTS.addWishListToShoppingCart, body: checkedItemsWithQuantity }) as any)
+        navigate('/shopping-cart')
     }
 
     const handleCheckboxChange = (id: number) => {
@@ -108,7 +113,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
     return (
         <Fragment>
             <TableContainer>
-                <Table >
+                {wishListstate.wishListItems.length > 0 ? (<Table >
                     <TableHead>
                         <TableRow>
                             <TableCell padding="checkbox"></TableCell>
@@ -139,16 +144,16 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                             </TableRow>
                         ))}
                     </TableBody>
-                </Table>
+                </Table>) : <Typography variant="h6" style={{textAlign:"center"}}>No items in wishlist</Typography>}
             </TableContainer>
             <Stack className="ActionWrapper">
                 <Stack className="Left">
-                    <Button color="primary" variant="contained" onClick={updateWishListHandler}>Update Wishlist</Button>
+                    <Button color="primary" variant="contained" onClick={updateWishListHandler} disabled={wishListstate.loading || !isWishListUpdated}>Update Wishlist</Button>
                     <Button color="primary" variant="outlined" onClick={toggleEmailFriend}>Email a friend</Button>
                 </Stack>
                 <Stack className="Right">
-                    <Button color="primary" variant="outlined" onClick={removeSelectedItemsHandler}>Remove</Button>
-                    <Button color="primary" variant="contained" onClick={addToCartSelectedItemsHandler}>Add to cart</Button>
+                    <Button color="primary" variant="outlined" onClick={removeSelectedItemsHandler} disabled={wishListstate.loading || !Object.values(selectedItems).some((value) => value === true)}>Remove</Button>
+                    <Button color="primary" variant="contained" onClick={addToCartSelectedItemsHandler} disabled={wishListstate.loading || !Object.values(selectedItems).some((value) => value === true)}>Add to cart</Button>
                 </Stack>
             </Stack>
         </Fragment>

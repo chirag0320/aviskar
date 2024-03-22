@@ -7,7 +7,7 @@ import { ENDPOINTS } from '@/utils/constants'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { IproductPrice } from '../home/FeaturedProducts'
-import { deleteShoppingCartData, resetSubTotal, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
+import { clearShoppingCart, deleteShoppingCartData, resetSubTotal, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
 import { set } from 'react-hook-form'
 import { navigate } from 'gatsby'
 import { apicall } from '@/utils/helper'
@@ -18,7 +18,7 @@ export type CartItemsWithLivePriceDetails = CartItem & {
 }
 
 // const CartDetails = ({ setSubTotal }: { setSubTotal: Dispatch<SetStateAction<number>> }) => {
-const CartDetails = () => {
+const CartDetails = ({ isShoppingCartUpdated, setIsShoppingCartUpdated }: { isShoppingCartUpdated: boolean, setIsShoppingCartUpdated: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const loading = useAppSelector(state => state.shoppingCart.loading);
     const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
     const [productIds, setProductIds] = useState({})
@@ -29,7 +29,7 @@ const CartDetails = () => {
     const changeInQuantities = useDebounce(quantities, 500)
     useEffect(() => {
         updateCartHandler(false)
-    }, [changeInQuantities])
+    }, [changeInQuantities,cartItemsWithLivePrice])
     useEffect(() => {
         if (priceData?.data?.length > 0) {
             const idwithpriceObj: any = {}
@@ -62,19 +62,20 @@ const CartDetails = () => {
         })
         setQuantities(quantities)
     }, [cartItems])
-
     const increaseQuantity = (id: number) => {
         setQuantities({ ...quantities, [id]: quantities[id] + 1 })
+        setIsShoppingCartUpdated(true)
     }
 
     const decreaseQuantity = (id: number) => {
         setQuantities({ ...quantities, [id]: quantities[id] - 1 })
+        setIsShoppingCartUpdated(true)
     }
 
     const removeItemFromCart = async (id: number) => {
         // optimistic update needs(currentlt not)
-        setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== id));        
         await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: [id] }) as any);
+        setCartItemsWithLivePrice(()=>cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== id));
     }
 
     const updateCartHandler = async (isapiCallNeeded?: boolean) => {
@@ -88,7 +89,9 @@ const CartDetails = () => {
         })
         dispatch(resetSubTotal());
         dispatch(updateSubTotal(subTotal))
+
         if (isapiCallNeeded) {
+            setIsShoppingCartUpdated(false)
             await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
         }
     }
@@ -98,9 +101,8 @@ const CartDetails = () => {
         for (const id in quantities) {
             ids.push(Number(id));
         }
-
+        dispatch(clearShoppingCart());
         await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: ids }) as any)
-        dispatch(resetSubTotal());
     }
 
     return (
@@ -114,10 +116,10 @@ const CartDetails = () => {
                 <Typography variant="body1"><Typography component="span" className="Note">Note:</Typography> Prices are live prices and will be locked on confirm order. </Typography>
             </Box>
             <Stack className="BottomCartActionsWrapper">
-                <Button className='LeftArrow' startIcon={<LeftArrow />} color='secondary' onClick={() => navigate("/shop")}> Continue Shopping</Button>
+                <Button className='LeftArrow' startIcon={<LeftArrow />} color='secondary' onClick={() => navigate("/shop")} disabled={loading}> Continue Shopping</Button>
                 <Stack className='ClearUpdateCartWrapper'>
                     <Button className="ClearShoppingCart" color='secondary' onClick={clearCartHandler} disabled={loading}>Clear Shopping Cart</Button>
-                    <Button className='UpdateCartBtn' size='large' variant="contained" onClick={() => updateCartHandler(true)} disabled={loading}>Update Shopping Cart</Button>
+                    <Button className='UpdateCartBtn' size='large' variant="contained" onClick={() => updateCartHandler(true)} disabled={loading || !isShoppingCartUpdated}>Update Shopping Cart</Button>
                 </Stack>
             </Stack>
         </Box>
