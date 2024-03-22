@@ -537,9 +537,6 @@ const theme: Theme = createTheme({
         container: {
           boxShadow: "none",
         },
-        paper: {
-          margin: 20,
-        },
       },
     },
     MuiDialogTitle: {
