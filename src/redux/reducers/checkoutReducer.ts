@@ -141,11 +141,11 @@ interface CheckoutPageState {
 }
 const initialState: CheckoutPageState = {
     loading: false,
-    checkoutPageData: null,
-    subTotal: 0,
-    finalDataForTheCheckout: null,
-    insuranceAndTaxCalculation: null,
-    craditCardCharges: null
+    checkoutPageData: JSON.parse(localStorage.getItem("checkoutPageData") ?? '{}'),
+    subTotal: Number(localStorage.getItem("checkoutPageData")) || 0,
+    finalDataForTheCheckout: localStorage.getItem("finalDataForTheCheckout") ?? null,
+    insuranceAndTaxCalculation: JSON.parse(localStorage.getItem("insuranceAndTaxCalculation") ?? '{}') ?? null,
+    craditCardCharges: JSON.parse(localStorage.getItem("craditCardCharges") ?? '{}') ?? null
 }
 
 export const getCheckoutPageData = appCreateAsyncThunk(

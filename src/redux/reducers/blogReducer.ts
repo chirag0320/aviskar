@@ -6,12 +6,12 @@ import BlogServices from '@/apis/services/blogAndNewsServices'
 
 interface BlogState {
     blogList: {},
-    blogDetailsData:{}
+    blogDetailsData: {}
     loading: boolean
 }
 const initialState: BlogState = {
-    blogList: {},
-    blogDetailsData:{},
+    blogList: JSON.parse(localStorage.getItem("blogList") ?? '{}'),
+    blogDetailsData: JSON.parse(localStorage.getItem("blogDetailsData") ?? '{}'),
     loading: false
 }
 
@@ -23,7 +23,7 @@ export const BlogList = appCreateAsyncThunk(
 )
 export const BlogDetailsAPI = appCreateAsyncThunk(
     'BlogDetails/status',
-    async ({ params }: { params:{pathName: 'string'} }) => {
+    async ({ params }: { params: { pathName: 'string' } }) => {
         return await BlogServices.BlogDetails(params?.pathName)
     }
 )
@@ -33,7 +33,7 @@ export const blogpageSlice = createSlice({
     reducers: {
         resetWholeBlogPageData: (state) => {
             state.blogList = {}
-            state.blogDetailsData={}
+            state.blogDetailsData = {}
         },
         setLoadingTrue: (state) => {
             state.loading = true

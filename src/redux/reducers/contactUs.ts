@@ -16,8 +16,8 @@ interface ContactUsData {
 
 const initialState: ContactUsData = {
     loading: false,
-    reasonsForContact: [],
-    html: {}
+    reasonsForContact: JSON.parse(localStorage.getItem('reasonsForContact') ?? '[]'),
+    html: JSON.parse(localStorage.getItem('html') ?? '{}')
 }
 
 export const saveContactUsDetails = appCreateAsyncThunk(
@@ -61,6 +61,7 @@ export const contactUsPageSlice = createSlice({
             const responseData = action.payload.data;
             state.reasonsForContact = responseData.data;
             state.loading = false;
+            localStorage.setItem('reasonsForContact',responseData.data)
         })
         builder.addCase(getReasonsForContactUs.rejected, (state) => {
             state.loading = false;
@@ -87,6 +88,7 @@ export const contactUsPageSlice = createSlice({
             });
 
             state.html = config;
+            localStorage.setItem('html', JSON.stringify(config))
         })
         builder.addCase(getConfiguration.rejected, (state) => {
             state.loading = false;

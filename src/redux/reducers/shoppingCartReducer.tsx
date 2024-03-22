@@ -67,6 +67,7 @@ export const shoppingCart = createSlice({
         })
         builder.addCase(getShoppingCartData.fulfilled, (state, action) => {
             state.cartItems = action.payload.data.data.items;
+            localStorage.setItem('cartItems',action.payload.data.data.items)
             state.loading = false;
         })
         builder.addCase(getShoppingCartData.rejected, (state, action) => {

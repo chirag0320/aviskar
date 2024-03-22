@@ -16,18 +16,14 @@ interface filterQuery {
 }
 
 const initialState: categoryData = {
-  loading: false,
-  items: [],
-  count: 0,
-  categories: [],
-  price: {
-    minPrice: 0,
-    maxPrice: 0
-  },
-  specifications: {
-  },
-  manufactureres: [],
-  productDetailsData:{}
+  loading: JSON.parse(localStorage.getItem("loading") ?? 'false'),
+  items: JSON.parse(localStorage.getItem("items") ?? '[]'),
+  count: JSON.parse(localStorage.getItem("count") ?? '0'),
+  categories: JSON.parse(localStorage.getItem("categories") ?? '[]'),
+  price: JSON.parse(localStorage.getItem("price") ?? "{minPrice: 0,maxPrice: 0}"),
+  specifications: JSON.parse(localStorage.getItem("specifications") ?? '{}'),
+  manufactureres: JSON.parse(localStorage.getItem("manufactureres") ?? '[]'),
+  productDetailsData:JSON.parse(localStorage.getItem("productDetailsData") ?? '{}')
 }
 
 export const getCategoryData = appCreateAsyncThunk(

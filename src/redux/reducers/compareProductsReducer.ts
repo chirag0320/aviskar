@@ -14,9 +14,9 @@ interface ShoppingCartState {
 
 const initialState: ShoppingCartState = {
     loading: false,
-    productIds: [],
-    specificationKeys: [],
-    comparedProducts: []
+    productIds: JSON.parse(localStorage.getItem('productIds') ?? '[]'),
+    specificationKeys: JSON.parse(localStorage.getItem('specificationKeys') ?? '[]'),
+    comparedProducts: JSON.parse(localStorage.getItem('comparedProducts') ?? '[]')
 }
 
 export const getCompareProducts = appCreateAsyncThunk(
