@@ -10,7 +10,7 @@ class ShoppingCartServices {
     }
 
     static async clearShoppingCartData(url: string, deleteCartQuery: any) {
-        return axiosInstance.delete(url, deleteCartQuery);
+        return axiosInstance.post(url, deleteCartQuery);
     }
 }
 

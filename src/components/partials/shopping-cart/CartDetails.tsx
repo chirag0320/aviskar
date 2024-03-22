@@ -7,16 +7,18 @@ import { ENDPOINTS } from '@/utils/constants'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { IproductPrice } from '../home/FeaturedProducts'
-import { resetSubTotal, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
+import { clearShoppingCart, deleteShoppingCartData, resetSubTotal, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
 import { set } from 'react-hook-form'
 import { navigate } from 'gatsby'
+import { apicall } from '@/utils/helper'
+import useDebounce from '@/hooks/useDebounce'
 
 export type CartItemsWithLivePriceDetails = CartItem & {
     LivePriceDetails: IproductPrice
 }
 
 // const CartDetails = ({ setSubTotal }: { setSubTotal: Dispatch<SetStateAction<number>> }) => {
-const CartDetails = () => {
+const CartDetails = ({ isShoppingCartUpdated, setIsShoppingCartUpdated }: { isShoppingCartUpdated: boolean, setIsShoppingCartUpdated: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const loading = useAppSelector(state => state.shoppingCart.loading);
     const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
     const [productIds, setProductIds] = useState({})
@@ -24,7 +26,10 @@ const CartDetails = () => {
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
     const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
-
+    const changeInQuantities = useDebounce(quantities, 500)
+    useEffect(() => {
+        updateCartHandler(false)
+    }, [changeInQuantities,cartItemsWithLivePrice])
     useEffect(() => {
         if (priceData?.data?.length > 0) {
             const idwithpriceObj: any = {}
@@ -41,13 +46,9 @@ const CartDetails = () => {
 
             dispatch(updateSubTotal(subTotal))
 
-            // const subTotal = cartItemsWithLivePrice.reduce((acc: number, item: CartItemsWithLivePriceDetails) => {
-            //     return acc + (item.LivePriceDetails.price * item.quantity)
-            // }, 0)
-
             setCartItemsWithLivePrice(cartItemsWithLivePrice)
         }
-    }, [priceData])
+    }, [priceData, cartItems])
 
     useEffect(() => {
         if (cartItems.length > 0) {
@@ -57,60 +58,51 @@ const CartDetails = () => {
 
         let quantities: any = {}
         cartItems.forEach((item: CartItem) => {
-            quantities[item.productId] = item.quantity
+            quantities[item.id] = item.quantity
         })
         setQuantities(quantities)
     }, [cartItems])
-
-    const increaseQuantity = (productId: number) => {
-        setQuantities({ ...quantities, [productId]: quantities[productId] + 1 })
-
-        // const item = cartItemsWithLivePrice.find((item: CartItemsWithLivePriceDetails) => item.productId === productId);
-        // if (item) {
-        //     setSubTotal((prevSubTotal) => prevSubTotal + item.LivePriceDetails.price);
-        // }
+    const increaseQuantity = (id: number) => {
+        setQuantities({ ...quantities, [id]: quantities[id] + 1 })
+        setIsShoppingCartUpdated(true)
     }
 
-    const decreaseQuantity = (productId: number) => {
-        if (quantities[productId] === 1) {
-            setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId));
-        }
-        else {
-            setQuantities({ ...quantities, [productId]: quantities[productId] - 1 })
-        }
-
-        const item = cartItemsWithLivePrice.find((item: CartItemsWithLivePriceDetails) => item.productId === productId);
-        // if (item) {
-        //     setSubTotal((prevSubTotal) => prevSubTotal - item.LivePriceDetails.price);
-        // }
+    const decreaseQuantity = (id: number) => {
+        setQuantities({ ...quantities, [id]: quantities[id] - 1 })
+        setIsShoppingCartUpdated(true)
     }
 
-    const removeItemFromCart = (productId: number) => {
-        setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId));
-
-        const item = cartItemsWithLivePrice.find((item: CartItemsWithLivePriceDetails) => item.productId === productId);
-        // if (item) {
-        //     setSubTotal((prevSubTotal) => prevSubTotal - (item.LivePriceDetails.price * item.quantity));
-        // }
+    const removeItemFromCart = async (id: number) => {
+        // optimistic update needs(currentlt not)
+        await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: [id] }) as any);
+        setCartItemsWithLivePrice(()=>cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== id));
     }
 
-    const updateCartHandler = async () => {
+    const updateCartHandler = async (isapiCallNeeded?: boolean) => {
         let subTotal = 0;
         const itemsWithQuantity = cartItemsWithLivePrice.map((item: CartItemsWithLivePriceDetails) => {
-            subTotal += (item.LivePriceDetails.price * quantities[item.productId]);
+            subTotal += (item.LivePriceDetails.price * quantities[item.id]);
             return {
-                id: item.productId,
-                quantity: quantities[item.productId]
+                id: item.id,
+                quantity: quantities[item.id]
             }
         })
         dispatch(resetSubTotal());
         dispatch(updateSubTotal(subTotal))
-        await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
+
+        if (isapiCallNeeded) {
+            setIsShoppingCartUpdated(false)
+            await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
+        }
     }
 
     const clearCartHandler = async () => {
-        await dispatch(updateShoppingCartData({ url: ENDPOINTS.clearShoppingCartData, body: [] }) as any)
-        dispatch(resetSubTotal());
+        const ids: number[] = [];
+        for (const id in quantities) {
+            ids.push(Number(id));
+        }
+        dispatch(clearShoppingCart());
+        await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: ids }) as any)
     }
 
     return (
@@ -118,16 +110,16 @@ const CartDetails = () => {
             <Box className="ShoppingProductsDetailsWrapper">
                 {cartItemsWithLivePrice.map((cartItem) => {
                     return (
-                        <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={true} hideRightSide={true} quantity={quantities[cartItem.productId]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
+                        <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={true} hideRightSide={true} quantity={quantities[cartItem.id]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
                     )
                 })}
                 <Typography variant="body1"><Typography component="span" className="Note">Note:</Typography> Prices are live prices and will be locked on confirm order. </Typography>
             </Box>
             <Stack className="BottomCartActionsWrapper">
-                <Button className='LeftArrow' startIcon={<LeftArrow />} color='secondary' onClick={() => navigate("/shop")}> Continue Shopping</Button>
+                <Button className='LeftArrow' startIcon={<LeftArrow />} color='secondary' onClick={() => navigate("/shop")} disabled={loading}> Continue Shopping</Button>
                 <Stack className='ClearUpdateCartWrapper'>
                     <Button className="ClearShoppingCart" color='secondary' onClick={clearCartHandler} disabled={loading}>Clear Shopping Cart</Button>
-                    <Button className='UpdateCartBtn' size='large' variant="contained" onClick={updateCartHandler} disabled={loading}>Update Shopping Cart</Button>
+                    <Button className='UpdateCartBtn' size='large' variant="contained" onClick={() => updateCartHandler(true)} disabled={loading || !isShoppingCartUpdated}>Update Shopping Cart</Button>
                 </Stack>
             </Stack>
         </Box>

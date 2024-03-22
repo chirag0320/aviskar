@@ -30,8 +30,8 @@ export const updateShoppingCartData = appCreateAsyncThunk(
     }
 )
 
-export const clearShoppingCartData = appCreateAsyncThunk(
-    'clearShoppingCart',
+export const deleteShoppingCartData = appCreateAsyncThunk(
+    'deleteShoppingCart',
     async ({ url, body }: { url: string, body: any }) => {
         return await ShoppingCartServices.clearShoppingCartData(url, body);
     }
@@ -49,6 +49,10 @@ export const shoppingCart = createSlice({
         },
         resetSubTotal: (state) => {
             state.subTotal = 0
+        },
+        clearShoppingCart: (state) => {
+            state.cartItems = [];
+            state.subTotal = 0;
         },
         updateSubTotal: (state, action) => {
             state.subTotal += action.payload;
@@ -81,18 +85,18 @@ export const shoppingCart = createSlice({
         })
 
         // delete shopping cart data
-        builder.addCase(clearShoppingCartData.pending, (state, action) => {
+        builder.addCase(deleteShoppingCartData.pending, (state, action) => {
             state.loading = true;
         })
-        builder.addCase(clearShoppingCartData.fulfilled, (state, action) => {
+        builder.addCase(deleteShoppingCartData.fulfilled, (state, action) => {
             state.loading = false
         })
-        builder.addCase(clearShoppingCartData.rejected, (state, action) => {
+        builder.addCase(deleteShoppingCartData.rejected, (state, action) => {
             state.loading = false;
         })
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotal, resetSubTotal } = shoppingCart.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotal, resetSubTotal ,clearShoppingCart} = shoppingCart.actions
 
 export default shoppingCart.reducer

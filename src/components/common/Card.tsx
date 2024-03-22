@@ -193,7 +193,31 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
         <Button name='discoverMore' aria-label='discoverMore' variant="contained" onClick={() => {
           navigate(`/product-details/${product?.friendlypagename}`) //friendlypagename
         }} className="PrimaryAction" fullWidth>Discover More</Button>
-        {product.isBundle && <IconButton aria-label='StackIcon' className="Outlined Stack"><StackIcon /></IconButton>}
+        {product.isBundle &&
+          <ClickTooltip
+            open={open}
+            className="TooltipStack"
+            placement="bottom-start"
+            onClose={handleTooltipClose}
+            onClickAway={handleClickAway}
+            renderComponent={
+              <IconButton
+                ref={tooltipRef}
+                aria-label='StackIcon'
+                className="Outlined Stack"
+                onClick={handleTooltipOpen}
+              >
+                <StackIcon />
+              </IconButton>
+            }
+            lightTheme
+            arrow
+          >
+            <Box className="Content">
+              <Typography variant="body2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, consequuntur. </Typography>
+            </Box>
+          </ClickTooltip>
+        }
         <IconButton aria-label='AddToCartIcon' className="Outlined AddToCart"><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
@@ -343,17 +367,19 @@ export const LineChartCard = (props: any) => {
 };
 
 
-export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem }: { cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any }) => {
+export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct }: { cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
   const [deliveryMethod, setDeliveryMethod] = useState<string>('SecureShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     setDeliveryMethod(event.target.value as string);
+    changeDeliveryMethodOfProduct(cartItem.productId, event.target.value)
   }
 
   return (
+    cartItem && Object.keys(cartItem)?.length > 0 &&
     <Card className="CartCard">
       <CardMedia
         component="img"
-        image={cartItem.imageUrl}
+        image={cartItem?.imageUrl}
         alt="Product image"
       />
       <CardContent>
@@ -367,11 +393,11 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
             <Typography variant="body2">Qty.</Typography>
             <Typography variant="subtitle1">${cartItem.LivePriceDetails.price}</Typography>
             <Stack className="Quantity">
-              <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.productId)}><MinusIcon /></IconButton>
+              <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.id)} disabled={quantity === 1}><MinusIcon /></IconButton>
               <TextField value={quantity} disabled />
-              <IconButton className="Plus" onClick={() => increaseQuantity(cartItem.productId)}><PlusIcon /></IconButton>
+              <IconButton className="Plus" onClick={() => increaseQuantity(cartItem.id)}><PlusIcon /></IconButton>
             </Stack>
-            <IconButton className="DeleteButton" onClick={() => removeItem(cartItem.productId)}><Delete1Icon /></IconButton>
+            <IconButton className="DeleteButton" onClick={() => removeItem(cartItem.id)}><Delete1Icon /></IconButton>
           </Box>
         </Stack>
         <Stack className="BottomWrapper">
@@ -382,9 +408,10 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
                 <Select
                   color="secondary"
                   className="DeliveryMethodSelect"
-                  value={deliveryMethod}
+                  value={!isDifferentMethod ? deliveryMethodOfParent : deliveryMethod}
                   onChange={handleDeliveryMethod}
                   IconComponent={SelectDropdown}
+                  disabled={!isDifferentMethod}
                 >
                   <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
                   <MenuItem value="VaultStorage">Vault Storage</MenuItem>

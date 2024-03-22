@@ -15,16 +15,18 @@ import { PriceChangeReturn, ProductStockStatus, ProductUpdateCountdown } from "@
 import ProductImages from "./ProductImages"
 
 // Assets
-import { AlarmIcon, CameraIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MailIcon, MailIcon1, MinusIcon, PlusIcon, TwitterIcon } from "@/assets/icons"
+import { AlarmIcon, CameraIcon, CompareIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MinusIcon, PlusIcon, TwitterIcon } from "@/assets/icons"
 
 // Data
 import { qmintRating } from "@/utils/data"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { ENDPOINTS } from "@/utils/constants"
 import { valueChangeForPrice } from "@/utils/common"
 import useCallAPI from "@/hooks/useCallAPI"
 import { navigate } from "gatsby"
+import { addProductToCompare } from "@/redux/reducers/compareProductsReducer"
+import { addToWishList } from "@/redux/reducers/wishListReducer"
 
 function createData(
   quantity: string,
@@ -54,6 +56,7 @@ const schema = yup.object().shape({
 
 
 function AboutProduct({ productId }: any) {
+  const dispatch = useAppDispatch();
   const styles: any = createStyles({
     tableBody: {
       border: '1px solid #ddd', // border around the table body
@@ -132,6 +135,9 @@ function AboutProduct({ productId }: any) {
       default:
         break;
     }
+  }
+  const addIntoComapreProduct = (id: any) => {
+    dispatch(addProductToCompare(id))
   }
   return (
     <Box className="AboutProduct">
@@ -219,14 +225,15 @@ function AboutProduct({ productId }: any) {
                 }}><PlusIcon /></IconButton>
               </Stack>
                 <Stack className="Right">
-                  <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={() => {
-                    apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+                  <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={async () => {
+                    await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
                       "productId": productId,
                       "quantity": quantityCount
                     } as any)
+                    navigate('/shopping-cart')
                   }} disabled={loadingForAddToCart}>Add to cart</Button>
-                  <Button size="large" variant="outlined" onClick={()=>{
-                    if(!isLoggedIn){
+                  <Button size="large" variant="outlined" onClick={() => {
+                    if (!isLoggedIn) {
                       navigate('/login')
                       return
                     }
@@ -238,21 +245,31 @@ function AboutProduct({ productId }: any) {
                 }}>Register to Buy</Button>}
             </Stack>
             <Divider />
-            {/* <Stack className="SocialConnects">
-              <Box className="Left">
-                <Button className="">
-                  <HeartIcon className="Icon" />
-                  <Typography variant="overline">Wishlist</Typography>
-                </Button>
-                <MailIcon1 className="Icon" />
-                <AlarmIcon className="Icon" />
-              </Box>
-              <Box className="Right">
-                <IconButton className="Icon"><InstagramIcon1 /></IconButton>
-                <IconButton className="Icon"><FacebookIcon /></IconButton>
-                <IconButton className="Icon"><TwitterIcon /></IconButton>
-              </Box>
-            </Stack> */}
+            <Stack className="SocialConnects">
+              <Button color="secondary" className="IconWithText" onClick={async () => {
+                  await dispatch(addToWishList({
+                    url: ENDPOINTS.addToWishList,
+                    body: {
+                      productId: productId,
+                      quantity: 1
+                    }
+                  }) as any)
+                }} >
+                <Box className="IconWrapper"><HeartIcon /></Box>
+                <Typography variant="overline">Wishlist</Typography>
+              </Button>
+              <Button color="secondary" className="IconWithText" onClick={() => { addIntoComapreProduct(productId) }}>
+                <Box className="IconWrapper"><CompareIcon /></Box>
+                <Typography variant="overline">Compare</Typography>
+              </Button>
+              <Button color="secondary" className="IconWithText">
+                <Box className="IconWrapper"><AlarmIcon /></Box>
+                <Typography variant="overline">Price Alert</Typography>
+              </Button>
+              <IconButton href="#" target="_blank" className="IconWrapper"><InstagramIcon1 /></IconButton>
+              <IconButton href="#" target="_blank" className="IconWrapper"><FacebookIcon /></IconButton>
+              <IconButton href="#" target="_blank" className="IconWrapper"><TwitterIcon /></IconButton>
+            </Stack>
             <Divider />
             {(priceData?.data?.[0]?.tierPriceList?.length > 0 || productDetailsData?.isGradingShow) ? <Stack className="AdditionalDetails">
               {priceData?.data?.[0]?.tierPriceList?.length > 0 ? <><Accordion defaultExpanded>
