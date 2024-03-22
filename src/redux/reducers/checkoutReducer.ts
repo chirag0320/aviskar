@@ -123,13 +123,15 @@ interface CheckoutPageState {
         "customerId": number
     } | null,
     subTotal: number,
-    finalDataForTheCheckout: any
+    finalDataForTheCheckout: any,
+    insuranceAndTaxCalculation: any
 }
 const initialState: CheckoutPageState = {
     loading: false,
     checkoutPageData: null,
     subTotal: 0,
-    finalDataForTheCheckout:null
+    finalDataForTheCheckout: null,
+    insuranceAndTaxCalculation:null
 }
 
 export const getCheckoutPageData = appCreateAsyncThunk(
@@ -139,9 +141,15 @@ export const getCheckoutPageData = appCreateAsyncThunk(
     }
 )
 
+export const getInsuranceAndTaxDetailsCalculation = appCreateAsyncThunk(
+    'getInsuranceAndTaxDetailsCalculation',
+    async ({ url, body }: { url: string, body: any }) => {
+        return await CheckoutPageServices.getInsuranceAndTaxInfo(url, body)
+    }
+)
 export const addOrEditAddress = appCreateAsyncThunk(
     "addOrEditAddress",
-    async ({url ,body} : {url : string , body : any}) => {
+    async ({ url, body }: { url: string, body: any }) => {
 
     }
 )
@@ -163,8 +171,8 @@ export const checkoutPage = createSlice({
             state.subTotal += action.payload;
             state.subTotal = Math.round((state.subTotal + Number.EPSILON) * 100) / 100
         },
-        updateFinalDataForTheCheckout:(state,action)=>{
-            state.finalDataForTheCheckout = {...state.finalDataForTheCheckout,...action.payload}
+        updateFinalDataForTheCheckout: (state, action) => {
+            state.finalDataForTheCheckout = { ...state.finalDataForTheCheckout, ...action.payload }
         }
     },
 
@@ -178,6 +186,17 @@ export const checkoutPage = createSlice({
             state.loading = false;
         })
         builder.addCase(getCheckoutPageData.rejected, (state, action) => {
+            state.loading = false
+        })
+        // get checkout page data
+        builder.addCase(getInsuranceAndTaxDetailsCalculation.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getInsuranceAndTaxDetailsCalculation.fulfilled, (state, action) => {
+            state.insuranceAndTaxCalculation = action?.payload?.data?.data
+            state.loading = false;
+        })
+        builder.addCase(getInsuranceAndTaxDetailsCalculation.rejected, (state, action) => {
             state.loading = false
         })
     },

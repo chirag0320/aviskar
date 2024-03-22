@@ -367,10 +367,10 @@ export const LineChartCard = (props: any) => {
 };
 
 
-export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct }: { cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
-  const [deliveryMethod, setDeliveryMethod] = useState<string>('SecureShipping')
+export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: {deliverMethod:any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
+  // const [deliveryMethod, setDeliveryMethod] = useState<string>('LocalShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
-    setDeliveryMethod(event.target.value as string);
+    // setDeliveryMethod(event.target.value as string);
     changeDeliveryMethodOfProduct(cartItem.productId, event.target.value)
   }
 
@@ -408,11 +408,12 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
                 <Select
                   color="secondary"
                   className="DeliveryMethodSelect"
-                  value={!isDifferentMethod ? deliveryMethodOfParent : deliveryMethod}
+                  value={deliverMethod}
                   onChange={handleDeliveryMethod}
                   IconComponent={SelectDropdown}
                   disabled={!isDifferentMethod}
                 >
+                  <MenuItem value="LocalShipping">Local Shipping</MenuItem>
                   <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
                   <MenuItem value="VaultStorage">Vault Storage</MenuItem>
                 </Select>
@@ -433,7 +434,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
   )
 }
 
-export const CartCardAbstract = ({product,quantity,deliveryMethod}:any) => {
+export const CartCardAbstract = ({ product, quantity, deliveryMethod }: any) => {
   return (
     <Card className="CartCardAbstract">
       <CardContent>
@@ -447,7 +448,7 @@ export const CartCardAbstract = ({product,quantity,deliveryMethod}:any) => {
             <Typography className="Name" variant="titleLarge" component="p">{product?.productName}</Typography>
             <Typography>Qty: {quantity}</Typography>
           </Box>
-          <Typography variant="subtitle1">${roundOfThePrice((product?.LivePriceDetails?.price)*(quantity))}</Typography>
+          <Typography variant="subtitle1">${roundOfThePrice((product?.LivePriceDetails?.price) * (quantity))}</Typography>
         </Stack>
       </CardContent>
       <Divider />

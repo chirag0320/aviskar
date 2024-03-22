@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Typography, Button, Divider, Stack, Box } from "@mui/material"
 
 // Hooks
@@ -13,10 +13,41 @@ import { CartCardAbstract } from "@/components/common/Card"
 import { OutlinedCheckIcon } from "@/assets/icons"
 import OTPConfirmation from "./OTPConfirmation"
 import { roundOfThePrice } from "@/utils/common"
+import useAPIoneTime from "@/hooks/useAPIoneTime"
+import { getInsuranceAndTaxDetailsCalculation } from "@/redux/reducers/checkoutReducer"
+import { ENDPOINTS } from "@/utils/constants"
+interface Product {
+  productId: number;
+  qty: number;
+  price: number;
+  shippingMethod: number;
+  LivePriceDetails?: any;
+}
 
+interface Body {
+  products: Product[];
+  Postcode: string;
+  CountryId: number;
+}
 function OrderSummary() {
-  const { finalDataForTheCheckout,subTotal} = useAppSelector((state) => state.checkoutPage)
-  console.log("🚀 ~ OrderSummary ~ finalDataForTheCheckout:", finalDataForTheCheckout)
+  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation } = useAppSelector((state) => state.checkoutPage)
+  console.log("🚀 ~ OrderSummary ~ insuranceAndTaxCalculation:", insuranceAndTaxCalculation)
+  const [body, setBody] = useState<Body | null>(null)
+  useEffect(() => {
+    setBody({
+      Postcode: finalDataForTheCheckout?.shippingAddress?.postcode,
+      CountryId: finalDataForTheCheckout?.shippingAddress?.country,
+      products: finalDataForTheCheckout?.cartItemsWithLivePrice?.map((item: Product) => {
+        return ({
+          productId: item.productId,
+          qty: finalDataForTheCheckout?.quantitiesWithProductId?.[item?.productId],
+          price: item?.LivePriceDetails?.price,
+          shippingMethod: finalDataForTheCheckout?.deliveryMethodsWithProductId?.[item?.productId]
+        })
+      })
+    })
+  }, [finalDataForTheCheckout])
+  useAPIoneTime({ service: getInsuranceAndTaxDetailsCalculation, endPoint: ENDPOINTS.calculateInsuranceAndTaxDetails, body })
   const [openOTPConfirmation, toggleOTPConfirmation] = useToggle(false)
   const renderPricingItem = (title: string, value: string) => {
     return (
@@ -30,14 +61,14 @@ function OrderSummary() {
   return (
     <StepWrapper title="Order Summary" className="OrderSummary">
       <Box className="ProductList">
-        {finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 && finalDataForTheCheckout?.cartItemsWithLivePrice?.map((product:any) => {
+        {finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 && finalDataForTheCheckout?.cartItemsWithLivePrice?.map((product: any) => {
           return (
-            <CartCardAbstract product={product} quantity={finalDataForTheCheckout?.quantitiesWithProductId?.[product?.productId]} deliveryMethod={finalDataForTheCheckout?.deliveryMethodsWithProductId?.[product?.productId]}/>
+            <CartCardAbstract product={product} quantity={finalDataForTheCheckout?.quantitiesWithProductId?.[product?.productId]} deliveryMethod={finalDataForTheCheckout?.deliveryMethodsWithProductId?.[product?.productId]} />
           )
         })}
       </Box>
       <Box className="PricingDetails">
-        {renderPricingItem("Subtotal",roundOfThePrice(subTotal as any) as any )}
+        {renderPricingItem("Subtotal", roundOfThePrice(subTotal as any) as any)}
         <Divider />
         {renderPricingItem("Secure Shipping", "$120.22")}
         {renderPricingItem("Vault storage", "$90.22")}
