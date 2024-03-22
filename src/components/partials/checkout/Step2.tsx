@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
-import { Box, Checkbox, FormControlLabel, IconButton, MenuItem, Select, Stack, Typography } from "@mui/material"
+import { useMediaQuery, Box, Checkbox, FormControlLabel, IconButton, MenuItem, Select, Stack, Typography } from "@mui/material"
 
 // Type
-import type { SelectChangeEvent } from "@mui/material"
+import type { SelectChangeEvent, Theme } from "@mui/material"
 
 // Componenets
 import StepWrapper from "./StepWrapper"
@@ -19,6 +19,7 @@ import useDebounce from "@/hooks/useDebounce"
 
 function Step2() {
   const dispatch = useAppDispatch()
+  const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
   const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
   const [deliveryMethod, setDeliveryMethod] = useState<'DifferentMethod' | 'VaultStorage' | 'SecureShipping'>('DifferentMethod')
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
@@ -141,7 +142,7 @@ function Step2() {
           <Typography className="Title" variant="subtitle1">
             Delivery Method
             <HoverTooltip
-              placement="right"
+              placement={isSmallScreen ? "top" : "right"}
               renderComponent={<IconButton className="InfoButton"><InfoIcon /></IconButton>}
               infoTooltip
               arrow

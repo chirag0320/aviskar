@@ -251,7 +251,6 @@
       }
       .Checkbox {
         color: rgba($dark, 0.8);
-        margin-bottom: -10px;
       }
     }
   }
@@ -308,7 +307,7 @@
       .ActionDivider {
         margin: 30px -25px 0px;
         @include media($xs) {
-          @include margin-horizontal(-10);
+          margin: 15px -15px 0px;
         }
       }
       .ActionWrapper {
