@@ -87,6 +87,8 @@ function Category({ location }: { location: any }) {
         <CategoryFilters selectedFilters={selectedFilters} setSelectedPrice={setSelectedPrice} setSelectedFilters={setSelectedFilters} page={page} />
     );
 
+    console.log("🚀 ~ Category ~ selectedFilters:", selectedFilters)
+
     return (
         <Layout>
             <Seo
