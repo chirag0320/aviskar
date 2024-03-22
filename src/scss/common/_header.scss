@@ -80,7 +80,10 @@
       &__Wrapper {
         justify-content: space-between;
         align-items: center;
-
+        gap: 8px;
+        .Left {
+          flex: 1;
+        }
         .Right {
           align-items: center;
           gap: 20px;
@@ -141,9 +144,9 @@
 
           .SignInButton {
             align-self: stretch;
-
+            flex-shrink: 0;
             @include media($xs) {
-              @include padding-horizontal(9);
+              @include padding-horizontal(6);
             }
 
             .MuiButton-startIcon {
@@ -156,9 +159,12 @@
           }
 
           .HamburgerButton {
-            color: $dark;
-            padding: 0;
-
+            .HamburgerIcon {
+              font-size: 22px;
+            }
+            .CrossIcon {
+              font-size: 16px;
+            }
             @include media-min($md) {
               display: none;
             }
@@ -406,6 +412,9 @@
     top: calc(67px + 1px);
     &.isHomePage {
       top: calc(67px + 50px + 1px);
+      .MuiDrawer-paper {
+        max-height: calc(100% - 67px - 50px - 1px);
+      }
     }
     &.ScrollActive {
       top: calc(67px + 1px);
@@ -422,7 +431,7 @@
     .MuiDrawer-paper {
       top: inherit;
       width: inherit;
-      max-height: calc(100% - 120px);
+      max-height: calc(100% - 67px - 1px);
       box-shadow: $shadow5;
 
       .MuiList-root {

@@ -258,14 +258,9 @@
   }
   .DestinationWrapper {
     margin-top: 50px;
+    @include padding-horizontal(0);
     @include media($md) {
       margin-top: 30px;
-    }
-    @include media-min($lg) {
-      @include padding-horizontal(40);
-    }
-    @include media-min($xl) {
-      @include padding-horizontal(200);
     }
     .SwiperContainer {
       .swiper {

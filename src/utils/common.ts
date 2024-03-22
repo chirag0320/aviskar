@@ -28,3 +28,8 @@ export function valueChangeForPrice({ currentprice, yesterdayprice }: { currentp
 export function roundOfThePrice(price:number){
 return  Math.round((price + Number.EPSILON) * 100) / 100
 }
+export const shipmentTypeToEnum:any = {
+  'LocalShipping': 3,
+  'SecureShipping': 2,
+  'VaultStorage': 1
+}
