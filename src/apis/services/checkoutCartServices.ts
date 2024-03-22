@@ -13,6 +13,9 @@ class CheckoutPageServices {
     static async getInsuranceAndTaxInfo(url : string , body: any){
         return axiosInstance.post(url,body);
     }
+    static async getCraditCardChargesValue(url : string , body: any){
+        return axiosInstance.post(url,body);
+    }
 }
 
 export default CheckoutPageServices

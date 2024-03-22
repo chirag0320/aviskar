@@ -19,6 +19,7 @@ import useDebounce from "@/hooks/useDebounce"
 
 function Step2() {
   const dispatch = useAppDispatch()
+  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { checkoutPageData, finalDataForTheCheckout } = useAppSelector((state) => state.checkoutPage)
   const [deliveryMethod, setDeliveryMethod] = useState<'LocalShipping' | 'VaultStorage' | 'SecureShipping'>('LocalShipping')
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
@@ -54,7 +55,7 @@ function Step2() {
     }
   }, [priceData, checkoutPageData?.shoppingCartItems])
   useEffect(() => {
-    if (priceData?.data?.length > 0 && cartItemsWithLivePrice?.length > 0 ) {
+    if (priceData?.data?.length > 0 && cartItemsWithLivePrice?.length > 0) {
       const idwithpriceObj: any = {}
       priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
 
@@ -161,9 +162,9 @@ function Step2() {
             onChange={handleDeliveryMethod}
             IconComponent={SelectDropdown}
           >
-            <MenuItem value="LocalShipping">Local Shipping</MenuItem>
-            <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
-            <MenuItem value="VaultStorage">Vault Storage</MenuItem>
+            {configDetailsState?.localpickupenable?.value && <MenuItem value="LocalShipping">Local Shipping</MenuItem>}
+            {configDetailsState?.secureShippingenable?.value && <MenuItem value="SecureShipping">Secure Shipping</MenuItem>}
+            {configDetailsState?.vaultstorageenable?.value && <MenuItem value="VaultStorage">Vault Storage</MenuItem>}
           </Select>
         </Stack>
         <FormControlLabel

@@ -39,7 +39,19 @@ export type shopingCartItem = {
     "shippingMethod": any[],
     "shippableCountrys": any[]
 }
-
+export interface Fees {
+    insuranceFee: number;
+    shippingFee: number;
+    secureShippingFee: number;
+    secureShippingTax: number;
+    secureShippingFeeIncludingTax: number;
+    vaultStorageFee: number;
+    vaultStorageTax: number;
+    vaultStorageFeeIncludingTax: number;
+    insuranceMessage: string | null;
+    shippingMessage: string | null;
+    storageMessage: string | null;
+}
 interface CheckoutPageState {
     loading: boolean,
     checkoutPageData: {
@@ -124,14 +136,16 @@ interface CheckoutPageState {
     } | null,
     subTotal: number,
     finalDataForTheCheckout: any,
-    insuranceAndTaxCalculation: any
+    insuranceAndTaxCalculation: Fees | null,
+    craditCardCharges: any
 }
 const initialState: CheckoutPageState = {
     loading: false,
     checkoutPageData: null,
     subTotal: 0,
     finalDataForTheCheckout: null,
-    insuranceAndTaxCalculation:null
+    insuranceAndTaxCalculation: null,
+    craditCardCharges: null
 }
 
 export const getCheckoutPageData = appCreateAsyncThunk(
@@ -145,6 +159,12 @@ export const getInsuranceAndTaxDetailsCalculation = appCreateAsyncThunk(
     'getInsuranceAndTaxDetailsCalculation',
     async ({ url, body }: { url: string, body: any }) => {
         return await CheckoutPageServices.getInsuranceAndTaxInfo(url, body)
+    }
+)
+export const getCraditCardCharges = appCreateAsyncThunk(
+    'getCraditCardCharges',
+    async ({ url, body }: { url: string, body: any }) => {
+        return await CheckoutPageServices.getCraditCardChargesValue(url, body)
     }
 )
 export const addOrEditAddress = appCreateAsyncThunk(
@@ -197,6 +217,17 @@ export const checkoutPage = createSlice({
             state.loading = false;
         })
         builder.addCase(getInsuranceAndTaxDetailsCalculation.rejected, (state, action) => {
+            state.loading = false
+        })
+        // get checkout page data
+        builder.addCase(getCraditCardCharges.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getCraditCardCharges.fulfilled, (state, action) => {
+            state.craditCardCharges = action?.payload?.data?.data
+            state.loading = false;
+        })
+        builder.addCase(getCraditCardCharges.rejected, (state, action) => {
             state.loading = false
         })
     },
