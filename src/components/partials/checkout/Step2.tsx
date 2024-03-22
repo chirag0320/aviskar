@@ -54,12 +54,12 @@ function Step2() {
     }
   }, [priceData, checkoutPageData?.shoppingCartItems])
   useEffect(() => {
-    if (priceData?.data?.length > 0) {
+    if (priceData?.data?.length > 0 && cartItemsWithLivePrice?.length > 0 ) {
       const idwithpriceObj: any = {}
       priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
 
       let subTotal = 0;
-      cartItemsWithLivePrice.map((item: shopingCartItem) => {
+      cartItemsWithLivePrice?.map((item: shopingCartItem) => {
         subTotal += (idwithpriceObj?.[item.productId]?.price * quantities[item.productId])
       })
       dispatch(resetSubTotalCheckoutPage())
@@ -82,7 +82,7 @@ function Step2() {
     setQuantities(quantities)
     setDeliveryMethods(deliveryMethods)
     dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: quantities, deliveryMethodsWithProductId: deliveryMethods }))
-  }, [checkoutPageData?.shoppingCartItems,changeDiffrenceDeliveryMethods,deliveryMethod])
+  }, [checkoutPageData?.shoppingCartItems, changeDiffrenceDeliveryMethods, deliveryMethod])
 
   useEffect(() => {
     dispatch(updateFinalDataForTheCheckout({ cartItemsWithLivePrice }))
@@ -93,10 +93,10 @@ function Step2() {
     const makeObject: any = { parentDeliveryMethod: event.target.value }
     let deliveryMethods: any = {}
     // if (changeDiffrenceDeliveryMethods) {
-      checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
-        deliveryMethods[item.productId] = event.target.value
-      })
-      makeObject['deliveryMethodsWithProductId'] = deliveryMethods
+    checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
+      deliveryMethods[item.productId] = event.target.value
+    })
+    makeObject['deliveryMethodsWithProductId'] = deliveryMethods
     // } 
     // else {
     //   checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
@@ -168,16 +168,16 @@ function Step2() {
         </Stack>
         <FormControlLabel
           className="DeliveryCheckbox"
-          control={<Checkbox checked={changeDiffrenceDeliveryMethods} onClick={()=>{
+          control={<Checkbox checked={changeDiffrenceDeliveryMethods} onClick={() => {
             toggleChangeDiffrenceDeliveryMethods()
-          }}/>}
+          }} />}
           label="Select different delivery method for products"
         />
       </Box>
       <Stack className="ProductList">
         {cartItemsWithLivePrice?.length > 0 && cartItemsWithLivePrice?.map((cartItem) => {
           return (
-            <CartCard changeDeliveryMethodOfProduct={changeDeliveryMethodOfProduct} isDifferentMethod={changeDiffrenceDeliveryMethods} deliveryMethodOfParent={deliveryMethod} key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={false} hideRightSide={true} quantity={quantities[cartItem.productId]} deliverMethod={deliveryMethods[cartItem.productId]}increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
+            <CartCard changeDeliveryMethodOfProduct={changeDeliveryMethodOfProduct} isDifferentMethod={changeDiffrenceDeliveryMethods} deliveryMethodOfParent={deliveryMethod} key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={false} hideRightSide={true} quantity={quantities[cartItem.productId]} deliverMethod={deliveryMethods[cartItem.productId]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
           )
         })}
       </Stack>
