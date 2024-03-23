@@ -41,3 +41,6 @@ export function localStorageGetItem(key: any) {
 export function localStorageSetItem(key: any, value: any) {
   isBrowser && localStorage?.setItem(key, typeof value !== 'string' ? JSON.stringify(value) : value)
 }
+export function hasFulfilled(dataType: string): boolean {
+  return dataType.includes('/fulfilled');
+}

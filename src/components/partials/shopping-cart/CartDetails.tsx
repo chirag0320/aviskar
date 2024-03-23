@@ -38,7 +38,7 @@ const CartDetails = () => {
 
             let subTotal = 0;
             const cartItemsWithLivePrice = cartItems.map((item: CartItem) => {
-                subTotal += (idwithpriceObj[item.productId].price * item.quantity)
+                subTotal += (idwithpriceObj?.[item.productId]?.price * item.quantity)
                 return {
                     ...item,
                     LivePriceDetails: idwithpriceObj[item.productId]

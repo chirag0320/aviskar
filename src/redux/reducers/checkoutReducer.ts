@@ -322,7 +322,7 @@ export const checkoutPage = createSlice({
         })
         builder.addCase(placeOrder.fulfilled, (state, action) => {
             const responseData = action.payload.data.data;
-            state.orderId = responseData.orderId;
+            state.orderId = responseData;
             state.loading = false;
         })
         builder.addCase(placeOrder.rejected, (state, action) => {
