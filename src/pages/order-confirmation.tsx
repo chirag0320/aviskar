@@ -9,6 +9,7 @@ import { OrderItem, getOrderConfirmationDetails } from "@/redux/reducers/orderCo
 import { ENDPOINTS } from "@/utils/constants";
 import { useAppSelector } from "@/hooks";
 import { rows } from "./order-details";
+import { navigate } from "gatsby";
 
 function OrderConfirmation(props: any) {
     const orderId = props.location?.search?.split('=')[1];
@@ -101,7 +102,9 @@ function OrderConfirmation(props: any) {
                                 <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography>
                             </Box>
                         </Box>
-                        <Button className='ContinueBtn' size='large' variant="contained">Continue</Button>
+                        <Button className='ContinueBtn' size='large' variant="contained" onClick={()=>{
+                            navigate("/")
+                        }}>Continue</Button>
                     </Container>
                 </Box>
             </>
