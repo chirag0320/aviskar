@@ -28,7 +28,6 @@ interface IApiResponse<T> {
 function Pricing() {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { data }: IApiResponse<ItickerData> = useApiRequest(ENDPOINTS.getTicker, 'get', null, 60);
-  console.log(data?.data, "data?.data")
   const renderedStockItems = useMemo(() => {
     const tickerStyle = {
       tickerboxfontcolor: configDetailsState?.tickerboxfontcolor?.value,
