@@ -17,7 +17,7 @@ import useUserDetailsFromToken from "@/hooks/useUserDetailsFromToken";
 import Toaster from "@/components/common/Toaster";
 
 function IndexPage() {
-  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+  const { configDetails: configDetailsState, openToaster } = useAppSelector((state) => state.homePage)
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
 
   const [body] = useState({
@@ -58,6 +58,7 @@ function IndexPage() {
   return (
     <Layout>
       <>
+      {openToaster && <Toaster />}
         <Seo
           keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
           title="Home"

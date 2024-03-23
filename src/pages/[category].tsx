@@ -14,6 +14,7 @@ import useDebounce from "@/hooks/useDebounce"
 import { categoryRequestBody } from "@/types/categoryRequestBody"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { navigate } from "gatsby"
+import { Toaster } from "react-hot-toast"
 
 export const pageSize = 12;
 export const requestBodyDefault: categoryRequestBody = {

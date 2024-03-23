@@ -39,18 +39,20 @@ import { ProductStockStatus, ProductUpdateCountdown } from "./Utils"
 import { IFeaturedProducts } from "../partials/home/FeaturedProducts"
 import { Link as NavigationLink, navigate } from "gatsby"
 import { deliveryMethodMessage, roundOfThePrice } from "@/utils/common"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 import { productImages } from "@/utils/data"
 import { CartItem } from "@/types/shoppingCart";
 import { CartItemsWithLivePriceDetails } from "../partials/shopping-cart/CartDetails";
 import useCallAPI from "@/hooks/useCallAPI";
 import { ENDPOINTS } from "@/utils/constants";
+import { setToasterState } from "@/redux/reducers/homepageReducer";
 
 interface Iproduct {
   product: IFeaturedProducts;
   stickyProduct?: boolean
 }
 export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Iproduct) => {
+  const dispatch = useAppDispatch()
   const { loading: loadingForAddToCart, error: errorForAddToCart, apiCallFunction } = useCallAPI()
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const [open, setOpen] = useState(false)
@@ -248,6 +250,12 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             "productId": product.productId,
             "quantity": 1
           } as any)
+          dispatch(setToasterState({
+            openToaster: true,
+            toasterMessage: 'The product has been added to your',
+            buttonText: 'product cart',
+            redirectButtonUrl: 'shopping-cart'
+          }))
         }}><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>

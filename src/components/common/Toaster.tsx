@@ -34,6 +34,12 @@ function Toaster() {
     }
     () => {
       // todo check what can we do here to improve
+      dispatch(setToasterState({
+        openToaster: false,
+        toasterMessage: '',
+        buttonText: '',
+        redirectButtonUrl: ''
+      }))
     }
   }, [openToaster])
   return (
@@ -48,7 +54,7 @@ function Toaster() {
           severity="info"
           variant="filled"
         >
-          {toasterMessage}  <Button onClick={()=>{
+          {toasterMessage}  <Button onClick={() => {
             navigate(`/${redirectButtonUrl}`)
           }}>{buttonText}</Button>
         </Alert>
