@@ -12,7 +12,7 @@ import { productImages } from "@/utils/data"
 import { CartCardAbstract } from "@/components/common/Card"
 import { OutlinedCheckIcon } from "@/assets/icons"
 import OTPConfirmation from "./OTPConfirmation"
-import { roundOfThePrice, shipmentTypeToEnum } from "@/utils/common"
+import { hasFulfilled, roundOfThePrice, shipmentTypeToEnum } from "@/utils/common"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { checkValidationOnConfirmOrder, disableOTP, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation, placeOrder } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
@@ -74,7 +74,7 @@ function OrderSummary() {
   const dispatch = useAppDispatch()
   const { deviceInfo, locationInfo }: any = useDeviceDetails()
   console.log("🚀 ~ OrderSummary ~ deviceInfo, locationInfo:", deviceInfo, locationInfo)
-  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading,orderId } = useAppSelector((state) => state.checkoutPage)
+  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading, orderId } = useAppSelector((state) => state.checkoutPage)
   console.log("🚀 ~ OrderSummary ~ finalDataForTheCheckout:", finalDataForTheCheckout)
   const [body, setBody] = useState<Body | null>(null)
   const [totalValueNeedToPayFromCraditCart, setTotalValueNeedToPayFromCraditCart] = useState<any>({ OrderTotal: 0 })
@@ -114,12 +114,6 @@ function OrderSummary() {
   }
 
   useEffect(() => {
-    if(orderId){
-      navigate(`/order-confirmation/?id=${orderId}`)
-    }
-  },[orderId])
-
-  useEffect(() => {
     if (isOTPEnabled) {
       toggleOTPConfirmation()
     }
@@ -149,19 +143,24 @@ function OrderSummary() {
           "Browser": deviceInfo?.userAgent,
           "IsInstantBuy": false
         }
-        dispatch(placeOrder({ url: ENDPOINTS.placeOrder, body: prepareBodyData }) as any);
+        const data = await dispatch(placeOrder({ url: ENDPOINTS.placeOrder, body: prepareBodyData }) as any);
+        console.log("🚀 ~ placeOrderFun ~ data:", data)
+        if(hasFulfilled(data?.type)){
+          const id = data?.payload?.data?.data
+          navigate(`/order-confirmation/?id=${id}`)
+        }
       }
       placeOrderFun();
       dispatch(disableOTP())
     }
   }, [isOTPEnabled])
 
-  const onConfirmOrderHandler = () => {
-    dispatch(checkValidationOnConfirmOrder({
+  const onConfirmOrderHandler = async () => {
+    await dispatch(checkValidationOnConfirmOrder({
       url: ENDPOINTS.checkValidationOnConfirmOrder, body: {
         PaymentMethodEnum: paymentMethodEnum[finalDataForTheCheckout?.paymentType],
         OrderTotal: Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax),
-        // static
+        // static todo
         IsRewardPointUsed: false,
         UsedRewardPoints: 0,
         UsedRewardPointAmount: 0.00
