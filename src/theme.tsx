@@ -248,6 +248,7 @@ const theme: Theme = createTheme({
           paddingTop: 18.5,
           paddingBottom: 18.5,
           paddingLeft: 23,
+          paddingRight: 23,
         },
         notchedOutline: {
           borderColor: `${variable.dark}33`,
