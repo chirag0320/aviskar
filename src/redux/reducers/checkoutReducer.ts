@@ -138,10 +138,16 @@ interface CheckoutPageState {
     subTotal: number,
     finalDataForTheCheckout: any,
     insuranceAndTaxCalculation: Fees | null,
-    craditCardCharges: any
+    craditCardCharges: any,
+    isOTPEnabled: boolean | null,
+    isOTPSent: boolean | null,
+    isOTPVerified: boolean | null
 }
 const initialState: CheckoutPageState = {
     loading: false,
+    isOTPEnabled: null,
+    isOTPSent: null,
+    isOTPVerified: null,
     checkoutPageData: isBrowser && JSON.parse(localStorageGetItem("checkoutPageData") ?? JSON.stringify({})),
     subTotal: Number(localStorageGetItem("checkoutPageData")) || 0,
     finalDataForTheCheckout: localStorageGetItem("finalDataForTheCheckout") ?? null,
@@ -171,7 +177,34 @@ export const getCraditCardCharges = appCreateAsyncThunk(
 export const addOrEditAddress = appCreateAsyncThunk(
     "addOrEditAddress",
     async ({ url, body }: { url: string, body: any }) => {
+        return await CheckoutPageServices.addOrEditAddress(url, body)
+    }
+)
+export const checkValidationOnConfirmOrder = appCreateAsyncThunk(
+    "checkValidationOnConfirmOrder",
+    async ({ url, body }: { url: string, body: any }) => {
+        return await CheckoutPageServices.checkValidationOnConfirmOrder(url, body)
+    }
+)
 
+export const orderPlaceOTPSend = appCreateAsyncThunk(
+    "orderPlaceOTPSend",
+    async ({ url, body }: { url: string, body: any }) => {
+        return await CheckoutPageServices.orderPlaceOTPSend(url, body)
+    }
+)
+
+export const orderPlaceOTPVerify = appCreateAsyncThunk(
+    "orderPlaceOTPVerify",
+    async ({ url, body }: { url: string, body: any }) => {
+        return await CheckoutPageServices.orderPlaceOTPVerify(url, body)
+    }
+)
+
+export const placeOrder = appCreateAsyncThunk(
+    "placeOrder",
+    async ({ url, body }: { url: string, body: any }) => {
+        return await CheckoutPageServices.placeOrder(url, body)
     }
 )
 
@@ -195,7 +228,12 @@ export const checkoutPage = createSlice({
         },
         updateFinalDataForTheCheckout: (state, action) => {
             state.finalDataForTheCheckout = { ...state.finalDataForTheCheckout, ...action.payload }
-            localStorageSetItem('finalDataForTheCheckout', JSON.stringify(state.subTotal))
+            localStorageSetItem('finalDataForTheCheckout', JSON.stringify(state.finalDataForTheCheckout))
+
+        },
+        disableOTP: (state) => {
+            state.isOTPEnabled = false
+            state.isOTPVerified = false
         }
     },
 
@@ -236,9 +274,58 @@ export const checkoutPage = createSlice({
         builder.addCase(getCraditCardCharges.rejected, (state, action) => {
             state.loading = false
         })
+        // checkValidationOnConfirmOrder
+        builder.addCase(checkValidationOnConfirmOrder.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(checkValidationOnConfirmOrder.fulfilled, (state, action) => {
+            const responseData = action.payload.data.data;
+
+            state.isOTPEnabled = responseData.isOTPEnabled;
+            // state.isOTPSent = responseData.isOTPSent;
+            state.loading = false;
+        })
+        builder.addCase(checkValidationOnConfirmOrder.rejected, (state, action) => {
+            state.loading = false
+        })
+
+        // orderPlaceOTPSend
+        builder.addCase(orderPlaceOTPSend.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(orderPlaceOTPSend.fulfilled, (state, action) => {
+            state.isOTPSent = true;
+            state.loading = false;
+        })
+        builder.addCase(orderPlaceOTPSend.rejected, (state, action) => {
+            state.loading = false
+        })
+
+        // orderPlaceOTPVerify
+        builder.addCase(orderPlaceOTPVerify.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(orderPlaceOTPVerify.fulfilled, (state, action) => {
+            state.isOTPVerified = true;
+            state.loading = false;
+        })
+        builder.addCase(orderPlaceOTPVerify.rejected, (state, action) => {
+            state.loading = false
+        })
+
+        // placeOrder
+        builder.addCase(placeOrder.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(placeOrder.fulfilled, (state, action) => {
+            state.loading = false;
+        })
+        builder.addCase(placeOrder.rejected, (state, action) => {
+            state.loading = false
+        })
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout } = checkoutPage.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout,disableOTP } = checkoutPage.actions
 
 export default checkoutPage.reducer
