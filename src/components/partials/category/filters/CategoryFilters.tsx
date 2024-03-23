@@ -40,7 +40,7 @@ function CategoryFilters({ setSelectedFilters, setSelectedPrice, selectedFilters
 
   return (
     isSmallScreen ? (
-      <SmallScreenFilters renderList={renderList} setSelectedFiltersMobile={setSelectedFilters} setSelectedPriceMobile={setSelectedPrice} />
+      <SmallScreenFilters renderList={renderList} setSelectedFiltersMobile={setSelectedFilters} setSelectedPriceMobile={setSelectedPrice} page={page} />
     ) : (
       <LargerScreenFilters renderList={renderList} setSelectedFilters={setSelectedFilters} setSelectedPrice={setSelectedPrice} selectedFilters={selectedFilters} page={page} />
     )

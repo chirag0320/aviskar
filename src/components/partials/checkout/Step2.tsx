@@ -10,23 +10,27 @@ import { CartCard } from "@/components/common/Card"
 import { InfoIcon, SelectDropdown } from "@/assets/icons"
 import { HoverTooltip } from "@/components/common/CustomTooltip"
 import { productImages } from "@/utils/data"
-import { useAppDispatch, useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 import { resetSubTotalCheckoutPage, shopingCartItem, updateFinalDataForTheCheckout, updateSubTotalCheckoutPage } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { CartItemsWithLivePriceDetails } from "../shopping-cart/CartDetails"
 import useDebounce from "@/hooks/useDebounce"
+import { deleteShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
 
 function Step2() {
   const dispatch = useAppDispatch()
-  const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
-  const [deliveryMethod, setDeliveryMethod] = useState<'DifferentMethod' | 'VaultStorage' | 'SecureShipping'>('DifferentMethod')
+  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+  const { checkoutPageData, finalDataForTheCheckout } = useAppSelector((state) => state.checkoutPage)
+  const [deliveryMethod, setDeliveryMethod] = useState<'LocalShipping' | 'VaultStorage' | 'SecureShipping'>('LocalShipping')
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
   const [deliveryMethods, setDeliveryMethods] = useState<{ [key: number]: string }>({})
   const [productIds, setProductIds] = useState({})
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
   const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
   const changeInQuantities = useDebounce(quantities, 500)
+  const [changeDiffrenceDeliveryMethods, toggleChangeDiffrenceDeliveryMethods] = useToggle(false)
+
 
   useEffect(() => {
     if (priceData?.data?.length > 0) {
@@ -52,14 +56,18 @@ function Step2() {
     }
   }, [priceData, checkoutPageData?.shoppingCartItems])
   useEffect(() => {
-    if (priceData?.data?.length > 0) {
+    if (priceData?.data?.length > 0 && cartItemsWithLivePrice?.length > 0) {
       const idwithpriceObj: any = {}
       priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
 
       let subTotal = 0;
-      cartItemsWithLivePrice.map((item: shopingCartItem) => {
+      cartItemsWithLivePrice?.map((item: shopingCartItem) => {
         subTotal += (idwithpriceObj?.[item.productId]?.price * quantities[item.productId])
       })
+      dispatch(resetSubTotalCheckoutPage())
+      dispatch(updateSubTotalCheckoutPage(subTotal))
+    } else if (cartItemsWithLivePrice?.length === 0) {
+      let subTotal = 0;
       dispatch(resetSubTotalCheckoutPage())
       dispatch(updateSubTotalCheckoutPage(subTotal))
     }
@@ -75,31 +83,34 @@ function Step2() {
     let deliveryMethods: any = {}
     checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
       quantities[item.productId] = item.quantity
-      deliveryMethods[item.productId] = 'SecureShipping'
+      deliveryMethods[item.productId] = deliveryMethod
     })
     setQuantities(quantities)
     setDeliveryMethods(deliveryMethods)
-    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: quantities, deliveryMethodsWithProductId: deliveryMethods }))
-  }, [checkoutPageData?.shoppingCartItems])
+    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: quantities, deliveryMethodsWithProductId: deliveryMethods, IsDifferentShippingMethod: changeDiffrenceDeliveryMethods }))
+  }, [checkoutPageData?.shoppingCartItems, changeDiffrenceDeliveryMethods, deliveryMethod])
+
   useEffect(() => {
     dispatch(updateFinalDataForTheCheckout({ cartItemsWithLivePrice }))
   }, [cartItemsWithLivePrice])
+
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     setDeliveryMethod(event.target.value as any);
     const makeObject: any = { parentDeliveryMethod: event.target.value }
     let deliveryMethods: any = {}
-    if (event.target.value !== 'DifferentMethod') {
-      checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
-        deliveryMethods[item.productId] = event.target.value
-      })
-      makeObject['deliveryMethodsWithProductId'] = deliveryMethods
-    } else {
-      checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
-        deliveryMethods[item.productId] = 'SecureShipping'
-      })
-      makeObject['deliveryMethodsWithProductId'] = deliveryMethods
-    }
-    dispatch(updateFinalDataForTheCheckout(makeObject))
+    // if (changeDiffrenceDeliveryMethods) {
+    checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
+      deliveryMethods[item.productId] = event.target.value
+    })
+    makeObject['deliveryMethodsWithProductId'] = deliveryMethods
+    // } 
+    // else {
+    //   checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
+    //     deliveryMethods[item.productId] = 'SecureShipping'
+    //   })
+    //   makeObject['deliveryMethodsWithProductId'] = deliveryMethods
+    // }
+    dispatch(updateFinalDataForTheCheckout({ ...makeObject, parentDeliveryMethod: event.target.value }))
   }
 
   const increaseQuantity = (productId: number) => {
@@ -122,8 +133,17 @@ function Step2() {
     }
   }
 
-  const removeItemFromCart = (productId: number) => {
-    const updatedCartItem = cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId)
+  const removeItemFromCart = async (productId: number) => {
+    let ids: any[] = [];
+    const updatedCartItem = cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => {
+      if (item.id == productId) {
+        ids.push(productId)
+      }
+      return (item.id !== productId)
+    })
+    if (ids.length) {
+      await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: ids }) as any);
+    }
     setCartItemsWithLivePrice(updatedCartItem);
     dispatch(updateFinalDataForTheCheckout({ cartItemsWithLivePrice: updatedCartItem }))
   }
@@ -156,21 +176,23 @@ function Step2() {
             onChange={handleDeliveryMethod}
             IconComponent={SelectDropdown}
           >
-            <MenuItem value="DifferentMethod">Different Method</MenuItem>
-            <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
-            <MenuItem value="VaultStorage">Vault Storage</MenuItem>
+            {configDetailsState?.localpickupenable?.value && <MenuItem value="LocalShipping">Local Shipping</MenuItem>}
+            {configDetailsState?.secureShippingenable?.value && <MenuItem value="SecureShipping">Secure Shipping</MenuItem>}
+            {configDetailsState?.vaultstorageenable?.value && <MenuItem value="VaultStorage">Vault Storage</MenuItem>}
           </Select>
         </Stack>
         <FormControlLabel
           className="DeliveryCheckbox"
-          control={<Checkbox />}
+          control={<Checkbox checked={changeDiffrenceDeliveryMethods} onClick={() => {
+            toggleChangeDiffrenceDeliveryMethods()
+          }} />}
           label="Select different delivery method for products"
         />
       </Box>
       <Stack className="ProductList">
         {cartItemsWithLivePrice?.length > 0 && cartItemsWithLivePrice?.map((cartItem) => {
           return (
-            <CartCard changeDeliveryMethodOfProduct={changeDeliveryMethodOfProduct} isDifferentMethod={deliveryMethod === 'DifferentMethod'} deliveryMethodOfParent={deliveryMethod} key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={false} hideRightSide={true} quantity={quantities[cartItem.productId]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
+            <CartCard changeDeliveryMethodOfProduct={changeDeliveryMethodOfProduct} isDifferentMethod={changeDiffrenceDeliveryMethods} deliveryMethodOfParent={deliveryMethod} key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={false} hideRightSide={true} quantity={quantities[cartItem.productId]} deliverMethod={deliveryMethods[cartItem.productId]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
           )
         })}
       </Stack>

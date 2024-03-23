@@ -10,7 +10,7 @@ import CartDetails from '@/components/partials/shopping-cart/CartDetails';
 import CartOrderSummary from '@/components/partials/shopping-cart/CartOrderSummary';
 
 function ShoppingCart() {
-    const [isShoppingCartUpdated, setIsShoppingCartUpdated] = useState(false)
+    // const [isShoppingCartUpdated, setIsShoppingCartUpdated] = useState(false)
 
     // const [subTotal, setSubTotal] = useState(0);
     useAPIoneTime({
@@ -39,8 +39,10 @@ function ShoppingCart() {
                     <Container>
                         <Box className="ShoppingCartContent">
                             {/* <CartDetails setSubTotal={setSubTotal} /> */}
-                            <CartDetails isShoppingCartUpdated={isShoppingCartUpdated} setIsShoppingCartUpdated={setIsShoppingCartUpdated} />
-                            <CartOrderSummary isShoppingCartUpdated={isShoppingCartUpdated} />
+                            {/* <CartDetails isShoppingCartUpdated={isShoppingCartUpdated} setIsShoppingCartUpdated={setIsShoppingCartUpdated} />
+                            <CartOrderSummary isShoppingCartUpdated={isShoppingCartUpdated} /> */}
+                            <CartDetails />
+                            <CartOrderSummary />
                         </Box>
                     </Container>
                 </Box>

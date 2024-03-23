@@ -92,8 +92,6 @@ const RenderFields: React.FC<RenderFieldProps> = ({
 }) => {
   const [passwordVisibility, togglePasswordVisibility] = useToggle(false)
 
-  // console.log(name,options);
-
   let fieldType = null
   switch (type) {
     case 'select':
@@ -282,6 +280,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
           <Controller
             name={name}
             control={control}
+            defaultValue={value} // Set defaultValue instead of passing value prop
             render={({ field: { value, onChange } }) => (
               <>
                 <TextField
@@ -290,7 +289,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                   fullWidth={fullWidth}
                   error={!!error}
                   placeholder={placeholder}
-                  value={value}
+                  value={value} // Use the value from the Controller instead of the prop
                   disabled={disabled}
                   autoComplete={autoComplete}
                   variant={variant}
@@ -306,11 +305,13 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                     ;['e', 'E', '+', '-', '.'].includes(e.key) &&
                       e.preventDefault()
                   }}
+                  {...register(name)}
                   {...otherProps}
                 />
               </>
             )}
           />
+
         </FormControl>
       )
       break

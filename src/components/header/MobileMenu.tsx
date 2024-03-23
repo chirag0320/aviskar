@@ -8,6 +8,7 @@ import { ArrowDown, ArrowUp } from '../../assets/icons/index'
 
 // Utils
 import { useAppSelector } from "@/hooks"
+import { navigate } from "gatsby";
 function MobileMenu(props: any) {
   const { open, toggleMobileMenu, trigger } = props
   const location = useLocation();
@@ -42,7 +43,6 @@ function MobileMenu(props: any) {
       variant="temporary"
       onClose={toggleMobileMenu}
       anchor="top"
-      disablePortal
       disableScrollLock
     >
       <Container className="HeaderContainer">
@@ -56,7 +56,12 @@ function MobileMenu(props: any) {
                     key={`ListItemButton-${category.categoryId}`}
                     className={classNames([openMenu[category.categoryId] ? "ExpandedMenu" : "CollapsedMenu"])}
                     selected={category.categoryId === 0}
-                    onClick={() => handleClickMainMenu(category.categoryId)}
+                    onClick={() => {
+                      handleClickMainMenu(category.categoryId);
+                      if (!hasSubcategory) {
+                        navigate(`/${category.searchEngineFriendlyPageName}`)
+                      }
+                    }}
                   >
                     <ListItemText primary={category.name} primaryTypographyProps={{ variant: "body2" }} />
                     {hasSubcategory ?
@@ -78,7 +83,9 @@ function MobileMenu(props: any) {
                                 <List component="div">
                                   {menu.subCategories.map((subCategory: any) => {
                                     return (
-                                      <ListItemButton key={`SubMenu_${subCategory.categoryId}-${subCategory.name}`} selected={false} sx={{ pl: 4 }}>
+                                      <ListItemButton key={`SubMenu_${subCategory.categoryId}-${subCategory.name}`} selected={false} sx={{ pl: 4 }} onClick={() => {
+                                        navigate(`/${subCategory.searchEngineFriendlyPageName}`)
+                                      }}>
                                         <ListItemText primary={subCategory.name} primaryTypographyProps={{ variant: "body2" }} />
                                       </ListItemButton>
                                     )

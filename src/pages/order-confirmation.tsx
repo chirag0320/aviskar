@@ -1,9 +1,10 @@
 import React from "react"
 import Seo from "../components/common/Seo"
 import Layout from "@/components/common/Layout";
-import { Box, Stack, Container, Typography, Icon, Button } from "@mui/material"
+import { Box, Stack, Container, Typography, Icon, Button, TableContainer, Table, TableHead, TableCell, TableRow, TableBody } from "@mui/material"
 import GreenConfirmationIcon from "@/assets/icons/GreenConfirmationIcon";
 import LogoGoldCoin from "@/assets/logos/LogoGoldCoin.png";
+import { rows } from "./order-details";
 
 function OrderConfirmation() {
     return (
@@ -35,16 +36,48 @@ function OrderConfirmation() {
                                     <Typography variant="body1" className="Title">Transaction Date and Time</Typography>
                                     <Typography variant="subtitle1">872608526</Typography>
                                 </Stack>
-                                <Stack className="TitleValueWrapper Orders">
-                                    <Typography variant="body1" className="Title">Orders</Typography>
-                                    <Stack className="LogoWrapper">
+                                <Box className="TitleValueWrapper Orders">
+                                    <Typography variant="body1" className="Title">Orders:-</Typography>
+                                    {/* <Stack className="LogoWrapper">
                                         <img src={LogoGoldCoin} alt="Logo" />
                                         <Box sx={{ padding: "6px 0" }}>
                                             <Typography variant="subtitle1">2024 1oz Lunar Series III</Typography>
                                             <Typography>$204.22</Typography>
                                         </Box>
-                                    </Stack>
-                                </Stack>
+                                    </Stack> */}
+                                    <TableContainer
+                                        className="OrderDetailTableWrapper"
+                                        sx={{}}
+                                    // component={Paper}
+                                    >
+                                        <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
+                                            <TableHead>
+                                                <TableRow className="OrderDetailsHeadRow">
+                                                    <TableCell sx={{ minWidth: "60%" }}>Name</TableCell>
+                                                    <TableCell sx={{ minWidth: "15%" }}>Price</TableCell>
+                                                    <TableCell sx={{ minWidth: "10%" }}>Quantity</TableCell>
+                                                    <TableCell sx={{ minWidth: "15%" }}>Total</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {rows.map((row) => (
+                                                    <TableRow
+                                                        key={row.Name}
+                                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                    >
+                                                        <TableCell component="th" scope="row">
+                                                            <img className="ProductImage" src="https://qmintstoremedia.blob.core.windows.net/pictures/products/1-2oz-dmcc-burj-khalifa-gold-coin_120320242303442.png?sv=2018-03-28&amp;sr=b&amp;sig=mW5OHZRZxVHSN%2BZjg50NIiiVpK25r%2BX9g31A1ti5oaE%3D&amp;st=2024-03-11T13%3A48%3A44Z&amp;se=3024-03-12T13%3A48%3A44Z&amp;sp=r&amp;c=638458481243003453" alt="Product image" loading="lazy"></img>
+                                                            {row.Name}
+                                                        </TableCell>
+                                                        <TableCell>{row.Price}</TableCell>
+                                                        <TableCell>{row.Quantity}</TableCell>
+                                                        <TableCell>{row.Total}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </Box>
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Quantity</Typography>
                                     <Typography variant="subtitle1">1</Typography>

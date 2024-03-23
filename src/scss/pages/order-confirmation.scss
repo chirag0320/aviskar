@@ -81,12 +81,34 @@
                     }
                 }
 
+                .OrderDetailTableWrapper {
+                    margin-top: 20px;
+                    border: 1px solid rgba(227, 228, 229, 1);
+                    border-radius: 15px;
+                    box-shadow: none;
+
+                    .OrderDetailTable {
+
+                        box-shadow: none;
+
+                            .OrderDetailsHeadRow {
+                                background-color: rgba($blueCyan, 0.1);
+                            }
+                            .ProductImage{
+                                max-width: 140px;
+                                max-height: 140px;
+                                margin-right: 30px;
+                            }
+                    }
+                }
+
                 &.Orders {
                     .LogoWrapper {
                         gap: 15px;
                         align-items: center;
                     }
                 }
+
 
 
                 &.PaymentAmountWrapper {

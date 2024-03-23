@@ -16,7 +16,7 @@ import StatusImage from '../assets/images/StatusImage.png';
 
 
 
-function createData(
+export function createData(
     Name: string,
     Price: string,
     Quantity: string,
@@ -24,7 +24,7 @@ function createData(
 ) {
     return { Name, Price, Quantity, Total };
 }
-const rows = [
+export const rows = [
     createData(
         "Test Accounting Product",
         "$38.39",

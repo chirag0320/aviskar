@@ -131,7 +131,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                                 </TableCell>
                                 <TableCell align="left"><img src={item.imageUrl} width={100} height={100} /></TableCell>
                                 <TableCell><Button href="#" color="secondary">{item.productName}</Button></TableCell>
-                                <TableCell>{item.LivePriceDetails.price}</TableCell>
+                                <TableCell>{item?.LivePriceDetails?.price}</TableCell>
                                 <TableCell>
                                     <Stack className="Quantity">
                                         <IconButton className="Minus" onClick={() => decreaseQuantity(item.id)} disabled={quantities[item.id] === 1}><MinusIcon /></IconButton>

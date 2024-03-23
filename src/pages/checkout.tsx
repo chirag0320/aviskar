@@ -16,6 +16,7 @@ import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { getCheckoutPageData } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import { useAppSelector } from "@/hooks"
+import useDeviceDetails from "@/hooks/useDeviceDetails"
 
 function Checkout() {
   const [state] = useState({service:getCheckoutPageData, endPoint:ENDPOINTS.checkoutDetails})

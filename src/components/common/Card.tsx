@@ -2,12 +2,12 @@ import React, { useState, useRef, Fragment } from "react";
 import {
   Stack,
   Box,
+  Link,
   Card,
   CardContent,
   CardActions,
   Typography,
   Button,
-  Link,
   IconButton, CardMedia, TextField, Select, MenuItem, Divider,
   Icon,
 } from "@mui/material";
@@ -37,18 +37,21 @@ import {
 // Utils
 import { ProductStockStatus, ProductUpdateCountdown } from "./Utils"
 import { IFeaturedProducts } from "../partials/home/FeaturedProducts"
-import { navigate } from "gatsby"
+import { Link as NavigationLink, navigate } from "gatsby"
 import { deliveryMethodMessage, roundOfThePrice } from "@/utils/common"
 import { useAppSelector } from "@/hooks"
 import { productImages } from "@/utils/data"
 import { CartItem } from "@/types/shoppingCart";
 import { CartItemsWithLivePriceDetails } from "../partials/shopping-cart/CartDetails";
+import useCallAPI from "@/hooks/useCallAPI";
+import { ENDPOINTS } from "@/utils/constants";
 
 interface Iproduct {
   product: IFeaturedProducts;
   stickyProduct?: boolean
 }
 export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Iproduct) => {
+  const { loading: loadingForAddToCart, error: errorForAddToCart, apiCallFunction } = useCallAPI()
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const [open, setOpen] = useState(false)
   const tooltipRef: any = useRef(null)
@@ -67,9 +70,9 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
   return (
     <Card className={classNames("ProductCard", { "Sticky": stickyProduct })} key={product.productId}>
       <Stack className="ImageWrapper">
-        <Link className="ImageLink" href="#">
+        <NavigationLink className="ImageLink" to={`/product-details/${product?.friendlypagename}`}>
           <img src={product.imageUrl} alt="Product image" loading="lazy" />
-        </Link>
+        </NavigationLink>
         <ProductStockStatus
           availability={product.availability}
           colorClass={product.colorClass}
@@ -218,7 +221,12 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             </Box>
           </ClickTooltip>
         }
-        <IconButton aria-label='AddToCartIcon' className="Outlined AddToCart"><AddToCartIcon /></IconButton>
+        <IconButton className="Outlined AddToCart" onClick={async () => {
+          await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+            "productId": product.productId,
+            "quantity": 1
+          } as any)
+        }}><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
   );
@@ -367,10 +375,10 @@ export const LineChartCard = (props: any) => {
 };
 
 
-export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct }: { cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
-  const [deliveryMethod, setDeliveryMethod] = useState<string>('SecureShipping')
+export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
+  // const [deliveryMethod, setDeliveryMethod] = useState<string>('LocalShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
-    setDeliveryMethod(event.target.value as string);
+    // setDeliveryMethod(event.target.value as string);
     changeDeliveryMethodOfProduct(cartItem.productId, event.target.value)
   }
 
@@ -386,12 +394,12 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
         <Stack className="TopWrapper">
           <Box className="LeftWrapper">
             <Typography className="Name" component="p" variant="titleLarge">{cartItem.productName}</Typography>
-            <Typography variant="body2">{cartItem.shippingInfo}</Typography>
+            <Typography variant="body2">{cartItem?.shippingInfo}</Typography>
           </Box>
           <Box className="RightWrapper">
             <Typography className="LivePrice" variant="body2">Live Price</Typography>
             <Typography variant="body2">Qty.</Typography>
-            <Typography variant="subtitle1">${cartItem.LivePriceDetails.price}</Typography>
+            <Typography variant="subtitle1">${cartItem?.LivePriceDetails?.price}</Typography>
             <Stack className="Quantity">
               <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.id)} disabled={quantity === 1}><MinusIcon /></IconButton>
               <TextField value={quantity} disabled />
@@ -408,11 +416,12 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
                 <Select
                   color="secondary"
                   className="DeliveryMethodSelect"
-                  value={!isDifferentMethod ? deliveryMethodOfParent : deliveryMethod}
+                  value={deliverMethod}
                   onChange={handleDeliveryMethod}
                   IconComponent={SelectDropdown}
                   disabled={!isDifferentMethod}
                 >
+                  <MenuItem value="LocalShipping">Local Shipping</MenuItem>
                   <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
                   <MenuItem value="VaultStorage">Vault Storage</MenuItem>
                 </Select>
@@ -433,7 +442,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
   )
 }
 
-export const CartCardAbstract = ({product,quantity,deliveryMethod}:any) => {
+export const CartCardAbstract = ({ product, quantity, deliveryMethod }: any) => {
   return (
     <Card className="CartCardAbstract">
       <CardContent>
@@ -447,7 +456,7 @@ export const CartCardAbstract = ({product,quantity,deliveryMethod}:any) => {
             <Typography className="Name" variant="titleLarge" component="p">{product?.productName}</Typography>
             <Typography>Qty: {quantity}</Typography>
           </Box>
-          <Typography variant="subtitle1">${roundOfThePrice((product?.LivePriceDetails?.price)*(quantity))}</Typography>
+          <Typography variant="subtitle1">${roundOfThePrice((product?.LivePriceDetails?.price) * (quantity))}</Typography>
         </Stack>
       </CardContent>
       <Divider />

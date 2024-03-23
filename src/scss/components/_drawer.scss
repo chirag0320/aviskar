@@ -11,6 +11,7 @@
           justify-content: space-between;
           @include padding-vertical(10);
           .CloseButton {
+            font-size: 16px;
             color: rgba($elephant, 0.6);
             margin-right: -10px;
           }

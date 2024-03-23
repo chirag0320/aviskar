@@ -5,16 +5,15 @@ import { useAppDispatch, useAppSelector, useToggle } from '@/hooks'
 import TabPanel from '@/components/common/TabPanel'
 import PriceSlider from './PriceSlider'
 import RenderCheckboxField from './RenderCheckboxField'
-import { ENDPOINTS } from '@/utils/constants'
-import { getCategoryData } from '@/redux/reducers/categoryReducer'
 
 interface props {
     renderList: (data: any) => any
     setSelectedFiltersMobile: any,
     setSelectedPriceMobile: any,
+    page: number
 }
 
-const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedPriceMobile }: props) => {
+const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedPriceMobile, page }: props) => {
     const categoryData = useAppSelector(state => state.category)
     const dispatch = useAppDispatch()
     const [openFilterBy, toggleFilterBy] = useToggle(false)
@@ -24,14 +23,19 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
     const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+        // console.log();
+        
         setTabValue(newValue)
     }
-
+    
     const applyFilterHandler = async () => {
         setSelectedFiltersMobile(selectedFilters)
         setSelectedPriceMobile(selectedPrice)
         toggleFilterBy()
     }
+
+    console.log("SelectedFilters" , selectedFilters);
+    
 
     return (
         <Fragment>
@@ -73,7 +77,7 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
                             {renderList(categoryData.categories)}
                         </TabPanel>
                         <TabPanel value={tabValue} index={1}>
-                            <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} />
+                            <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} page={page} />
                         </TabPanel>
                         {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
                             <TabPanel value={tabValue} index={index + 2} key={filter}>
@@ -91,7 +95,7 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
                                     }
                                     )}
                                     selectedFilters={selectedFilters}
-                                    setSelectedFilters={setSelectedFilters} />
+                                    setSelectedFilters={setSelectedFilters} page={page} />
                             </TabPanel>
                         ))}
                     </Stack>
