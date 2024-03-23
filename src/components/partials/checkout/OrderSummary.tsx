@@ -14,14 +14,53 @@ import { OutlinedCheckIcon } from "@/assets/icons"
 import OTPConfirmation from "./OTPConfirmation"
 import { roundOfThePrice, shipmentTypeToEnum } from "@/utils/common"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
-import { getCraditCardCharges, getInsuranceAndTaxDetailsCalculation } from "@/redux/reducers/checkoutReducer"
+import { checkValidationOnConfirmOrder, disableOTP, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation, placeOrder } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
+import useDeviceDetails from "@/hooks/useDeviceDetails"
+
+export interface PlaceOrderBody {
+  OrderCustomerID: number;
+  BillingAddressId: number;
+  ShippingAddressId: number;
+  OrderItems: OrderItem[];
+  PaymentMethod: number;
+  ShippingMethod: number;
+  IsDifferentShippingMethod: boolean;
+  IsUsedRewardPoints: boolean;
+  AgentId: string;
+  Location: string;
+  Device: string;
+  Browser: string;
+  IsInstantBuy: boolean;
+}
+
+interface OrderItem {
+  ShoppingCartId: number;
+  ProductId: number;
+  ParentProductId: number;
+  Quantity: number;
+  ShippingMethod: number;
+}
+
+
 interface Product {
   productId: number;
   qty: number;
   price: number;
   shippingMethod: number;
   LivePriceDetails?: any;
+}
+
+// enum PaymentMethod{
+//   CreditCard = 3,
+//   BankTransfer = 2,
+//   Cash = 1
+// }
+
+const paymentMethodEnum: { [key: string]: number } = {
+  "CreditCard": 3,
+  "BankTransfer": 2,
+  "Cash": 1
 }
 
 interface Body {
@@ -32,10 +71,14 @@ interface Body {
 
 function OrderSummary() {
   const dispatch = useAppDispatch()
-  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges } = useAppSelector((state) => state.checkoutPage)
+  const { deviceInfo, locationInfo }: any = useDeviceDetails()
+  console.log("🚀 ~ OrderSummary ~ deviceInfo, locationInfo:", deviceInfo, locationInfo)
+  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading } = useAppSelector((state) => state.checkoutPage)
   console.log("🚀 ~ OrderSummary ~ finalDataForTheCheckout:", finalDataForTheCheckout)
   const [body, setBody] = useState<Body | null>(null)
   const [totalValueNeedToPayFromCraditCart, setTotalValueNeedToPayFromCraditCart] = useState<any>({ OrderTotal: 0 })
+  const [isConfirmOrderAPICalled, setIsConfirmOrderAPICalled] = useState(false)
+
   useEffect(() => {
     setBody({
       Postcode: finalDataForTheCheckout?.shippingAddress?.postcode?.toString(),
@@ -70,6 +113,57 @@ function OrderSummary() {
     )
   }
 
+  useEffect(() => {
+    if (isOTPEnabled) {
+      toggleOTPConfirmation()
+    }
+    else if (isOTPEnabled === false) {
+      const placeOrderFun = async () => {
+        // call place order API
+        const prepareBodyData: PlaceOrderBody = {
+          "OrderCustomerID": finalDataForTheCheckout?.userAccount?.customerId,
+          "BillingAddressId": finalDataForTheCheckout?.billingAddress?.addressId,
+          "ShippingAddressId": finalDataForTheCheckout?.shippingAddress?.addressId,
+          "OrderItems": finalDataForTheCheckout?.cartItemsWithLivePrice?.map((item: any) => {
+            return ({
+              "ShoppingCartId": item.id,
+              "ProductId": item.productId,
+              "ParentProductId": item?.parentProductId,
+              "Quantity": finalDataForTheCheckout?.quantitiesWithProductId[item.productId],
+              "ShippingMethod": shipmentTypeToEnum[finalDataForTheCheckout?.deliveryMethodsWithProductId[item.productId]]
+            })
+          }),
+          "PaymentMethod": paymentMethodEnum[finalDataForTheCheckout?.paymentType],
+          "ShippingMethod": shipmentTypeToEnum[finalDataForTheCheckout?.parentDeliveryMethod || 'LocalShipping'],
+          "IsDifferentShippingMethod": finalDataForTheCheckout?.IsDifferentShippingMethod,
+          "IsUsedRewardPoints": false,
+          "AgentId": "",
+          "Location": 'lat' + locationInfo?.latitude + ',' + 'long' + locationInfo?.longitude,
+          "Device": deviceInfo?.platform!,
+          "Browser": deviceInfo?.userAgent,
+          "IsInstantBuy": false
+        }
+        dispatch(placeOrder({ url: ENDPOINTS.placeOrder, body: prepareBodyData }) as any);
+      }
+      placeOrderFun();
+      dispatch(disableOTP())
+    }
+  }, [isOTPEnabled])
+
+  const onConfirmOrderHandler = () => {
+    dispatch(checkValidationOnConfirmOrder({
+      url: ENDPOINTS.checkValidationOnConfirmOrder, body: {
+        PaymentMethodEnum: paymentMethodEnum[finalDataForTheCheckout?.paymentType],
+        OrderTotal: Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax),
+        // static
+        IsRewardPointUsed: false,
+        UsedRewardPoints: 0,
+        UsedRewardPointAmount: 0.00
+      }
+    }))
+    setIsConfirmOrderAPICalled(true)
+  }
+
   return (
     <StepWrapper title="Order Summary" className="OrderSummary">
       <Box className="ProductList">
@@ -80,16 +174,16 @@ function OrderSummary() {
         })}
       </Box>
       <Box className="PricingDetails">
-        {renderPricingItem("Subtotal", '$'+roundOfThePrice(subTotal as any) as any)}
+        {renderPricingItem("Subtotal", '$' + roundOfThePrice(subTotal as any) as any)}
         <Divider />
         {renderPricingItem("Secure Shipping", `$${insuranceAndTaxCalculation?.secureShippingFeeIncludingTax}`)}
         {renderPricingItem("Vault storage", `$${insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax}`)}
         <Divider />
         {finalDataForTheCheckout?.paymentType === 'CreditCard' && renderPricingItem("Credit Card Fees", craditCardCharges?.creditCardFeeIncludingTax)}
         {finalDataForTheCheckout?.paymentType === 'CreditCard' && < Divider />}
-        {renderPricingItem("GST Included", `$${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingTax) + Number(insuranceAndTaxCalculation?.vaultStorageTax) + Number(finalDataForTheCheckout?.cartItemsWithLivePrice?.reduce((total: number, product: {
+        {renderPricingItem("GST Included", `$${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingTax) + Number(insuranceAndTaxCalculation?.vaultStorageTax) + Number(finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 ? finalDataForTheCheckout?.cartItemsWithLivePrice?.reduce((total: number, product: {
           LivePriceDetails: { taxPrice: number }
-        }) => total + product.LivePriceDetails.taxPrice, 0)))}`)}
+        }) => total + product?.LivePriceDetails?.taxPrice, 0) : 0))}`)}
         <Stack className="PricingItem TotalItem">
           <Typography variant="subtitle1">Total</Typography>
           <Typography variant="subtitle1">${Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax)}</Typography>
@@ -101,7 +195,8 @@ function OrderSummary() {
         <Divider className="ActionDivider" />
         <Stack className="ActionWrapper">
           <Button color="secondary">Continue Shopping</Button>
-          <Button variant="contained" onClick={toggleOTPConfirmation} disabled={!finalDataForTheCheckout?.termAndServiceIsRead}>Confirm Order</Button>
+          {/* <Button variant="contained" onClick={toggleOTPConfirmation} disabled={!finalDataForTheCheckout?.termAndServiceIsRead}>Confirm Order</Button> */}
+          <Button variant="contained" onClick={onConfirmOrderHandler} disabled={!finalDataForTheCheckout?.termAndServiceIsRead || loading}>Confirm Order</Button>
         </Stack>
       </Box>
       <OTPConfirmation open={openOTPConfirmation} onClose={toggleOTPConfirmation} />

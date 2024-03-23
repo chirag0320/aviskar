@@ -82,7 +82,7 @@ function Step2() {
     })
     setQuantities(quantities)
     setDeliveryMethods(deliveryMethods)
-    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: quantities, deliveryMethodsWithProductId: deliveryMethods }))
+    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: quantities, deliveryMethodsWithProductId: deliveryMethods,IsDifferentShippingMethod:changeDiffrenceDeliveryMethods }))
   }, [checkoutPageData?.shoppingCartItems, changeDiffrenceDeliveryMethods, deliveryMethod])
 
   useEffect(() => {
@@ -105,7 +105,7 @@ function Step2() {
     //   })
     //   makeObject['deliveryMethodsWithProductId'] = deliveryMethods
     // }
-    dispatch(updateFinalDataForTheCheckout(makeObject))
+    dispatch(updateFinalDataForTheCheckout({ ...makeObject, parentDeliveryMethod: event.target.value }))
   }
 
   const increaseQuantity = (productId: number) => {

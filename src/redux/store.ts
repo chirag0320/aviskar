@@ -15,12 +15,7 @@ import wishListReducer from './reducers/wishListReducer'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: [
-    'configDetails',
-    'userDetails',
-    'loading',
-    'sectionDetails',
-    'categoriesList', 'isLoggedIn', 'userDetails', 'blogList', 'newsList', 'calculators','recentlyViewedProducts','productIds'], // Reducers you want to persist
+  // Reducers you want to persist
 }
 // const persistedHomePageReducer = persistReducer(persistConfig, homepageReducer)
 // const persistedblogReducer = persistReducer(persistConfig, blogReducer)
@@ -51,9 +46,7 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
+      serializableCheck: false,
     }),
 })
 const persistor = persistStore(store)
