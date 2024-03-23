@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import CheckoutPageServices from '@/apis/services/checkoutCartServices'
 import { any } from 'prop-types'
+import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 export type customerDetails = {
     "customerId": number,
     "email": string,
@@ -144,14 +145,14 @@ interface CheckoutPageState {
 }
 const initialState: CheckoutPageState = {
     loading: false,
-    checkoutPageData: null,
-    subTotal: 0,
-    finalDataForTheCheckout: null,
-    insuranceAndTaxCalculation: null,
-    craditCardCharges: null,
     isOTPEnabled: null,
     isOTPSent: null,
-    isOTPVerified: null
+    isOTPVerified: null,
+    checkoutPageData: isBrowser && JSON.parse(localStorageGetItem("checkoutPageData") ?? JSON.stringify({})),
+    subTotal: Number(localStorageGetItem("checkoutPageData")) || 0,
+    finalDataForTheCheckout: localStorageGetItem("finalDataForTheCheckout") ?? null,
+    insuranceAndTaxCalculation: (isBrowser && JSON.parse(localStorageGetItem("insuranceAndTaxCalculation") ?? JSON.stringify({}))) ?? null,
+    craditCardCharges: (isBrowser && JSON.parse(localStorageGetItem("craditCardCharges") ?? JSON.stringify({}))) ?? null
 }
 
 export const getCheckoutPageData = appCreateAsyncThunk(
@@ -223,9 +224,12 @@ export const checkoutPage = createSlice({
         updateSubTotalCheckoutPage: (state, action) => {
             state.subTotal += action.payload;
             state.subTotal = Math.round((state.subTotal + Number.EPSILON) * 100) / 100
+            localStorageSetItem('subTotal', JSON.stringify(state.subTotal))
         },
         updateFinalDataForTheCheckout: (state, action) => {
             state.finalDataForTheCheckout = { ...state.finalDataForTheCheckout, ...action.payload }
+            localStorageSetItem('finalDataForTheCheckout', JSON.stringify(state.finalDataForTheCheckout))
+
         },
         disableOTP: (state) => {
             state.isOTPEnabled = false
@@ -240,6 +244,7 @@ export const checkoutPage = createSlice({
         })
         builder.addCase(getCheckoutPageData.fulfilled, (state, action) => {
             state.checkoutPageData = action?.payload?.data?.data
+            localStorageSetItem('checkoutPageData', JSON.stringify(state.checkoutPageData))
             state.loading = false;
         })
         builder.addCase(getCheckoutPageData.rejected, (state, action) => {
@@ -251,6 +256,7 @@ export const checkoutPage = createSlice({
         })
         builder.addCase(getInsuranceAndTaxDetailsCalculation.fulfilled, (state, action) => {
             state.insuranceAndTaxCalculation = action?.payload?.data?.data
+            localStorageSetItem('insuranceAndTaxCalculation', JSON.stringify(state.insuranceAndTaxCalculation))
             state.loading = false;
         })
         builder.addCase(getInsuranceAndTaxDetailsCalculation.rejected, (state, action) => {
@@ -262,6 +268,7 @@ export const checkoutPage = createSlice({
         })
         builder.addCase(getCraditCardCharges.fulfilled, (state, action) => {
             state.craditCardCharges = action?.payload?.data?.data
+            localStorageSetItem('craditCardCharges', JSON.stringify(state.craditCardCharges))
             state.loading = false;
         })
         builder.addCase(getCraditCardCharges.rejected, (state, action) => {

@@ -29,6 +29,11 @@ const initialState: CalculatorsData = {
     shipping: 0.00,
     insurance: 0.00,
     vaultStorage: 0.00
+    // calculatorType: JSON.parse(localStorage.getItem("calculatorType") ?? '0'),
+    // calculators: JSON.parse(localStorage.getItem("calculators") ?? '[]'),
+    // shipping: JSON.parse(localStorage.getItem("shipping") ?? '0.00'),
+    // insurance: JSON.parse(localStorage.getItem("insurance") ?? '0.00'),
+    // vaultStorage: JSON.parse(localStorage.getItem("vaultStorage") ?? '0.00')
 }
 
 export const saveCalculatorsData = appCreateAsyncThunk(
