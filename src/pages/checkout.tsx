@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useLayoutEffect, useState } from "react"
 import { Box, Container, Stack } from "@mui/material"
 
 // Componenets
@@ -17,10 +17,18 @@ import { getCheckoutPageData } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import { useAppSelector } from "@/hooks"
 import useDeviceDetails from "@/hooks/useDeviceDetails"
+import { navigate } from "gatsby"
 
 function Checkout() {
   const [state] = useState({service:getCheckoutPageData, endPoint:ENDPOINTS.checkoutDetails})
+  const isLoggedIn = useAppSelector(state => state.homePage.isLoggedIn)
   useAPIoneTime(state)
+
+  if(!isLoggedIn){
+    navigate('/login',{replace:true})
+    return;
+  }
+
   return (
     <Layout>
       <Seo
