@@ -64,9 +64,9 @@ function OrderConfirmation(props: any) {
                                         <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
                                             <TableHead>
                                                 <TableRow className="OrderDetailsHeadRow">
-                                                    <TableCell sx={{ minWidth: "400px" }}>Name</TableCell>
-                                                    <TableCell sx={{ minWidth: "150px" }}>Price</TableCell>
-                                                    <TableCell sx={{ minWidth: "130px" }}>Quantity</TableCell>
+                                                    <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
+                                                    <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
+                                                    <TableCell sx={{ minWidth: "150px" }}>Quantity</TableCell>
                                                     <TableCell sx={{ minWidth: "150px" }}>Total</TableCell>
                                                 </TableRow>
                                             </TableHead>
