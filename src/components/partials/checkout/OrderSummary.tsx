@@ -14,8 +14,9 @@ import { OutlinedCheckIcon } from "@/assets/icons"
 import OTPConfirmation from "./OTPConfirmation"
 import { roundOfThePrice, shipmentTypeToEnum } from "@/utils/common"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
-import { checkValidationOnConfirmOrder, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation, placeOrder } from "@/redux/reducers/checkoutReducer"
+import { checkValidationOnConfirmOrder, disableOTP, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation, placeOrder } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
+import useDeviceDetails from "@/hooks/useDeviceDetails"
 
 export interface PlaceOrderBody {
   OrderCustomerID: number;
@@ -70,7 +71,10 @@ interface Body {
 
 function OrderSummary() {
   const dispatch = useAppDispatch()
+  const { deviceInfo, locationInfo }: any = useDeviceDetails()
+  console.log("🚀 ~ OrderSummary ~ deviceInfo, locationInfo:", deviceInfo, locationInfo)
   const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading } = useAppSelector((state) => state.checkoutPage)
+  console.log("🚀 ~ OrderSummary ~ finalDataForTheCheckout:", finalDataForTheCheckout)
   const [body, setBody] = useState<Body | null>(null)
   const [totalValueNeedToPayFromCraditCart, setTotalValueNeedToPayFromCraditCart] = useState<any>({ OrderTotal: 0 })
   const [isConfirmOrderAPICalled, setIsConfirmOrderAPICalled] = useState(false)
@@ -113,45 +117,36 @@ function OrderSummary() {
     if (isOTPEnabled) {
       toggleOTPConfirmation()
     }
-    else if (isConfirmOrderAPICalled) {
-      setIsConfirmOrderAPICalled(false)
-
+    else if (isOTPEnabled === false) {
       const placeOrderFun = async () => {
         // call place order API
         const prepareBodyData: PlaceOrderBody = {
-          "OrderCustomerID": 1234,
-          "BillingAddressId": 12,
-          "ShippingAddressId": 12,
-          "OrderItems": [
-            {
-              "ShoppingCartId": 3212,
-              "ProductId": 1234,
-              "ParentProductId": 1234,
-              "Quantity": 23,
-              "ShippingMethod": 1
-            },
-            {
-              "ShoppingCartId": 234,
-              "ProductId": 1234,
-              "ParentProductId": 1234,
-              "Quantity": 23,
-              "ShippingMethod": 1
-            }
-          ],
-          "PaymentMethod": 1,
-          "ShippingMethod": 1,
-          "IsDifferentShippingMethod": true,
+          "OrderCustomerID": finalDataForTheCheckout?.userAccount?.customerId,
+          "BillingAddressId": finalDataForTheCheckout?.billingAddress?.addressId,
+          "ShippingAddressId": finalDataForTheCheckout?.shippingAddress?.addressId,
+          "OrderItems": finalDataForTheCheckout?.cartItemsWithLivePrice?.map((item: any) => {
+            return ({
+              "ShoppingCartId": item.id,
+              "ProductId": item.productId,
+              "ParentProductId": item?.parentProductId,
+              "Quantity": finalDataForTheCheckout?.quantitiesWithProductId[item.productId],
+              "ShippingMethod": shipmentTypeToEnum[finalDataForTheCheckout?.deliveryMethodsWithProductId[item.productId]]
+            })
+          }),
+          "PaymentMethod": paymentMethodEnum[finalDataForTheCheckout?.paymentType],
+          "ShippingMethod": shipmentTypeToEnum[finalDataForTheCheckout?.parentDeliveryMethod || 'LocalShipping'],
+          "IsDifferentShippingMethod": finalDataForTheCheckout?.IsDifferentShippingMethod,
           "IsUsedRewardPoints": false,
           "AgentId": "",
-          "Location": "",
-          "Device": "",
-          "Browser": "",
+          "Location": 'lat' + locationInfo?.latitude + ',' + 'long' + locationInfo?.longitude,
+          "Device": deviceInfo?.platform!,
+          "Browser": deviceInfo?.userAgent,
           "IsInstantBuy": false
         }
         dispatch(placeOrder({ url: ENDPOINTS.placeOrder, body: prepareBodyData }) as any);
       }
-
       placeOrderFun();
+      dispatch(disableOTP())
     }
   }, [isOTPEnabled])
 
@@ -186,9 +181,9 @@ function OrderSummary() {
         <Divider />
         {finalDataForTheCheckout?.paymentType === 'CreditCard' && renderPricingItem("Credit Card Fees", craditCardCharges?.creditCardFeeIncludingTax)}
         {finalDataForTheCheckout?.paymentType === 'CreditCard' && < Divider />}
-        {renderPricingItem("GST Included", `$${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingTax) + Number(insuranceAndTaxCalculation?.vaultStorageTax) + Number(finalDataForTheCheckout?.cartItemsWithLivePrice?.reduce((total: number, product: {
+        {renderPricingItem("GST Included", `$${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingTax) + Number(insuranceAndTaxCalculation?.vaultStorageTax) + Number(finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 ? finalDataForTheCheckout?.cartItemsWithLivePrice?.reduce((total: number, product: {
           LivePriceDetails: { taxPrice: number }
-        }) => total + product.LivePriceDetails.taxPrice, 0)))}`)}
+        }) => total + product?.LivePriceDetails?.taxPrice, 0) : 0))}`)}
         <Stack className="PricingItem TotalItem">
           <Typography variant="subtitle1">Total</Typography>
           <Typography variant="subtitle1">${Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax)}</Typography>
