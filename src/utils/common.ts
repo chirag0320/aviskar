@@ -25,6 +25,19 @@ export function progressBarLogic({ currentprice, min, max }: any) {
 export function valueChangeForPrice({ currentprice, yesterdayprice }: { currentprice: number, yesterdayprice: number }) {
   return (((currentprice - yesterdayprice) / yesterdayprice) * 100).toFixed(2)
 }
-export function roundOfThePrice(price:number){
-return  Math.round((price + Number.EPSILON) * 100) / 100
+export function roundOfThePrice(price: number) {
+  return Math.round((price + Number.EPSILON) * 100) / 100
+}
+export const shipmentTypeToEnum: any = {
+  'LocalShipping': 3,
+  'SecureShipping': 2,
+  'VaultStorage': 1
+}
+export const isBrowser = typeof window !== "undefined"
+export function localStorageGetItem(key: any) {
+  return isBrowser && key ? (localStorage?.getItem(key) === 'undefined' ? undefined : localStorage?.getItem(key)) : undefined
+}
+
+export function localStorageSetItem(key: any, value: any) {
+  isBrowser && localStorage?.setItem(key, typeof value !== 'string' ? JSON.stringify(value) : value)
 }

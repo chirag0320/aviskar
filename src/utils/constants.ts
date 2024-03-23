@@ -41,6 +41,8 @@ export const ENDPOINTS = {
     addWishListToShoppingCart: "Wishlist/nxJzG70390aEbLTm6J0Qsg",
     checkoutDetails: 'Checkout/xT3hjqkBFESvUfuMu8T70A',
     addOrEditAddress: "myvault/mIKu7TMRFUW49i97slxpDg",
+    calculateInsuranceAndTaxDetails: "calculator/a5n79zVvKUKbIgrXui6tmA",
+    calculateCraditCardCharges: "calculator/yGU45H6bwUuxggNPZF8R3g",
     qmintopenaidata: 'MyVault/WqNoMqgI93gqVTfe986gYQ'
 
 }

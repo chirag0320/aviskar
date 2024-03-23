@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import CheckoutPageServices from '@/apis/services/checkoutCartServices'
 import { any } from 'prop-types'
+import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 export type customerDetails = {
     "customerId": number,
     "email": string,
@@ -39,7 +40,19 @@ export type shopingCartItem = {
     "shippingMethod": any[],
     "shippableCountrys": any[]
 }
-
+export interface Fees {
+    insuranceFee: number;
+    shippingFee: number;
+    secureShippingFee: number;
+    secureShippingTax: number;
+    secureShippingFeeIncludingTax: number;
+    vaultStorageFee: number;
+    vaultStorageTax: number;
+    vaultStorageFeeIncludingTax: number;
+    insuranceMessage: string | null;
+    shippingMessage: string | null;
+    storageMessage: string | null;
+}
 interface CheckoutPageState {
     loading: boolean,
     checkoutPageData: {
@@ -123,13 +136,17 @@ interface CheckoutPageState {
         "customerId": number
     } | null,
     subTotal: number,
-    finalDataForTheCheckout: any
+    finalDataForTheCheckout: any,
+    insuranceAndTaxCalculation: Fees | null,
+    craditCardCharges: any
 }
 const initialState: CheckoutPageState = {
     loading: false,
-    checkoutPageData: null,
-    subTotal: 0,
-    finalDataForTheCheckout:null
+    checkoutPageData: isBrowser && JSON.parse(localStorageGetItem("checkoutPageData") ?? JSON.stringify({})),
+    subTotal: Number(localStorageGetItem("checkoutPageData")) || 0,
+    finalDataForTheCheckout: localStorageGetItem("finalDataForTheCheckout") ?? null,
+    insuranceAndTaxCalculation: (isBrowser && JSON.parse(localStorageGetItem("insuranceAndTaxCalculation") ?? JSON.stringify({}))) ?? null,
+    craditCardCharges: (isBrowser && JSON.parse(localStorageGetItem("craditCardCharges") ?? JSON.stringify({}))) ?? null
 }
 
 export const getCheckoutPageData = appCreateAsyncThunk(
@@ -139,9 +156,21 @@ export const getCheckoutPageData = appCreateAsyncThunk(
     }
 )
 
+export const getInsuranceAndTaxDetailsCalculation = appCreateAsyncThunk(
+    'getInsuranceAndTaxDetailsCalculation',
+    async ({ url, body }: { url: string, body: any }) => {
+        return await CheckoutPageServices.getInsuranceAndTaxInfo(url, body)
+    }
+)
+export const getCraditCardCharges = appCreateAsyncThunk(
+    'getCraditCardCharges',
+    async ({ url, body }: { url: string, body: any }) => {
+        return await CheckoutPageServices.getCraditCardChargesValue(url, body)
+    }
+)
 export const addOrEditAddress = appCreateAsyncThunk(
     "addOrEditAddress",
-    async ({url ,body} : {url : string , body : any}) => {
+    async ({ url, body }: { url: string, body: any }) => {
 
     }
 )
@@ -162,9 +191,11 @@ export const checkoutPage = createSlice({
         updateSubTotalCheckoutPage: (state, action) => {
             state.subTotal += action.payload;
             state.subTotal = Math.round((state.subTotal + Number.EPSILON) * 100) / 100
+            localStorageSetItem('subTotal', JSON.stringify(state.subTotal))
         },
-        updateFinalDataForTheCheckout:(state,action)=>{
-            state.finalDataForTheCheckout = {...state.finalDataForTheCheckout,...action.payload}
+        updateFinalDataForTheCheckout: (state, action) => {
+            state.finalDataForTheCheckout = { ...state.finalDataForTheCheckout, ...action.payload }
+            localStorageSetItem('finalDataForTheCheckout', JSON.stringify(state.subTotal))
         }
     },
 
@@ -175,9 +206,34 @@ export const checkoutPage = createSlice({
         })
         builder.addCase(getCheckoutPageData.fulfilled, (state, action) => {
             state.checkoutPageData = action?.payload?.data?.data
+            localStorageSetItem('checkoutPageData', JSON.stringify(state.checkoutPageData))
             state.loading = false;
         })
         builder.addCase(getCheckoutPageData.rejected, (state, action) => {
+            state.loading = false
+        })
+        // get checkout page data
+        builder.addCase(getInsuranceAndTaxDetailsCalculation.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getInsuranceAndTaxDetailsCalculation.fulfilled, (state, action) => {
+            state.insuranceAndTaxCalculation = action?.payload?.data?.data
+            localStorageSetItem('insuranceAndTaxCalculation', JSON.stringify(state.insuranceAndTaxCalculation))
+            state.loading = false;
+        })
+        builder.addCase(getInsuranceAndTaxDetailsCalculation.rejected, (state, action) => {
+            state.loading = false
+        })
+        // get checkout page data
+        builder.addCase(getCraditCardCharges.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getCraditCardCharges.fulfilled, (state, action) => {
+            state.craditCardCharges = action?.payload?.data?.data
+            localStorageSetItem('craditCardCharges', JSON.stringify(state.craditCardCharges))
+            state.loading = false;
+        })
+        builder.addCase(getCraditCardCharges.rejected, (state, action) => {
             state.loading = false
         })
     },

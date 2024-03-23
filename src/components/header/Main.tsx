@@ -37,7 +37,7 @@ function Main(props: any) {
           {/* <Link to={ENDPOINTS.login}> */}
           <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton" variant="outlined" color="primary" startIcon={<Profile />}>{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Button>
           {/* </Link> */}
-          <IconButton area-label="HamburgerMenuButton" className="HamburgerButton" onClick={toggleMobileMenu}>{!openMobileMenu ? <HamburgerIcon /> : <CrossIcon />}</IconButton>
+          <IconButton color="secondary" area-label="HamburgerMenuButton" className="HamburgerButton MenuButton" onClick={toggleMobileMenu}>{!openMobileMenu ? <HamburgerIcon className="HamburgerIcon" /> : <CrossIcon className="CrossIcon" />}</IconButton>
         </Stack>
       </Stack>
     </Container>

@@ -803,7 +803,7 @@
 
     .MuiCardContent-root {
       padding: 0;
-
+      flex-grow: 1;
       .TopWrapper {
         justify-content: space-between;
         gap: 16px;
@@ -957,8 +957,9 @@
       .Wrapper {
         align-items: center;
         gap: 16px;
-
+        flex-grow: 1;
         .About {
+          flex-grow: 1;
           .Name {
             margin-bottom: 8px;
           }

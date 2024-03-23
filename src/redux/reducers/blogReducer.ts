@@ -13,6 +13,9 @@ const initialState: BlogState = {
     blogList: {},
     blogDetailsData:{},
     loading: false
+    // blogList: JSON.parse(localStorage.getItem("blogList") ?? '{}'),
+    // blogDetailsData: JSON.parse(localStorage.getItem("blogDetailsData") ?? '{}'),
+    // loading: false
 }
 
 export const BlogList = appCreateAsyncThunk(
