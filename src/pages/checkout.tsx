@@ -21,7 +21,6 @@ import useDeviceDetails from "@/hooks/useDeviceDetails"
 function Checkout() {
   const [state] = useState({service:getCheckoutPageData, endPoint:ENDPOINTS.checkoutDetails})
   useAPIoneTime(state)
-  const {deviceInfo, locationInfo} =useDeviceDetails()
   return (
     <Layout>
       <Seo
