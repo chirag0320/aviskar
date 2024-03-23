@@ -35,7 +35,7 @@ export const shipmentTypeToEnum:any = {
 }
 export const isBrowser = typeof window !== "undefined"
 export function localStorageGetItem(key:any){
- return isBrowser && key ? localStorage?.getItem(key) : ''
+ return isBrowser && key ? localStorage?.getItem(key) : undefined
   }
 
 export function localStorageSetItem(key:any, value:any){

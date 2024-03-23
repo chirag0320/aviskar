@@ -17,14 +17,14 @@ interface filterQuery {
 }
 
 const initialState: categoryData = {
-  loading: isBrowser && JSON.parse(localStorageGetItem("loading") ?? 'false'),
-  items: isBrowser && JSON.parse(localStorageGetItem("items") ?? '[]'),
-  count: isBrowser && JSON.parse(localStorageGetItem("count") ?? '0'),
-  categories: isBrowser && JSON.parse(localStorageGetItem("categories") ?? '[]'),
-  price: isBrowser && JSON.parse(localStorageGetItem("price") ?? "{minPrice: 0,maxPrice: 0}"),
-  specifications: isBrowser && JSON.parse(localStorageGetItem("specifications") ?? '{}'),
-  manufactureres: isBrowser && JSON.parse(localStorageGetItem("manufactureres") ?? '[]'),
-  productDetailsData: isBrowser && JSON.parse(localStorageGetItem("productDetailsData") ?? '{}')
+  loading: isBrowser && JSON.parse(localStorageGetItem("loading") ?? JSON.stringify(false)),
+  items: isBrowser && JSON.parse(localStorageGetItem("items") ?? JSON.stringify([])),
+  count: isBrowser && JSON.parse(localStorageGetItem("count") ?? JSON.stringify(0)),
+  categories: isBrowser && JSON.parse(localStorageGetItem("categories") ?? JSON.stringify([])),
+  price: isBrowser && JSON.parse(localStorageGetItem("price") ?? JSON.stringify({minPrice: 0,maxPrice: 0})),
+  specifications: isBrowser && JSON.parse(localStorageGetItem("specifications") ?? JSON.stringify({})),
+  manufactureres: isBrowser && JSON.parse(localStorageGetItem("manufactureres") ?? JSON.stringify([])),
+  productDetailsData: isBrowser && JSON.parse(localStorageGetItem("productDetailsData") ?? JSON.stringify({}))
 }
 
 export const getCategoryData = appCreateAsyncThunk(

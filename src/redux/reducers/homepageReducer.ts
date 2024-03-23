@@ -30,15 +30,15 @@ interface CreateGuidelineState {
   recentlyViewedProducts: any[]
 }
 const initialState: CreateGuidelineState = {
-  configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? '{}'),
+  configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
   loading: false,
-  sectionDetails: isBrowser && JSON.parse(localStorageGetItem('sectionDetails') ?? '{1: {},2: {}}'),
-  categoriesList: isBrowser && JSON.parse(localStorageGetItem('categoriesList') ?? '{}'),
-  userDetails: null,
-  isLoggedIn: false,
+  sectionDetails: isBrowser && JSON.parse(localStorageGetItem('sectionDetails') ?? JSON.stringify({1: {},2: {}})),
+  categoriesList: isBrowser && JSON.parse(localStorageGetItem('categoriesList') ?? JSON.stringify(({}))),
+  userDetails: isBrowser && JSON.parse(localStorageGetItem('userDetails') || JSON.stringify({})),
+  isLoggedIn: isBrowser && JSON.parse(localStorageGetItem('isLoggedIn') || JSON.stringify(false)),
   loadingForSignIn: false,
-  mebershipPlanDetailsData: isBrowser && JSON.parse(localStorageGetItem('mebershipPlanDetailsData') ?? '{}'),
-  recentlyViewedProducts: isBrowser && JSON.parse(localStorageGetItem('recentlyViewedProducts') ?? '[]')
+  mebershipPlanDetailsData: isBrowser && JSON.parse(localStorageGetItem('mebershipPlanDetailsData') ?? JSON.stringify({})),
+  recentlyViewedProducts: isBrowser && JSON.parse(localStorageGetItem('recentlyViewedProducts') ?? JSON.stringify([]))
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -207,9 +207,10 @@ export const createHomepageSlice = createSlice({
     })
     builder.addCase(LoginUserAPI.fulfilled, (state, action) => {
       state.userDetails = action.payload.data.data
-      localStorageSetItem('userDetails', JSON.stringify(action.payload.data.datas))
+      localStorageSetItem('userDetails', JSON.stringify(action.payload.data.data))
       state.loadingForSignIn = false
       state.isLoggedIn = true
+      localStorageSetItem('isLoggedIn', JSON.stringify(true))
     })
     builder.addCase(LoginUserAPI.rejected, (state, action) => {
       state.loadingForSignIn = false
@@ -224,6 +225,7 @@ export const createHomepageSlice = createSlice({
       localStorageSetItem('userDetails', '')
       state.loading = false
       state.isLoggedIn = false
+      localStorageSetItem('isLoggedIn', JSON.stringify(false))
     })
     builder.addCase(LogOutUserAPI.rejected, (state, action) => {
       // console.log("🚀rr ~ builder.addCase ~ action.payload.data:", action.payload)
@@ -238,6 +240,7 @@ export const createHomepageSlice = createSlice({
       localStorageSetItem('userDetails', JSON.stringify(action.payload.data.data))
       state.loading = false
       state.isLoggedIn = true
+      localStorageSetItem('isLoggedIn', JSON.stringify(true))
     })
     builder.addCase(ImpersonateSignInAPI.rejected, (state, action) => {
       state.loading = false

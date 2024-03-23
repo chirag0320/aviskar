@@ -17,8 +17,8 @@ interface ContactUsData {
 
 const initialState: ContactUsData = {
     loading: false,
-    reasonsForContact: isBrowser && JSON.parse(localStorageGetItem('reasonsForContact') ?? '[]'),
-    html: isBrowser && JSON.parse(localStorageGetItem('html') ?? '{}')
+    reasonsForContact: isBrowser && JSON.parse(localStorageGetItem('reasonsForContact') ?? JSON.stringify([])),
+    html: isBrowser && JSON.parse(localStorageGetItem('html') ?? JSON.stringify({}))
 }
 
 export const saveContactUsDetails = appCreateAsyncThunk(
