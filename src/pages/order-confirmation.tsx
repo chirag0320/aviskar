@@ -1,20 +1,22 @@
 import React, { Fragment, useEffect } from "react"
 import Seo from "../components/common/Seo"
 import Layout from "@/components/common/Layout";
-import { Box, Stack, Container, Typography, Icon, Button } from "@mui/material"
+import { Box, Stack, Container, Typography, Icon, Button, TableContainer, Table, TableHead, TableCell, TableRow, TableBody } from "@mui/material"
 import GreenConfirmationIcon from "@/assets/icons/GreenConfirmationIcon";
 import LogoGoldCoin from "@/assets/logos/LogoGoldCoin.png";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { OrderItem, getOrderConfirmationDetails } from "@/redux/reducers/orderConfirmationDetails";
 import { ENDPOINTS } from "@/utils/constants";
 import { useAppSelector } from "@/hooks";
+import { rows } from "./order-details";
 
 function OrderConfirmation(props: any) {
     const orderId = props.location?.search?.split('=')[1];
     const orderConfirmationDetails = useAppSelector(state => state.orderConfirmationDetails);
+    console.log("🚀 ~ OrderConfirmation ~ orderConfirmationDetails:", orderConfirmationDetails)
     useAPIoneTime({
         service: getOrderConfirmationDetails,
-        endPoint: ENDPOINTS.orderConfimationDetails + orderId
+        endPoint: ENDPOINTS.orderConfimationDetails + 26487
     })
     return (
         <Layout>
@@ -45,25 +47,49 @@ function OrderConfirmation(props: any) {
                                     <Typography variant="body1" className="Title">Transaction Date and Time</Typography>
                                     <Typography variant="subtitle1">{orderConfirmationDetails.orderTime}, {orderConfirmationDetails.orderDate}</Typography>
                                 </Stack>
-                                <Stack className="TitleValueWrapper Orders">
-                                    <Typography variant="body1" className="Title">Orders</Typography>
-                                    <Stack className="LogoWrapper">
-
-                                        {orderConfirmationDetails.orderItems.map((item: OrderItem, index: number) => (
-                                            <Fragment key={item.productId}>
-                                                <img src={item.imageUrl} alt="Logo" />
-                                                <Box className="OrderItem">
-                                                    <Typography variant="subtitle1">{item.productName}</Typography>
-                                                    <Typography variant="subtitle1">{item.orderTotal}</Typography>
-                                                </Box>
-                                            </Fragment>
-                                        ))}
-                                    </Stack>
-                                </Stack>
-                                <Stack className="TitleValueWrapper">
-                                    <Typography variant="body1" className="Title">Quantity</Typography>
-                                    <Typography variant="subtitle1">1</Typography>
-                                </Stack>
+                                <Box className="TitleValueWrapper Orders">
+                                    <Typography variant="body1" className="Title">Orders:-</Typography>
+                                    {/* <Stack className="LogoWrapper">
+                                        <img src={LogoGoldCoin} alt="Logo" />
+                                        <Box sx={{ padding: "6px 0" }}>
+                                            <Typography variant="subtitle1">2024 1oz Lunar Series III</Typography>
+                                            <Typography>$204.22</Typography>
+                                        </Box>
+                                    </Stack> */}
+                                    <TableContainer
+                                        className="OrderDetailTableWrapper"
+                                        sx={{}}
+                                    // component={Paper}
+                                    >
+                                        <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
+                                            <TableHead>
+                                                <TableRow className="OrderDetailsHeadRow">
+                                                    <TableCell sx={{ minWidth: "60%" }}>Name</TableCell>
+                                                    <TableCell sx={{ minWidth: "15%" }}>Price</TableCell>
+                                                    <TableCell sx={{ minWidth: "10%" }}>Quantity</TableCell>
+                                                    <TableCell sx={{ minWidth: "15%" }}>Total</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {orderConfirmationDetails?.orderItems?.map((row) => (
+                                                    <TableRow
+                                                        key={row.productId}
+                                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                    >
+                                                        <TableCell component="th" scope="row">
+                                                            <img className="ProductImage" 
+                                                            src={row.imageUrl} alt="Product image" loading="lazy"></img>
+                                                            {row.productName}
+                                                        </TableCell>
+                                                        <TableCell>{row.unitPrice}</TableCell>
+                                                        <TableCell>{row.quantity}</TableCell>
+                                                        <TableCell>{row.subTotal}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </Box>
                                 <Stack className="TitleValueWrapper PaymentAmountWrapper">
                                     <Typography variant="body1" className="Title">Payment Amount</Typography>
                                     <Typography variant="subtitle1">${orderConfirmationDetails.totalPaymentAmount}</Typography>

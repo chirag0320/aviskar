@@ -18,26 +18,25 @@ interface OrderDetails {
     totalPaymentAmount: number | null;
 }
 
-export interface OrderItem {
+
+interface OrderItem {
     productId: number;
     parentProductId: number;
     quantity: number;
     productName: string;
     imageUrl: string;
-    orderSubtotalInclTax: number;
-    orderSubtotalExclTax: number;
-    orderSubTotalDiscountInclTax: number;
-    orderSubTotalDiscountExclTax: number;
-    orderShippingInclTax: number;
-    orderShippingExclTax: number;
-    paymentMethodAdditionalFeeInclTax: number;
-    paymentMethodAdditionalFeeExclTax: number;
-    orderTax: number;
-    orderDiscount: number;
-    orderTotal: number;
+    unitPrice: number;
+    subTotal: number;
 }
 
-
+interface Order {
+    orderId: number;
+    orderDate: string;
+    orderTime: string;
+    orderNumber: string;
+    orderTotal: number;
+    orderItems: OrderItem[];
+}
 const initialState: OrderDetails = {
     loading: false,
     orderId: null,
@@ -72,19 +71,15 @@ export const orderConfirmationDetailsPageSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(getOrderConfirmationDetails.fulfilled, (state, action) => {
-            const responseData = action.payload.data?.data;
+            const responseData: Order = action.payload.data?.data;
 
-            if(!responseData) return;
+            if (!responseData) return;
             state.orderId = responseData?.orderId;
             state.orderDate = responseData?.orderDate;
             state.orderTime = responseData?.orderTime;
             state.orderNumber = responseData?.orderNumber;
             state.orderItems = responseData?.orderItems;
-            state.totalPaymentAmount = 0;
-            for (let i = 0; i < state.orderItems.length; i++) {
-                state.totalPaymentAmount = state.totalPaymentAmount + state.orderItems[i].orderTotal;
-            }
-            state.loading = false;
+            state.totalPaymentAmount = responseData?.orderTotal
         })
         builder.addCase(getOrderConfirmationDetails.rejected, (state) => {
             state.loading = false;
