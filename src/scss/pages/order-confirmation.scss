@@ -90,15 +90,40 @@
                     .OrderDetailTable {
                         box-shadow: none;
 
+                        .MuiTableCell-root {
+                            font-size: 16px;
+                            line-height: 26px;
+                        }
+
+                        .MuiTableCell-head {
+                            font-weight: 600;
+                        }
+
                         .OrderDetailsHeadRow {
                             background-color: rgba($blueCyan, 0.1);
                         }
 
-                        .ProductImage {
-                            max-width: 140px;
-                            max-height: 140px;
-                            margin-right: 30px;
+                        tbody {
+                            th {
+                                display: flex;
+                                align-items: center;
+                                gap: 20px;
+
+                                .ProductImage {
+                                    max-width: 140px;
+                                    max-height: 140px;
+                                    object-fit: contain;
+
+                                    @include media($sm) {
+                                        max-width: 100px;
+                                        max-height: 100px;
+                                    }
+                                }
+                            }
+
                         }
+
+
                     }
                 }
 

@@ -5,7 +5,7 @@ import { Box, Stack, Container, Typography, Icon, Button, TableContainer, Table,
 import GreenConfirmationIcon from "@/assets/icons/GreenConfirmationIcon";
 import LogoGoldCoin from "@/assets/logos/LogoGoldCoin.png";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
-import { OrderItem, getOrderConfirmationDetails } from "@/redux/reducers/orderConfirmationDetails";
+import { getOrderConfirmationDetails } from "@/redux/reducers/orderConfirmationDetails";
 import { ENDPOINTS } from "@/utils/constants";
 import { useAppSelector } from "@/hooks";
 import { rows } from "./order-details";
@@ -64,10 +64,10 @@ function OrderConfirmation(props: any) {
                                         <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
                                             <TableHead>
                                                 <TableRow className="OrderDetailsHeadRow">
-                                                    <TableCell sx={{ minWidth: "60%" }}>Name</TableCell>
-                                                    <TableCell sx={{ minWidth: "15%" }}>Price</TableCell>
-                                                    <TableCell sx={{ minWidth: "10%" }}>Quantity</TableCell>
-                                                    <TableCell sx={{ minWidth: "15%" }}>Total</TableCell>
+                                                    <TableCell sx={{ minWidth: "400px" }}>Name</TableCell>
+                                                    <TableCell sx={{ minWidth: "150px" }}>Price</TableCell>
+                                                    <TableCell sx={{ minWidth: "130px" }}>Quantity</TableCell>
+                                                    <TableCell sx={{ minWidth: "150px" }}>Total</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -77,14 +77,31 @@ function OrderConfirmation(props: any) {
                                                         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                                                     >
                                                         <TableCell component="th" scope="row">
-                                                            <img className="ProductImage" 
-                                                            src={row.imageUrl} alt="Product image" loading="lazy"></img>
+                                                            <img className="ProductImage"
+                                                                src={row.imageUrl} alt="Product image" loading="lazy"></img>
                                                             {row.productName}
                                                         </TableCell>
                                                         <TableCell>{row.unitPrice}</TableCell>
                                                         <TableCell>{row.quantity}</TableCell>
                                                         <TableCell>{row.subTotal}</TableCell>
                                                     </TableRow>
+
+                                                ))}
+                                                {orderConfirmationDetails?.orderItems?.map((row) => (
+                                                    <TableRow
+                                                        key={row.productId}
+                                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                    >
+                                                        <TableCell component="th" scope="row">
+                                                            <img className="ProductImage"
+                                                                src={row.imageUrl} alt="Product image" loading="lazy"></img>
+                                                            {row.productName}
+                                                        </TableCell>
+                                                        <TableCell>{row.unitPrice}</TableCell>
+                                                        <TableCell>{row.quantity}</TableCell>
+                                                        <TableCell>{row.subTotal}</TableCell>
+                                                    </TableRow>
+
                                                 ))}
                                             </TableBody>
                                         </Table>
