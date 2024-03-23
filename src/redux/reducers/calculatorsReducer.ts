@@ -19,7 +19,8 @@ interface CalculatorsData {
     calculators: Calculator[],
     shipping: number,
     insurance: number,
-    vaultStorage: number
+    vaultStorage: number,
+    openai: []
 }
 
 const initialState: CalculatorsData = {
@@ -28,7 +29,8 @@ const initialState: CalculatorsData = {
     calculators: [],
     shipping: 0.00,
     insurance: 0.00,
-    vaultStorage: 0.00
+    vaultStorage: 0.00,
+    openai: []
 }
 
 export const saveCalculatorsData = appCreateAsyncThunk(
@@ -40,6 +42,13 @@ export const saveCalculatorsData = appCreateAsyncThunk(
         }
     }) => {
         return await CalculatorsServices.saveCalculatorsData(url, body);
+    }
+)
+
+export const getAIdata = appCreateAsyncThunk(
+    'getAIdata',
+    async ({ question }: { question: any }) => {
+        return await CalculatorsServices.getAIdata(question)
     }
 )
 
@@ -59,7 +68,7 @@ export const calculatorsPagesSlice = createSlice({
         },
         removeCalculator(state, action) {
             const calculatorIndex = action.payload;
-            state.calculators.splice(calculatorIndex,1)
+            state.calculators.splice(calculatorIndex, 1)
         }
     },
 
@@ -78,9 +87,21 @@ export const calculatorsPagesSlice = createSlice({
         builder.addCase(saveCalculatorsData.rejected, (state) => {
             state.loading = false;
         })
+
+        builder.addCase(getAIdata.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(getAIdata.fulfilled, (state, action) => {
+            const responseData = action?.payload?.data?.data;
+            state.openai = responseData;
+            state.loading = false;
+        })
+        builder.addCase(getAIdata.rejected, (state) => {
+            state.loading = false;
+        })
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse,addCalculator, removeCalculator } = calculatorsPagesSlice.actions;
+export const { setLoadingTrue, setLoadingFalse, addCalculator, removeCalculator } = calculatorsPagesSlice.actions;
 
 export default calculatorsPagesSlice.reducer

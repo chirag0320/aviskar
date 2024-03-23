@@ -40,7 +40,9 @@ export const ENDPOINTS = {
     addToWishList: "wishlist/rPpCvZNFeEOtE0ESOjGGeQ",
     addWishListToShoppingCart: "Wishlist/nxJzG70390aEbLTm6J0Qsg",
     checkoutDetails: 'Checkout/xT3hjqkBFESvUfuMu8T70A',
-    addOrEditAddress: "myvault/mIKu7TMRFUW49i97slxpDg"
+    addOrEditAddress: "myvault/mIKu7TMRFUW49i97slxpDg",
+    qmintopenaidata: 'MyVault/WqNoMqgI93gqVTfe986gYQ'
+
 }
 export const StoreData = {
     storeCode: 12,
