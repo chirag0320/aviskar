@@ -247,14 +247,14 @@ function AboutProduct({ productId }: any) {
             <Divider />
             <Stack className="SocialConnects">
               <Button color="secondary" className="IconWithText" onClick={async () => {
-                  await dispatch(addToWishList({
-                    url: ENDPOINTS.addToWishList,
-                    body: {
-                      productId: productId,
-                      quantity: 1
-                    }
-                  }) as any)
-                }} >
+                await dispatch(addToWishList({
+                  url: ENDPOINTS.addToWishList,
+                  body: {
+                    productId: productId,
+                    quantity: 1
+                  }
+                }) as any)
+              }} >
                 <Box className="IconWrapper"><HeartIcon /></Box>
                 <Typography variant="overline">Wishlist</Typography>
               </Button>
@@ -333,19 +333,19 @@ function AboutProduct({ productId }: any) {
                       <Table size="small">
                         <TableHead>
                           <TableRow>
-                            <TableCell align="center"><Typography variant="subtitle1">Quantity</Typography></TableCell>
                             <TableCell align="center"><Typography variant="subtitle1">Product Name</Typography></TableCell>
+                            <TableCell align="center"><Typography variant="subtitle1">Quantity</Typography></TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
                           {productDetailsData?.bulkProduct.map((bulkProduct: { quantity: number, productName: any }) => (
                             <TableRow key={bulkProduct.quantity} >
                               <TableCell align="center">
-                                <Typography>{bulkProduct.quantity}</Typography>
+                                <Typography>{bulkProduct.productName}</Typography>
                                 <Divider />
                               </TableCell>
-                              <TableCell align="left" style={{ wordWrap: "break-word" }}>
-                                <Typography>{bulkProduct.productName}</Typography>
+                              <TableCell align="center" style={{ wordWrap: "break-word" }}>
+                                <Typography>{bulkProduct.quantity}</Typography>
                                 <Divider />
                               </TableCell>
                             </TableRow>
