@@ -129,7 +129,7 @@ function Step2() {
   }
 
   const removeItemFromCart = (productId: number) => {
-    const updatedCartItem = cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId)
+    const updatedCartItem = cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== productId)
     setCartItemsWithLivePrice(updatedCartItem);
     dispatch(updateFinalDataForTheCheckout({ cartItemsWithLivePrice: updatedCartItem }))
   }
