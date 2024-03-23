@@ -14,8 +14,34 @@ import { OutlinedCheckIcon } from "@/assets/icons"
 import OTPConfirmation from "./OTPConfirmation"
 import { roundOfThePrice, shipmentTypeToEnum } from "@/utils/common"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
-import { checkValidationOnConfirmOrder, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation } from "@/redux/reducers/checkoutReducer"
+import { checkValidationOnConfirmOrder, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation, placeOrder } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
+
+export interface PlaceOrderBody {
+  OrderCustomerID: number;
+  BillingAddressId: number;
+  ShippingAddressId: number;
+  OrderItems: OrderItem[];
+  PaymentMethod: number;
+  ShippingMethod: number;
+  IsDifferentShippingMethod: boolean;
+  IsUsedRewardPoints: boolean;
+  AgentId: string;
+  Location: string;
+  Device: string;
+  Browser: string;
+  IsInstantBuy: boolean;
+}
+
+interface OrderItem {
+  ShoppingCartId: number;
+  ProductId: number;
+  ParentProductId: number;
+  Quantity: number;
+  ShippingMethod: number;
+}
+
+
 interface Product {
   productId: number;
   qty: number;
@@ -44,9 +70,11 @@ interface Body {
 
 function OrderSummary() {
   const dispatch = useAppDispatch()
-  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges } = useAppSelector((state) => state.checkoutPage)
+  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading } = useAppSelector((state) => state.checkoutPage)
   const [body, setBody] = useState<Body | null>(null)
   const [totalValueNeedToPayFromCraditCart, setTotalValueNeedToPayFromCraditCart] = useState<any>({ OrderTotal: 0 })
+  const [isConfirmOrderAPICalled, setIsConfirmOrderAPICalled] = useState(false)
+
   useEffect(() => {
     setBody({
       Postcode: finalDataForTheCheckout?.shippingAddress?.postcode?.toString(),
@@ -81,6 +109,52 @@ function OrderSummary() {
     )
   }
 
+  useEffect(() => {
+    if (isOTPEnabled) {
+      toggleOTPConfirmation()
+    }
+    else if (isConfirmOrderAPICalled) {
+      setIsConfirmOrderAPICalled(false)
+
+      const placeOrderFun = async () => {
+        // call place order API
+        const prepareBodyData: PlaceOrderBody = {
+          "OrderCustomerID": 1234,
+          "BillingAddressId": 12,
+          "ShippingAddressId": 12,
+          "OrderItems": [
+            {
+              "ShoppingCartId": 3212,
+              "ProductId": 1234,
+              "ParentProductId": 1234,
+              "Quantity": 23,
+              "ShippingMethod": 1
+            },
+            {
+              "ShoppingCartId": 234,
+              "ProductId": 1234,
+              "ParentProductId": 1234,
+              "Quantity": 23,
+              "ShippingMethod": 1
+            }
+          ],
+          "PaymentMethod": 1,
+          "ShippingMethod": 1,
+          "IsDifferentShippingMethod": true,
+          "IsUsedRewardPoints": false,
+          "AgentId": "",
+          "Location": "",
+          "Device": "",
+          "Browser": "",
+          "IsInstantBuy": false
+        }
+        dispatch(placeOrder({ url: ENDPOINTS.placeOrder, body: prepareBodyData }) as any);
+      }
+
+      placeOrderFun();
+    }
+  }, [isOTPEnabled])
+
   const onConfirmOrderHandler = () => {
     dispatch(checkValidationOnConfirmOrder({
       url: ENDPOINTS.checkValidationOnConfirmOrder, body: {
@@ -92,6 +166,7 @@ function OrderSummary() {
         UsedRewardPointAmount: 0.00
       }
     }))
+    setIsConfirmOrderAPICalled(true)
   }
 
   return (
@@ -126,7 +201,7 @@ function OrderSummary() {
         <Stack className="ActionWrapper">
           <Button color="secondary">Continue Shopping</Button>
           {/* <Button variant="contained" onClick={toggleOTPConfirmation} disabled={!finalDataForTheCheckout?.termAndServiceIsRead}>Confirm Order</Button> */}
-          <Button variant="contained" onClick={onConfirmOrderHandler} disabled={!finalDataForTheCheckout?.termAndServiceIsRead}>Confirm Order</Button>
+          <Button variant="contained" onClick={onConfirmOrderHandler} disabled={!finalDataForTheCheckout?.termAndServiceIsRead || loading}>Confirm Order</Button>
         </Stack>
       </Box>
       <OTPConfirmation open={openOTPConfirmation} onClose={toggleOTPConfirmation} />

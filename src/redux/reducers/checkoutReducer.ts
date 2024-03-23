@@ -137,7 +137,10 @@ interface CheckoutPageState {
     subTotal: number,
     finalDataForTheCheckout: any,
     insuranceAndTaxCalculation: Fees | null,
-    craditCardCharges: any
+    craditCardCharges: any,
+    isOTPEnabled: boolean | null,
+    isOTPSent: boolean | null,
+    isOTPVerified: boolean | null
 }
 const initialState: CheckoutPageState = {
     loading: false,
@@ -145,7 +148,10 @@ const initialState: CheckoutPageState = {
     subTotal: 0,
     finalDataForTheCheckout: null,
     insuranceAndTaxCalculation: null,
-    craditCardCharges: null
+    craditCardCharges: null,
+    isOTPEnabled: null,
+    isOTPSent: null,
+    isOTPVerified: null
 }
 
 export const getCheckoutPageData = appCreateAsyncThunk(
@@ -180,6 +186,27 @@ export const checkValidationOnConfirmOrder = appCreateAsyncThunk(
     }
 )
 
+export const orderPlaceOTPSend = appCreateAsyncThunk(
+    "orderPlaceOTPSend",
+    async ({ url, body }: { url: string, body: any }) => {
+        return await CheckoutPageServices.orderPlaceOTPSend(url, body)
+    }
+)
+
+export const orderPlaceOTPVerify = appCreateAsyncThunk(
+    "orderPlaceOTPVerify",
+    async ({ url, body }: { url: string, body: any }) => {
+        return await CheckoutPageServices.orderPlaceOTPVerify(url, body)
+    }
+)
+
+export const placeOrder = appCreateAsyncThunk(
+    "placeOrder",
+    async ({ url, body }: { url: string, body: any }) => {
+        return await CheckoutPageServices.placeOrder(url, body)
+    }
+)
+
 export const checkoutPage = createSlice({
     name: 'checkoutPage',
     initialState,
@@ -199,6 +226,10 @@ export const checkoutPage = createSlice({
         },
         updateFinalDataForTheCheckout: (state, action) => {
             state.finalDataForTheCheckout = { ...state.finalDataForTheCheckout, ...action.payload }
+        },
+        disableOTP: (state) => {
+            state.isOTPEnabled = false
+            state.isOTPVerified = false
         }
     },
 
@@ -241,15 +272,53 @@ export const checkoutPage = createSlice({
             state.loading = true
         })
         builder.addCase(checkValidationOnConfirmOrder.fulfilled, (state, action) => {
-            console.log(action.payload.data);
+            const responseData = action.payload.data.data;
+
+            state.isOTPEnabled = responseData.isOTPEnabled;
+            // state.isOTPSent = responseData.isOTPSent;
             state.loading = false;
         })
         builder.addCase(checkValidationOnConfirmOrder.rejected, (state, action) => {
             state.loading = false
         })
+
+        // orderPlaceOTPSend
+        builder.addCase(orderPlaceOTPSend.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(orderPlaceOTPSend.fulfilled, (state, action) => {
+            state.isOTPSent = true;
+            state.loading = false;
+        })
+        builder.addCase(orderPlaceOTPSend.rejected, (state, action) => {
+            state.loading = false
+        })
+
+        // orderPlaceOTPVerify
+        builder.addCase(orderPlaceOTPVerify.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(orderPlaceOTPVerify.fulfilled, (state, action) => {
+            state.isOTPVerified = true;
+            state.loading = false;
+        })
+        builder.addCase(orderPlaceOTPVerify.rejected, (state, action) => {
+            state.loading = false
+        })
+
+        // placeOrder
+        builder.addCase(placeOrder.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(placeOrder.fulfilled, (state, action) => {
+            state.loading = false;
+        })
+        builder.addCase(placeOrder.rejected, (state, action) => {
+            state.loading = false
+        })
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout } = checkoutPage.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout,disableOTP } = checkoutPage.actions
 
 export default checkoutPage.reducer

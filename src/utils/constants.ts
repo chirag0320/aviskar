@@ -42,8 +42,13 @@ export const ENDPOINTS = {
     checkoutDetails: 'Checkout/xT3hjqkBFESvUfuMu8T70A',
     checkValidationOnConfirmOrder: 'Checkout/NiJ7vYmnQ0CjUVyAoNalJQ',
     addOrEditAddress: "myvault/mIKu7TMRFUW49i97slxpDg",
-    calculateInsuranceAndTaxDetails:"calculator/a5n79zVvKUKbIgrXui6tmA",
-    calculateCraditCardCharges: "calculator/yGU45H6bwUuxggNPZF8R3g"
+    calculateInsuranceAndTaxDetails: "calculator/a5n79zVvKUKbIgrXui6tmA",
+    calculateCraditCardCharges: "calculator/yGU45H6bwUuxggNPZF8R3g",
+
+    // order place process
+    KioskPlaceOrderSendOTP: "orders/SnfaWtozdk6fvNoAMJE5ng/dPLcaeb7i0",
+    KioskPlaceOrderVerifyOTP: "orders/SZjOIofpwUakP3eKheaN2w/NRDAW78N8E",
+    placeOrder: "Checkout/e3eQr12FQ06Hpan2VxeMYg"
 }
 export const StoreData = {
     storeCode: 12,

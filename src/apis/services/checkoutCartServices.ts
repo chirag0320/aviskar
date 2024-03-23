@@ -20,6 +20,16 @@ class CheckoutPageServices {
     static async checkValidationOnConfirmOrder(url: string, body: any) {
         return axiosInstance.post(url, body);
     }
+    static async orderPlaceOTPSend(url: string, body: any) {
+        return axiosInstance.post(url, body);
+    }
+    static async orderPlaceOTPVerify(url: string, body: any) {
+        return axiosInstance.post(url, body);
+    }
+
+    static async placeOrder(url: string, body: any) {
+        return axiosInstance.post(url, body);
+    }
 }
 
 export default CheckoutPageServices
