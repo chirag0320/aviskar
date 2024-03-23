@@ -27,12 +27,14 @@ import {
 import useRemainingTime from "@/hooks/useRemainingTime";
 import { navigate } from "gatsby";
 import CountDownTimer from "../partials/productDetail/CountDownTImer";
+import { roundOfThePrice } from "@/utils/common";
 interface Iprops {
   name: string;
   value: number;
   charturl?: string;
   status: boolean;
   percentage: number;
+  move: any;
   tickerStyle?: {
     tickertype?: string;
     tickerboxfontcolor?: string;
@@ -51,7 +53,7 @@ interface ProductStockStatus {
 }
 
 export const StockReturnWithName = React.memo(
-  ({ name, value, charturl, status, percentage, tickerStyle }: Iprops) => {
+  ({ name, value, charturl, status, percentage, tickerStyle, move }: Iprops) => {
     return (
       <Stack
         className={classNames(
@@ -74,8 +76,8 @@ export const StockReturnWithName = React.memo(
         >
           <Box className="FlipContainer">
             <Box className="Flipper">
-              <Typography variant="body2" component="span" className="Value Front">{percentage}%</Typography>
-              <Typography variant="body2" component="span" className="Value Back">{Math.round((7 + percentage) * 100) / 100}$</Typography>
+              <Typography variant="body2" component="span" className="Value Front">{roundOfThePrice(percentage)}%</Typography>
+              <Typography variant="body2" component="span" className="Value Back">{roundOfThePrice(move)}$</Typography>
             </Box>
           </Box>
           {status ? <ChevronUp /> : <ChevronDown />}
@@ -92,8 +94,7 @@ export const AfterStockReturnWithName = React.memo(({ text }: any) => {
         text ? "Profit" : "Loss",
       ])}
     >
-      <Typography variant="overline" component="span" className="Name">
-        {text}
+      <Typography variant="overline" component="span" className="Name" dangerouslySetInnerHTML={{__html: text}}>
       </Typography>
     </Stack>
   );

@@ -28,14 +28,14 @@ interface IApiResponse<T> {
 function Pricing() {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { data }: IApiResponse<ItickerData> = useApiRequest(ENDPOINTS.getTicker, 'get', null, 60);
-
+  console.log(data?.data, "data?.data")
   const renderedStockItems = useMemo(() => {
     const tickerStyle = {
       tickerboxfontcolor: configDetailsState?.tickerboxfontcolor?.value,
       tickertype: configDetailsState?.tickertype?.value,
     }
     return data?.data?.map((stock) => (
-      <StockReturnWithName key={stock.name} name={stock.name} value={stock.current} charturl={stock.charturl} status={stock.position === 1} percentage={stock.percentage} tickerStyle={tickerStyle} />
+      <StockReturnWithName key={stock.name} name={stock.name} value={stock.current} charturl={stock.charturl} status={stock.position === 1} percentage={stock.percentage} move={stock.move} tickerStyle={tickerStyle} />
     ));
   }, [data]);
   const renderdTextAfterText = useMemo(() => {
