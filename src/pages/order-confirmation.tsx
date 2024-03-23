@@ -10,10 +10,11 @@ import { ENDPOINTS } from "@/utils/constants";
 import { useAppSelector } from "@/hooks";
 
 function OrderConfirmation(props: any) {
+    const orderId = props.location?.search?.split('=')[1];
     const orderConfirmationDetails = useAppSelector(state => state.orderConfirmationDetails);
     useAPIoneTime({
         service: getOrderConfirmationDetails,
-        endPoint: ENDPOINTS.orderConfimationDetails + "27025"
+        endPoint: ENDPOINTS.orderConfimationDetails + orderId
     })
     return (
         <Layout>

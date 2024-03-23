@@ -5,6 +5,7 @@ import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import CheckoutPageServices from '@/apis/services/checkoutCartServices'
 import { any } from 'prop-types'
 import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
+import { navigate } from 'gatsby'
 export type customerDetails = {
     "customerId": number,
     "email": string,
@@ -141,7 +142,8 @@ interface CheckoutPageState {
     craditCardCharges: any,
     isOTPEnabled: boolean | null,
     isOTPSent: boolean | null,
-    isOTPVerified: boolean | null
+    isOTPVerified: boolean | null,
+    orderId: number | null
 }
 const initialState: CheckoutPageState = {
     loading: false,
@@ -152,7 +154,8 @@ const initialState: CheckoutPageState = {
     subTotal: Number(JSON.parse(localStorageGetItem("checkoutPageData") ?? '0')) || 0,
     finalDataForTheCheckout: JSON.parse(localStorageGetItem("finalDataForTheCheckout") ?? JSON.stringify({})) ?? null,
     insuranceAndTaxCalculation: (isBrowser && JSON.parse(localStorageGetItem("insuranceAndTaxCalculation") ?? JSON.stringify({}))) ?? null,
-    craditCardCharges: (isBrowser && JSON.parse(localStorageGetItem("craditCardCharges") ?? JSON.stringify({}))) ?? null
+    craditCardCharges: (isBrowser && JSON.parse(localStorageGetItem("craditCardCharges") ?? JSON.stringify({}))) ?? null,
+    orderId: null
 }
 
 export const getCheckoutPageData = appCreateAsyncThunk(
@@ -318,6 +321,8 @@ export const checkoutPage = createSlice({
             state.loading = true
         })
         builder.addCase(placeOrder.fulfilled, (state, action) => {
+            const responseData = action.payload.data.data;
+            state.orderId = responseData.orderId;
             state.loading = false;
         })
         builder.addCase(placeOrder.rejected, (state, action) => {

@@ -72,14 +72,14 @@ export const orderConfirmationDetailsPageSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(getOrderConfirmationDetails.fulfilled, (state, action) => {
-            const responseData = action.payload.data.data;
-            console.log('responseData', responseData);
+            const responseData = action.payload.data?.data;
 
-            state.orderId = responseData.orderId;
-            state.orderDate = responseData.orderDate;
-            state.orderTime = responseData.orderTime;
-            state.orderNumber = responseData.orderNumber;
-            state.orderItems = responseData.orderItems;
+            if(!responseData) return;
+            state.orderId = responseData?.orderId;
+            state.orderDate = responseData?.orderDate;
+            state.orderTime = responseData?.orderTime;
+            state.orderNumber = responseData?.orderNumber;
+            state.orderItems = responseData?.orderItems;
             state.totalPaymentAmount = 0;
             for (let i = 0; i < state.orderItems.length; i++) {
                 state.totalPaymentAmount = state.totalPaymentAmount + state.orderItems[i].orderTotal;

@@ -17,6 +17,7 @@ import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { checkValidationOnConfirmOrder, disableOTP, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation, placeOrder } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import useDeviceDetails from "@/hooks/useDeviceDetails"
+import { navigate } from "gatsby"
 
 export interface PlaceOrderBody {
   OrderCustomerID: number;
@@ -73,11 +74,10 @@ function OrderSummary() {
   const dispatch = useAppDispatch()
   const { deviceInfo, locationInfo }: any = useDeviceDetails()
   console.log("🚀 ~ OrderSummary ~ deviceInfo, locationInfo:", deviceInfo, locationInfo)
-  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading } = useAppSelector((state) => state.checkoutPage)
+  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading,orderId } = useAppSelector((state) => state.checkoutPage)
   console.log("🚀 ~ OrderSummary ~ finalDataForTheCheckout:", finalDataForTheCheckout)
   const [body, setBody] = useState<Body | null>(null)
   const [totalValueNeedToPayFromCraditCart, setTotalValueNeedToPayFromCraditCart] = useState<any>({ OrderTotal: 0 })
-  const [isConfirmOrderAPICalled, setIsConfirmOrderAPICalled] = useState(false)
 
   useEffect(() => {
     setBody({
@@ -112,6 +112,12 @@ function OrderSummary() {
       </Stack>
     )
   }
+
+  useEffect(() => {
+    if(orderId){
+      navigate(`/order-confirmation/?id=${orderId}`)
+    }
+  },[orderId])
 
   useEffect(() => {
     if (isOTPEnabled) {
@@ -161,7 +167,6 @@ function OrderSummary() {
         UsedRewardPointAmount: 0.00
       }
     }))
-    setIsConfirmOrderAPICalled(true)
   }
 
   return (
