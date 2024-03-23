@@ -217,7 +217,21 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             arrow
           >
             <Box className="Content">
-              <Typography variant="body2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, consequuntur. </Typography>
+              <Typography variant="body2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, consequuntur fgdbh. </Typography>
+              {product?.priceWithDetails?.tierPriceList?.map((price) => {
+                return (
+                  <Fragment
+                    key={`${price.fromQty} - ${price.toQty} ${price.price}`}
+                  >
+                    <Typography className="Item">
+                      {price.fromQty} - {price.toQty} Items
+                    </Typography>
+                    <Typography className="ItemPrice">
+                      ${price.price}
+                    </Typography>
+                  </Fragment>
+                );
+              })}
             </Box>
           </ClickTooltip>
         }
