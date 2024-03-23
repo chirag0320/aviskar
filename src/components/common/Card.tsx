@@ -193,7 +193,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             </Box>
           </ClickTooltip>
         ) : null}
-        
+
         <Button name='discoverMore' aria-label='discoverMore' variant="contained" onClick={() => {
           navigate(`/product-details/${product?.friendlypagename}`) //friendlypagename
         }} className="PrimaryAction" fullWidth>Discover More</Button>
@@ -219,6 +219,12 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             arrow
           >
             <Box className="Offers">
+              <Typography className="ItemPrice">
+                Name
+              </Typography>
+              <Typography className="ItemPrice" sx={{marginRight: "5px"}}>
+                Qty 
+              </Typography>
               {product?.bulkProduct?.map((product: any) => {
                 return (
                   <Fragment
@@ -228,7 +234,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                       {product?.productName}
                     </Typography>
                     <Typography className="ItemPrice">
-                      { product?.quantity}
+                      {product?.quantity}
                     </Typography>
                   </Fragment>
                 );
