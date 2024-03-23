@@ -4,7 +4,8 @@ import { RightArrow } from '@/assets/icons'
 import { useAppSelector } from '@/hooks'
 import { navigate } from 'gatsby'
 
-const CartOrderSummary = ({ isShoppingCartUpdated }: { isShoppingCartUpdated: boolean }) => {
+// const CartOrderSummary = ({ isShoppingCartUpdated }: { isShoppingCartUpdated: boolean }) => {
+const CartOrderSummary = () => {
     const subTotal = useAppSelector(state => state.shoppingCart.subTotal);
 
     return (
@@ -27,10 +28,13 @@ const CartOrderSummary = ({ isShoppingCartUpdated }: { isShoppingCartUpdated: bo
                     <Typography variant="subtitle1">Calculated during checkout </Typography>
                 </Stack>
             </Box>
-            {isShoppingCartUpdated && <Typography variant="body2" className='CartUpdatedMessage'>Cart updated</Typography>}
             <Button className='ProceedtoCheckoutBtn' size='large' variant="contained" onClick={() => {
                 navigate('/checkout')
-            }} disabled={isShoppingCartUpdated}>Proceed to Checkout</Button>
+            }} >Proceed to Checkout</Button>
+            {/* {isShoppingCartUpdated && <Typography variant="body2" className='CartUpdatedMessage'>Cart updated</Typography>}
+            <Button className='ProceedtoCheckoutBtn' size='large' variant="contained" onClick={() => {
+                navigate('/checkout')
+            }} disabled={isShoppingCartUpdated}>Proceed to Checkout</Button> */}
         </Box>
     )
 }
