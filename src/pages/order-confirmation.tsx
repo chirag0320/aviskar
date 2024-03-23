@@ -1,11 +1,20 @@
-import React from "react"
+import React, { Fragment, useEffect } from "react"
 import Seo from "../components/common/Seo"
 import Layout from "@/components/common/Layout";
 import { Box, Stack, Container, Typography, Icon, Button } from "@mui/material"
 import GreenConfirmationIcon from "@/assets/icons/GreenConfirmationIcon";
 import LogoGoldCoin from "@/assets/logos/LogoGoldCoin.png";
+import useAPIoneTime from "@/hooks/useAPIoneTime";
+import { OrderItem, getOrderConfirmationDetails } from "@/redux/reducers/orderConfirmationDetails";
+import { ENDPOINTS } from "@/utils/constants";
+import { useAppSelector } from "@/hooks";
 
-function OrderConfirmation() {
+function OrderConfirmation(props: any) {
+    const orderConfirmationDetails = useAppSelector(state => state.orderConfirmationDetails);
+    useAPIoneTime({
+        service: getOrderConfirmationDetails,
+        endPoint: ENDPOINTS.orderConfimationDetails + "27025"
+    })
     return (
         <Layout>
             <>
@@ -23,26 +32,31 @@ function OrderConfirmation() {
                         <Box className="DetailsWrapper">
                             <Box className="ThankyouWrapper">
                                 <Typography className="ThankyouText">Thank you for choosing Queensland Mint</Typography>
-                                <Typography variant="subtitle2" className="OrderID">Your order # is: 872608526</Typography>
+                                <Typography variant="subtitle2" className="OrderID">Your order id is: {orderConfirmationDetails.orderId}</Typography>
                                 <Typography variant="body1">You will receive an order confirmation email with details of your order and a link to track its progress.</Typography>
                             </Box>
                             <Box className="OrderDetailsWrapper">
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Order No.</Typography>
-                                    <Typography variant="subtitle1">872608526</Typography>
+                                    <Typography variant="subtitle1">{orderConfirmationDetails.orderNumber}</Typography>
                                 </Stack>
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Transaction Date and Time</Typography>
-                                    <Typography variant="subtitle1">872608526</Typography>
+                                    <Typography variant="subtitle1">{orderConfirmationDetails.orderTime}, {orderConfirmationDetails.orderDate}</Typography>
                                 </Stack>
                                 <Stack className="TitleValueWrapper Orders">
                                     <Typography variant="body1" className="Title">Orders</Typography>
                                     <Stack className="LogoWrapper">
-                                        <img src={LogoGoldCoin} alt="Logo" />
-                                        <Box sx={{ padding: "6px 0" }}>
-                                            <Typography variant="subtitle1">2024 1oz Lunar Series III</Typography>
-                                            <Typography>$204.22</Typography>
-                                        </Box>
+
+                                        {orderConfirmationDetails.orderItems.map((item: OrderItem, index: number) => (
+                                            <Fragment key={item.productId}>
+                                                <img src={item.imageUrl} alt="Logo" />
+                                                <Box className="OrderItem">
+                                                    <Typography variant="subtitle1">{item.productName}</Typography>
+                                                    <Typography variant="subtitle1">{item.orderTotal}</Typography>
+                                                </Box>
+                                            </Fragment>
+                                        ))}
                                     </Stack>
                                 </Stack>
                                 <Stack className="TitleValueWrapper">
@@ -51,7 +65,7 @@ function OrderConfirmation() {
                                 </Stack>
                                 <Stack className="TitleValueWrapper PaymentAmountWrapper">
                                     <Typography variant="body1" className="Title">Payment Amount</Typography>
-                                    <Typography variant="subtitle1">$321.00</Typography>
+                                    <Typography variant="subtitle1">${orderConfirmationDetails.totalPaymentAmount}</Typography>
                                 </Stack>
                             </Box>
                             <Box className="BottomContentWrapper">

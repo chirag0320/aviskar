@@ -11,6 +11,7 @@ import calculatorsReducer from './reducers/calculatorsReducer'
 import shoppingCartReducer from './reducers/shoppingCartReducer'
 import compareProductsReducer from './reducers/compareProductsReducer'
 import wishListReducer from './reducers/wishListReducer'
+import orderConfirmationDetails, { orderConfirmationDetailsPageSlice } from './reducers/orderConfirmationDetails';
 // Configuration for redux-persist
 const persistConfig = {
   key: 'root',
@@ -33,7 +34,8 @@ const store = configureStore({
     calculators: persistReducer(persistConfig, calculatorsReducer),
     checkoutPage: checkoutPageReducer,
     compareProducts: persistReducer(persistConfig, compareProductsReducer),
-    wishList : wishListReducer
+    wishList: wishListReducer,
+    orderConfirmationDetails: orderConfirmationDetailsPageSlice.reducer,
 
 
     // profile: persistedProfileReducer,

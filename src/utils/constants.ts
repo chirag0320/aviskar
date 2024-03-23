@@ -49,7 +49,10 @@ export const ENDPOINTS = {
     // order place process
     KioskPlaceOrderSendOTP: "orders/SnfaWtozdk6fvNoAMJE5ng/dPLcaeb7i0",
     KioskPlaceOrderVerifyOTP: "orders/SZjOIofpwUakP3eKheaN2w/NRDAW78N8E",
-    placeOrder: "Checkout/e3eQr12FQ06Hpan2VxeMYg"
+    placeOrder: "Checkout/e3eQr12FQ06Hpan2VxeMYg",
+
+    // order confimation
+    orderConfimationDetails: "Checkout/i6GZ9e5bWEOWTnfRwpSIVg/",
 }
 export const StoreData = {
     storeCode: 12,

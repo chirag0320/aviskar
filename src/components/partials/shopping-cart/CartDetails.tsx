@@ -19,7 +19,7 @@ export type CartItemsWithLivePriceDetails = CartItem & {
 
 // const CartDetails = ({ setSubTotal }: { setSubTotal: Dispatch<SetStateAction<number>> }) => {
 const CartDetails = () => {
-// const CartDetails = ({ isShoppingCartUpdated, setIsShoppingCartUpdated }: { isShoppingCartUpdated: boolean, setIsShoppingCartUpdated: React.Dispatch<React.SetStateAction<boolean>> }) => {
+    // const CartDetails = ({ isShoppingCartUpdated, setIsShoppingCartUpdated }: { isShoppingCartUpdated: boolean, setIsShoppingCartUpdated: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const loading = useAppSelector(state => state.shoppingCart.loading);
     const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
     const [productIds, setProductIds] = useState({})
@@ -68,7 +68,7 @@ const CartDetails = () => {
         setQuantities(prevQuantities => ({ ...prevQuantities, [id]: prevQuantities[id] + 1 }));
         // setIsShoppingCartUpdated(true);
     }
-    
+
     const decreaseQuantity = (id: number) => {
         setQuantities(prevQuantities => ({ ...prevQuantities, [id]: prevQuantities[id] - 1 }));
         // setIsShoppingCartUpdated(true);
@@ -77,7 +77,7 @@ const CartDetails = () => {
     const removeItemFromCart = async (id: number) => {
         // optimistic update needs(currentlt not)
         await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: [id] }) as any);
-        setCartItemsWithLivePrice(()=>cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== id));
+        setCartItemsWithLivePrice(() => cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== id));
     }
 
     const updateCartHandler = async (isapiCallNeeded?: boolean) => {
@@ -110,18 +110,19 @@ const CartDetails = () => {
     return (
         <Box className="ShoppingCartDetails">
             <Box className="ShoppingProductsDetailsWrapper">
+                {cartItemsWithLivePrice && cartItemsWithLivePrice.length === 0 && <Typography variant="body1" style={{textAlign:"center"}}>No items in the cart</Typography>}
                 {cartItemsWithLivePrice?.length > 0 && cartItemsWithLivePrice?.map((cartItem) => {
                     return (
                         <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={true} hideRightSide={true} quantity={quantities[cartItem.id]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
                     )
                 })}
-                <Typography variant="body1"><Typography component="span" className="Note">Note:</Typography> Prices are live prices and will be locked on confirm order. </Typography>
+                {cartItemsWithLivePrice?.length > 0 && <Typography variant="body1"><Typography component="span" className="Note">Note:</Typography> Prices are live prices and will be locked on confirm order. </Typography>}
             </Box>
             <Stack className="BottomCartActionsWrapper">
                 <Button className='LeftArrow' startIcon={<LeftArrow />} color='secondary' onClick={() => navigate("/shop")} disabled={loading}> Continue Shopping</Button>
                 <Stack className='ClearUpdateCartWrapper'>
-                    <Button className="ClearShoppingCart" color='secondary' onClick={clearCartHandler} disabled={loading}>Clear Shopping Cart</Button>
-                    <Button className='UpdateCartBtn' size='large' variant="contained" onClick={() => updateCartHandler(true)} disabled={loading}>Update Shopping Cart</Button>
+                    <Button className="ClearShoppingCart" color='secondary' onClick={clearCartHandler} disabled={loading || cartItemsWithLivePrice.length === 0}>Clear Shopping Cart</Button>
+                    <Button className='UpdateCartBtn' size='large' variant="contained" onClick={() => updateCartHandler(true)} disabled={loading || cartItemsWithLivePrice.length === 0}>Update Shopping Cart</Button>
                 </Stack>
             </Stack>
         </Box>
