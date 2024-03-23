@@ -14,6 +14,7 @@ import { useAppSelector } from "@/hooks"
 import { useMediaQuery } from "@mui/material";
 import Layout from "@/components/common/Layout";
 import useUserDetailsFromToken from "@/hooks/useUserDetailsFromToken";
+import Toaster from "@/components/common/Toaster";
 
 function IndexPage() {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)

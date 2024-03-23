@@ -27,18 +27,26 @@ interface CreateGuidelineState {
   isLoggedIn: boolean,
   loadingForSignIn: boolean,
   mebershipPlanDetailsData: any,
-  recentlyViewedProducts: any[]
+  recentlyViewedProducts: any[],
+  openToaster: boolean,
+  buttonText: string,
+  redirectButtonUrl: string,
+  toasterMessage: string
 }
 const initialState: CreateGuidelineState = {
   configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
   loading: false,
-  sectionDetails: isBrowser && JSON.parse(localStorageGetItem('sectionDetails') ?? JSON.stringify({1: {},2: {}})),
+  sectionDetails: isBrowser && JSON.parse(localStorageGetItem('sectionDetails') ?? JSON.stringify({ 1: {}, 2: {} })),
   categoriesList: isBrowser && JSON.parse(localStorageGetItem('categoriesList') ?? JSON.stringify(({}))),
   userDetails: isBrowser && JSON.parse(localStorageGetItem('userDetails') || JSON.stringify({})),
   isLoggedIn: isBrowser && JSON.parse(localStorageGetItem('isLoggedIn') || JSON.stringify(false)),
   loadingForSignIn: false,
   mebershipPlanDetailsData: isBrowser && JSON.parse(localStorageGetItem('mebershipPlanDetailsData') ?? JSON.stringify({})),
-  recentlyViewedProducts: isBrowser && JSON.parse(localStorageGetItem('recentlyViewedProducts') ?? JSON.stringify([]))
+  recentlyViewedProducts: isBrowser && JSON.parse(localStorageGetItem('recentlyViewedProducts') ?? JSON.stringify([])),
+  openToaster: false,
+  buttonText: '',
+  redirectButtonUrl: '',
+  toasterMessage: ''
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -112,8 +120,8 @@ export const createHomepageSlice = createSlice({
     resetWholeHomePageData: (state) => {
       state.configDetails = {}
       state.mebershipPlanDetailsData = {}
-      localStorageSetItem('configDetails',JSON.stringify(state.configDetails))
-      localStorageSetItem('mebershipPlanDetailsData',JSON.stringify(state.mebershipPlanDetailsData))
+      localStorageSetItem('configDetails', JSON.stringify(state.configDetails))
+      localStorageSetItem('mebershipPlanDetailsData', JSON.stringify(state.mebershipPlanDetailsData))
     },
     setLoadingTrue: (state) => {
       state.loading = true
@@ -136,8 +144,23 @@ export const createHomepageSlice = createSlice({
         state.recentlyViewedProducts.unshift(newProductId);
         localStorageSetItem('recentlyViewedProducts', JSON.stringify(state.recentlyViewedProducts))
       }
-    }
-
+    },
+    setToasterState: (state, action) => {
+      console.log("🚀 ~ action:", action)
+      state.openToaster = action.payload.openToaster
+      state.toasterMessage = action.payload.toasterMessage
+      state.buttonText = action.payload.buttonText
+      state.redirectButtonUrl = action.payload.redirectButtonUrl
+    },
+    // setToasterMeaasge: (state, action) => {
+    //   state.toasterMessage = action.payload
+    // },
+    // setButtonText: (state, action) => {
+    //   state.buttonText = action.payload
+    // },
+    // setRedirectUrl: (state, action) => {
+    //   state.redirectButtonUrl = action.payload
+    // }
   },
 
   extraReducers: (builder) => {
@@ -248,6 +271,6 @@ export const createHomepageSlice = createSlice({
   },
 })
 
-export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct } = createHomepageSlice.actions
+export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState } = createHomepageSlice.actions
 
 export default createHomepageSlice.reducer
