@@ -193,13 +193,15 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             </Box>
           </ClickTooltip>
         ) : null}
+        
         <Button name='discoverMore' aria-label='discoverMore' variant="contained" onClick={() => {
           navigate(`/product-details/${product?.friendlypagename}`) //friendlypagename
         }} className="PrimaryAction" fullWidth>Discover More</Button>
+
         {product.isBundle &&
           <ClickTooltip
             open={open}
-            className="TooltipStack"
+            className="TooltipOfferTag"
             placement="bottom-start"
             onClose={handleTooltipClose}
             onClickAway={handleClickAway}
@@ -216,18 +218,17 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             lightTheme
             arrow
           >
-            <Box className="Content">
-              <Typography variant="body2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, consequuntur fgdbh. </Typography>
-              {product?.priceWithDetails?.tierPriceList?.map((price) => {
+            <Box className="Offers">
+              {product?.bulkProduct?.map((product: any) => {
                 return (
                   <Fragment
-                    key={`${price.fromQty} - ${price.toQty} ${price.price}`}
+                    key={product?.productName}
                   >
                     <Typography className="Item">
-                      {price.fromQty} - {price.toQty} Items
+                      {product?.productName}
                     </Typography>
                     <Typography className="ItemPrice">
-                      ${price.price}
+                      { product?.quantity}
                     </Typography>
                   </Fragment>
                 );
@@ -235,6 +236,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             </Box>
           </ClickTooltip>
         }
+
         <IconButton className="Outlined AddToCart" onClick={async () => {
           await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
             "productId": product.productId,
