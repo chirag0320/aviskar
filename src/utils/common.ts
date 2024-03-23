@@ -33,3 +33,11 @@ export const shipmentTypeToEnum:any = {
   'SecureShipping': 2,
   'VaultStorage': 1
 }
+export const isBrowser = typeof window !== "undefined"
+export function localStorageGetItem(key:any){
+ return isBrowser && key ? localStorage?.getItem(key) : ''
+  }
+
+export function localStorageSetItem(key:any, value:any){
+  isBrowser && localStorage?.setItem(key,typeof value !== 'string' ?JSON.stringify(value) : value)
+}

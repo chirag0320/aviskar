@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import ContactUsServices from '@/apis/services/ContactUsServices'
 import { ConfigDetails, ContactUsFormDetails, Reason } from '@/types/contactUs'
+import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 // Services
 
 interface ContactUsData {
@@ -16,8 +17,8 @@ interface ContactUsData {
 
 const initialState: ContactUsData = {
     loading: false,
-    reasonsForContact: JSON.parse(localStorage.getItem('reasonsForContact') ?? '[]'),
-    html: JSON.parse(localStorage.getItem('html') ?? '{}')
+    reasonsForContact: isBrowser && JSON.parse(localStorageGetItem('reasonsForContact') ?? '[]'),
+    html: isBrowser && JSON.parse(localStorageGetItem('html') ?? '{}')
 }
 
 export const saveContactUsDetails = appCreateAsyncThunk(
@@ -61,7 +62,7 @@ export const contactUsPageSlice = createSlice({
             const responseData = action.payload.data;
             state.reasonsForContact = responseData.data;
             state.loading = false;
-            localStorage.setItem('reasonsForContact',responseData.data)
+            localStorageSetItem('reasonsForContact',JSON.stringify(responseData.data))
         })
         builder.addCase(getReasonsForContactUs.rejected, (state) => {
             state.loading = false;
@@ -88,7 +89,7 @@ export const contactUsPageSlice = createSlice({
             });
 
             state.html = config;
-            localStorage.setItem('html', JSON.stringify(config))
+            localStorageSetItem('html', JSON.stringify(config))
         })
         builder.addCase(getConfiguration.rejected, (state) => {
             state.loading = false;

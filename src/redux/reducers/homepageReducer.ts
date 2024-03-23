@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 // Types
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import ConfigServices, { IloginUserBody } from '@/apis/services/ConfigServices'
+import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 
 // Services
 
@@ -29,15 +30,15 @@ interface CreateGuidelineState {
   recentlyViewedProducts: any[]
 }
 const initialState: CreateGuidelineState = {
-  configDetails: JSON.parse(localStorage.getItem('configDetails') ?? '{}'),
+  configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? '{}'),
   loading: false,
-  sectionDetails: JSON.parse(localStorage.getItem('sectionDetails') ?? '{1: {},2: {}}'),
-  categoriesList: JSON.parse(localStorage.getItem('categoriesList') ?? '{}'),
+  sectionDetails: isBrowser && JSON.parse(localStorageGetItem('sectionDetails') ?? '{1: {},2: {}}'),
+  categoriesList: isBrowser && JSON.parse(localStorageGetItem('categoriesList') ?? '{}'),
   userDetails: null,
   isLoggedIn: false,
   loadingForSignIn: false,
-  mebershipPlanDetailsData: JSON.parse(localStorage.getItem('mebershipPlanDetailsData') ?? '{}'),
-  recentlyViewedProducts: JSON.parse(localStorage.getItem('recentlyViewedProducts') ?? '[]')
+  mebershipPlanDetailsData: isBrowser && JSON.parse(localStorageGetItem('mebershipPlanDetailsData') ?? '{}'),
+  recentlyViewedProducts: isBrowser && JSON.parse(localStorageGetItem('recentlyViewedProducts') ?? '[]')
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -111,6 +112,8 @@ export const createHomepageSlice = createSlice({
     resetWholeHomePageData: (state) => {
       state.configDetails = {}
       state.mebershipPlanDetailsData = {}
+      localStorageSetItem('configDetails',JSON.stringify(state.configDetails))
+      localStorageSetItem('mebershipPlanDetailsData',JSON.stringify(state.mebershipPlanDetailsData))
     },
     setLoadingTrue: (state) => {
       state.loading = true
@@ -126,10 +129,12 @@ export const createHomepageSlice = createSlice({
         // Product does not exist, add it to the list
         state.recentlyViewedProducts.unshift(newProductId);
         state.recentlyViewedProducts = state?.recentlyViewedProducts?.length > 20 ? state.recentlyViewedProducts.splice(0, 20) : state.recentlyViewedProducts
+        localStorageSetItem('recentlyViewedProducts', JSON.stringify(state.recentlyViewedProducts))
       } else {
         // Product already exists, remove it from its current position and add it to the beginning of the list
         state.recentlyViewedProducts.splice(existingIndex, 1);
         state.recentlyViewedProducts.unshift(newProductId);
+        localStorageSetItem('recentlyViewedProducts', JSON.stringify(state.recentlyViewedProducts))
       }
     }
 
@@ -147,7 +152,7 @@ export const createHomepageSlice = createSlice({
       }, {})
       state.configDetails = data
       state.loading = false
-      localStorage.setItem('configDetails',data)
+      localStorageSetItem('configDetails', JSON.stringify(data))
     })
     builder.addCase(configDetails.rejected, (state, action) => {
       state.loading = false
@@ -159,7 +164,7 @@ export const createHomepageSlice = createSlice({
     })
     builder.addCase(membershipPlanDetails.fulfilled, (state, action) => {
       state.mebershipPlanDetailsData = action?.payload?.data?.data
-      localStorage.setItem('mebershipPlanDetailsData', action?.payload?.data?.data)
+      localStorageSetItem('mebershipPlanDetailsData', JSON.stringify(action?.payload?.data?.data))
       state.loading = false
     })
     builder.addCase(membershipPlanDetails.rejected, (state, action) => {
@@ -177,7 +182,7 @@ export const createHomepageSlice = createSlice({
       }, { 1: {}, 2: {} }) ?? {}
       state.sectionDetails = data
       state.loading = false
-      localStorage.setItem('sectionDetails', data)
+      localStorageSetItem('sectionDetails', JSON.stringify(data))
     })
     builder.addCase(HomePageSectionDetails.rejected, (state, action) => {
       state.loading = false
@@ -188,8 +193,9 @@ export const createHomepageSlice = createSlice({
       state.loading = true
     })
     builder.addCase(CategoriesListDetails.fulfilled, (state, action) => {
-      state.categoriesList = { ...action?.payload?.data?.data, items: action?.payload?.data?.data?.items?.sort((a: any, b: any) => a?.categoryId - b?.categoryId) }
-      localStorage.setItem('categoriesList', { ...action?.payload?.data?.data, items: action?.payload?.data?.data?.items?.sort((a: any, b: any) => a?.categoryId - b?.categoryId) })
+      const data = { ...action?.payload?.data?.data, items: action?.payload?.data?.data?.items?.sort((a: any, b: any) => a?.categoryId - b?.categoryId) }
+      state.categoriesList = data
+      localStorageSetItem('categoriesList', JSON.stringify(data))
       state.loading = false
     })
     builder.addCase(CategoriesListDetails.rejected, (state, action) => {
@@ -201,7 +207,7 @@ export const createHomepageSlice = createSlice({
     })
     builder.addCase(LoginUserAPI.fulfilled, (state, action) => {
       state.userDetails = action.payload.data.data
-      localStorage.setItem('userDetails', action.payload.data.datas)
+      localStorageSetItem('userDetails', JSON.stringify(action.payload.data.datas))
       state.loadingForSignIn = false
       state.isLoggedIn = true
     })
@@ -215,7 +221,7 @@ export const createHomepageSlice = createSlice({
     builder.addCase(LogOutUserAPI.fulfilled, (state, action) => {
       // console.log("🚀ff ~ builder.addCase ~ action.payload.data:", action.payload)
       state.userDetails = null
-      localStorage.setItem('userDetails', '')
+      localStorageSetItem('userDetails', '')
       state.loading = false
       state.isLoggedIn = false
     })
@@ -229,7 +235,7 @@ export const createHomepageSlice = createSlice({
     })
     builder.addCase(ImpersonateSignInAPI.fulfilled, (state, action) => {
       state.userDetails = action.payload.data.data
-      localStorage.setItem('userDetails', action.payload.data.data)
+      localStorageSetItem('userDetails', JSON.stringify(action.payload.data.data))
       state.loading = false
       state.isLoggedIn = true
     })

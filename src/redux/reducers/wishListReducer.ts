@@ -11,7 +11,7 @@ interface WishListState {
 }
 const initialState: WishListState = {
     loading: false,
-    wishListItems: JSON.parse(localStorage.getItem("wishListItems") ?? '[]')
+    wishListItems: []
 }
 
 export const getWishListData = appCreateAsyncThunk(

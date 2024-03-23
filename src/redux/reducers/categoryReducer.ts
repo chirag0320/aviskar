@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import CategoryServices from '@/apis/services/CategoryServices'
 import { categoryData } from '@/types/categoryData'
+import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 // Services
 
 interface filterQuery {
@@ -16,14 +17,14 @@ interface filterQuery {
 }
 
 const initialState: categoryData = {
-  loading: JSON.parse(localStorage.getItem("loading") ?? 'false'),
-  items: JSON.parse(localStorage.getItem("items") ?? '[]'),
-  count: JSON.parse(localStorage.getItem("count") ?? '0'),
-  categories: JSON.parse(localStorage.getItem("categories") ?? '[]'),
-  price: JSON.parse(localStorage.getItem("price") ?? "{minPrice: 0,maxPrice: 0}"),
-  specifications: JSON.parse(localStorage.getItem("specifications") ?? '{}'),
-  manufactureres: JSON.parse(localStorage.getItem("manufactureres") ?? '[]'),
-  productDetailsData:JSON.parse(localStorage.getItem("productDetailsData") ?? '{}')
+  loading: isBrowser && JSON.parse(localStorageGetItem("loading") ?? 'false'),
+  items: isBrowser && JSON.parse(localStorageGetItem("items") ?? '[]'),
+  count: isBrowser && JSON.parse(localStorageGetItem("count") ?? '0'),
+  categories: isBrowser && JSON.parse(localStorageGetItem("categories") ?? '[]'),
+  price: isBrowser && JSON.parse(localStorageGetItem("price") ?? "{minPrice: 0,maxPrice: 0}"),
+  specifications: isBrowser && JSON.parse(localStorageGetItem("specifications") ?? '{}'),
+  manufactureres: isBrowser && JSON.parse(localStorageGetItem("manufactureres") ?? '[]'),
+  productDetailsData: isBrowser && JSON.parse(localStorageGetItem("productDetailsData") ?? '{}')
 }
 
 export const getCategoryData = appCreateAsyncThunk(
@@ -34,7 +35,7 @@ export const getCategoryData = appCreateAsyncThunk(
 )
 export const getProductDetailsData = appCreateAsyncThunk(
   "getProductDetailsData",
-  async ({ url }: { url: string}) => {
+  async ({ url }: { url: string }) => {
     return await CategoryServices.getProductDetailsData(url);
   }
 )
@@ -51,6 +52,7 @@ export const categoryPageSlice = createSlice({
     },
     setSortedItems: (state, action) => {
       state.items = action.payload
+      localStorageSetItem('items', JSON.stringify(state.items))
     },
     setPriceForEachItem: (state, action: any) => {
       const priceForEachId = action.payload;
@@ -60,6 +62,7 @@ export const categoryPageSlice = createSlice({
           item.priceWithDetails = priceForEachId[item.productId]
         }
       })
+      localStorageSetItem('items', JSON.stringify(state.items))
     }
   },
 
@@ -76,12 +79,17 @@ export const categoryPageSlice = createSlice({
         const filtersData = additionalField.filters;
 
         state.items = responseData.items;
+        localStorageSetItem('items', JSON.stringify(state.items))
         state.count = responseData.count;
-
+        localStorageSetItem('count', JSON.stringify(state.count))
         state.categories = filtersData.categories;
+        localStorageSetItem('categories', JSON.stringify(state.categories))
         state.manufactureres = filtersData.manufactureres;
+        localStorageSetItem('manufactureres', JSON.stringify(state.manufactureres))
         state.price = filtersData.price;
+        localStorageSetItem('price', JSON.stringify(state.price))
         state.specifications = filtersData.sepecifications; // Corrected the spelling of 'specifications'
+        localStorageSetItem('specifications', JSON.stringify(state.specifications))
       }
 
       state.loading = false;
@@ -90,13 +98,14 @@ export const categoryPageSlice = createSlice({
     builder.addCase(getCategoryData.rejected, (state) => {
       state.loading = false;
     })
-    
+
     // product Details Data
     builder.addCase(getProductDetailsData.pending, (state) => {
       state.loading = true;
     })
     builder.addCase(getProductDetailsData.fulfilled, (state, action) => {
       state.productDetailsData = action.payload.data.data
+      localStorageSetItem('productDetailsData', JSON.stringify(state.productDetailsData))
       state.loading = false;
 
     })

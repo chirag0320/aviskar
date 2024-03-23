@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import { CartItem } from '@/types/shoppingCart'
 import ShoppingCartServices from '@/apis/services/shoppingCartServices'
+import { localStorageSetItem } from '@/utils/common'
 
 interface ShoppingCartState {
     loading: boolean,
@@ -67,7 +68,7 @@ export const shoppingCart = createSlice({
         })
         builder.addCase(getShoppingCartData.fulfilled, (state, action) => {
             state.cartItems = action.payload.data.data.items;
-            localStorage.setItem('cartItems',action.payload.data.data.items)
+            localStorageSetItem('cartItems',action.payload.data.data.items)
             state.loading = false;
         })
         builder.addCase(getShoppingCartData.rejected, (state, action) => {
