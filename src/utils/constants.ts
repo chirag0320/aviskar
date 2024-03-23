@@ -42,6 +42,7 @@ export const ENDPOINTS = {
     checkoutDetails: 'Checkout/xT3hjqkBFESvUfuMu8T70A',
     checkValidationOnConfirmOrder: 'Checkout/NiJ7vYmnQ0CjUVyAoNalJQ',
     addOrEditAddress: "myvault/mIKu7TMRFUW49i97slxpDg",
+    qmintopenaidata: 'MyVault/WqNoMqgI93gqVTfe986gYQ',
     calculateInsuranceAndTaxDetails: "calculator/a5n79zVvKUKbIgrXui6tmA",
     calculateCraditCardCharges: "calculator/yGU45H6bwUuxggNPZF8R3g",
 
