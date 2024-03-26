@@ -112,6 +112,7 @@ function Blog() {
             </Box>
             <Box className="SearchWrapper">
               <TextField
+                type="search"
                 id="Search-Blog"
                 placeholder="Search Blog"
                 variant="outlined"

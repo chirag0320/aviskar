@@ -78,11 +78,11 @@ function News() {
           </Typography>
           <Box className="PostWrapper">
             <Stack className="LeftPostWrapper">
-              <PostCard isNews={true} details={newsList?.items?.[0]} navigate={() => navigate(`/news/${newsList?.items?.[0]?.friendlyName}`)}/>
+              <PostCard isNews={true} details={newsList?.items?.[0]} navigate={() => navigate(`/news/${newsList?.items?.[0]?.friendlyName}`)} />
             </Stack>
             <Stack className="RightPostWrapper">
               {newsList?.items?.[1] ? <PostCard isNews={true} details={newsList?.items?.[1]} navigate={() => navigate(`/news/${newsList?.items?.[1]?.friendlyName}`)} /> : null}
-              {newsList?.items?.[2] ? <PostCard isNews={true} details={newsList?.items?.[2]} navigate={() => navigate(`/news/${newsList?.items?.[2]?.friendlyName}`)}/> : null}
+              {newsList?.items?.[2] ? <PostCard isNews={true} details={newsList?.items?.[2]} navigate={() => navigate(`/news/${newsList?.items?.[2]?.friendlyName}`)} /> : null}
             </Stack>
           </Box>
         </Container>
@@ -103,6 +103,7 @@ function News() {
           </Box>
           <Box className="SearchWrapper">
             <TextField
+              type="search"
               id="Search-Blog"
               placeholder="Search Blog"
               variant="outlined"
