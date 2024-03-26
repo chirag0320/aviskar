@@ -160,8 +160,8 @@ const initialState: CheckoutPageState = {
 
 export const getCheckoutPageData = appCreateAsyncThunk(
     'getCheckoutPageData',
-    async ({ url }: { url: string }) => {
-        return await CheckoutPageServices.getCheckoutPageData(url)
+    async ({ url, isinstantbuy }: { url: string, isinstantbuy: boolean }) => {
+        return await CheckoutPageServices.getCheckoutPageData(url, isinstantbuy)
     }
 )
 

@@ -33,7 +33,7 @@ import {
   FilledUpButton,
   OptionsIcon,
 } from "../../assets/icons/index";
-
+import noImage from '../../assets/images/noImage.png'
 // Utils
 import { ProductStockStatus, ProductUpdateCountdown } from "./Utils"
 import { IFeaturedProducts } from "../partials/home/FeaturedProducts"
@@ -73,7 +73,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
     <Card className={classNames("ProductCard", { "Sticky": stickyProduct })} key={product.productId}>
       <Stack className="ImageWrapper">
         <NavigationLink className="ImageLink" to={`/product-details/${product?.friendlypagename}`}>
-          <img src={product.imageUrl} alt="Product image" loading="lazy" />
+          <img src={product.imageUrl ?? noImage} alt="Product image" loading="lazy" />
         </NavigationLink>
         <ProductStockStatus
           availability={product.availability}
@@ -248,7 +248,8 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
         <IconButton className="Outlined AddToCart" onClick={async () => {
           await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
             "productId": product.productId,
-            "quantity": 1
+            "quantity": 1,
+            "IsInstantBuy": false
           } as any)
           dispatch(setToasterState({
             openToaster: true,

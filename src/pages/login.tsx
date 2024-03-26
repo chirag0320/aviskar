@@ -11,6 +11,7 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { isActionRejected } from '@/components/common/Utils';
 import { Link, navigate } from 'gatsby';
 import { AxiosError } from 'axios';
+import { getLastPage } from '@/utils/common';
 export interface IdispatchType {
   type: string,
   meta: {
@@ -51,7 +52,14 @@ function SignInPage() {
       setLoginError(((response.payload as AxiosError).response?.data as { message?: string }).message || "Something went wrong")
       return
     }
-    navigate("/");
+    const lastPage = getLastPage();
+    if (lastPage) {
+      // Redirect the user to the last visited page
+      navigate(lastPage);
+    } else {
+      // Redirect the user to a default page
+      navigate('/');
+    }
   };
 
   function navigateToRegister() {

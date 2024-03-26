@@ -18,13 +18,13 @@ interface filterQuery {
 
 const initialState: categoryData = {
   loading: isBrowser && JSON.parse(localStorageGetItem("loading") ?? JSON.stringify(false)),
-  items: isBrowser && JSON.parse(localStorageGetItem("items") ?? JSON.stringify([])),
+  items: [],
   count: isBrowser && JSON.parse(localStorageGetItem("count") ?? JSON.stringify(0)),
   categories: isBrowser && JSON.parse(localStorageGetItem("categories") ?? JSON.stringify([])),
-  price: isBrowser && JSON.parse(localStorageGetItem("price") ?? JSON.stringify({minPrice: 0,maxPrice: 0})),
+  price: isBrowser && JSON.parse(localStorageGetItem("price") ?? JSON.stringify({ minPrice: 0, maxPrice: 0 })),
   specifications: isBrowser && JSON.parse(localStorageGetItem("specifications") ?? JSON.stringify({})),
   manufactureres: isBrowser && JSON.parse(localStorageGetItem("manufactureres") ?? JSON.stringify([])),
-  productDetailsData: isBrowser && JSON.parse(localStorageGetItem("productDetailsData") ?? JSON.stringify({}))
+  productDetailsData: {}
 }
 
 export const getCategoryData = appCreateAsyncThunk(
@@ -52,7 +52,6 @@ export const categoryPageSlice = createSlice({
     },
     setSortedItems: (state, action) => {
       state.items = action.payload
-      localStorageSetItem('items', JSON.stringify(state.items))
     },
     setPriceForEachItem: (state, action: any) => {
       const priceForEachId = action.payload;
@@ -62,7 +61,10 @@ export const categoryPageSlice = createSlice({
           item.priceWithDetails = priceForEachId[item.productId]
         }
       })
-      localStorageSetItem('items', JSON.stringify(state.items))
+    },
+    resetProductDetails: (state) => {
+      state.productDetailsData = {}
+      state.loading = false
     }
   },
 
@@ -105,7 +107,6 @@ export const categoryPageSlice = createSlice({
     })
     builder.addCase(getProductDetailsData.fulfilled, (state, action) => {
       state.productDetailsData = action.payload.data.data
-      localStorageSetItem('productDetailsData', JSON.stringify(state.productDetailsData))
       state.loading = false;
 
     })
@@ -116,6 +117,6 @@ export const categoryPageSlice = createSlice({
   },
 })
 
-export const { setLoadingTrue, setLoadingFalse, setSortedItems, setPriceForEachItem } = categoryPageSlice.actions;
+export const { setLoadingTrue, setLoadingFalse, setSortedItems, setPriceForEachItem,resetProductDetails } = categoryPageSlice.actions;
 
 export default categoryPageSlice.reducer

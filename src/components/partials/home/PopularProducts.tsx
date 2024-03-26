@@ -34,7 +34,6 @@ function PopularProducts() {
   const [productIds, setProductIds] = useState({})
   const { data }: Idata = useApiRequest(ENDPOINTS.getProduct, 'post', dataforbody);
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
-console.log(data?.data?.items,"data?.data?.items")
   useEffect(() => {
     const metalId = productType === 'gold' ? 17 : productType === 'silver' ? 18 : undefined;
     setDataforbody({ ...dataforbody, filters: { ...dataforbody.filters, metalId } })

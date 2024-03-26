@@ -12,10 +12,17 @@ import shoppingCartReducer from './reducers/shoppingCartReducer'
 import compareProductsReducer from './reducers/compareProductsReducer'
 import wishListReducer from './reducers/wishListReducer'
 import orderConfirmationDetails, { orderConfirmationDetailsPageSlice } from './reducers/orderConfirmationDetails';
+import topicReducer  from './reducers/topicReducer';
 // Configuration for redux-persist
 const persistConfig = {
   key: 'root',
   storage,
+  whitelist: [
+    'configDetails',
+    'userDetails',
+    'loading',
+    'sectionDetails',
+    'categoriesList', 'isLoggedIn', 'userDetails', 'blogList', 'newsList', 'calculators','recentlyViewedProducts','productIds']
   // Reducers you want to persist
 }
 // const persistedHomePageReducer = persistReducer(persistConfig, homepageReducer)
@@ -36,6 +43,7 @@ const store = configureStore({
     compareProducts: persistReducer(persistConfig, compareProductsReducer),
     wishList: wishListReducer,
     orderConfirmationDetails: orderConfirmationDetailsPageSlice.reducer,
+    topic : topicReducer
 
 
     // profile: persistedProfileReducer,

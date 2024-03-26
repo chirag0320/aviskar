@@ -46,7 +46,7 @@ const ConstantApiLoader = React.memo(() => {
   }, [])
 
   return (
-    <LinearProgress title="ConstantApiLoader" className="ConstantApiLoader" color="secondary" variant="determinate" value={progress} />
+    <LinearProgress title="ConstantApiLoader" className="ConstantApiLoader" color="secondary" variant="determinate" value={(((progress+1)/60)*100)} />
   )
 }
 )
