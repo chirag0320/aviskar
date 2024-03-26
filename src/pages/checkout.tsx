@@ -20,17 +20,8 @@ import useDeviceDetails from "@/hooks/useDeviceDetails"
 import { navigate } from "gatsby"
 
 function Checkout() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const isInstantBuy = urlParams.get('isInstantBuy')
-
-
-  const [state, setState] = useState({
-    service: getCheckoutPageData, endPoint: ENDPOINTS.checkoutDetails, params: {
-      isInstantBuy
-    }
-  })
+  const [state, setState] = useState({service: getCheckoutPageData, endPoint: ENDPOINTS.checkoutDetails})
   const isLoggedIn = useAppSelector(state => state.homePage.isLoggedIn)
-  useAPIoneTime(state)
 
   if (!isLoggedIn) {
     navigate('/login', { replace: true })
@@ -38,9 +29,11 @@ function Checkout() {
   }
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isInstantBuy = urlParams.get('isInstantBuy')
     setState((prev:any) => ({ ...prev, params: { isInstantBuy: isInstantBuy ?? false } }))
-  }, [isInstantBuy])
-
+  }, [window.location.search])
+  useAPIoneTime(state)
   return (
     <Layout>
       <Seo
