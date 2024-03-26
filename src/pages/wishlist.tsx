@@ -1,5 +1,8 @@
 import React from "react"
-import { Box, Button, Container, Typography } from "@mui/material"
+import { Box, Button, Container, IconButton, Stack, Typography } from "@mui/material"
+
+// Assets
+import { ClipboardIcon } from "@/assets/icons"
 
 // Componenets
 import Layout from "@/components/common/Layout"
@@ -39,7 +42,10 @@ function Wishlist() {
         <WishListDetails toggleEmailFriend={toggleEmailFriend} />
         <Box className="WishlistLink">
           <Typography>Your wishlist URL for sharing</Typography>
-          <Button>http://queenslandmint.com/wishlist/5b455134-e44c-492a-a79b-33487860ff00</Button>
+          <Stack className="Wrapper">
+            <Button>http://queenslandmint.com/wishlist/5b455134-e44c-492a-a79b-33487860ff00</Button>
+            <IconButton size="small" color="secondary"><ClipboardIcon fontSize="inherit" /></IconButton>
+          </Stack>
         </Box>
         <EmailFriend open={openEmailFriend} onClose={toggleEmailFriend} />
       </Container>
