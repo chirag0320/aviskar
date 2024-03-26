@@ -126,7 +126,8 @@ function News() {
               onChange={handleChange}
               aria-label="News Category list"
               textColor="secondary"
-              sx={{ flexWrap: "wrap" }}
+              variant="scrollable"
+              allowScrollButtonsMobile
             >
               {/* <Tab label="All Blog" value={'all'} />
               <Tab label="News" value={'news'} />

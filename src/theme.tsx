@@ -652,8 +652,10 @@ const theme: Theme = createTheme({
         root: {
           minHeight: 0,
         },
-        flexContainer: {
-          justifyContent: "center",
+        scrollButtons: {
+          "&.Mui-disabled": {
+            opacity: 0.3,
+          },
         },
 
         indicator: {

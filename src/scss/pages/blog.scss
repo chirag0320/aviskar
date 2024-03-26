@@ -87,15 +87,10 @@
     }
     .PostFilter {
       margin-top: 40px;
-      .MuiTabs-root {
-        .MuiTabs-flexContainer {
-          flex-wrap: wrap;
-        }
-      }
       .TabPanel {
-        margin-top: 60px;
+        padding-top: 60px;
         @include media($md) {
-          margin-top: 30px;
+          padding-top: 30px;
         }
       }
     }
