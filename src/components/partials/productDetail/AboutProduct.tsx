@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, Stack, Tabs, Tab, Typography, Slider, Select, MenuItem, Divider, Button, IconButton, TextField, Icon, Accordion, AccordionDetails, AccordionSummary, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, createStyles } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -15,7 +15,7 @@ import { PriceChangeReturn, ProductStockStatus, ProductUpdateCountdown } from "@
 import ProductImages from "./ProductImages"
 
 // Assets
-import { AlarmIcon, CameraIcon, CompareIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MinusIcon, PlusIcon, TwitterIcon } from "@/assets/icons"
+import { AlarmIcon, CameraIcon, CompareIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MinusIcon, PlusIcon, TwitterIcon, YoutubeIcon } from "@/assets/icons"
 
 // Data
 import { qmintRating } from "@/utils/data"
@@ -29,6 +29,7 @@ import { addProductToCompare } from "@/redux/reducers/compareProductsReducer"
 import { addToWishList } from "@/redux/reducers/wishListReducer"
 import Toaster from "@/components/common/Toaster"
 import { setToasterState } from "@/redux/reducers/homepageReducer"
+import { resetProductDetails } from "@/redux/reducers/categoryReducer"
 
 function createData(
   quantity: string,
@@ -77,13 +78,12 @@ function AboutProduct({ productId }: any) {
   const { productDetailsData } = useAppSelector((state) => state.category)
   const { configDetails: configDetailsState, isLoggedIn, openToaster } = useAppSelector((state) => state.homePage)
   const [quantityCount, setQuantityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
-  const [productIds] = useState({ productIds: [Number(productId)] })
+  const [productIds, setProductIds] = useState({ productIds: [Number(productId)] })
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
   const [tabValue, setTabValue] = useState<number>(0)
   const [priceHistoryDuration, setPriceHistoryDuration] = useState<string>('hour')
 
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
-
   const { data: progressData } = useApiRequest(urlForThePriceRange, 'get');
   const { loading: loadingForAddToCart, error: errorForAddToCart, apiCallFunction } = useCallAPI()
   const {
@@ -100,6 +100,11 @@ function AboutProduct({ productId }: any) {
   const handleTabChange = (event: SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
   }
+
+  useEffect(() => {
+    setProductIds({ productIds: [Number(productId)] })
+    setUrlForThePriceRange(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
+  }, [productId])
 
   const handlePriceHistoryDuration = (event: SelectChangeEvent) => {
     setPriceHistoryDuration(event.target.value as string);
@@ -161,6 +166,11 @@ function AboutProduct({ productId }: any) {
       redirectButtonUrl: 'wishlist'
     }))
   }
+  useEffect(() => {
+    return () => {
+      dispatch(resetProductDetails())
+    }
+  }, [])
   return (
     <Box className="AboutProduct">
       {openToaster && <Toaster />}
@@ -194,9 +204,9 @@ function AboutProduct({ productId }: any) {
                     </Stack>
                     <Slider
                       className="Slider"
-                      value={priceData?.data?.[0]?.price}
-                      min={progressData?.data?.minPrice}
-                      max={progressData?.data?.maxPrice}
+                      value={Number(priceData?.data?.[0]?.price)}
+                      min={Number(progressData?.data?.minPrice)}
+                      max={Number(progressData?.data?.maxPrice)}
                       disabled
                     />
                   </Stack>
@@ -279,13 +289,13 @@ function AboutProduct({ productId }: any) {
                 <Box className="IconWrapper"><CompareIcon /></Box>
                 <Typography variant="overline">Compare</Typography>
               </Button>
-              <Button color="secondary" className="IconWithText">
+              {/* <Button color="secondary" className="IconWithText">
                 <Box className="IconWrapper"><AlarmIcon /></Box>
                 <Typography variant="overline">Price Alert</Typography>
-              </Button>
-              <IconButton href="#" target="_blank" className="IconWrapper"><InstagramIcon1 /></IconButton>
-              <IconButton href="#" target="_blank" className="IconWrapper"><FacebookIcon /></IconButton>
-              <IconButton href="#" target="_blank" className="IconWrapper"><TwitterIcon /></IconButton>
+              </Button> */}
+              <IconButton href={configDetailsState?.youtubelink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><YoutubeIcon /></IconButton>
+              <IconButton href={configDetailsState?.facebooklink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><FacebookIcon /></IconButton>
+              <IconButton href={configDetailsState?.twitterlink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><TwitterIcon /></IconButton>
             </Stack>
             <Divider />
             {(priceData?.data?.[0]?.tierPriceList?.length > 0 || productDetailsData?.isGradingShow) ? <Stack className="AdditionalDetails">
@@ -447,4 +457,4 @@ function AboutProduct({ productId }: any) {
   )
 }
 
-export default AboutProduct
+export default React.memo(AboutProduct)

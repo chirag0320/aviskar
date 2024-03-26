@@ -22,6 +22,7 @@ import { navigate } from "gatsby"
 function Checkout() {
   const [state] = useState({service:getCheckoutPageData, endPoint:ENDPOINTS.checkoutDetails})
   const isLoggedIn = useAppSelector(state => state.homePage.isLoggedIn)
+  console.log("🚀 ~ Checkout ~ isLoggedIn:", isLoggedIn)
   useAPIoneTime(state)
 
   if(!isLoggedIn){

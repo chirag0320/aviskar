@@ -243,7 +243,6 @@ export const createHomepageSlice = createSlice({
       state.loading = true
     })
     builder.addCase(LogOutUserAPI.fulfilled, (state, action) => {
-      // console.log("🚀ff ~ builder.addCase ~ action.payload.data:", action.payload)
       state.userDetails = null
       localStorageSetItem('userDetails', '')
       state.loading = false

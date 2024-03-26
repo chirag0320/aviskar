@@ -22,8 +22,9 @@ function Toaster() {
     }))
   }
   useEffect(() => {
+    let x:any;
     if (openToaster) {
-      setTimeout(() => {
+      x =setTimeout(() => {
         dispatch(setToasterState({
           openToaster: false,
           toasterMessage: '',
@@ -32,7 +33,8 @@ function Toaster() {
         }))
       }, 6000);
     }
-    () => {
+    return () => {
+      clearTimeout(x)
       // todo check what can we do here to improve
       dispatch(setToasterState({
         openToaster: false,
@@ -41,7 +43,7 @@ function Toaster() {
         redirectButtonUrl: ''
       }))
     }
-  }, [openToaster])
+  }, [openToaster, toasterMessage, buttonText, redirectButtonUrl])
   return (
     <>
       <Snackbar
