@@ -1,10 +1,15 @@
 import React from "react"
 import { Box, Typography } from "@mui/material"
 
-function RecordNotFound() {
+interface RecordNotFound {
+  message?: string
+}
+
+function RecordNotFound(props: RecordNotFound) {
+  const { message } = props
   return (
-    <Box>
-      <Typography>Record not found</Typography>
+    <Box className="RecordNotFound">
+      <Typography> {message ? message : "Record not found"}</Typography>
     </Box>
   )
 }

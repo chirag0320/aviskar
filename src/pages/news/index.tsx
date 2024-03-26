@@ -16,6 +16,7 @@ import TabPanel from "@/components/common/TabPanel";
 // Components
 import Layout from "@/components/common/Layout";
 import PostCard from "@/components/common/PostCard";
+import RecordNotFound from "@/components/common/RecordNotFound";
 
 // Utils
 import { Breadcrumb } from "@/components/common/Utils";
@@ -162,7 +163,7 @@ function News() {
               </Grid>
               {newsList?.items?.length > 0 ? <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
                 {/* <Button variant="contained">Load More</Button> */}
-              </Stack> : null}
+              </Stack> : <RecordNotFound message="No news to show" />}
             </TabPanel>
             {/* <TabPanel index={3} value={value}>
               <Grid

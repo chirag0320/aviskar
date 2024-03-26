@@ -92,6 +92,9 @@
         @include media($md) {
           padding-top: 30px;
         }
+        .RecordNotFound {
+          @include padding-vertical(20, 30);
+        }
       }
     }
   }
