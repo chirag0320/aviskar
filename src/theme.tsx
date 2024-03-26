@@ -262,6 +262,13 @@ const theme: Theme = createTheme({
       defaultProps: {
         IconComponent: ArrowDown,
       },
+      styleOverrides: {
+        root: {
+          ".MuiMenuItem-root": {
+            whiteSpace: "normal",
+          },
+        },
+      },
     },
     MuiFormLabel: {
       styleOverrides: {
@@ -645,8 +652,10 @@ const theme: Theme = createTheme({
         root: {
           minHeight: 0,
         },
-        flexContainer: {
-          justifyContent: "center",
+        scrollButtons: {
+          "&.Mui-disabled": {
+            opacity: 0.3,
+          },
         },
 
         indicator: {

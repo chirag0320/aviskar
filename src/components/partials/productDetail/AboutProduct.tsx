@@ -409,7 +409,8 @@ function AboutProduct({ productId }: any) {
           onChange={handleTabChange}
           className="ProductDescriptionTabs"
           aria-label="Product description tabs"
-          variant="fullWidth"
+          variant="scrollable"
+          allowScrollButtonsMobile
         >
           {productDetailsData?.isProductDescriptionShow ? <Tab label="Product Description" value={0} /> : null}
           {productDetailsData?.isAdditionalInformationShow ? <Tab label="Additional Information" value={1} /> : null}
