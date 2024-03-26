@@ -102,7 +102,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
           color={color}
           {...(error ? { error: true } : {})}
         >
-          {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+          {label && <FormLabel htmlFor={name}>{label}{required && " *"}</FormLabel>}
           <Controller
             control={control}
             render={({ field }) => (
@@ -114,7 +114,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 disabled={disabled}
                 variant={variant}
                 MenuProps={MenuProps}
-                required={required}
+                // required={required}
                 displayEmpty
                 sx={
                   field.value === 'none' || field.value === ''
@@ -335,7 +335,6 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             disabled={disabled}
             variant={variant}
             onKeyDown={onKeyDown}
-            required={required}
             // label={label}
             InputProps={{ readOnly, onBlur, endAdornment }}
             {...register(name)}

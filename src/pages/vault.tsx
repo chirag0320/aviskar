@@ -292,10 +292,11 @@ function Vault() {
         </Box>
         <Box className="RewardSection" sx={{ mt: 7.5 }}>
           <Container>
-            <Typography className="rewardText">Your Rewards Points:</Typography>
-            <Typography variant="h4" className="rewardPoints">
-              460
-            </Typography>
+            <Stack className="RewardWrapper">
+              <Typography className="rewardText">Your Rewards Points: </Typography>
+              <Typography variant="h4" className="rewardPoints"> 460</Typography>
+            </Stack>
+
           </Container>
         </Box>
         <Box className="AccountInformation" sx={{ mt: 2.5 }}>

@@ -9,13 +9,14 @@ import { getOrderConfirmationDetails } from "@/redux/reducers/orderConfirmationD
 import { ENDPOINTS } from "@/utils/constants";
 import { useAppSelector } from "@/hooks";
 import { rows } from "./order-details";
-import { navigate } from "gatsby";
 
 function OrderConfirmation(props: any) {
+    const orderId = props.location?.search?.split('=')[1];
     const orderConfirmationDetails = useAppSelector(state => state.orderConfirmationDetails);
+    console.log("🚀 ~ OrderConfirmation ~ orderConfirmationDetails:", orderConfirmationDetails)
     useAPIoneTime({
         service: getOrderConfirmationDetails,
-        endPoint: ENDPOINTS.orderConfimationDetails + props.location?.search?.split('=')[1] ?? 'noIdPresent'
+        endPoint: ENDPOINTS.orderConfimationDetails + 26487
     })
     return (
         <Layout>
@@ -66,7 +67,7 @@ function OrderConfirmation(props: any) {
                                                     <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
                                                     <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
                                                     <TableCell sx={{ minWidth: "150px" }}>Quantity</TableCell>
-                                                    <TableCell sx={{ minWidth: "150px" }}>Total</TableCell>
+                                                    <TableCell sx={{ minWidth: "200px" }}>Total</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -117,9 +118,7 @@ function OrderConfirmation(props: any) {
                                 <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography>
                             </Box>
                         </Box>
-                        <Button className='ContinueBtn' size='large' variant="contained" onClick={() => {
-                            navigate("/")
-                        }}>Continue</Button>
+                        <Button className='ContinueBtn' size='large' variant="contained">Continue</Button>
                     </Container>
                 </Box>
             </>

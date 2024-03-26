@@ -34,18 +34,21 @@
       justify-content: space-between;
       align-items: center;
       gap: 20px;
+
       &:hover {
         * {
           animation-play-state: paused;
         }
       }
+
       &--Content {
         gap: $spaceBetweenChild;
 
         .StockReturnWithName {
           border-right: 1px solid color-mix(in srgb, currentColor 50%, transparent);
           padding-right: $spaceBetweenChild;
-          p{
+
+          p {
             margin: 0;
           }
         }
@@ -84,9 +87,11 @@
         justify-content: space-between;
         align-items: center;
         gap: 8px;
+
         .Left {
           flex: 1;
         }
+
         .Right {
           align-items: center;
           gap: 20px;
@@ -104,6 +109,7 @@
             align-items: center;
             gap: 4px;
             font-weight: 500;
+            @include transition;
 
             @include media($md) {
               display: none;
@@ -115,6 +121,7 @@
               font-size: pxToRem(14);
               line-height: pxToRem(20);
               padding-right: 8px;
+
               .MuiInputBase-input {
                 padding-left: 16px;
 
@@ -125,9 +132,11 @@
 
               .MuiInputAdornment-root {
                 margin-left: 0;
+
                 .MuiIconButton-root {
                   width: auto;
                   height: auto;
+
                   svg {
                     width: 18px;
                     height: 18px;
@@ -148,6 +157,7 @@
           .SignInButton {
             align-self: stretch;
             flex-shrink: 0;
+
             @include media($xs) {
               @include padding-horizontal(6);
             }
@@ -165,9 +175,11 @@
             .HamburgerIcon {
               font-size: 22px;
             }
+
             .CrossIcon {
               font-size: 16px;
             }
+
             @include media-min($md) {
               display: none;
             }
@@ -195,6 +207,7 @@
           @include media($lg) {
             gap: 3vw;
           }
+
           .MenuLink {
             text-transform: uppercase;
             text-decoration: none;
@@ -328,28 +341,34 @@
                         }
 
                         @include transition;
+
                         &:hover {
                           color: $yellowFuel;
                         }
+
                         .ImageWrapper {
                           position: relative;
                           border-radius: 16px;
                           overflow: hidden;
+
                           &::after {
                             content: "";
                             position: absolute;
                             inset: 0;
                             background: linear-gradient(360deg, #000000 0%, rgba(0, 0, 0, 0) 61.15%);
                           }
+
                           img {
                             width: 100%;
                             height: 160px;
                             object-fit: cover;
+
                             @include media-min($lg) {
                               max-width: 250px;
                             }
                           }
                         }
+
                         .MuiTypography-root {
                           position: absolute;
                           bottom: $textPosition;
@@ -413,12 +432,15 @@
 
   &.MuiDrawer-root {
     top: calc(67px + 1px);
+
     &.isHomePage {
       top: calc(67px + 50px + 1px);
+
       .MuiDrawer-paper {
         max-height: calc(100% - 67px - 50px - 1px);
       }
     }
+
     &.ScrollActive {
       top: calc(67px + 1px);
 
