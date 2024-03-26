@@ -136,7 +136,7 @@ export const Breadcrumb = React.memo(({ page1, page2, page3 }: any) => {
   return (
     <Box
       className="Breadcrumb"
-      sx={{ backgroundColor: "#E5E6EB80", py: 3.875 }}
+      sx={{ backgroundColor: "#E5E6EB80" }}
     >
       <Container>
         <Breadcrumbs aria-label="breadcrumb" separator={<ChevronRight />}>
