@@ -1,6 +1,9 @@
 #PageProductDetail {
+  @include padding-vertical(50);
+  @include media($sm) {
+    @include padding-vertical(20);
+  }
   .AboutProduct {
-    padding-top: 50px;
     .AboutWrapper {
       $dividerColor: rgba($dark, 0.1);
       align-items: flex-start;
@@ -136,6 +139,7 @@
             .Bottom {
               gap: 30px;
               align-items: center;
+              flex-wrap: wrap;
               @include media($sm) {
                 gap: 18px;
               }
@@ -347,24 +351,24 @@
       flex-direction: column;
       gap: 20px;
       margin-top: 60px;
-      margin-bottom: 60px;
       @include media($md) {
         margin-top: 25px;
       }
       .MuiTabs-root {
         border-radius: 12px;
         background-color: $mercury;
-        border: inset 1px solid $mercury;
         padding: 4px;
         .MuiTabs-scroller {
           .MuiTab-root {
+            flex-grow: 1;
+            max-width: initial;
             text-transform: initial;
             border-radius: 11px;
             font-size: pxToRem(16);
             line-height: pxToRem(26);
             color: rgba($dark, 0.5);
             @include media($sm) {
-              @include padding-horizontal(8);
+              @include padding-horizontal(12);
             }
             &.Mui-selected {
               color: $white;
@@ -399,6 +403,7 @@
             max-height: 500px;
             overflow: auto;
             padding-right: 10px;
+            overflow-wrap: break-word;
           }
         }
       }

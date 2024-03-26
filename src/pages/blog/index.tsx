@@ -112,6 +112,7 @@ function Blog() {
             </Box>
             <Box className="SearchWrapper">
               <TextField
+                type="search"
                 id="Search-Blog"
                 placeholder="Search Blog"
                 variant="outlined"
@@ -133,9 +134,10 @@ function Blog() {
               <Tabs
                 value={value}
                 onChange={handleChange}
-                aria-label="News Category list"
+                aria-label="Blog Category list"
                 textColor="secondary"
-                sx={{ flexWrap: "wrap" }}
+                variant="scrollable"
+                allowScrollButtonsMobile
               >
                 <Tab label="All Blog" value={"all"} />
                 <Tab label="News" value={"news"} />

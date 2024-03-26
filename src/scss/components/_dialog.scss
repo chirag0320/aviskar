@@ -94,6 +94,12 @@
           max-height: 313px;
           margin-right: 16px;
           @include padding-horizontal(20);
+          @include media($xs) {
+            padding-right: 10px;
+          }
+          .Content {
+            overflow-wrap: break-word;
+          }
         }
         .MuiDialogActions-root {
           justify-content: flex-start;

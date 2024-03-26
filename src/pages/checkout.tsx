@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react"
+import React, { useEffect, useLayoutEffect, useState } from "react"
 import { Box, Container, Stack } from "@mui/material"
 
 // Componenets
@@ -20,15 +20,20 @@ import useDeviceDetails from "@/hooks/useDeviceDetails"
 import { navigate } from "gatsby"
 
 function Checkout() {
-  const [state] = useState({service:getCheckoutPageData, endPoint:ENDPOINTS.checkoutDetails})
+  const [state, setState] = useState({service: getCheckoutPageData, endPoint: ENDPOINTS.checkoutDetails})
   const isLoggedIn = useAppSelector(state => state.homePage.isLoggedIn)
-  useAPIoneTime(state)
 
-  if(!isLoggedIn){
-    navigate('/login',{replace:true})
+  if (!isLoggedIn) {
+    navigate('/login', { replace: true })
     return;
   }
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isInstantBuy = urlParams.get('isInstantBuy')
+    setState((prev:any) => ({ ...prev, params: { isInstantBuy: isInstantBuy ?? false } }))
+  }, [window.location.search])
+  useAPIoneTime(state)
   return (
     <Layout>
       <Seo

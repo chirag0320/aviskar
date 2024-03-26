@@ -4,6 +4,7 @@ import { Skeleton } from "@mui/material";
 
 // Components
 import LazyHeader from "../header/index"
+import { storeLastPage } from "@/utils/common";
 const LazyFooter = lazy(() => import('../footer/index'));
 function Layout({ children }: any) {
   // const [loading, setLoading] = useState(true);
@@ -13,7 +14,7 @@ function Layout({ children }: any) {
       setWait(true)
       // setLoading(false);
     }, 2000);
-
+    storeLastPage(window.location.pathname)
     return () => {
       clearTimeout(x);
     }
@@ -28,7 +29,7 @@ function Layout({ children }: any) {
         {children}
         {/* </Suspense> */}
       </main>
-      {wait && <Suspense fallback={<Skeleton height='30vh'></Skeleton>}>
+      {<Suspense fallback={<Skeleton height='30vh'></Skeleton>}>
         <LazyFooter />
       </Suspense>}
     </div>

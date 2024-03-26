@@ -302,7 +302,7 @@ function Vault() {
         <Box className="AccountInformation" sx={{ mt: 2.5 }}>
           <Container>
             <Typography className="AccountInformationText">
-              AccountInformation
+              Account Information
             </Typography>
             <Box sx={{ mt: 4.5 }}>
               <Card className="AccountInformationCard">

@@ -46,3 +46,13 @@ export function localStorageSetItem(key: any, value: any) {
 export function hasFulfilled(dataType: string): boolean {
   return dataType.includes('/fulfilled');
 }
+
+// Function to store the last page in session storage
+export const storeLastPage = (pageUrl:string) => {
+  sessionStorage.setItem('lastPage', pageUrl);
+};
+
+// Function to retrieve the last page from session storage
+export const getLastPage = () => {
+  return sessionStorage.getItem('lastPage');
+};

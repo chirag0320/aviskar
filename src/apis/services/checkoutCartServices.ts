@@ -2,8 +2,11 @@ import axiosInstance from '@/axiosfolder';
 
 class CheckoutPageServices {
 
-    static async getCheckoutPageData(url: string) {
-        return axiosInstance.get(url);
+    static async getCheckoutPageData(url: string, params?:boolean) {
+        console.log("🚀 ~ CheckoutPageServices ~ getCheckoutPageData ~ params:", params)
+        if(params){
+            return axiosInstance.post(url,{},{params});
+        }
     }
 
     static async addOrEditAddress(url: string, addressQuery: any) {
