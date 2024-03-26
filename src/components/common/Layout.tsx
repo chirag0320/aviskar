@@ -29,7 +29,7 @@ function Layout({ children }: any) {
         {children}
         {/* </Suspense> */}
       </main>
-      {wait && <Suspense fallback={<Skeleton height='30vh'></Skeleton>}>
+      {<Suspense fallback={<Skeleton height='30vh'></Skeleton>}>
         <LazyFooter />
       </Suspense>}
     </div>

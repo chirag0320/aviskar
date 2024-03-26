@@ -53,6 +53,9 @@ export const ENDPOINTS = {
 
     // order confimation
     orderConfimationDetails: "Checkout/i6GZ9e5bWEOWTnfRwpSIVg/",
+
+    // topics
+    topicDetail : "topic/DyTigzAfJkuIRqtL9g6MjQ/{{topic-name}}"
 }
 export const StoreData = {
     storeCode: 12,

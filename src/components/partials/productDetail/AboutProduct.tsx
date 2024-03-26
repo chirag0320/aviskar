@@ -31,6 +31,8 @@ import Toaster from "@/components/common/Toaster"
 import { setToasterState } from "@/redux/reducers/homepageReducer"
 import { resetProductDetails } from "@/redux/reducers/categoryReducer"
 
+import noImage from '../../../assets/images/noImage.png'
+
 function createData(
   quantity: string,
   price: string,
@@ -171,11 +173,27 @@ function AboutProduct({ productId }: any) {
       dispatch(resetProductDetails())
     }
   }, [])
+  const addToCartFunction = async (isInstantBuy: any) => {
+    await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+      "productId": productId,
+      "quantity": quantityCount,
+      "IsInstantBuy": isInstantBuy
+    } as any)
+  }
+  const handleBuyNow = async() => {
+    if (!isLoggedIn) {
+      navigate('/login')
+      return
+    }
+    await addToCartFunction(true)
+    navigate('/checkout/?isInstantBuy=true')
+  }
+
   return (
     <Box className="AboutProduct">
       {openToaster && <Toaster />}
       <Stack className="AboutWrapper">
-        <ProductImages productImages={productDetailsData?.imageUrls} />
+        <ProductImages productImages={productDetailsData?.imageUrls?.length > 0 ? productDetailsData?.imageUrls : [noImage]} />
         <Box className="ProductAbout">
           <form>
             <Box className="Heading">
@@ -259,17 +277,11 @@ function AboutProduct({ productId }: any) {
               </Stack>
                 <Stack className="Right">
                   <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={async () => {
-                    await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
-                      "productId": productId,
-                      "quantity": quantityCount
-                    } as any)
+                    await addToCartFunction(false)
                     navigate('/shopping-cart')
                   }} disabled={loadingForAddToCart}>Add to cart</Button>
                   <Button size="large" variant="outlined" onClick={() => {
-                    if (!isLoggedIn) {
-                      navigate('/login')
-                      return
-                    }
+                    handleBuyNow()
                   }}>Buy now</Button>
                 </Stack></>)
                 :
