@@ -1,35 +1,52 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Button from "@mui/material/Button"
 import Snackbar from "@mui/material/Snackbar"
 import Alert from "@mui/material/Alert"
+import { useAppDispatch, useAppSelector } from "@/hooks"
+import { setToasterState } from "@/redux/reducers/homepageReducer"
+import { navigate } from "gatsby"
 
-interface Toaster {
-  children: any
-}
-
-function Toaster(props: Toaster) {
-  const { children } = props
-  const [open, setOpen] = useState<boolean>(false)
-
-  const handleClick = () => {
-    setOpen(true)
-  }
+function Toaster() {
+  const dispatch = useAppDispatch()
+  const { openToaster, toasterMessage, buttonText, redirectButtonUrl } = useAppSelector((state) => state.homePage)
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") {
       return
     }
-
-    setOpen(false)
+    dispatch(setToasterState({
+      openToaster: false,
+      toasterMessage: '',
+      buttonText: '',
+      redirectButtonUrl: ''
+    }))
   }
-
+  useEffect(() => {
+    if (openToaster) {
+      setTimeout(() => {
+        dispatch(setToasterState({
+          openToaster: false,
+          toasterMessage: '',
+          buttonText: '',
+          redirectButtonUrl: ''
+        }))
+      }, 6000);
+    }
+    () => {
+      // todo check what can we do here to improve
+      dispatch(setToasterState({
+        openToaster: false,
+        toasterMessage: '',
+        buttonText: '',
+        redirectButtonUrl: ''
+      }))
+    }
+  }, [openToaster])
   return (
     <>
-      {/* <Button onClick={handleClick}>Open Snackbar</Button> */}
       <Snackbar
-        open={open}
+        open={true}
         onClose={handleClose}
-        autoHideDuration={6000}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
@@ -37,7 +54,9 @@ function Toaster(props: Toaster) {
           severity="info"
           variant="filled"
         >
-          {children}
+          {toasterMessage}  <Button onClick={() => {
+            navigate(`/${redirectButtonUrl}`)
+          }}>{buttonText}</Button>
         </Alert>
       </Snackbar>
     </>

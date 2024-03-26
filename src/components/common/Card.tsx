@@ -39,18 +39,20 @@ import { ProductStockStatus, ProductUpdateCountdown } from "./Utils"
 import { IFeaturedProducts } from "../partials/home/FeaturedProducts"
 import { Link as NavigationLink, navigate } from "gatsby"
 import { deliveryMethodMessage, roundOfThePrice } from "@/utils/common"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 import { productImages } from "@/utils/data"
 import { CartItem } from "@/types/shoppingCart";
 import { CartItemsWithLivePriceDetails } from "../partials/shopping-cart/CartDetails";
 import useCallAPI from "@/hooks/useCallAPI";
 import { ENDPOINTS } from "@/utils/constants";
+import { setToasterState } from "@/redux/reducers/homepageReducer";
 
 interface Iproduct {
   product: IFeaturedProducts;
   stickyProduct?: boolean
 }
 export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Iproduct) => {
+  const dispatch = useAppDispatch()
   const { loading: loadingForAddToCart, error: errorForAddToCart, apiCallFunction } = useCallAPI()
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const [open, setOpen] = useState(false)
@@ -193,13 +195,15 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             </Box>
           </ClickTooltip>
         ) : null}
+
         <Button name='discoverMore' aria-label='discoverMore' variant="contained" onClick={() => {
           navigate(`/product-details/${product?.friendlypagename}`) //friendlypagename
         }} className="PrimaryAction" fullWidth>Discover More</Button>
+
         {product.isBundle &&
           <ClickTooltip
             open={open}
-            className="TooltipStack"
+            className="TooltipOfferTag"
             placement="bottom-start"
             onClose={handleTooltipClose}
             onClickAway={handleClickAway}
@@ -216,16 +220,42 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             lightTheme
             arrow
           >
-            <Box className="Content">
-              <Typography variant="body2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, consequuntur. </Typography>
+            <Box className="Offers">
+              <Typography className="ItemPrice">
+                Name
+              </Typography>
+              <Typography className="ItemPrice" sx={{marginRight: "5px"}}>
+                Qty 
+              </Typography>
+              {product?.bulkProduct?.map((product: any) => {
+                return (
+                  <Fragment
+                    key={product?.productName}
+                  >
+                    <Typography className="Item">
+                      {product?.productName}
+                    </Typography>
+                    <Typography className="ItemPrice">
+                      {product?.quantity}
+                    </Typography>
+                  </Fragment>
+                );
+              })}
             </Box>
           </ClickTooltip>
         }
+
         <IconButton className="Outlined AddToCart" onClick={async () => {
           await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
             "productId": product.productId,
             "quantity": 1
           } as any)
+          dispatch(setToasterState({
+            openToaster: true,
+            toasterMessage: 'The product has been added to your',
+            buttonText: 'product cart',
+            redirectButtonUrl: 'shopping-cart'
+          }))
         }}><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>

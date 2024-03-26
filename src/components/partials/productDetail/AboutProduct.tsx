@@ -22,11 +22,13 @@ import { qmintRating } from "@/utils/data"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { ENDPOINTS } from "@/utils/constants"
-import { valueChangeForPrice } from "@/utils/common"
+import { roundOfThePrice, valueChangeForPrice } from "@/utils/common"
 import useCallAPI from "@/hooks/useCallAPI"
 import { navigate } from "gatsby"
 import { addProductToCompare } from "@/redux/reducers/compareProductsReducer"
 import { addToWishList } from "@/redux/reducers/wishListReducer"
+import Toaster from "@/components/common/Toaster"
+import { setToasterState } from "@/redux/reducers/homepageReducer"
 
 function createData(
   quantity: string,
@@ -73,8 +75,7 @@ function AboutProduct({ productId }: any) {
     },
   });
   const { productDetailsData } = useAppSelector((state) => state.category)
-  const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
-
+  const { configDetails: configDetailsState, isLoggedIn, openToaster } = useAppSelector((state) => state.homePage)
   const [quantityCount, setQuantityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
   const [productIds] = useState({ productIds: [Number(productId)] })
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
@@ -138,9 +139,31 @@ function AboutProduct({ productId }: any) {
   }
   const addIntoComapreProduct = (id: any) => {
     dispatch(addProductToCompare(id))
+    dispatch(setToasterState({
+      openToaster: true,
+      toasterMessage: 'The product has been added to your',
+      buttonText: 'product comparison',
+      redirectButtonUrl: 'compare-products'
+    }))
+  }
+  const addIntoWishList = async (id: any) => {
+    await dispatch(addToWishList({
+      url: ENDPOINTS.addToWishList,
+      body: {
+        productId: productId,
+        quantity: 1
+      }
+    }) as any)
+    dispatch(setToasterState({
+      openToaster: true,
+      toasterMessage: 'The product has been added to your',
+      buttonText: 'product wishlist',
+      redirectButtonUrl: 'wishlist'
+    }))
   }
   return (
     <Box className="AboutProduct">
+      {openToaster && <Toaster />}
       <Stack className="AboutWrapper">
         <ProductImages productImages={productDetailsData?.imageUrls} />
         <Box className="ProductAbout">
@@ -153,7 +176,7 @@ function AboutProduct({ productId }: any) {
             <Box className="PricingDetails">
               {(isLoggedIn || configDetailsState?.productpriceenableforguests?.value) ? <><Stack className="Top">
                 <Stack className="Left">
-                  <Typography className="ProductValue" variant="subtitle2">${priceData?.data?.[0]?.price}</Typography>
+                  <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
                   {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue" variant="overline">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
                   <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
                   {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
@@ -247,14 +270,8 @@ function AboutProduct({ productId }: any) {
             <Divider />
             <Stack className="SocialConnects">
               <Button color="secondary" className="IconWithText" onClick={async () => {
-                  await dispatch(addToWishList({
-                    url: ENDPOINTS.addToWishList,
-                    body: {
-                      productId: productId,
-                      quantity: 1
-                    }
-                  }) as any)
-                }} >
+                addIntoWishList(productId)
+              }} >
                 <Box className="IconWrapper"><HeartIcon /></Box>
                 <Typography variant="overline">Wishlist</Typography>
               </Button>
@@ -333,19 +350,19 @@ function AboutProduct({ productId }: any) {
                       <Table size="small">
                         <TableHead>
                           <TableRow>
-                            <TableCell align="center"><Typography variant="subtitle1">Quantity</Typography></TableCell>
                             <TableCell align="center"><Typography variant="subtitle1">Product Name</Typography></TableCell>
+                            <TableCell align="center"><Typography variant="subtitle1">Quantity</Typography></TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
                           {productDetailsData?.bulkProduct.map((bulkProduct: { quantity: number, productName: any }) => (
                             <TableRow key={bulkProduct.quantity} >
                               <TableCell align="center">
-                                <Typography>{bulkProduct.quantity}</Typography>
+                                <Typography>{bulkProduct.productName}</Typography>
                                 <Divider />
                               </TableCell>
-                              <TableCell align="left" style={{ wordWrap: "break-word" }}>
-                                <Typography>{bulkProduct.productName}</Typography>
+                              <TableCell align="center" style={{ wordWrap: "break-word" }}>
+                                <Typography>{bulkProduct.quantity}</Typography>
                                 <Divider />
                               </TableCell>
                             </TableRow>

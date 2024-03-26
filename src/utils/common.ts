@@ -26,7 +26,9 @@ export function valueChangeForPrice({ currentprice, yesterdayprice }: { currentp
   return (((currentprice - yesterdayprice) / yesterdayprice) * 100).toFixed(2)
 }
 export function roundOfThePrice(price: number) {
-  return Math.round((price + Number.EPSILON) * 100) / 100
+  // return Math.round((price + Number.EPSILON) * 100) / 100
+  // return (price).toFixed(2);
+  return (Math.round((price + Number.EPSILON) * 100) / 100).toFixed(2);
 }
 export const shipmentTypeToEnum: any = {
   'LocalShipping': 3,

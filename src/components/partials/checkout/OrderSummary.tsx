@@ -190,7 +190,7 @@ function OrderSummary() {
         }) => total + product?.LivePriceDetails?.taxPrice, 0) : 0))}`)}
         <Stack className="PricingItem TotalItem">
           <Typography variant="subtitle1">Total</Typography>
-          <Typography variant="subtitle1">${Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax)}</Typography>
+          <Typography variant="subtitle1">${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax))}</Typography>
         </Stack>
         <Stack className="PaymentMethod">
           <OutlinedCheckIcon />
