@@ -137,8 +137,8 @@ function Blog() {
                 onChange={handleChange}
                 aria-label="Blog Category list"
                 textColor="secondary"
-                variant="scrollable"
-                allowScrollButtonsMobile
+              // variant="scrollable"
+              // allowScrollButtonsMobile
               >
                 <Tab label="All Blog" value={"all"} />
                 <Tab label="News" value={"news"} />

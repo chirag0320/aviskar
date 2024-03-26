@@ -359,6 +359,9 @@
         background-color: $mercury;
         padding: 4px;
         .MuiTabs-scroller {
+          .MuiTabs-flexContainer {
+            flex-wrap: wrap;
+          }
           .MuiTab-root {
             flex-grow: 1;
             max-width: initial;
