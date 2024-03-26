@@ -45,8 +45,8 @@ function Calculator() {
                         <Box className="TotalWrapper TotalValueWrapper">
                             <Stack
                                 className='DataValueWrapper TotalValueNestedWrapper'>
-                                <Typography variant="body1" className="">Total Vault Storage</Typography>
-                                <Typography variant="subtitle1" className="">${vaultStorage}</Typography>
+                                <Typography variant="body1">Total Vault Storage</Typography>
+                                <Typography variant="subtitle1">${vaultStorage}</Typography>
                             </Stack>
                         </Box>
                     </Box>

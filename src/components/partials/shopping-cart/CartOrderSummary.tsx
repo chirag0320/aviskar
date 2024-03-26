@@ -4,8 +4,9 @@ import { RightArrow } from '@/assets/icons'
 import { useAppSelector } from '@/hooks'
 import { navigate } from 'gatsby'
 
-const CartOrderSummary = ({ isShoppingCartUpdated }: { isShoppingCartUpdated: boolean }) => {
-    const subTotal = useAppSelector(state => state.shoppingCart.subTotal);
+// const CartOrderSummary = ({ isShoppingCartUpdated }: { isShoppingCartUpdated: boolean }) => {
+const CartOrderSummary = () => {
+    const shoppingCartItems = useAppSelector(state => state.shoppingCart);
 
     return (
         <Box className="OrderSummaryDetailsWrapper">
@@ -13,7 +14,7 @@ const CartOrderSummary = ({ isShoppingCartUpdated }: { isShoppingCartUpdated: bo
                 <Typography variant="subtitle2" className='OrderSummaryTitle'>Order Summary </Typography>
                 <Stack className='SubtotalWrapper'>
                     <Typography variant="subtitle1">Subtotal </Typography>
-                    <Typography variant="body1" className='SubtotalValue'>${subTotal}</Typography>
+                    <Typography variant="body1" className='SubtotalValue'>${shoppingCartItems.subTotal}</Typography>
                 </Stack>
                 <Stack className='DeliveryWrapper'>
                     <Typography variant="subtitle1">Delivery </Typography>
@@ -27,10 +28,13 @@ const CartOrderSummary = ({ isShoppingCartUpdated }: { isShoppingCartUpdated: bo
                     <Typography variant="subtitle1">Calculated during checkout </Typography>
                 </Stack>
             </Box>
-            {isShoppingCartUpdated && <Typography variant="body2" className='CartUpdatedMessage'>Cart updated</Typography>}
             <Button className='ProceedtoCheckoutBtn' size='large' variant="contained" onClick={() => {
                 navigate('/checkout')
-            }} disabled={isShoppingCartUpdated}>Proceed to Checkout</Button>
+            }} disabled={shoppingCartItems.loading || shoppingCartItems.cartItems.length === 0}>Proceed to Checkout</Button>
+            {/* {isShoppingCartUpdated && <Typography variant="body2" className='CartUpdatedMessage'>Cart updated</Typography>}
+            <Button className='ProceedtoCheckoutBtn' size='large' variant="contained" onClick={() => {
+                navigate('/checkout')
+            }} disabled={isShoppingCartUpdated}>Proceed to Checkout</Button> */}
         </Box>
     )
 }

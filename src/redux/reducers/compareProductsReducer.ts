@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import CompareProductsServices from '@/apis/services/compareProductsServices'
 import { CompareProduct } from '@/types/compareProducts'
+import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 
 interface ShoppingCartState {
     loading: boolean,
@@ -14,9 +15,9 @@ interface ShoppingCartState {
 
 const initialState: ShoppingCartState = {
     loading: false,
-    productIds: [],
-    specificationKeys: [],
-    comparedProducts: []
+    productIds: isBrowser && JSON.parse(localStorageGetItem('productIds') ?? JSON.stringify([])),
+    specificationKeys: isBrowser && JSON.parse(localStorageGetItem('specificationKeys') ?? JSON.stringify([])),
+    comparedProducts: isBrowser && JSON.parse(localStorageGetItem('comparedProducts') ?? JSON.stringify([]))
 }
 
 export const getCompareProducts = appCreateAsyncThunk(
@@ -38,20 +39,24 @@ export const compareProducts = createSlice({
         },
         addProductToCompare: (state, action) => {
             const productId = action.payload;
-            console.log("🚀 ~ action.payload:", action.payload)
 
             if (!state.productIds.includes(productId) && state.productIds.length < 5) {
                 state.productIds = [...state.productIds, productId]
+                localStorageSetItem('productIds', JSON.stringify(state.productIds))
             }
         },
         removeProductFromCompare: (state, action) => {
-            console.log("🚀 ~ action.payload:", action)
-            state.productIds = state.productIds.filter((id) => id !== action.payload)
+            const filteredIds = state.productIds.filter((id) => id !== action.payload)
+            state.productIds = filteredIds
+            localStorageSetItem('productIds', JSON.stringify(filteredIds))
         },
         clearCompareList: (state) => {
             state.productIds = []
             state.comparedProducts = []
             state.specificationKeys = []
+            localStorageSetItem('productIds', JSON.stringify(state.productIds))
+            localStorageSetItem('comparedProducts', JSON.stringify(state.comparedProducts))
+            localStorageSetItem('specificationKeys', JSON.stringify(state.specificationKeys))
         }
     },
     extraReducers: (builder) => {

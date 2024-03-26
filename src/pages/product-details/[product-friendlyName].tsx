@@ -38,9 +38,6 @@ function ProductDetail({ params }: any) {
       />
       <Breadcrumb page1={"Shop"} page2={"Products"} page3={params?.["product-friendlyName"]} />
       <Container id="PageProductDetail">
-        <Toaster>
-          The product has been added to your <Button href="#">product comparison</Button>
-        </Toaster>
         {productDetailsData?.productId && <AboutProduct productId={productDetailsData?.productId} />}
         {productDetailsData?.relatedProducts?.length > 0 && <RelatedProduct relatedProductsList={structuredClone(productDetailsData?.relatedProducts)} />}
       </Container>

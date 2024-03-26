@@ -112,7 +112,158 @@
                     border-bottom: none;
                 }
 
-                &.ValueNestedWrapper{
+                &.ValueNestedWrapper {
+                    background-color: white;
+                }
+            }
+
+            &.TotalValueWrapper {
+                border: none;
+                border-radius: 10px;
+
+                .TotalValueNestedWrapper {
+                    border-radius: 10px;
+                    padding: 22px 30px;
+
+                    @include media($sm) {
+                        flex-direction: column;
+                        align-items: center;
+                    }
+
+                    .MuiTypography-body1 {
+                        max-width: 267px;
+                        text-align: right;
+                        color: rgba($dark, 0.8);
+
+                        @include media($sm) {
+                            max-width: 100%;
+                            text-align: center;
+                            margin-bottom: 10px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .openaiPageContent {
+        padding: 50px 0 0px;
+
+        @include media($sm) {
+            padding: 50px 0 0px;
+        }
+
+        .GreyTable {
+            margin-bottom: 50px;
+        }
+
+        .SelectionWrapper {
+            margin-bottom: 50px;
+            padding: 46px 50px 50px 48px;
+            border: 1px solid $mercury;
+            border-radius: 10px;
+
+            @include media($sm) {
+                padding: 30px;
+            }
+
+            .MetalWrapper,
+            .WeightWrapper {
+                align-items: flex-start;
+                gap: 53px;
+
+                @include media($ssm) {
+                    flex-direction: column;
+                    gap: 30px;
+                }
+
+                .MuiFormLabel-root {
+                    margin-bottom: 16px;
+                }
+
+                .SelectMetal,
+                .Weight {
+                    min-width: 100%;
+
+                    @include media($ssm) {
+                        min-width: 100%;
+                    }
+
+                    svg {
+                        right: 17px;
+                    }
+                }
+            }
+
+            .MetalWrapper {
+                margin-bottom: 22px;
+
+                @include media($ssm) {
+                    margin-bottom: 30px;
+                }
+            }
+
+            .MetalType,
+            .WeightType {
+                .MuiFormLabel-root {
+                    font-size: 18px;
+                    line-height: 28px;
+                    font-weight: 700;
+                }
+            }
+
+            .AddMetaltBtn {
+                margin-top: 20px;
+
+                @include media($ssm) {
+                    margin-top: 30px;
+                }
+
+                @include media-min($xxl) {
+                    min-width: 168px;
+                }
+            }
+
+        }
+
+        .CardsWrapper {
+            margin-bottom: 50px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+
+            @include media-min($xxl) {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            @include media($md) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            @include media($sm) {
+                grid-template-columns: repeat(1, 1fr);
+                gap: 20px;
+            }
+        }
+
+        .TotalWrapper {
+            border: 1px solid $mercury;
+            border-radius: 10px;
+
+            .DataValueWrapper {
+                padding: 19px 30px;
+                justify-content: space-between;
+                align-items: center;
+                // border-bottom: 1px solid $mercury;
+                border: 1px solid $mercury;
+
+                &.TotalValueNestedWrapper {
+                    background-color: $palladium;
+                    border-radius: 0px 0px 10px 10px;
+                    border-bottom: none;
+                }
+
+                &.ValueNestedWrapper {
                     background-color: white;
                 }
             }

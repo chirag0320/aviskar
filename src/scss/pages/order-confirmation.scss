@@ -81,12 +81,59 @@
                     }
                 }
 
+                .OrderDetailTableWrapper {
+                    margin-top: 20px;
+                    border: 1px solid rgba(227, 228, 229, 1);
+                    border-radius: 15px;
+                    box-shadow: none;
+
+                    .OrderDetailTable {
+                        box-shadow: none;
+
+                        .MuiTableCell-root {
+                            font-size: 16px;
+                            line-height: 26px;
+                        }
+
+                        .MuiTableCell-head {
+                            font-weight: 600;
+                        }
+
+                        .OrderDetailsHeadRow {
+                            background-color: rgba($blueCyan, 0.1);
+                        }
+
+                        tbody {
+                            th {
+                                display: flex;
+                                align-items: center;
+                                gap: 20px;
+
+                                .ProductImage {
+                                    max-width: 140px;
+                                    max-height: 140px;
+                                    object-fit: contain;
+
+                                    @include media($sm) {
+                                        max-width: 100px;
+                                        max-height: 100px;
+                                    }
+                                }
+                            }
+
+                        }
+
+
+                    }
+                }
+
                 &.Orders {
                     .LogoWrapper {
                         gap: 15px;
                         align-items: center;
                     }
                 }
+
 
 
                 &.PaymentAmountWrapper {

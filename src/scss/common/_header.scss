@@ -45,6 +45,9 @@
         .StockReturnWithName {
           border-right: 1px solid color-mix(in srgb, currentColor 50%, transparent);
           padding-right: $spaceBetweenChild;
+          p{
+            margin: 0;
+          }
         }
       }
 

@@ -6,9 +6,11 @@ import { ProductCard } from "@/components/common/Card"
 // Hooks
 import { useAppSelector } from "@/hooks"
 import { pageSize } from "@/pages/[category]"
+import Toaster from "@/components/common/Toaster"
 
 function ProductList({ page, setPage }: { page: number, setPage: any }) {
   const categoryData = useAppSelector((state) => state.category);
+  const { openToaster } = useAppSelector(state => state.homePage)
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -16,6 +18,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
 
   return (
     <Box className="ProductList">
+    {openToaster && <Toaster />}
       <Box className="ProductListWrapper">
 
         {

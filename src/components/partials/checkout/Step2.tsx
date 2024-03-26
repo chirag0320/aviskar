@@ -16,6 +16,7 @@ import { ENDPOINTS } from "@/utils/constants"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { CartItemsWithLivePriceDetails } from "../shopping-cart/CartDetails"
 import useDebounce from "@/hooks/useDebounce"
+import { deleteShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
 
 function Step2() {
   const dispatch = useAppDispatch()
@@ -66,6 +67,10 @@ function Step2() {
       })
       dispatch(resetSubTotalCheckoutPage())
       dispatch(updateSubTotalCheckoutPage(subTotal))
+    } else if (cartItemsWithLivePrice?.length === 0) {
+      let subTotal = 0;
+      dispatch(resetSubTotalCheckoutPage())
+      dispatch(updateSubTotalCheckoutPage(subTotal))
     }
   }, [priceData, changeInQuantities, cartItemsWithLivePrice, checkoutPageData?.shoppingCartItems])
 
@@ -83,7 +88,7 @@ function Step2() {
     })
     setQuantities(quantities)
     setDeliveryMethods(deliveryMethods)
-    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: quantities, deliveryMethodsWithProductId: deliveryMethods }))
+    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: quantities, deliveryMethodsWithProductId: deliveryMethods, IsDifferentShippingMethod: changeDiffrenceDeliveryMethods }))
   }, [checkoutPageData?.shoppingCartItems, changeDiffrenceDeliveryMethods, deliveryMethod])
 
   useEffect(() => {
@@ -106,7 +111,7 @@ function Step2() {
     //   })
     //   makeObject['deliveryMethodsWithProductId'] = deliveryMethods
     // }
-    dispatch(updateFinalDataForTheCheckout(makeObject))
+    dispatch(updateFinalDataForTheCheckout({ ...makeObject, parentDeliveryMethod: event.target.value }))
   }
 
   const increaseQuantity = (productId: number) => {
@@ -129,8 +134,17 @@ function Step2() {
     }
   }
 
-  const removeItemFromCart = (productId: number) => {
-    const updatedCartItem = cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId)
+  const removeItemFromCart = async (productId: number) => {
+    let ids: any[] = [];
+    const updatedCartItem = cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => {
+      if (item.id == productId) {
+        ids.push(productId)
+      }
+      return (item.id !== productId)
+    })
+    if (ids.length) {
+      await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: ids }) as any);
+    }
     setCartItemsWithLivePrice(updatedCartItem);
     dispatch(updateFinalDataForTheCheckout({ cartItemsWithLivePrice: updatedCartItem }))
   }

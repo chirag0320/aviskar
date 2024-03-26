@@ -109,7 +109,11 @@
             }
 
             @include media($sm) {
-                width: calc(85% - 20px);
+                width: calc(75% - 20px);
+            }
+
+            @include media($xs) {
+                width: calc(100% - 20px);
             }
 
 
