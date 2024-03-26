@@ -43,7 +43,8 @@ interface Idata {
     data: {
       items: ItravelDestinations[]
     }
-  }
+  },
+  loading: boolean,
 }
 function SkeletonCloserLook({ index }: { index: number | string }) {
   return (
@@ -59,7 +60,7 @@ function SkeletonCloserLook({ index }: { index: number | string }) {
   )
 }
 function CloserLook() {
-  const { data }: Idata = useApiRequest(ENDPOINTS.getBlog, 'post', dataforbody);
+  const { data, loading }: Idata = useApiRequest(ENDPOINTS.getBlog, 'post', dataforbody);
   const config = {
     slidesPerView: 1.4,
     spaceBetween: 20,
@@ -103,8 +104,8 @@ function CloserLook() {
         <Box className="SwiperContainer">
           <Swiper {...config} >
             {
-              data?.data?.items?.length > 0 ?
-                data?.data?.items?.map((destination) => (
+              !loading ?
+                (data?.data?.items?.length > 0 ? data?.data?.items?.map((destination) => (
                   <SwiperSlide key={destination.id}>
                     <TravelCard
                       friendlyName={destination?.friendlyName}
@@ -114,7 +115,7 @@ function CloserLook() {
                     />
                   </SwiperSlide>
                 ))
-                :
+                  : null) :
                 Array(5).fill(0).map((_, index) => {
                   return (
                     <SwiperSlide key={index}>

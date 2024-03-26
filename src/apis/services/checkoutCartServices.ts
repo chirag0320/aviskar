@@ -2,8 +2,8 @@ import axiosInstance from '@/axiosfolder';
 
 class CheckoutPageServices {
 
-    static async getCheckoutPageData(url: string) {
-        return axiosInstance.get(url);
+    static async getCheckoutPageData(url: string, isinstantbuy?:boolean) {
+        return axiosInstance.post(url,{},{params:{isinstantbuy : isinstantbuy ?? false}});
     }
 
     static async addOrEditAddress(url: string, addressQuery: any) {

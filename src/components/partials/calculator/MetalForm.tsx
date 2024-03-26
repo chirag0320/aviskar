@@ -17,9 +17,17 @@ interface Inputs {
 
 const schema = yup.object().shape({
     SelectMetal: yup.string().required("Metal selection is required"),
-    Weight: yup.number().required(),
-    MetalType: yup.string().required("Metal type is required field"),
-    WeightType: yup.string().required("Weight type is required field")
+    Weight: yup
+    .number()
+    .nullable()
+    .transform((value, originalValue) => {
+        // Transform empty strings to null, which will trigger the 'required' validation
+        return originalValue === "" ? null : value;
+    })
+    .positive("Weight must be a positive number")
+    .required("Weight is required"),
+    MetalType: yup.string().required("Metal type is required"),
+    WeightType: yup.string().required("Weight type is required")
 });
 
 const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
@@ -43,7 +51,7 @@ const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
         const calculatorData = {
             Metal: Number(data.SelectMetal),
             MetalType: Number(data.MetalType),
-            MetalWeight: data.Weight,
+            MetalWeight: Number(data.Weight),
             MetalWeightType: Number(data.WeightType)
         }
 
@@ -86,7 +94,7 @@ const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
                         <MenuItem value="2">Silver</MenuItem>
                         <MenuItem value="3">Platinum</MenuItem>
                         <MenuItem value="4">Palladium</MenuItem>
-                        <MenuItem value="11">Copper</MenuItem>
+                        {/* <MenuItem value="11">Copper</MenuItem> */}
                     </RenderFields>
                     {/* {Note:- refer to types/enums.ts file for reference for value of the input} */}
                     <RenderFields
@@ -119,6 +127,7 @@ const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
                         variant='outlined'
                         margin='none'
                         className='Weight'
+                        setValue={setValue}
                     />
                     {/* {Note:- refer to types/enums.ts file for reference for value of the input} */}
                     <RenderFields
