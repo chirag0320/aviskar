@@ -262,6 +262,13 @@ const theme: Theme = createTheme({
       defaultProps: {
         IconComponent: ArrowDown,
       },
+      styleOverrides: {
+        root: {
+          ".MuiMenuItem-root": {
+            whiteSpace: "normal",
+          },
+        },
+      },
     },
     MuiFormLabel: {
       styleOverrides: {
