@@ -48,7 +48,9 @@ function PostCard({ details, navigate, isNews = false }: any) {
         </CardContent>
         <CardActions sx={{ mt: 1.25, p: 0 }}>
           <Button variant="text" endIcon={<ArrowRight />} onClick={() => {
-            navigate()
+            if(navigate){
+              navigate()
+            }
           }}>
             Discover More
           </Button>

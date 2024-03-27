@@ -37,6 +37,7 @@ export interface IFeaturedProducts {
   metalId: number,
   tierpriceapply: boolean,
   priceWithDetails: null | IproductPrice,
+  bulkProduct: any
 }
 export interface Idata {
   data: {
