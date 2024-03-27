@@ -122,6 +122,7 @@
 
       .ProductName {
         @include max-line(2);
+        @include transition;
 
         .MuiTypography-root {
           @include media($sm) {

@@ -2,6 +2,7 @@
   .BannerTitle {
     display: none;
   }
+
   .SwiperContainer {
     .swiper {
       .swiper-wrapper {
@@ -14,6 +15,7 @@
             color: $white;
             position: relative;
             background-color: $greyRegent;
+
             // @include media($sm) {
             //   height: auto;
             // }
@@ -22,16 +24,21 @@
               height: 100%;
               width: 100%;
             }
+
             .Content {
               z-index: 1;
+
               .Title {
                 color: $yellowFuel;
                 text-shadow: $textShadow1;
               }
+
               .Action {
                 margin-top: 20px;
+
                 .Primary {
                   font-weight: 600;
+
                   @include media-min($md) {
                     padding: 14px 30px;
                   }
@@ -41,12 +48,14 @@
           }
         }
       }
+
       .swiper-pagination {
         @include media($md) {
           padding-bottom: 24px;
         }
       }
     }
+
     .SwiperNavigation {
       @include media($md) {
         display: none;
@@ -57,32 +66,41 @@
 
 #FeaturedProducts {
   @include padding-vertical(70, 70);
+
   @include media($md) {
     @include padding-vertical(50);
   }
+
   .ProductsWrapper {
     margin-top: 50px;
+
     @include media-min($md) {
       @include padding-horizontal(24);
     }
+
     @include media-min($xl) {
       @include padding-horizontal(40);
     }
+
     @include media($md) {
       margin-top: 25px;
     }
+
     .SwiperContainer {
       .swiper {
         @include padding-vertical(40);
         @include margin-vertical(-40);
+
         @include media-min($md) {
           @include padding-horizontal(24);
           @include margin-horizontal(-24);
         }
+
         @include media-min($xl) {
           @include padding-horizontal(40);
           @include margin-horizontal(-40);
         }
+
         .swiper-wrapper {
           .swiper-slide {
             .ProductCard {
@@ -95,9 +113,11 @@
           }
         }
       }
+
       .swiper-pagination {
         position: static;
         @include padding-vertical(50, 0);
+
         @include media($md) {
           display: none;
         }
@@ -109,31 +129,38 @@
 #LookingFor {
   border: 1px solid $white;
   background-color: rgba($yellowFuel, 0.05);
+
   @include media($md) {
     @include padding-vertical(40);
   }
+
   .Container {
     .OfferWrapper {
       gap: 30px;
       margin-top: 53px;
       @include padding-horizontal(80);
+
       @include media($lg) {
         gap: 20px;
         @include padding-horizontal(0);
       }
+
       @include media($sm) {
         flex-wrap: wrap;
         gap: 30px 15px;
       }
+
       .Offer {
         img {
           width: 100%;
         }
+
         &:not(.Main) {
           @include media($sm) {
             flex: 0.5;
           }
         }
+
         &.Main {
           @include media($sm) {
             order: -1;
@@ -147,47 +174,63 @@
 
 #PopularProducts {
   @include padding-vertical(60, 50);
+
   @include media($md) {
     @include padding-vertical(50);
   }
+
   .ToggleWrapper {
     justify-content: center;
     margin-top: 29px;
+
+    button {
+      @include transition;
+    }
   }
+
   .ProductsWrapper {
     .Wrapper {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 24px;
       margin-top: 50px;
+
       @include media-min($xxl) {
         gap: 40px;
       }
+
       @include media($xl) {
         grid-template-columns: repeat(3, 1fr);
         margin-top: 30px;
       }
+
       @include media($md) {
         grid-template-columns: repeat(2, 1fr);
         @include padding-horizontal(40);
       }
+
       @include media($ssm) {
         @include padding-horizontal(0);
       }
+
       @include media($sm) {
         grid-template-columns: repeat(1, 1fr);
         gap: 20px;
         margin-top: 25px;
       }
     }
+
     .Action {
       justify-content: center;
       margin-top: 50px;
+
       @include media($md) {
         margin-top: 32px;
       }
+
       .DiscoverMore {
         padding: 13px 31px;
+
         @include media($sm) {
           @include padding-vertical(10);
         }
@@ -199,26 +242,33 @@
 #DiscoverTreasure {
   border: 1px solid $white;
   background-color: rgba($yellowFuel, 0.05);
+
   .Container {
     .Wrapper {
       gap: 30px;
+
       @include media($lg) {
         flex-direction: column;
       }
+
       .Left {
         position: relative;
         padding-right: 100px;
         flex: 0.45;
+
         @include media-between($sm, $lg) {
           max-width: 500px;
           flex: initial;
         }
+
         @include media($sm) {
           max-width: initial;
         }
+
         .PrimaryImage {
           height: 100%;
         }
+
         .SecondaryImage {
           position: absolute;
           top: 6%;
@@ -226,17 +276,22 @@
           max-width: 50%;
         }
       }
+
       .Right {
         flex: 0.55;
+
         .SectionHeading {
           text-align: left;
         }
+
         .Action {
           gap: 20px;
           margin-top: 30px;
+
           .Primary {
             padding: 13px 30px;
           }
+
           @include media($sm) {
             align-items: initial
           }
@@ -248,45 +303,57 @@
 
 #CloserLook {
   @include padding-vertical(60, 50);
+
   @include media($md) {
     padding: 50px 0;
   }
+
   .SectionHeading {
     @include media($md) {
       @include padding-horizontal(20);
     }
   }
+
   .DestinationWrapper {
     margin-top: 50px;
     @include padding-horizontal(0);
+
     @include media($md) {
       margin-top: 30px;
     }
+
     .SwiperContainer {
       .swiper {
         @include padding-vertical(40);
         @include margin-vertical(-40);
+
         @include media-min($md) {
           @include padding-horizontal(24);
           @include margin-horizontal(-24);
         }
       }
+
       .swiper-pagination {
         position: static;
+
         @include media($md) {
           @include padding-vertical(26, 0);
         }
       }
     }
   }
+
   .Action {
     justify-content: center;
     margin-top: 17px;
+
     @include media($md) {
       margin-top: 30px;
     }
+
     .MuiButton-root {
       padding: 13px 31px;
+
       @include media($sm) {
         @include padding-vertical(10);
       }
