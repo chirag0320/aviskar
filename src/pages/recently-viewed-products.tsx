@@ -15,7 +15,6 @@ import { IpriceForEachId } from "@/components/partials/home/FeaturedProducts"
 
 function RecentlyViewedProducts() {
   const { recentlyViewedProducts } = useAppSelector((state) => state.homePage)
-  console.log("🚀 ~ RecentlyViewedProducts ~ recentlyViewedProducts:", recentlyViewedProducts)
   const [productIds, setProductId] = useState<any>(recentlyViewedProducts)
   const [priceForEachId, setPriceForEachId] = useState<IpriceForEachId | null>(null)
   const [dataWithId, setdataWithId] = useState<any>({})
