@@ -10,10 +10,13 @@ const CartMenu = lazy(() => import('./CartMenu'))
 import ActionMenu from "./ActionMenu"
 import MegaMenu from "./MegaMenu"
 import { useAppSelector } from "@/hooks"
+import Badge from '@mui/material/Badge';
 
 // Utils
 import { subMenuItems } from "../../utils/data"
 import { Link, navigate } from "gatsby"
+
+
 export interface Icategory {
   categoryId: number,
   name: string,
@@ -79,9 +82,11 @@ function Navigation() {
           <Stack className="RightPart">
             {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
             {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
-              <Link area-label="shopping-cart-link" to="/shopping-cart">
-                <CartMenu />
-              </Link>
+              <Badge badgeContent={1} color="primary" max={99}>
+                <Link area-label="shopping-cart-link" to="/shopping-cart">
+                  <CartMenu />
+                </Link>
+              </Badge>
             </Suspense> : null}
             <ActionMenu />
           </Stack>

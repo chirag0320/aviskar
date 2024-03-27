@@ -182,9 +182,6 @@
   .ToggleWrapper {
     margin-top: 29px;
 
-    button {
-      @include transition;
-    }
 
     @include media-min($sm) {
       justify-content: center;
@@ -195,6 +192,7 @@
         width: 100%;
 
         .MuiToggleButton-root {
+          @include transition;
           flex: 1;
           min-width: initial;
           padding: 12px;
