@@ -226,8 +226,8 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
               <Typography className="ItemPrice">
                 Name
               </Typography>
-              <Typography className="ItemPrice" sx={{marginRight: "5px"}}>
-                Qty 
+              <Typography className="ItemPrice" sx={{ marginRight: "5px" }}>
+                Qty
               </Typography>
               {product?.bulkProduct?.map((product: any) => {
                 return (
@@ -248,17 +248,29 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
         }
 
         <IconButton className="Outlined AddToCart" onClick={async () => {
-          await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+          const response = await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
             "productId": product.productId,
             "quantity": 1,
             "IsInstantBuy": false
           } as any)
-          dispatch(setToasterState({
-            openToaster: true,
-            toasterMessage: 'The product has been added to your',
-            buttonText: 'product cart',
-            redirectButtonUrl: 'shopping-cart'
-          }))
+          // console.log("🚀 ~ addTOCart response", response);
+          if (response.code === 200) {
+            dispatch(setToasterState({
+              openToaster: true,
+              toasterMessage: 'The product has been added to your',
+              buttonText: 'product cart',
+              redirectButtonUrl: 'shopping-cart'
+            }))
+          }
+          else {
+            dispatch(setToasterState({
+              openToaster: true,
+              toasterMessage: "Adding cart failed! Try again",
+              // buttonText: 'Adding cart failed! Try again',
+              // redirectButtonUrl: ''
+            }))
+          }
+
         }}><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
@@ -408,7 +420,7 @@ export const LineChartCard = (props: any) => {
 };
 
 
-export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
+export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
   // const [deliveryMethod, setDeliveryMethod] = useState<string>('LocalShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     // setDeliveryMethod(event.target.value as string);
@@ -432,7 +444,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
           <Box className="RightWrapper">
             <Typography className="LivePrice" variant="body2">Live Price</Typography>
             <Typography variant="body2">Qty.</Typography>
-            <Typography variant="subtitle1">${cartItem?.LivePriceDetails?.price}</Typography>
+            <Typography variant="subtitle1">${roundOfThePrice(cartItem?.LivePriceDetails?.price)}</Typography>
             <Stack className="Quantity">
               <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.id)} disabled={quantity === 1}><MinusIcon /></IconButton>
               <TextField value={quantity} disabled />

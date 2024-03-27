@@ -68,6 +68,8 @@ export const compareProducts = createSlice({
             const responseData = action.payload.data.data;
 
             state.specificationKeys = responseData.specificationKeys;
+            // NOte : adding manually because not present in response
+            state.specificationKeys.unshift("ProductImage");
             state.comparedProducts = responseData.comparedProducts;
             state.loading = false
         })
