@@ -27,10 +27,10 @@ const CartDetails = () => {
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
     const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
-    // const changeInQuantities = useDebounce(quantities, 500)
-    // useEffect(() => {
-    //     updateCartHandler(false)
-    // }, [changeInQuantities,cartItemsWithLivePrice])
+    const changeInQuantities = useDebounce(quantities, 500)
+    useEffect(() => {
+        updateCartHandler(false)
+    }, [changeInQuantities,cartItemsWithLivePrice])
     useEffect(() => {
         if (priceData?.data?.length > 0) {
             const idwithpriceObj: any = {}

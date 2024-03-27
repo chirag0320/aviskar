@@ -406,7 +406,7 @@ export const LineChartCard = (props: any) => {
 };
 
 
-export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
+export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
   // const [deliveryMethod, setDeliveryMethod] = useState<string>('LocalShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     // setDeliveryMethod(event.target.value as string);
