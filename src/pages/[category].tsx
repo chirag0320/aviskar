@@ -19,7 +19,7 @@ import { Toaster } from "react-hot-toast"
 export const pageSize = 12;
 export const requestBodyDefault: categoryRequestBody = {
     search: "",
-    pageNo: 1,
+    pageNo: 0,
     pageSize: pageSize,
     sortBy: "",
     sortOrder: "",
@@ -31,7 +31,7 @@ export const requestBodyDefault: categoryRequestBody = {
 }
 
 function Category({ location }: { location: any }) {
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(0);
     const dispatch = useAppDispatch();
 
     const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
