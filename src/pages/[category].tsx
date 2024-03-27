@@ -19,7 +19,7 @@ import { Toaster } from "react-hot-toast"
 export const pageSize = 12;
 export const requestBodyDefault: categoryRequestBody = {
     search: "",
-    pageNo: 1,
+    pageNo: 0,
     pageSize: pageSize,
     sortBy: "",
     sortOrder: "",
