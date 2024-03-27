@@ -31,7 +31,7 @@ export const requestBodyDefault: categoryRequestBody = {
 }
 
 function Category({ location }: { location: any }) {
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(location?.search !== "" ? parseInt(location?.search.split("=")[1]) : 1);
     const dispatch = useAppDispatch();
 
     const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
@@ -88,7 +88,7 @@ function Category({ location }: { location: any }) {
         <CategoryFilters selectedFilters={selectedFilters} setSelectedPrice={setSelectedPrice} setSelectedFilters={setSelectedFilters} page={page} />
     );
 
-    console.log("🚀 ~ Category ~ selectedFilters:", selectedFilters)
+    // console.log("🚀 ~ Category ~ selectedFilters:", selectedFilters)
 
     return (
         <Layout>
