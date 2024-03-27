@@ -329,8 +329,8 @@ function AboutProduct({ productId }: any) {
                     <Table size="small">
                       <TableHead>
                         <TableRow>
-                          <TableCell align="center"><Typography variant="subtitle1">Quantity</Typography></TableCell>
-                          <TableCell align="center"><Typography variant="subtitle1">Price</Typography></TableCell>
+                          <TableCell><Typography variant="subtitle1">Quantity</Typography></TableCell>
+                          <TableCell><Typography variant="subtitle1">Price</Typography></TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -385,8 +385,8 @@ function AboutProduct({ productId }: any) {
                       <Table size="small">
                         <TableHead>
                           <TableRow>
-                            <TableCell align="center"><Typography variant="subtitle1">Product Name</Typography></TableCell>
-                            <TableCell align="center"><Typography variant="subtitle1">Quantity</Typography></TableCell>
+                            <TableCell><Typography variant="subtitle1">Product Name</Typography></TableCell>
+                            <TableCell><Typography variant="subtitle1">Quantity</Typography></TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -451,14 +451,14 @@ function AboutProduct({ productId }: any) {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      {/* <TableCell align="center"><Typography variant="subtitle1">specifications</Typography></TableCell> */}
-                      {/* <TableCell align="center"><Typography variant="subtitle1">Product Name</Typography></TableCell> */}
+                      {/* <TableCell><Typography variant="subtitle1">specifications</Typography></TableCell> */}
+                      {/* <TableCell><Typography variant="subtitle1">Product Name</Typography></TableCell> */}
                     </TableRow>
                   </TableHead>
                   <TableBody style={styles.tableBody}>
                     {Object.entries(productDetailsData?.specifications)?.map((bulkProduct: any, index) => (
                       <TableRow key={index} style={{ ...styles.tableRow }}>
-                        <TableCell align="center" style={styles.tableCell}>
+                        <TableCell style={styles.tableCell}>
                           <Typography>{index + 1}</Typography>
                         </TableCell>
                         <TableCell align="left" style={{ ...styles.tableCell }}>
