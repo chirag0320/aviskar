@@ -217,8 +217,8 @@ function AboutProduct({ productId }: any) {
                 <Stack className="Bottom">
                   <Stack className="SliderWrapper">
                     <Stack className="PriceMinMax">
-                      <Typography>Low: <Typography variant="titleLarge">${progressData?.data?.minPrice}</Typography></Typography>
-                      <Typography>High: <Typography variant="titleLarge">${progressData?.data?.maxPrice}</Typography></Typography>
+                      <Typography>Low: <Typography variant="titleLarge">${roundOfThePrice(progressData?.data?.minPrice)}</Typography></Typography>
+                      <Typography>High: <Typography variant="titleLarge">${roundOfThePrice(progressData?.data?.maxPrice)}</Typography></Typography>
                     </Stack>
                     <Slider
                       className="Slider"
