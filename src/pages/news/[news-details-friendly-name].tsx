@@ -31,6 +31,7 @@ import {
   FacebookIcon,
   TwitterIcon,
   InstagramIcon,
+  YoutubeIcon,
 } from "@/assets/icons";
 import { formatDate } from "@/utils/common";
 import useApiRequest from "@/hooks/useAPIRequest";
@@ -47,7 +48,7 @@ function NewsDetails({ params }: any) {
   return (
     <Layout>
       <Box className="BlogDetailPage">
-        <Breadcrumb page1={"Blog"} page2={"Blog"} page3={"Blog"} />
+        <Breadcrumb page1={"News"} page2={"News"} page3={newsDetailsData?.title} />
         <Box className="PostDescription">
           <Container>
             <Button
@@ -55,7 +56,7 @@ function NewsDetails({ params }: any) {
               variant="text"
               startIcon={<ChevronLeft />}
               onClick={()=>{
-                navigate('/blog')
+                navigate('/news')
               }}
             >
               All Posts
@@ -104,11 +105,14 @@ function NewsDetails({ params }: any) {
                     <IconButton className="SocialIcon" aria-label="Facebook Icon">
                       <FacebookIcon />
                     </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Facebook Icon">
+                    <IconButton className="SocialIcon" aria-label="Twitter Icon">
                       <TwitterIcon />
                     </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Facebook Icon">
+                    {/* <IconButton className="SocialIcon" aria-label="Instagram Icon">
                       <InstagramIcon />
+                    </IconButton> */}
+                    <IconButton className="SocialIcon" aria-label="Youtube Icon">
+                      <YoutubeIcon />
                     </IconButton>
                   </Stack>
                 </Box>

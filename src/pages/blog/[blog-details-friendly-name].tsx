@@ -31,6 +31,7 @@ import {
   FacebookIcon,
   TwitterIcon,
   InstagramIcon,
+  YoutubeIcon,
 } from "@/assets/icons";
 import { formatDate } from "@/utils/common";
 import useApiRequest from "@/hooks/useAPIRequest";
@@ -53,7 +54,7 @@ function BlogDetails({ params }: any) {
   return (
     <Layout>
       <Box className="BlogDetailPage">
-        <Breadcrumb page1={"Blog"} page2={"Blog"} page3={"Blog"} />
+        <Breadcrumb page1={"Blog"} page2={"Blog"} page3={blogDetailsData?.title} />
         <Box className="PostDescription">
           <Container>
             <Button
@@ -117,15 +118,21 @@ function BlogDetails({ params }: any) {
                     </IconButton>
                     <IconButton
                       className="SocialIcon"
-                      aria-label="Facebook Icon"
+                      aria-label="Twitter Icon"
                     >
                       <TwitterIcon />
                     </IconButton>
-                    <IconButton
+                    {/* <IconButton
                       className="SocialIcon"
-                      aria-label="Facebook Icon"
+                      aria-label="Instagram Icon"
                     >
                       <InstagramIcon />
+                    </IconButton> */}
+                    <IconButton
+                      className="SocialIcon"
+                      aria-label="Youtube Icon"
+                    >
+                      <YoutubeIcon />
                     </IconButton>
                   </Stack>
                 </Box>
