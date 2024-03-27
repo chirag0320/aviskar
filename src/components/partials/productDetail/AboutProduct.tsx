@@ -180,7 +180,7 @@ function AboutProduct({ productId }: any) {
       "IsInstantBuy": isInstantBuy
     } as any)
   }
-  const handleBuyNow = async() => {
+  const handleBuyNow = async () => {
     if (!isLoggedIn) {
       navigate('/login')
       return
@@ -379,12 +379,16 @@ function AboutProduct({ productId }: any) {
                         <TableBody>
                           {productDetailsData?.bulkProduct.map((bulkProduct: { quantity: number, productName: any }) => (
                             <TableRow key={bulkProduct.quantity} >
-                              <TableCell align="center">
-                                <Typography>{bulkProduct.productName}</Typography>
+                              <TableCell>
+                                <Stack className="Content">
+                                  <Typography>{bulkProduct.productName}</Typography>
+                                </Stack>
                                 <Divider />
                               </TableCell>
-                              <TableCell align="center" style={{ wordWrap: "break-word" }}>
-                                <Typography>{bulkProduct.quantity}</Typography>
+                              <TableCell>
+                                <Stack className="Content">
+                                  <Typography>{bulkProduct.quantity}</Typography>
+                                </Stack>
                                 <Divider />
                               </TableCell>
                             </TableRow>
