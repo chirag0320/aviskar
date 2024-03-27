@@ -22,7 +22,7 @@ const persistConfig = {
     'userDetails',
     'loading',
     'sectionDetails',
-    'categoriesList', 'isLoggedIn', 'userDetails', 'blogList', 'newsList', 'calculators','recentlyViewedProducts','productIds']
+    'categoriesList', 'isLoggedIn', 'userDetails', 'blogList', 'newsList', 'calculators','productIds']
   // Reducers you want to persist
 }
 // const persistedHomePageReducer = persistReducer(persistConfig, homepageReducer)
