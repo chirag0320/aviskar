@@ -64,35 +64,12 @@ function News() {
 
   return (
     <Layout>
-      <Breadcrumb page1={"Blog"} />
-      <Box className="HeroSection">
-        <Container>
-          <Typography variant="h2" component="h2">
-            Our Latest News Post
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{ mt: 1.875, color: variable.greyRegent }}
-          >
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
-          </Typography>
-          <Box className="PostWrapper">
-            <Stack className="LeftPostWrapper">
-              <PostCard isNews={true} details={newsList?.items?.[0]} navigate={() => navigate(`/news/${newsList?.items?.[0]?.friendlyName}`)} />
-            </Stack>
-            <Stack className="RightPostWrapper">
-              {newsList?.items?.[1] ? <PostCard isNews={true} details={newsList?.items?.[1]} navigate={() => navigate(`/news/${newsList?.items?.[1]?.friendlyName}`)} /> : null}
-              {newsList?.items?.[2] ? <PostCard isNews={true} details={newsList?.items?.[2]} navigate={() => navigate(`/news/${newsList?.items?.[2]?.friendlyName}`)} /> : null}
-            </Stack>
-          </Box>
-        </Container>
-      </Box>
-      <Box className="DiscoverPost">
-        <Container>
-          <Box className="DiscoverPost__title">
+      <Breadcrumb page1={"News"} />
+      <Box className="BlogPage">
+        <Box className="HeroSection">
+          <Container>
             <Typography variant="h2" component="h2">
-              Discover Blog Posts
+              Our Latest News Post
             </Typography>
             <Typography
               variant="body1"
@@ -101,147 +78,172 @@ function News() {
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry.
             </Typography>
-          </Box>
-          <Box className="SearchWrapper">
-            <TextField
-              type="search"
-              id="Search-Blog"
-              placeholder="Search Blog"
-              variant="outlined"
-              value={searchValue}
-              onChange={(e) => {
-                setSearchValue(e.target.value)
-                setbody((prev: any) => ({ ...prev, "search": e.target.value, }))
-              }}
-            />
-            <Button
-              variant="contained"
-              size="large"
-              startIcon={<SearchButtonIcon />}
-            >
-              Search
-            </Button>
-          </Box>
-          <Box className="PostFilter">
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="News Category list"
-              textColor="secondary"
-            // variant="scrollable"
-            // allowScrollButtonsMobile
-            >
-              {/* <Tab label="All Blog" value={'all'} />
-              <Tab label="News" value={'news'} />
-              <Tab label="Insights" value={'insights'} />
-              <Tab label="Gold" value={'gold'} />
-              <Tab label="Silver" value={'silver'} />
-              <Tab label="Platinum" value={'platinum'} />
-              <Tab label="Community" value={'community'} />
-              <Tab label="Resources" value={'resources'} /> */}
-            </Tabs>
+            <Box className="PostWrapper">
+              <Stack className="LeftPostWrapper">
+                <PostCard isNews={true} details={newsList?.items?.[0]} navigate={() => navigate(`/news/${newsList?.items?.[0]?.friendlyName}`)} />
+              </Stack>
+              <Stack className="RightPostWrapper">
+                {newsList?.items?.[1] ? <PostCard isNews={true} details={newsList?.items?.[1]} navigate={() => navigate(`/news/${newsList?.items?.[1]?.friendlyName}`)} /> : null}
+                {newsList?.items?.[2] ? <PostCard isNews={true} details={newsList?.items?.[2]} navigate={() => navigate(`/news/${newsList?.items?.[2]?.friendlyName}`)} /> : null}
+              </Stack>
+            </Box>
+          </Container>
+        </Box>
+        <Box className="DiscoverPost">
+          <Container>
+            <Box className="DiscoverPost__title">
+              <Typography variant="h2" component="h2">
+                Discover News Posts
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ mt: 1.875, color: variable.greyRegent }}
+              >
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry.
+              </Typography>
+            </Box>
+            <Box className="SearchWrapper">
+              <TextField
+                type="search"
+                id="Search-News"
+                placeholder="Search News"
+                variant="outlined"
+                value={searchValue}
+                onChange={(e) => {
+                  setSearchValue(e.target.value)
+                  setbody((prev: any) => ({ ...prev, "search": e.target.value, }))
+                }}
+              />
+              <Button
+                variant="contained"
+                size="large"
+                startIcon={<SearchButtonIcon />}
+              >
+                Search
+              </Button>
+            </Box>
+            <Box className="PostFilter">
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                aria-label="News Category list"
+                textColor="secondary"
+              // variant="scrollable"
+              // allowScrollButtonsMobile
+              >
+                {/* <Tab label="All Blog" value={'all'} />
+                <Tab label="News" value={'news'} />
+                <Tab label="Insights" value={'insights'} />
+                <Tab label="Gold" value={'gold'} />
+                <Tab label="Silver" value={'silver'} />
+                <Tab label="Platinum" value={'platinum'} />
+                <Tab label="Community" value={'community'} />
+                <Tab label="Resources" value={'resources'} /> */}
+              </Tabs>
 
-            <TabPanel index={value as any} value={value}>
-              <Grid
-                container
-                rowSpacing={{ md: 6.25, xs: 4 }}
-                columnSpacing={{ md: 3.75, xs: 2 }}
-              >
-                {newsList?.items?.map((item: any) => {
-                  return (
-                    <Grid item md={4} sm={6} key={item?.id}>
-                      <PostCard isNews={true} details={item} navigate={() => navigate(`/news/${item?.friendlyName}`)} />
-                    </Grid>
-                  )
-                })}
-                {/* <Grid item md={4} sm={6}>
-                  <PostCard />
+              <TabPanel index={value as any} value={value}>
+                <Grid
+                  container
+                  rowSpacing={{ md: 6.25, xs: 4 }}
+                  columnSpacing={{ md: 3.75, xs: 2 }}
+                >
+                  {newsList?.items?.map((item: any) => {
+                    return (
+                      <Grid item md={4} sm={6} key={item?.id}>
+                        <PostCard isNews={true} details={item} navigate={() => navigate(`/news/${item?.friendlyName}`)} />
+                      </Grid>
+                    )
+                  })}
+                  {/* <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid> */}
                 </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid> */}
-              </Grid>
-              {newsList?.items?.length > 0 ? <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                {/* <Button variant="contained">Load More</Button> */}
-              </Stack> : <RecordNotFound message="No news to show" />}
-            </TabPanel>
-            {/* <TabPanel index={3} value={value}>
-              <Grid
-                container
-                rowSpacing={{ md: 6.25, xs: 4 }}
-                columnSpacing={{ md: 3.75, xs: 2 }}
-              >
-                <Grid item md={4} sm={6}>
-                  <PostCard />
+                {newsList?.items?.length > 0 ? <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
+                  {/* <Button variant="contained">Load More</Button> */}
+                </Stack> : <RecordNotFound message="No news to show" />}
+              </TabPanel>
+              {/* <TabPanel index={3} value={value}>
+                <Grid
+                  container
+                  rowSpacing={{ md: 6.25, xs: 4 }}
+                  columnSpacing={{ md: 3.75, xs: 2 }}
+                >
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
                 </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
+                <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
+                  <Button variant="contained">Load More</Button>
+                </Stack>
+              </TabPanel> */}
+              {/* <TabPanel index={2} value={value}>
+                <Grid
+                  container
+                  rowSpacing={{ md: 6.25, xs: 4 }}
+                  columnSpacing={{ md: 3.75, xs: 2 }}
+                >
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
                 </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
+                <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
+                  <Button variant="contained">Load More</Button>
+                </Stack>
+              </TabPanel>
+              <TabPanel index={3} value={value}>
+                <Grid
+                  container
+                  rowSpacing={{ md: 6.25, xs: 4 }}
+                  columnSpacing={{ md: 3.75, xs: 2 }}
+                >
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
+                  <Grid item md={4} sm={6}>
+                    <PostCard />
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                <Button variant="contained">Load More</Button>
-              </Stack>
-            </TabPanel> */}
-            {/* <TabPanel index={2} value={value}>
-              <Grid
-                container
-                rowSpacing={{ md: 6.25, xs: 4 }}
-                columnSpacing={{ md: 3.75, xs: 2 }}
-              >
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-              </Grid>
-              <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                <Button variant="contained">Load More</Button>
-              </Stack>
-            </TabPanel>
-            <TabPanel index={3} value={value}>
-              <Grid
-                container
-                rowSpacing={{ md: 6.25, xs: 4 }}
-                columnSpacing={{ md: 3.75, xs: 2 }}
-              >
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-              </Grid>
-              <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                <Button variant="contained">Load More</Button>
-              </Stack>
-            </TabPanel>
-            <TabPanel index={4} value={value}>
-              Item Three
-            </TabPanel>
-            <TabPanel index={5} value={value}>
-              Item Three
-            </TabPanel>
-            <TabPanel index={6} value={value}>
-              Item Three
-            </TabPanel>
-            <TabPanel index={7} value={value}>
-              Item Three
-            </TabPanel>
-            <TabPanel index={8} value={value}>
-              Item Three
-            </TabPanel> */}
-          </Box>
-        </Container>
+                <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
+                  <Button variant="contained">Load More</Button>
+                </Stack>
+              </TabPanel>
+              <TabPanel index={4} value={value}>
+                Item Three
+              </TabPanel>
+              <TabPanel index={5} value={value}>
+                Item Three
+              </TabPanel>
+              <TabPanel index={6} value={value}>
+                Item Three
+              </TabPanel>
+              <TabPanel index={7} value={value}>
+                Item Three
+              </TabPanel>
+              <TabPanel index={8} value={value}>
+                Item Three
+              </TabPanel> */}
+            </Box>
+          </Container>
+        </Box>
       </Box>
     </Layout>
   );
