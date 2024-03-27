@@ -31,7 +31,7 @@ export const requestBodyDefault: categoryRequestBody = {
 }
 
 function Category({ location }: { location: any }) {
-    const [page, setPage] = useState(location?.search !== "" ? parseInt(location?.search.split("=")[1]) : 1);
+    const [page, setPage] = useState(location?.search !== "" ? parseInt(new URLSearchParams(location.search).get("page")!) : 1);
     const dispatch = useAppDispatch();
 
     const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});

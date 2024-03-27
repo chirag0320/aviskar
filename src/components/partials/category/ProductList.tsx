@@ -15,7 +15,10 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
-    navigate(`?page=${value}`, { replace: true });
+    // navigate(`?page=${value}`, { replace: true });
+    const pageQuery = new URLSearchParams(location.search);
+    pageQuery.set('page', value.toString());
+    navigate(`?${pageQuery.toString()}`, { replace: true });
   }
 
   return (
