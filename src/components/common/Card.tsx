@@ -10,6 +10,9 @@ import {
   Button,
   IconButton, CardMedia, TextField, Select, MenuItem, Divider,
   Icon,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import classNames from "classnames";
 
@@ -205,7 +208,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
         {product.isBundle &&
           <ClickTooltip
             open={open}
-            className="TooltipOfferTag"
+            className="TooltipStack"
             placement="bottom-start"
             onClose={handleTooltipClose}
             onClickAway={handleClickAway}
@@ -222,27 +225,16 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             lightTheme
             arrow
           >
-            <Box className="Offers">
-              <Typography className="ItemPrice">
-                Name
-              </Typography>
-              <Typography className="ItemPrice" sx={{ marginRight: "5px" }}>
-                Qty
-              </Typography>
-              {product?.bulkProduct?.map((product: any) => {
-                return (
-                  <Fragment
-                    key={product?.productName}
-                  >
-                    <Typography className="Item">
-                      {product?.productName}
-                    </Typography>
-                    <Typography className="ItemPrice">
-                      {product?.quantity}
-                    </Typography>
-                  </Fragment>
-                );
-              })}
+            <Box className="Content">
+              <List disablePadding>
+                {product?.bulkProduct?.map((product: any) => {
+                  return (
+                    <ListItem disablePadding disableGutters>
+                      <ListItemText primary={product?.productName} secondary={product?.quantity} secondaryTypographyProps={{variant: "body1"}} />
+                    </ListItem>
+                  );
+                })}
+              </List>
             </Box>
           </ClickTooltip>
         }
