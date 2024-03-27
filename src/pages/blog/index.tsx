@@ -16,6 +16,7 @@ import TabPanel from "@/components/common/TabPanel";
 // Components
 import Layout from "@/components/common/Layout";
 import PostCard from "@/components/common/PostCard";
+import RecordNotFound from "@/components/common/RecordNotFound";
 
 // Utils
 import { Breadcrumb } from "@/components/common/Utils";
@@ -136,8 +137,8 @@ function Blog() {
                 onChange={handleChange}
                 aria-label="Blog Category list"
                 textColor="secondary"
-                variant="scrollable"
-                allowScrollButtonsMobile
+              // variant="scrollable"
+              // allowScrollButtonsMobile
               >
                 <Tab label="All Blog" value={"all"} />
                 <Tab label="News" value={"news"} />
@@ -178,7 +179,7 @@ function Blog() {
                   <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
                     {/* <Button variant="contained">Load More</Button> */}
                   </Stack>
-                ) : null}
+                ) : <RecordNotFound message="No blogs to show" />}
               </TabPanel>
               {/* <TabPanel index={3} value={value}>
               <Grid

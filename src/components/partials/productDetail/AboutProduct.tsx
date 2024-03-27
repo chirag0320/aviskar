@@ -180,7 +180,7 @@ function AboutProduct({ productId }: any) {
       "IsInstantBuy": isInstantBuy
     } as any)
   }
-  const handleBuyNow = async() => {
+  const handleBuyNow = async () => {
     if (!isLoggedIn) {
       navigate('/login')
       return
@@ -379,12 +379,16 @@ function AboutProduct({ productId }: any) {
                         <TableBody>
                           {productDetailsData?.bulkProduct.map((bulkProduct: { quantity: number, productName: any }) => (
                             <TableRow key={bulkProduct.quantity} >
-                              <TableCell align="center">
-                                <Typography>{bulkProduct.productName}</Typography>
+                              <TableCell>
+                                <Stack className="Content">
+                                  <Typography>{bulkProduct.productName}</Typography>
+                                </Stack>
                                 <Divider />
                               </TableCell>
-                              <TableCell align="center" style={{ wordWrap: "break-word" }}>
-                                <Typography>{bulkProduct.quantity}</Typography>
+                              <TableCell>
+                                <Stack className="Content">
+                                  <Typography>{bulkProduct.quantity}</Typography>
+                                </Stack>
                                 <Divider />
                               </TableCell>
                             </TableRow>
@@ -409,8 +413,9 @@ function AboutProduct({ productId }: any) {
           onChange={handleTabChange}
           className="ProductDescriptionTabs"
           aria-label="Product description tabs"
-          variant="scrollable"
-          allowScrollButtonsMobile
+          variant="fullWidth"
+        // variant="scrollable"
+        // allowScrollButtonsMobile
         >
           {productDetailsData?.isProductDescriptionShow ? <Tab label="Product Description" value={0} /> : null}
           {productDetailsData?.isAdditionalInformationShow ? <Tab label="Additional Information" value={1} /> : null}
