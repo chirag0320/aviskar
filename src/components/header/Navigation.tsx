@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, lazy } from "react"
+import React, { Fragment, Suspense, lazy, useEffect, useState } from "react"
 import { Container, Stack, Divider, Button, Box } from "@mui/material"
 import classNames from "classnames"
 
@@ -28,6 +28,11 @@ export interface Icategory {
 }
 function Navigation() {
   const { configDetails: configDetailsState, categoriesList } = useAppSelector((state) => state.homePage)
+  const [currententlySelected, setCurrententlySelected] = useState('')
+  useEffect(() => {
+    console.log("🚀 ~ Navigation ~ window?.location?.pathname:", window?.location?.pathname)
+    setCurrententlySelected(window?.location?.pathname?.toLocaleLowerCase()?.replace(/[\s/]/g, ''))
+  }, [window?.location?.pathname])
   return (
     <Box className="NavigationHeader">
       <Container>
@@ -49,7 +54,7 @@ function Navigation() {
                             aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                             color="secondary"
                             onClick={() => navigate(`/${category.searchEngineFriendlyPageName}`)}
-                            className={classNames("MenuLink")}
+                            className={classNames("MenuLink", { "Active": category?.name?.toLocaleLowerCase()?.replace(/[\s/]/g, '') === currententlySelected })}
                             disableRipple
                             name={category?.searchEngineFriendlyPageName ?? category.name}
                           >
@@ -66,7 +71,7 @@ function Navigation() {
                         color="secondary"
                         aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                         name={category?.searchEngineFriendlyPageName ?? category.name}
-                        className={classNames("MenuLink", { "Active": false })}
+                        className={classNames("MenuLink", { "Active": category?.name?.toLocaleLowerCase()?.replace(/[\s/]/g, '') === currententlySelected })}
                         disableRipple
                       >
                         {category.name}
@@ -92,4 +97,4 @@ function Navigation() {
   )
 }
 
-export default React.memo(Navigation)
+export default Navigation

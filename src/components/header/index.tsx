@@ -46,4 +46,4 @@ const Index = () => {
   )
 }
 
-export default React.memo(Index)
+export default Index
