@@ -10,6 +10,9 @@ import useApiRequest from '@/hooks/useAPIRequest'
 import { ENDPOINTS } from '@/utils/constants'
 import { navigate } from 'gatsby'
 
+// Components
+import RecordNotFound from '@/components/common/RecordNotFound'
+
 const dataforbody = {
   "search": "",
   "pageNo": 0,
@@ -101,37 +104,40 @@ function CloserLook() {
         description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
       />
       <Container className="DestinationWrapper" maxWidth="lg">
-        <Box className="SwiperContainer">
-          <Swiper {...config} >
-            {
-              !loading ?
-                (data?.data?.items?.length > 0 ? data?.data?.items?.map((destination) => (
-                  <SwiperSlide key={destination.id}>
-                    <TravelCard
-                      friendlyName={destination?.friendlyName}
-                      place={destination.title}
-                      description={destination.bodyOverview}
-                      imageUrl={destination.imageUrl}
-                    />
-                  </SwiperSlide>
-                ))
-                  : null) :
-                Array(5).fill(0).map((_, index) => {
-                  return (
-                    <SwiperSlide key={index}>
-                      <Card className="ProductCard">
-                        <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
-                        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                          <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
-                          <Skeleton animation="wave" height={70} width="95%" />
-                        </div>
-                      </Card>
+        {data?.data?.items?.length !== 0 ?
+          <Box className="SwiperContainer">
+            <Swiper {...config} >
+              {
+                !loading ?
+                  (data?.data?.items?.length > 0 ? data?.data?.items?.map((destination) => (
+                    <SwiperSlide key={destination.id}>
+                      <TravelCard
+                        friendlyName={destination?.friendlyName}
+                        place={destination.title}
+                        description={destination.bodyOverview}
+                        imageUrl={destination.imageUrl}
+                      />
                     </SwiperSlide>
-                  );
-                })
-            }
-          </Swiper>
-        </Box>
+                  ))
+                    : null) :
+                  Array(5).fill(0).map((_, index) => {
+                    return (
+                      <SwiperSlide key={index}>
+                        <Card className="ProductCard">
+                          <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
+                          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                            <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
+                            <Skeleton animation="wave" height={70} width="95%" />
+                          </div>
+                        </Card>
+                      </SwiperSlide>
+                    );
+                  })
+              }
+            </Swiper>
+          </Box>
+          : <RecordNotFound message="No destination available" />
+        }
       </Container>
       <Stack className="Action">
         <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained" onClick={() => {

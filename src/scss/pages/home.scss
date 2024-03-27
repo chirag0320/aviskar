@@ -151,8 +151,23 @@
     @include padding-vertical(50);
   }
   .ToggleWrapper {
-    justify-content: center;
     margin-top: 29px;
+    @include media-min($sm) {
+      justify-content: center;
+    }
+    @include media($sm) {
+      .MuiToggleButtonGroup-root {
+        width: 100%;
+        .MuiToggleButton-root {
+          flex: 1;
+          min-width: initial;
+          padding: 12px;
+          font-style: normal;
+          font-weight: 600;
+          letter-spacing: normal;
+        }
+      }
+    }
   }
   .ProductsWrapper {
     .Wrapper {

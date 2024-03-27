@@ -82,7 +82,9 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
         />
       </Stack>
       <CardContent>
-        <Link className="ProductName" href="#">
+        <Link className="ProductName" onClick={() => {
+          navigate(`/product-details/${product?.friendlypagename}`) //friendlypagename
+        }}>
           <Typography component="h3">{product.productName}</Typography>
         </Link>
         <Stack className="ContentWrapper">

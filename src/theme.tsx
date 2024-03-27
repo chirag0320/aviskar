@@ -446,7 +446,7 @@ const theme: Theme = createTheme({
             backgroundColor: "#EAA22B",
             letterSpacing: 1,
             "&:hover": {
-              color: "#EAA22B",
+              backgroundColor: "#EAA22B",
             },
             "@media (max-width: 600px)": {
               minWidth: 120,
@@ -455,12 +455,6 @@ const theme: Theme = createTheme({
           "@media (max-width: 600px)": {
             minWidth: 100,
           },
-        },
-        firstButton: {
-          paddingRight: 0,
-        },
-        lastButton: {
-          paddingLeft: 0,
         },
       },
     },

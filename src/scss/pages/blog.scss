@@ -87,10 +87,28 @@
     }
     .PostFilter {
       margin-top: 40px;
+      .MuiTabs-root {
+        .MuiTabs-flexContainer {
+          justify-content: center;
+          flex-wrap: wrap;
+          @include media($xxs) {
+            flex-direction: column;
+          }
+          .MuiTab-root {
+            @include media($xs) {
+              min-height: initial;
+              padding: 8px 20px;
+            }
+          }
+        }
+      }
       .TabPanel {
         padding-top: 60px;
         @include media($md) {
           padding-top: 30px;
+        }
+        .RecordNotFound {
+          @include padding-vertical(20, 30);
         }
       }
     }
