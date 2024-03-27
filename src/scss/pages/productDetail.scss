@@ -158,6 +158,7 @@
                 flex-direction: column;
                 min-width: fit-content;
                 width: 60%;
+                max-width: calc(100% - 1px);
                 @include media($sm) {
                   flex-grow: 1;
                 }
