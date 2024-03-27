@@ -322,23 +322,29 @@
       .Details {
         ul {
           list-style: none;
-          padding: 13px 30px 14px;
+          margin: 0;
+          padding: 13px 30px;
+
+          @include media($sm) {
+            padding: 10px 30px 16px;
+          }
 
           li {
             padding: 10px 0;
-            justify-content: space-between;
             border-bottom: 1px solid #0000000a;
-
             opacity: 80%;
-
             font-size: 16px;
+
+            @include media($sm) {
+              padding: 6px 0;
+            }
           }
         }
       }
 
       // previously we are having this below detials css but now getting this from backend so need to chagne above css
       // .Details {
-      //   padding: 13px 30px 14px;
+      //   padding: 13px 30px;
 
       //   .ContentWrapper {
       //     padding: 10px 0;
@@ -359,6 +365,10 @@
     .MuiCardActions-root {
       padding: 0 30px 30px;
 
+      @include media($sm) {
+        padding-bottom: 16px;
+      }
+
       .UpgradPlanButton {
         padding: 12px 16px;
         border-color: $yellowFuel;
@@ -375,7 +385,6 @@
   }
 
   &.ActiveCard {
-    // transform: scale(1.08);
     box-shadow: 0 8px 16px rgb(234 162 43 / 68%);
 
     .UpgradPlanButton {
@@ -385,7 +394,6 @@
   }
 }
 
-// }
 // End :: membershipcard css
 
 .PostCard {
