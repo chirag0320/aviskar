@@ -154,8 +154,8 @@ export const createHomepageSlice = createSlice({
       console.log("🚀 ~ action:", action)
       state.openToaster = action.payload.openToaster
       state.toasterMessage = action.payload.toasterMessage
-      state.buttonText = action.payload.buttonText
-      state.redirectButtonUrl = action.payload.redirectButtonUrl
+      state.buttonText = action.payload.buttonText || ''
+      state.redirectButtonUrl = action.payload.redirectButtonUrl || ''
     },
     // setToasterMeaasge: (state, action) => {
     //   state.toasterMessage = action.payload

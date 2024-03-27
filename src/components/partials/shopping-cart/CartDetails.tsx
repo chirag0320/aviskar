@@ -5,13 +5,14 @@ import useApiRequest from '@/hooks/useAPIRequest'
 import { CartItem } from '@/types/shoppingCart'
 import { ENDPOINTS } from '@/utils/constants'
 import { Box, Button, Stack, Typography } from '@mui/material'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IproductPrice } from '../home/FeaturedProducts'
 import { clearShoppingCart, deleteShoppingCartData, resetSubTotal, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
-import { set } from 'react-hook-form'
 import { navigate } from 'gatsby'
-import { apicall } from '@/utils/helper'
 import useDebounce from '@/hooks/useDebounce'
+import { hasFulfilled } from '@/utils/common'
+import { setToasterState } from "@/redux/reducers/homepageReducer";
+
 
 export type CartItemsWithLivePriceDetails = CartItem & {
     LivePriceDetails: IproductPrice
@@ -19,6 +20,7 @@ export type CartItemsWithLivePriceDetails = CartItem & {
 
 // const CartDetails = ({ setSubTotal }: { setSubTotal: Dispatch<SetStateAction<number>> }) => {
 const CartDetails = () => {
+
     // const CartDetails = ({ isShoppingCartUpdated, setIsShoppingCartUpdated }: { isShoppingCartUpdated: boolean, setIsShoppingCartUpdated: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const loading = useAppSelector(state => state.shoppingCart.loading);
     const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
@@ -30,7 +32,7 @@ const CartDetails = () => {
     const changeInQuantities = useDebounce(quantities, 500)
     useEffect(() => {
         updateCartHandler(false)
-    }, [changeInQuantities,cartItemsWithLivePrice])
+    }, [changeInQuantities, cartItemsWithLivePrice])
     useEffect(() => {
         if (priceData?.data?.length > 0) {
             const idwithpriceObj: any = {}
@@ -76,8 +78,22 @@ const CartDetails = () => {
 
     const removeItemFromCart = async (id: number) => {
         // optimistic update needs(currentlt not)
-        await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: [id] }) as any);
-        setCartItemsWithLivePrice(() => cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== id));
+        const response = await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: [id] }) as any);
+
+        if (hasFulfilled(response.type)) {
+            setCartItemsWithLivePrice(() => cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== id));
+            // console.log("🚀 ~ removeItemFromCart ~ response?.payload?.data?.message:", response?.payload?.data?.message)
+            dispatch(setToasterState({
+                openToaster: true,
+                toasterMessage: response?.payload?.data?.message
+            }))
+        }
+        else {
+            dispatch(setToasterState({
+                openToaster: true,
+                toasterMessage: "Removing item from Shopping Cart failed. Please try again.",
+            }))
+        }
     }
 
     const updateCartHandler = async (isapiCallNeeded?: boolean) => {
@@ -110,7 +126,7 @@ const CartDetails = () => {
     return (
         <Box className="ShoppingCartDetails">
             <Box className="ShoppingProductsDetailsWrapper">
-                {cartItemsWithLivePrice && cartItemsWithLivePrice.length === 0 && <Typography variant="body1" style={{textAlign:"center"}}>No items in the cart</Typography>}
+                {cartItemsWithLivePrice && cartItemsWithLivePrice.length === 0 && <Typography variant="body1" style={{ textAlign: "center" }}>No items in the cart</Typography>}
                 {cartItemsWithLivePrice?.length > 0 && cartItemsWithLivePrice?.map((cartItem) => {
                     return (
                         <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={true} hideRightSide={true} quantity={quantities[cartItem.id]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />

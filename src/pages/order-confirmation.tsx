@@ -11,12 +11,12 @@ import { useAppSelector } from "@/hooks";
 import { rows } from "./order-details";
 
 function OrderConfirmation(props: any) {
-    const orderId = props.location?.search?.split('=')[1];
+    // const orderId = props.location?.search?.split('=')[1];
     const orderConfirmationDetails = useAppSelector(state => state.orderConfirmationDetails);
     console.log("🚀 ~ OrderConfirmation ~ orderConfirmationDetails:", orderConfirmationDetails)
     useAPIoneTime({
         service: getOrderConfirmationDetails,
-        endPoint: ENDPOINTS.orderConfimationDetails + 26487
+        endPoint: ENDPOINTS.orderConfimationDetails + new URLSearchParams(location.search).get("id")
     })
     return (
         <Layout>
@@ -71,22 +71,6 @@ function OrderConfirmation(props: any) {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {orderConfirmationDetails?.orderItems?.map((row) => (
-                                                    <TableRow
-                                                        key={row.productId}
-                                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                    >
-                                                        <TableCell component="th" scope="row">
-                                                            <img className="ProductImage"
-                                                                src={row.imageUrl} alt="Product image" loading="lazy"></img>
-                                                            {row.productName}
-                                                        </TableCell>
-                                                        <TableCell>{row.unitPrice}</TableCell>
-                                                        <TableCell>{row.quantity}</TableCell>
-                                                        <TableCell>{row.subTotal}</TableCell>
-                                                    </TableRow>
-
-                                                ))}
                                                 {orderConfirmationDetails?.orderItems?.map((row) => (
                                                     <TableRow
                                                         key={row.productId}

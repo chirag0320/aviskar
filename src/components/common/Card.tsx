@@ -226,8 +226,8 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
               <Typography className="ItemPrice">
                 Name
               </Typography>
-              <Typography className="ItemPrice" sx={{marginRight: "5px"}}>
-                Qty 
+              <Typography className="ItemPrice" sx={{ marginRight: "5px" }}>
+                Qty
               </Typography>
               {product?.bulkProduct?.map((product: any) => {
                 return (
@@ -248,17 +248,29 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
         }
 
         <IconButton className="Outlined AddToCart" onClick={async () => {
-          await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+          const response = await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
             "productId": product.productId,
             "quantity": 1,
             "IsInstantBuy": false
           } as any)
-          dispatch(setToasterState({
-            openToaster: true,
-            toasterMessage: 'The product has been added to your',
-            buttonText: 'product cart',
-            redirectButtonUrl: 'shopping-cart'
-          }))
+          // console.log("🚀 ~ addTOCart response", response);
+          if (response.code === 200) {
+            dispatch(setToasterState({
+              openToaster: true,
+              toasterMessage: 'The product has been added to your',
+              buttonText: 'product cart',
+              redirectButtonUrl: 'shopping-cart'
+            }))
+          }
+          else {
+            dispatch(setToasterState({
+              openToaster: true,
+              toasterMessage: "Adding cart failed! Try again",
+              // buttonText: 'Adding cart failed! Try again',
+              // redirectButtonUrl: ''
+            }))
+          }
+
         }}><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
