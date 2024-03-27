@@ -51,7 +51,7 @@ const ContactUsForm = () => {
             }
         }) as any);
         reset();
-    }    
+    }
 
     return (
         <Box className="GetInTouchLeftForm">
@@ -66,7 +66,7 @@ const ContactUsForm = () => {
                     control={control}
                     variant='outlined'
                     margin='none'
-                    // required
+                    required
                     className='SelectReason'
                 >
                     {reasonsForContact.length > 0 && reasonsForContact.map((reason) => (
@@ -81,7 +81,7 @@ const ContactUsForm = () => {
                     placeholder="Enter your name."
                     variant='outlined'
                     margin='none'
-                // required
+                    required
                 />
                 <RenderFields
                     register={register}
@@ -91,7 +91,7 @@ const ContactUsForm = () => {
                     placeholder="Enter your email address."
                     variant='outlined'
                     margin='none'
-                // required
+                    required
                 />
                 <RenderFields
                     register={register}
@@ -101,7 +101,7 @@ const ContactUsForm = () => {
                     placeholder="Enter your phone number."
                     variant='outlined'
                     margin='none'
-                // required
+                    required
                 />
                 <RenderFields
                     register={register}
@@ -114,7 +114,7 @@ const ContactUsForm = () => {
                     rows={7}
                     className='EnquiryTexaea'
                     margin='none'
-                // required
+                    required
                 />
                 <Box className="FormAction">
                     <Button className='GetInTouchSubmitBtn' variant="contained" type="submit" disabled={loading}>Submit</Button>

@@ -291,16 +291,6 @@
 }
 
 // Start :: membershipcard css
-// .MembershipCardLink{
-// border-radius: 20px;
-// @include transition;
-// &:hover {
-//   box-shadow: 14px 28px 43.29999923706055px 0px #0000001A;
-//   .UpgradPlanButton{
-//     background-color: $yellowFuel;
-//     color: $white;
-//   }
-// }
 .MembershipCard {
   &.MuiCard-root {
     text-align: center;
@@ -308,8 +298,6 @@
     @include transition;
 
     &:hover {
-      // transform: scale(1.025);
-      // box-shadow: 14px 28px 43.29999923706055px 0px #0000001A;
 
       .UpgradPlanButton {
         background-color: $yellowFuel;
@@ -341,13 +329,9 @@
             justify-content: space-between;
             border-bottom: 1px solid #0000000a;
 
-            // .ContentTitle {
             opacity: 80%;
-            // }
 
-            // .ContentValue {
             font-size: 16px;
-            // }
           }
         }
       }
@@ -391,10 +375,8 @@
   }
 
   &.ActiveCard {
-    transform: scale(1.08);
-    box-shadow: 6px 6px 12px #eed0a0;
-
-    // box-shadow: 14px 28px 43.3px 0px #eed0a0;
+    // transform: scale(1.08);
+    box-shadow: 0 8px 16px rgb(234 162 43 / 68%);
 
     .UpgradPlanButton {
       background-color: $yellowFuel;

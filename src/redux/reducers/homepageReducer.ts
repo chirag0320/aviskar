@@ -131,18 +131,25 @@ export const createHomepageSlice = createSlice({
     },
     setRecentlyViewedProduct: (state, action) => {
       const newProductId = action.payload;
+      console.log("🚀 ~ newProductId:", newProductId)
       // Check if the product already exists in the recently viewed list
       const existingIndex = state.recentlyViewedProducts.findIndex(productId => productId === newProductId);
+      console.log("🚀 ~ existingIndex:", existingIndex)
       if (existingIndex === -1) {
-        // Product does not exist, add it to the list
-        state.recentlyViewedProducts.unshift(newProductId);
-        state.recentlyViewedProducts = state?.recentlyViewedProducts?.length > 20 ? state.recentlyViewedProducts.splice(0, 20) : state.recentlyViewedProducts
-        localStorageSetItem('recentlyViewedProducts', JSON.stringify(state.recentlyViewedProducts))
+        let updatedViewProducts = [newProductId, ...state.recentlyViewedProducts]
+        console.log("🚀 ~ updatedViewProducts: 1", updatedViewProducts)
+        if(updatedViewProducts?.length > 20){
+          updatedViewProducts.splice(0, 20)
+        }
+        state.recentlyViewedProducts = updatedViewProducts
+        console.log("🚀 ~ updatedViewProducts: 2", updatedViewProducts)
+        localStorageSetItem('recentlyViewedProducts', JSON.stringify(updatedViewProducts))
       } else {
-        // Product already exists, remove it from its current position and add it to the beginning of the list
-        state.recentlyViewedProducts.splice(existingIndex, 1);
-        state.recentlyViewedProducts.unshift(newProductId);
-        localStorageSetItem('recentlyViewedProducts', JSON.stringify(state.recentlyViewedProducts))
+        let updatedViewProducts = [...state.recentlyViewedProducts]
+        updatedViewProducts.splice(existingIndex, 1);
+        updatedViewProducts.unshift(newProductId);
+        state.recentlyViewedProducts = updatedViewProducts
+        localStorageSetItem('recentlyViewedProducts', JSON.stringify(updatedViewProducts))
       }
     },
     setToasterState: (state, action) => {
