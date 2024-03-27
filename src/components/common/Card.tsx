@@ -130,7 +130,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
               <Typography variant="overline" className="DiscountMessage">
                 {configDetailsState?.productboxdiscounttext?.value}
               </Typography>
-              <HoverTooltip
+              {/* <HoverTooltip
                 placement="top-end"
                 renderComponent={
                   <IconButton className="InfoButton">
@@ -141,7 +141,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                 arrow
               >
                 This is a helper text to justify pricing discount.
-              </HoverTooltip>
+              </HoverTooltip> */}
             </Stack>
           </Stack>
         </Stack>
@@ -280,7 +280,9 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
 export const TravelCard = (props: any) => {
   const { place, description, imageUrl, friendlyName } = props
   return (
-    <Card className="TravelCard">
+    <Card className="TravelCard" onClick={() => {
+      navigate(`blog/${friendlyName}`)
+    }}>
       <Link className="ImageLink">
         <img src={imageUrl} alt="Travel image" loading="lazy" />
       </Link>
@@ -289,9 +291,7 @@ export const TravelCard = (props: any) => {
         <Typography className="Description">{description}</Typography>
       </CardContent>
       <CardActions>
-        <Button name='discoverMore' aria-label="discoverMore" endIcon={<ArrowRight />} onClick={() => {
-          navigate(`blog/${friendlyName}`)
-        }}>Discover More</Button>
+        <Button name='discoverMore' aria-label="discoverMore" endIcon={<ArrowRight />}>Discover More</Button>
       </CardActions>
     </Card>
   );
