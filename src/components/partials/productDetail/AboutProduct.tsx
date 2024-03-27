@@ -198,7 +198,16 @@ function AboutProduct({ productId }: any) {
           <form>
             <Box className="Heading">
               <Typography className="ProductName" variant="h4">{productDetailsData?.name}</Typography>
-              <Typography>{productDetailsData?.shortDescription}</Typography>
+              <Stack className="Wrapper">
+                <Typography>{productDetailsData?.shortDescription}</Typography>
+                <Typography
+                  variant="caption"
+                  className="OfferBadge"
+                  sx={{ backgroundColor: productDetailsData?.tagColor }}
+                >
+                  {productDetailsData?.tagName}
+                </Typography>
+              </Stack>
             </Box>
             <Divider />
             <Box className="PricingDetails">
