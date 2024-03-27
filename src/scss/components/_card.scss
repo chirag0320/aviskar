@@ -145,8 +145,8 @@
 
           .Left {
             align-items: center;
-            gap: 8px;
-
+            gap: 0px 8px;
+            flex-wrap: wrap;
             .DiscountedPrice {
               text-decoration: line-through;
               color: rgba($dark, 0.5);
@@ -155,7 +155,7 @@
 
           .Discount {
             color: $sinopia;
-
+            flex-shrink: 0;
             @include media($sm) {
               font-size: pxToRem(13);
               line-height: pxToRem(24);
