@@ -333,12 +333,16 @@ function AboutProduct({ productId }: any) {
                           toQty: number,
                         }, index: any) => (
                           <TableRow key={`pricedata-${index}`} >
-                            <TableCell align="center">
-                              <Typography>{priceData?.fromQty + '-' + priceData?.toQty}</Typography>
+                            <TableCell>
+                              <Stack className="Content">
+                                <Typography>{priceData?.fromQty + '-' + priceData?.toQty}</Typography>
+                              </Stack>
                               <Divider />
                             </TableCell>
-                            <TableCell align="center" style={{ wordWrap: "break-word" }}>
-                              <Typography>{priceData?.price}</Typography>
+                            <TableCell>
+                              <Stack className="Content">
+                                <Typography>{priceData?.price}</Typography>
+                              </Stack>
                               <Divider />
                             </TableCell>
                           </TableRow>
