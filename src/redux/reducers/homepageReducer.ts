@@ -137,12 +137,10 @@ export const createHomepageSlice = createSlice({
       console.log("🚀 ~ existingIndex:", existingIndex)
       if (existingIndex === -1) {
         let updatedViewProducts = [newProductId, ...state.recentlyViewedProducts]
-        console.log("🚀 ~ updatedViewProducts: 1", updatedViewProducts)
         if(updatedViewProducts?.length > 20){
           updatedViewProducts.splice(0, 20)
         }
         state.recentlyViewedProducts = updatedViewProducts
-        console.log("🚀 ~ updatedViewProducts: 2", updatedViewProducts)
         localStorageSetItem('recentlyViewedProducts', JSON.stringify(updatedViewProducts))
       } else {
         let updatedViewProducts = [...state.recentlyViewedProducts]
