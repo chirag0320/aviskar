@@ -19,6 +19,7 @@ import Toaster from "@/components/common/Toaster";
 function IndexPage() {
   const dispatch = useAppDispatch()
   const { configDetails: configDetailsState, openToaster,scrollPosition } = useAppSelector((state) => state.homePage)
+  console.log("🚀 ~ IndexPage ~ scrollPosition:", scrollPosition)
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
 
   const [body] = useState({
