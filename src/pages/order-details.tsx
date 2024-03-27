@@ -145,10 +145,10 @@ function orderDetails() {
                                 <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell sx={{ minWidth: "40%" }}>Name</TableCell>
-                                            <TableCell sx={{ minWidth: "15%" }}>Price</TableCell>
-                                            <TableCell sx={{ minWidth: "10%" }}>Quantity</TableCell>
-                                            <TableCell sx={{ minWidth: "15%" }}>Total</TableCell>
+                                            <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
+                                            <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
+                                            <TableCell sx={{ minWidth: "156px" }}>Quantity</TableCell>
+                                            <TableCell sx={{ minWidth: "200px" }}>Total</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>

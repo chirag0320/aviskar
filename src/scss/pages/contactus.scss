@@ -91,6 +91,10 @@
             padding-top: 60px;
         }
 
+        @include media($sm) {
+            padding-top: 40px;
+        }
+
 
         .ContactCard {
             padding: 35px 30px 30px 30px;
@@ -131,6 +135,11 @@
                     width: auto;
                 }
             }
+
+            .CallUsNumber,
+            .EmailAddress {
+                @include transition;
+            }
         }
     }
 
@@ -147,8 +156,12 @@
 
         @include media($md) {
             flex-direction: column;
-            padding: 50px 0 50px;
+            padding: 50px 0;
 
+        }
+
+        @include media($sm) {
+            padding: 40px 0;
         }
 
 
@@ -160,6 +173,11 @@
 
                 .InputRow {
                     margin-bottom: 38px;
+
+                    @include media($sm) {
+                        margin-bottom: 24px;
+                    }
+
 
                     &.EnquiryTexaea {
                         margin-bottom: 28px;
