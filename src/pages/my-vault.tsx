@@ -82,7 +82,7 @@ function Vault() {
   return (
     <Layout>
       <Box className="VaultPage">
-        <Breadcrumb page1={"Vault"} />
+        <Breadcrumb arr={[{navigate:'/vault',name:'vault'}]} />
         <Box className="HeroSection">
           <Container>
             <Box className="HeroSectionWrapper">

@@ -34,7 +34,8 @@ import useDebounce from "@/hooks/useDebounce";
 import { navigate } from "gatsby";
 
 function Blog() {
-  const { blogList }: any = useAppSelector((state) => state.blogPage);
+  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+  const { blogList, topThree }: any = useAppSelector((state) => state.blogPage);
   const [value, setValue] = React.useState<any>("all");
   const [searchValue, setSearchValue] = useState<string>("");
 
@@ -69,29 +70,34 @@ function Blog() {
   return (
     <Layout>
       <Box className="BlogPage">
-        <Breadcrumb page1={"Blog"} />
+        <Breadcrumb arr={[{ navigate: '/blog', name: 'Blog' }]} />
         <Box className="HeroSection">
           <Container>
             <Typography variant="h2" component="h2">
-              Our Latest Blog Post
+              {configDetailsState?.["blogpost.blogposttital"]?.value}
             </Typography>
             <Typography
               variant="body1"
               sx={{ mt: 1.875, color: variable.greyRegent }}
             >
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry.
+              {configDetailsState?.["blogpost.blogpostsubtital"]?.value}
             </Typography>
             <Box className="PostWrapper">
               <Stack className="LeftPostWrapper">
-                <PostCard details={blogList?.items?.[0]} />
+                <PostCard details={topThree?.[0]} navigate={() =>
+                  navigate(`/blog/${topThree?.[0]?.friendlyName}`)
+                } />
               </Stack>
               <Stack className="RightPostWrapper">
-                {blogList?.items?.[1] ? (
-                  <PostCard details={blogList?.items?.[1]} />
+                {topThree?.[1] ? (
+                  <PostCard details={topThree?.[1]} navigate={() =>
+                    navigate(`/blog/${topThree?.[1]?.friendlyName}`)
+                  } />
                 ) : null}
-                {blogList?.items?.[2] ? (
-                  <PostCard details={blogList?.items?.[2]} />
+                {topThree?.[2] ? (
+                  <PostCard details={topThree?.[2]} navigate={() =>
+                    navigate(`/blog/${topThree?.[2]?.friendlyName}`)
+                  } />
                 ) : null}
               </Stack>
             </Box>
@@ -101,14 +107,13 @@ function Blog() {
           <Container>
             <Box className="DiscoverPost__title">
               <Typography variant="h2" component="h2">
-                Our Latest Blog Post
+                {configDetailsState?.["blogpost.blogposttital"]?.value}
               </Typography>
               <Typography
                 variant="body1"
                 sx={{ mt: 1.875, color: variable.greyRegent }}
               >
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+                {configDetailsState?.["blogpost.blogpostsubtital"]?.value}
               </Typography>
             </Box>
             <Box className="SearchWrapper">

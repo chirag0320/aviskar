@@ -5,14 +5,16 @@ import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import BlogAndNewsServices from '@/apis/services/blogAndNewsServices'
 
 interface BlogState {
-    newsList: {},
-    newsDetailsData:{}
-    loading: boolean
+    newsList: any,
+    newsDetailsData: any
+    loading: boolean,
+    topThree: []
 }
 const initialState: BlogState = {
     newsList: {},
-    newsDetailsData:{},
-    loading: false
+    newsDetailsData: {},
+    loading: false,
+    topThree: []
 }
 
 export const NewsList = appCreateAsyncThunk(
@@ -33,7 +35,8 @@ export const NewsPageSlice = createSlice({
     reducers: {
         resetWholeBlogPageData: (state) => {
             state.newsList = {}
-            state.newsDetailsData={}
+            state.newsDetailsData = {}
+            state.topThree = []
         },
         setLoadingTrue: (state) => {
             state.loading = true
@@ -50,6 +53,9 @@ export const NewsPageSlice = createSlice({
         })
         builder.addCase(NewsList.fulfilled, (state, action) => {
             state.newsList = action.payload.data.data
+            if (state.topThree.length < 1) {
+                state.topThree = action.payload.data.data.items.slice(0, 3)
+            }
             state.loading = false
         })
         builder.addCase(NewsList.rejected, (state, action) => {

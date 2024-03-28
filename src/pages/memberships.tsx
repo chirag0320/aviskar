@@ -17,7 +17,7 @@ const colourForMembership: any = {
     gold: 'goldTips',
     palladium: 'palladium',
     platinum: 'mercury',
-    silver: 'silverSand',
+    silver: 'silver',
     copper: 'copper',
 }
 
@@ -43,7 +43,7 @@ function Memberships() {
                             {
                                 Object.entries(mebershipPlanDetailsData).flatMap((item: any, index) => {
                                     return (
-                                        item[0] !== 'currentMemberShip' ? [<MembershipCard bgcolor={variable[colourForMembership[item[0]]]} cardtitle={item[0] as string} details={item[1]} />] : []
+                                        item[0] !== 'currentMemberShip' ? [<MembershipCard bgcolor={variable[colourForMembership[item[0]]] === 'silver'? '#c0c0c0' : variable[colourForMembership[item[0]]]} cardtitle={item[0] as string} details={item[1]} />] : []
                                     )
                                 })
                             }

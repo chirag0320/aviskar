@@ -94,7 +94,7 @@ export const AfterStockReturnWithName = React.memo(({ text }: any) => {
         text ? "Profit" : "Loss",
       ])}
     >
-      <Typography variant="overline" component="span" className="Name" dangerouslySetInnerHTML={{__html: text}}>
+      <Typography variant="overline" component="span" className="Name" dangerouslySetInnerHTML={{ __html: text }}>
       </Typography>
     </Stack>
   );
@@ -132,7 +132,7 @@ export const PageTitle = React.memo(({ title }: any) => {
     </Box>
   );
 });
-export const Breadcrumb = React.memo(({ page1, page2, page3 }: any) => {
+export const Breadcrumb = React.memo(({ arr }: any) => {
   return (
     <Box
       className="Breadcrumb"
@@ -140,26 +140,13 @@ export const Breadcrumb = React.memo(({ page1, page2, page3 }: any) => {
     >
       <Container>
         <Breadcrumbs aria-label="breadcrumb" separator={<ChevronRight />}>
-          <Link underline="hover" color="inherit" variant="body2" onClick={
-            ()=>{
-              navigate('/')
-            }
-          }>
+          <Link underline="hover" color="inherit" variant="body2" onClick={() => { navigate('/') }}>
             Home
           </Link>
-          {page1 ? (
-            <Link
-              color={page1 && !page2 && !page3 ? variable.dark : "inherit"}
-              variant="body2"
-              onClick={()=>{
-                navigate('/shop')
-              }}
-            >
-              {page1}
-            </Link>
-          ) : (
-            ""
-          )}
+          {arr.map((item: any, index: any) => <Link key={index} color={true ? variable.dark : "inherit"} variant="body2" onClick={() => { navigate(item.navigate) }}>
+            {item.name}
+          </Link>)
+          }
           {/* {page2 ? (
             <Typography
               color={page2 && !page3 ? variable.dark : "inherit"}
@@ -170,7 +157,7 @@ export const Breadcrumb = React.memo(({ page1, page2, page3 }: any) => {
           ) : (
             ""
           )} */}
-          {page3 ? (
+          {/* {page3 ? (
             <Typography
               color={page3 ? variable.dark : "inherit"}
               variant="body2"
@@ -179,7 +166,7 @@ export const Breadcrumb = React.memo(({ page1, page2, page3 }: any) => {
             </Typography>
           ) : (
             ""
-          )}
+          )} */}
         </Breadcrumbs>
       </Container>
     </Box>
