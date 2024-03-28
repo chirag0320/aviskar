@@ -36,7 +36,7 @@ function ProductDetail({ params }: any) {
         title="Category"
         lang="en"
       />
-      <Breadcrumb page1={"Shop"} page2={"Products"} page3={params?.["product-friendlyName"]} />
+      <Breadcrumb arr={[{ navigate: '/shop', name: 'Shop' }, { navigate: '/product-details/' + params?.["product-friendlyName"], name: params?.["product-friendlyName"] }]} />
       <Container id="PageProductDetail">
         {productDetailsData?.productId && <AboutProduct productId={productDetailsData?.productId} />}
         {productDetailsData?.relatedProducts?.length > 0 && <RelatedProduct relatedProductsList={structuredClone(productDetailsData?.relatedProducts)} />}

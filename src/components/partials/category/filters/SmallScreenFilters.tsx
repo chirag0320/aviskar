@@ -24,18 +24,18 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         // console.log();
-        
+
         setTabValue(newValue)
     }
-    
+
     const applyFilterHandler = async () => {
         setSelectedFiltersMobile(selectedFilters)
         setSelectedPriceMobile(selectedPrice)
         toggleFilterBy()
     }
 
-    console.log("SelectedFilters" , selectedFilters);
-    
+    console.log("SelectedFilters", selectedFilters);
+
 
     return (
         <Fragment>
@@ -56,6 +56,7 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
             >
                 <Stack className="DialogHeader">
                     <DialogTitle variant="subtitle2">FILTER BY</DialogTitle>
+                    <Button variant="text">Clear Filter</Button>
                     <IconButton className="CloseButton" onClick={toggleFilterBy}><CrossIcon /></IconButton>
                 </Stack>
                 <DialogContent>

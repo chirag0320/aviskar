@@ -1,5 +1,5 @@
 import React from 'react'
-import { Accordion, AccordionDetails, AccordionSummary, Box, List, Divider } from "@mui/material"
+import { Accordion, AccordionDetails, AccordionSummary, Box, List, Divider, Button } from "@mui/material"
 import SortBy from './SortBy'
 import PriceSlider from './PriceSlider'
 import RenderCheckboxField from './RenderCheckboxField'
@@ -9,14 +9,18 @@ interface props {
     selectedFilters: { [key: string]: string[] },
     setSelectedFilters: any,
     setSelectedPrice: any,
-    page : number
+    page: number
 }
 
-const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice, selectedFilters , page }: props) => {
+const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice, selectedFilters, page }: props) => {
     const categoryData = useAppSelector(state => state.category)
 
     return (
         <Box className="CategoryFilters">
+            <Box sx={{ padding: '16px 14px 0' }}>
+                {/* <Button variant="contained">Clear Filter</Button> */}
+                <Button variant="outlined">Clear Filter</Button>
+            </Box>
             <Box className="CategoriesWrapper">
                 <Accordion defaultExpanded>
                     <AccordionSummary
@@ -44,12 +48,12 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
                         Sort By
                     </AccordionSummary>
                     <AccordionDetails>
-                        <SortBy page={page}/>
+                        <SortBy page={page} />
                     </AccordionDetails>
                 </Accordion>
             </Box>}
             <Box className="FilterByWrapper">
-                {categoryData.items.length > 0 && <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} page={page}/>}
+                {categoryData.items.length > 0 && <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} page={page} />}
                 {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
                     <Accordion key={filter} className="Divider">
                         <AccordionSummary
@@ -73,9 +77,9 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
                                 }
                                 )}
                                 selectedFilters={selectedFilters}
-                                setSelectedFilters={setSelectedFilters} 
+                                setSelectedFilters={setSelectedFilters}
                                 page={page}
-                                />
+                            />
                         </AccordionDetails>
                     </Accordion>
                 ))}

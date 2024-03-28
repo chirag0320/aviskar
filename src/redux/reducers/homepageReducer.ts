@@ -133,10 +133,8 @@ export const createHomepageSlice = createSlice({
     },
     setRecentlyViewedProduct: (state, action) => {
       const newProductId = action.payload;
-      console.log("🚀 ~ newProductId:", newProductId)
       // Check if the product already exists in the recently viewed list
       const existingIndex = state.recentlyViewedProducts.findIndex(productId => productId === newProductId);
-      console.log("🚀 ~ existingIndex:", existingIndex)
       if (existingIndex === -1) {
         let updatedViewProducts = [newProductId, ...state.recentlyViewedProducts]
         if (updatedViewProducts?.length > 20) {
@@ -153,7 +151,6 @@ export const createHomepageSlice = createSlice({
       }
     },
     setToasterState: (state, action) => {
-      console.log("🚀 ~ action:", action)
       state.openToaster = action.payload.openToaster
       state.toasterMessage = action.payload.toasterMessage
       state.buttonText = action.payload.buttonText || ''
@@ -260,7 +257,6 @@ export const createHomepageSlice = createSlice({
       localStorageSetItem('isLoggedIn', JSON.stringify(false))
     })
     builder.addCase(LogOutUserAPI.rejected, (state, action) => {
-      // console.log("🚀rr ~ builder.addCase ~ action.payload.data:", action.payload)
       state.loading = false
     })
     // ImpersonateSignInAPI

@@ -60,7 +60,7 @@ function BlogDetails(params: any) {
   return (
     <Layout>
       <Box className="BlogDetailPage">
-        <Breadcrumb page1={"Blog"} page2={"Blog"} page3={blogDetailsData?.title} />
+        <Breadcrumb arr={[{ navigate: '/blog', name: 'Blog' }, { navigate: "/blog/" + params?.params?.["blog-details-friendly-name"], name: params?.params?.["blog-details-friendly-name"] }]} />
         <Box className="PostDescription">
           <Container>
             <Button
@@ -147,6 +147,18 @@ function BlogDetails(params: any) {
               <Box className="DiscoverPost">
                 <Box className="DiscoverPost__title">
                   <Typography variant="h2" component="h2">
+                    Related posts
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ mt: 1.875, color: variable.greyRegent }}
+                  >
+                    Lorem Ipsum is simply dummy text of the printing and typesetting
+                    industry.
+                  </Typography>
+                </Box>
+                {/* <Box className="DiscoverPost__title">
+                  <Typography variant="h2" component="h2">
                     Subscribe to our newsletter
                   </Typography>
                   <Typography
@@ -172,7 +184,7 @@ function BlogDetails(params: any) {
                     By clicking Sign Up you're confirming that you agree with
                     our Terms and Conditions.
                   </Typography>
-                </Box>
+                </Box> */}
                 <Box className="RecentPosts">
                   <Grid
                     container
@@ -182,7 +194,12 @@ function BlogDetails(params: any) {
                     {blogList?.items?.map((item: any) => {
                       return (
                         <Grid item md={4} sm={6} key={item?.id}>
-                          <PostCard details={item} />
+                          <PostCard
+                          details={item}
+                          navigate={() =>
+                            navigate(`/blog/${item?.friendlyName}`)
+                          }
+                        />
                         </Grid>
                       );
                     })}
