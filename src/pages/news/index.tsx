@@ -34,6 +34,7 @@ import useDebounce from "@/hooks/useDebounce";
 import { navigate } from "gatsby";
 
 function News() {
+  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { newsList }: any = useAppSelector((state) => state.newsPage)
   const [value, setValue] = React.useState<any>('all');
   const [searchValue, setSearchValue] = useState<string>('')
@@ -64,19 +65,18 @@ function News() {
 
   return (
     <Layout>
-      <Breadcrumb arr={[{navigate:'/news',name:'News'}]} />
+      <Breadcrumb arr={[{ navigate: '/news', name: 'News' }]} />
       <Box className="BlogPage">
         <Box className="HeroSection">
           <Container>
             <Typography variant="h2" component="h2">
-              Our Latest News Post
+              {configDetailsState?.["news.newstital"]?.value}
             </Typography>
             <Typography
               variant="body1"
               sx={{ mt: 1.875, color: variable.greyRegent }}
             >
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry.
+              {configDetailsState?.["news.newssubtital"]?.value}
             </Typography>
             <Box className="PostWrapper">
               <Stack className="LeftPostWrapper">

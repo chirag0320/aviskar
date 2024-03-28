@@ -30,7 +30,6 @@ function Navigation() {
   const { configDetails: configDetailsState, categoriesList } = useAppSelector((state) => state.homePage)
   const [currententlySelected, setCurrententlySelected] = useState('')
   useEffect(() => {
-    console.log("🚀 ~ Navigation ~ window?.location?.pathname:", window?.location?.pathname)
     setCurrententlySelected(window?.location?.pathname?.toLocaleLowerCase()?.replace(/[\s/]/g, ''))
   }, [window?.location?.pathname])
   return (

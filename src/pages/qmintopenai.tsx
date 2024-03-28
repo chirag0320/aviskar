@@ -17,7 +17,6 @@ function Qmintopenai() {
     const dispatch = useAppDispatch();
     const loading = useAppSelector(state => state.calculators.loading);
     const getopenai = useAppSelector(state => state.calculators.openai);
-    console.log(getopenai);
     const headerdata = getopenai.length > 0 ? getopenai[0] : [];
 
     const styles: any = createStyles({

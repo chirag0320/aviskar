@@ -42,7 +42,6 @@ function Memberships() {
                         <Box className="MembershipCardWrapper">
                             {
                                 Object.entries(mebershipPlanDetailsData).flatMap((item: any, index) => {
-                                    console.log("🚀 ~ Object.entries ~ item:", item)
                                     return (
                                         item[0] !== 'currentMemberShip' ? [<MembershipCard bgcolor={variable[colourForMembership[item[0]]] === 'silver'? '#c0c0c0' : variable[colourForMembership[item[0]]]} cardtitle={item[0] as string} details={item[1]} />] : []
                                     )

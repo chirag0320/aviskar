@@ -17,9 +17,6 @@ function CompareProducts() {
     const { productIds, comparedProducts, specificationKeys } = useAppSelector((state) => state.compareProducts);
     const dispatch = useAppDispatch();
 
-    console.log('compareProductsState', productIds);
-
-
     useEffect(() => {
         const fetchCompareProducts = async () => {
             if (productIds.length > 0) {

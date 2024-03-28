@@ -9,7 +9,6 @@ import { getTopicDetails } from "@/redux/reducers/topicReducer"
 import { useAppSelector } from "@/hooks"
 function Topics(paramsData: any) {
   const { topicDetails, loading } = useAppSelector(state => state.topic)
-  console.log("🚀 ~ Topics ~ topicDetails, loading:", topicDetails, loading)
   useAPIoneTime({ service: getTopicDetails, endPoint: ENDPOINTS.topicDetail?.replace('{{topic-name}}', paramsData?.params?.['topic-name']) })
   return (
     !loading && <Layout>

@@ -34,6 +34,7 @@ import useDebounce from "@/hooks/useDebounce";
 import { navigate } from "gatsby";
 
 function Blog() {
+  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { blogList }: any = useAppSelector((state) => state.blogPage);
   const [value, setValue] = React.useState<any>("all");
   const [searchValue, setSearchValue] = useState<string>("");
@@ -73,14 +74,13 @@ function Blog() {
         <Box className="HeroSection">
           <Container>
             <Typography variant="h2" component="h2">
-              Our Latest Blog Post
+              {configDetailsState?.["blogpost.blogposttital"]?.value}
             </Typography>
             <Typography
               variant="body1"
               sx={{ mt: 1.875, color: variable.greyRegent }}
             >
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry.
+              {configDetailsState?.["blogpost.blogpostsubtital"]?.value}
             </Typography>
             <Box className="PostWrapper">
               <Stack className="LeftPostWrapper">
