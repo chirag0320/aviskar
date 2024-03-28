@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -31,29 +31,36 @@ import {
   FacebookIcon,
   TwitterIcon,
   InstagramIcon,
+  YoutubeIcon,
 } from "@/assets/icons";
 import { formatDate } from "@/utils/common";
 import useApiRequest from "@/hooks/useAPIRequest";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { BlogDetailsAPI } from "@/redux/reducers/blogReducer";
-import { useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import useSubscription from "@/hooks/useSubscription";
 import { navigate } from "gatsby";
+import { setLoadingFalse, setLoadingTrue } from "@/redux/reducers/homepageReducer";
 
-function BlogDetails({ params }: any) {
-  const { blogDetailsData, blogList }: any = useAppSelector(
-    (state) => state.blogPage
-  );
-  const { email, handleEmailChange, subscribe, loadingForEmailSub } =
-    useSubscription();
-  useAPIoneTime({
-    service: BlogDetailsAPI,
-    params: { pathName: params?.["blog-details-friendly-name"] },
-  });
+function BlogDetails(params: any) {
+  const dispatch = useAppDispatch()
+  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+  const { blogDetailsData, blogList }: any = useAppSelector((state) => state.blogPage);
+  const { email, handleEmailChange, subscribe, loadingForEmailSub } = useSubscription();
+  useEffect(() => {
+    const apiCall = async () => {
+      dispatch(setLoadingTrue())
+      await dispatch(BlogDetailsAPI({ params: { pathName: params?.["blog-details-friendly-name"] } }))
+      setTimeout(() => {
+        dispatch(setLoadingFalse())
+      }, 1500);
+    }
+    apiCall()
+  }, [params?.params?.["blog-details-friendly-name"]])
   return (
     <Layout>
       <Box className="BlogDetailPage">
-        <Breadcrumb page1={"Blog"} page2={"Blog"} page3={"Blog"} />
+        <Breadcrumb page1={"Blog"} page2={"Blog"} page3={blogDetailsData?.title} />
         <Box className="PostDescription">
           <Container>
             <Button
@@ -109,24 +116,18 @@ function BlogDetails({ params }: any) {
                 <Box className="Left">
                   <Typography variant="subtitle1">Share this post</Typography>
                   <Stack className="SocialIconWrapper">
-                    <IconButton
-                      className="SocialIcon"
-                      aria-label="Facebook Icon"
-                    >
+                    <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}>
                       <FacebookIcon />
                     </IconButton>
-                    <IconButton
-                      className="SocialIcon"
-                      aria-label="Facebook Icon"
-                    >
+                    <IconButton className="SocialIcon" aria-label="Twitter Icon" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}>
                       <TwitterIcon />
                     </IconButton>
-                    <IconButton
-                      className="SocialIcon"
-                      aria-label="Facebook Icon"
-                    >
-                      <InstagramIcon />
+                    <IconButton className="SocialIcon" aria-label="Youtube Icon" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}>
+                      <YoutubeIcon />
                     </IconButton>
+                    {/* <IconButton className="SocialIcon" aria-label="Instagram Icon">
+                      <InstagramIcon />
+                    </IconButton> */}
                   </Stack>
                 </Box>
                 <Box className="Right">
@@ -244,4 +245,4 @@ function BlogDetails({ params }: any) {
     </Layout>
   );
 }
-export default BlogDetails;
+export default React.memo(BlogDetails);

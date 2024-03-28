@@ -10,6 +10,9 @@ import {
   Button,
   IconButton, CardMedia, TextField, Select, MenuItem, Divider,
   Icon,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import classNames from "classnames";
 
@@ -132,7 +135,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
               <Typography variant="overline" className="DiscountMessage">
                 {configDetailsState?.productboxdiscounttext?.value}
               </Typography>
-              <HoverTooltip
+              {/* <HoverTooltip
                 placement="top-end"
                 renderComponent={
                   <IconButton className="InfoButton">
@@ -143,7 +146,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                 arrow
               >
                 This is a helper text to justify pricing discount.
-              </HoverTooltip>
+              </HoverTooltip> */}
             </Stack>
           </Stack>
         </Stack>
@@ -207,7 +210,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
         {product.isBundle &&
           <ClickTooltip
             open={open}
-            className="TooltipOfferTag"
+            className="TooltipStack"
             placement="bottom-start"
             onClose={handleTooltipClose}
             onClickAway={handleClickAway}
@@ -224,27 +227,16 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             lightTheme
             arrow
           >
-            <Box className="Offers">
-              <Typography className="ItemPrice">
-                Name
-              </Typography>
-              <Typography className="ItemPrice" sx={{ marginRight: "5px" }}>
-                Qty
-              </Typography>
-              {product?.bulkProduct?.map((product: any) => {
-                return (
-                  <Fragment
-                    key={product?.productName}
-                  >
-                    <Typography className="Item">
-                      {product?.productName}
-                    </Typography>
-                    <Typography className="ItemPrice">
-                      {product?.quantity}
-                    </Typography>
-                  </Fragment>
-                );
-              })}
+            <Box className="Content">
+              <List disablePadding>
+                {product?.bulkProduct?.map((product: any) => {
+                  return (
+                    <ListItem disablePadding disableGutters>
+                      <ListItemText primary={product?.productName} secondary={product?.quantity} secondaryTypographyProps={{variant: "body1"}} />
+                    </ListItem>
+                  );
+                })}
+              </List>
             </Box>
           </ClickTooltip>
         }
@@ -278,7 +270,9 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
 export const TravelCard = (props: any) => {
   const { place, description, imageUrl, friendlyName } = props
   return (
-    <Card className="TravelCard">
+    <Card className="TravelCard" onClick={() => {
+      navigate(`blog/${friendlyName}`)
+    }}>
       <Link className="ImageLink">
         <img src={imageUrl} alt="Travel image" loading="lazy" />
       </Link>
@@ -287,9 +281,7 @@ export const TravelCard = (props: any) => {
         <Typography className="Description">{description}</Typography>
       </CardContent>
       <CardActions>
-        <Button name='discoverMore' aria-label="discoverMore" endIcon={<ArrowRight />} onClick={() => {
-          navigate(`blog/${friendlyName}`)
-        }}>Discover More</Button>
+        <Button name='discoverMore' aria-label="discoverMore" endIcon={<ArrowRight />}>Discover More</Button>
       </CardActions>
     </Card>
   );

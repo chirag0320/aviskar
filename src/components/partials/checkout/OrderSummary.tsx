@@ -144,8 +144,7 @@ function OrderSummary() {
           "IsInstantBuy": false
         }
         const data = await dispatch(placeOrder({ url: ENDPOINTS.placeOrder, body: prepareBodyData }) as any);
-        // console.log("🚀 ~ placeOrderFun ~ data:", data)
-        if(hasFulfilled(data?.type)){
+        if (hasFulfilled(data?.type)) {
           const id = data?.payload?.data?.data
           navigate(`/order-confirmation/?id=${id}`)
         }
@@ -200,7 +199,7 @@ function OrderSummary() {
         <Stack className="ActionWrapper">
           <Button color="secondary">Continue Shopping</Button>
           {/* <Button variant="contained" onClick={toggleOTPConfirmation} disabled={!finalDataForTheCheckout?.termAndServiceIsRead}>Confirm Order</Button> */}
-          <Button variant="contained" onClick={onConfirmOrderHandler} disabled={!finalDataForTheCheckout?.termAndServiceIsRead || loading}>Confirm Order</Button>
+          <Button variant="contained" onClick={onConfirmOrderHandler} disabled={!finalDataForTheCheckout?.termAndServiceIsRead || loading || finalDataForTheCheckout?.cartItemsWithLivePrice?.length < 1}>Confirm Order</Button>
         </Stack>
       </Box>
       <OTPConfirmation open={openOTPConfirmation} onClose={toggleOTPConfirmation} />

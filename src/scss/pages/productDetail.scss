@@ -107,6 +107,17 @@
             .ProductName {
               margin-bottom: 8px;
             }
+            .Wrapper {
+              justify-content: space-between;
+              align-items: flex-start;
+              gap: 8px;
+              .OfferBadge {
+                color: $white;
+                border-radius: 5px;
+                padding: 3px 6px;
+                flex-shrink: 0;
+              }
+            }
           }
           .PricingDetails {
             @include padding-vertical($spacing);
@@ -147,6 +158,7 @@
                 flex-direction: column;
                 min-width: fit-content;
                 width: 60%;
+                max-width: calc(100% - 1px);
                 @include media($sm) {
                   flex-grow: 1;
                 }
