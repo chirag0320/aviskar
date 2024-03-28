@@ -54,6 +54,17 @@ export interface Fees {
     shippingMessage: string | null;
     storageMessage: string | null;
 }
+
+export interface StateOrCountry {
+    id: number,
+    name: string,
+    enumValue: number,
+    type: any,
+    colorCode: any,
+    seqNo: number,
+    extraProperty: any
+}
+
 interface CheckoutPageState {
     loading: boolean,
     checkoutPageData: {
@@ -143,7 +154,9 @@ interface CheckoutPageState {
     isOTPEnabled: boolean | null,
     isOTPSent: boolean | null,
     isOTPVerified: boolean | null,
-    orderId: number | null
+    orderId: number | null,
+    stateList: StateOrCountry[],
+    countryList: StateOrCountry[]
 }
 const initialState: CheckoutPageState = {
     loading: false,
@@ -155,7 +168,9 @@ const initialState: CheckoutPageState = {
     finalDataForTheCheckout: JSON.parse(localStorageGetItem("finalDataForTheCheckout") ?? JSON.stringify({})) ?? null,
     insuranceAndTaxCalculation: (isBrowser && JSON.parse(localStorageGetItem("insuranceAndTaxCalculation") ?? JSON.stringify({}))) ?? null,
     craditCardCharges: (isBrowser && JSON.parse(localStorageGetItem("craditCardCharges") ?? JSON.stringify({}))) ?? null,
-    orderId: null
+    orderId: null,
+    stateList: [],
+    countryList: []
 }
 
 export const getCheckoutPageData = appCreateAsyncThunk(
@@ -212,6 +227,13 @@ export const placeOrder = appCreateAsyncThunk(
     }
 )
 
+export const getStateAndCountryLists = appCreateAsyncThunk(
+    "getStateAndCountryLists",
+    async ({ url }: { url: string }) => {
+        return await CheckoutPageServices.getStateAndCountryLists(url)
+    }
+)
+
 export const checkoutPage = createSlice({
     name: 'checkoutPage',
     initialState,
@@ -254,7 +276,7 @@ export const checkoutPage = createSlice({
         builder.addCase(getCheckoutPageData.rejected, (state, action) => {
             state.loading = false
         })
-        // get checkout page data
+        // get insurance and tax details calculation
         builder.addCase(getInsuranceAndTaxDetailsCalculation.pending, (state, action) => {
             state.loading = true
         })
@@ -266,7 +288,7 @@ export const checkoutPage = createSlice({
         builder.addCase(getInsuranceAndTaxDetailsCalculation.rejected, (state, action) => {
             state.loading = false
         })
-        // get checkout page data
+        // get credit card charges
         builder.addCase(getCraditCardCharges.pending, (state, action) => {
             state.loading = true
         })
@@ -327,6 +349,31 @@ export const checkoutPage = createSlice({
             state.loading = false;
         })
         builder.addCase(placeOrder.rejected, (state, action) => {
+            state.loading = false
+        })
+
+        // getStateAndCountryLists
+        builder.addCase(getStateAndCountryLists.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getStateAndCountryLists.fulfilled, (state, action) => {
+            const responseData = action.payload.data.data;
+            state.stateList = responseData.stateList;
+            state.countryList = responseData.countryList;
+            state.loading = false;
+        })
+        builder.addCase(getStateAndCountryLists.rejected, (state, action) => {
+            state.loading = false
+        })
+
+        // addOrEditAddress
+        builder.addCase(addOrEditAddress.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(addOrEditAddress.fulfilled, (state, action) => {
+            state.loading = false;
+        })
+        builder.addCase(addOrEditAddress.rejected, (state, action) => {
             state.loading = false
         })
     },

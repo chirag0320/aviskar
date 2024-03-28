@@ -49,6 +49,7 @@ import { CartItemsWithLivePriceDetails } from "../partials/shopping-cart/CartDet
 import useCallAPI from "@/hooks/useCallAPI";
 import { ENDPOINTS } from "@/utils/constants";
 import { setToasterState } from "@/redux/reducers/homepageReducer";
+import useShowToaster from "@/hooks/useShowToaster";
 
 interface Iproduct {
   product: IFeaturedProducts;
@@ -71,6 +72,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
       setOpen(false);
     }
   };
+  const { showToaster } = useShowToaster();
 
   return (
     <Card className={classNames("ProductCard", { "Sticky": stickyProduct })} key={product.productId}>
@@ -247,20 +249,16 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
           } as any)
           // console.log("🚀 ~ addTOCart response", response);
           if (response.code === 200) {
-            dispatch(setToasterState({
-              openToaster: true,
-              toasterMessage: 'The product has been added to your',
+            showToaster({
+              message: 'The product has been added to your product cart',
               buttonText: 'product cart',
               redirectButtonUrl: 'shopping-cart'
-            }))
+            })
           }
           else {
-            dispatch(setToasterState({
-              openToaster: true,
-              toasterMessage: "Adding cart failed! Try again",
-              // buttonText: 'Adding cart failed! Try again',
-              // redirectButtonUrl: ''
-            }))
+            showToaster({
+              message: 'Adding to cart failed! Please Try again',
+            })
           }
 
         }}><AddToCartIcon /></IconButton>

@@ -9,15 +9,17 @@ const CloserLook = lazy(() => import("../components/partials/home/CloserLook"))
 import FeaturedProducts from "../components/partials/home/FeaturedProducts"
 import { ENDPOINTS } from "@/utils/constants"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
-import { CategoriesListDetails, HomePageSectionDetails, configDetails } from "@/redux/reducers/homepageReducer"
-import { useAppSelector } from "@/hooks"
+import { CategoriesListDetails, HomePageSectionDetails, configDetails, setScrollPosition } from "@/redux/reducers/homepageReducer"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 import { useMediaQuery } from "@mui/material";
 import Layout from "@/components/common/Layout";
 import useUserDetailsFromToken from "@/hooks/useUserDetailsFromToken";
 import Toaster from "@/components/common/Toaster";
 
 function IndexPage() {
-  const { configDetails: configDetailsState, openToaster } = useAppSelector((state) => state.homePage)
+  const dispatch = useAppDispatch()
+  const { configDetails: configDetailsState, openToaster,scrollPosition } = useAppSelector((state) => state.homePage)
+  console.log("🚀 ~ IndexPage ~ scrollPosition:", scrollPosition)
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
 
   const [body] = useState({
@@ -30,6 +32,12 @@ function IndexPage() {
       "includeInTopMenu": true
     }
   })
+
+  useEffect(() => {
+    return () => {
+      dispatch(setScrollPosition(window.scrollY));
+    }
+  }, [])
 
   useAPIoneTime({ service: configDetails, endPoint: ENDPOINTS.getConfigStore })
   useAPIoneTime({ service: HomePageSectionDetails, endPoint: ENDPOINTS.homePageSection })
@@ -58,7 +66,7 @@ function IndexPage() {
   return (
     <Layout>
       <>
-      {openToaster && <Toaster />}
+        {openToaster && <Toaster />}
         <Seo
           keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
           title="Home"
@@ -66,11 +74,11 @@ function IndexPage() {
         />
         {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>}
         {configDetailsState?.sliderenableinhome?.value === false ? null : <Banner />}
-        {wait1 && <Suspense fallback={<></>}> <FeaturedProducts /></Suspense>}
-        {wait1 && <Suspense fallback={<></>}> <LookingFor /></Suspense>}
-        {wait1 && <Suspense fallback={<></>}><PopularProducts /></Suspense>}
-        {wait2 && <Suspense fallback={<></>}><DiscoverTreasure /></Suspense>}
-        {wait3 && <Suspense fallback={<></>}><CloserLook /></Suspense>}
+        <Suspense fallback={<></>}> <FeaturedProducts /></Suspense>
+        <Suspense fallback={<></>}> <LookingFor /></Suspense>
+        <Suspense fallback={<></>}><PopularProducts /></Suspense>
+        <Suspense fallback={<></>}><DiscoverTreasure /></Suspense>
+        <Suspense fallback={<></>}><CloserLook /></Suspense>
       </>
     </Layout>
   )

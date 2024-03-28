@@ -12,6 +12,7 @@ import { navigate } from 'gatsby'
 import useDebounce from '@/hooks/useDebounce'
 import { hasFulfilled } from '@/utils/common'
 import { setToasterState } from "@/redux/reducers/homepageReducer";
+import useShowToaster from '@/hooks/useShowToaster'
 
 
 export type CartItemsWithLivePriceDetails = CartItem & {
@@ -26,6 +27,7 @@ const CartDetails = () => {
     const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
     const [productIds, setProductIds] = useState({})
     const dispatch = useAppDispatch();
+    const { showToaster } = useShowToaster();
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
     const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
@@ -83,16 +85,10 @@ const CartDetails = () => {
         if (hasFulfilled(response.type)) {
             setCartItemsWithLivePrice(() => cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== id));
             // console.log("🚀 ~ removeItemFromCart ~ response?.payload?.data?.message:", response?.payload?.data?.message)
-            dispatch(setToasterState({
-                openToaster: true,
-                toasterMessage: response?.payload?.data?.message
-            }))
+            showToaster({ message: response?.payload?.data?.message })
         }
         else {
-            dispatch(setToasterState({
-                openToaster: true,
-                toasterMessage: "Removing item from Shopping Cart failed. Please try again.",
-            }))
+            showToaster({ message: "Remove item failed" })
         }
     }
 

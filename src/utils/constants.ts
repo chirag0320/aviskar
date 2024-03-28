@@ -39,10 +39,13 @@ export const ENDPOINTS = {
     deleteWishListData: "wishlist/PARNGc8fSUerxSmM65X06A",
     addToWishList: "wishlist/rPpCvZNFeEOtE0ESOjGGeQ",
     addWishListToShoppingCart: "Wishlist/nxJzG70390aEbLTm6J0Qsg",
+    qmintopenaidata: 'MyVault/WqNoMqgI93gqVTfe986gYQ',
+
+    // checkout page
     checkoutDetails: 'Checkout/xT3hjqkBFESvUfuMu8T70A',
     checkValidationOnConfirmOrder: 'Checkout/NiJ7vYmnQ0CjUVyAoNalJQ',
     addOrEditAddress: "myvault/mIKu7TMRFUW49i97slxpDg",
-    qmintopenaidata: 'MyVault/WqNoMqgI93gqVTfe986gYQ',
+    getStateAndCountryLists: "utility/MEUpxqzLezhOjhjaN4I4XA",
     calculateInsuranceAndTaxDetails: "calculator/a5n79zVvKUKbIgrXui6tmA",
     calculateCraditCardCharges: "calculator/yGU45H6bwUuxggNPZF8R3g",
 

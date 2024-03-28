@@ -15,7 +15,6 @@ import { updateFinalDataForTheCheckout } from "@/redux/reducers/checkoutReducer"
 function TermsServices() {
   const dispatch = useAppDispatch()
   const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
-  console.log("🚀 ~ Checkout ~ checkoutPageData:", checkoutPageData)
   const [openTermsServices, toggleTermsServices] = useToggle(false)
   const [readedTermAndServices, toggleReadedTermAndServices] = useToggle(false)
   useEffect(() => {
@@ -50,7 +49,6 @@ function TermsServices() {
           __html: checkoutPageData?.termsConditions?.value
         }}
         >
-
         </Box>
       </StyledDialog>
     </>
