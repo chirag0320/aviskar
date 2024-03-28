@@ -225,17 +225,16 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             lightTheme
             arrow
           >
-            <Box className="Content">
-              <List disablePadding>
-                {product?.bulkProduct?.map((product: any) => {
-                  return (
-                    <ListItem disablePadding disableGutters>
-                      <ListItemText primary={product?.productName} secondary={product?.quantity} secondaryTypographyProps={{variant: "body1"}} />
-                    </ListItem>
-                  );
-                })}
-              </List>
-            </Box>
+            <Stack className="Content">
+              {product?.bulkProduct?.map((product: any) => {
+                return (
+                  <Typography>
+                    <Typography variant="inherit" component="span">{product?.quantity} </Typography>
+                    x {product?.productName}
+                  </Typography>
+                )
+              })}
+            </Stack>
           </ClickTooltip>
         }
 
