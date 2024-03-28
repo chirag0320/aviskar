@@ -33,6 +33,10 @@ class CheckoutPageServices {
     static async placeOrder(url: string, body: any) {
         return axiosInstance.post(url, body);
     }
+
+    static async getStateAndCountryLists(url: string) {
+        return axiosInstance.get(url);
+    }
 }
 
 export default CheckoutPageServices

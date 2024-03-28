@@ -105,16 +105,22 @@ const RenderFields: React.FC<RenderFieldProps> = ({
           {label && <FormLabel htmlFor={name}>{label}{required && " *"}</FormLabel>}
           <Controller
             control={control}
+            defaultValue={defaultValue}
             render={({ field }) => (
               <Select
                 inputProps={{ id: name }}
-                value={field.value}
-                defaultValue={defaultValue}
                 error={!!error}
                 disabled={disabled}
+                defaultValue={defaultValue}
+                onChange={(e) => {
+                  field.onChange(e)
+                  if (onChange) {
+                    onChange()
+                  }
+                }
+                }
                 variant={variant}
                 MenuProps={MenuProps}
-                // required={required}
                 displayEmpty
                 sx={
                   field.value === 'none' || field.value === ''
@@ -125,7 +131,6 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                       color: "#1D2129",
                     }
                 }
-                {...register(name)}
                 {...otherProps}
               >
                 {children}
@@ -135,8 +140,8 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             {...otherProps}
           />
         </FormControl>
-      )
-      break
+      );
+      break;
 
     case 'radio':
       if (!options) return null
@@ -289,7 +294,8 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                   fullWidth={fullWidth}
                   error={!!error}
                   placeholder={placeholder}
-                  value={value} // Use the value from the Controller instead of the prop
+                  value={value}
+                  defaultValue={defaultValue}
                   disabled={disabled}
                   autoComplete={autoComplete}
                   variant={variant}
@@ -332,6 +338,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             multiline={multiline}
             value={value}
             autoComplete={autoComplete}
+            defaultValue={defaultValue}
             disabled={disabled}
             variant={variant}
             onKeyDown={onKeyDown}
