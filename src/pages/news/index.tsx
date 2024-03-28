@@ -35,7 +35,7 @@ import { navigate } from "gatsby";
 
 function News() {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
-  const { newsList }: any = useAppSelector((state) => state.newsPage)
+  const { newsList, topThree }: any = useAppSelector((state) => state.newsPage)
   const [value, setValue] = React.useState<any>('all');
   const [searchValue, setSearchValue] = useState<string>('')
 
@@ -80,11 +80,11 @@ function News() {
             </Typography>
             <Box className="PostWrapper">
               <Stack className="LeftPostWrapper">
-                <PostCard isNews={true} details={newsList?.items?.[0]} navigate={() => navigate(`/news/${newsList?.items?.[0]?.friendlyName}`)} />
+                <PostCard isNews={true} details={topThree?.[0]} navigate={() => navigate(`/news/${topThree?.[0]?.friendlyName}`)} />
               </Stack>
               <Stack className="RightPostWrapper">
-                {newsList?.items?.[1] ? <PostCard isNews={true} details={newsList?.items?.[1]} navigate={() => navigate(`/news/${newsList?.items?.[1]?.friendlyName}`)} /> : null}
-                {newsList?.items?.[2] ? <PostCard isNews={true} details={newsList?.items?.[2]} navigate={() => navigate(`/news/${newsList?.items?.[2]?.friendlyName}`)} /> : null}
+                {topThree?.[1] ? <PostCard isNews={true} details={topThree?.[1]} navigate={() => navigate(`/news/${topThree?.[1]?.friendlyName}`)} /> : null}
+                {topThree?.[2] ? <PostCard isNews={true} details={topThree?.[2]} navigate={() => navigate(`/news/${topThree?.[2]?.friendlyName}`)} /> : null}
               </Stack>
             </Box>
           </Container>

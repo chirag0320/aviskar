@@ -35,7 +35,7 @@ import { navigate } from "gatsby";
 
 function Blog() {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
-  const { blogList }: any = useAppSelector((state) => state.blogPage);
+  const { blogList, topThree }: any = useAppSelector((state) => state.blogPage);
   const [value, setValue] = React.useState<any>("all");
   const [searchValue, setSearchValue] = useState<string>("");
 
@@ -84,19 +84,19 @@ function Blog() {
             </Typography>
             <Box className="PostWrapper">
               <Stack className="LeftPostWrapper">
-                <PostCard details={blogList?.items?.[0]} navigate={() =>
-                  navigate(`/blog/${blogList?.items?.[0]?.friendlyName}`)
+                <PostCard details={topThree?.[0]} navigate={() =>
+                  navigate(`/blog/${topThree?.[0]?.friendlyName}`)
                 } />
               </Stack>
               <Stack className="RightPostWrapper">
-                {blogList?.items?.[1] ? (
-                  <PostCard details={blogList?.items?.[1]} navigate={() =>
-                    navigate(`/blog/${blogList?.items?.[1]?.friendlyName}`)
+                {topThree?.[1] ? (
+                  <PostCard details={topThree?.[1]} navigate={() =>
+                    navigate(`/blog/${topThree?.[1]?.friendlyName}`)
                   } />
                 ) : null}
-                {blogList?.items?.[2] ? (
-                  <PostCard details={blogList?.items?.[2]} navigate={() =>
-                    navigate(`/blog/${blogList?.items?.[2]?.friendlyName}`)
+                {topThree?.[2] ? (
+                  <PostCard details={topThree?.[2]} navigate={() =>
+                    navigate(`/blog/${topThree?.[2]?.friendlyName}`)
                   } />
                 ) : null}
               </Stack>
