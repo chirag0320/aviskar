@@ -6,12 +6,10 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import parse from 'autosuggest-highlight/parse';
 import { debounce } from '@mui/material/utils';
-import { InputAdornment } from '@mui/material';
-import { Search } from '@/assets/icons';
 
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
-const GOOGLE_MAPS_API_KEY = 'AIzaSyC3aviU6KHXAjoSnxcw6qbOhjnFctbxPkE';
+const GOOGLE_MAPS_API_KEY = 'AIzaSyCEM4lp3kIZg6B4PM1doznnMrDNVHRJcNg';
 
 function loadScript(src: string, position: HTMLElement | null, id: string) {
   if (!position) {
@@ -75,6 +73,8 @@ export default function GoogleMaps() {
       ),
     [],
   );
+
+  // console.log('value', value);
 
   React.useEffect(() => {
     let active = true;

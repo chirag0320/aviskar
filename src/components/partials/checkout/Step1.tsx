@@ -21,6 +21,7 @@ import { getStateAndCountryLists, updateFinalDataForTheCheckout } from "@/redux/
 import AddAddress from "./AddAddress"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { ENDPOINTS } from "@/utils/constants"
+import { AddressType } from "@/types/enums"
 
 function Step1() {
   const dispatch = useAppDispatch()
@@ -159,7 +160,7 @@ function Step1() {
           >
             <List>
               <ListItem>
-                <ListItemButton onClick={() => { setIsBillingAddress(() => true);handleUpdateAddress("Edit"); }}>
+                <ListItemButton onClick={() => { setIsBillingAddress(() => true); handleUpdateAddress("Edit"); }}>
                   <ListItemIcon>
                     <PencilIcon />
                   </ListItemIcon>
@@ -175,7 +176,7 @@ function Step1() {
                 </ListItemButton>
               </ListItem>
               <ListItem>
-                <ListItemButton onClick={() => { handleUpdateAddress("Add") }}>
+                <ListItemButton onClick={() => { setIsBillingAddress(() => true); handleUpdateAddress("Add") }}>
                   <ListItemIcon>
                     <Map1Icon />
                   </ListItemIcon>
@@ -214,7 +215,7 @@ function Step1() {
           >
             <List>
               <ListItem>
-                <ListItemButton onClick={() => { setIsBillingAddress(() => false);handleUpdateAddress("Edit"); }}>
+                <ListItemButton onClick={() => { setIsBillingAddress(() => false); handleUpdateAddress("Edit"); }}>
                   <ListItemIcon>
                     <PencilIcon />
                   </ListItemIcon>
@@ -222,7 +223,7 @@ function Step1() {
                 </ListItemButton>
               </ListItem>
               <ListItem>
-                <ListItemButton onClick={() => {setIsBillingAddress(() => false); toggleSelectAddress();  }}>
+                <ListItemButton onClick={() => { setIsBillingAddress(() => false); toggleSelectAddress(); }}>
                   <ListItemIcon>
                     <Map2Icon />
                   </ListItemIcon>
@@ -230,7 +231,7 @@ function Step1() {
                 </ListItemButton>
               </ListItem>
               <ListItem>
-                <ListItemButton onClick={() => { handleUpdateAddress("Add") }}>
+                <ListItemButton onClick={() => { setIsBillingAddress(() => false); handleUpdateAddress("Add") }}>
                   <ListItemIcon>
                     <Map1Icon />
                   </ListItemIcon>
@@ -242,7 +243,7 @@ function Step1() {
         </Stack>
       </Box>
       <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={toggleUpdateAddress} existingAddress={isBillingAddress ? billingAddress : shippingAddress} />
-      <AddAddress open={openAddAddress} dialogTitle="Add Address" onClose={toggleAddAddress} />
+      <AddAddress open={openAddAddress} dialogTitle="Add Address" onClose={toggleAddAddress} addressTypeId={isBillingAddress ? AddressType.Billing : AddressType.Shipping} />
       <AlertDialog open={openAlertDialog} onClose={toggleAlertDialog} />
       <SelectAddress isbillingAddress={isBillingAddress} open={openSelectAddress} onClose={toggleSelectAddress} listOfAddress={isBillingAddress ? checkoutPageData?.billingAddressDetails : checkoutPageData?.shippingAddressDetails} handleAddressUpdate={handleAddressUpdate} />
     </StepWrapper>

@@ -21,6 +21,7 @@ interface AddAddress {
     open: boolean
     dialogTitle: string
     onClose: () => void
+    addressTypeId: number
 }
 
 interface Inputs {
@@ -52,7 +53,7 @@ export const addressSchema = yup.object().shape({
 })
 
 function AddAddress(props: AddAddress) {
-    const { open, dialogTitle, onClose } = props
+    const { open, dialogTitle, onClose, addressTypeId } = props
     const dispatch = useAppDispatch();
     const countryList = useAppSelector(state => state.checkoutPage.countryList);
     const stateList = useAppSelector(state => state.checkoutPage.stateList);
@@ -73,6 +74,7 @@ function AddAddress(props: AddAddress) {
 
     const onAddressFormSubmitHandler = async (data: any) => {
         const addressQuery = {
+            addressTypeId,
             firstName: data.FirstName,
             lastName: data.LastName,
             company: data.Company,
