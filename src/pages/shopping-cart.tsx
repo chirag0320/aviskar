@@ -8,11 +8,13 @@ import { ENDPOINTS } from '@/utils/constants';
 import useAPIoneTime from '@/hooks/useAPIoneTime';
 import CartDetails from '@/components/partials/shopping-cart/CartDetails';
 import CartOrderSummary from '@/components/partials/shopping-cart/CartOrderSummary';
+import Toaster from '@/components/common/Toaster'
+import { useAppSelector } from '@/hooks';
+
 
 function ShoppingCart() {
-    // const [isShoppingCartUpdated, setIsShoppingCartUpdated] = useState(false)
+    const openToaster = useAppSelector(state => state.homePage.openToaster)
 
-    // const [subTotal, setSubTotal] = useState(0);
     useAPIoneTime({
         service: getShoppingCartData, endPoint: ENDPOINTS.getShoppingCartData, body: {
             "search": "",
@@ -27,6 +29,7 @@ function ShoppingCart() {
     return (
         <Layout>
             <>
+                {openToaster && <Toaster />}
                 <Seo
                     keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
                     title="Home"

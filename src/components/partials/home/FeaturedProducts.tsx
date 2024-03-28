@@ -11,6 +11,7 @@ import { ProductCard } from "../../common/Card"
 import useApiRequest from "@/hooks/useAPIRequest"
 import axiosInstance from "@/axiosfolder"
 import { ENDPOINTS } from "@/utils/constants"
+import { useAppSelector } from "@/hooks"
 export interface IFeaturedProducts {
   productId: number,
   categoryId: number,
@@ -69,6 +70,8 @@ let cancellationSource: AbortController | null = null;
 let timeoutId: number | any = null;
 
 function FeaturedProducts() {
+  const { configDetails } = useAppSelector((state) => state.homePage)
+  console.log("🚀 ~ FeaturedProducts ~ configDetails:", configDetails)
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
   const [dataforbody] = useState({
     "search": "",
@@ -179,8 +182,8 @@ function FeaturedProducts() {
     <Box id="FeaturedProducts" component="section">
       <Container>
         <SectionHeading
-          title="Featured Products"
-          description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+          title={configDetails?.["home.featuredproducts.tital"]?.value ?? "Featured Products*"}
+          description={configDetails?.["home.featuredproducts.subtital"]?.value ?? "description*"}
         />
       </Container>
       <Box className="ProductsWrapper">

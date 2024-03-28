@@ -11,13 +11,11 @@ import { useAppDispatch, useAppSelector } from "@/hooks";
 import { Link } from "gatsby";
 import { clearCompareList, compareProducts, getCompareProducts, removeProductFromCompare } from "@/redux/reducers/compareProductsReducer";
 import { ENDPOINTS } from "@/utils/constants";
+import noImage from '../assets/images/noImage.png'
 
 function CompareProducts() {
     const { productIds, comparedProducts, specificationKeys } = useAppSelector((state) => state.compareProducts);
     const dispatch = useAppDispatch();
-
-    console.log('compareProductsState', productIds);
-
 
     useEffect(() => {
         const fetchCompareProducts = async () => {
@@ -28,7 +26,7 @@ function CompareProducts() {
         fetchCompareProducts();
     }, [productIds])
 
-    const removeProduct = (id:any) => {
+    const removeProduct = (id: any) => {
         dispatch(removeProductFromCompare(id))
     }
     return (
@@ -72,7 +70,7 @@ function CompareProducts() {
                                                             {attribute === 'ProductName' ? (
                                                                 <Link to={`/product-details/${product.productName}`} className="productNameLink">{product.productName}</Link>
                                                             ) : attribute === 'ProductImage' ? (
-                                                                <img src={product.imageUrl} className="ProductImage" alt={product.productName} />
+                                                                <img src={product.imageUrl ?? noImage} className="ProductImage" alt={product.productName} />
                                                             ) : (
                                                                 product.specifications[attribute]
                                                             )}

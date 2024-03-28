@@ -10,6 +10,9 @@ import {
   Button,
   IconButton, CardMedia, TextField, Select, MenuItem, Divider,
   Icon,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import classNames from "classnames";
 
@@ -46,6 +49,7 @@ import { CartItemsWithLivePriceDetails } from "../partials/shopping-cart/CartDet
 import useCallAPI from "@/hooks/useCallAPI";
 import { ENDPOINTS } from "@/utils/constants";
 import { setToasterState } from "@/redux/reducers/homepageReducer";
+import useShowToaster from "@/hooks/useShowToaster";
 
 interface Iproduct {
   product: IFeaturedProducts;
@@ -68,6 +72,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
       setOpen(false);
     }
   };
+  const { showToaster } = useShowToaster();
 
   return (
     <Card className={classNames("ProductCard", { "Sticky": stickyProduct })} key={product.productId}>
@@ -130,7 +135,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
               <Typography variant="overline" className="DiscountMessage">
                 {configDetailsState?.productboxdiscounttext?.value}
               </Typography>
-              <HoverTooltip
+              {/* <HoverTooltip
                 placement="top-end"
                 renderComponent={
                   <IconButton className="InfoButton">
@@ -141,7 +146,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                 arrow
               >
                 This is a helper text to justify pricing discount.
-              </HoverTooltip>
+              </HoverTooltip> */}
             </Stack>
           </Stack>
         </Stack>
@@ -205,7 +210,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
         {product.isBundle &&
           <ClickTooltip
             open={open}
-            className="TooltipOfferTag"
+            className="TooltipStack"
             placement="bottom-start"
             onClose={handleTooltipClose}
             onClickAway={handleClickAway}
@@ -222,43 +227,39 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             lightTheme
             arrow
           >
-            <Box className="Offers">
-              <Typography className="ItemPrice">
-                Name
-              </Typography>
-              <Typography className="ItemPrice" sx={{marginRight: "5px"}}>
-                Qty 
-              </Typography>
+            <Stack className="Content">
               {product?.bulkProduct?.map((product: any) => {
                 return (
-                  <Fragment
-                    key={product?.productName}
-                  >
-                    <Typography className="Item">
-                      {product?.productName}
-                    </Typography>
-                    <Typography className="ItemPrice">
-                      {product?.quantity}
-                    </Typography>
-                  </Fragment>
-                );
+                  <Typography>
+                    <Typography variant="inherit" component="span">{product?.quantity} </Typography>
+                    x {product?.productName}
+                  </Typography>
+                )
               })}
-            </Box>
+            </Stack>
           </ClickTooltip>
         }
 
         <IconButton className="Outlined AddToCart" onClick={async () => {
-          await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+          const response = await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
             "productId": product.productId,
             "quantity": 1,
             "IsInstantBuy": false
           } as any)
-          dispatch(setToasterState({
-            openToaster: true,
-            toasterMessage: 'The product has been added to your',
-            buttonText: 'product cart',
-            redirectButtonUrl: 'shopping-cart'
-          }))
+          // console.log("🚀 ~ addTOCart response", response);
+          if (response.code === 200) {
+            showToaster({
+              message: 'The product has been added to your product cart',
+              buttonText: 'product cart',
+              redirectButtonUrl: 'shopping-cart'
+            })
+          }
+          else {
+            showToaster({
+              message: 'Adding to cart failed! Please Try again',
+            })
+          }
+
         }}><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
@@ -268,7 +269,9 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
 export const TravelCard = (props: any) => {
   const { place, description, imageUrl, friendlyName } = props
   return (
-    <Card className="TravelCard">
+    <Card className="TravelCard" onClick={() => {
+      navigate(`blog/${friendlyName}`)
+    }}>
       <Link className="ImageLink">
         <img src={imageUrl} alt="Travel image" loading="lazy" />
       </Link>
@@ -277,9 +280,7 @@ export const TravelCard = (props: any) => {
         <Typography className="Description">{description}</Typography>
       </CardContent>
       <CardActions>
-        <Button name='discoverMore' aria-label="discoverMore" endIcon={<ArrowRight />} onClick={() => {
-          navigate(`blog/${friendlyName}`)
-        }}>Discover More</Button>
+        <Button name='discoverMore' aria-label="discoverMore" endIcon={<ArrowRight />}>Discover More</Button>
       </CardActions>
     </Card>
   );
@@ -408,7 +409,7 @@ export const LineChartCard = (props: any) => {
 };
 
 
-export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
+export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
   // const [deliveryMethod, setDeliveryMethod] = useState<string>('LocalShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     // setDeliveryMethod(event.target.value as string);
@@ -432,7 +433,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
           <Box className="RightWrapper">
             <Typography className="LivePrice" variant="body2">Live Price</Typography>
             <Typography variant="body2">Qty.</Typography>
-            <Typography variant="subtitle1">${cartItem?.LivePriceDetails?.price}</Typography>
+            <Typography variant="subtitle1">${roundOfThePrice(cartItem?.LivePriceDetails?.price)}</Typography>
             <Stack className="Quantity">
               <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.id)} disabled={quantity === 1}><MinusIcon /></IconButton>
               <TextField value={quantity} disabled />

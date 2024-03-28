@@ -31,7 +31,8 @@ interface CreateGuidelineState {
   openToaster: boolean,
   buttonText: string,
   redirectButtonUrl: string,
-  toasterMessage: string
+  toasterMessage: string,
+  scrollPosition: number
 }
 const initialState: CreateGuidelineState = {
   configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
@@ -46,7 +47,8 @@ const initialState: CreateGuidelineState = {
   openToaster: false,
   buttonText: '',
   redirectButtonUrl: '',
-  toasterMessage: ''
+  toasterMessage: '',
+  scrollPosition: 0
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -131,13 +133,11 @@ export const createHomepageSlice = createSlice({
     },
     setRecentlyViewedProduct: (state, action) => {
       const newProductId = action.payload;
-      console.log("🚀 ~ newProductId:", newProductId)
       // Check if the product already exists in the recently viewed list
       const existingIndex = state.recentlyViewedProducts.findIndex(productId => productId === newProductId);
-      console.log("🚀 ~ existingIndex:", existingIndex)
       if (existingIndex === -1) {
         let updatedViewProducts = [newProductId, ...state.recentlyViewedProducts]
-        if(updatedViewProducts?.length > 20){
+        if (updatedViewProducts?.length > 20) {
           updatedViewProducts.splice(0, 20)
         }
         state.recentlyViewedProducts = updatedViewProducts
@@ -151,11 +151,10 @@ export const createHomepageSlice = createSlice({
       }
     },
     setToasterState: (state, action) => {
-      console.log("🚀 ~ action:", action)
       state.openToaster = action.payload.openToaster
       state.toasterMessage = action.payload.toasterMessage
-      state.buttonText = action.payload.buttonText
-      state.redirectButtonUrl = action.payload.redirectButtonUrl
+      state.buttonText = action.payload.buttonText || ''
+      state.redirectButtonUrl = action.payload.redirectButtonUrl || ''
     },
     // setToasterMeaasge: (state, action) => {
     //   state.toasterMessage = action.payload
@@ -165,7 +164,10 @@ export const createHomepageSlice = createSlice({
     // },
     // setRedirectUrl: (state, action) => {
     //   state.redirectButtonUrl = action.payload
-    // }
+    // },
+    setScrollPosition : (state,action) => {
+      state.scrollPosition = action.payload;
+    }
   },
 
   extraReducers: (builder) => {
@@ -255,7 +257,6 @@ export const createHomepageSlice = createSlice({
       localStorageSetItem('isLoggedIn', JSON.stringify(false))
     })
     builder.addCase(LogOutUserAPI.rejected, (state, action) => {
-      // console.log("🚀rr ~ builder.addCase ~ action.payload.data:", action.payload)
       state.loading = false
     })
     // ImpersonateSignInAPI
@@ -275,6 +276,6 @@ export const createHomepageSlice = createSlice({
   },
 })
 
-export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState } = createHomepageSlice.actions
+export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState , setScrollPosition} = createHomepageSlice.actions
 
 export default createHomepageSlice.reducer

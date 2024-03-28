@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -31,29 +31,36 @@ import {
   FacebookIcon,
   TwitterIcon,
   InstagramIcon,
+  YoutubeIcon,
 } from "@/assets/icons";
 import { formatDate } from "@/utils/common";
 import useApiRequest from "@/hooks/useAPIRequest";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { BlogDetailsAPI } from "@/redux/reducers/blogReducer";
-import { useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import useSubscription from "@/hooks/useSubscription";
 import { navigate } from "gatsby";
+import { setLoadingFalse, setLoadingTrue } from "@/redux/reducers/homepageReducer";
 
-function BlogDetails({ params }: any) {
-  const { blogDetailsData, blogList }: any = useAppSelector(
-    (state) => state.blogPage
-  );
-  const { email, handleEmailChange, subscribe, loadingForEmailSub } =
-    useSubscription();
-  useAPIoneTime({
-    service: BlogDetailsAPI,
-    params: { pathName: params?.["blog-details-friendly-name"] },
-  });
+function BlogDetails(params: any) {
+  const dispatch = useAppDispatch()
+  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+  const { blogDetailsData, blogList }: any = useAppSelector((state) => state.blogPage);
+  const { email, handleEmailChange, subscribe, loadingForEmailSub } = useSubscription();
+  useEffect(() => {
+    const apiCall = async () => {
+      dispatch(setLoadingTrue())
+      await dispatch(BlogDetailsAPI({ params: { pathName: params?.["blog-details-friendly-name"] } }))
+      setTimeout(() => {
+        dispatch(setLoadingFalse())
+      }, 1500);
+    }
+    apiCall()
+  }, [params?.params?.["blog-details-friendly-name"]])
   return (
     <Layout>
       <Box className="BlogDetailPage">
-        <Breadcrumb page1={"Blog"} page2={"Blog"} page3={"Blog"} />
+        <Breadcrumb arr={[{ navigate: '/blog', name: 'Blog' }, { navigate: "/blog/" + params?.params?.["blog-details-friendly-name"], name: params?.params?.["blog-details-friendly-name"] }]} />
         <Box className="PostDescription">
           <Container>
             <Button
@@ -109,24 +116,18 @@ function BlogDetails({ params }: any) {
                 <Box className="Left">
                   <Typography variant="subtitle1">Share this post</Typography>
                   <Stack className="SocialIconWrapper">
-                    <IconButton
-                      className="SocialIcon"
-                      aria-label="Facebook Icon"
-                    >
+                    <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}>
                       <FacebookIcon />
                     </IconButton>
-                    <IconButton
-                      className="SocialIcon"
-                      aria-label="Facebook Icon"
-                    >
+                    <IconButton className="SocialIcon" aria-label="Twitter Icon" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}>
                       <TwitterIcon />
                     </IconButton>
-                    <IconButton
-                      className="SocialIcon"
-                      aria-label="Facebook Icon"
-                    >
-                      <InstagramIcon />
+                    <IconButton className="SocialIcon" aria-label="Youtube Icon" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}>
+                      <YoutubeIcon />
                     </IconButton>
+                    {/* <IconButton className="SocialIcon" aria-label="Instagram Icon">
+                      <InstagramIcon />
+                    </IconButton> */}
                   </Stack>
                 </Box>
                 <Box className="Right">
@@ -145,6 +146,18 @@ function BlogDetails({ params }: any) {
             {blogList?.items?.length > 0 ? (
               <Box className="DiscoverPost">
                 <Box className="DiscoverPost__title">
+                  <Typography variant="h2" component="h2">
+                    Related posts
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ mt: 1.875, color: variable.greyRegent }}
+                  >
+                    Lorem Ipsum is simply dummy text of the printing and typesetting
+                    industry.
+                  </Typography>
+                </Box>
+                {/* <Box className="DiscoverPost__title">
                   <Typography variant="h2" component="h2">
                     Subscribe to our newsletter
                   </Typography>
@@ -171,7 +184,7 @@ function BlogDetails({ params }: any) {
                     By clicking Sign Up you're confirming that you agree with
                     our Terms and Conditions.
                   </Typography>
-                </Box>
+                </Box> */}
                 <Box className="RecentPosts">
                   <Grid
                     container
@@ -181,7 +194,12 @@ function BlogDetails({ params }: any) {
                     {blogList?.items?.map((item: any) => {
                       return (
                         <Grid item md={4} sm={6} key={item?.id}>
-                          <PostCard details={item} />
+                          <PostCard
+                          details={item}
+                          navigate={() =>
+                            navigate(`/blog/${item?.friendlyName}`)
+                          }
+                        />
                         </Grid>
                       );
                     })}
@@ -244,4 +262,4 @@ function BlogDetails({ params }: any) {
     </Layout>
   );
 }
-export default BlogDetails;
+export default React.memo(BlogDetails);

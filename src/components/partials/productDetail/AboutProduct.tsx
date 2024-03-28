@@ -32,6 +32,7 @@ import { setToasterState } from "@/redux/reducers/homepageReducer"
 import { resetProductDetails } from "@/redux/reducers/categoryReducer"
 
 import noImage from '../../../assets/images/noImage.png'
+import useShowToaster from "@/hooks/useShowToaster"
 
 function createData(
   quantity: string,
@@ -84,6 +85,7 @@ function AboutProduct({ productId }: any) {
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
   const [tabValue, setTabValue] = useState<number>(0)
   const [priceHistoryDuration, setPriceHistoryDuration] = useState<string>('hour')
+  const {showToaster} = useShowToaster();
 
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
   const { data: progressData } = useApiRequest(urlForThePriceRange, 'get');
@@ -146,12 +148,11 @@ function AboutProduct({ productId }: any) {
   }
   const addIntoComapreProduct = (id: any) => {
     dispatch(addProductToCompare(id))
-    dispatch(setToasterState({
-      openToaster: true,
-      toasterMessage: 'The product has been added to your',
+    showToaster({
+      message: 'The product has been added to compare',
       buttonText: 'product comparison',
       redirectButtonUrl: 'compare-products'
-    }))
+    })
   }
   const addIntoWishList = async (id: any) => {
     await dispatch(addToWishList({
@@ -161,12 +162,11 @@ function AboutProduct({ productId }: any) {
         quantity: 1
       }
     }) as any)
-    dispatch(setToasterState({
-      openToaster: true,
-      toasterMessage: 'The product has been added to your',
+    showToaster({
+      message: 'The product has been added to your product wishlist',
       buttonText: 'product wishlist',
       redirectButtonUrl: 'wishlist'
-    }))
+    })
   }
   useEffect(() => {
     return () => {
@@ -198,7 +198,16 @@ function AboutProduct({ productId }: any) {
           <form>
             <Box className="Heading">
               <Typography className="ProductName" variant="h4">{productDetailsData?.name}</Typography>
-              <Typography>{productDetailsData?.shortDescription}</Typography>
+              <Stack className="Wrapper">
+                <Typography>{productDetailsData?.shortDescription}</Typography>
+                <Typography
+                  variant="caption"
+                  className="OfferBadge"
+                  sx={{ backgroundColor: productDetailsData?.tagColor }}
+                >
+                  {productDetailsData?.tagName}
+                </Typography>
+              </Stack>
             </Box>
             <Divider />
             <Box className="PricingDetails">
@@ -217,8 +226,8 @@ function AboutProduct({ productId }: any) {
                 <Stack className="Bottom">
                   <Stack className="SliderWrapper">
                     <Stack className="PriceMinMax">
-                      <Typography>Low: <Typography variant="titleLarge">${progressData?.data?.minPrice}</Typography></Typography>
-                      <Typography>High: <Typography variant="titleLarge">${progressData?.data?.maxPrice}</Typography></Typography>
+                      <Typography>Low: <Typography variant="titleLarge">${roundOfThePrice(progressData?.data?.minPrice)}</Typography></Typography>
+                      <Typography>High: <Typography variant="titleLarge">${roundOfThePrice(progressData?.data?.maxPrice)}</Typography></Typography>
                     </Stack>
                     <Slider
                       className="Slider"
@@ -320,8 +329,8 @@ function AboutProduct({ productId }: any) {
                     <Table size="small">
                       <TableHead>
                         <TableRow>
-                          <TableCell align="center"><Typography variant="subtitle1">Quantity</Typography></TableCell>
-                          <TableCell align="center"><Typography variant="subtitle1">Price</Typography></TableCell>
+                          <TableCell><Typography variant="subtitle1">Quantity</Typography></TableCell>
+                          <TableCell><Typography variant="subtitle1">Price</Typography></TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -333,12 +342,16 @@ function AboutProduct({ productId }: any) {
                           toQty: number,
                         }, index: any) => (
                           <TableRow key={`pricedata-${index}`} >
-                            <TableCell align="center">
-                              <Typography>{priceData?.fromQty + '-' + priceData?.toQty}</Typography>
+                            <TableCell>
+                              <Stack className="Content">
+                                <Typography>{priceData?.fromQty + '-' + priceData?.toQty}</Typography>
+                              </Stack>
                               <Divider />
                             </TableCell>
-                            <TableCell align="center" style={{ wordWrap: "break-word" }}>
-                              <Typography>{priceData?.price}</Typography>
+                            <TableCell>
+                              <Stack className="Content">
+                                <Typography>{priceData?.price}</Typography>
+                              </Stack>
                               <Divider />
                             </TableCell>
                           </TableRow>
@@ -372,8 +385,8 @@ function AboutProduct({ productId }: any) {
                       <Table size="small">
                         <TableHead>
                           <TableRow>
-                            <TableCell align="center"><Typography variant="subtitle1">Product Name</Typography></TableCell>
-                            <TableCell align="center"><Typography variant="subtitle1">Quantity</Typography></TableCell>
+                            <TableCell><Typography variant="subtitle1">Product Name</Typography></TableCell>
+                            <TableCell><Typography variant="subtitle1">Quantity</Typography></TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -438,14 +451,14 @@ function AboutProduct({ productId }: any) {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      {/* <TableCell align="center"><Typography variant="subtitle1">specifications</Typography></TableCell> */}
-                      {/* <TableCell align="center"><Typography variant="subtitle1">Product Name</Typography></TableCell> */}
+                      {/* <TableCell><Typography variant="subtitle1">specifications</Typography></TableCell> */}
+                      {/* <TableCell><Typography variant="subtitle1">Product Name</Typography></TableCell> */}
                     </TableRow>
                   </TableHead>
                   <TableBody style={styles.tableBody}>
                     {Object.entries(productDetailsData?.specifications)?.map((bulkProduct: any, index) => (
                       <TableRow key={index} style={{ ...styles.tableRow }}>
-                        <TableCell align="center" style={styles.tableCell}>
+                        <TableCell style={styles.tableCell}>
                           <Typography>{index + 1}</Typography>
                         </TableCell>
                         <TableCell align="left" style={{ ...styles.tableCell }}>

@@ -17,7 +17,10 @@ import UpdateAddress from "./UpdateAddress"
 import SelectAddress from "./SelectAddress"
 import AlertDialog from "./AlertDialog"
 import { navigate } from "gatsby"
-import { updateFinalDataForTheCheckout } from "@/redux/reducers/checkoutReducer"
+import { getStateAndCountryLists, updateFinalDataForTheCheckout } from "@/redux/reducers/checkoutReducer"
+import AddAddress from "./AddAddress"
+import useAPIoneTime from "@/hooks/useAPIoneTime"
+import { ENDPOINTS } from "@/utils/constants"
 
 function Step1() {
   const dispatch = useAppDispatch()
@@ -31,11 +34,12 @@ function Step1() {
   const [addressTitle, setAddressTitle] = useState<string>("Add")
   const [selectAccount, setSelectAccount] = useState<any>(checkoutPageData?.customers?.[0]!)
   const [openUpdateAddress, toggleUpdateAddress] = useToggle(false)
+  const [openAddAddress, toggleAddAddress] = useToggle(false)
   const [openSelectAddress, toggleSelectAddress] = useToggle(false)
   const [openAlertDialog, toggleAlertDialog] = useToggle(false)
   const tooltipRef: any = useRef(null)
   const shipingtooltipRef: any = useRef(null)
-
+  useAPIoneTime({ service: getStateAndCountryLists, endPoint: ENDPOINTS.getStateAndCountryLists });
 
   useEffect(() => {
     if (checkoutPageData?.customers?.[0]) {
@@ -89,9 +93,14 @@ function Step1() {
   }, [])
 
   const handleUpdateAddress = useCallback((type: string) => {
-    setAddressTitle(type)
-    toggleUpdateAddress()
-  }, [openUpdateAddress])
+    // setAddressTitle(type)
+    if (type === "Edit") {
+      toggleUpdateAddress()
+    }
+    else if (type === "Add") {
+      toggleAddAddress()
+    }
+  }, [openUpdateAddress, openAddAddress])
 
   const handleAddressUpdate = useCallback((addressData: any, isbilling: any) => {
     if (isbilling) {
@@ -232,7 +241,8 @@ function Step1() {
           </ClickTooltip>
         </Stack>
       </Box>
-      <UpdateAddress open={openUpdateAddress} dialogTitle={addressTitle + " Address"} onClose={toggleUpdateAddress} existingAddress={addressTitle == "Add" ? null : billingAddress} />
+      <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={toggleUpdateAddress} existingAddress={billingAddress} />
+      <AddAddress open={openAddAddress} dialogTitle="Add Address" onClose={toggleAddAddress} />
       <AlertDialog open={openAlertDialog} onClose={toggleAlertDialog} />
       <SelectAddress isbillingAddress={isBillingAddress} open={openSelectAddress} onClose={toggleSelectAddress} listOfAddress={isBillingAddress ? checkoutPageData?.billingAddressDetails : checkoutPageData?.shippingAddressDetails} handleAddressUpdate={handleAddressUpdate} />
     </StepWrapper>

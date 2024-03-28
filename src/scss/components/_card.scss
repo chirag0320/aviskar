@@ -146,8 +146,8 @@
 
           .Left {
             align-items: center;
-            gap: 8px;
-
+            gap: 0px 8px;
+            flex-wrap: wrap;
             .DiscountedPrice {
               text-decoration: line-through;
               color: rgba($dark, 0.5);
@@ -156,7 +156,7 @@
 
           .Discount {
             color: $sinopia;
-
+            flex-shrink: 0;
             @include media($sm) {
               font-size: pxToRem(13);
               line-height: pxToRem(24);
@@ -281,6 +281,30 @@
         .MuiTooltip-tooltip {
           box-shadow: $shadow11;
           padding: 16px;
+          max-width: calc(100% - 10px);
+          .Content {
+            flex-direction: column;
+            gap: 4px;
+            .MuiTypography-body1 {
+              position: relative;
+              line-height: 1.6;
+              padding-left: 14px;
+              &:before {
+                content: '';
+                position: absolute;
+                top: 9px;
+                left: 0;
+                display: block;
+                height: 5px;
+                width: 5px;
+                border-radius: 50%;
+                background-color: $dark;
+              }
+              .MuiTypography-inherit {
+                font-weight: 700;
+              }
+            }
+          }
         }
       }
 

@@ -15,6 +15,7 @@ import { ENDPOINTS } from '@/utils/constants'
 import { useAppSelector } from '@/hooks'
 import { apicall, trimAllSpaceFromString } from '@/utils/helper'
 import useSubscription from '@/hooks/useSubscription'
+import { navigate } from 'gatsby'
 export interface FooterLink {
   linkTitle: string;
   linkUrl: string;
@@ -35,7 +36,11 @@ function index() {
       <Container className="Container">
         <Stack className="FooterWrapper">
           <Stack className="LogoPart">
-            <img src={configDetailsState?.brandlogourl?.value} alt="Footer logo" loading="lazy" />
+            <Link style={{cursor: 'pointer'}}>
+            <img src={configDetailsState?.brandlogourl?.value} alt="Footer logo" loading="lazy" onClick={()=>{
+              navigate('/')
+            }}/>
+            </Link>
             <Stack className="AboutWrapper">
               <Stack className="LocationWrapper About">
                 <MapIcon />
@@ -67,16 +72,16 @@ function index() {
             ))}
           </Stack>
           <Stack className="NewsletterPart">
-            <Typography className="MenuTitle" variant="subtitle2" component="p">Newsletter</Typography>
-            <Box className="Content">
+            {/* <Typography className="MenuTitle" variant="subtitle2" component="p">Newsletter</Typography> */}
+            {/* <Box className="Content">
               <Typography className="InfoMessage" variant="overline">Stay up to date with our latest news.</Typography>
               <Stack className="FieldWrapper">
-                {/* props i have removed */}
+                props i have removed
                 <TextField type="email" className="EmailField" placeholder="Your Email Address" value={email} onChange={handleEmailChange} />
                 <Button name='subscribe' aria-label='subscribe' className="SubscribeButton" variant="contained" onClick={subscribe}>Subscribe</Button>
               </Stack>
               <Typography className="ConsentMessage" variant="body2">Your email is safe with us, we don't spam</Typography>
-            </Box>
+            </Box> */}
             <Stack className="SocialWrapper">
               <IconButton title="Follow us on Facebook" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}><FacebookIcon fontSize="small" /></IconButton>
               <IconButton title="Follow us on Youtube" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}><YoutubeIcon /></IconButton>

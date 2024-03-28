@@ -12,6 +12,7 @@ import { navigate } from 'gatsby'
 
 // Components
 import RecordNotFound from '@/components/common/RecordNotFound'
+import { useAppSelector } from '@/hooks'
 
 const dataforbody = {
   "search": "",
@@ -63,7 +64,9 @@ function SkeletonCloserLook({ index }: { index: number | string }) {
   )
 }
 function CloserLook() {
+  const { configDetails } = useAppSelector((state) => state.homePage)
   const { data, loading }: Idata = useApiRequest(ENDPOINTS.getBlog, 'post', dataforbody);
+
   const config = {
     slidesPerView: 1.4,
     spaceBetween: 20,
@@ -100,8 +103,8 @@ function CloserLook() {
   return (
     <Container id="CloserLook" component="section">
       <SectionHeading
-        title="Take a closer look"
-        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        title={configDetails?.["home.closerlook.tital"]?.value ?? "Take a closer look*"}
+        description={configDetails?.["home.closerlook.subtital"]?.value ?? "description*"}
       />
       <Container className="DestinationWrapper" maxWidth="lg">
         {data?.data?.items?.length !== 0 ?
@@ -139,10 +142,10 @@ function CloserLook() {
           : <RecordNotFound message="No destination available" />
         }
       </Container>
-      <Stack className="Action">
-        <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained" onClick={() => {
+      <Stack className="Action" onClick={() => {
           navigate('/blog')
-        }}>Discover More</Button>
+        }}>
+        <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained">Discover More</Button>
       </Stack>
     </Container>
   )

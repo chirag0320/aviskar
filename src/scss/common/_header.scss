@@ -435,10 +435,10 @@
     top: calc(67px + 1px);
 
     &.isHomePage {
-      top: calc(67px + 50px + 1px);
+      top: calc(67px + 50px + 1px) !important;
 
       .MuiDrawer-paper {
-        max-height: calc(100% - 67px - 50px - 1px);
+        max-height: calc(100% - 67px - 50px - 1px) !important;
       }
     }
 
@@ -519,10 +519,13 @@
 
 #MobileSecondaryMenu {
   position: relative;
-  @include padding-vertical(9);
 
   @include media-min($md) {
     display: none;
+  }
+
+  .MuiAppBar-root {
+    @include padding-vertical(9);
   }
 
   .Wrapper {

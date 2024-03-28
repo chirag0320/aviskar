@@ -8,6 +8,7 @@ import useApiRequest from "@/hooks/useAPIRequest"
 import { Idata, IpriceForEachId } from "./FeaturedProducts"
 import { ENDPOINTS } from "@/utils/constants"
 import { navigate } from "gatsby"
+import { useAppSelector } from "@/hooks"
 const defaultData = {
   "search": "",
   "pageNo": 0,
@@ -28,6 +29,7 @@ function SkeletonPopularProducts({ index }: { index: number | string }) {
   </Card>)
 }
 function PopularProducts() {
+  const { configDetails } = useAppSelector((state) => state.homePage)
   const [productType, setProductType] = useState('all');
   const [priceForEachId, setPriceForEachId] = useState<IpriceForEachId | null>(null)
   const [dataforbody, setDataforbody] = useState<any>(defaultData)
@@ -59,8 +61,8 @@ function PopularProducts() {
   return (
     <Container id="PopularProducts" component="section">
       <SectionHeading
-        title="Popular Products"
-        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        title={configDetails?.["home.popularproducts.tital"]?.value ?? "Popular Products*"}
+        description={configDetails?.["home.popularproducts.subtital"]?.value ?? "description*"}
       />
       <Stack className="ToggleWrapper">
         <ToggleButtonGroup

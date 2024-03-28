@@ -9,14 +9,15 @@ import { getOrderConfirmationDetails } from "@/redux/reducers/orderConfirmationD
 import { ENDPOINTS } from "@/utils/constants";
 import { useAppSelector } from "@/hooks";
 import { rows } from "./order-details";
+import { navigate } from "gatsby";
 
 function OrderConfirmation(props: any) {
-    const orderId = props.location?.search?.split('=')[1];
+    // const orderId = props.location?.search?.split('=')[1];
     const orderConfirmationDetails = useAppSelector(state => state.orderConfirmationDetails);
     console.log("🚀 ~ OrderConfirmation ~ orderConfirmationDetails:", orderConfirmationDetails)
     useAPIoneTime({
         service: getOrderConfirmationDetails,
-        endPoint: ENDPOINTS.orderConfimationDetails + 26487
+        endPoint: ENDPOINTS.orderConfimationDetails + new URLSearchParams(location.search).get("id")
     })
     return (
         <Layout>
@@ -87,22 +88,6 @@ function OrderConfirmation(props: any) {
                                                     </TableRow>
 
                                                 ))}
-                                                {orderConfirmationDetails?.orderItems?.map((row) => (
-                                                    <TableRow
-                                                        key={row.productId}
-                                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                    >
-                                                        <TableCell component="th" scope="row">
-                                                            <img className="ProductImage"
-                                                                src={row.imageUrl} alt="Product image" loading="lazy"></img>
-                                                            {row.productName}
-                                                        </TableCell>
-                                                        <TableCell>{row.unitPrice}</TableCell>
-                                                        <TableCell>{row.quantity}</TableCell>
-                                                        <TableCell>{row.subTotal}</TableCell>
-                                                    </TableRow>
-
-                                                ))}
                                             </TableBody>
                                         </Table>
                                     </TableContainer>
@@ -118,7 +103,9 @@ function OrderConfirmation(props: any) {
                                 <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography>
                             </Box>
                         </Box>
-                        <Button className='ContinueBtn' size='large' variant="contained">Continue</Button>
+                        <Button className='ContinueBtn' size='large' variant="contained" onClick={() => {
+                            navigate("/");
+                        }}>Continue</Button>
                     </Container>
                 </Box>
             </>

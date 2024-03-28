@@ -17,11 +17,11 @@ interface GetInTouchInputs {
 }
 
 const schema = yup.object().shape({
-    reason: yup.string().required(),
-    name: yup.string().required(),
+    reason: yup.string().trim().required(),
+    name: yup.string().trim().required(),
     email: yup.string().email().required(), // Email field is required and must be in email format
-    phone: yup.string().required(),
-    enquiry: yup.string().required(),
+    phone: yup.string().trim().required(),
+    enquiry: yup.string().trim().required(),
 });
 
 
