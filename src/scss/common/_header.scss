@@ -514,10 +514,13 @@
 
 #MobileSecondaryMenu {
   position: relative;
-  @include padding-vertical(9);
 
   @include media-min($md) {
     display: none;
+  }
+
+  .MuiAppBar-root {
+    @include padding-vertical(9);
   }
 
   .Wrapper {
