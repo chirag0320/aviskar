@@ -93,14 +93,13 @@ function News() {
           <Container>
             <Box className="DiscoverPost__title">
               <Typography variant="h2" component="h2">
-                Discover News Posts
+                {configDetailsState?.["news.newstital"]?.value}
               </Typography>
               <Typography
                 variant="body1"
                 sx={{ mt: 1.875, color: variable.greyRegent }}
               >
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+                {configDetailsState?.["news.newssubtital"]?.value}
               </Typography>
             </Box>
             <Box className="SearchWrapper">

@@ -107,14 +107,13 @@ function Blog() {
           <Container>
             <Box className="DiscoverPost__title">
               <Typography variant="h2" component="h2">
-                Our Latest Blog Post
+                {configDetailsState?.["blogpost.blogposttital"]?.value}
               </Typography>
               <Typography
                 variant="body1"
                 sx={{ mt: 1.875, color: variable.greyRegent }}
               >
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+                {configDetailsState?.["blogpost.blogpostsubtital"]?.value}
               </Typography>
             </Box>
             <Box className="SearchWrapper">
