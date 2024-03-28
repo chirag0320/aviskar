@@ -41,6 +41,7 @@ import useSubscription from "@/hooks/useSubscription";
 import { navigate } from "gatsby";
 
 function BlogDetails({ params }: any) {
+  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { blogDetailsData, blogList }: any = useAppSelector(
     (state) => state.blogPage
   );
@@ -109,22 +110,13 @@ function BlogDetails({ params }: any) {
                 <Box className="Left">
                   <Typography variant="subtitle1">Share this post</Typography>
                   <Stack className="SocialIconWrapper">
-                    <IconButton
-                      className="SocialIcon"
-                      aria-label="Facebook Icon"
-                    >
+                    <IconButton className="SocialIcon" aria-label="Facebook Icon">
                       <FacebookIcon />
                     </IconButton>
-                    <IconButton
-                      className="SocialIcon"
-                      aria-label="Facebook Icon"
-                    >
+                    <IconButton className="SocialIcon" aria-label="Facebook Icon">
                       <TwitterIcon />
                     </IconButton>
-                    <IconButton
-                      className="SocialIcon"
-                      aria-label="Facebook Icon"
-                    >
+                    <IconButton className="SocialIcon" aria-label="Facebook Icon">
                       <InstagramIcon />
                     </IconButton>
                   </Stack>
