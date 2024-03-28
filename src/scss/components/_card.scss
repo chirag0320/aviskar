@@ -280,6 +280,44 @@
         .MuiTooltip-tooltip {
           box-shadow: $shadow11;
           padding: 16px;
+          max-width: calc(100% - 10px);
+          .Content {
+            .MuiList-root {
+              .MuiListItem-root {
+                .MuiListItemText-root {
+                  position: relative;
+                  display: flex;
+                  align-items: center;
+                  gap: 4px;
+                  padding-left: 14px;
+                  .MuiTypography-root {
+                    &:before {
+                      content: '';
+                      position: absolute;
+                      top: 50%;
+                      left: 0;
+                      transform: translate(0, -50%);
+                      display: block;
+                      height: 7px;
+                      width: 7px;
+                      border-radius: 50%;
+                      background-color: $dark;
+                    }
+                    &.MuiTypography-noWrap {
+                      white-space: normal;
+                    }
+                    &.MuiListItemText-primary {
+                      flex: 1;
+                    }
+                    &.MuiListItemText-secondary {
+                      color: $dark;
+                      font-weight: 700;
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
 

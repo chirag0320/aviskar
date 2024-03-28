@@ -31,6 +31,7 @@ import {
   FacebookIcon,
   TwitterIcon,
   InstagramIcon,
+  YoutubeIcon,
 } from "@/assets/icons";
 import { formatDate } from "@/utils/common";
 import useApiRequest from "@/hooks/useAPIRequest";
@@ -118,12 +119,15 @@ function BlogDetails(params: any) {
                     <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}>
                       <FacebookIcon />
                     </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}>
+                    <IconButton className="SocialIcon" aria-label="Twitter Icon" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}>
                       <TwitterIcon />
                     </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}>
-                      <InstagramIcon />
+                    <IconButton className="SocialIcon" aria-label="Youtube Icon" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}>
+                      <YoutubeIcon />
                     </IconButton>
+                    {/* <IconButton className="SocialIcon" aria-label="Instagram Icon">
+                      <InstagramIcon />
+                    </IconButton> */}
                   </Stack>
                 </Box>
                 <Box className="Right">

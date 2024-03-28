@@ -31,6 +31,7 @@ import {
   FacebookIcon,
   TwitterIcon,
   InstagramIcon,
+  YoutubeIcon,
 } from "@/assets/icons";
 import { formatDate } from "@/utils/common";
 import useApiRequest from "@/hooks/useAPIRequest";
@@ -41,7 +42,7 @@ import { navigate } from "gatsby";
 import { NewsDetailsAPI } from "@/redux/reducers/newsReducer";
 import { setLoadingFalse, setLoadingTrue } from "@/redux/reducers/homepageReducer";
 
-function NewsDetails(params:any) {
+function NewsDetails(params: any) {
   const dispatch = useAppDispatch()
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { newsDetailsData, newsList }: any = useAppSelector((state) => state.newsPage)
@@ -67,7 +68,7 @@ function NewsDetails(params:any) {
               variant="text"
               startIcon={<ChevronLeft />}
               onClick={() => {
-                navigate('/blog')
+                navigate('/news')
               }}
             >
               All Posts
@@ -116,12 +117,15 @@ function NewsDetails(params:any) {
                     <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}>
                       <FacebookIcon />
                     </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}>
+                    <IconButton className="SocialIcon" aria-label="Twitter Icon" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}>
                       <TwitterIcon />
                     </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}>
-                      <InstagramIcon />
+                    <IconButton className="SocialIcon" aria-label="Youtube Icon" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}>
+                      <YoutubeIcon />
                     </IconButton>
+                    {/* <IconButton className="SocialIcon" aria-label="Instagram Icon">
+                      <InstagramIcon />
+                    </IconButton> */}
                   </Stack>
                 </Box>
                 <Box className="Right">
