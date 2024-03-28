@@ -64,7 +64,7 @@ function News() {
 
   return (
     <Layout>
-      <Breadcrumb page1={"News"} />
+      <Breadcrumb arr={[{navigate:'/news',name:'News'}]} />
       <Box className="BlogPage">
         <Box className="HeroSection">
           <Container>

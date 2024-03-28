@@ -69,7 +69,7 @@ function Blog() {
   return (
     <Layout>
       <Box className="BlogPage">
-        <Breadcrumb page1={"Blog"} />
+        <Breadcrumb arr={[{ navigate: '/blog', name: 'Blog' }]} />
         <Box className="HeroSection">
           <Container>
             <Typography variant="h2" component="h2">
@@ -84,14 +84,20 @@ function Blog() {
             </Typography>
             <Box className="PostWrapper">
               <Stack className="LeftPostWrapper">
-                <PostCard details={blogList?.items?.[0]} />
+                <PostCard details={blogList?.items?.[0]} navigate={() =>
+                  navigate(`/blog/${blogList?.items?.[0]?.friendlyName}`)
+                } />
               </Stack>
               <Stack className="RightPostWrapper">
                 {blogList?.items?.[1] ? (
-                  <PostCard details={blogList?.items?.[1]} />
+                  <PostCard details={blogList?.items?.[1]} navigate={() =>
+                    navigate(`/blog/${blogList?.items?.[1]?.friendlyName}`)
+                  } />
                 ) : null}
                 {blogList?.items?.[2] ? (
-                  <PostCard details={blogList?.items?.[2]} />
+                  <PostCard details={blogList?.items?.[2]} navigate={() =>
+                    navigate(`/blog/${blogList?.items?.[2]?.friendlyName}`)
+                  } />
                 ) : null}
               </Stack>
             </Box>
