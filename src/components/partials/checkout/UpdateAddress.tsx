@@ -1,5 +1,5 @@
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Autocomplete, MenuItem, Button, Stack, TextField } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
-import { StateOrCountry, addOrEditAddress } from "@/redux/reducers/checkoutReducer";
+import { StateOrCountry, addOrEditAddress, updateAddress } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import { addressSchema } from "./AddAddress"
@@ -41,6 +41,7 @@ interface Inputs {
 
 function UpdateAddress(props: UpdateAddress) {
   const { open, dialogTitle, onClose, existingAddress } = props
+  const loading = useAppSelector(state => state.checkoutPage.loading);
   const countryList = useAppSelector(state => state.checkoutPage.countryList);
   const stateList = useAppSelector(state => state.checkoutPage.stateList);
   const [stateId, setStateId] = useState<number | null>(null);
@@ -66,7 +67,7 @@ function UpdateAddress(props: UpdateAddress) {
       company: data.Company,
       phoneNumber: data.Contact,
       email: data.Email,
-      isVerified: true, // static
+      isVerified: false, // static
       addressLine1: data.Address1,
       addressLine2: data.Address2,
       city: data.City,
@@ -75,7 +76,6 @@ function UpdateAddress(props: UpdateAddress) {
       postcode: data.Code,
       countryId: data.Country,
     }
-
 
     const response = await dispatch(addOrEditAddress({
       url: ENDPOINTS.addOrEditAddress,
@@ -89,10 +89,34 @@ function UpdateAddress(props: UpdateAddress) {
       onClose()
       reset()
       showToaster({ message: "Address saved successfully" })
+      dispatch(updateAddress({
+        ...existingAddress,
+        firstName: data.FirstName,
+        lastName: data.LastName,
+        company: data.Company,
+        phone1: data.Contact,
+        email: data.Email,
+        addressLine1: data.Address1,
+        addressLine2: data.Address2,
+        city: data.City,
+        stateName: data.State,
+        postcode: data.Code,
+        country: data.Country,
+        countryName: countryList.find((country: StateOrCountry) => country.id === data.Country)?.name,
+        state: stateId,
+      }))
     } else {
       showToaster({ message: "Failed to save address" })
     }
   }
+
+  useEffect(() => {
+    setValue('State', existingAddress.stateName);
+    setStateId(existingAddress?.state);
+    return () => {
+      reset()
+    }
+  }, [existingAddress])
 
   return (
     <StyledDialog
@@ -254,7 +278,7 @@ function UpdateAddress(props: UpdateAddress) {
             <Button variant="outlined" onClick={onClose}>
               Close
             </Button>
-            <Button variant="contained" type="submit">
+            <Button variant="contained" type="submit" disabled={loading}>
               Submit
             </Button>
           </Stack>

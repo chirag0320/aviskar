@@ -1,5 +1,5 @@
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Autocomplete, MenuItem, Button, Stack, TextField } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -40,7 +40,7 @@ interface Inputs {
 export const addressSchema = yup.object().shape({
     FirstName: yup.string().trim().required(),
     LastName: yup.string().trim().required(),
-    Company: yup.string().trim().required(),
+    Company: yup.string().trim(),
     Contact: yup.string().trim().required(),
     Email: yup.string().email().required(),
     Address1: yup.string().trim().required(),
@@ -58,7 +58,7 @@ function AddAddress(props: AddAddress) {
     const stateList = useAppSelector(state => state.checkoutPage.stateList);
     const [stateId, setStateId] = useState<number | null>(null);
     const { showToaster } = useShowToaster();
-
+    const loading = useAppSelector(state => state.checkoutPage.loading);
 
     const {
         register,
@@ -101,9 +101,15 @@ function AddAddress(props: AddAddress) {
             reset()
             showToaster({ message: "Address saved successfully" })
         } else {
-            showToaster({ message: "Failed to save address" })
+            showToaster({ message: "Failed to save address. Please check the input fields" })
         }
     }
+
+    useEffect(() => {
+        return () => {
+            reset()
+        }
+    }, []);
 
     return (
         <StyledDialog
@@ -255,7 +261,7 @@ function AddAddress(props: AddAddress) {
                         <Button variant="outlined" onClick={onClose}>
                             Close
                         </Button>
-                        <Button variant="contained" type="submit">
+                        <Button variant="contained" type="submit" disabled={loading}>
                             Submit
                         </Button>
                     </Stack>

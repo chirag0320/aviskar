@@ -55,3 +55,8 @@ export const WeightTypes = {
     1: "Grams",
     2: "Kilograms"
 };
+
+export const AddressType = {
+    Shipping: 2,
+    Billing: 1
+}

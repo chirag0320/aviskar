@@ -31,7 +31,7 @@ function Step1() {
   const [isBillingAddress, setIsBillingAddress] = useState<boolean>(false)
   const [openBillingAddreddOptions, setOpenBillingAddreddOptions] = useState<boolean>(false)
   const [isBillingAndShipingAddressSame, setisBillingAndShipingAddressSame] = useState<boolean>(false)
-  const [addressTitle, setAddressTitle] = useState<string>("Add")
+  // const [addressTitle, setAddressTitle] = useState<string>("Add")
   const [selectAccount, setSelectAccount] = useState<any>(checkoutPageData?.customers?.[0]!)
   const [openUpdateAddress, toggleUpdateAddress] = useToggle(false)
   const [openAddAddress, toggleAddAddress] = useToggle(false)
@@ -159,7 +159,7 @@ function Step1() {
           >
             <List>
               <ListItem>
-                <ListItemButton onClick={() => { handleUpdateAddress("Edit") }}>
+                <ListItemButton onClick={() => { setIsBillingAddress(() => true);handleUpdateAddress("Edit"); }}>
                   <ListItemIcon>
                     <PencilIcon />
                   </ListItemIcon>
@@ -214,7 +214,7 @@ function Step1() {
           >
             <List>
               <ListItem>
-                <ListItemButton onClick={() => { handleUpdateAddress("Edit") }}>
+                <ListItemButton onClick={() => { setIsBillingAddress(() => false);handleUpdateAddress("Edit"); }}>
                   <ListItemIcon>
                     <PencilIcon />
                   </ListItemIcon>
@@ -222,7 +222,7 @@ function Step1() {
                 </ListItemButton>
               </ListItem>
               <ListItem>
-                <ListItemButton onClick={() => { toggleSelectAddress(); setIsBillingAddress(() => false); }}>
+                <ListItemButton onClick={() => {setIsBillingAddress(() => false); toggleSelectAddress();  }}>
                   <ListItemIcon>
                     <Map2Icon />
                   </ListItemIcon>
@@ -241,7 +241,7 @@ function Step1() {
           </ClickTooltip>
         </Stack>
       </Box>
-      <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={toggleUpdateAddress} existingAddress={billingAddress} />
+      <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={toggleUpdateAddress} existingAddress={isBillingAddress ? billingAddress : shippingAddress} />
       <AddAddress open={openAddAddress} dialogTitle="Add Address" onClose={toggleAddAddress} />
       <AlertDialog open={openAlertDialog} onClose={toggleAlertDialog} />
       <SelectAddress isbillingAddress={isBillingAddress} open={openSelectAddress} onClose={toggleSelectAddress} listOfAddress={isBillingAddress ? checkoutPageData?.billingAddressDetails : checkoutPageData?.shippingAddressDetails} handleAddressUpdate={handleAddressUpdate} />

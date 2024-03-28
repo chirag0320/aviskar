@@ -6,6 +6,8 @@ import CheckoutPageServices from '@/apis/services/checkoutCartServices'
 import { any } from 'prop-types'
 import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 import { navigate } from 'gatsby'
+import { AddressType } from '@/types/enums'
+
 export type customerDetails = {
     "customerId": number,
     "email": string,
@@ -65,58 +67,35 @@ export interface StateOrCountry {
     extraProperty: any
 }
 
+interface AddressDetail {
+    "addressId": number,
+    "addressType": number,
+    "customerId": number,
+    "firstName": string,
+    "lastName": string,
+    "addressLine1": string,
+    "addressLine2": string,
+    "city": string,
+    "state": number,
+    "postcode": number,
+    "country": number,
+    "phone1": string,
+    "email": string,
+    "isSource": string,
+    "isVerified": boolean,
+    "company": null,
+    "isactive": boolean,
+    "storeCode": number,
+    "stateName": string,
+    "countryName": string
+}
+
 interface CheckoutPageState {
     loading: boolean,
     checkoutPageData: {
         "customers": customerDetails[],
-        "billingAddressDetails": [
-            {
-                "addressId": number,
-                "addressType": number,
-                "customerId": number,
-                "firstName": string,
-                "lastName": string,
-                "addressLine1": string,
-                "addressLine2": string,
-                "city": string,
-                "state": number,
-                "postcode": number,
-                "country": number,
-                "phone1": string,
-                "email": string,
-                "isSource": string,
-                "isVerified": boolean,
-                "company": null,
-                "isactive": boolean,
-                "storeCode": number,
-                "stateName": string,
-                "countryName": string
-            }
-        ],
-        "shippingAddressDetails": [
-            {
-                "addressId": number,
-                "addressType": number,
-                "customerId": number,
-                "firstName": string,
-                "lastName": string,
-                "addressLine1": string,
-                "addressLine2": string,
-                "city": string,
-                "state": number,
-                "postcode": number,
-                "country": number,
-                "phone1": string,
-                "email": string,
-                "isSource": string,
-                "isVerified": true,
-                "company": any,
-                "isactive": true,
-                "storeCode": number,
-                "stateName": string,
-                "countryName": string
-            },
-        ],
+        "billingAddressDetails": AddressDetail[],
+        "shippingAddressDetails": AddressDetail[],
         "shoppingCartItems": shopingCartItem[],
         "termsConditions": {
             "name": string,
@@ -260,6 +239,30 @@ export const checkoutPage = createSlice({
         disableOTP: (state) => {
             state.isOTPEnabled = null
             state.isOTPVerified = null
+        },
+        updateAddress: (state, action) => {
+            const updatedAddress = action.payload;
+
+            if (updatedAddress.addressType === AddressType.Shipping) {
+                const updatedShippingDetails = state.checkoutPageData?.shippingAddressDetails.map((address) => {
+                    if (address.addressId === updatedAddress.addressId) {
+                        return updatedAddress;
+                    }
+                    return address;
+                });
+
+                state.checkoutPageData!.shippingAddressDetails = updatedShippingDetails as AddressDetail[];
+            }
+            else if (updatedAddress.addressType === AddressType.Billing) {
+                const updatedBillingDetails = state.checkoutPageData?.billingAddressDetails.map((address) => {
+                    if (address.addressId === updatedAddress.addressId) {
+                        return updatedAddress;
+                    }
+                    return address;
+                });
+
+                state.checkoutPageData!.billingAddressDetails = updatedBillingDetails as AddressDetail[];
+            }
         }
     },
 
@@ -379,6 +382,6 @@ export const checkoutPage = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout, disableOTP } = checkoutPage.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout, disableOTP, updateAddress } = checkoutPage.actions
 
 export default checkoutPage.reducer
