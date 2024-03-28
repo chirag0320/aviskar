@@ -32,6 +32,7 @@ import { setToasterState } from "@/redux/reducers/homepageReducer"
 import { resetProductDetails } from "@/redux/reducers/categoryReducer"
 
 import noImage from '../../../assets/images/noImage.png'
+import useShowToaster from "@/hooks/useShowToaster"
 
 function createData(
   quantity: string,
@@ -84,6 +85,7 @@ function AboutProduct({ productId }: any) {
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
   const [tabValue, setTabValue] = useState<number>(0)
   const [priceHistoryDuration, setPriceHistoryDuration] = useState<string>('hour')
+  const {showToaster} = useShowToaster();
 
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
   const { data: progressData } = useApiRequest(urlForThePriceRange, 'get');
@@ -146,12 +148,11 @@ function AboutProduct({ productId }: any) {
   }
   const addIntoComapreProduct = (id: any) => {
     dispatch(addProductToCompare(id))
-    dispatch(setToasterState({
-      openToaster: true,
-      toasterMessage: 'The product has been added to your',
+    showToaster({
+      message: 'The product has been added to compare',
       buttonText: 'product comparison',
       redirectButtonUrl: 'compare-products'
-    }))
+    })
   }
   const addIntoWishList = async (id: any) => {
     await dispatch(addToWishList({
@@ -161,12 +162,11 @@ function AboutProduct({ productId }: any) {
         quantity: 1
       }
     }) as any)
-    dispatch(setToasterState({
-      openToaster: true,
-      toasterMessage: 'The product has been added to your',
+    showToaster({
+      message: 'The product has been added to your product wishlist',
       buttonText: 'product wishlist',
       redirectButtonUrl: 'wishlist'
-    }))
+    })
   }
   useEffect(() => {
     return () => {

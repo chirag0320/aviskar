@@ -31,7 +31,8 @@ interface CreateGuidelineState {
   openToaster: boolean,
   buttonText: string,
   redirectButtonUrl: string,
-  toasterMessage: string
+  toasterMessage: string,
+  scrollPosition: number
 }
 const initialState: CreateGuidelineState = {
   configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
@@ -46,7 +47,8 @@ const initialState: CreateGuidelineState = {
   openToaster: false,
   buttonText: '',
   redirectButtonUrl: '',
-  toasterMessage: ''
+  toasterMessage: '',
+  scrollPosition: 0
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -137,7 +139,7 @@ export const createHomepageSlice = createSlice({
       console.log("🚀 ~ existingIndex:", existingIndex)
       if (existingIndex === -1) {
         let updatedViewProducts = [newProductId, ...state.recentlyViewedProducts]
-        if(updatedViewProducts?.length > 20){
+        if (updatedViewProducts?.length > 20) {
           updatedViewProducts.splice(0, 20)
         }
         state.recentlyViewedProducts = updatedViewProducts
@@ -165,7 +167,10 @@ export const createHomepageSlice = createSlice({
     // },
     // setRedirectUrl: (state, action) => {
     //   state.redirectButtonUrl = action.payload
-    // }
+    // },
+    setScrollPosition : (state,action) => {
+      state.scrollPosition = action.payload;
+    }
   },
 
   extraReducers: (builder) => {
@@ -275,6 +280,6 @@ export const createHomepageSlice = createSlice({
   },
 })
 
-export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState } = createHomepageSlice.actions
+export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState , setScrollPosition} = createHomepageSlice.actions
 
 export default createHomepageSlice.reducer

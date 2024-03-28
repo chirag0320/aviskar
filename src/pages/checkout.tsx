@@ -18,9 +18,11 @@ import { ENDPOINTS } from "@/utils/constants"
 import { useAppSelector } from "@/hooks"
 import useDeviceDetails from "@/hooks/useDeviceDetails"
 import { navigate } from "gatsby"
+import Toaster from "@/components/common/Toaster"
 
 function Checkout() {
-  const [state, setState] = useState({service: getCheckoutPageData, endPoint: ENDPOINTS.checkoutDetails})
+  const openToaster = useAppSelector(state => state.homePage.openToaster)
+  const [state, setState] = useState({ service: getCheckoutPageData, endPoint: ENDPOINTS.checkoutDetails })
   const isLoggedIn = useAppSelector(state => state.homePage.isLoggedIn)
 
   if (!isLoggedIn) {
@@ -31,7 +33,7 @@ function Checkout() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const isInstantBuy = urlParams.get('isInstantBuy')
-    setState((prev:any) => ({ ...prev, params: { isInstantBuy: isInstantBuy ?? false } }))
+    setState((prev: any) => ({ ...prev, params: { isInstantBuy: isInstantBuy ?? false } }))
   }, [window.location.search])
   useAPIoneTime(state)
   return (
@@ -41,6 +43,7 @@ function Checkout() {
         title="Category"
         lang="en"
       />
+      {openToaster && <Toaster />}
       <PageTitle title="Checkout" />
       <Container id="PageCheckout">
         <Stack className="AllSteps">

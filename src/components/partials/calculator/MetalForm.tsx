@@ -18,14 +18,14 @@ interface Inputs {
 const schema = yup.object().shape({
     SelectMetal: yup.string().required("Metal selection is required"),
     Weight: yup
-    .number()
-    .nullable()
-    .transform((value, originalValue) => {
-        // Transform empty strings to null, which will trigger the 'required' validation
-        return originalValue === "" ? null : value;
-    })
-    .positive("Weight must be a positive number")
-    .required("Weight is required"),
+        .number()
+        .nullable()
+        .transform((value, originalValue) => {
+            // Transform empty strings to null, which will trigger the 'required' validation
+            return originalValue === "" ? null : value;
+        })
+        .positive("Weight must be a positive number")
+        .required("Weight is required"),
     MetalType: yup.string().required("Metal type is required"),
     WeightType: yup.string().required("Weight type is required")
 });
@@ -90,6 +90,7 @@ const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
                         className='SelectMetal'
                     >
                         {/* {Note:- refer to types/enums.ts file for reference of value of input} */}
+                        {/* <MenuItem value="none">Select Metal</MenuItem> */}
                         <MenuItem value="1">Gold</MenuItem>
                         <MenuItem value="2">Silver</MenuItem>
                         <MenuItem value="3">Platinum</MenuItem>
