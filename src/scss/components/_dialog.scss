@@ -139,7 +139,7 @@
             gap: 20px;
             .Column {
               gap: 20px;
-              @include media($xs) {
+              @include media($sm) {
                 flex-wrap: wrap;
               }
             }
@@ -166,7 +166,12 @@
           .ActionWrapper {
             justify-content: flex-end;
             gap: 20px;
-            @include padding-vertical(20);
+            padding-bottom: 20px;
+            .MuiButton-root {
+              @include media($xs) {
+                flex: 1;
+              }
+            }
           }
         }
       }
@@ -203,7 +208,9 @@
               display: none;
             }
             .MuiMenu-paper {
-              max-width: $sm;
+              @include media-min($sm){
+                max-width: $sm;
+              }
               .MuiList-root {
                 max-height: 300px;
                 .MuiMenuItem-root {
