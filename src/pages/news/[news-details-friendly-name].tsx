@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Grid,
@@ -35,15 +35,27 @@ import {
 import { formatDate } from "@/utils/common";
 import useApiRequest from "@/hooks/useAPIRequest";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
-import { useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import useSubscription from "@/hooks/useSubscription";
 import { navigate } from "gatsby";
 import { NewsDetailsAPI } from "@/redux/reducers/newsReducer";
+import { setLoadingFalse, setLoadingTrue } from "@/redux/reducers/homepageReducer";
 
-function NewsDetails({ params }: any) {
-  const { newsDetailsData,newsList }: any = useAppSelector((state) => state.newsPage)
+function NewsDetails(params:any) {
+  const dispatch = useAppDispatch()
+  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+  const { newsDetailsData, newsList }: any = useAppSelector((state) => state.newsPage)
   const { email, handleEmailChange, subscribe, loadingForEmailSub } = useSubscription()
-  useAPIoneTime({ service: NewsDetailsAPI, params: { pathName: params?.['news-details-friendly-name'] } })
+  useEffect(() => {
+    const apiCall = async () => {
+      dispatch(setLoadingTrue())
+      await dispatch(NewsDetailsAPI({ params: { pathName: params?.["news-details-friendly-name"] } }))
+      setTimeout(() => {
+        dispatch(setLoadingFalse())
+      }, 1500);
+    }
+    apiCall()
+  }, [params?.params?.["news-details-friendly-name"]])
   return (
     <Layout>
       <Box className="BlogDetailPage">
@@ -54,7 +66,7 @@ function NewsDetails({ params }: any) {
               className="BackButton"
               variant="text"
               startIcon={<ChevronLeft />}
-              onClick={()=>{
+              onClick={() => {
                 navigate('/blog')
               }}
             >
@@ -101,13 +113,13 @@ function NewsDetails({ params }: any) {
                 <Box className="Left">
                   <Typography variant="subtitle1">Share this post</Typography>
                   <Stack className="SocialIconWrapper">
-                    <IconButton className="SocialIcon" aria-label="Facebook Icon">
+                    <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}>
                       <FacebookIcon />
                     </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Facebook Icon">
+                    <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}>
                       <TwitterIcon />
                     </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Facebook Icon">
+                    <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}>
                       <InstagramIcon />
                     </IconButton>
                   </Stack>
