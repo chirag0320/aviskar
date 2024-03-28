@@ -36,7 +36,7 @@ function ContactUs() {
                 <Box className="IconWrapper">
                   <Icon className='OriginalIcon'><AddressIcon /></Icon>
                 </Box>
-                <Typography variant="h4" component="h2" className="Title">address</Typography>
+                <Typography variant="h4" component="h2" className="Title">Address</Typography>
                 <Typography variant="body1" className="AddressDesription">102 Adelaide St Brisbane <br /> Queensland 4000 Australia</Typography>
               </Box>
               <Box className="CallUsWrapper ContactCard">

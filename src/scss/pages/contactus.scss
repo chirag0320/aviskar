@@ -203,12 +203,12 @@
 
         .GetInTouchRightMap {
             flex: 1;
-
             iframe {
                 height: 100%;
                 border-radius: 20px;
                 width: 100%;
                 aspect-ratio: 16 / 9;
+                background-color: $mercury30;
 
             }
         }
