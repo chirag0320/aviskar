@@ -13,6 +13,7 @@ import CartMenu from "./CartMenu"
 import ActionMenu from "./ActionMenu"
 import SearchField from "./SearchField"
 import { useAppSelector } from "@/hooks"
+import { navigate } from "gatsby"
 
 function MobileSecondaryMenu() {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
@@ -47,8 +48,18 @@ function MobileSecondaryMenu() {
             </Container>
           </ClickTooltip>
           <IconButton title='Call us' className={classNames("MenuButton", { "Active": false })} href="tel:+61731848300"><Call /></IconButton>
-          {configDetailsState?.enablechart?.value ? <ChartMenu /> : null}
-          {configDetailsState?.enablecart?.value ? <CartMenu /> : null}
+          {configDetailsState?.enablechart?.value ?
+            <IconButton>
+              <ChartMenu />
+            </IconButton>
+            : null}
+          {configDetailsState?.enablecart?.value ?
+            <IconButton onClick={() => {
+              navigate("/shopping-cart")
+            }}>
+              <CartMenu />
+            </IconButton>
+            : null}
           <ActionMenu />
         </Stack>
       </Container>
