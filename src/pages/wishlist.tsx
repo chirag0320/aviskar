@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Box, Button, Container, IconButton, Stack, Typography } from "@mui/material";
-import { Snackbar } from "@mui/material"; // Import Snackbar from MUI
 import { ClipboardIcon } from "@/assets/icons";
 import Layout from "@/components/common/Layout";
 import Seo from "@/components/common/Seo";
@@ -11,10 +10,13 @@ import { ENDPOINTS } from "@/utils/constants";
 import { getWishListData } from "@/redux/reducers/wishListReducer";
 import WishListDetails from "@/components/partials/wishlist/WishListDetails";
 import { useToggle } from "@/hooks";
+import CorrectIcon from "@/assets/icons/CorrectIcon";
+
+const WISHLIST_URL = "http://queenslandmint.com/wishlist/5b455134-e44c-492a-a79b-33487860ff00"
 
 function Wishlist() {
   const [openEmailFriend, toggleEmailFriend] = useToggle(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false); // State for Snackbar
+  const [showCopyIcon, setShowCopyIcon] = useState(false);
 
   useAPIoneTime({
     service: getWishListData,
@@ -30,8 +32,11 @@ function Wishlist() {
   });
 
   const handleCopyUrl = () => {
-    navigator.clipboard.writeText("http://queenslandmint.com/wishlist/5b455134-e44c-492a-a79b-33487860ff00");
-    setSnackbarOpen(true); // Open Snackbar when URL is copied
+    navigator.clipboard.writeText(WISHLIST_URL);
+    setShowCopyIcon(true);
+    setTimeout(() => {
+      setShowCopyIcon(false);
+    }, 3000);
   };
 
   return (
@@ -47,25 +52,19 @@ function Wishlist() {
         <Box className="WishlistLink">
           <Typography>Your wishlist URL for sharing</Typography>
           <Stack className="Wrapper">
-            <Button>http://queenslandmint.com/wishlist/5b455134-e44c-492a-a79b-33487860ff00</Button>
-            <IconButton size="small" color="secondary" onClick={handleCopyUrl}>
+            <Button>{WISHLIST_URL}</Button>
+            {!showCopyIcon && <IconButton size="small" color="secondary" onClick={handleCopyUrl}>
               <ClipboardIcon fontSize="inherit" />
-            </IconButton>
+            </IconButton>}
+            {showCopyIcon &&
+              // Note:- correct the icon size and color
+              <IconButton size="small" color="secondary" disabled={true}>
+                <CorrectIcon />
+              </IconButton>}
           </Stack>
         </Box>
         <EmailFriend open={openEmailFriend} onClose={toggleEmailFriend} />
       </Container>
-      {/* Snackbar for displaying copy success */}
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        open={snackbarOpen}
-        autoHideDuration={2000}
-        onClose={() => setSnackbarOpen(false)}
-        message="URL copied to clipboard!"
-      />
     </Layout>
   );
 }
