@@ -430,7 +430,7 @@
     border-radius: 20px;
     max-height: 314px;
     height: 100%;
-
+    flex-shrink: 0;
     @include media($lg) {
       max-height: 200px;
     }

@@ -1,6 +1,9 @@
 .BlogDetailPage {
   .PostDescription {
     padding: 50px 0 80px;
+    @include media($sm) {
+      @include padding-vertical(30, 50);
+    }
     .BackButton {
       color: $dark;
       font-size: 16px;
@@ -9,15 +12,25 @@
     .PostUploadInfo {
       margin-top: 18px;
     }
+    .BlogTitle {
+      margin-top: 48px;
+      @include media($md) {
+        margin-top: 32px;
+      }
+    }
     .ContentWrapper {
       .PostThumbnail {
+        margin-top: 48px;
+        @include media($sm) {
+          margin-top: 30px;
+        }
         img {
           width: 100%;
-          max-height: 700px;
+          max-height: 550px;
           object-fit: cover;
           border-radius: 20px;
           @include media($lg) {
-            max-height: 600px;
+            max-height: 450px;
           }
           @include media($md) {
             max-height: 400px;
@@ -26,6 +39,14 @@
       }
       .PostContent {
         padding-bottom: 60px;
+        margin-top: 60px;
+        @include media($md) {
+          margin-top: 40px;
+          padding-bottom: 20px;
+        }
+        @include media($sm) {
+          margin-top: 30px;
+        }
         & > * {
           margin-top: 14px;
           &:first-child {
@@ -81,7 +102,10 @@
   }
   .NewsLetter {
     background: #eaa22b0d;
-    padding: 70px 0;
+    @include padding-vertical(70);
+    @include media($sm) {
+      @include padding-vertical(40);
+    }
     .NewsLetterWrapper {
       text-align: center;
       .NewsLetterBox {
@@ -89,12 +113,23 @@
         gap: 16px;
         display: flex;
         justify-content: center;
+        @include media($sm) {
+          margin-top: 20px;
+        }
+        @include media($xxs) {
+          gap: 10px;
+        }
         .MuiFormControl-root {
           width: 394px;
           .MuiInputBase-root {
             .MuiInputBase-input {
               padding: 12px;
             }
+          }
+        }
+        .MuiButton-root {
+          @include media($xxs) {
+            padding: 9px;
           }
         }
       }

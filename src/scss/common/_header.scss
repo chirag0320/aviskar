@@ -117,25 +117,51 @@
           }
 
           .SearchField {
-            .MuiInputBase-root {
-              font-size: pxToRem(14);
-              line-height: pxToRem(20);
-              padding-right: 8px;
+            align-self: stretch;
+            min-width: 220px;
+            @include media($md) {
+              min-width: initial;
+            }
+            .MuiTextField-root {
+              height: 100%;
+              .MuiInputBase-root {
+                font-size: pxToRem(14);
+                line-height: pxToRem(20);
+                height: inherit;
+                padding: 0;
+                .MuiInputBase-input {
+                  padding-left: 16px;
+                }
+  
+                .MuiInputAdornment-root {
+                  margin-left: 0;
+  
+                  .MuiIconButton-root {
+                    width: auto;
+                    height: auto;
+  
+                    svg {
+                      width: 18px;
+                      height: 18px;
+                    }
+                  }
+                }
 
-              .MuiInputBase-input {
-                padding-left: 16px;
-              }
-
-              .MuiInputAdornment-root {
-                margin-left: 0;
-
-                .MuiIconButton-root {
-                  width: auto;
-                  height: auto;
-
-                  svg {
-                    width: 18px;
-                    height: 18px;
+                .MuiAutocomplete-endAdornment {
+                  position: static;
+                  margin-right: 5px;
+                  .MuiIconButton-root {
+                    width: 34px;
+                    height: 34px;
+                    &.MuiAutocomplete-popupIndicator {
+                      &.MuiAutocomplete-popupIndicatorOpen {
+                        transform: none;
+                      }
+                      svg {
+                        width: 18px;
+                        height: 18px;
+                      }
+                    }
                   }
                 }
               }
@@ -168,6 +194,7 @@
           }
 
           .HamburgerButton {
+            display: none;
             .HamburgerIcon {
               font-size: 22px;
             }
@@ -176,8 +203,8 @@
               font-size: 16px;
             }
 
-            @include media-min($md) {
-              display: none;
+            @include media($md) {
+              display: inline-flex;
             }
           }
         }
@@ -554,6 +581,50 @@
 
           .SearchField {
             width: 100%;
+            .MuiTextField-root {
+              height: 100%;
+              .MuiInputBase-root {
+                font-size: pxToRem(14);
+                line-height: pxToRem(20);
+                height: inherit;
+                padding: 0;
+                .MuiInputBase-input {
+                  padding-left: 16px;
+                }
+  
+                .MuiInputAdornment-root {
+                  margin-left: 0;
+  
+                  .MuiIconButton-root {
+                    width: auto;
+                    height: auto;
+  
+                    svg {
+                      width: 18px;
+                      height: 18px;
+                    }
+                  }
+                }
+
+                .MuiAutocomplete-endAdornment {
+                  position: static;
+                  margin-right: 5px;
+                  .MuiIconButton-root {
+                    width: 34px;
+                    height: 34px;
+                    &.MuiAutocomplete-popupIndicator {
+                      &.MuiAutocomplete-popupIndicatorOpen {
+                        transform: none;
+                      }
+                      svg {
+                        width: 18px;
+                        height: 18px;
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

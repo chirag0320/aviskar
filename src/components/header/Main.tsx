@@ -32,7 +32,7 @@ function Main(props: any) {
           <Link className="Logo" to="/"><img src={mobile ? configDetailsState?.storelogourl?.value : configDetailsState?.storelogourl?.value} width={mobile ? 189 : 246} height={mobile ? 30 : 40} alt="QMint logo" loading="eager" /></Link>
         </Stack>
         <Stack className="Right">
-          <LinkM href="tel:+61731848300" variant="overline" className="PhoneNumber"><Call />{configDetailsState?.companyphonenumber?.value}</LinkM>
+          <LinkM href={"tel:" + configDetailsState?.companyphonenumber?.value} variant="overline" className="PhoneNumber"><Call />{configDetailsState?.companyphonenumber?.value}</LinkM>
           <SearchField />
           {/* <Link to={ENDPOINTS.login}> */}
           <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton" variant="outlined" color="primary" startIcon={<Profile />}>{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Button>
