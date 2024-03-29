@@ -13,8 +13,6 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import useDebounce from "@/hooks/useDebounce"
 import { categoryRequestBody } from "@/types/categoryRequestBody"
 import useApiRequest from "@/hooks/useAPIRequest"
-import { navigate } from "gatsby"
-import { Toaster } from "react-hot-toast"
 
 export const pageSize = 12;
 export const requestBodyDefault: categoryRequestBody = {
@@ -31,7 +29,8 @@ export const requestBodyDefault: categoryRequestBody = {
 }
 
 function Category({ location }: { location: any }) {
-    const [page, setPage] = useState(location?.search !== "" ? parseInt(new URLSearchParams(location.search).get("page")!) : 1);
+    const searchParams = new URLSearchParams(location?.search);
+    const [page, setPage] = useState(searchParams.has("page") ? parseInt(searchParams.get("page")!) : 1);
     const dispatch = useAppDispatch();
 
     const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
@@ -45,23 +44,32 @@ function Category({ location }: { location: any }) {
     const debouncePrice = useDebounce(selectedPrice, 700);
 
     useEffect(() => {
+        const commonArgument = {
+            pageNo: page, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters }
+        };
+
+        const argumentForService = {
+            url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
+            body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, ...commonArgument } : { ...requestBodyDefault, ...commonArgument }
+        }
+
         if (Object.keys(selectedFilters).length || (selectedPrice)) {
             dispatch(getCategoryData(
-                {
-                    url: ENDPOINTS.getCategoryData + `/${location.pathname}`,
-                    body: { ...requestBodyDefault, pageNo: page, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters } }
-                }) as any)
+                argumentForService) as any)
         }
     }, [debounceFilter, debouncePrice]);
 
     useEffect(() => {
         setSelectedFilters((prev) => ({}));
         setSelectedPrice(() => null);
+
+        const argumentForService = {
+            url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
+            body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, pageNo: page, filters: { specification: {} } } : { ...requestBodyDefault, pageNo: page, filters: { specification: {} } }
+        }
+
         dispatch(getCategoryData(
-            {
-                url: ENDPOINTS.getCategoryData + `/${location.pathname}`,
-                body: { ...requestBodyDefault, pageNo: page, filters: { specification: {} } }
-            }) as any)
+            argumentForService) as any)
     }, [page, location.pathname])
 
 
