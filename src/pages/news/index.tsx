@@ -123,7 +123,7 @@ function News() {
               </Button>
             </Box>
             <Box className="PostFilter">
-              <Tabs
+              {/* <Tabs
                 value={value}
                 onChange={handleChange}
                 aria-label="News Category list"
@@ -131,115 +131,39 @@ function News() {
               // variant="scrollable"
               // allowScrollButtonsMobile
               >
-                {/* <Tab label="All Blog" value={'all'} />
+                <Tab label="All Blog" value={'all'} />
                 <Tab label="News" value={'news'} />
                 <Tab label="Insights" value={'insights'} />
                 <Tab label="Gold" value={'gold'} />
                 <Tab label="Silver" value={'silver'} />
                 <Tab label="Platinum" value={'platinum'} />
                 <Tab label="Community" value={'community'} />
-                <Tab label="Resources" value={'resources'} /> */}
-              </Tabs>
+                <Tab label="Resources" value={'resources'} />
+              </Tabs> */}
 
               <TabPanel index={value as any} value={value}>
-                <Grid
-                  container
-                  rowSpacing={{ md: 6.25, xs: 4 }}
-                  columnSpacing={{ md: 3.75, xs: 2 }}
-                >
-                  {newsList?.items?.map((item: any) => {
-                    return (
-                      <Grid item xs={12} md={4} sm={6} key={item?.id}>
-                        <PostCard isNews={true} details={item} navigate={() => navigate(`/news/${item?.friendlyName}`)} />
-                      </Grid>
-                    )
-                  })}
-                  {/* <Grid item md={4} sm={6}>
-                    <PostCard />
+                {newsList?.items?.length > 0 && (
+                  <Grid
+                    container
+                    rowSpacing={{ md: 6.25, xs: 4 }}
+                    columnSpacing={{ md: 3.75, xs: 2 }}
+                  >
+                    {newsList?.items?.map((item: any) => {
+                      return (
+                        <Grid item xs={12} md={4} sm={6} key={item?.id}>
+                          <PostCard isNews={true} details={item} navigate={() => navigate(`/news/${item?.friendlyName}`)} />
+                        </Grid>
+                      );
+                    })}
                   </Grid>
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid> */}
-                </Grid>
-                {newsList?.items?.length > 0 ? <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                  {/* <Button variant="contained">Load More</Button> */}
-                </Stack> : <RecordNotFound message="No news to show" />}
+                )}
+                {newsList?.items?.length > 0 ? (
+                  // <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
+                  //   <Button variant="contained">Load More</Button>
+                  // </Stack>
+                  null
+                 ) : <RecordNotFound message="No news to show" />}
               </TabPanel>
-              {/* <TabPanel index={3} value={value}>
-                <Grid
-                  container
-                  rowSpacing={{ md: 6.25, xs: 4 }}
-                  columnSpacing={{ md: 3.75, xs: 2 }}
-                >
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                </Grid>
-                <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                  <Button variant="contained">Load More</Button>
-                </Stack>
-              </TabPanel> */}
-              {/* <TabPanel index={2} value={value}>
-                <Grid
-                  container
-                  rowSpacing={{ md: 6.25, xs: 4 }}
-                  columnSpacing={{ md: 3.75, xs: 2 }}
-                >
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                </Grid>
-                <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                  <Button variant="contained">Load More</Button>
-                </Stack>
-              </TabPanel>
-              <TabPanel index={3} value={value}>
-                <Grid
-                  container
-                  rowSpacing={{ md: 6.25, xs: 4 }}
-                  columnSpacing={{ md: 3.75, xs: 2 }}
-                >
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                </Grid>
-                <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                  <Button variant="contained">Load More</Button>
-                </Stack>
-              </TabPanel>
-              <TabPanel index={4} value={value}>
-                Item Three
-              </TabPanel>
-              <TabPanel index={5} value={value}>
-                Item Three
-              </TabPanel>
-              <TabPanel index={6} value={value}>
-                Item Three
-              </TabPanel>
-              <TabPanel index={7} value={value}>
-                Item Three
-              </TabPanel>
-              <TabPanel index={8} value={value}>
-                Item Three
-              </TabPanel> */}
             </Box>
           </Container>
         </Box>

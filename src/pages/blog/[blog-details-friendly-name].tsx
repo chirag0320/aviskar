@@ -205,15 +205,6 @@ function BlogDetails(params: any) {
                         </Grid>
                       );
                     })}
-                    {/* <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid> */}
                   </Grid>
                 </Box>
               </Box>
