@@ -69,8 +69,8 @@ function Blog() {
 
   return (
     <Layout>
+      <Breadcrumb arr={[{ navigate: '/blog', name: 'Blog' }]} />
       <Box className="BlogPage">
-        <Breadcrumb arr={[{ navigate: '/blog', name: 'Blog' }]} />
         <Box className="HeroSection">
           <Container>
             <Typography variant="h2" component="h2">
@@ -156,145 +156,33 @@ function Blog() {
               </Tabs>
 
               <TabPanel index={value as any} value={value}>
-                <Grid
-                  container
-                  rowSpacing={{ md: 6.25, xs: 4 }}
-                  columnSpacing={{ md: 3.75, xs: 2 }}
-                >
-                  {blogList?.items?.map((item: any) => {
-                    return (
-                      <Grid item md={4} sm={6} key={item?.id}>
-                        <PostCard
-                          details={item}
-                          navigate={() =>
-                            navigate(`/blog/${item?.friendlyName}`)
-                          }
-                        />
-                      </Grid>
-                    );
-                  })}
-                  {/* <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid> */}
-                </Grid>
+                {blogList?.items?.length > 0 && (
+                  <Grid
+                    container
+                    rowSpacing={{ md: 6.25, xs: 4 }}
+                    columnSpacing={{ md: 3.75, xs: 2 }}
+                  >
+                    {blogList?.items?.map((item: any) => {
+                      return (
+                        <Grid item xs={12} md={4} sm={6} key={item?.id}>
+                          <PostCard
+                            details={item}
+                            navigate={() =>
+                              navigate(`/blog/${item?.friendlyName}`)
+                            }
+                          />
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                )}
                 {blogList?.items?.length > 0 ? (
-                  <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                    {/* <Button variant="contained">Load More</Button> */}
-                  </Stack>
+                  // <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
+                  //   <Button variant="contained">Load More</Button>
+                  // </Stack>
+                  null
                 ) : <RecordNotFound message="No blogs to show" />}
               </TabPanel>
-              {/* <TabPanel index={3} value={value}>
-              <Grid
-                container
-                rowSpacing={{ md: 6.25, xs: 4 }}
-                columnSpacing={{ md: 3.75, xs: 2 }}
-              >
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                  <Button variant="contained">Load More</Button>
-                </Stack>
-              </TabPanel>
-              <TabPanel index={2} value={value}>
-                <Grid
-                  container
-                  rowSpacing={{ md: 6.25, xs: 4 }}
-                  columnSpacing={{ md: 3.75, xs: 2 }}
-                >
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                </Grid>
-                <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                  <Button variant="contained">Load More</Button>
-                </Stack>
-              </TabPanel>
-              <TabPanel index={3} value={value}>
-                <Grid
-                  container
-                  rowSpacing={{ md: 6.25, xs: 4 }}
-                  columnSpacing={{ md: 3.75, xs: 2 }}
-                >
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                  <Grid item md={4} sm={6}>
-                    <PostCard />
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                <Button variant="contained">Load More</Button>
-              </Stack>
-            </TabPanel> */}
-              {/* <TabPanel index={2} value={value}>
-              <Grid
-                container
-                rowSpacing={{ md: 6.25, xs: 4 }}
-                columnSpacing={{ md: 3.75, xs: 2 }}
-              >
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-              </Grid>
-              <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                <Button variant="contained">Load More</Button>
-              </Stack>
-            </TabPanel>
-            <TabPanel index={3} value={value}>
-              <Grid
-                container
-                rowSpacing={{ md: 6.25, xs: 4 }}
-                columnSpacing={{ md: 3.75, xs: 2 }}
-              >
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-              </Grid>
-              <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                <Button variant="contained">Load More</Button>
-              </Stack>
-            </TabPanel>
-            <TabPanel index={4} value={value}>
-              Item Three
-            </TabPanel>
-            <TabPanel index={5} value={value}>
-              Item Three
-            </TabPanel>
-            <TabPanel index={6} value={value}>
-              Item Three
-            </TabPanel>
-            <TabPanel index={7} value={value}>
-              Item Three
-            </TabPanel>
-            <TabPanel index={8} value={value}>
-              Item Three
-            </TabPanel> */}
             </Box>
           </Container>
         </Box>

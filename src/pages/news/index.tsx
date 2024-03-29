@@ -149,7 +149,7 @@ function News() {
                 >
                   {newsList?.items?.map((item: any) => {
                     return (
-                      <Grid item md={4} sm={6} key={item?.id}>
+                      <Grid item xs={12} md={4} sm={6} key={item?.id}>
                         <PostCard isNews={true} details={item} navigate={() => navigate(`/news/${item?.friendlyName}`)} />
                       </Grid>
                     )
