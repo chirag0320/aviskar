@@ -8,7 +8,12 @@ import {
   CardActions,
   Typography,
   Button,
-  IconButton, CardMedia, TextField, Select, MenuItem, Divider,
+  IconButton,
+  CardMedia,
+  TextField,
+  Select,
+  MenuItem,
+  Divider,
   Icon,
   List,
   ListItem,
@@ -17,7 +22,7 @@ import {
 import classNames from "classnames";
 
 // Type
-import type { SelectChangeEvent } from "@mui/material"
+import type { SelectChangeEvent } from "@mui/material";
 
 // Components
 import LineBarChart from "./LineChart";
@@ -31,36 +36,48 @@ import {
   ChevronDown,
   ChevronUp,
   ArrowRight,
-  InfoIcon, Delete1Icon, MinusIcon, PlusIcon, SelectDropdown,
+  InfoIcon,
+  Delete1Icon,
+  MinusIcon,
+  PlusIcon,
+  SelectDropdown,
   OrdersIcon,
   FilledUpButton,
   OptionsIcon,
 } from "../../assets/icons/index";
-import noImage from '../../assets/images/noImage.png'
+import noImage from "../../assets/images/noImage.png";
 // Utils
-import { ProductStockStatus, ProductUpdateCountdown } from "./Utils"
-import { IFeaturedProducts } from "../partials/home/FeaturedProducts"
-import { Link as NavigationLink, navigate } from "gatsby"
-import { deliveryMethodMessage, roundOfThePrice } from "@/utils/common"
-import { useAppDispatch, useAppSelector } from "@/hooks"
-import { productImages } from "@/utils/data"
+import { ProductStockStatus, ProductUpdateCountdown } from "./Utils";
+import { IFeaturedProducts } from "../partials/home/FeaturedProducts";
+import { Link as NavigationLink, navigate } from "gatsby";
+import { deliveryMethodMessage, roundOfThePrice } from "@/utils/common";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { productImages } from "@/utils/data";
 import { CartItem } from "@/types/shoppingCart";
 import { CartItemsWithLivePriceDetails } from "../partials/shopping-cart/CartDetails";
 import useCallAPI from "@/hooks/useCallAPI";
 import { ENDPOINTS } from "@/utils/constants";
 import { setToasterState } from "@/redux/reducers/homepageReducer";
 import useShowToaster from "@/hooks/useShowToaster";
-
 interface Iproduct {
   product: IFeaturedProducts;
-  stickyProduct?: boolean
+  stickyProduct?: boolean;
 }
-export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Iproduct) => {
-  const dispatch = useAppDispatch()
-  const { loading: loadingForAddToCart, error: errorForAddToCart, apiCallFunction } = useCallAPI()
-  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
-  const [open, setOpen] = useState(false)
-  const tooltipRef: any = useRef(null)
+export const ProductCard: React.FC<Iproduct> = ({
+  product,
+  stickyProduct,
+}: Iproduct) => {
+  const dispatch = useAppDispatch();
+  const {
+    loading: loadingForAddToCart,
+    error: errorForAddToCart,
+    apiCallFunction,
+  } = useCallAPI();
+  const { configDetails: configDetailsState } = useAppSelector(
+    (state) => state.homePage
+  );
+  const [open, setOpen] = useState(false);
+  const tooltipRef: any = useRef(null);
   const handleTooltipClose = (event: any) => {
     setOpen(false);
   };
@@ -75,10 +92,20 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
   const { showToaster } = useShowToaster();
 
   return (
-    <Card className={classNames("ProductCard", { "Sticky": stickyProduct })} key={product.productId}>
+    <Card
+      className={classNames("ProductCard", { Sticky: stickyProduct })}
+      key={product.productId}
+    >
       <Stack className="ImageWrapper">
-        <NavigationLink className="ImageLink" to={`/product-details/${product?.friendlypagename}`}>
-          <img src={product.imageUrl ?? noImage} alt="Product image" loading="lazy" />
+        <NavigationLink
+          className="ImageLink"
+          to={`/product-details/${product?.friendlypagename}`}
+        >
+          <img
+            src={product.imageUrl ?? noImage}
+            alt="Product image"
+            loading="lazy"
+          />
         </NavigationLink>
         <ProductStockStatus
           availability={product.availability}
@@ -87,15 +114,18 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
         />
       </Stack>
       <CardContent>
-        <Link className="ProductName" onClick={() => {
-          navigate(`/product-details/${product?.friendlypagename}`) //friendlypagename
-        }}>
+        <Link
+          className="ProductName"
+          onClick={() => {
+            navigate(`/product-details/${product?.friendlypagename}`); //friendlypagename
+          }}
+        >
           <Typography component="h3">{product.productName}</Typography>
         </Link>
         <Stack className="ContentWrapper">
           <Stack className="Top">
             <Stack className="Left">
-              { /*{product.productPrice !== 0 ? <Typography variant="subtitle1" className="ActualPrice">${product.productPrice}</Typography> : <><Typography variant="subtitle1" className="ActualPrice">${(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ?
+              {/*{product.productPrice !== 0 ? <Typography variant="subtitle1" className="ActualPrice">${product.productPrice}</Typography> : <><Typography variant="subtitle1" className="ActualPrice">${(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ?
                 (product?.priceWithDetails?.productLowestPrice?.toFixed(2)) : product?.priceWithDetails?.price?.toFixed(2)}</Typography>
                 {(product?.priceWithDetails?.discount && product?.priceWithDetails?.discount !== 0)
                   ?
@@ -103,10 +133,15 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                     ${(product?.priceWithDetails?.price + product?.priceWithDetails?.discount).toFixed(2)}</Typography>
                   : null}</>}
                 */}
-              <Typography variant="subtitle1" className="ActualPrice">${(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ?
-                (product?.priceWithDetails?.productLowestPrice?.toFixed(2)) : product?.priceWithDetails?.price?.toFixed(2)}</Typography>
-              {(product?.priceWithDetails?.discount && product?.priceWithDetails?.discount !== 0)
-                ?
+              <Typography variant="subtitle1" className="ActualPrice">
+                $
+                {product?.priceWithDetails?.tierPriceList &&
+                product?.priceWithDetails?.tierPriceList?.length > 0
+                  ? product?.priceWithDetails?.productLowestPrice?.toFixed(2)
+                  : product?.priceWithDetails?.price?.toFixed(2)}
+              </Typography>
+              {product?.priceWithDetails?.discount &&
+              product?.priceWithDetails?.discount !== 0 ? (
                 <Typography variant="overline" className="DiscountedPrice">
                   $
                   {(
@@ -114,10 +149,10 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                     product?.priceWithDetails?.discount
                   ).toFixed(2)}
                 </Typography>
-                : null}
+              ) : null}
             </Stack>
             {product?.priceWithDetails?.discount &&
-              product?.priceWithDetails?.discount !== 0 ? (
+            product?.priceWithDetails?.discount !== 0 ? (
               <Typography variant="overline" className="Discount">
                 ${product?.priceWithDetails?.discount?.toFixed(2)} Off
               </Typography>
@@ -126,7 +161,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
           <Stack className="Bottom">
             <Typography variant="overline" className="PriceMessage">
               {product?.priceWithDetails?.tierPriceList &&
-                product?.priceWithDetails?.tierPriceList?.length > 0
+              product?.priceWithDetails?.tierPriceList?.length > 0
                 ? "As low As"
                 : "Best Price at"}
             </Typography>
@@ -162,7 +197,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
       </CardContent>
       <CardActions>
         {product?.priceWithDetails?.tierPriceList &&
-          product?.priceWithDetails?.tierPriceList?.length > 0 ? (
+        product?.priceWithDetails?.tierPriceList?.length > 0 ? (
           <ClickTooltip
             open={open}
             className="TooltipOfferTag"
@@ -176,7 +211,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                 variant="outlined"
                 endIcon={open ? <ChevronUp /> : <ChevronDown />}
                 onClick={handleTooltipOpen}
-                aria-label='OfferTag'
+                aria-label="OfferTag"
               >
                 <OfferTagIcon />
               </Button>
@@ -203,11 +238,20 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
           </ClickTooltip>
         ) : null}
 
-        <Button name='discoverMore' aria-label='discoverMore' variant="contained" onClick={() => {
-          navigate(`/product-details/${product?.friendlypagename}`) //friendlypagename
-        }} className="PrimaryAction" fullWidth>Discover More</Button>
+        <Button
+          name="discoverMore"
+          aria-label="discoverMore"
+          variant="contained"
+          onClick={() => {
+            navigate(`/product-details/${product?.friendlypagename}`); //friendlypagename
+          }}
+          className="PrimaryAction"
+          fullWidth
+        >
+          Discover More
+        </Button>
 
-        {product.isBundle &&
+        {product.isBundle && (
           <ClickTooltip
             open={open}
             className="TooltipStack"
@@ -217,7 +261,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             renderComponent={
               <IconButton
                 ref={tooltipRef}
-                aria-label='StackIcon'
+                aria-label="StackIcon"
                 className="Outlined Stack"
                 onClick={handleTooltipOpen}
               >
@@ -231,56 +275,78 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
               {product?.bulkProduct?.map((product: any) => {
                 return (
                   <Typography>
-                    <Typography variant="inherit" component="span">{product?.quantity} </Typography>
+                    <Typography variant="inherit" component="span">
+                      {product?.quantity}{" "}
+                    </Typography>
                     x {product?.productName}
                   </Typography>
-                )
+                );
               })}
             </Stack>
           </ClickTooltip>
-        }
+        )}
 
-        <IconButton className="Outlined AddToCart" onClick={async () => {
-          const response = await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
-            "productId": product.productId,
-            "quantity": 1,
-            "IsInstantBuy": false
-          } as any)
-          // console.log("🚀 ~ addTOCart response", response);
-          if (response.code === 200) {
-            showToaster({
-              message: 'The product has been added to your product cart',
-              buttonText: 'product cart',
-              redirectButtonUrl: 'shopping-cart'
-            })
-          }
-          else {
-            showToaster({
-              message: 'Adding to cart failed! Please Try again',
-            })
-          }
-
-        }}><AddToCartIcon /></IconButton>
+        <IconButton
+          className="Outlined AddToCart"
+          onClick={async () => {
+            const response = await apiCallFunction(
+              ENDPOINTS.addToCartProduct,
+              "POST",
+              {
+                productId: product.productId,
+                quantity: 1,
+                IsInstantBuy: false,
+              } as any
+            );
+            // console.log("🚀 ~ addTOCart response", response);
+            if (response.code === 200) {
+              showToaster({
+                message: "The product has been added to your product cart",
+                buttonText: "product cart",
+                redirectButtonUrl: "shopping-cart",
+              });
+            } else {
+              showToaster({
+                message: "Adding to cart failed! Please Try again",
+              });
+            }
+          }}
+        >
+          <AddToCartIcon />
+        </IconButton>
       </CardActions>
     </Card>
   );
 };
 
 export const TravelCard = (props: any) => {
-  const { place, description, imageUrl, friendlyName } = props
+  const { place, description, imageUrl, friendlyName } = props;
   return (
-    <Card className="TravelCard" onClick={() => {
-      navigate(`blog/${friendlyName}`)
-    }}>
+    <Card
+      className="TravelCard"
+      onClick={() => {
+        navigate(`blog/${friendlyName}`);
+      }}
+    >
       <Link className="ImageLink">
         <img src={imageUrl} alt="Travel image" loading="lazy" />
       </Link>
       <CardContent>
-        <Link className="Place"><Typography variant="subtitle2" component="h3">{place}</Typography></Link>
+        <Link className="Place">
+          <Typography variant="subtitle2" component="h3">
+            {place}
+          </Typography>
+        </Link>
         <Typography className="Description">{description}</Typography>
       </CardContent>
       <CardActions>
-        <Button name='discoverMore' aria-label="discoverMore" endIcon={<ArrowRight />}>Discover More</Button>
+        <Button
+          name="discoverMore"
+          aria-label="discoverMore"
+          endIcon={<ArrowRight />}
+        >
+          Discover More
+        </Button>
       </CardActions>
     </Card>
   );
@@ -408,75 +474,129 @@ export const LineChartCard = (props: any) => {
   );
 };
 
-
-export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
+export const CartCard = ({
+  cartItem,
+  hideDeliveryMethod,
+  hideRightSide,
+  quantity,
+  increaseQuantity,
+  decreaseQuantity,
+  removeItem,
+  isDifferentMethod,
+  deliveryMethodOfParent,
+  changeDeliveryMethodOfProduct,
+  deliverMethod,
+}: {
+  deliverMethod?: any;
+  cartItem: CartItemsWithLivePriceDetails;
+  hideDeliveryMethod: boolean;
+  hideRightSide: boolean;
+  quantity: number;
+  increaseQuantity: any;
+  decreaseQuantity: any;
+  removeItem: any;
+  isDifferentMethod?: boolean;
+  deliveryMethodOfParent?: any;
+  changeDeliveryMethodOfProduct?: any;
+}) => {
   // const [deliveryMethod, setDeliveryMethod] = useState<string>('LocalShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     // setDeliveryMethod(event.target.value as string);
-    changeDeliveryMethodOfProduct(cartItem.productId, event.target.value)
-  }
+    changeDeliveryMethodOfProduct(cartItem.productId, event.target.value);
+  };
 
   return (
-    cartItem && Object.keys(cartItem)?.length > 0 &&
-    <Card className="CartCard">
-      <CardMedia
-        component="img"
-        image={cartItem?.imageUrl}
-        alt="Product image"
-      />
-      <CardContent>
-        <Stack className="TopWrapper">
-          <Box className="LeftWrapper">
-            <Typography className="Name" component="p" variant="titleLarge">{cartItem.productName}</Typography>
-            <Typography variant="body2">{cartItem?.shippingInfo}</Typography>
-          </Box>
-          <Box className="RightWrapper">
-            <Typography className="LivePrice" variant="body2">Live Price</Typography>
-            <Typography variant="body2">Qty.</Typography>
-            <Typography variant="subtitle1">${roundOfThePrice(cartItem?.LivePriceDetails?.price)}</Typography>
-            <Stack className="Quantity">
-              <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.id)} disabled={quantity === 1}><MinusIcon /></IconButton>
-              <TextField value={quantity} disabled />
-              <IconButton className="Plus" onClick={() => increaseQuantity(cartItem.id)}><PlusIcon /></IconButton>
-            </Stack>
-            <IconButton className="DeleteButton" onClick={() => removeItem(cartItem.id)}><Delete1Icon /></IconButton>
-          </Box>
-        </Stack>
-        <Stack className="BottomWrapper">
-          <Stack className="LeftSide">
-            {!hideDeliveryMethod && (
-              <Stack className="DeliveryMethod">
-                <Typography className="Label" variant="titleLarge">Delivery Method:</Typography>
-                <Select
-                  color="secondary"
-                  className="DeliveryMethodSelect"
-                  value={deliverMethod}
-                  onChange={handleDeliveryMethod}
-                  IconComponent={SelectDropdown}
-                  disabled={!isDifferentMethod}
+    cartItem &&
+    Object.keys(cartItem)?.length > 0 && (
+      <Card className="CartCard">
+        <CardMedia
+          component="img"
+          image={cartItem?.imageUrl}
+          alt="Product image"
+        />
+        <CardContent>
+          <Stack className="TopWrapper">
+            <Box className="LeftWrapper">
+              <Typography className="Name" component="p" variant="titleLarge">
+                {cartItem.productName}
+              </Typography>
+              <Typography variant="body2">{cartItem?.shippingInfo}</Typography>
+            </Box>
+            <Box className="RightWrapper">
+              <Typography className="LivePrice" variant="body2">
+                Live Price
+              </Typography>
+              <Typography variant="body2">Qty.</Typography>
+              <Typography variant="subtitle1">
+                ${roundOfThePrice(cartItem?.LivePriceDetails?.price)}
+              </Typography>
+              <Stack className="Quantity">
+                <IconButton
+                  className="Minus"
+                  onClick={() => decreaseQuantity(cartItem.id)}
+                  disabled={quantity === 1}
                 >
-                  <MenuItem value="LocalShipping">Local Shipping</MenuItem>
-                  <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
-                  <MenuItem value="VaultStorage">Vault Storage</MenuItem>
-                </Select>
+                  <MinusIcon />
+                </IconButton>
+                <TextField value={quantity} disabled />
+                <IconButton
+                  className="Plus"
+                  onClick={() => increaseQuantity(cartItem.id)}
+                >
+                  <PlusIcon />
+                </IconButton>
+              </Stack>
+              <IconButton
+                className="DeleteButton"
+                onClick={() => removeItem(cartItem.id)}
+              >
+                <Delete1Icon />
+              </IconButton>
+            </Box>
+          </Stack>
+          <Stack className="BottomWrapper">
+            <Stack className="LeftSide">
+              {!hideDeliveryMethod && (
+                <Stack className="DeliveryMethod">
+                  <Typography className="Label" variant="titleLarge">
+                    Delivery Method:
+                  </Typography>
+                  <Select
+                    color="secondary"
+                    className="DeliveryMethodSelect"
+                    value={deliverMethod}
+                    onChange={handleDeliveryMethod}
+                    IconComponent={SelectDropdown}
+                    disabled={!isDifferentMethod}
+                  >
+                    <MenuItem value="LocalShipping">Local Shipping</MenuItem>
+                    <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
+                    <MenuItem value="VaultStorage">Vault Storage</MenuItem>
+                  </Select>
+                </Stack>
+              )}
+
+              <ProductUpdateCountdown />
+            </Stack>
+            {!hideRightSide && (
+              <Stack className="RightSide">
+                <Typography className="ShippingMessage" variant="body2">
+                  {deliveryMethodMessage.noSecureShipping}
+                </Typography>
               </Stack>
             )}
-
-            <ProductUpdateCountdown />
           </Stack>
-          {!hideRightSide && (
-            <Stack className="RightSide">
-              <Typography className="ShippingMessage" variant="body2">{deliveryMethodMessage.noSecureShipping}</Typography>
-            </Stack>
-          )}
+        </CardContent>
+      </Card>
+    )
+  );
+};
 
-        </Stack>
-      </CardContent>
-    </Card >
-  )
-}
-
-export const CartCardAbstract = ({ product, quantity, deliveryMethod }: any) => {
+export const CartCardAbstract = ({
+  product,
+  quantity,
+  deliveryMethod,
+}: any) => {
   return (
     <Card className="CartCardAbstract">
       <CardContent>
@@ -487,14 +607,23 @@ export const CartCardAbstract = ({ product, quantity, deliveryMethod }: any) => 
         />
         <Stack className="Wrapper">
           <Box className="About">
-            <Typography className="Name" variant="titleLarge" component="p">{product?.productName}</Typography>
+            <Typography className="Name" variant="titleLarge" component="p">
+              {product?.productName}
+            </Typography>
             <Typography>Qty: {quantity}</Typography>
           </Box>
-          <Typography variant="subtitle1">${roundOfThePrice((product?.LivePriceDetails?.price) * (quantity))}</Typography>
+          <Typography variant="subtitle1">
+            ${roundOfThePrice(product?.LivePriceDetails?.price * quantity)}
+          </Typography>
         </Stack>
       </CardContent>
       <Divider />
-      <Typography className="DeliveryMethod" variant="overline" component="p">Delivery Method: <Typography variant="inherit" component="span">{deliveryMethod}</Typography></Typography>
-    </Card >
-  )
-}
+      <Typography className="DeliveryMethod" variant="overline" component="p">
+        Delivery Method:{" "}
+        <Typography variant="inherit" component="span">
+          {deliveryMethod}
+        </Typography>
+      </Typography>
+    </Card>
+  );
+};
