@@ -20,10 +20,12 @@
       // gap: 30px 70px;
     }
     @include media-between($xl, $xxl) {
-      gap: 40px;
+      // gap: 40px;
+      gap: 80px;
     }
     @include media-min($xxl) {
-      gap: 133px;
+      // gap: 133px;
+      gap: 200px;
     }
     .LogoPart {
       flex-direction: column;
