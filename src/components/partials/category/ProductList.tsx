@@ -50,7 +50,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
         }
       </Box>
       <Stack className="Pagination">
-        {categoryData?.count > 0 && <Pagination count={Math.floor(categoryData?.count / pageSize)} page={page} shape="rounded" onChange={handlePageChange} />}
+        {categoryData?.count > 0 && <Pagination count={Math.ceil(categoryData?.count / pageSize)} page={page} shape="rounded" onChange={handlePageChange} />}
       </Stack>
     </Box>
   )

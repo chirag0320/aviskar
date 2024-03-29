@@ -45,7 +45,7 @@ function Category({ location }: { location: any }) {
 
     useEffect(() => {
         const commonArgument = {
-            pageNo: page, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters }
+            pageNo: page-1, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters }
         };
 
         const argumentForService = {
@@ -65,7 +65,7 @@ function Category({ location }: { location: any }) {
 
         const argumentForService = {
             url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
-            body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, pageNo: page, filters: { specification: {} } } : { ...requestBodyDefault, pageNo: page, filters: { specification: {} } }
+            body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, pageNo: page-1, filters: { specification: {} } } : { ...requestBodyDefault, pageNo: page-1, filters: { specification: {} } }
         }
 
         dispatch(getCategoryData(
