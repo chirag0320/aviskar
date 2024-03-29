@@ -7,28 +7,34 @@ import { ENDPOINTS } from '@/utils/constants'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { IproductPrice } from '../home/FeaturedProducts'
-import { clearShoppingCart, deleteShoppingCartData, resetSubTotal, setCartItemWarning, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
+import { clearShoppingCart, deleteShoppingCartData, getShoppingCartData, resetSubTotal, setCartItemWarning, setLoadingFalse, setLoadingTrue, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
 import { navigate } from 'gatsby'
 import useDebounce from '@/hooks/useDebounce'
 import { hasFulfilled } from '@/utils/common'
-import { setToasterState } from "@/redux/reducers/homepageReducer";
 import useShowToaster from '@/hooks/useShowToaster'
 
+interface Props {
+    cartItemsWithLivePrice: CartItemsWithLivePriceDetails[],
+    setCartItemsWithLivePrice: React.Dispatch<React.SetStateAction<CartItemsWithLivePriceDetails[]>>,
+    quantities: { [key: number]: number },
+    setQuantities: React.Dispatch<React.SetStateAction<{
+        [key: number]: number;
+    }>>
+}
 
 export type CartItemsWithLivePriceDetails = CartItem & {
     LivePriceDetails: IproductPrice
 }
 
-const CartDetails = () => {
+const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quantities, setQuantities }: Props) => {
     const loading = useAppSelector(state => state.shoppingCart.loading);
     const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
     const [productIds, setProductIds] = useState({})
     const dispatch = useAppDispatch();
     const { showToaster } = useShowToaster();
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
-    const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
-    const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
     const changeInQuantities = useDebounce(quantities, 500)
+
     useEffect(() => {
         updateCartHandler(false)
     }, [changeInQuantities, cartItemsWithLivePrice])

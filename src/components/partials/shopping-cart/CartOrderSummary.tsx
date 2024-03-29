@@ -3,44 +3,50 @@ import { Box, Typography, Stack, Button } from "@mui/material"
 import { RightArrow } from '@/assets/icons'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { navigate } from 'gatsby'
-import { setCartItemWarning, updateShoppingCartData } from '@/redux/reducers/shoppingCartReducer'
+import { resetSubTotal, setCartItemWarning, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
 import { ENDPOINTS } from '@/utils/constants'
 import { hasFulfilled } from '@/utils/common'
 import useShowToaster from '@/hooks/useShowToaster'
+import { CartItemsWithLivePriceDetails } from './CartDetails'
+
+interface Props {
+    cartItemsWithLivePrice: CartItemsWithLivePriceDetails[],
+    quantities: { [key: number]: number }
+}
 
 // const CartOrderSummary = ({ isShoppingCartUpdated }: { isShoppingCartUpdated: boolean }) => {
-const CartOrderSummary = () => {
+const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
     const dispatch = useAppDispatch();
     const { showToaster } = useShowToaster();
     const shoppingCartItems = useAppSelector(state => state.shoppingCart);
 
     const handleProccedToCheckout = async () => {
-        // let subTotal = 0;
-        // const itemsWithQuantity = cartItemsWithLivePrice.map((item: CartItemsWithLivePriceDetails) => {
-        //     subTotal += (item.LivePriceDetails.price * quantities[item.id]);
-        //     return {
-        //         id: item.id,
-        //         quantity: quantities[item.id]
-        //     }
-        // })
-        // dispatch(resetSubTotal());
-        // dispatch(updateSubTotal(subTotal))
+        let subTotal = 0;
+        const itemsWithQuantity = cartItemsWithLivePrice.map((item: CartItemsWithLivePriceDetails) => {
+            subTotal += (item.LivePriceDetails.price * quantities[item.id]);
+            return {
+                id: item.id,
+                quantity: quantities[item.id]
+            }
+        })
+        dispatch(resetSubTotal());
+        dispatch(updateSubTotal(subTotal))
 
-        // const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
+        const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
 
-        // if (hasFulfilled(response.type)) {
-        //     if (!response?.payload?.data?.data) {
-        //         showToaster({ message: "Cart updated", severity: 'success' })
-        //         navigate('/checkout')
-        //     }
-        //     else {
-        //         dispatch(setCartItemWarning(response?.payload?.data?.data));
-        //         showToaster({ message: "Some items have warnings", severity: 'warning' })
-        //     }
-        // }
-        // else {
-        //     showToaster({ message: "Update cart failed", severity: 'error' })
-        // }
+        if (hasFulfilled(response.type)) {
+            if (!response?.payload?.data?.data) {
+                showToaster({ message: "Cart updated", severity: 'success' })
+                navigate('/checkout')
+            }
+            else {
+                dispatch(setCartItemWarning(response?.payload?.data?.data));
+                showToaster({ message: "Cannot Checkout as Some items have warnings", severity: 'warning' })
+            }
+        }
+        else {
+            showToaster({ message: "Update cart failed", severity: 'error' })
+        }
     }
 
     return (
