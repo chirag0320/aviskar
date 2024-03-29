@@ -26,6 +26,7 @@ function Step2() {
   const { checkoutPageData, finalDataForTheCheckout } = useAppSelector((state) => state.checkoutPage)
   const [deliveryMethod, setDeliveryMethod] = useState<'LocalShipping' | 'VaultStorage' | 'SecureShipping'>('LocalShipping')
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
+  console.log("🚀 ~ Step2 ~ quantities:", quantities)
   const [deliveryMethods, setDeliveryMethods] = useState<{ [key: number]: string }>({})
   const [productIds, setProductIds] = useState({})
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);

@@ -144,7 +144,7 @@ const initialState: CheckoutPageState = {
     isOTPVerified: null,
     checkoutPageData: isBrowser && JSON.parse(localStorageGetItem("checkoutPageData") ?? JSON.stringify({})),
     subTotal: Number(JSON.parse(localStorageGetItem("checkoutPageData") ?? '0')) || 0,
-    finalDataForTheCheckout: JSON.parse(localStorageGetItem("finalDataForTheCheckout") ?? JSON.stringify({})) ?? null,
+    finalDataForTheCheckout: {},
     insuranceAndTaxCalculation: (isBrowser && JSON.parse(localStorageGetItem("insuranceAndTaxCalculation") ?? JSON.stringify({}))) ?? null,
     craditCardCharges: (isBrowser && JSON.parse(localStorageGetItem("craditCardCharges") ?? JSON.stringify({}))) ?? null,
     orderId: null,
@@ -232,7 +232,6 @@ export const checkoutPage = createSlice({
         },
         updateFinalDataForTheCheckout: (state, action) => {
             state.finalDataForTheCheckout = { ...state.finalDataForTheCheckout, ...action.payload }
-            localStorageSetItem('finalDataForTheCheckout', JSON.stringify(state.finalDataForTheCheckout))
 
         },
         disableOTP: (state) => {
