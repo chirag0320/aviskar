@@ -22,6 +22,7 @@ function Step2() {
   const dispatch = useAppDispatch()
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+  console.log("🚀 ~ Step2 ~ configDetailsState:", configDetailsState)
   const { checkoutPageData, finalDataForTheCheckout } = useAppSelector((state) => state.checkoutPage)
   const [deliveryMethod, setDeliveryMethod] = useState<'LocalShipping' | 'VaultStorage' | 'SecureShipping'>('LocalShipping')
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
@@ -167,7 +168,7 @@ function Step2() {
               infoTooltip
               arrow
             >
-              This is a helper text to justify pricing discount.
+              {configDetailsState?.["checkout.deliveryinfotext"]?.value}
             </HoverTooltip>
           </Typography>
           <Select
@@ -197,7 +198,9 @@ function Step2() {
           )
         })}
       </Stack>
-      <Typography className="StepNote"><Typography variant="titleLarge">Note:</Typography> Prices are live prices and will be locked on confirm order. </Typography>
+      <Typography className="StepNote">
+        {/* <Typography variant="titleLarge">Note:</Typography> */}
+        {configDetailsState?.["checkout.pricelockedtext"]?.value}</Typography>
     </StepWrapper>
   )
 }

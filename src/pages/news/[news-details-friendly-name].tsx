@@ -60,7 +60,7 @@ function NewsDetails(params: any) {
   return (
     <Layout>
       <Box className="BlogDetailPage">
-        <Breadcrumb page1={"News"} page2={"News"} page3={newsDetailsData?.title} />
+        <Breadcrumb arr={[{ navigate: '/news', name: 'News' }, { navigate: "/news/" + params?.params?.["news-details-friendly-name"], name: params?.params?.["news-details-friendly-name"] }]} />
         <Box className="PostDescription">
           <Container>
             <Button
@@ -161,7 +161,7 @@ function NewsDetails(params: any) {
                   {newsList?.items?.map((item: any) => {
                     return (
                       <Grid item md={4} sm={6} key={item?.id}>
-                        <PostCard details={item} />
+                        <PostCard isNews={true} details={item} navigate={() => navigate(`/news/${item?.friendlyName}`)} />
                       </Grid>
                     )
                   })}

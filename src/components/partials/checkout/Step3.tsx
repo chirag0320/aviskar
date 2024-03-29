@@ -11,13 +11,14 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import { updateFinalDataForTheCheckout } from "@/redux/reducers/checkoutReducer"
 
 function Step3() {
+  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const dispatch = useAppDispatch()
   const [paymentType, setPaymentType] = useState('BankTransfer')
   const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(updateFinalDataForTheCheckout({ paymentType }))
-  },[paymentType])
-  const renderRadioLabelWithIcon = (label: string, icon: React.ReactElement, price?: string) => {
+  }, [paymentType])
+  const renderRadioLabelWithIcon = (label: string, icon: React.ReactElement, price?: string, helperText?: string) => {
     return (
       <Stack className="RadioLabelWithIcon">
         {icon}
@@ -30,7 +31,7 @@ function Step3() {
               infoTooltip
               arrow
             >
-              This is a helper text about payment method. Lorem, ipsum dolor.
+              {helperText}
             </HoverTooltip>
           </Typography>
           <Typography variant="subtitle1">{price ? price : "Free"}</Typography>
@@ -46,9 +47,9 @@ function Step3() {
         <RadioGroup name="payment-method" defaultValue="BankTransfer" row value={paymentType} onChange={(e) => {
           setPaymentType(e.target.value)
         }}>
-          {checkoutPageData?.storeDetail?.isBankTransfer && <FormControlLabel value="BankTransfer" control={<Radio />} label={renderRadioLabelWithIcon("Bank Transfer", <BankIcon />)} />}
-          {checkoutPageData?.storeDetail?.isCash && <FormControlLabel value="Cash" control={<Radio />} label={renderRadioLabelWithIcon("Cash", <CashIcon />)} />}
-          {checkoutPageData?.storeDetail?.isCreditCard && <FormControlLabel value="CreditCard" control={<Radio />} label={renderRadioLabelWithIcon("Credit Card", <CardIcon />, checkoutPageData?.storeDetail?.creadatcardTax?.toString())} />}
+          {checkoutPageData?.storeDetail?.isBankTransfer && <FormControlLabel value="BankTransfer" control={<Radio />} label={renderRadioLabelWithIcon("Bank Transfer", <BankIcon />, undefined, configDetailsState?.["checkout.payment.banktransferinfotext"]?.value)} />}
+          {checkoutPageData?.storeDetail?.isCash && <FormControlLabel value="Cash" control={<Radio />} label={renderRadioLabelWithIcon("Cash", <CashIcon />, undefined, configDetailsState?.["checkout.payment.cashinfotext"]?.value)} />}
+          {checkoutPageData?.storeDetail?.isCreditCard && <FormControlLabel value="CreditCard" control={<Radio />} label={renderRadioLabelWithIcon("Credit Card", <CardIcon />, checkoutPageData?.storeDetail?.creadatcardTax?.toString(), configDetailsState?.["checkout.payment.creditcardinfotext"]?.value)} />}
         </RadioGroup>
       </Stack>
     </StepWrapper>

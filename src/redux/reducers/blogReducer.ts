@@ -8,11 +8,13 @@ interface BlogState {
     blogList: {},
     blogDetailsData:{}
     loading: boolean
+    topThree: []
 }
 const initialState: BlogState = {
     blogList: {},
     blogDetailsData:{},
-    loading: false
+    loading: false,
+    topThree: []
     // blogList: JSON.parse(localStorage.getItem("blogList") ?? '{}'),
     // blogDetailsData: JSON.parse(localStorage.getItem("blogDetailsData") ?? '{}'),
     // loading: false
@@ -37,6 +39,7 @@ export const blogpageSlice = createSlice({
         resetWholeBlogPageData: (state) => {
             state.blogList = {}
             state.blogDetailsData={}
+            state.topThree = []
         },
         setLoadingTrue: (state) => {
             state.loading = true
@@ -53,6 +56,9 @@ export const blogpageSlice = createSlice({
         })
         builder.addCase(BlogList.fulfilled, (state, action) => {
             state.blogList = action.payload.data.data
+            if (state.topThree.length < 1) {
+                state.topThree = action.payload.data.data.items.slice(0, 3)
+            }
             state.loading = false
         })
         builder.addCase(BlogList.rejected, (state, action) => {
