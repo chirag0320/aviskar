@@ -111,7 +111,7 @@ function UpdateAddress(props: UpdateAddress) {
   }
 
   useEffect(() => {
-    setValue('State', existingAddress.stateName);
+    setValue('State', existingAddress?.stateName);
     setStateId(existingAddress?.state);
     return () => {
       reset()
