@@ -674,6 +674,15 @@ const theme: Theme = createTheme({
         },
       },
     },
+    MuiAutocomplete: {
+      styleOverrides: {
+        option: {
+          "@media (max-width: 600px)": {
+            minHeight: "initial !important",
+          },
+        },
+      },
+    },
   },
   shape: {
     borderRadius: 8,
