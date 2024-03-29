@@ -151,7 +151,8 @@ function AboutProduct({ productId }: any) {
     showToaster({
       message: 'The product has been added to compare',
       buttonText: 'product comparison',
-      redirectButtonUrl: 'compare-products'
+      redirectButtonUrl: 'compare-products',
+      severity: 'success'
     })
   }
   const addIntoWishList = async (id: any) => {
@@ -165,7 +166,8 @@ function AboutProduct({ productId }: any) {
     showToaster({
       message: 'The product has been added to your product wishlist',
       buttonText: 'product wishlist',
-      redirectButtonUrl: 'wishlist'
+      redirectButtonUrl: 'wishlist',
+      severity: 'success'
     })
   }
   useEffect(() => {

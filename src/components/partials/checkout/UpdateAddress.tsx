@@ -88,7 +88,7 @@ function UpdateAddress(props: UpdateAddress) {
     if (hasFulfilled(response.type)) {
       onClose()
       reset()
-      showToaster({ message: "Address saved successfully" })
+      showToaster({ message: "Address saved successfully" , severity: 'success'})
       dispatch(updateAddress({
         ...existingAddress,
         firstName: data.FirstName,
@@ -106,7 +106,7 @@ function UpdateAddress(props: UpdateAddress) {
         state: stateId,
       }))
     } else {
-      showToaster({ message: "Failed to save address" })
+      showToaster({ message: "Failed to save address" , severity: 'error'})
     }
   }
 

@@ -74,6 +74,37 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
   };
   const { showToaster } = useShowToaster();
 
+  const handleAddToCart = async () => {
+    const response = await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+      "productId": product.productId,
+      "quantity": 1,
+      "IsInstantBuy": false
+    } as any)
+    // console.log("🚀 ~ addTOCart response", response);
+    if (response.code === 200) {
+      if (response.data) {
+        showToaster({
+          message: 'The product has been added to your product cart',
+          buttonText: 'product cart',
+          redirectButtonUrl: 'shopping-cart',
+          severity: 'success'
+        })
+      } else {
+        showToaster({
+          message: response.message,
+          severity: 'warning'
+        })
+      }
+    }
+    else {
+      showToaster({
+        message: 'Adding to cart failed! Please Try again',
+        severity: 'error'
+      })
+    }
+
+  }
+
   return (
     <Card className={classNames("ProductCard", { "Sticky": stickyProduct })} key={product.productId}>
       <Stack className="ImageWrapper">
@@ -232,7 +263,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                 {product?.bulkProduct?.map((product: any) => {
                   return (
                     <ListItem disablePadding disableGutters>
-                      <ListItemText primary={product?.productName} secondary={product?.quantity} secondaryTypographyProps={{variant: "body1"}} />
+                      <ListItemText primary={product?.productName} secondary={product?.quantity} secondaryTypographyProps={{ variant: "body1" }} />
                     </ListItem>
                   );
                 })}
@@ -241,27 +272,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
           </ClickTooltip>
         }
 
-        <IconButton className="Outlined AddToCart" onClick={async () => {
-          const response = await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
-            "productId": product.productId,
-            "quantity": 1,
-            "IsInstantBuy": false
-          } as any)
-          // console.log("🚀 ~ addTOCart response", response);
-          if (response.code === 200) {
-            showToaster({
-              message: 'The product has been added to your product cart',
-              buttonText: 'product cart',
-              redirectButtonUrl: 'shopping-cart'
-            })
-          }
-          else {
-            showToaster({
-              message: 'Adding to cart failed! Please Try again',
-            })
-          }
-
-        }}><AddToCartIcon /></IconButton>
+        <IconButton className="Outlined AddToCart" onClick={handleAddToCart}><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
   );
@@ -430,6 +441,9 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
           <Box className="LeftWrapper">
             <Typography className="Name" component="p" variant="titleLarge">{cartItem.productName}</Typography>
             <Typography variant="body2">{cartItem?.shippingInfo}</Typography>
+            {cartItem?.warnings?.map((warning) => (
+              <Typography variant="body2" key={warning}>{warning}</Typography>
+            ))}
           </Box>
           <Box className="RightWrapper">
             <Typography className="LivePrice" variant="body2">Live Price</Typography>

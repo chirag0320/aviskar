@@ -1,12 +1,47 @@
 import React from 'react'
 import { Box, Typography, Stack, Button } from "@mui/material"
 import { RightArrow } from '@/assets/icons'
-import { useAppSelector } from '@/hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks'
 import { navigate } from 'gatsby'
+import { setCartItemWarning, updateShoppingCartData } from '@/redux/reducers/shoppingCartReducer'
+import { ENDPOINTS } from '@/utils/constants'
+import { hasFulfilled } from '@/utils/common'
+import useShowToaster from '@/hooks/useShowToaster'
 
 // const CartOrderSummary = ({ isShoppingCartUpdated }: { isShoppingCartUpdated: boolean }) => {
 const CartOrderSummary = () => {
+    const dispatch = useAppDispatch();
+    const { showToaster } = useShowToaster();
     const shoppingCartItems = useAppSelector(state => state.shoppingCart);
+
+    const handleProccedToCheckout = async () => {
+        // let subTotal = 0;
+        // const itemsWithQuantity = cartItemsWithLivePrice.map((item: CartItemsWithLivePriceDetails) => {
+        //     subTotal += (item.LivePriceDetails.price * quantities[item.id]);
+        //     return {
+        //         id: item.id,
+        //         quantity: quantities[item.id]
+        //     }
+        // })
+        // dispatch(resetSubTotal());
+        // dispatch(updateSubTotal(subTotal))
+
+        // const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
+
+        // if (hasFulfilled(response.type)) {
+        //     if (!response?.payload?.data?.data) {
+        //         showToaster({ message: "Cart updated", severity: 'success' })
+        //         navigate('/checkout')
+        //     }
+        //     else {
+        //         dispatch(setCartItemWarning(response?.payload?.data?.data));
+        //         showToaster({ message: "Some items have warnings", severity: 'warning' })
+        //     }
+        // }
+        // else {
+        //     showToaster({ message: "Update cart failed", severity: 'error' })
+        // }
+    }
 
     return (
         <Box className="OrderSummaryDetailsWrapper">
@@ -28,13 +63,7 @@ const CartOrderSummary = () => {
                     <Typography variant="subtitle1">Calculated during checkout </Typography>
                 </Stack>
             </Box>
-            <Button className='ProceedtoCheckoutBtn' size='large' variant="contained" onClick={() => {
-                navigate('/checkout')
-            }} disabled={shoppingCartItems.loading || shoppingCartItems.cartItems.length === 0}>Proceed to Checkout</Button>
-            {/* {isShoppingCartUpdated && <Typography variant="body2" className='CartUpdatedMessage'>Cart updated</Typography>}
-            <Button className='ProceedtoCheckoutBtn' size='large' variant="contained" onClick={() => {
-                navigate('/checkout')
-            }} disabled={isShoppingCartUpdated}>Proceed to Checkout</Button> */}
+            <Button className='ProceedtoCheckoutBtn' size='large' variant="contained" onClick={handleProccedToCheckout} disabled={shoppingCartItems.loading || shoppingCartItems.cartItems.length === 0}>Proceed to Checkout</Button>
         </Box>
     )
 }

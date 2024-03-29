@@ -20,4 +20,5 @@ export interface CartItem {
     stock: number;
     shippingMethod: number[];
     shippableCountrys: number[];
+    warnings? : string[];
 }
