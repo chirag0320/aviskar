@@ -683,6 +683,13 @@ const theme: Theme = createTheme({
         },
       },
     },
+    MuiBadge: {
+      styleOverrides: {
+        badge: {
+          lineHeight: "normal",
+        },
+      },
+    },
   },
   shape: {
     borderRadius: 8,
