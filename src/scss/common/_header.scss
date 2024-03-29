@@ -204,7 +204,7 @@
             }
 
             @include media($md) {
-              display: initial;
+              display: inline-flex;
             }
           }
         }

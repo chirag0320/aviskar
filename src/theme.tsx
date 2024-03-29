@@ -671,6 +671,10 @@ const theme: Theme = createTheme({
             color: variable.white,
             fontWeight: 700,
           },
+          "@media (max-width: 600px)": {
+            padding: "6px 20px",
+            minHeight: "initial",
+          },
         },
       },
     },
