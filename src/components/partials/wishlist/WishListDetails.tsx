@@ -9,12 +9,15 @@ import { MinusIcon, PlusIcon } from '@/assets/icons'
 import { updateShoppingCartData } from '@/redux/reducers/shoppingCartReducer'
 import { addToWishListToShoppingCart, deleteWishListData } from '@/redux/reducers/wishListReducer'
 import { navigate } from 'gatsby'
+import { hasFulfilled } from '@/utils/common'
+import useShowToaster from '@/hooks/useShowToaster'
 
 const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }) => {
     const wishListstate = useAppSelector(state => state.wishList)
     const dispatch = useAppDispatch();
 
     const [productIds, setProductIds] = useState({})
+    const {showToaster} = useShowToaster();
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
     const [wishListItemsWithLivePrice, setWishListItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
@@ -75,7 +78,13 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
         })
 
         setIsWishListUpdated(false)
-        await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
+        const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateWishListData, body: itemsWithQuantity }) as any);
+        if(hasFulfilled(response.type)){
+            showToaster({message : "Wishlist items updated successfully", severity: 'success'})
+        }
+        else{
+            showToaster({message : "Failed to update wishlist items.", severity: 'error'})
+        }
     }
 
     const removeSelectedItemsHandler = async () => {
@@ -85,8 +94,15 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                 checkedItems.push(Number(item));
             }
         }
-        setWishListItemsWithLivePrice(wishListItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => !checkedItems.includes(item.id)));
-        await dispatch(deleteWishListData({ url: ENDPOINTS.deleteWishListData, body: checkedItems }) as any)
+        
+        const response = await dispatch(deleteWishListData({ url: ENDPOINTS.deleteWishListData, body: checkedItems }) as any)
+        if(hasFulfilled(response.type)){
+            setWishListItemsWithLivePrice(wishListItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => !checkedItems.includes(item.id)));
+            showToaster({message : response.payload.data.message, severity: 'success'})
+        }
+        else{
+            showToaster({message : "Failed to delete wishlist items.", severity: 'error'})
+        }
     }
 
     const addToCartSelectedItemsHandler = async () => {
@@ -102,8 +118,15 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
             }
         }
 
-        await dispatch(addToWishListToShoppingCart({ url: ENDPOINTS.addWishListToShoppingCart, body: checkedItemsWithQuantity }) as any)
-        navigate('/shopping-cart')
+        const response = await dispatch(addToWishListToShoppingCart({ url: ENDPOINTS.addWishListToShoppingCart, body: checkedItemsWithQuantity }) as any)
+        if(hasFulfilled(response.type)){
+            // showToaster({message : "Selected items added to cart", severity: 'success'})
+            navigate('/shopping-cart')
+        }
+        else{
+            showToaster({message : "Failed to add items to cart", severity: 'error'})
+        }
+        
     }
 
     const handleCheckboxChange = (id: number) => {
