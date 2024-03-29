@@ -459,6 +459,10 @@
           }
         }
       }
+      .PostTitle {
+        text-align: left;
+        text-decoration: none;
+      }
     }
 
     .MuiCardActions-root {
@@ -477,7 +481,6 @@
     }
 
     .MuiTypography-root {
-      color: $dark;
       @include max-line(2);
     }
   }
