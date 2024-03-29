@@ -7,31 +7,34 @@ import { ENDPOINTS } from '@/utils/constants'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { IproductPrice } from '../home/FeaturedProducts'
-import { clearShoppingCart, deleteShoppingCartData, resetSubTotal, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
+import { clearShoppingCart, deleteShoppingCartData, getShoppingCartData, resetSubTotal, setCartItemWarning, setLoadingFalse, setLoadingTrue, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
 import { navigate } from 'gatsby'
 import useDebounce from '@/hooks/useDebounce'
 import { hasFulfilled } from '@/utils/common'
-import { setToasterState } from "@/redux/reducers/homepageReducer";
 import useShowToaster from '@/hooks/useShowToaster'
 
+interface Props {
+    cartItemsWithLivePrice: CartItemsWithLivePriceDetails[],
+    setCartItemsWithLivePrice: React.Dispatch<React.SetStateAction<CartItemsWithLivePriceDetails[]>>,
+    quantities: { [key: number]: number },
+    setQuantities: React.Dispatch<React.SetStateAction<{
+        [key: number]: number;
+    }>>
+}
 
 export type CartItemsWithLivePriceDetails = CartItem & {
     LivePriceDetails: IproductPrice
 }
 
-// const CartDetails = ({ setSubTotal }: { setSubTotal: Dispatch<SetStateAction<number>> }) => {
-const CartDetails = () => {
-
-    // const CartDetails = ({ isShoppingCartUpdated, setIsShoppingCartUpdated }: { isShoppingCartUpdated: boolean, setIsShoppingCartUpdated: React.Dispatch<React.SetStateAction<boolean>> }) => {
+const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quantities, setQuantities }: Props) => {
     const loading = useAppSelector(state => state.shoppingCart.loading);
     const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
     const [productIds, setProductIds] = useState({})
     const dispatch = useAppDispatch();
     const { showToaster } = useShowToaster();
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
-    const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
-    const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
     const changeInQuantities = useDebounce(quantities, 500)
+
     useEffect(() => {
         updateCartHandler(false)
     }, [changeInQuantities, cartItemsWithLivePrice])
@@ -70,25 +73,21 @@ const CartDetails = () => {
 
     const increaseQuantity = (id: number) => {
         setQuantities(prevQuantities => ({ ...prevQuantities, [id]: prevQuantities[id] + 1 }));
-        // setIsShoppingCartUpdated(true);
     }
 
     const decreaseQuantity = (id: number) => {
         setQuantities(prevQuantities => ({ ...prevQuantities, [id]: prevQuantities[id] - 1 }));
-        // setIsShoppingCartUpdated(true);
     }
 
     const removeItemFromCart = async (id: number) => {
-        // optimistic update needs(currentlt not)
         const response = await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: [id] }) as any);
 
         if (hasFulfilled(response.type)) {
             setCartItemsWithLivePrice(() => cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== id));
-            // console.log("🚀 ~ removeItemFromCart ~ response?.payload?.data?.message:", response?.payload?.data?.message)
-            showToaster({ message: response?.payload?.data?.message })
+            showToaster({ message: response?.payload?.data?.message, severity: 'success' })
         }
         else {
-            showToaster({ message: "Remove item failed" })
+            showToaster({ message: "Remove item failed", severity: 'error' })
         }
     }
 
@@ -105,8 +104,20 @@ const CartDetails = () => {
         dispatch(updateSubTotal(subTotal))
 
         if (isapiCallNeeded) {
-            // setIsShoppingCartUpdated(false)
-            await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
+            const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
+
+            if (hasFulfilled(response.type)) {
+                if (!response?.payload?.data?.data) {
+                    showToaster({ message: "Cart updated", severity: 'success' })
+                }
+                else {
+                    dispatch(setCartItemWarning(response?.payload?.data?.data));
+                    showToaster({ message: "Some items have warnings", severity: 'warning' })
+                }
+            }
+            else {
+                showToaster({ message: "Update cart failed", severity: 'error' })
+            }
         }
     }
 

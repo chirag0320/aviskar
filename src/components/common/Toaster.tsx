@@ -8,7 +8,7 @@ import { navigate } from "gatsby"
 
 function Toaster() {
   const dispatch = useAppDispatch()
-  const { openToaster, toasterMessage, buttonText, redirectButtonUrl } = useAppSelector((state) => state.homePage)
+  const { openToaster, toasterMessage, buttonText, redirectButtonUrl,severity } = useAppSelector((state) => state.homePage)
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") {
@@ -53,7 +53,7 @@ function Toaster() {
       >
         <Alert
           onClose={handleClose}
-          severity="info"
+          severity={severity}
           variant="filled"
         >
           {toasterMessage}  <Button onClick={() => {

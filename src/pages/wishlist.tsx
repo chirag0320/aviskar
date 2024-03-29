@@ -10,10 +10,12 @@ import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { ENDPOINTS } from "@/utils/constants";
 import { getWishListData } from "@/redux/reducers/wishListReducer";
 import WishListDetails from "@/components/partials/wishlist/WishListDetails";
-import { useToggle } from "@/hooks";
+import { useAppSelector, useToggle } from "@/hooks";
+import Toaster from "@/components/common/Toaster";
 
 function Wishlist() {
   const [openEmailFriend, toggleEmailFriend] = useToggle(false);
+  const openToaster = useAppSelector(state => state.homePage.openToaster);
   const [snackbarOpen, setSnackbarOpen] = useState(false); // State for Snackbar
 
   useAPIoneTime({
@@ -36,6 +38,7 @@ function Wishlist() {
 
   return (
     <Layout>
+      {openToaster && <Toaster />}
       <Seo
         keywords={["QMint Wishlist"]}
         title="Wishlist"

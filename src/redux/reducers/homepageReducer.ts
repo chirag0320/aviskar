@@ -28,11 +28,13 @@ interface CreateGuidelineState {
   loadingForSignIn: boolean,
   mebershipPlanDetailsData: any,
   recentlyViewedProducts: any[],
+  // toaster
   openToaster: boolean,
   buttonText: string,
   redirectButtonUrl: string,
   toasterMessage: string,
-  scrollPosition: number
+  scrollPosition: number,
+  severity: 'error' | 'success' | 'info' | 'warning'
 }
 const initialState: CreateGuidelineState = {
   configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
@@ -48,7 +50,8 @@ const initialState: CreateGuidelineState = {
   buttonText: '',
   redirectButtonUrl: '',
   toasterMessage: '',
-  scrollPosition: 0
+  scrollPosition: 0,
+  severity: 'info'
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -155,6 +158,7 @@ export const createHomepageSlice = createSlice({
       state.toasterMessage = action.payload.toasterMessage
       state.buttonText = action.payload.buttonText || ''
       state.redirectButtonUrl = action.payload.redirectButtonUrl || ''
+      state.severity = action.payload.severity || 'info'
     },
     // setToasterMeaasge: (state, action) => {
     //   state.toasterMessage = action.payload

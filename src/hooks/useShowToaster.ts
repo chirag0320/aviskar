@@ -4,12 +4,13 @@ import { useAppDispatch } from ".";
 const useShowToaster = () => {
     const dispatch = useAppDispatch();
 
-    const showToaster = ({ message, buttonText = '', redirectButtonUrl = '' }: { message: string, buttonText?: string, redirectButtonUrl?: string }): void => {
+    const showToaster = ({ message, buttonText = '', redirectButtonUrl = '', severity = 'info' }: { message: string, buttonText?: string, redirectButtonUrl?: string, severity?: 'info' | 'error' | 'success' | 'warning' }): void => {
         dispatch(setToasterState({
             openToaster: true,
             toasterMessage: message,
             buttonText,
-            redirectButtonUrl
+            redirectButtonUrl,
+            severity
         }));
     }
 

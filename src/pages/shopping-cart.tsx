@@ -10,6 +10,7 @@ import CartDetails from '@/components/partials/shopping-cart/CartDetails';
 import CartOrderSummary from '@/components/partials/shopping-cart/CartOrderSummary';
 import Toaster from '@/components/common/Toaster'
 import { useAppSelector } from '@/hooks';
+import ShoppingCartComponent from '@/components/partials/shopping-cart/ShoppingCartComponent';
 
 
 function ShoppingCart() {
@@ -40,13 +41,7 @@ function ShoppingCart() {
                         <PageTitle title="Shopping cart" />
                     </Box>
                     <Container>
-                        <Box className="ShoppingCartContent">
-                            {/* <CartDetails setSubTotal={setSubTotal} /> */}
-                            {/* <CartDetails isShoppingCartUpdated={isShoppingCartUpdated} setIsShoppingCartUpdated={setIsShoppingCartUpdated} />
-                            <CartOrderSummary isShoppingCartUpdated={isShoppingCartUpdated} /> */}
-                            <CartDetails />
-                            <CartOrderSummary />
-                        </Box>
+                        <ShoppingCartComponent />
                     </Container>
                 </Box>
             </>
