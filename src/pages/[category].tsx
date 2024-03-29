@@ -43,19 +43,6 @@ function Category({ location }: { location: any }) {
     const debounceFilter = useDebounce(selectedFilters, 700);
     const debouncePrice = useDebounce(selectedPrice, 700);
 
-    // useEffect(() => {
-    //     if (searchParams.has("keyword")) {
-    //         console.log("🚀 ~ useEffect ~ searchParams", searchParams.get("keyword"))
-
-    //         dispatch(getCategoryData(
-    //             {
-    //                 url: ENDPOINTS.search,
-    //                 body: { ...requestBodyDefault, search: searchParams.get("keyword")!, filters: {} }
-    //             }) as any)
-    //     }
-    // }, [])
-
-
     useEffect(() => {
         const commonArgument = {
             pageNo: page, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters }
