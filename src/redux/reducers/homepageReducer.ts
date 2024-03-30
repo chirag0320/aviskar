@@ -34,7 +34,8 @@ interface CreateGuidelineState {
   redirectButtonUrl: string,
   toasterMessage: string,
   scrollPosition: number,
-  severity: 'error' | 'success' | 'info' | 'warning'
+  severity: 'error' | 'success' | 'info' | 'warning',
+  needToShowProgressLoader: false
 }
 const initialState: CreateGuidelineState = {
   configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
@@ -51,7 +52,8 @@ const initialState: CreateGuidelineState = {
   redirectButtonUrl: '',
   toasterMessage: '',
   scrollPosition: 0,
-  severity: 'info'
+  severity: 'info',
+  needToShowProgressLoader: false
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -169,8 +171,11 @@ export const createHomepageSlice = createSlice({
     // setRedirectUrl: (state, action) => {
     //   state.redirectButtonUrl = action.payload
     // },
-    setScrollPosition : (state,action) => {
+    setScrollPosition: (state, action) => {
       state.scrollPosition = action.payload;
+    },
+    serProgressLoaderStatus: (state, action) => {
+      state.needToShowProgressLoader = action.payload
     }
   },
 
@@ -280,6 +285,6 @@ export const createHomepageSlice = createSlice({
   },
 })
 
-export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState , setScrollPosition} = createHomepageSlice.actions
+export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState, setScrollPosition, serProgressLoaderStatus } = createHomepageSlice.actions
 
 export default createHomepageSlice.reducer

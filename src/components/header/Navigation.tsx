@@ -4,7 +4,7 @@ import classNames from "classnames"
 
 // Components
 import { HoverTooltip } from "../common/CustomTooltip"
-import { ConstantApiLoader } from "./Loader"
+import { ConstantApiLoader, PageLoader } from "./Loader"
 const ChartMenu = lazy(() => import('./ChartMenu'))
 const CartMenu = lazy(() => import('./CartMenu'))
 import ActionMenu from "./ActionMenu"
@@ -15,6 +15,7 @@ import Badge from '@mui/material/Badge';
 // Utils
 import { subMenuItems } from "../../utils/data"
 import { Link, navigate } from "gatsby"
+import { ProductUpdateCountdown } from "../common/Utils"
 
 
 export interface Icategory {
@@ -30,7 +31,7 @@ export interface Icategory {
   categoryImages: any[]
 }
 function Navigation() {
-  const { configDetails: configDetailsState, categoriesList } = useAppSelector((state) => state.homePage)
+  const { configDetails: configDetailsState, categoriesList,needToShowProgressLoader } = useAppSelector((state) => state.homePage)
   const [currententlySelected, setCurrententlySelected] = useState('')
   useEffect(() => {
     setCurrententlySelected(window?.location?.pathname?.toLocaleLowerCase()?.replace(/[\s/]/g, ''))
@@ -84,6 +85,7 @@ function Navigation() {
             }
           </Stack>
           <Stack className="RightPart">
+            {needToShowProgressLoader && <ProductUpdateCountdown needToShowText={false}/>}
             {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
             {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
               <Badge badgeContent={1} color="primary" max={99}>
