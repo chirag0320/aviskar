@@ -10,9 +10,9 @@ import SortBy from "@/components/partials/category/filters/SortBy"
 import { getCategoryData, setPriceForEachItem } from "@/redux/reducers/categoryReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import { useAppDispatch, useAppSelector } from "@/hooks"
-import useDebounce from "@/hooks/useDebounce"
 import { categoryRequestBody } from "@/types/categoryRequestBody"
 import useApiRequest from "@/hooks/useAPIRequest"
+import useAPIoneTime from "@/hooks/useAPIoneTime"
 
 export const pageSize = 12;
 export const requestBodyDefault: categoryRequestBody = {
@@ -22,8 +22,8 @@ export const requestBodyDefault: categoryRequestBody = {
     sortBy: "",
     sortOrder: "",
     filters: {
-        minPrice: 0,
-        maxPrice: 100,
+        // minPrice: 0,
+        // maxPrice: 100,
         specification: {}
     }
 }
@@ -33,45 +33,22 @@ function Category({ location }: { location: any }) {
     const [page, setPage] = useState(searchParams.has("page") ? parseInt(searchParams.get("page")!) : 1);
     const dispatch = useAppDispatch();
 
-    const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
-    const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
-
     const [productIds, setProductIds] = useState({})
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
     const categoryData = useAppSelector(state => state.category);
 
-    const debounceFilter = useDebounce(selectedFilters, 700);
-    const debouncePrice = useDebounce(selectedPrice, 700);
+    useAPIoneTime({
+        service: getCategoryData,
+        endPoint: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
+        body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, pageNo: page - 1, filters: { specification: {} } } : { ...requestBodyDefault, pageNo: page - 1, filters: { specification: {} } }
+    })
 
     useEffect(() => {
-        const commonArgument = {
-            pageNo: page-1, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters }
-        };
-
-        const argumentForService = {
-            url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
-            body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, ...commonArgument } : { ...requestBodyDefault, ...commonArgument }
+        if (categoryData?.items?.length > 0) {
+            const productIds = categoryData?.items?.map((product: any) => product?.productId);
+            setProductIds({ productIds })
         }
-
-        if (Object.keys(selectedFilters).length || (selectedPrice)) {
-            dispatch(getCategoryData(
-                argumentForService) as any)
-        }
-    }, [debounceFilter, debouncePrice]);
-
-    useEffect(() => {
-        setSelectedFilters((prev) => ({}));
-        setSelectedPrice(() => null);
-
-        const argumentForService = {
-            url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
-            body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, pageNo: page-1, filters: { specification: {} } } : { ...requestBodyDefault, pageNo: page-1, filters: { specification: {} } }
-        }
-
-        dispatch(getCategoryData(
-            argumentForService) as any)
-    }, [page, location.pathname])
-
+    }, [categoryData])
 
     useEffect(() => {
         if (priceData?.data?.length > 0) {
@@ -82,21 +59,7 @@ function Category({ location }: { location: any }) {
         }
     }, [priceData])
 
-    useEffect(() => {
-        if (categoryData?.items?.length > 0) {
-            // console.log("🚀 ~ useEffect ~ categoryData:", categoryData)
-            const productIds = categoryData?.items?.map((product: any) => product?.productId);
-            setProductIds({ productIds })
-        }
-    }, [categoryData.specifications])
-
     const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
-
-    const categoryFilters = (
-        <CategoryFilters selectedFilters={selectedFilters} setSelectedPrice={setSelectedPrice} setSelectedFilters={setSelectedFilters} page={page} />
-    );
-
-    // console.log("🚀 ~ Category ~ selectedFilters:", selectedFilters)
 
     return (
         <Layout>
@@ -109,11 +72,11 @@ function Category({ location }: { location: any }) {
                 {isSmallScreen ? (
                     <Stack className="CategoryHeader">
                         <SortBy page={page} />
-                        {categoryFilters}
+                        <CategoryFilters page={page} searchParams={searchParams} />
                     </Stack>
                 ) : null}
                 <Stack className="MainContent">
-                    {!isSmallScreen ? categoryFilters : null}
+                    {!isSmallScreen ? <CategoryFilters page={page} searchParams={searchParams} /> : null}
                     <ProductList page={page} setPage={setPage} />
                 </Stack>
             </Container>

@@ -5,8 +5,8 @@ export interface categoryRequestBody {
     sortBy : string,
     sortOrder : string,
     filters : {
-        minPrice : number,
-        maxPrice : number,
+        // minPrice : number,
+        // maxPrice : number,
         specification : {
             [key: string]: string[]
         }
