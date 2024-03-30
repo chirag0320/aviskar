@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import useDebounce from "@/hooks/useDebounce"
 import { categoryRequestBody } from "@/types/categoryRequestBody"
 import useApiRequest from "@/hooks/useAPIRequest"
+import { serProgressLoaderStatus } from "@/redux/reducers/homepageReducer"
 
 export const pageSize = 12;
 export const requestBodyDefault: categoryRequestBody = {
@@ -42,6 +43,12 @@ function Category({ location }: { location: any }) {
 
     const debounceFilter = useDebounce(selectedFilters, 700);
     const debouncePrice = useDebounce(selectedPrice, 700);
+    useEffect(() => {
+        dispatch(serProgressLoaderStatus(true))
+        return () => {
+            dispatch(serProgressLoaderStatus(false))
+        }
+    }, [])
 
     useEffect(() => {
         const commonArgument = {

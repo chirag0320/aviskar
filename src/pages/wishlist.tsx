@@ -53,7 +53,7 @@ function Wishlist() {
       <PageTitle title="Wishlist" />
       <Container id="Pagewishlist" maxWidth="lg">
         <WishListDetails toggleEmailFriend={toggleEmailFriend} />
-        <Box className="WishlistLink">
+        {/* <Box className="WishlistLink">
           <Typography>Your wishlist URL for sharing</Typography>
           <Stack className="Wrapper">
             <Button>{WISHLIST_URL}</Button>
@@ -66,7 +66,7 @@ function Wishlist() {
                 <CorrectIcon />
               </IconButton>}
           </Stack>
-        </Box>
+        </Box> */}
         <EmailFriend open={openEmailFriend} onClose={toggleEmailFriend} />
       </Container>
     </Layout>

@@ -71,7 +71,6 @@ let timeoutId: number | any = null;
 
 function FeaturedProducts() {
   const { configDetails } = useAppSelector((state) => state.homePage)
-  console.log("🚀 ~ FeaturedProducts ~ configDetails:", configDetails)
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
   const [dataforbody] = useState({
     "search": "",
