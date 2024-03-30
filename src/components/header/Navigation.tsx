@@ -36,15 +36,15 @@ export interface Icategory {
 }
 function Navigation() {
   const dispatch = useAppDispatch()
-  const { configDetails: configDetailsState, categoriesList,needToShowProgressLoader } = useAppSelector((state) => state.homePage)
+  const { configDetails: configDetailsState, categoriesList, needToShowProgressLoader } = useAppSelector((state) => state.homePage)
   const { cartItems } = useAppSelector((state) => state.shoppingCart)
   const [currententlySelected, setCurrententlySelected] = useState('')
   useEffect(() => {
     setCurrententlySelected(window?.location?.pathname?.toLocaleLowerCase()?.replace(/[\s/]/g, ''))
   }, [window?.location?.pathname])
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
-  },[])
+  }, [])
   return (
     <Box className="NavigationHeader">
       <Container>
@@ -94,14 +94,14 @@ function Navigation() {
             }
           </Stack>
           <Stack className="RightPart">
-            {needToShowProgressLoader && <ProductUpdateCountdown needToShowText={false}/>}
+            {needToShowProgressLoader && <ProductUpdateCountdown needToShowText={false} />}
             {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
             {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
-              <Badge badgeContent={cartItems?.length?.toString()} color="primary" max={99}>
-                <Link area-label="shopping-cart-link" to="/shopping-cart">
+              <Link area-label="shopping-cart-link" to="/shopping-cart">
+                <Badge badgeContent={cartItems?.length?.toString()} color="primary" max={99}>
                   <CartMenu />
-                </Link>
-              </Badge>
+                </Badge>
+              </Link>
             </Suspense> : null}
             <ActionMenu />
           </Stack>
