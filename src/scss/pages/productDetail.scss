@@ -147,7 +147,7 @@
             }
           }
 
-          .fix-wrapper {
+          .FixWrapper {
             @include media($md) {
               position: fixed;
               bottom: 0;
@@ -163,6 +163,84 @@
                 padding: 0 24px;
               }
             }
+
+            .PricingDetails {
+              display: none;
+
+              @include media($md) {
+                display: block;
+                padding: 6px 0;
+
+                .Top {
+                  display: flex;
+                  margin-bottom: 0;
+                }
+
+                .Bottom {
+                  display: none;
+                }
+
+              }
+            }
+
+            .Mobileflex {
+              @include media($md) {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+
+                @include media($sm) {
+                  gap: 30px;
+                }
+
+
+                .OrderDetails,
+                .OrderActions {
+                  padding: 6px 0;
+                }
+
+                .OrderDetails {
+                  text-align: left;
+
+                  @include media($sm) {
+                    width: 60%;
+                  }
+
+                  @include media($xs) {
+                    width: 40%;
+                  }
+
+                }
+
+                .OrderActions {
+                  flex-direction: column;
+
+                  @include media($sm) {
+                    width: 40%;
+                  }
+
+                  @include media($xs) {
+                    width: 60%;
+                  }
+
+                  .QuantityWrapper {
+                    justify-content: center;
+                  }
+
+                  .Right {
+                    @include media($ssm) {
+                      flex-direction: column;
+                    }
+                  }
+                }
+
+                .MuiDivider-root {
+                  display: none;
+                }
+
+              }
+            }
+
           }
 
           .PricingDetails {
@@ -174,6 +252,10 @@
               flex-wrap: wrap;
               gap: 8px;
               margin-bottom: 10px;
+
+              @include media($md) {
+                display: none;
+              }
 
               .Left {
                 align-items: center;

@@ -17,8 +17,7 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
 
     return (
         <Box className="CategoryFilters">
-            <Box sx={{ padding: '16px 14px 0' }}>
-                {/* <Button variant="contained">Clear Filter</Button> */}
+            <Box sx={{ padding: '16px 14px 0', textAlign: 'center' }}>
                 <Button variant="outlined">Clear Filter</Button>
             </Box>
             <Box className="CategoriesWrapper">
