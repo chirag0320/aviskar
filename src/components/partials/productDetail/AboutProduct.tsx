@@ -22,7 +22,7 @@ import { qmintRating } from "@/utils/data"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { ENDPOINTS } from "@/utils/constants"
-import { roundOfThePrice, valueChangeForPrice } from "@/utils/common"
+import { bodyForGetShoppingCartData, roundOfThePrice, valueChangeForPrice } from "@/utils/common"
 import useCallAPI from "@/hooks/useCallAPI"
 import { navigate } from "gatsby"
 import { addProductToCompare } from "@/redux/reducers/compareProductsReducer"
@@ -33,6 +33,7 @@ import { resetProductDetails } from "@/redux/reducers/categoryReducer"
 
 import noImage from '../../../assets/images/noImage.png'
 import useShowToaster from "@/hooks/useShowToaster"
+import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
 
 function createData(
   quantity: string,
@@ -85,7 +86,7 @@ function AboutProduct({ productId }: any) {
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
   const [tabValue, setTabValue] = useState<number>(0)
   const [priceHistoryDuration, setPriceHistoryDuration] = useState<string>('hour')
-  const {showToaster} = useShowToaster();
+  const { showToaster } = useShowToaster();
 
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
   const { data: progressData } = useApiRequest(urlForThePriceRange, 'get');
@@ -181,6 +182,7 @@ function AboutProduct({ productId }: any) {
       "quantity": quantityCount,
       "IsInstantBuy": isInstantBuy
     } as any)
+    dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
   }
   const handleBuyNow = async () => {
     if (!isLoggedIn) {

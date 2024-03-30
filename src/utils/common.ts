@@ -56,3 +56,11 @@ export const storeLastPage = (pageUrl:string) => {
 export const getLastPage = () => {
   return sessionStorage.getItem('lastPage');
 };
+export const bodyForGetShoppingCartData={
+  "search": "",
+  "pageNo": 0,
+  "pageSize": -1,
+  "sortBy": "",
+  "sortOrder": "",
+  "filters": {}
+}

@@ -8,7 +8,7 @@ import { navigate } from "gatsby"
 
 function Toaster() {
   const dispatch = useAppDispatch()
-  const { openToaster, toasterMessage, buttonText, redirectButtonUrl,severity } = useAppSelector((state) => state.homePage)
+  const { openToaster, toasterMessage, buttonText, redirectButtonUrl, severity } = useAppSelector((state) => state.homePage)
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") {
@@ -21,20 +21,19 @@ function Toaster() {
       redirectButtonUrl: ''
     }))
   }
+
   useEffect(() => {
-    let x:any;
-    if (openToaster) {
-      x =setTimeout(() => {
-        dispatch(setToasterState({
-          openToaster: false,
-          toasterMessage: '',
-          buttonText: '',
-          redirectButtonUrl: ''
-        }))
-      }, 6000);
-    }
+    let x: any;
+    x = setTimeout(() => {
+      dispatch(setToasterState({
+        openToaster: false,
+        toasterMessage: '',
+        buttonText: '',
+        redirectButtonUrl: ''
+      }))
+    }, 6000);
     return () => {
-      clearTimeout(x)
+      x && clearTimeout(x)
       // todo check what can we do here to improve
       dispatch(setToasterState({
         openToaster: false,
@@ -44,6 +43,7 @@ function Toaster() {
       }))
     }
   }, [openToaster, toasterMessage, buttonText, redirectButtonUrl])
+
   return (
     <>
       <Snackbar

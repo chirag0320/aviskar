@@ -32,6 +32,7 @@ export interface Icategory {
 }
 function Navigation() {
   const { configDetails: configDetailsState, categoriesList,needToShowProgressLoader } = useAppSelector((state) => state.homePage)
+  const { cartItems } = useAppSelector((state) => state.shoppingCart)
   const [currententlySelected, setCurrententlySelected] = useState('')
   useEffect(() => {
     setCurrententlySelected(window?.location?.pathname?.toLocaleLowerCase()?.replace(/[\s/]/g, ''))
@@ -88,7 +89,7 @@ function Navigation() {
             {needToShowProgressLoader && <ProductUpdateCountdown needToShowText={false}/>}
             {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
             {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
-              <Badge badgeContent={1} color="primary" max={99}>
+              <Badge badgeContent={cartItems?.length?.toString()} color="primary" max={99}>
                 <Link area-label="shopping-cart-link" to="/shopping-cart">
                   <CartMenu />
                 </Link>
