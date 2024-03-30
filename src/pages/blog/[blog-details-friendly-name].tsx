@@ -80,8 +80,9 @@ function BlogDetails(params: any) {
               <Box>
                 <Typography variant="body1">Written by</Typography>
                 <Typography
-                  variant="body1"
-                  sx={{ fontWeight: "700", lineHeight: "28px", mt: 1.25 }}
+                  className="Value"
+                  variant="titleLarge"
+                  component="p"
                 >
                   {blogDetailsData?.createdBy}
                 </Typography>
@@ -89,8 +90,9 @@ function BlogDetails(params: any) {
               <Box>
                 <Typography variant="body1">Published on</Typography>
                 <Typography
-                  variant="body1"
-                  sx={{ fontWeight: "700", lineHeight: "28px", mt: 1.25 }}
+                  className="Value"
+                  variant="titleLarge"
+                  component="p"
                 >
                   {formatDate(blogDetailsData?.createdOnUtc)}
                 </Typography>
@@ -203,15 +205,6 @@ function BlogDetails(params: any) {
                         </Grid>
                       );
                     })}
-                    {/* <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid> */}
                   </Grid>
                 </Box>
               </Box>

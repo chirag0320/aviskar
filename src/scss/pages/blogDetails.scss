@@ -11,6 +11,11 @@
     }
     .PostUploadInfo {
       margin-top: 18px;
+      .Value {
+        @include media-min($lg) {
+          margin-top: 8px;
+        }
+      }
     }
     .BlogTitle {
       margin-top: 48px;

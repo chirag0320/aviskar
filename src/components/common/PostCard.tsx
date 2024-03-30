@@ -34,16 +34,23 @@ function PostCard({ details, navigate, isNews = false }: any) {
             </Box>
             <Typography variant="body1">{formatDate(isNews ? details?.createdOnUtc : details?.createdOnUtc)}</Typography>
           </Stack>
-          <Typography variant="subtitle2" sx={{ mt: 1.875 }}>
-            {details?.title}
-            {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et. */}
-          </Typography>
+          <Button
+            color="secondary"
+            variant="text"
+            onClick={() => {
+              if (navigate) {
+                navigate()
+              }
+            }}
+            sx={{ mt: 1.875 }}
+            className="PostTitle"
+          >
+            <Typography variant="subtitle2">
+              {details?.title}
+            </Typography>
+          </Button>
           <Typography variant="body1" sx={{ mt: 1.25 }}>
             {isNews ? details?.shortDescription : details?.bodyOverview}
-            {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamc. */}
           </Typography>
         </CardContent>
         <CardActions sx={{ mt: 1.25, p: 0 }}>

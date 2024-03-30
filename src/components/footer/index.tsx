@@ -72,7 +72,7 @@ function index() {
             ))}
           </Stack>
           <Stack className="NewsletterPart">
-            {/* <Typography className="MenuTitle" variant="subtitle2" component="p">Newsletter</Typography> */}
+            <Typography className="MenuTitle" variant="subtitle2" component="p">Social Media</Typography>
             {/* <Box className="Content">
               <Typography className="InfoMessage" variant="overline">Stay up to date with our latest news.</Typography>
               <Stack className="FieldWrapper">

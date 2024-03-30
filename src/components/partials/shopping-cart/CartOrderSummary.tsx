@@ -61,9 +61,9 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
                     <Typography variant="subtitle1">Delivery </Typography>
                     <Typography variant="body1" className='DeliveryValue'>Calculated during checkout </Typography>
                 </Stack>
-                <Box className="AddCouponWrapper">
+                {/* <Box className="AddCouponWrapper">
                     <Button className='RightArrow' endIcon={<RightArrow />}> Add coupon or gift card</Button>
-                </Box>
+                </Box> */}
                 <Stack className='TotalWrapper'>
                     <Typography variant="subtitle1">Total </Typography>
                     <Typography variant="subtitle1">Calculated during checkout </Typography>

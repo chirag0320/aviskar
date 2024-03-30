@@ -12,6 +12,7 @@ import { ENDPOINTS } from "@/utils/constants"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import { categoryRequestBody } from "@/types/categoryRequestBody"
 import useApiRequest from "@/hooks/useAPIRequest"
+import { serProgressLoaderStatus } from "@/redux/reducers/homepageReducer"
 
 export const pageSize = 12;
 export const requestBodyDefault: categoryRequestBody = {
@@ -46,7 +47,14 @@ function Category({ location }: { location: any }) {
             }) as any)
         }
         callApi();
-    }, [searchParams,location.pathname])
+    }, [searchParams, location.pathname])
+
+    useEffect(() => {
+        dispatch(serProgressLoaderStatus(true))
+        return () => {
+            dispatch(serProgressLoaderStatus(false))
+        }
+    }, [])
 
     useEffect(() => {
         if (categoryData?.items?.length > 0) {
