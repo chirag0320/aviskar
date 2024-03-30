@@ -26,7 +26,8 @@ const initialState: categoryData = {
   manufactureres: isBrowser && JSON.parse(localStorageGetItem("manufactureres") ?? JSON.stringify([])),
   productDetailsData: {},
   sortBy: null,
-  sortedItems: []
+  sortedItems: [],
+  clearFilters: false
 }
 
 export const getCategoryData = appCreateAsyncThunk(
@@ -64,6 +65,11 @@ export const categoryPageSlice = createSlice({
           item.priceWithDetails = priceForEachId[item.productId]
         }
       })
+      state.sortedItems.forEach((item: any) => {
+        if (priceForEachId[item.productId]) {
+          item.priceWithDetails = priceForEachId[item.productId]
+        }
+      })
     },
     resetProductDetails: (state) => {
       state.productDetailsData = {}
@@ -71,6 +77,9 @@ export const categoryPageSlice = createSlice({
     },
     setSortBy: (state, action) => {
       state.sortBy = action.payload
+    },
+    setClearFilters: (state, action) => {
+      state.clearFilters = action.payload
     }
   },
 
@@ -120,10 +129,9 @@ export const categoryPageSlice = createSlice({
     builder.addCase(getProductDetailsData.rejected, (state) => {
       state.loading = false;
     })
-
   },
 })
 
-export const { setLoadingTrue, setLoadingFalse, setSortedItems, setPriceForEachItem, resetProductDetails,setSortBy } = categoryPageSlice.actions;
+export const { setLoadingTrue, setLoadingFalse, setSortedItems, setPriceForEachItem, resetProductDetails, setSortBy, setClearFilters } = categoryPageSlice.actions;
 
 export default categoryPageSlice.reducer
