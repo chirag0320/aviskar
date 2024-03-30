@@ -20,7 +20,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
     pageQuery.set('page', value.toString());
     navigate(`?${pageQuery.toString()}`, { replace: true });
   }
-
+  
   return (
     <Box className="ProductList">
       {openToaster && <Toaster />}

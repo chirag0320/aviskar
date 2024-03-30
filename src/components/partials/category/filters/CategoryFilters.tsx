@@ -31,7 +31,7 @@ function CategoryFilters({ page, searchParams }: { page: number, searchParams: U
         body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, ...commonArgument } : { ...requestBodyDefault, ...commonArgument }
       }
 
-      if (Object.keys(selectedFilters).length || (selectedPrice)) {
+      if (selectedFilters && Object.keys(selectedFilters)?.length || (selectedPrice)) {
         await dispatch(getCategoryData(
           argumentForService) as any)
       }

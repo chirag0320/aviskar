@@ -13,14 +13,18 @@ interface props {
 }
 
 const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice, selectedFilters, page }: props) => {
-    console.log("🚀 ~ LargerScreenFilters ~ selectedFilters:", selectedFilters)
     const categoryData = useAppSelector(state => state.category)
+    console.log("🚀 ~ LargerScreenFilters ~ categoryData:", categoryData)
+
+    const clearFiltersHandler = () => {
+        setSelectedFilters(() => {});
+        setSelectedPrice(() => null);
+    }
 
     return (
         <Box className="CategoryFilters">
             <Box sx={{ padding: '16px 14px 0' }}>
-                {/* <Button variant="contained">Clear Filter</Button> */}
-                <Button variant="outlined">Clear Filter</Button>
+                <Button variant="outlined" onClick={clearFiltersHandler}>Clear Filters</Button>
             </Box>
             <Box className="CategoriesWrapper">
                 <Accordion defaultExpanded>
@@ -54,7 +58,7 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
                 </Accordion>
             </Box>}
             <Box className="FilterByWrapper">
-                {categoryData.items.length > 0 && <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} page={page} />}
+                {categoryData.price && <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} page={page} />}
                 {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
                     <Accordion key={filter} className="Divider">
                         <AccordionSummary
