@@ -36,7 +36,7 @@ import {
 import { Breadcrumb } from "@/components/common/Utils";
 
 // Assets
-import { ArrowRight } from "../assets/icons/index";
+import { ArrowRight } from "../../assets/icons/index";
 import { Console } from "console";
 
 interface VaultProps {
