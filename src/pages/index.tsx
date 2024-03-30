@@ -18,7 +18,7 @@ import Toaster from "@/components/common/Toaster";
 
 function IndexPage() {
   const dispatch = useAppDispatch()
-  const { configDetails: configDetailsState, openToaster,scrollPosition } = useAppSelector((state) => state.homePage)
+  const { configDetails: configDetailsState, openToaster, scrollPosition } = useAppSelector((state) => state.homePage)
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
 
   const [body] = useState({
@@ -71,7 +71,7 @@ function IndexPage() {
           title="Home"
           lang="en"
         />
-        {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>}
+        {/* {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>} */}
         {configDetailsState?.sliderenableinhome?.value === false ? null : <Banner />}
         <Suspense fallback={<></>}> <FeaturedProducts /></Suspense>
         <Suspense fallback={<></>}> <LookingFor /></Suspense>
