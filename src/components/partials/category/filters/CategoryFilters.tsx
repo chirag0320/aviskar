@@ -22,8 +22,6 @@ function CategoryFilters({ page, searchParams }: { page: number, searchParams: U
 
   useEffect(() => {
     const fetchData = async () => {
-
-
       const commonArgument = {
         pageNo: page - 1, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters }
       };
@@ -39,7 +37,7 @@ function CategoryFilters({ page, searchParams }: { page: number, searchParams: U
       }
     }
     fetchData();
-  }, [debounceFilter, debouncePrice]);
+  }, [searchParams, debounceFilter, debouncePrice]);
 
   const navigatePageHandler = (categoryId: number, searchEngineFriendlyPageName: string) => {
     navigate(`/${searchEngineFriendlyPageName}`, { state: { categoryId: categoryId } })

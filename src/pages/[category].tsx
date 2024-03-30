@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useMediaQuery, Theme, Container, Stack } from "@mui/material"
 
 // Components
@@ -12,7 +12,6 @@ import { ENDPOINTS } from "@/utils/constants"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import { categoryRequestBody } from "@/types/categoryRequestBody"
 import useApiRequest from "@/hooks/useAPIRequest"
-import useAPIoneTime from "@/hooks/useAPIoneTime"
 
 export const pageSize = 12;
 export const requestBodyDefault: categoryRequestBody = {
@@ -29,7 +28,7 @@ export const requestBodyDefault: categoryRequestBody = {
 }
 
 function Category({ location }: { location: any }) {
-    const searchParams = new URLSearchParams(location?.search);
+    const searchParams = useMemo(() => new URLSearchParams(location?.search), [location?.search]);
     const [page, setPage] = useState(searchParams.has("page") ? parseInt(searchParams.get("page")!) : 1);
     const dispatch = useAppDispatch();
 
@@ -37,18 +36,24 @@ function Category({ location }: { location: any }) {
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
     const categoryData = useAppSelector(state => state.category);
 
-    useAPIoneTime({
-        service: getCategoryData,
-        endPoint: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
-        body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, pageNo: page - 1, filters: { specification: {} } } : { ...requestBodyDefault, pageNo: page - 1, filters: { specification: {} } }
-    })
+    useEffect(() => {
+        const callApi = async () => {
+            await dispatch(getCategoryData({
+                url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
+                body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, pageNo: page - 1, filters: { specification: {} } } : {
+                    ...requestBodyDefault, pageNo: page - 1, filters: { specification: {} }
+                }
+            }) as any)
+        }
+        callApi();
+    }, [location.pathname])
 
     useEffect(() => {
         if (categoryData?.items?.length > 0) {
             const productIds = categoryData?.items?.map((product: any) => product?.productId);
             setProductIds({ productIds })
         }
-    }, [categoryData])
+    }, [categoryData.specifications])
 
     useEffect(() => {
         if (priceData?.data?.length > 0) {
