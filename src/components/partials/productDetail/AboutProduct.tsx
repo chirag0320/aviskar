@@ -85,7 +85,7 @@ function AboutProduct({ productId }: any) {
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
   const [tabValue, setTabValue] = useState<number>(0)
   const [priceHistoryDuration, setPriceHistoryDuration] = useState<string>('hour')
-  const {showToaster} = useShowToaster();
+  const { showToaster } = useShowToaster();
 
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
   const { data: progressData } = useApiRequest(urlForThePriceRange, 'get');
@@ -211,96 +211,98 @@ function AboutProduct({ productId }: any) {
                 </Typography>
               </Stack>
             </Box>
-            <Divider />
-            <Box className="PricingDetails">
-              {(isLoggedIn || configDetailsState?.productpriceenableforguests?.value) ? <><Stack className="Top">
-                <Stack className="Left">
-                  <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
-                  {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue" variant="overline">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
-                  <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
-                  {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
-                </Stack>
-                <Stack className="Right">
-                  <ProductUpdateCountdown />
-                  <Typography className="DiscountMessage" variant="overline">{configDetailsState?.productboxdiscounttext?.value}</Typography>
-                </Stack>
-              </Stack>
-                <Stack className="Bottom">
-                  <Stack className="SliderWrapper">
-                    <Stack className="PriceMinMax">
-                      <Typography>Low: <Typography variant="titleLarge">${roundOfThePrice(progressData?.data?.minPrice)}</Typography></Typography>
-                      <Typography>High: <Typography variant="titleLarge">${roundOfThePrice(progressData?.data?.maxPrice)}</Typography></Typography>
-                    </Stack>
-                    <Slider
-                      className="Slider"
-                      value={Number(priceData?.data?.[0]?.price)}
-                      min={Number(progressData?.data?.minPrice)}
-                      max={Number(progressData?.data?.maxPrice)}
-                      disabled
-                    />
+            <Box className="fix-wrapper">
+              <Divider />
+              <Box className="PricingDetails">
+                {(isLoggedIn || configDetailsState?.productpriceenableforguests?.value) ? <><Stack className="Top">
+                  <Stack className="Left">
+                    <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
+                    {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue" variant="overline">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
+                    <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
+                    {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
                   </Stack>
-                  <Select
-                    color="secondary"
-                    className="PriceHistorySelect"
-                    value={priceHistoryDuration}
-                    onChange={handlePriceHistoryDuration}
-                  >
-                    <MenuItem value="hour">24H</MenuItem>
-                    <MenuItem value="week">1W</MenuItem>
-                    <MenuItem value="month">1M</MenuItem>
-                    <MenuItem value="year">1Y</MenuItem>
-                  </Select>
-                </Stack></> : <Button size="large" variant="outlined" onClick={() => {
-                  navigate('/login')
-                }}>Activate Live Price</Button>}
-            </Box>
-            <Divider />
-            <Stack className="OrderDetails">
-              {isLoggedIn || configDetailsState?.availabilityenableforguests?.value ?
-                <><ProductStockStatus availability={productDetailsData?.availability} colorClass={productDetailsData?.colorClass} iconClass={productDetailsData?.iconClass} />
-                  <Typography className="ProductMessage" variant="overline">{productDetailsData?.condition}</Typography>
-                  <Typography className="ShipmentDetail" variant="overline">{productDetailsData?.description}</Typography></>
-                :
-                <Typography className="ProductMessage" variant="overline">{configDetailsState?.membershipunloacktext?.value}</Typography>
-              }
-            </Stack>
-            <Divider />
-            <Stack className="OrderActions">
-              {(isLoggedIn || configDetailsState?.buybuttonenableforguests?.value) ? (!productDetailsData?.disableBuyButton && <><Stack className="QuantityWrapper">
-                <IconButton id='minus' className="Minus" onClick={(e) => {
-                  e.stopPropagation()
-                  handleQuentityUpdate('minus')
-                }}><MinusIcon /></IconButton>
-                <RenderFields
-                  color="primary"
-                  register={register}
-                  error={errors.Quantity}
-                  name="Quantity"
-                  margin='none'
-                  fullWidth={false}
-                  value={quantityCount as any}
-                  disabled={true}
-                />
-                <IconButton id='plus' className="Plus" onClick={(e) => {
-                  e.stopPropagation()
-                  handleQuentityUpdate('plus')
-                }}><PlusIcon /></IconButton>
+                  <Stack className="Right">
+                    <ProductUpdateCountdown />
+                    <Typography className="DiscountMessage" variant="overline">{configDetailsState?.productboxdiscounttext?.value}</Typography>
+                  </Stack>
+                </Stack>
+                  <Stack className="Bottom">
+                    <Stack className="SliderWrapper">
+                      <Stack className="PriceMinMax">
+                        <Typography>Low: <Typography variant="titleLarge">${roundOfThePrice(progressData?.data?.minPrice)}</Typography></Typography>
+                        <Typography>High: <Typography variant="titleLarge">${roundOfThePrice(progressData?.data?.maxPrice)}</Typography></Typography>
+                      </Stack>
+                      <Slider
+                        className="Slider"
+                        value={Number(priceData?.data?.[0]?.price)}
+                        min={Number(progressData?.data?.minPrice)}
+                        max={Number(progressData?.data?.maxPrice)}
+                        disabled
+                      />
+                    </Stack>
+                    <Select
+                      color="secondary"
+                      className="PriceHistorySelect"
+                      value={priceHistoryDuration}
+                      onChange={handlePriceHistoryDuration}
+                    >
+                      <MenuItem value="hour">24H</MenuItem>
+                      <MenuItem value="week">1W</MenuItem>
+                      <MenuItem value="month">1M</MenuItem>
+                      <MenuItem value="year">1Y</MenuItem>
+                    </Select>
+                  </Stack></> : <Button size="large" variant="outlined" onClick={() => {
+                    navigate('/login')
+                  }}>Activate Live Price</Button>}
+              </Box>
+              <Divider />
+              <Stack className="OrderDetails">
+                {isLoggedIn || configDetailsState?.availabilityenableforguests?.value ?
+                  <><ProductStockStatus availability={productDetailsData?.availability} colorClass={productDetailsData?.colorClass} iconClass={productDetailsData?.iconClass} />
+                    <Typography className="ProductMessage" variant="overline">{productDetailsData?.condition}</Typography>
+                    <Typography className="ShipmentDetail" variant="overline">{productDetailsData?.description}</Typography></>
+                  :
+                  <Typography className="ProductMessage" variant="overline">{configDetailsState?.membershipunloacktext?.value}</Typography>
+                }
               </Stack>
-                <Stack className="Right">
-                  <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={async () => {
-                    await addToCartFunction(false)
-                    navigate('/shopping-cart')
-                  }} disabled={loadingForAddToCart}>Add to cart</Button>
-                  <Button size="large" variant="outlined" onClick={() => {
-                    handleBuyNow()
-                  }}>Buy now</Button>
-                </Stack></>)
-                :
-                <Button size="large" color="success" variant="contained" onClick={() => {
-                  navigate('/login')
-                }}>Register to Buy</Button>}
-            </Stack>
-            <Divider />
+              <Divider />
+              <Stack className="OrderActions">
+                {(isLoggedIn || configDetailsState?.buybuttonenableforguests?.value) ? (!productDetailsData?.disableBuyButton && <><Stack className="QuantityWrapper">
+                  <IconButton id='minus' className="Minus" onClick={(e) => {
+                    e.stopPropagation()
+                    handleQuentityUpdate('minus')
+                  }}><MinusIcon /></IconButton>
+                  <RenderFields
+                    color="primary"
+                    register={register}
+                    error={errors.Quantity}
+                    name="Quantity"
+                    margin='none'
+                    fullWidth={false}
+                    value={quantityCount as any}
+                    disabled={true}
+                  />
+                  <IconButton id='plus' className="Plus" onClick={(e) => {
+                    e.stopPropagation()
+                    handleQuentityUpdate('plus')
+                  }}><PlusIcon /></IconButton>
+                </Stack>
+                  <Stack className="Right">
+                    <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={async () => {
+                      await addToCartFunction(false)
+                      navigate('/shopping-cart')
+                    }} disabled={loadingForAddToCart}>Add to cart</Button>
+                    <Button size="large" variant="outlined" onClick={() => {
+                      handleBuyNow()
+                    }}>Buy now</Button>
+                  </Stack></>)
+                  :
+                  <Button size="large" color="success" variant="contained" onClick={() => {
+                    navigate('/login')
+                  }}>Register to Buy</Button>}
+              </Stack>
+              <Divider />
+            </Box>
             <Stack className="SocialConnects">
               <Button color="secondary" className="IconWithText" onClick={async () => {
                 addIntoWishList(productId)
