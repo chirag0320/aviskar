@@ -62,7 +62,7 @@ function BlogDetails(params: any) {
       <Box className="BlogDetailPage">
         <Breadcrumb arr={[{ navigate: '/blog', name: 'Blog' }, { navigate: "/blog/" + params?.params?.["blog-details-friendly-name"], name: params?.params?.["blog-details-friendly-name"] }]} />
         <Box className="PostDescription">
-          <Container>
+          <Container maxWidth="lg">
             <Button
               className="BackButton"
               variant="text"
@@ -73,15 +73,16 @@ function BlogDetails(params: any) {
             >
               All Posts
             </Button>
-            <Typography variant="h2" component="h2" sx={{ mt: 6 }}>
+            <Typography variant="h2" component="h2" className="BlogTitle">
               {blogDetailsData?.title}
             </Typography>
             <Stack className="PostUploadInfo" gap={6}>
               <Box>
                 <Typography variant="body1">Written by</Typography>
                 <Typography
-                  variant="body1"
-                  sx={{ fontWeight: "700", lineHeight: "28px", mt: 1.25 }}
+                  className="Value"
+                  variant="titleLarge"
+                  component="p"
                 >
                   {blogDetailsData?.createdBy}
                 </Typography>
@@ -89,21 +90,22 @@ function BlogDetails(params: any) {
               <Box>
                 <Typography variant="body1">Published on</Typography>
                 <Typography
-                  variant="body1"
-                  sx={{ fontWeight: "700", lineHeight: "28px", mt: 1.25 }}
+                  className="Value"
+                  variant="titleLarge"
+                  component="p"
                 >
                   {formatDate(blogDetailsData?.createdOnUtc)}
                 </Typography>
               </Box>
             </Stack>
             <Box className="ContentWrapper">
-              <Box className="PostThumbnail" sx={{ mt: 6 }}>
+              <Box className="PostThumbnail">
                 <img
                   src="https://picsum.photos/200"
                   alt="https://picsum.photos/200"
                 />
               </Box>
-              <Box className="PostContent" sx={{ mt: 7.5 }}>
+              <Box className="PostContent">
                 <Typography variant="subtitle1">
                   {blogDetailsData?.bodyOverview}
                 </Typography>
@@ -203,15 +205,6 @@ function BlogDetails(params: any) {
                         </Grid>
                       );
                     })}
-                    {/* <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid>
-                <Grid item md={4} sm={6}>
-                  <PostCard />
-                </Grid> */}
                   </Grid>
                 </Box>
               </Box>

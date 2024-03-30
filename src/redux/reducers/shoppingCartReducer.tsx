@@ -58,6 +58,19 @@ export const shoppingCart = createSlice({
         updateSubTotal: (state, action) => {
             state.subTotal += action.payload;
             state.subTotal = Math.round((state.subTotal + Number.EPSILON) * 100) / 100
+        },
+        setCartItemWarning: (state, action) => {
+            const warnings = action.payload;
+
+            state.cartItems.forEach((item: CartItem) => {
+                warnings.forEach((warning: any) => {
+                    if (item.productId === warning.productId) {
+                        item.warnings = warning.warnings;
+                    }
+                })
+            })
+
+            // localStorageSetItem('cartItems', state.cartItems)
         }
     },
 
@@ -68,7 +81,8 @@ export const shoppingCart = createSlice({
         })
         builder.addCase(getShoppingCartData.fulfilled, (state, action) => {
             state.cartItems = action.payload.data.data.items;
-            localStorageSetItem('cartItems',action.payload.data.data.items)
+            console.log("🚀 ~ builder.addCase ~ cartItems:", action.payload.data)
+            localStorageSetItem('cartItems', action.payload.data.data.items)
             state.loading = false;
         })
         builder.addCase(getShoppingCartData.rejected, (state, action) => {
@@ -99,6 +113,6 @@ export const shoppingCart = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotal, resetSubTotal ,clearShoppingCart} = shoppingCart.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotal, resetSubTotal, clearShoppingCart, setCartItemWarning } = shoppingCart.actions
 
 export default shoppingCart.reducer

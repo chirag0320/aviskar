@@ -7,7 +7,7 @@
   .FooterWrapper {
     display: flex;
     justify-content: space-between;
-    gap: 20px;
+    gap: 4vw;
     padding-bottom: 38px;
     @include media($md) {
       flex-direction: column;
@@ -16,14 +16,16 @@
     @include media-between($md, $llg) {
       flex-wrap: wrap;
       justify-content: center;
-      align-items: center;
-      gap: 30px 70px;
+      // align-items: center;
+      // gap: 30px 70px;
     }
     @include media-between($xl, $xxl) {
-      gap: 40px;
+      // gap: 40px;
+      gap: 80px;
     }
     @include media-min($xxl) {
-      gap: 133px;
+      // gap: 133px;
+      gap: 200px;
     }
     .LogoPart {
       flex-direction: column;
@@ -78,12 +80,15 @@
         align-items: initial;
         gap: 40px;
       }
+      @include media-between($md, $mmd) {
+        order: 1;
+      }
       @include media-between($md, $llg) {
         justify-content: center;
         gap: 8vw;
-        order: 1;
-        padding-top: 30px;
-        border-top: 1px solid rgba($white, 0.1);
+        // order: 1;
+        // padding-top: 30px;
+        // border-top: 1px solid rgba($white, 0.1);
       }
       @include media-between($llg, $xxl) {
         gap: 16px;
@@ -149,7 +154,7 @@
     }
     .NewsletterPart {
       flex-direction: column;
-      flex-grow: 1;
+      // flex-grow: 1;
       flex-shrink: 0;
       max-width: 322px;
       color: $white;
@@ -158,6 +163,9 @@
         max-width: initial;
         padding-top: 30px;
         border-top: 1px solid rgba($white, 0.1);
+      }
+      @include media-min($md) {
+        align-self: flex-start;
       }
       @include media-min($xl) {
         padding-right: 7px;
@@ -213,10 +221,10 @@
       .SocialWrapper {
         align-items: center;
         gap: 8px;
-        margin-top: 19px;
-        @include media($md) {
-          margin-top: 16px;
-        }
+        // margin-top: 19px;
+        // @include media($md) {
+        //   margin-top: 16px;
+        // }
         .MuiIconButton-root {
           color: $white;
           border-radius: 8px;

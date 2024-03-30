@@ -18,6 +18,8 @@ import { checkValidationOnConfirmOrder, disableOTP, getCraditCardCharges, getIns
 import { ENDPOINTS } from "@/utils/constants"
 import useDeviceDetails from "@/hooks/useDeviceDetails"
 import { navigate } from "gatsby"
+import { setCartItemWarning, updateShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
+import useShowToaster from "@/hooks/useShowToaster"
 
 export interface PlaceOrderBody {
   OrderCustomerID: number;
@@ -72,6 +74,7 @@ interface Body {
 
 function OrderSummary() {
   const dispatch = useAppDispatch()
+  const { showToaster } = useShowToaster();
   const { deviceInfo, locationInfo }: any = useDeviceDetails()
   // console.log("🚀 ~ OrderSummary ~ deviceInfo, locationInfo:", deviceInfo, locationInfo)
   const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading, orderId } = useAppSelector((state) => state.checkoutPage)
@@ -112,6 +115,7 @@ function OrderSummary() {
       </Stack>
     )
   }
+
 
   useEffect(() => {
     if (isOTPEnabled) {
@@ -155,16 +159,37 @@ function OrderSummary() {
   }, [isOTPEnabled])
 
   const onConfirmOrderHandler = async () => {
-    await dispatch(checkValidationOnConfirmOrder({
-      url: ENDPOINTS.checkValidationOnConfirmOrder, body: {
-        PaymentMethodEnum: paymentMethodEnum[finalDataForTheCheckout?.paymentType],
-        OrderTotal: Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax),
-        // static todo
-        IsRewardPointUsed: false,
-        UsedRewardPoints: 0,
-        UsedRewardPointAmount: 0.00
+    const itemsWithQuantity = finalDataForTheCheckout?.cartItemsWithLivePrice?.map((item: any) => {
+      return ({
+        id: item.id,
+        quantity: finalDataForTheCheckout?.quantitiesWithProductId[item.productId]
+      })
+    })
+
+    const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
+
+    if (hasFulfilled(response.type)) {
+      if (!response?.payload?.data?.data) {
+        // showToaster({ message: "Cart updated", severity: 'success' })
+        await dispatch(checkValidationOnConfirmOrder({
+          url: ENDPOINTS.checkValidationOnConfirmOrder, body: {
+            PaymentMethodEnum: paymentMethodEnum[finalDataForTheCheckout?.paymentType],
+            OrderTotal: Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax),
+            // static todo
+            IsRewardPointUsed: false,
+            UsedRewardPoints: 0,
+            UsedRewardPointAmount: 0.00
+          }
+        }))
       }
-    }))
+      else {
+        // dispatch(setCartItemWarning(response?.payload?.data?.data));
+        showToaster({ message: "Cannot Place order as Some items have warnings", severity: 'warning' })
+      }
+    }
+    else {
+      showToaster({ message: "Update cart failed", severity: 'error' })
+    }
   }
 
   return (

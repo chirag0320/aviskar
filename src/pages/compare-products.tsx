@@ -12,10 +12,14 @@ import { Link } from "gatsby";
 import { clearCompareList, compareProducts, getCompareProducts, removeProductFromCompare } from "@/redux/reducers/compareProductsReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import noImage from '../assets/images/noImage.png'
+import useShowToaster from "@/hooks/useShowToaster";
+import Toaster from "@/components/common/Toaster";
 
 function CompareProducts() {
+    const openToaster = useAppSelector(state => state.homePage.openToaster)
     const { productIds, comparedProducts, specificationKeys } = useAppSelector((state) => state.compareProducts);
     const dispatch = useAppDispatch();
+    const { showToaster } = useShowToaster()
 
     useEffect(() => {
         const fetchCompareProducts = async () => {
@@ -28,9 +32,11 @@ function CompareProducts() {
 
     const removeProduct = (id: any) => {
         dispatch(removeProductFromCompare(id))
+        showToaster({ message: "Product removed from compare list", severity: 'success' })
     }
     return (
         <Layout>
+            {openToaster && <Toaster />}
             <Seo
                 keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
                 title="Home"

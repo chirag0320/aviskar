@@ -101,9 +101,9 @@ function AddAddress(props: AddAddress) {
         if (hasFulfilled(response.type)) {
             onClose()
             reset()
-            showToaster({ message: "Address saved successfully" })
+            showToaster({ message: "Address saved successfully" , severity: "success"})
         } else {
-            showToaster({ message: "Failed to save address. Please check the input fields" })
+            showToaster({ message: "Failed to save address. Please check the input fields" , severity: "error"})
         }
     }
 

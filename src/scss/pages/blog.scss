@@ -2,6 +2,9 @@
 .BlogDetailPage {
   .HeroSection {
     margin-top: 50px;
+    @include media($sm) {
+      margin-top: 30px;
+    }
     .PostWrapper {
       display: flex;
       margin-top: 50px;
@@ -10,7 +13,6 @@
         flex-direction: column;
       }
       @include media($sm) {
-        gap: 15px;
         margin-top: 30px;
       }
       .LeftPostWrapper {
@@ -34,17 +36,14 @@
         flex-direction: column;
         gap: 30px;
         width: 50%;
-        flex: 1;
+        flex: 1;  
         @include media($lg) {
           width: 100%;
-        }
-        @include media($sm) {
-          gap: 15px;
         }
         .PostCard {
           display: flex;
           gap: 20px;
-          align-items: center;
+          // align-items: center;
           @include media($sm) {
             flex-direction: column;
             gap: 15px;
@@ -59,6 +58,10 @@
             }
           }
           .CardContentWrapper {
+            flex-grow: 1;
+            @include media-min($sm) {
+              @include padding-vertical(20);
+            }
             .MuiCardContent-root {
               padding-top: 0;
             }
@@ -69,6 +72,9 @@
   }
   .DiscoverPost {
     margin-top: 80px;
+    @include media($sm) {
+      margin-top: 50px;
+    }
     &__title {
       text-align: center;
     }
@@ -77,17 +83,38 @@
       justify-content: center;
       display: flex;
       gap: 20px;
+      @include media($md) {
+        margin-top: 30px;
+      }
+      @include media($sm) {
+        gap: 10px;
+        margin-top: 20px;
+      }
       .MuiFormControl-root {
         .MuiInputBase-root {
           .MuiInputBase-input {
             width: 534px;
+            @include media($sm) {
+              padding: 10px 12px;
+            }
+          }
+        }
+      }
+      .MuiButton-root {
+        @include media($sm) {
+          padding: 10px;
+        }
+        .MuiButton-startIcon {
+          margin-left: initial;
+          @include media($xxs) {
+            display: none;
           }
         }
       }
     }
     .PostFilter {
-      margin-top: 40px;
       .MuiTabs-root {
+        margin-top: 40px;
         .MuiTabs-flexContainer {
           justify-content: center;
           flex-wrap: wrap;
@@ -108,9 +135,18 @@
           padding-top: 30px;
         }
         .RecordNotFound {
-          @include padding-vertical(20, 30);
+          @include media($md) {
+            margin-top: 20px;
+          }
         }
       }
     }
+  }
+}
+
+.BlogPage {
+  padding-bottom: 60px;
+  @include media($sm) {
+    padding-bottom: 30px;
   }
 }

@@ -91,6 +91,37 @@ export const ProductCard: React.FC<Iproduct> = ({
   };
   const { showToaster } = useShowToaster();
 
+  const handleAddToCart = async () => {
+    const response = await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+      "productId": product.productId,
+      "quantity": 1,
+      "IsInstantBuy": false
+    } as any)
+    // console.log("🚀 ~ addTOCart response", response);
+    if (response.code === 200) {
+      if (response.data) {
+        showToaster({
+          message: 'The product has been added to your product cart',
+          buttonText: 'product cart',
+          redirectButtonUrl: 'shopping-cart',
+          severity: 'success'
+        })
+      } else {
+        showToaster({
+          message: response.message,
+          severity: 'warning'
+        })
+      }
+    }
+    else {
+      showToaster({
+        message: 'Adding to cart failed! Please Try again',
+        severity: 'error'
+      })
+    }
+
+  }
+
   return (
     <Card
       className={classNames("ProductCard", { Sticky: stickyProduct })}
@@ -286,34 +317,7 @@ export const ProductCard: React.FC<Iproduct> = ({
           </ClickTooltip>
         )}
 
-        <IconButton
-          className="Outlined AddToCart"
-          onClick={async () => {
-            const response = await apiCallFunction(
-              ENDPOINTS.addToCartProduct,
-              "POST",
-              {
-                productId: product.productId,
-                quantity: 1,
-                IsInstantBuy: false,
-              } as any
-            );
-            // console.log("🚀 ~ addTOCart response", response);
-            if (response.code === 200) {
-              showToaster({
-                message: "The product has been added to your product cart",
-                buttonText: "product cart",
-                redirectButtonUrl: "shopping-cart",
-              });
-            } else {
-              showToaster({
-                message: "Adding to cart failed! Please Try again",
-              });
-            }
-          }}
-        >
-          <AddToCartIcon />
-        </IconButton>
+        <IconButton className="Outlined AddToCart" onClick={handleAddToCart}><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
   );
@@ -506,54 +510,34 @@ export const CartCard = ({
   };
 
   return (
-    cartItem &&
-    Object.keys(cartItem)?.length > 0 && (
-      <Card className="CartCard">
-        <CardMedia
-          component="img"
-          image={cartItem?.imageUrl}
-          alt="Product image"
-        />
-        <CardContent>
-          <Stack className="TopWrapper">
-            <Box className="LeftWrapper">
-              <Typography className="Name" component="p" variant="titleLarge">
-                {cartItem.productName}
-              </Typography>
-              <Typography variant="body2">{cartItem?.shippingInfo}</Typography>
-            </Box>
-            <Box className="RightWrapper">
-              <Typography className="LivePrice" variant="body2">
-                Live Price
-              </Typography>
-              <Typography variant="body2">Qty.</Typography>
-              <Typography variant="subtitle1">
-                ${roundOfThePrice(cartItem?.LivePriceDetails?.price)}
-              </Typography>
-              <Stack className="Quantity">
-                <IconButton
-                  className="Minus"
-                  onClick={() => decreaseQuantity(cartItem.id)}
-                  disabled={quantity === 1}
-                >
-                  <MinusIcon />
-                </IconButton>
-                <TextField value={quantity} disabled />
-                <IconButton
-                  className="Plus"
-                  onClick={() => increaseQuantity(cartItem.id)}
-                >
-                  <PlusIcon />
-                </IconButton>
-              </Stack>
-              <IconButton
-                className="DeleteButton"
-                onClick={() => removeItem(cartItem.id)}
-              >
-                <Delete1Icon />
-              </IconButton>
-            </Box>
-          </Stack>
+    cartItem && Object.keys(cartItem)?.length > 0 &&
+    <Card className="CartCard">
+      <CardMedia
+        component="img"
+        image={cartItem?.imageUrl}
+        alt="Product image"
+      />
+      <CardContent>
+        <Stack className="TopWrapper">
+          <Box className="LeftWrapper">
+            <Typography className="Name" component="p" variant="titleLarge">{cartItem.productName}</Typography>
+            <Typography variant="body2">{cartItem?.shippingInfo}</Typography>
+            {cartItem?.warnings?.map((warning) => (
+              <Typography variant="body2" key={warning}>{warning}</Typography>
+            ))}
+          </Box>
+          <Box className="RightWrapper">
+            <Typography className="LivePrice" variant="body2">Live Price</Typography>
+            <Typography variant="body2">Qty.</Typography>
+            <Typography variant="subtitle1">${roundOfThePrice(cartItem?.LivePriceDetails?.price)}</Typography>
+            <Stack className="Quantity">
+              <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.id)} disabled={quantity === 1}><MinusIcon /></IconButton>
+              <TextField value={quantity} disabled />
+              <IconButton className="Plus" onClick={() => increaseQuantity(cartItem.id)}><PlusIcon /></IconButton>
+            </Stack>
+            <IconButton className="DeleteButton" onClick={() => removeItem(cartItem.id)}><Delete1Icon /></IconButton>
+          </Box>
+        </Stack>
           <Stack className="BottomWrapper">
             <Stack className="LeftSide">
               {!hideDeliveryMethod && (
