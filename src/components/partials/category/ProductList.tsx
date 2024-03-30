@@ -1,16 +1,21 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Box, Skeleton, Card, Pagination, Stack, Typography } from "@mui/material"
 
 // Components
 import { ProductCard } from "@/components/common/Card"
 // Hooks
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 import { pageSize } from "@/pages/[category]"
 import Toaster from "@/components/common/Toaster"
 import { navigate } from "gatsby"
+import { SortingOption } from "@/types/enums"
+import { setSortedItems } from "@/redux/reducers/categoryReducer"
+import { sortByMostPopular, sortByPriceHighToLow, sortByPriceLowToHigh } from "@/utils/itemsSorting"
 
 function ProductList({ page, setPage }: { page: number, setPage: any }) {
   const categoryData = useAppSelector((state) => state.category);
+  const sortByValue = useAppSelector((state) => state.category.sortBy);
+  const dispatch = useAppDispatch();
   const { openToaster } = useAppSelector(state => state.homePage)
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -20,12 +25,24 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
     pageQuery.set('page', value.toString());
     navigate(`?${pageQuery.toString()}`, { replace: true });
   }
-  
+
+  useEffect(() => {
+    if (!sortByValue) return;
+    if (sortByValue === SortingOption.Popular) {
+      dispatch(setSortedItems(sortByMostPopular(categoryData.items)));
+    }
+    else if (sortByValue === SortingOption.PriceHighToLow) {
+      dispatch(setSortedItems(sortByPriceHighToLow(categoryData.items)));
+    }
+    else if (sortByValue === SortingOption.PriceLowToHigh) {
+      dispatch(setSortedItems(sortByPriceLowToHigh(categoryData.items)));
+    }
+  }, [sortByValue, page]);
+
   return (
     <Box className="ProductList">
       {openToaster && <Toaster />}
       <Box className="ProductListWrapper">
-
         {
           !categoryData.loading ? (
             categoryData?.items?.length > 0 ? categoryData.items.map((product: any) => {

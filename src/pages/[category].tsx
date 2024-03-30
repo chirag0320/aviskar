@@ -46,7 +46,7 @@ function Category({ location }: { location: any }) {
             }) as any)
         }
         callApi();
-    }, [location.pathname])
+    }, [searchParams,location.pathname])
 
     useEffect(() => {
         if (categoryData?.items?.length > 0) {
@@ -76,7 +76,7 @@ function Category({ location }: { location: any }) {
             <Container id="PageCategory">
                 {isSmallScreen ? (
                     <Stack className="CategoryHeader">
-                        <SortBy page={page} />
+                        <SortBy />
                         <CategoryFilters page={page} searchParams={searchParams} />
                     </Stack>
                 ) : null}

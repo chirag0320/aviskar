@@ -14,11 +14,10 @@ interface props {
 
 const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice, selectedFilters, page }: props) => {
     const categoryData = useAppSelector(state => state.category)
-    console.log("🚀 ~ LargerScreenFilters ~ categoryData:", categoryData)
 
     const clearFiltersHandler = () => {
-        setSelectedFilters(() => {});
-        setSelectedPrice(() => null);
+        // setSelectedFilters(() => {});
+        // setSelectedPrice(() => null);
     }
 
     return (
@@ -53,7 +52,7 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
                         Sort By
                     </AccordionSummary>
                     <AccordionDetails>
-                        <SortBy page={page} />
+                        <SortBy/>
                     </AccordionDetails>
                 </Accordion>
             </Box>}

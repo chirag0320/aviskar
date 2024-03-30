@@ -9,5 +9,6 @@ export interface categoryData {
     },
     specifications: {},
     manufactureres: [],
-    productDetailsData: any
+    productDetailsData: any,
+    sortBy: SortingOption | null
 }
