@@ -27,7 +27,9 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
   }
 
   useEffect(() => {
+    console.log("categoryData", 1)
     if (!sortByValue) return;
+    if (!categoryData.items) return;
     if (sortByValue === SortingOption.Popular) {
       dispatch(setSortedItems(sortByMostPopular(categoryData.items)));
     }
@@ -37,7 +39,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
     else if (sortByValue === SortingOption.PriceLowToHigh) {
       dispatch(setSortedItems(sortByPriceLowToHigh(categoryData.items)));
     }
-  }, [sortByValue, page]);
+  }, [categoryData?.items, sortByValue, page]);
 
   return (
     <Box className="ProductList">
@@ -45,7 +47,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
       <Box className="ProductListWrapper">
         {
           !categoryData.loading ? (
-            categoryData?.items?.length > 0 ? categoryData.items.map((product: any) => {
+            categoryData?.sortedItems?.length > 0 ? categoryData.sortedItems.map((product: any) => {
               return (
                 <ProductCard key={product.productId} product={product} stickyProduct={false} />
               );

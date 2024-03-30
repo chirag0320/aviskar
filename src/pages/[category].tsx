@@ -37,17 +37,17 @@ function Category({ location }: { location: any }) {
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
     const categoryData = useAppSelector(state => state.category);
 
-    useEffect(() => {
-        const callApi = async () => {
-            await dispatch(getCategoryData({
-                url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
-                body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, pageNo: page - 1, filters: { specification: {} } } : {
-                    ...requestBodyDefault, pageNo: page - 1, filters: { specification: {} }
-                }
-            }) as any)
-        }
-        callApi();
-    }, [searchParams, location.pathname])
+    // useEffect(() => {
+    //     const callApi = async () => {
+    //         await dispatch(getCategoryData({
+    //             url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
+    //             body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, pageNo: page - 1, filters: { specification: {} } } : {
+    //                 ...requestBodyDefault, pageNo: page - 1, filters: { specification: {} }
+    //             }
+    //         }) as any)
+    //     }
+    //     callApi();
+    // }, [location.pathname])
 
     useEffect(() => {
         dispatch(serProgressLoaderStatus(true))
@@ -85,11 +85,11 @@ function Category({ location }: { location: any }) {
                 {isSmallScreen ? (
                     <Stack className="CategoryHeader">
                         <SortBy />
-                        <CategoryFilters page={page} searchParams={searchParams} />
+                        <CategoryFilters setPage={setPage} page={page} searchParams={searchParams} />
                     </Stack>
                 ) : null}
                 <Stack className="MainContent">
-                    {!isSmallScreen ? <CategoryFilters page={page} searchParams={searchParams} /> : null}
+                    {!isSmallScreen ? <CategoryFilters page={page} setPage={setPage} searchParams={searchParams} /> : null}
                     <ProductList page={page} setPage={setPage} />
                 </Stack>
             </Container>

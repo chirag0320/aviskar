@@ -10,7 +10,7 @@ import { requestBodyDefault } from "@/pages/[category]"
 import { getCategoryData } from "@/redux/reducers/categoryReducer"
 import { useAppDispatch } from "@/hooks"
 
-function CategoryFilters({ page, searchParams }: { page: number, searchParams: URLSearchParams }) {
+function CategoryFilters({ page, searchParams,setPage }: { setPage:any,page: number, searchParams: URLSearchParams }) {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
 
   const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
@@ -19,25 +19,39 @@ function CategoryFilters({ page, searchParams }: { page: number, searchParams: U
 
   const debounceFilter = useDebounce(selectedFilters, 700);
   const debouncePrice = useDebounce(selectedPrice, 700);
+  const fetchData = async () => {
+    const commonArgument = {
+      pageNo: page - 1, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters }
+    };
+
+    const argumentForService = {
+      url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
+      body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, ...commonArgument } : { ...requestBodyDefault, ...commonArgument }
+    }
+
+    // if (selectedFilters && Object.keys(selectedFilters)?.length || (selectedPrice)) {
+      await dispatch(getCategoryData(
+        argumentForService) as any)
+    // }
+  }
+  useEffect(() => {
+    if(setPage){
+      setPage(()=>searchParams.has("page") ? parseInt(searchParams.get("page")!) : 1)
+    }
+  }, [searchParams]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const commonArgument = {
-        pageNo: page - 1, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters }
-      };
-
-      const argumentForService = {
-        url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
-        body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, ...commonArgument } : { ...requestBodyDefault, ...commonArgument }
-      }
-
-      if (selectedFilters && Object.keys(selectedFilters)?.length || (selectedPrice)) {
-        await dispatch(getCategoryData(
-          argumentForService) as any)
-      }
+    const pageQuery = new URLSearchParams(location.search);
+    pageQuery.set('page', "1");
+    navigate(`?${pageQuery.toString()}`, { replace: true });
+    if(page === 1){
+      fetchData();
     }
-    fetchData();
-  }, [searchParams, debounceFilter, debouncePrice]);
+  },[debounceFilter, debouncePrice])
+
+useEffect(()=>{
+  fetchData();
+},[page])
 
   const navigatePageHandler = (categoryId: number, searchEngineFriendlyPageName: string) => {
     navigate(`/${searchEngineFriendlyPageName}`, { state: { categoryId: categoryId } })
