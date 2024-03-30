@@ -572,7 +572,6 @@ export const CartCard = ({
           </Stack>
         </CardContent>
       </Card>
-    )
   );
 };
 
