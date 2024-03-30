@@ -477,7 +477,6 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
                 </Select>
               </Stack>
             )}
-
             <ProductUpdateCountdown />
           </Stack>
           {!hideRightSide && (

@@ -206,7 +206,7 @@ export const LinkWithIcon = React.memo(({ icon, href, text }: any) => {
   );
 });
 
-export const ProductUpdateCountdown = React.memo((props:{needToShowText:boolean | undefined}) => {
+export const ProductUpdateCountdown = React.memo((props:{needToShowText?:boolean | undefined}) => {
   const { remainingTime } = useRemainingTime()
   return (
     <Stack className="ProductUpdateCountdown">
