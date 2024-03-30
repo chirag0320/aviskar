@@ -9,13 +9,17 @@ const ChartMenu = lazy(() => import('./ChartMenu'))
 const CartMenu = lazy(() => import('./CartMenu'))
 import ActionMenu from "./ActionMenu"
 import MegaMenu from "./MegaMenu"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 import Badge from '@mui/material/Badge';
 
 // Utils
 import { subMenuItems } from "../../utils/data"
 import { Link, navigate } from "gatsby"
 import { ProductUpdateCountdown } from "../common/Utils"
+import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
+import { ENDPOINTS } from "@/utils/constants"
+import useAPIoneTime from "@/hooks/useAPIoneTime"
+import { bodyForGetShoppingCartData } from "@/utils/common"
 
 
 export interface Icategory {
@@ -31,12 +35,16 @@ export interface Icategory {
   categoryImages: any[]
 }
 function Navigation() {
+  const dispatch = useAppDispatch()
   const { configDetails: configDetailsState, categoriesList,needToShowProgressLoader } = useAppSelector((state) => state.homePage)
   const { cartItems } = useAppSelector((state) => state.shoppingCart)
   const [currententlySelected, setCurrententlySelected] = useState('')
   useEffect(() => {
     setCurrententlySelected(window?.location?.pathname?.toLocaleLowerCase()?.replace(/[\s/]/g, ''))
   }, [window?.location?.pathname])
+  useEffect(()=>{
+    dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
+  },[])
   return (
     <Box className="NavigationHeader">
       <Container>
