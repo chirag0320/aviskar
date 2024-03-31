@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector, useToggle } from '@/hooks'
 import TabPanel from '@/components/common/TabPanel'
 import PriceSlider from './PriceSlider'
 import RenderCheckboxField from './RenderCheckboxField'
+import { setClearFilters } from '@/redux/reducers/categoryReducer'
 
 interface props {
     renderList: (data: any) => any
@@ -24,6 +25,10 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue)
+    }
+
+    const clearFiltersHandler = () => {
+        dispatch(setClearFilters(true));
     }
 
     const applyFilterHandler = async () => {
@@ -51,7 +56,7 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
             >
                 <Stack className="DialogHeader">
                     <DialogTitle variant="subtitle2">FILTER BY</DialogTitle>
-                    <Button variant="text">Clear Filter</Button>
+                    <Button variant="text" onClick={clearFiltersHandler}>Clear Filter</Button>
                     <IconButton className="CloseButton" onClick={toggleFilterBy}><CrossIcon /></IconButton>
                 </Stack>
                 <DialogContent>

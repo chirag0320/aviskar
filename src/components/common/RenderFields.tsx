@@ -51,7 +51,8 @@ interface RenderFieldProps {
   children?: any
   labelPlacement?: FormControlLabelProps['labelPlacement'],
   setValue?: any,
-  required?: boolean
+  required?: boolean,
+  alreadySelectedFilters?: string[]
 }
 
 const RenderFields: React.FC<RenderFieldProps> = ({
@@ -88,6 +89,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   control,
   labelPlacement,
   required,
+  alreadySelectedFilters,
   ...otherProps
 }) => {
   const [passwordVisibility, togglePasswordVisibility] = useToggle(false)
@@ -205,7 +207,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                           onChange(); // Trigger onChange if provided
                         }
                       }}
-                      checked={!!getValues(name)?.[checkboxOption.value]}
+                      checked={!!getValues(name)?.[checkboxOption.value] || alreadySelectedFilters?.includes(checkboxOption.value)}
                     />
                   }
                   label={checkboxOption.label}
