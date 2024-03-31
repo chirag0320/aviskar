@@ -16,6 +16,7 @@ import { StateOrCountry, addOrEditAddress } from "@/redux/reducers/checkoutReduc
 import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
+import { AddressComponents } from "@/utils/parseAddressComponents"
 
 interface AddAddress {
     open: boolean
@@ -60,6 +61,7 @@ function AddAddress(props: AddAddress) {
     const [stateId, setStateId] = useState<number | null>(null);
     const { showToaster } = useShowToaster();
     const loading = useAppSelector(state => state.checkoutPage.loading);
+    const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents | null>(null);
 
     const {
         register,
@@ -67,6 +69,7 @@ function AddAddress(props: AddAddress) {
         handleSubmit,
         control,
         setValue,
+        getValues,
         formState: { errors },
     } = useForm<Inputs>({
         resolver: yupResolver(addressSchema)
@@ -101,9 +104,9 @@ function AddAddress(props: AddAddress) {
         if (hasFulfilled(response.type)) {
             onClose()
             reset()
-            showToaster({ message: "Address saved successfully" , severity: "success"})
+            showToaster({ message: "Address saved successfully", severity: "success" })
         } else {
-            showToaster({ message: "Failed to save address. Please check the input fields" , severity: "error"})
+            showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
         }
     }
 
@@ -112,6 +115,17 @@ function AddAddress(props: AddAddress) {
             reset()
         }
     }, []);
+
+    useEffect(() => {
+        // console.log("🚀 ~ useEffect ~ googleAddressComponents:", googleAddressComponents)
+
+        if (googleAddressComponents) {
+            setValue('Address1', googleAddressComponents.address)
+            setValue('Country', googleAddressComponents.country)
+            setValue('State', googleAddressComponents.state)
+            setStateId(() => null);
+        }
+    }, [googleAddressComponents])
 
     return (
         <StyledDialog
@@ -175,7 +189,7 @@ function AddAddress(props: AddAddress) {
                             margin='none'
                         />
                     </Stack>
-                    <GoogleMaps />
+                    <GoogleMaps setParsedAddress={setGoogleAddressComponents} />
                     <RenderFields
                         register={register}
                         error={errors.Address1}
@@ -209,7 +223,6 @@ function AddAddress(props: AddAddress) {
                             type="select"
                             control={control}
                             error={errors.Country}
-                            // defaultValue="none"
                             name="Country"
                             variant='outlined'
                             margin='none'
@@ -240,14 +253,16 @@ function AddAddress(props: AddAddress) {
 
                                 if (typeof value === 'string') {
                                     setValue('State', value);
-                                }
-                                else {
+                                } else {
                                     setValue('State', value.name);
-                                    setStateId(value.id);
+                                    setStateId(value.id ? value.id : null);
                                 }
                             }}
-                            freeSolo
-                        />
+                            onInputChange={(event, newInputValue) => {
+                                setValue('State', newInputValue); // Update the form value with the manually typed input
+                            }}
+                            freeSolo />
+
                         <RenderFields
                             type="number"
                             register={register}
