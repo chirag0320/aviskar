@@ -22,6 +22,7 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
 
     const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
     const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
+    console.log("🚀 ~ SmallScreenFilters ~ selectedPrice:", selectedPrice)
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue)
@@ -78,7 +79,7 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
                             {renderList(categoryData.categories)}
                         </TabPanel>
                         <TabPanel value={tabValue} index={1}>
-                            <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} />
+                            <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} selectedPrice={selectedPrice} />
                         </TabPanel>
                         {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
                             <TabPanel value={tabValue} index={index + 2} key={filter}>
