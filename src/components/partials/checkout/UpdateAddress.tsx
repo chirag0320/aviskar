@@ -123,6 +123,8 @@ function UpdateAddress(props: UpdateAddress) {
           setValue('Country', country.id.toString())
         }
       })
+      setValue('State', googleAddressComponents.state)
+      setStateId(() => null);
     }
   }, [googleAddressComponents])
 

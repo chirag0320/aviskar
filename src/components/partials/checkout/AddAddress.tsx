@@ -121,7 +121,11 @@ function AddAddress(props: AddAddress) {
 
         if (googleAddressComponents) {
             setValue('Address1', googleAddressComponents.address)
-            setValue('Country', googleAddressComponents.country)
+            countryList.forEach((country: StateOrCountry) => {
+                if (country.name === googleAddressComponents.country) {
+                    setValue('Country', country.id.toString())
+                }
+            })
             setValue('State', googleAddressComponents.state)
             setStateId(() => null);
         }
@@ -254,10 +258,12 @@ function AddAddress(props: AddAddress) {
                                 if (typeof value === 'string') {
                                     setValue('State', value);
                                 } else {
-                                    setValue('State', value.name);
-                                    setStateId(value.id ? value.id : null);
+                                    setValue('State', value?.name);
+                                    setStateId(value?.id ? value?.id : null);
                                 }
                             }}
+                            inputValue={getValues('State')}
+                            // defaultValue={getValues('State')}
                             onInputChange={(event, newInputValue) => {
                                 setValue('State', newInputValue); // Update the form value with the manually typed input
                             }}
