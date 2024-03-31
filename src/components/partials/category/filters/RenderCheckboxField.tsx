@@ -18,7 +18,7 @@ interface props {
 }
 
 const RenderCheckboxField = React.memo(({ filter, options, setSelectedFilters, selectedFilters, page }: props) => {
-    console.log("🚀 ~ RenderCheckboxField ~ selectedFilters:", selectedFilters)
+    // console.log("🚀 ~ RenderCheckboxField ~ selectedFilters:", selectedFilters)
     const [isPending, startTransition] = useTransition();
     const clearFilters = useAppSelector(state => state.category.clearFilters)
     const {
