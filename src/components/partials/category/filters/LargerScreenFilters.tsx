@@ -59,7 +59,7 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
                 </Accordion>
             </Box>}
             <Box className="FilterByWrapper">
-                {categoryData.price && <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} page={page} />}
+                {categoryData.price && <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} />}
                 {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
                     <Accordion key={filter} className="Divider">
                         <AccordionSummary
@@ -84,7 +84,6 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
                                 )}
                                 selectedFilters={selectedFilters}
                                 setSelectedFilters={setSelectedFilters}
-                                page={page}
                             />
                         </AccordionDetails>
                     </Accordion>
