@@ -66,6 +66,8 @@ export const shoppingCart = createSlice({
                 warnings.forEach((warning: any) => {
                     if (item.productId === warning.productId) {
                         item.warnings = warning.warnings;
+                    }else{
+                        item.warnings = []
                     }
                 })
             })

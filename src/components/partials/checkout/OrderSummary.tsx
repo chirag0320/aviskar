@@ -14,7 +14,7 @@ import { OutlinedCheckIcon } from "@/assets/icons"
 import OTPConfirmation from "./OTPConfirmation"
 import { hasFulfilled, roundOfThePrice, shipmentTypeToEnum } from "@/utils/common"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
-import { checkValidationOnConfirmOrder, disableOTP, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation, placeOrder } from "@/redux/reducers/checkoutReducer"
+import { checkValidationOnConfirmOrder, disableOTP, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation, placeOrder, setCheckoutItemWarning } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import useDeviceDetails from "@/hooks/useDeviceDetails"
 import { navigate } from "gatsby"
@@ -183,7 +183,7 @@ function OrderSummary() {
         }))
       }
       else {
-        // dispatch(setCartItemWarning(response?.payload?.data?.data));
+        dispatch(setCheckoutItemWarning(response?.payload?.data?.data));
         showToaster({ message: "Cannot Place order as Some items have warnings", severity: 'warning' })
       }
     }

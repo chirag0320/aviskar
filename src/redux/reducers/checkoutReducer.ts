@@ -7,6 +7,7 @@ import { any } from 'prop-types'
 import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 import { navigate } from 'gatsby'
 import { AddressType } from '@/types/enums'
+import { CartItem } from '@/types/shoppingCart'
 
 export type customerDetails = {
     "customerId": number,
@@ -261,6 +262,21 @@ export const checkoutPage = createSlice({
 
                 state.checkoutPageData!.billingAddressDetails = updatedBillingDetails as AddressDetail[];
             }
+        },
+        setCheckoutItemWarning: (state, action) => {
+            const warnings = action.payload;
+
+            state?.checkoutPageData?.shoppingCartItems.forEach((item: CartItem) => {
+                warnings.forEach((warning: any) => {
+                    if (item.productId === warning.productId) {
+                        item.warnings = warning.warnings;
+                    }else{
+                        item.warnings = []
+                    }
+                })
+            })
+
+            // localStorageSetItem('cartItems', state.cartItems)
         }
     },
 
@@ -380,6 +396,6 @@ export const checkoutPage = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout, disableOTP, updateAddress } = checkoutPage.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout, disableOTP, updateAddress, setCheckoutItemWarning } = checkoutPage.actions
 
 export default checkoutPage.reducer

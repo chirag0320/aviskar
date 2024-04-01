@@ -23,7 +23,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
     // navigate(`?page=${value}`, { replace: true });
     const pageQuery = new URLSearchParams(location.search);
     pageQuery.set('page', value.toString());
-    navigate(`?${pageQuery.toString()}`, { replace: true });
+      navigate(`?${pageQuery.toString()}`, { replace: true });
   }
 
   useEffect(() => {
