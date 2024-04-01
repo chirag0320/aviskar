@@ -44,7 +44,6 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
   }
 
   useEffect(() => {
-    console.log("🚀 ~ searchParams:xyz,window.location.pathname", searchParams,"--",window.location.pathname)
     if (setPage) {
       // if (parseInt(searchParams.get("page")!) == 1) {
       fetchData()
