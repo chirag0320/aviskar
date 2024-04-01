@@ -106,8 +106,9 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
         if (isapiCallNeeded) {
             const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
 
+            // NOTE :- Proper response is not coming from backend to show the right toaster so bottom can be a bug for showing right toaster message
             if (hasFulfilled(response.type)) {
-                if (!response?.payload?.data?.data) {
+                if (!response?.payload?.data?.data || response?.payload?.data?.data?.length === 0) {
                     showToaster({ message: "Cart updated", severity: 'success' })
                 }
                 else {
@@ -136,7 +137,7 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
                 {cartItemsWithLivePrice && cartItemsWithLivePrice.length === 0 && <Typography variant="body1" style={{ textAlign: "center" }}>No items in the cart</Typography>}
                 {cartItemsWithLivePrice?.length > 0 && cartItemsWithLivePrice?.map((cartItem) => {
                     return (
-                        <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={true} hideRightSide={true} quantity={quantities[cartItem.id]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
+                        <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={true} quantity={quantities[cartItem.id]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
                     )
                 })}
                 {cartItemsWithLivePrice?.length > 0 && <Typography variant="body1"><Typography component="span" className="Note">Note:</Typography> Prices are live prices and will be locked on confirm order. </Typography>}
@@ -152,4 +153,4 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
     )
 }
 
-export default CartDetails
+export default React.memo(CartDetails);

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Box, TextField, Autocomplete, IconButton } from "@mui/material";
+import React, { useEffect, useMemo, useState } from "react";
+import { Box, TextField, Autocomplete, IconButton, Stack } from "@mui/material";
 import { Search } from "../../assets/icons/index"; // Assuming you have imported the Search icon
 
 // Assuming you have appropriate custom hooks for API calls and debouncing
@@ -14,9 +14,17 @@ interface Option {
 }
 
 function SearchField() {
+  const searchParams = useMemo(() => new URLSearchParams(window.location.search), [window.location.search]);
   const { apiCallFunction } = useCallAPI();
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    if (searchParams.has("keyword")) {
+      console.log("🚀 ~ SearchField ~ searchParams:", searchParams.get("keyword"))
+      setInputValue(searchParams.get("keyword")!);
+    }
+  }, [searchParams])
 
   const debouncedInputValue = useDebounce(inputValue, 500);
 
@@ -53,6 +61,7 @@ function SearchField() {
       options={options}
       color="primary"
       getOptionLabel={(option: Option) => option.name}
+      inputValue={inputValue}
       renderOption={(props, option: Option) => (
         <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props} onClick={() => navigate(`/product-details/${option?.friendlypagename}`)}>
           {/* Uncomment below if you have an image associated with each option */}
@@ -67,8 +76,7 @@ function SearchField() {
         </Box>
       )}
       renderInput={(params) => (
-        // Attention:- Below needs to change the styles
-        <div style={{ display: "flex" }}>
+        <Stack className="Wrapper">
           <TextField
             {...params}
             variant="filled"
@@ -79,10 +87,10 @@ function SearchField() {
               ...params.inputProps,
             }}
           />
-          <IconButton onClick={handleSearch}>
-            <Search />
+          <IconButton color="secondary" className="SearchButton" onClick={handleSearch}>
+            <Search fontSize="small" />
           </IconButton>
-        </div>
+        </Stack>
       )}
     />
   );

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, FormControl, Select, RadioGroup, FormControlLabel, FormLabel, Radio, FormHelperText, Checkbox, FormGroup, Switch, TextField, IconButton, InputAdornment } from '@mui/material'
-import { Controller, set } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import classNames from 'classnames'
 
 // Hooks
@@ -51,7 +51,8 @@ interface RenderFieldProps {
   children?: any
   labelPlacement?: FormControlLabelProps['labelPlacement'],
   setValue?: any,
-  required?: boolean
+  required?: boolean,
+  alreadySelectedFilters?: string[]
 }
 
 const RenderFields: React.FC<RenderFieldProps> = ({
@@ -88,6 +89,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   control,
   labelPlacement,
   required,
+  alreadySelectedFilters,
   ...otherProps
 }) => {
   const [passwordVisibility, togglePasswordVisibility] = useToggle(false)
@@ -104,8 +106,8 @@ const RenderFields: React.FC<RenderFieldProps> = ({
         >
           {label && <FormLabel htmlFor={name}>{label}{required && " *"}</FormLabel>}
           <Controller
+            name={name}
             control={control}
-            defaultValue={defaultValue}
             render={({ field }) => (
               <Select
                 inputProps={{ id: name }}
@@ -113,7 +115,9 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 disabled={disabled}
                 defaultValue={defaultValue}
                 onChange={(e) => {
-                  field.onChange(e)
+                  console.log(name, e.target.value, "xxx")
+                  // field.onChange(e)
+                  setValue(name, e.target.value)
                   if (onChange) {
                     onChange()
                   }
@@ -131,13 +135,13 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                       color: "#1D2129",
                     }
                 }
+                {...register(name)}
                 {...otherProps}
+                value={value}
               >
                 {children}
               </Select>
             )}
-            name={name}
-            {...otherProps}
           />
         </FormControl>
       );
@@ -205,7 +209,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                           onChange(); // Trigger onChange if provided
                         }
                       }}
-                      checked={!!getValues(name)?.[checkboxOption.value]}
+                      checked={alreadySelectedFilters?.includes(checkboxOption.value) || !!getValues(name)?.[checkboxOption.value]}
                     />
                   }
                   label={checkboxOption.label}

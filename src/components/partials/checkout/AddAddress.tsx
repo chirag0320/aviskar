@@ -6,7 +6,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // Hooks
-import { useAppDispatch, useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 
 // Componenets
 import StyledDialog from "@/components/common/StyledDialog"
@@ -16,6 +16,7 @@ import { StateOrCountry, addOrEditAddress } from "@/redux/reducers/checkoutReduc
 import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
+import { AddressComponents } from "@/utils/parseAddressComponents"
 
 interface AddAddress {
     open: boolean
@@ -59,14 +60,18 @@ function AddAddress(props: AddAddress) {
     const stateList = useAppSelector(state => state.checkoutPage.stateList);
     const [stateId, setStateId] = useState<number | null>(null);
     const { showToaster } = useShowToaster();
+    const [state, toggle] = useToggle()
     const loading = useAppSelector(state => state.checkoutPage.loading);
-
+    const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents | null>(null);
+    const [countryValue, setcountryValue] = useState<any>('-1')
+    const [stateValue, setstateValue] = useState<any>('')
     const {
         register,
         reset,
         handleSubmit,
         control,
         setValue,
+        getValues,
         formState: { errors },
     } = useForm<Inputs>({
         resolver: yupResolver(addressSchema)
@@ -84,12 +89,12 @@ function AddAddress(props: AddAddress) {
             addressLine1: data.Address1,
             addressLine2: data.Address2,
             city: data.City,
-            stateId: stateId,
+            stateId: stateId || 0,
             stateName: data.State,
             postcode: data.Code,
             countryId: data.Country,
         }
-
+        
 
         const response = await dispatch(addOrEditAddress({
             url: ENDPOINTS.addOrEditAddress,
@@ -101,18 +106,40 @@ function AddAddress(props: AddAddress) {
         if (hasFulfilled(response.type)) {
             onClose()
             reset()
-            showToaster({ message: "Address saved successfully" , severity: "success"})
+            showToaster({ message: "Address saved successfully", severity: "success" })
         } else {
-            showToaster({ message: "Failed to save address. Please check the input fields" , severity: "error"})
+            showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
         }
     }
 
     useEffect(() => {
         return () => {
             reset()
+            setcountryValue(-1)
+            setstateValue('')
         }
-    }, []);
+    }, [open]);
 
+    useEffect(() => {
+        if (googleAddressComponents) {
+            setValue('Address1', googleAddressComponents.address)
+            countryList.forEach((country: StateOrCountry) => {
+                if (country.name === googleAddressComponents.country.trim()) {
+                    setValue('Country', country.id.toString())
+                    setcountryValue(country.id.toString())
+                }
+            })
+            setValue('State', googleAddressComponents.state)
+            setstateValue(googleAddressComponents.state)
+            setStateId(() => null);
+            setValue('City', googleAddressComponents?.city)
+            setValue('Address2', googleAddressComponents.address2)
+        }
+    }, [googleAddressComponents])
+    const OnChange = () => {
+        toggle()
+    }
+    console.log(getValues('Country'), "get value")
     return (
         <StyledDialog
             id="UpdateAddress"
@@ -175,7 +202,7 @@ function AddAddress(props: AddAddress) {
                             margin='none'
                         />
                     </Stack>
-                    <GoogleMaps />
+                    <GoogleMaps setParsedAddress={setGoogleAddressComponents} />
                     <RenderFields
                         register={register}
                         error={errors.Address1}
@@ -204,22 +231,24 @@ function AddAddress(props: AddAddress) {
                             variant='outlined'
                             margin='none'
                         />
-                        <RenderFields
+                        {countryList?.length > 0 && <RenderFields
                             register={register}
                             type="select"
                             control={control}
                             error={errors.Country}
-                            // defaultValue="none"
                             name="Country"
                             variant='outlined'
                             margin='none'
+                            defaultValue={"-1"}
+                            value={countryValue}
                             setValue={setValue}
+                            onChange={OnChange}
                         >
-                            <MenuItem value="none">Select country</MenuItem>
+                            <MenuItem value="-1">Select country</MenuItem>
                             {countryList.map((country: StateOrCountry) => (
                                 <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
                             ))}
-                        </RenderFields>
+                        </RenderFields>}
                     </Stack>
                     <Stack className="Column">
                         <Autocomplete
@@ -240,14 +269,19 @@ function AddAddress(props: AddAddress) {
 
                                 if (typeof value === 'string') {
                                     setValue('State', value);
-                                }
-                                else {
-                                    setValue('State', value.name);
-                                    setStateId(value.id);
+                                } else {
+                                    setValue('State', value?.name);
+                                    setStateId(value?.id ? value?.id : null);
                                 }
                             }}
-                            freeSolo
-                        />
+                            inputValue={stateValue}
+                            // defaultValue={getValues('State')}
+                            onInputChange={(event, newInputValue) => {
+                                setValue('State', newInputValue); // Update the form value with the manually typed input
+                                setstateValue(newInputValue)
+                            }}
+                            freeSolo />
+
                         <RenderFields
                             type="number"
                             register={register}

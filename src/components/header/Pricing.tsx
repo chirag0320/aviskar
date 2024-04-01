@@ -7,7 +7,6 @@ import useApiRequest from "@/hooks/useAPIRequest"
 import { ENDPOINTS } from "@/utils/constants"
 import { useAppSelector } from "@/hooks"
 import DraggableMarquee from "./DraggableMarquee";
-// import Marquee from "./vipulMarquee"
 
 interface ItickerData {
   data: Array<{

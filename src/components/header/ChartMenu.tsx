@@ -5,10 +5,15 @@ import classNames from "classnames"
 // Assets
 import { ActivityIcon } from "../../assets/icons/index"
 
-function ChartMenu() {
+interface ChartMenuProps {
+  onClick?: () => void
+}
+
+function ChartMenu(props: ChartMenuProps) {
+  const { onClick } = props
   return (
     <>
-      <IconButton aria-label='chartIcon' className={classNames("MenuButton", { "Active": false })}><ActivityIcon /></IconButton>
+      <IconButton aria-label='chartIcon' className={classNames("MenuButton", { "Active": false })} onClick={onClick}><ActivityIcon /></IconButton>
     </>
   )
 }
