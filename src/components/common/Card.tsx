@@ -422,7 +422,8 @@ export const LineChartCard = (props: any) => {
 };
 
 
-export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
+export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide?: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
+  console.log("🚀 ~ CartCard ~ cartItem:", cartItem)
   // const [deliveryMethod, setDeliveryMethod] = useState<string>('LocalShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     // setDeliveryMethod(event.target.value as string);
@@ -440,8 +441,11 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
       <CardContent>
         <Stack className="TopWrapper">
           <Box className="LeftWrapper">
-            <Typography className="Name" component="p" variant="titleLarge">{cartItem.productName}</Typography>
+            <Typography className="Name" component="p" variant="titleLarge" onClick={() => navigate(`/product-details/${cartItem.friendlypagename}`)}>{cartItem.productName}</Typography>
             <Typography variant="body2">{cartItem?.shippingInfo}</Typography>
+            {cartItem?.warnings?.map((warning) => (
+              <Typography variant="body2" key={warning}>{warning}</Typography>
+            ))}
           </Box>
           <Box className="RightWrapper">
             <Typography className="LivePrice" variant="body2">Live Price</Typography>
@@ -468,7 +472,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
                   IconComponent={SelectDropdown}
                   disabled={!isDifferentMethod}
                 >
-                  <MenuItem value="LocalShipping">Local PickUp</MenuItem>
+                  <MenuItem value="LocalShipping">Local Shipping</MenuItem>
                   <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
                   <MenuItem value="VaultStorage">Vault Storage</MenuItem>
                 </Select>
@@ -476,14 +480,11 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
             )}
             <ProductUpdateCountdown />
           </Stack>
-          {(cartItem?.warnings?.length !== 0) && (
-            <Stack className="RightSide"> 
-              {cartItem?.warnings?.map((warning) => (
-                <Typography className="ShippingMessage" variant="body2" key={warning}>{warning}</Typography>
-              ))}
+          {!hideRightSide && (
+            <Stack className="RightSide">
+              <Typography className="ShippingMessage" variant="body2">{deliveryMethodMessage.noSecureShipping}</Typography>
             </Stack>
           )}
-
         </Stack>
       </CardContent>
     </Card >

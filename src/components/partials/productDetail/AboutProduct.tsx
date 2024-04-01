@@ -177,12 +177,22 @@ function AboutProduct({ productId }: any) {
     }
   }, [])
   const addToCartFunction = async (isInstantBuy: any) => {
-    await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+    const response = await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
       "productId": productId,
       "quantity": quantityCount,
       "IsInstantBuy": isInstantBuy
     } as any)
-    dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
+    console.log("🚀 ~ addToCartFunction ~ response:", response)
+
+    if (response.code === 200) {
+      if (response.data) {
+        navigate('/shopping-cart')
+      }
+      else {
+        showToaster({ message: response?.message, severity: "warning" })
+      }
+    }
+
   }
   const handleBuyNow = async () => {
     if (!isLoggedIn) {
@@ -339,7 +349,6 @@ function AboutProduct({ productId }: any) {
                     <Stack className="Right">
                       <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={async () => {
                         await addToCartFunction(false)
-                        navigate('/shopping-cart')
                       }} disabled={loadingForAddToCart}>Add to cart</Button>
                       <Button size="large" variant="outlined" onClick={() => {
                         handleBuyNow()
