@@ -35,7 +35,19 @@ interface CreateGuidelineState {
   toasterMessage: string,
   scrollPosition: number,
   severity: 'error' | 'success' | 'info' | 'warning',
-  needToShowProgressLoader: false
+  needToShowProgressLoader: false,
+  liveDashboardChartData: {
+    [key: string]: {
+      low: number,
+      high: number,
+      current: number,
+      position: number,
+      move: number,
+      percentage: number,
+      linechartdata: number[],
+      linechartdata2: number[]
+    }
+  }
 }
 const initialState: CreateGuidelineState = {
   configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
@@ -53,7 +65,8 @@ const initialState: CreateGuidelineState = {
   toasterMessage: '',
   scrollPosition: 0,
   severity: 'info',
-  needToShowProgressLoader: false
+  needToShowProgressLoader: false,
+  liveDashboardChartData: {}
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -99,6 +112,14 @@ export const membershipPlanDetails = appCreateAsyncThunk(
     return await ConfigServices.membershipPlanDetails(url)
   }
 )
+
+export const getLiveDashboardChartData = appCreateAsyncThunk(
+  'getLiveDashboardChartData/status',
+  async ({ url }: { url: string }) => {
+    return await ConfigServices.getLiveDashboardChartData(url)
+  }
+)
+
 // export const add = appCreateAsyncThunk(
 //   'add/status',
 //   async (data: GuidelineTitleParams) => {
@@ -280,6 +301,25 @@ export const createHomepageSlice = createSlice({
       localStorageSetItem('isLoggedIn', JSON.stringify(true))
     })
     builder.addCase(ImpersonateSignInAPI.rejected, (state, action) => {
+      state.loading = false
+    })
+
+    // Live Dashboard Chart Data
+    builder.addCase(getLiveDashboardChartData.pending, (state, action) => {
+      state.loading = true
+    })
+    builder.addCase(getLiveDashboardChartData.fulfilled, (state, action) => {
+      const responseData = action.payload.data.data;
+
+      Object.keys(responseData).map((key: string) => {
+        state.liveDashboardChartData = {
+          ...state.liveDashboardChartData,
+          [key]: responseData[key]["threedayrange"][0]
+        }
+      });
+      state.loading = false
+    })
+    builder.addCase(getLiveDashboardChartData.rejected, (state, action) => {
       state.loading = false
     })
   },

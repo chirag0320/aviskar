@@ -75,5 +75,8 @@ class ConfigServices {
   //     data,
   //   })
   // }
+  static async getLiveDashboardChartData(url: string) {
+    return axiosInstance.get(url)
+  }
 }
 export default ConfigServices
