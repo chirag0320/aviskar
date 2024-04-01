@@ -7,9 +7,11 @@ import { getShoppingCartData } from '@/redux/reducers/shoppingCartReducer';
 import { ENDPOINTS } from '@/utils/constants';
 import useAPIoneTime from '@/hooks/useAPIoneTime';
 import ShoppingCartComponent from '@/components/partials/shopping-cart/ShoppingCartComponent';
-
+import Loader from '@/components/common/Loader';
+import { useAppSelector } from '@/hooks';
 
 function ShoppingCart() {
+    const checkLoadingStatus = useAppSelector(state => state.shoppingCart.loading);
     useAPIoneTime({
         service: getShoppingCartData, endPoint: ENDPOINTS.getShoppingCartData, body: {
             "search": "",
@@ -24,6 +26,7 @@ function ShoppingCart() {
     return (
         <Layout>
             <>
+            <Loader open = {checkLoadingStatus} />
                 <Seo
                     keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
                     title="Home"

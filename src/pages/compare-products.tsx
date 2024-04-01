@@ -14,8 +14,10 @@ import { ENDPOINTS } from "@/utils/constants";
 import noImage from '../assets/images/noImage.png'
 import useShowToaster from "@/hooks/useShowToaster";
 import Toaster from "@/components/common/Toaster";
+import Loader from "@/components/common/Loader";
 
 function CompareProducts() {
+    const checkLoadingStatus = useAppSelector(state => state.homePage.loading);
     const openToaster = useAppSelector(state => state.homePage.openToaster)
     const { productIds, comparedProducts, specificationKeys } = useAppSelector((state) => state.compareProducts);
     const dispatch = useAppDispatch();
@@ -36,6 +38,7 @@ function CompareProducts() {
     }
     return (
         <Layout>
+            <Loader open = {checkLoadingStatus} />
             {openToaster && <Toaster />}
             <Seo
                 keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}

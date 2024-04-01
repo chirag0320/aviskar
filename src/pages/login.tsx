@@ -12,6 +12,7 @@ import { isActionRejected } from '@/components/common/Utils';
 import { Link, navigate } from 'gatsby';
 import { AxiosError } from 'axios';
 import { getLastPage } from '@/utils/common';
+import Loader from '@/components/common/Loader';
 export interface IdispatchType {
   type: string,
   meta: {
@@ -34,6 +35,7 @@ export interface IdispatchType {
 }
 function SignInPage() {
   const { configDetails: configDetailsState, loadingForSignIn } = useAppSelector((state) => state.homePage)
+  let checkLoadingStatus = useAppSelector(state => state.homePage.loading);
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [loadingForNavigate, setLoadingForNavigate] = useState(false)
   const [loginError, setLoginError] = useState<string | null>(null);
@@ -68,7 +70,10 @@ function SignInPage() {
     setLoadingForNavigate(false)
   }
   
+  console.log(loadingForNavigate, "loadingForNavigate");
   return (
+    <>
+    <Loader open = {loadingForNavigate} />
     <Box id="SignInPage">
       <Container maxWidth="sm" >
         <DialogTitle component="p">
@@ -145,6 +150,7 @@ function SignInPage() {
         </DialogActions>
       </Container>
     </Box>
+    </>
   )
 }
 

@@ -10,6 +10,7 @@ import { ENDPOINTS } from "@/utils/constants";
 import { getWishListData } from "@/redux/reducers/wishListReducer";
 import WishListDetails from "@/components/partials/wishlist/WishListDetails";
 import CorrectIcon from "@/assets/icons/CorrectIcon";
+import Loader from "@/components/common/Loader";
 
 const WISHLIST_URL = "http://queenslandmint.com/wishlist/5b455134-e44c-492a-a79b-33487860ff00"
 import Toaster from "@/components/common/Toaster";
@@ -20,6 +21,7 @@ function Wishlist() {
   const openToaster = useAppSelector(state => state.homePage.openToaster);
   // const [snackbarOpen, setSnackbarOpen] = useState(false); // State for Snackbar
   const [showCopyIcon, setShowCopyIcon] = useState(false);
+  const checkloadingstatus = useAppSelector(state => state.wishList.loading);
 
   useAPIoneTime({
     service: getWishListData,
@@ -44,6 +46,7 @@ function Wishlist() {
 
   return (
     <Layout>
+     <Loader open={checkloadingstatus} />
       {openToaster && <Toaster />}
       <Seo
         keywords={["QMint Wishlist"]}

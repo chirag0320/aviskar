@@ -15,10 +15,11 @@ import { useMediaQuery } from "@mui/material";
 import Layout from "@/components/common/Layout";
 import useUserDetailsFromToken from "@/hooks/useUserDetailsFromToken";
 import Toaster from "@/components/common/Toaster";
+import Loader from "@/components/common/Loader";
 
 function IndexPage() {
   const dispatch = useAppDispatch()
-  const { configDetails: configDetailsState, openToaster, scrollPosition } = useAppSelector((state) => state.homePage)
+  const { configDetails: configDetailsState, openToaster, scrollPosition, loading } = useAppSelector((state) => state.homePage)
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
 
   const [body] = useState({
@@ -67,6 +68,7 @@ function IndexPage() {
   return (
     <Layout>
       <>
+      <Loader open = {loading} />
         {openToaster && <Toaster />}
         <Seo
           keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}

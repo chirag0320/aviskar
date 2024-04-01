@@ -7,11 +7,16 @@ import { ENDPOINTS } from "@/utils/constants"
 import { getTopicDetails } from "@/redux/reducers/topicReducer"
 import { useAppSelector } from "@/hooks"
 import Layout from "@/components/common/Layout"
+import Loader from "@/components/common/Loader";
+
 function Topics(paramsData: any) {
+  const checkLoadingStatus = useAppSelector(state => state.topic.loading);
   const { topicDetails, loading } = useAppSelector(state => state.topic)
   useAPIoneTime({ service: getTopicDetails, endPoint: ENDPOINTS.topicDetail?.replace('{{topic-name}}', paramsData?.params?.['topic-name']) })
   return (
-    !loading && <Layout>
+    <>
+    <Loader open = {checkLoadingStatus} />
+    {!loading && <Layout>
       <Seo
         keywords={[`QMint Topics`]}
         title="Loans"
@@ -23,7 +28,8 @@ function Topics(paramsData: any) {
         Comming Soon
         </Box>
       </Container>
-    </Layout>
+    </Layout>}
+        </>
   )
 }
 

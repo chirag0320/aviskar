@@ -14,8 +14,10 @@ import { getConfiguration, getReasonsForContactUs } from '@/redux/reducers/conta
 import { ENDPOINTS } from '@/utils/constants';
 import Map from '@/components/partials/contactus/Map';
 import { useAppSelector } from '@/hooks';
+import Loader from '@/components/common/Loader';
 
 function ContactUs() {
+  const checkLoadingStatus = useAppSelector(state => state.homePage.loading);
   const configDetails = useAppSelector(state => state.homePage.configDetails)
   console.log("🚀 ~ ContactUs ~ configDetails:", configDetails)
   useAPIoneTime({ service: getReasonsForContactUs, endPoint: ENDPOINTS.reasonsForContact })
@@ -24,6 +26,7 @@ function ContactUs() {
   return (
     <Layout>
       <>
+      <Loader open = {checkLoadingStatus} />
         <Seo
           keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
           title="Home"
