@@ -9,7 +9,7 @@ import { ENDPOINTS } from "@/utils/constants"
 import { requestBodyDefault } from "@/pages/[category]"
 import { getCategoryData, setClearFilters, setSortBy } from "@/redux/reducers/categoryReducer"
 import { useAppDispatch, useAppSelector } from "@/hooks"
-
+let timeOut: any;
 function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: number, searchParams: URLSearchParams }) {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
 
@@ -27,20 +27,31 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
     };
 
     const argumentForService = {
-      url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
+      url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `${location.pathname}`,
       body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, ...commonArgument } : { ...requestBodyDefault, ...commonArgument }
     }
-
+    if (timeOut) {
+      clearTimeout(timeOut)
+    }
+    timeOut = setTimeout(() => {
+      dispatch(getCategoryData(
+        argumentForService) as any)
+    }, 500);
     // if (selectedFilters && Object.keys(selectedFilters)?.length || (selectedPrice)) {
-    await dispatch(getCategoryData(
-      argumentForService) as any)
+    // await dispatch(getCategoryData(
+    //   argumentForService) as any)
     // }
   }
+
   useEffect(() => {
+    console.log("🚀 ~ searchParams:xyz,window.location.pathname", searchParams,"--",window.location.pathname)
     if (setPage) {
+      // if (parseInt(searchParams.get("page")!) == 1) {
+      fetchData()
+      // }
       setPage(() => searchParams.has("page") ? parseInt(searchParams.get("page")!) : 1)
     }
-  }, [searchParams]);
+  }, [window.location, searchParams]);
 
   useEffect(() => {
     const pageQuery = new URLSearchParams(location.search);
@@ -63,7 +74,7 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
         };
 
         const argumentForService = {
-          url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
+          url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `${location.pathname}`,
           body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, ...commonArgument } : { ...requestBodyDefault, ...commonArgument }
         }
 

@@ -28,8 +28,8 @@ export const requestBodyDefault: categoryRequestBody = {
     }
 }
 
-function Category({ location }: { location: any }) {
-    const searchParams = useMemo(() => new URLSearchParams(location?.search), [location?.search]);
+function Category(props:any) {
+    const searchParams = useMemo(() => new URLSearchParams(props?.location?.search), [props?.location, window.location]);
     const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
     const [page, setPage] = useState(searchParams.has("page") ? parseInt(searchParams.get("page")!) : 1);
     const dispatch = useAppDispatch();
@@ -60,6 +60,7 @@ function Category({ location }: { location: any }) {
             dispatch(setPriceForEachItem(idwithpriceObj));
         }
     }, [priceData])
+
     return (
         <Layout>
             <Seo
