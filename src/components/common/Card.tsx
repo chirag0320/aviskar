@@ -423,7 +423,6 @@ export const LineChartCard = (props: any) => {
 
 
 export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
-  console.log("🚀 ~ CartCard ~ cartItem:", cartItem)
   // const [deliveryMethod, setDeliveryMethod] = useState<string>('LocalShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     // setDeliveryMethod(event.target.value as string);
@@ -472,7 +471,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
                   IconComponent={SelectDropdown}
                   disabled={!isDifferentMethod}
                 >
-                  <MenuItem value="LocalShipping">Local Shipping</MenuItem>
+                  <MenuItem value="LocalShipping">Local PickUp</MenuItem>
                   <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
                   <MenuItem value="VaultStorage">Vault Storage</MenuItem>
                 </Select>

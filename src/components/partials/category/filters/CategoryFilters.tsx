@@ -36,7 +36,7 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
     timeOut = setTimeout(() => {
       dispatch(getCategoryData(
         argumentForService) as any)
-    }, 500);
+    }, 1000);
     // if (selectedFilters && Object.keys(selectedFilters)?.length || (selectedPrice)) {
     // await dispatch(getCategoryData(
     //   argumentForService) as any)

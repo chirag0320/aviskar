@@ -240,6 +240,7 @@ export const checkoutPage = createSlice({
         },
         updateAddress: (state, action) => {
             const updatedAddress = action.payload;
+            console.log("🚀 ~ updatedAddress:", updatedAddress)
 
             if (updatedAddress.addressType === AddressType.Shipping) {
                 const updatedShippingDetails = state.checkoutPageData?.shippingAddressDetails.map((address) => {
@@ -258,6 +259,20 @@ export const checkoutPage = createSlice({
                     }
                     return address;
                 });
+
+                state.checkoutPageData!.billingAddressDetails = updatedBillingDetails as AddressDetail[];
+            }
+        },
+        addAddress: (state, action) => {
+            const updatedAddress = action.payload;
+
+            if (updatedAddress.addressType === AddressType.Shipping) {
+                const updatedShippingDetails = [...structuredClone(state.checkoutPageData!.shippingAddressDetails), updatedAddress]
+
+                state.checkoutPageData!.shippingAddressDetails = updatedShippingDetails as AddressDetail[];
+            }
+            else if (updatedAddress.addressType === AddressType.Billing) {
+                const updatedBillingDetails = [...structuredClone(state.checkoutPageData!.billingAddressDetails), updatedAddress]
 
                 state.checkoutPageData!.billingAddressDetails = updatedBillingDetails as AddressDetail[];
             }
@@ -380,6 +395,6 @@ export const checkoutPage = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout, disableOTP, updateAddress } = checkoutPage.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout, disableOTP, updateAddress, addAddress } = checkoutPage.actions
 
 export default checkoutPage.reducer

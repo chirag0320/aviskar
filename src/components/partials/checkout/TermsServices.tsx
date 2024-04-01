@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { Typography, Button, FormControlLabel, Checkbox, Container, Box } from "@mui/material"
 
 // Componenets
@@ -16,7 +16,7 @@ function TermsServices() {
   const dispatch = useAppDispatch()
   const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
   const [openTermsServices, toggleTermsServices] = useToggle(false)
-  const [readedTermAndServices, toggleReadedTermAndServices] = useToggle(false)
+  const [readedTermAndServices, setreadedTermAndServices] = useState(false)
   useEffect(() => {
     dispatch(updateFinalDataForTheCheckout({ termAndServiceIsRead: readedTermAndServices }))
   }, [readedTermAndServices])
@@ -32,7 +32,7 @@ function TermsServices() {
         <FormControlLabel
           className="Checkbox"
           control={<Checkbox checked={readedTermAndServices} onChange={() => {
-            toggleReadedTermAndServices()
+            setreadedTermAndServices((prev)=>!prev)
           }} />}
           label="I have read and agree to the terms of service."
         />
@@ -41,7 +41,10 @@ function TermsServices() {
         id="TermsServices"
         open={openTermsServices}
         dialogTitle="Terms of services"
-        onClose={toggleTermsServices}
+        onClose={()=>{
+          toggleTermsServices()
+          setreadedTermAndServices(true)
+        }}
         primaryActionText="Agree"
         actions
       >
