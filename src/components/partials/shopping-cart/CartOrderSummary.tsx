@@ -31,7 +31,7 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
         })
         dispatch(resetSubTotal());
         dispatch(updateSubTotal(subTotal))
-
+        
         const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
 
         if (hasFulfilled(response.type)) {

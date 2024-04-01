@@ -17,6 +17,8 @@ import useApiRequest from "@/hooks/useAPIRequest"
 import { CartItemsWithLivePriceDetails } from "../shopping-cart/CartDetails"
 import useDebounce from "@/hooks/useDebounce"
 import { deleteShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
+import { hasFulfilled } from "@/utils/common"
+import useShowToaster from "@/hooks/useShowToaster"
 
 function Step2() {
   const dispatch = useAppDispatch()
@@ -31,6 +33,7 @@ function Step2() {
   const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
   const changeInQuantities = useDebounce(quantities, 500)
   const [changeDiffrenceDeliveryMethods, toggleChangeDiffrenceDeliveryMethods] = useToggle(false)
+  const {showToaster} = useShowToaster();
 
 
   useEffect(() => {
@@ -124,14 +127,10 @@ function Step2() {
   const decreaseQuantity = (productId: number) => {
     const productIdOfId = cartItemsWithLivePrice.find((item) => item.id === productId)
 
-    if (quantities[productId] === 1) {
-      // setCartItemsWithLivePrice(cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.productId !== productId));
-    }
-    else {
-      const updatedQuantities = { ...quantities, [productIdOfId?.productId ?? productId]: quantities[productIdOfId?.productId ?? productId] - 1 }
-      setQuantities(updatedQuantities)
-      dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: updatedQuantities }))
-    }
+
+    const updatedQuantities = { ...quantities, [productIdOfId?.productId ?? productId]: quantities[productIdOfId?.productId ?? productId] - 1 }
+    setQuantities(updatedQuantities)
+    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: updatedQuantities }))
   }
 
   const removeItemFromCart = async (productId: number) => {
@@ -142,11 +141,18 @@ function Step2() {
       }
       return (item.id !== productId)
     })
+    let response;
     if (ids.length) {
-      await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: ids }) as any);
+      response = await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: ids }) as any);
     }
-    setCartItemsWithLivePrice(updatedCartItem);
-    dispatch(updateFinalDataForTheCheckout({ cartItemsWithLivePrice: updatedCartItem }))
+    if (hasFulfilled(response.type)) {
+      setCartItemsWithLivePrice(updatedCartItem);
+      dispatch(updateFinalDataForTheCheckout({ cartItemsWithLivePrice: updatedCartItem }))
+      showToaster({ message: response?.payload?.data?.message, severity: 'success' })
+    } else {
+      showToaster({ message: "Remove item failed", severity: 'error' })
+
+    }
   }
 
   const changeDeliveryMethodOfProduct = (productId: number, method: any) => {
