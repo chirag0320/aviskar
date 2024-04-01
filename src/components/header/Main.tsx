@@ -23,6 +23,7 @@ function Main(props: any) {
       navigate('/login')
     } else {
       dispatch(LogOutUserAPI() as any)
+      navigate('/')
     }
   }
   return (
