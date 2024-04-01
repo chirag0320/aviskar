@@ -55,8 +55,6 @@ function SearchField() {
     navigate(`/search/?keyword=${inputValue}`);
   }
 
-  console.log("🚀 ~ SearchField ~ searchParams:", inputValue)
-
   return (
     <Autocomplete
       className="SearchField"
