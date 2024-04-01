@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { useMediaQuery, Container, Stack, Button, Link as LinkM, IconButton } from "@mui/material"
+import { useMediaQuery, Container, Stack, Button, Link as LinkM, IconButton, Typography } from "@mui/material"
 
 // Components
 import SearchField from "./SearchField"
@@ -32,6 +32,7 @@ function Main(props: any) {
           <Link className="Logo" to="/"><img src={mobile ? configDetailsState?.storelogourl?.value : configDetailsState?.storelogourl?.value} width={mobile ? 189 : 246} height={mobile ? 30 : 40} alt="QMint logo" loading="eager" /></Link>
         </Stack>
         <Stack className="Right">
+          <Typography dangerouslySetInnerHTML={{__html: configDetailsState?.["home.header.marketingoffer"]?.value}}></Typography>
           <LinkM href={"tel:" + configDetailsState?.companyphonenumber?.value} variant="overline" className="PhoneNumber"><Call />{configDetailsState?.companyphonenumber?.value}</LinkM>
           <SearchField />
           {/* <Link to={ENDPOINTS.login}> */}

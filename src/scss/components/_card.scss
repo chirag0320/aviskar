@@ -290,7 +290,7 @@
               line-height: 1.6;
               padding-left: 14px;
               &:before {
-                content: '';
+                content: "";
                 position: absolute;
                 top: 9px;
                 left: 0;
@@ -323,7 +323,6 @@
     @include transition;
 
     &:hover {
-
       .UpgradPlanButton {
         background-color: $yellowFuel;
         color: $white;
@@ -662,18 +661,6 @@
     margin-top: 5px;
     padding: 24px 15px 17px;
     border-radius: 11px;
-
-    .Chart {
-      svg {
-        g {
-          &:first-of-type {
-            path {
-              fill: aliceblue;
-            }
-          }
-        }
-      }
-    }
 
     .RangeBar {
       display: flex;

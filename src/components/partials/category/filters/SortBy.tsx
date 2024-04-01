@@ -38,13 +38,13 @@ import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 // Utils
 import RenderFields from "@/components/common/RenderFields"
 import { SortingOption } from "@/types/enums"
-import { setSortedItems } from "@/redux/reducers/categoryReducer"
+import { setSortBy, setSortedItems } from "@/redux/reducers/categoryReducer"
 import { sortByMostPopular, sortByPriceHighToLow, sortByPriceLowToHigh } from "@/utils/itemsSorting"
 
-function SortBy({ page }: { page: number }) {
+function SortBy() {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
   const [openSortBy, toggleSortBy] = useToggle(false)
-  const [sortBy, setSortBy] = useState<SortingOption | null>(null);
+  // const [sortBy, setSortBy] = useState<SortingOption | null>(null);
   const dispatch = useAppDispatch();
   const items = useAppSelector(state => state.category.items);
 
@@ -61,36 +61,9 @@ function SortBy({ page }: { page: number }) {
     defaultValues: {},
   })
 
-  useEffect(() => {
-    reset();
-  }, [page])
-
-  useEffect(() => {
-    if (!sortBy) return;
-
-    if (sortBy == SortingOption.Popular) {
-      dispatch(setSortedItems(sortByMostPopular(items)));
-    }
-    else if (sortBy == SortingOption.PriceHighToLow) {
-      dispatch(setSortedItems(sortByPriceHighToLow(items)));
-    }
-    else if (sortBy == SortingOption.PriceLowToHigh) {
-      dispatch(setSortedItems(sortByPriceLowToHigh(items)));
-    }
-  }, [sortBy])
-
   const handleChange = () => {
     const value = Object.values(getValues())[0]
-
-    if (value === SortingOption.Popular) {
-      setSortBy(SortingOption.Popular)
-    }
-    else if (value === SortingOption.PriceHighToLow) {
-      setSortBy(SortingOption.PriceHighToLow)
-    }
-    else if (value === SortingOption.PriceLowToHigh) {
-      setSortBy(SortingOption.PriceLowToHigh)
-    }
+    dispatch(setSortBy(value));
   }
 
   const renderSortByFields = (labelPlacement: FormControlLabelProps['labelPlacement']) => {

@@ -23,8 +23,6 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
     const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-        // console.log();
-
         setTabValue(newValue)
     }
 
@@ -33,9 +31,6 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
         setSelectedPriceMobile(selectedPrice)
         toggleFilterBy()
     }
-
-    console.log("SelectedFilters", selectedFilters);
-
 
     return (
         <Fragment>

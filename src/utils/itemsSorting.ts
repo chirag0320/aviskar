@@ -8,7 +8,7 @@ export const sortByMostPopular = (items: Product[]) => {
 
 export const sortByPriceLowToHigh = (items: any[]) => {
     const sortedItems = [...items].sort((a, b) => {
-        return a.priceWithDetails.price - b.priceWithDetails.price;
+        return a.priceWithDetails?.price - b.priceWithDetails?.price;
     });
 
     return sortedItems;
@@ -16,7 +16,7 @@ export const sortByPriceLowToHigh = (items: any[]) => {
 
 export const sortByPriceHighToLow = (items: any[]) => {
     const sortedItems = [...items].sort((a, b) => {
-        return b.priceWithDetails.price - a.priceWithDetails.price;
+        return b.priceWithDetails?.price - a.priceWithDetails?.price;
     });
 
     return sortedItems;

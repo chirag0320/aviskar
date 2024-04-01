@@ -9,7 +9,7 @@ const CloserLook = lazy(() => import("../components/partials/home/CloserLook"))
 import FeaturedProducts from "../components/partials/home/FeaturedProducts"
 import { ENDPOINTS } from "@/utils/constants"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
-import { CategoriesListDetails, HomePageSectionDetails, configDetails, setScrollPosition } from "@/redux/reducers/homepageReducer"
+import { CategoriesListDetails, HomePageSectionDetails, configDetails, serProgressLoaderStatus, setScrollPosition } from "@/redux/reducers/homepageReducer"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import { useMediaQuery } from "@mui/material";
 import Layout from "@/components/common/Layout";
@@ -18,7 +18,7 @@ import Toaster from "@/components/common/Toaster";
 
 function IndexPage() {
   const dispatch = useAppDispatch()
-  const { configDetails: configDetailsState, openToaster,scrollPosition } = useAppSelector((state) => state.homePage)
+  const { configDetails: configDetailsState, openToaster, scrollPosition } = useAppSelector((state) => state.homePage)
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
 
   const [body] = useState({
@@ -46,6 +46,7 @@ function IndexPage() {
   const [wait2, setWait2] = useState(false)
   const [wait3, setWait3] = useState(false)
   useEffect(() => {
+    dispatch(serProgressLoaderStatus(true))
     const timeout1 = setTimeout(() => {
       setWait1(true);
     }, 400); // Wait for 300ms before rendering the first component
@@ -56,6 +57,7 @@ function IndexPage() {
       setWait3(true)
     }, 1100);
     return () => {
+      dispatch(serProgressLoaderStatus(false))
       clearTimeout(timeout1)
       clearTimeout(timeout2)
       clearTimeout(timeout3)
@@ -71,7 +73,7 @@ function IndexPage() {
           title="Home"
           lang="en"
         />
-        {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>}
+        {/* {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>} */}
         {configDetailsState?.sliderenableinhome?.value === false ? null : <Banner />}
         <Suspense fallback={<></>}> <FeaturedProducts /></Suspense>
         <Suspense fallback={<></>}> <LookingFor /></Suspense>

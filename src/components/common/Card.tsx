@@ -41,7 +41,7 @@ import noImage from '../../assets/images/noImage.png'
 import { ProductStockStatus, ProductUpdateCountdown } from "./Utils"
 import { IFeaturedProducts } from "../partials/home/FeaturedProducts"
 import { Link as NavigationLink, navigate } from "gatsby"
-import { deliveryMethodMessage, roundOfThePrice } from "@/utils/common"
+import { bodyForGetShoppingCartData, deliveryMethodMessage, roundOfThePrice } from "@/utils/common"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import { productImages } from "@/utils/data"
 import { CartItem } from "@/types/shoppingCart";
@@ -50,6 +50,7 @@ import useCallAPI from "@/hooks/useCallAPI";
 import { ENDPOINTS } from "@/utils/constants";
 import { setToasterState } from "@/redux/reducers/homepageReducer";
 import useShowToaster from "@/hooks/useShowToaster";
+import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer";
 
 interface Iproduct {
   product: IFeaturedProducts;
@@ -82,6 +83,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
     } as any)
     // console.log("🚀 ~ addTOCart response", response);
     if (response.code === 200) {
+      dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
       if (response.data) {
         showToaster({
           message: 'The product has been added to your product cart',
@@ -421,6 +423,7 @@ export const LineChartCard = (props: any) => {
 
 
 export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
+  console.log("🚀 ~ CartCard ~ cartItem:", cartItem)
   // const [deliveryMethod, setDeliveryMethod] = useState<string>('LocalShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     // setDeliveryMethod(event.target.value as string);
@@ -475,7 +478,6 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
                 </Select>
               </Stack>
             )}
-
             <ProductUpdateCountdown />
           </Stack>
           {!hideRightSide && (

@@ -1,5 +1,7 @@
 import React, { Suspense, lazy, useCallback, useState } from "react"
 import { useMediaQuery, useScrollTrigger, AppBar, Box, Divider, Skeleton } from "@mui/material"
+const MobileSecondaryMenu = lazy(() => import('./MobileSecondaryMenu'));
+
 
 // Components
 const Pricing = lazy(() => import('./Pricing'))
@@ -42,6 +44,7 @@ const Index = () => {
       <Suspense fallback={<></>}>
         {isMobile && openMobileMenu && <MobileMenu open={isMobile && openMobileMenu} trigger={trigger} toggleMobileMenu={toggleMobileMenu} />}
       </Suspense >
+      {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>}
     </Box >
   )
 }

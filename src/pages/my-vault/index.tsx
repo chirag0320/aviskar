@@ -36,7 +36,8 @@ import {
 import { Breadcrumb } from "@/components/common/Utils";
 
 // Assets
-import { ArrowRight } from "../assets/icons/index";
+import { ArrowRight } from "../../assets/icons/index";
+import { Console } from "console";
 
 interface VaultProps {
   id: number;
@@ -138,10 +139,16 @@ function Vault() {
                                           loading="eager"
                                           src={
                                             isLargeScreen
-                                              ? item.cdnUrlLarge
+                                              ? "https://picsum.photos/880/688"
                                               : item.cdnUrlSmall
                                           }
+                                          // src={
+                                          //   isLargeScreen
+                                          //     ? item.cdnUrlLarge
+                                          //     : item.cdnUrlSmall
+                                          // }
                                           alt="background"
+                                          
                                         />
                                       </>
                                     }

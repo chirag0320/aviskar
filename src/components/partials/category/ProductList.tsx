@@ -1,16 +1,21 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Box, Skeleton, Card, Pagination, Stack, Typography } from "@mui/material"
 
 // Components
 import { ProductCard } from "@/components/common/Card"
 // Hooks
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 import { pageSize } from "@/pages/[category]"
 import Toaster from "@/components/common/Toaster"
 import { navigate } from "gatsby"
+import { SortingOption } from "@/types/enums"
+import { setSortedItems } from "@/redux/reducers/categoryReducer"
+import { sortByMostPopular, sortByPriceHighToLow, sortByPriceLowToHigh } from "@/utils/itemsSorting"
 
 function ProductList({ page, setPage }: { page: number, setPage: any }) {
   const categoryData = useAppSelector((state) => state.category);
+  const sortByValue = useAppSelector((state) => state.category.sortBy);
+  const dispatch = useAppDispatch();
   const { openToaster } = useAppSelector(state => state.homePage)
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -21,14 +26,28 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
     navigate(`?${pageQuery.toString()}`, { replace: true });
   }
 
+  useEffect(() => {
+    console.log("categoryData", 1)
+    if (!sortByValue) return;
+    if (!categoryData.items) return;
+    if (sortByValue === SortingOption.Popular) {
+      dispatch(setSortedItems(sortByMostPopular(categoryData.items)));
+    }
+    else if (sortByValue === SortingOption.PriceHighToLow) {
+      dispatch(setSortedItems(sortByPriceHighToLow(categoryData.items)));
+    }
+    else if (sortByValue === SortingOption.PriceLowToHigh) {
+      dispatch(setSortedItems(sortByPriceLowToHigh(categoryData.items)));
+    }
+  }, [categoryData?.items, sortByValue, page]);
+
   return (
     <Box className="ProductList">
       {openToaster && <Toaster />}
       <Box className="ProductListWrapper">
-
         {
           !categoryData.loading ? (
-            categoryData?.items?.length > 0 ? categoryData.items.map((product: any) => {
+            categoryData?.sortedItems?.length > 0 ? categoryData.sortedItems.map((product: any) => {
               return (
                 <ProductCard key={product.productId} product={product} stickyProduct={false} />
               );
@@ -50,7 +69,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
         }
       </Box>
       <Stack className="Pagination">
-        {categoryData?.count > 0 && <Pagination count={Math.floor(categoryData?.count / pageSize)} page={page} shape="rounded" onChange={handlePageChange} />}
+        {categoryData?.count > 0 && <Pagination count={Math.ceil(categoryData?.count / pageSize)} page={page} shape="rounded" onChange={handlePageChange} />}
       </Stack>
     </Box>
   )

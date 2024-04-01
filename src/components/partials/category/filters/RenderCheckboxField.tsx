@@ -3,7 +3,6 @@ import React, { useEffect, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { log } from 'console'
 
 const schema = yup.object().shape({
     Gender: yup.array().required().nullable(),
@@ -17,7 +16,7 @@ interface props {
     page: number
 }
 
-const RenderCheckboxField = ({ filter, options, setSelectedFilters, page }: props) => {
+const RenderCheckboxField = React.memo(({ filter, options, setSelectedFilters,selectedFilters, page }: props) => {
     const [isPending, startTransition] = useTransition();
     const {
         register,
@@ -29,10 +28,6 @@ const RenderCheckboxField = ({ filter, options, setSelectedFilters, page }: prop
         resolver: yupResolver(schema),
         defaultValues: {},
     })
-
-    useEffect(() => {
-        reset();
-    }, [page])
 
     const onCheckboxChange = () => {
         startTransition(() => {
@@ -64,6 +59,6 @@ const RenderCheckboxField = ({ filter, options, setSelectedFilters, page }: prop
             margin="none"
         />
     )
-}
+});
 
 export default RenderCheckboxField

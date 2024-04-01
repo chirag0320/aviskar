@@ -24,7 +24,9 @@ const initialState: categoryData = {
   price: isBrowser && JSON.parse(localStorageGetItem("price") ?? JSON.stringify({ minPrice: 0, maxPrice: 0 })),
   specifications: isBrowser && JSON.parse(localStorageGetItem("specifications") ?? JSON.stringify({})),
   manufactureres: isBrowser && JSON.parse(localStorageGetItem("manufactureres") ?? JSON.stringify([])),
-  productDetailsData: {}
+  productDetailsData: {},
+  sortBy: null,
+  sortedItems: []
 }
 
 export const getCategoryData = appCreateAsyncThunk(
@@ -51,7 +53,8 @@ export const categoryPageSlice = createSlice({
       state.loading = false
     },
     setSortedItems: (state, action) => {
-      state.items = action.payload
+      state.sortedItems = action.payload
+      console.log("🚀 ~ state.items:", state.items)
     },
     setPriceForEachItem: (state, action: any) => {
       const priceForEachId = action.payload;
@@ -65,6 +68,9 @@ export const categoryPageSlice = createSlice({
     resetProductDetails: (state) => {
       state.productDetailsData = {}
       state.loading = false
+    },
+    setSortBy: (state, action) => {
+      state.sortBy = action.payload
     }
   },
 
@@ -81,6 +87,7 @@ export const categoryPageSlice = createSlice({
         const filtersData = additionalField.filters;
 
         state.items = responseData.items;
+        state.sortedItems = responseData.items;
         localStorageSetItem('items', JSON.stringify(state.items))
         state.count = responseData.count;
         localStorageSetItem('count', JSON.stringify(state.count))
@@ -117,6 +124,6 @@ export const categoryPageSlice = createSlice({
   },
 })
 
-export const { setLoadingTrue, setLoadingFalse, setSortedItems, setPriceForEachItem,resetProductDetails } = categoryPageSlice.actions;
+export const { setLoadingTrue, setLoadingFalse, setSortedItems, setPriceForEachItem, resetProductDetails,setSortBy } = categoryPageSlice.actions;
 
 export default categoryPageSlice.reducer

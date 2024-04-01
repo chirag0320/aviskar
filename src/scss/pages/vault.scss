@@ -55,6 +55,7 @@
                 .swiper-slide {
                   .Wrapper {
                     border-radius: 15px;
+                    background-color: transparent;
 
                     .BannerImage {
                       visibility: visible !important;
@@ -187,9 +188,11 @@
 
     .RewardWrapper {
       gap: 16px;
+      align-items: center;
 
       @include media($xs) {
         flex-direction: column;
+        align-items: flex-start;
       }
 
       .rewardText {
