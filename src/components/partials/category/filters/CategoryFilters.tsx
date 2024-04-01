@@ -27,7 +27,7 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
     };
 
     const argumentForService = {
-      url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
+      url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `${location.pathname}`,
       body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, ...commonArgument } : { ...requestBodyDefault, ...commonArgument }
     }
 
@@ -63,7 +63,7 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
         };
 
         const argumentForService = {
-          url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${location.pathname}`,
+          url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `${location.pathname}`,
           body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, ...commonArgument } : { ...requestBodyDefault, ...commonArgument }
         }
 
