@@ -22,7 +22,7 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
 
     const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
     const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
-    console.log("🚀 ~ SmallScreenFilters ~ selectedPrice:", selectedPrice)
+    // console.log("🚀 ~ SmallScreenFilters ~ selectedPrice:", selectedPrice)
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setTabValue(newValue)
