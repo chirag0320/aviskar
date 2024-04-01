@@ -23,7 +23,7 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
     const handleProccedToCheckout = async () => {
         let subTotal = 0;
         const itemsWithQuantity = cartItemsWithLivePrice.map((item: CartItemsWithLivePriceDetails) => {
-            subTotal += (item.LivePriceDetails.price * quantities[item.id]);
+            subTotal += (item?.LivePriceDetails?.price * quantities[item.id]);
             return {
                 id: item.id,
                 quantity: quantities[item.id]
