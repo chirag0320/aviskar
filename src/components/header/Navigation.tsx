@@ -36,7 +36,7 @@ export interface Icategory {
 }
 function Navigation() {
   const dispatch = useAppDispatch()
-  const { configDetails: configDetailsState, categoriesList, needToShowProgressLoader } = useAppSelector((state) => state.homePage)
+  const { configDetails: configDetailsState, categoriesList, needToShowProgressLoader, isLoggedIn } = useAppSelector((state) => state.homePage)
   const { cartItems } = useAppSelector((state) => state.shoppingCart)
   const [currententlySelected, setCurrententlySelected] = useState('')
   useEffect(() => {
@@ -44,7 +44,7 @@ function Navigation() {
   }, [window?.location?.pathname])
   useEffect(() => {
     dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
-  }, [])
+  }, [isLoggedIn])
   return (
     <Box className="NavigationHeader">
       <Container>
