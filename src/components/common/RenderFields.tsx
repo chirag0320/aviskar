@@ -92,7 +92,6 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   alreadySelectedFilters,
   ...otherProps
 }) => {
-  console.log("🚀 ~ alreadySelectedFilters:", alreadySelectedFilters)
   const [passwordVisibility, togglePasswordVisibility] = useToggle(false)
 
   let fieldType = null
@@ -103,23 +102,22 @@ const RenderFields: React.FC<RenderFieldProps> = ({
           fullWidth={fullWidth}
           margin={margin}
           color={color}
-          value={"11"}
           {...(error ? { error: true } : {})}
-          {...register(name)}
         >
           {label && <FormLabel htmlFor={name}>{label}{required && " *"}</FormLabel>}
           <Controller
+            name={name}
             control={control}
-            defaultValue={defaultValue}
-            value={"11"}
             render={({ field }) => (
               <Select
                 inputProps={{ id: name }}
                 error={!!error}
                 disabled={disabled}
-                defaultValue={"0"}
+                defaultValue={defaultValue}
                 onChange={(e) => {
-                  field.onChange(e)
+                  console.log(name, e.target.value, "xxx")
+                  // field.onChange(e)
+                  setValue(name, e.target.value)
                   if (onChange) {
                     onChange()
                   }
@@ -137,14 +135,13 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                       color: "#1D2129",
                     }
                 }
+                {...register(name)}
                 {...otherProps}
-                value={"0"}
+                value={value}
               >
                 {children}
               </Select>
             )}
-            name={name}
-            {...otherProps}
           />
         </FormControl>
       );
@@ -212,7 +209,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                           onChange(); // Trigger onChange if provided
                         }
                       }}
-                      checked={alreadySelectedFilters?.includes(checkboxOption.value) || !!getValues(name)?.[checkboxOption.value] }
+                      checked={alreadySelectedFilters?.includes(checkboxOption.value) || !!getValues(name)?.[checkboxOption.value]}
                     />
                   }
                   label={checkboxOption.label}

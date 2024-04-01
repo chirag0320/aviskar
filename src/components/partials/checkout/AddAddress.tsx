@@ -6,7 +6,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // Hooks
-import { useAppDispatch, useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 
 // Componenets
 import StyledDialog from "@/components/common/StyledDialog"
@@ -60,9 +60,11 @@ function AddAddress(props: AddAddress) {
     const stateList = useAppSelector(state => state.checkoutPage.stateList);
     const [stateId, setStateId] = useState<number | null>(null);
     const { showToaster } = useShowToaster();
+    const [state, toggle] = useToggle()
     const loading = useAppSelector(state => state.checkoutPage.loading);
     const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents | null>(null);
-
+    const [countryValue, setcountryValue] = useState<any>('-1')
+    const [stateValue, setstateValue] = useState<any>('')
     const {
         register,
         reset,
@@ -87,12 +89,12 @@ function AddAddress(props: AddAddress) {
             addressLine1: data.Address1,
             addressLine2: data.Address2,
             city: data.City,
-            stateId: stateId,
+            stateId: stateId || data.State,
             stateName: data.State,
             postcode: data.Code,
             countryId: data.Country,
         }
-
+        
 
         const response = await dispatch(addOrEditAddress({
             url: ENDPOINTS.addOrEditAddress,
@@ -113,27 +115,31 @@ function AddAddress(props: AddAddress) {
     useEffect(() => {
         return () => {
             reset()
+            setcountryValue(-1)
+            setstateValue('')
         }
-    }, []);
+    }, [open]);
 
     useEffect(() => {
-        console.log("🚀 ~ useEffect ~ googleAddressComponents:", googleAddressComponents)
-
         if (googleAddressComponents) {
             setValue('Address1', googleAddressComponents.address)
             countryList.forEach((country: StateOrCountry) => {
                 if (country.name === googleAddressComponents.country.trim()) {
                     setValue('Country', country.id.toString())
+                    setcountryValue(country.id.toString())
                 }
             })
             setValue('State', googleAddressComponents.state)
+            setstateValue(googleAddressComponents.state)
             setStateId(() => null);
+            setValue('City', googleAddressComponents?.city)
+            setValue('Address2', googleAddressComponents.address2)
         }
     }, [googleAddressComponents])
-
-    console.log("Qmint", getValues('State'))
-    console.log("Qmint", getValues('Country'))
-
+    const OnChange = () => {
+        toggle()
+    }
+    console.log(getValues('Country'), "get value")
     return (
         <StyledDialog
             id="UpdateAddress"
@@ -225,7 +231,7 @@ function AddAddress(props: AddAddress) {
                             variant='outlined'
                             margin='none'
                         />
-                        <RenderFields
+                        {countryList?.length > 0 && <RenderFields
                             register={register}
                             type="select"
                             control={control}
@@ -233,15 +239,16 @@ function AddAddress(props: AddAddress) {
                             name="Country"
                             variant='outlined'
                             margin='none'
-                            defaultValue={getValues('Country')}
-                            value={getValues('Country')}
+                            defaultValue={"-1"}
+                            value={countryValue}
                             setValue={setValue}
+                            onChange={OnChange}
                         >
-                            <MenuItem value="none">Select country</MenuItem>
+                            <MenuItem value="-1">Select country</MenuItem>
                             {countryList.map((country: StateOrCountry) => (
                                 <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
                             ))}
-                        </RenderFields>
+                        </RenderFields>}
                     </Stack>
                     <Stack className="Column">
                         <Autocomplete
@@ -267,10 +274,11 @@ function AddAddress(props: AddAddress) {
                                     setStateId(value?.id ? value?.id : null);
                                 }
                             }}
-                            inputValue={getValues('State')}
+                            inputValue={stateValue}
                             // defaultValue={getValues('State')}
                             onInputChange={(event, newInputValue) => {
                                 setValue('State', newInputValue); // Update the form value with the manually typed input
+                                setstateValue(newInputValue)
                             }}
                             freeSolo />
 
