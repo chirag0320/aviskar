@@ -17,10 +17,15 @@ interface props {
     setSelectedFilters: any,
 }
 
-const RenderCheckboxField = React.memo(({ filter, options, setSelectedFilters, selectedFilters }: props) => {
+const RenderCheckboxField =({ filter, options, setSelectedFilters, selectedFilters }: props) => {
+    console.log("🚀 ~ RenderCheckboxField ~ selectedFilters:", selectedFilters, 
+    // "---",filter, "---", options
+)
     const [isPending, startTransition] = useTransition();
     const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
+    console.log("🚀 ~ useEffect ~ isMobile:", isMobile)
     const clearFilters = useAppSelector(state => state.category.clearFilters)
+
     const {
         register,
         getValues,
@@ -44,7 +49,7 @@ const RenderCheckboxField = React.memo(({ filter, options, setSelectedFilters, s
                 }
             }
         }
-    }, [selectedFilters])
+    }, [selectedFilters, isMobile])
 
     useEffect(() => {
         if (clearFilters) {
@@ -74,6 +79,7 @@ const RenderCheckboxField = React.memo(({ filter, options, setSelectedFilters, s
     return (
         <RenderFields
             type="checkbox"
+            // value={}
             register={register}
             name={filter}
             options={options}
@@ -84,6 +90,6 @@ const RenderCheckboxField = React.memo(({ filter, options, setSelectedFilters, s
             margin="none"
         />
     )
-});
+};
 
 export default RenderCheckboxField

@@ -92,6 +92,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   alreadySelectedFilters,
   ...otherProps
 }) => {
+  console.log("🚀 ~ alreadySelectedFilters:", alreadySelectedFilters)
   const [passwordVisibility, togglePasswordVisibility] = useToggle(false)
 
   let fieldType = null
@@ -207,7 +208,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                           onChange(); // Trigger onChange if provided
                         }
                       }}
-                      checked={!!getValues(name)?.[checkboxOption.value] || alreadySelectedFilters?.includes(checkboxOption.value)}
+                      checked={alreadySelectedFilters?.includes(checkboxOption.value) || !!getValues(name)?.[checkboxOption.value] }
                     />
                   }
                   label={checkboxOption.label}
