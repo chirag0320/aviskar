@@ -681,6 +681,11 @@ const theme: Theme = createTheme({
     MuiAutocomplete: {
       styleOverrides: {
         option: {
+          transition: '400ms all ease',
+          "&:hover": {
+            color: `${variable.yellowFuel}`,
+            backgroundColor: 'transparent !important',
+          },
           "@media (max-width: 600px)": {
             minHeight: "initial !important",
           },

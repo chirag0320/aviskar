@@ -174,6 +174,16 @@
                 .Top {
                   display: flex;
                   margin-bottom: 0;
+
+                  @include media($xs) {
+                    gap: 5px;
+                  }
+
+                  .Left {
+                    .PriceChangeReturn {
+                      padding: 4px 7px;
+                    }
+                  }
                 }
 
                 .Bottom {
@@ -190,13 +200,15 @@
                 gap: 10px;
 
                 @include media($sm) {
-                  gap: 30px;
+                  gap: 10px;
                 }
 
 
                 .OrderDetails,
                 .OrderActions {
-                  padding: 6px 0;
+                  padding: 8px 0;
+                  gap: 8px;
+
                 }
 
                 .OrderDetails {
@@ -207,7 +219,7 @@
                   }
 
                   @include media($xs) {
-                    width: 40%;
+                    width: 55%;
                   }
 
                 }
@@ -220,7 +232,7 @@
                   }
 
                   @include media($xs) {
-                    width: 60%;
+                    width: 45%;
                   }
 
                   .QuantityWrapper {
@@ -228,8 +240,16 @@
                   }
 
                   .Right {
+                    gap: 8px;
+
                     @include media($ssm) {
                       flex-direction: column;
+                    }
+
+                    .MuiButton-endIcon {
+                      @include media($xs) {
+                        display: none;
+                      }
                     }
                   }
                 }
