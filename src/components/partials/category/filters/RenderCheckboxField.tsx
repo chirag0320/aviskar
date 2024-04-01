@@ -3,6 +3,8 @@ import React, { useEffect, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { useAppSelector } from '@/hooks'
+import { useMediaQuery } from '@mui/material'
 
 const schema = yup.object().shape({
     Gender: yup.array().required().nullable(),
@@ -13,21 +15,48 @@ interface props {
     options: any,
     selectedFilters: { [key: string]: string[] },
     setSelectedFilters: any,
-    page: number
 }
 
-const RenderCheckboxField = React.memo(({ filter, options, setSelectedFilters,selectedFilters, page }: props) => {
+const RenderCheckboxField =({ filter, options, setSelectedFilters, selectedFilters }: props) => {
+    console.log("🚀 ~ RenderCheckboxField ~ selectedFilters:", selectedFilters, 
+    // "---",filter, "---", options
+)
     const [isPending, startTransition] = useTransition();
+    const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
+    console.log("🚀 ~ useEffect ~ isMobile:", isMobile)
+    const clearFilters = useAppSelector(state => state.category.clearFilters)
+
     const {
         register,
         getValues,
         setValue,
         reset,
         formState: { errors },
-    } = useForm<{ Gender: string }>({
+    } = useForm<any>({
         resolver: yupResolver(schema),
         defaultValues: {},
     })
+
+    useEffect(() => {
+        if (isMobile) {
+            for (const key in selectedFilters) {
+                if (key === filter) {
+                    const obj: any = {};
+                    selectedFilters[key].forEach((value: string) => {
+                        obj[value] = true;
+                    })
+                    setValue(filter, obj)
+                }
+            }
+        }
+    }, [selectedFilters, isMobile])
+
+    useEffect(() => {
+        if (clearFilters) {
+            reset();
+            setSelectedFilters({});
+        }
+    }, [clearFilters])
 
     const onCheckboxChange = () => {
         startTransition(() => {
@@ -50,15 +79,17 @@ const RenderCheckboxField = React.memo(({ filter, options, setSelectedFilters,se
     return (
         <RenderFields
             type="checkbox"
+            // value={}
             register={register}
             name={filter}
             options={options}
+            alreadySelectedFilters={selectedFilters[filter]}
             setValue={setValue}
             getValues={getValues}
             onChange={onCheckboxChange}
             margin="none"
         />
     )
-});
+};
 
 export default RenderCheckboxField

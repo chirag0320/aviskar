@@ -23,15 +23,6 @@ interface UiFormInputs {
   Number: string
 }
 
-const schema = yup.object().shape({
-  Name: yup.string().required(),
-  CompanySize: yup.number().required().nullable(),
-  Gender: yup.array().required().nullable(),
-  Password: yup.string().required(),
-  Subscribe: yup.string().required(),
-  Number: yup.string().required(),
-})
-
 // Hooks
 import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 
@@ -46,7 +37,7 @@ function SortBy() {
   const [openSortBy, toggleSortBy] = useToggle(false)
   // const [sortBy, setSortBy] = useState<SortingOption | null>(null);
   const dispatch = useAppDispatch();
-  const items = useAppSelector(state => state.category.items);
+  const clearFilters = useAppSelector(state => state.category.clearFilters);
 
   const {
     register,
@@ -56,10 +47,16 @@ function SortBy() {
     control,
     setValue,
     formState: { errors },
-  } = useForm<UiFormInputs>({
-    resolver: yupResolver(schema),
+  } = useForm<any>({
+    // resolver: yupResolver(schema),
     defaultValues: {},
   })
+
+  useEffect(() => {
+    if (clearFilters) {
+      setValue("Sort By", null);
+    }
+  }, [clearFilters]);
 
   const handleChange = () => {
     const value = Object.values(getValues())[0]
@@ -74,7 +71,7 @@ function SortBy() {
         register={register}
         name="Sort By"
         labelPlacement={labelPlacement}
-        error={errors.CompanySize}
+        // error={errors.CompanySize}
         options={sortByOptions}
         margin="none"
         fullWidth

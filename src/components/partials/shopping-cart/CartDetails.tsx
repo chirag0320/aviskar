@@ -106,8 +106,9 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
         if (isapiCallNeeded) {
             const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
 
+            // NOTE :- Proper response is not coming from backend to show the right toaster so bottom can be a bug for showing right toaster message
             if (hasFulfilled(response.type)) {
-                if (!response?.payload?.data?.data) {
+                if (!response?.payload?.data?.data || response?.payload?.data?.data?.length === 0) {
                     showToaster({ message: "Cart updated", severity: 'success' })
                 }
                 else {
@@ -152,4 +153,4 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
     )
 }
 
-export default CartDetails
+export default React.memo(CartDetails);

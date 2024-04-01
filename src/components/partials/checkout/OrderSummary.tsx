@@ -169,7 +169,7 @@ function OrderSummary() {
     const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
 
     if (hasFulfilled(response.type)) {
-      if (!response?.payload?.data?.data) {
+      if (!response?.payload?.data?.data || response?.payload?.data?.data?.length === 0) {
         // showToaster({ message: "Cart updated", severity: 'success' })
         await dispatch(checkValidationOnConfirmOrder({
           url: ENDPOINTS.checkValidationOnConfirmOrder, body: {
@@ -222,7 +222,7 @@ function OrderSummary() {
         </Stack>
         <Divider className="ActionDivider" />
         <Stack className="ActionWrapper">
-          <Button color="secondary">Continue Shopping</Button>
+          <Button color="secondary" onClick={() => navigate("/")}>Continue Shopping</Button>
           {/* <Button variant="contained" onClick={toggleOTPConfirmation} disabled={!finalDataForTheCheckout?.termAndServiceIsRead}>Confirm Order</Button> */}
           <Button variant="contained" onClick={onConfirmOrderHandler} disabled={!finalDataForTheCheckout?.termAndServiceIsRead || loading || finalDataForTheCheckout?.cartItemsWithLivePrice?.length < 1}>Confirm Order</Button>
         </Stack>

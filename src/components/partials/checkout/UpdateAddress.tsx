@@ -17,6 +17,7 @@ import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import { addressSchema } from "./AddAddress"
 import useShowToaster from "@/hooks/useShowToaster"
+import { AddressComponents } from "@/utils/parseAddressComponents"
 
 interface UpdateAddress {
   open: boolean
@@ -48,6 +49,7 @@ function UpdateAddress(props: UpdateAddress) {
   // console.log("🚀 ~ UpdateAddress ~ existingAddress:", existingAddress)
   const dispatch = useAppDispatch();
   const { showToaster } = useShowToaster();
+  const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents | null>(null);
 
   const {
     register,
@@ -88,7 +90,7 @@ function UpdateAddress(props: UpdateAddress) {
     if (hasFulfilled(response.type)) {
       onClose()
       reset()
-      showToaster({ message: "Address saved successfully" , severity: 'success'})
+      showToaster({ message: "Address saved successfully", severity: 'success' })
       dispatch(updateAddress({
         ...existingAddress,
         firstName: data.FirstName,
@@ -106,9 +108,25 @@ function UpdateAddress(props: UpdateAddress) {
         state: stateId,
       }))
     } else {
-      showToaster({ message: "Failed to save address" , severity: 'error'})
+      showToaster({ message: "Failed to save address", severity: 'error' })
     }
   }
+
+  useEffect(() => {
+    // console.log("🚀 ~ useEffect ~ googleAddressComponents:", googleAddressComponents)
+
+    if (googleAddressComponents) {
+      setValue('Address1', googleAddressComponents.address)
+      // setValue('Country', googleAddressComponents.country)
+      countryList.forEach((country: StateOrCountry) => {
+        if (country.name === googleAddressComponents.country) {
+          setValue('Country', country.id.toString())
+        }
+      })
+      setValue('State', googleAddressComponents.state)
+      setStateId(() => null);
+    }
+  }, [googleAddressComponents])
 
   useEffect(() => {
     setValue('State', existingAddress?.stateName);
@@ -185,7 +203,7 @@ function UpdateAddress(props: UpdateAddress) {
               margin='none'
             />
           </Stack>
-          <GoogleMaps />
+          <GoogleMaps setParsedAddress={setGoogleAddressComponents} />
           <RenderFields
             register={register}
             error={errors.Address1}
@@ -259,6 +277,9 @@ function UpdateAddress(props: UpdateAddress) {
                   setValue('State', value.name);
                   setStateId(value.id);
                 }
+              }}
+              onInputChange={(event, newInputValue) => {
+                setValue('State', newInputValue); // Update the form value with the manually typed input
               }}
               freeSolo
             />
