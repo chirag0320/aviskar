@@ -160,14 +160,7 @@
                     height: 34px;
 
                     &.MuiAutocomplete-popupIndicator {
-                      &.MuiAutocomplete-popupIndicatorOpen {
-                        transform: none;
-                      }
-
-                      svg {
-                        width: 18px;
-                        height: 18px;
-                      }
+                      visibility: hidden;
                     }
                   }
                 }
@@ -180,6 +173,15 @@
 
             @include media-min($lg) {
               width: 372px;
+            }
+
+            .Wrapper {
+              position: relative;
+              height: 100%;
+              .SearchButton {
+                position: absolute;
+                right: 0;
+              }
             }
           }
 
@@ -629,17 +631,19 @@
                     height: 34px;
 
                     &.MuiAutocomplete-popupIndicator {
-                      &.MuiAutocomplete-popupIndicatorOpen {
-                        transform: none;
-                      }
-
-                      svg {
-                        width: 18px;
-                        height: 18px;
-                      }
+                      visibility: hidden;
                     }
                   }
                 }
+              }
+            }
+
+            .Wrapper {
+              position: relative;
+              height: 100%;
+              .SearchButton {
+                position: absolute;
+                right: 0;
               }
             }
           }
