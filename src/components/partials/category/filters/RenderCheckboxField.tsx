@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useAppSelector } from '@/hooks'
+import { useMediaQuery } from '@mui/material'
 
 const schema = yup.object().shape({
     Gender: yup.array().required().nullable(),
@@ -18,6 +19,7 @@ interface props {
 
 const RenderCheckboxField = React.memo(({ filter, options, setSelectedFilters, selectedFilters }: props) => {
     const [isPending, startTransition] = useTransition();
+    const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
     const clearFilters = useAppSelector(state => state.category.clearFilters)
     const {
         register,
@@ -31,13 +33,15 @@ const RenderCheckboxField = React.memo(({ filter, options, setSelectedFilters, s
     })
 
     useEffect(() => {
-        for (const key in selectedFilters) {
-            if (key === filter) {
-                const obj: any = {};
-                selectedFilters[key].forEach((value: string) => {
-                    obj[value] = true;
-                })
-                setValue(filter, obj)
+        if (isMobile) {
+            for (const key in selectedFilters) {
+                if (key === filter) {
+                    const obj: any = {};
+                    selectedFilters[key].forEach((value: string) => {
+                        obj[value] = true;
+                    })
+                    setValue(filter, obj)
+                }
             }
         }
     }, [selectedFilters])

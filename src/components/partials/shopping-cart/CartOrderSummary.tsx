@@ -35,8 +35,8 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
         const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
 
         if (hasFulfilled(response.type)) {
-            if (!response?.payload?.data?.data) {
-                showToaster({ message: "Cart updated", severity: 'success' })
+            if (!response?.payload?.data?.data || response?.payload?.data?.data?.length === 0) {
+                showToaster({ message: "Cart updated and redirecting to checkout", severity: 'success' })
                 navigate('/checkout')
             }
             else {
