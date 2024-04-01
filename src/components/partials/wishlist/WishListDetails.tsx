@@ -163,7 +163,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                                     </Stack>
                                 </TableCell>
                                 {/* round to 2 */}
-                                <TableCell>{(quantities[item.id] * item.LivePriceDetails.price).toFixed(2)}</TableCell>
+                                <TableCell>{(quantities[item.id] * item?.LivePriceDetails?.price).toFixed(2)}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

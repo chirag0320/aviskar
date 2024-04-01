@@ -94,7 +94,7 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
     const updateCartHandler = async (isapiCallNeeded?: boolean) => {
         let subTotal = 0;
         const itemsWithQuantity = cartItemsWithLivePrice.map((item: CartItemsWithLivePriceDetails) => {
-            subTotal += (item.LivePriceDetails.price * quantities[item.id]);
+            subTotal += (item?.LivePriceDetails?.price * quantities[item.id]);
             return {
                 id: item.id,
                 quantity: quantities[item.id]
