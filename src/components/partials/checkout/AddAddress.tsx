@@ -89,7 +89,7 @@ function AddAddress(props: AddAddress) {
             addressLine1: data.Address1,
             addressLine2: data.Address2,
             city: data.City,
-            stateId: stateId || data.State,
+            stateId: stateId || 0,
             stateName: data.State,
             postcode: data.Code,
             countryId: data.Country,
