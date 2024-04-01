@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
-import { StateOrCountry, addOrEditAddress } from "@/redux/reducers/checkoutReducer";
+import { StateOrCountry, addAddress, addOrEditAddress } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
@@ -104,6 +104,7 @@ function AddAddress(props: AddAddress) {
         }))
 
         if (hasFulfilled(response.type)) {
+            dispatch(addAddress(addressQuery))
             onClose()
             reset()
             showToaster({ message: "Address saved successfully", severity: "success" })

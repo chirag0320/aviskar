@@ -315,7 +315,7 @@ function AboutProduct({ productId }: any) {
                   }
                 </Stack>
                 <Divider />
-                <Stack className="OrderActions">
+                {productDetailsData?.availability === "In Stock" && <Stack className="OrderActions">
                   {(isLoggedIn || configDetailsState?.buybuttonenableforguests?.value) ? (!productDetailsData?.disableBuyButton && <><Stack className="QuantityWrapper">
                     <IconButton id='minus' className="Minus" onClick={(e) => {
                       e.stopPropagation()
@@ -349,7 +349,7 @@ function AboutProduct({ productId }: any) {
                     <Button size="large" color="success" variant="contained" onClick={() => {
                       navigate('/login')
                     }}>Register to Buy</Button>}
-                </Stack>
+                </Stack>}
               </Box>
               <Divider />
             </Box>

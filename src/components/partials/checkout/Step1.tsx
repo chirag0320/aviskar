@@ -104,6 +104,7 @@ function Step1() {
   }, [openUpdateAddress, openAddAddress])
 
   const handleAddressUpdate = useCallback((addressData: any, isbilling: any) => {
+    console.log("🚀 ~ handleAddressUpdate ~ addressData: any, isbilling: any:", addressData, isbilling)
     if (isbilling) {
       setBillingAddress(addressData)
       dispatch(updateFinalDataForTheCheckout({ billingAddress }))
