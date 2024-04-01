@@ -223,8 +223,18 @@ export const createHomepageSlice = createSlice({
       state.loading = true
     })
     builder.addCase(membershipPlanDetails.fulfilled, (state, action) => {
-      state.mebershipPlanDetailsData = action?.payload?.data?.data
-      localStorageSetItem('mebershipPlanDetailsData', JSON.stringify(action?.payload?.data?.data))
+      const responseData = action?.payload?.data?.data;
+      // state.mebershipPlanDetailsData = action?.payload?.data?.data
+
+      //  exclude if some key has null value
+      const mebershipPlanDetailsData = Object.keys(responseData).reduce((acc: any, key: any) => {
+        if (responseData[key] !== null) {
+          acc[key] = responseData[key]
+        }
+        return acc
+      }, {})
+      state.mebershipPlanDetailsData = mebershipPlanDetailsData
+      localStorageSetItem('mebershipPlanDetailsData', JSON.stringify(membershipPlanDetails))
       state.loading = false
     })
     builder.addCase(membershipPlanDetails.rejected, (state, action) => {
