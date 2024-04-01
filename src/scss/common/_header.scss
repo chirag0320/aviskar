@@ -1,4 +1,9 @@
 #HeaderWrapper {
+  .MuiContainer-root {
+    @include media-between($md, $lg) {
+      max-width: $lg;
+    }
+  }
   .PageLoader {
     .LinearLoader {
       &.MuiLinearProgress-root {
@@ -87,14 +92,16 @@
         justify-content: space-between;
         align-items: center;
         gap: 8px;
-
-        .Left {
-          flex: 1;
+        @include media-min($lg) {
+          gap: 16px;
         }
-
         .Right {
           align-items: center;
           gap: 20px;
+
+          @include media-between($md, $mmd) {
+            gap: 10px;
+          }
 
           @include media($md) {
             gap: 16px;
@@ -109,16 +116,22 @@
             align-items: center;
             gap: 4px;
             font-weight: 500;
+            flex-shrink: 0;
             @include transition;
 
             @include media($md) {
               display: none;
             }
+            svg {
+              @include media-between($md, $mmd) {
+                display: none;
+              }
+            }
           }
 
           .SearchField {
             align-self: stretch;
-            min-width: 220px;
+            min-width: 200px;
 
             @include media($md) {
               min-width: initial;
@@ -174,6 +187,9 @@
             @include media-min($lg) {
               width: 372px;
             }
+            @include media-between($md, $mmd) {
+              min-width: 160px;
+            }
 
             .Wrapper {
               position: relative;
@@ -181,6 +197,24 @@
               .SearchButton {
                 position: absolute;
                 right: 0;
+                height: inherit;
+              }
+            }
+          }
+          .Marketingoffer {
+            align-self: stretch;
+            a {
+              display: flex;
+              align-items: center;
+              height: 100%;
+              border-radius: 10px;
+            }
+            img {
+              border-radius: inherit;
+              max-height: 100%;
+              max-width: 300px;
+              @include media-between($md, $mmmd) {
+                max-width: 200px;
               }
             }
           }
@@ -192,9 +226,16 @@
             @include media($xs) {
               @include padding-horizontal(6);
             }
+            @include media-between($md, $mmd) {
+              @include padding-horizontal(10);
+            }
 
             .MuiButton-startIcon {
               margin-left: 0;
+
+              @include media-between($md, $mmd) {
+                display: none;
+              }
 
               @include media($xs) {
                 display: none;
