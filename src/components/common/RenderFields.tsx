@@ -103,18 +103,21 @@ const RenderFields: React.FC<RenderFieldProps> = ({
           fullWidth={fullWidth}
           margin={margin}
           color={color}
+          value={"11"}
           {...(error ? { error: true } : {})}
+          {...register(name)}
         >
           {label && <FormLabel htmlFor={name}>{label}{required && " *"}</FormLabel>}
           <Controller
             control={control}
             defaultValue={defaultValue}
+            value={"11"}
             render={({ field }) => (
               <Select
                 inputProps={{ id: name }}
                 error={!!error}
                 disabled={disabled}
-                defaultValue={defaultValue}
+                defaultValue={"0"}
                 onChange={(e) => {
                   field.onChange(e)
                   if (onChange) {
@@ -135,6 +138,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                     }
                 }
                 {...otherProps}
+                value={"0"}
               >
                 {children}
               </Select>

@@ -117,12 +117,12 @@ function AddAddress(props: AddAddress) {
     }, []);
 
     useEffect(() => {
-        // console.log("🚀 ~ useEffect ~ googleAddressComponents:", googleAddressComponents)
+        console.log("🚀 ~ useEffect ~ googleAddressComponents:", googleAddressComponents)
 
         if (googleAddressComponents) {
             setValue('Address1', googleAddressComponents.address)
             countryList.forEach((country: StateOrCountry) => {
-                if (country.name === googleAddressComponents.country) {
+                if (country.name === googleAddressComponents.country.trim()) {
                     setValue('Country', country.id.toString())
                 }
             })
@@ -130,6 +130,9 @@ function AddAddress(props: AddAddress) {
             setStateId(() => null);
         }
     }, [googleAddressComponents])
+
+    console.log("Qmint", getValues('State'))
+    console.log("Qmint", getValues('Country'))
 
     return (
         <StyledDialog
@@ -230,6 +233,8 @@ function AddAddress(props: AddAddress) {
                             name="Country"
                             variant='outlined'
                             margin='none'
+                            defaultValue={getValues('Country')}
+                            value={getValues('Country')}
                             setValue={setValue}
                         >
                             <MenuItem value="none">Select country</MenuItem>
