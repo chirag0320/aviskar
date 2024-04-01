@@ -893,7 +893,7 @@
 
       .BottomWrapper {
         justify-content: space-between;
-        align-items: flex-start;
+        align-items: center;
         gap: 10px;
         flex-wrap: wrap;
         margin-top: 10px;
@@ -927,6 +927,8 @@
         }
 
         .RightSide {
+          flex-direction: column;
+          gap: 8px;
           .ShippingMessage {
             background-color: rgba($error, 0.05);
             color: $redCoral;
