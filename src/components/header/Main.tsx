@@ -16,7 +16,7 @@ import { LogOutUserAPI } from "@/redux/reducers/homepageReducer"
 function Main(props: any) {
   const dispatch = useAppDispatch()
   const { openMobileMenu, toggleMobileMenu } = (props)
-  const mobile = useMediaQuery((theme: any) => theme.breakpoints.down('sm'))
+  const mobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
   const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
   const handleAuth = () => {
     if (!isLoggedIn) {
