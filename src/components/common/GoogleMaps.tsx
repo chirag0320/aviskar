@@ -77,7 +77,7 @@ export default function GoogleMaps({ setParsedAddress }: { setParsedAddress: any
   );
 
   React.useEffect(() => {
-    // console.log("🚀 ~ React.useEffect", value)
+    console.log("🚀 ~ React.useEffect ~ value:", value)
     if (value) {
       const parsedAddress = parseAddressComponents(value);
       setParsedAddress(parsedAddress);
