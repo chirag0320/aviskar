@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks'
 import { navigate } from 'gatsby'
 import { resetSubTotal, setCartItemWarning, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
 import { ENDPOINTS } from '@/utils/constants'
-import { hasFulfilled } from '@/utils/common'
+import { hasFulfilled, roundOfThePrice } from '@/utils/common'
 import useShowToaster from '@/hooks/useShowToaster'
 import { CartItemsWithLivePriceDetails } from './CartDetails'
 
@@ -55,7 +55,7 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
                 <Typography variant="subtitle2" className='OrderSummaryTitle'>Order Summary </Typography>
                 <Stack className='SubtotalWrapper'>
                     <Typography variant="subtitle1">Subtotal </Typography>
-                    <Typography variant="body1" className='SubtotalValue'>${shoppingCartItems.subTotal}</Typography>
+                    <Typography variant="body1" className='SubtotalValue'>${roundOfThePrice(shoppingCartItems.subTotal)}</Typography>
                 </Stack>
                 <Stack className='DeliveryWrapper'>
                     <Typography variant="subtitle1">Delivery </Typography>
