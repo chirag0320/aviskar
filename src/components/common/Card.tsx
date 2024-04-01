@@ -422,7 +422,7 @@ export const LineChartCard = (props: any) => {
 };
 
 
-export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
+export const CartCard = ({ cartItem, hideDeliveryMethod, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
   console.log("🚀 ~ CartCard ~ cartItem:", cartItem)
   // const [deliveryMethod, setDeliveryMethod] = useState<string>('LocalShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
@@ -443,9 +443,6 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
           <Box className="LeftWrapper">
             <Typography className="Name" component="p" variant="titleLarge">{cartItem.productName}</Typography>
             <Typography variant="body2">{cartItem?.shippingInfo}</Typography>
-            {cartItem?.warnings?.map((warning) => (
-              <Typography variant="body2" key={warning}>{warning}</Typography>
-            ))}
           </Box>
           <Box className="RightWrapper">
             <Typography className="LivePrice" variant="body2">Live Price</Typography>
@@ -480,9 +477,11 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
             )}
             <ProductUpdateCountdown />
           </Stack>
-          {!hideRightSide && (
-            <Stack className="RightSide">
-              <Typography className="ShippingMessage" variant="body2">{deliveryMethodMessage.noSecureShipping}</Typography>
+          {(cartItem?.warnings?.length !== 0) && (
+            <Stack className="RightSide"> 
+              {cartItem?.warnings?.map((warning) => (
+                <Typography className="ShippingMessage" variant="body2" key={warning}>{warning}</Typography>
+              ))}
             </Stack>
           )}
 

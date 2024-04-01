@@ -32,6 +32,15 @@ function MobileSecondaryMenu() {
       setOpenSearch(false)
     }
   }
+
+  const handleChartMenu = () => {
+    console.log("handleChartMenu clicked.")
+  }
+
+  const handleCartMenu = () => {
+    navigate("/shopping-cart")
+  }
+
   useEffect(() => {
     const header = document.querySelector("#HeaderWrapper .MuiAppBar-root")?.clientHeight
     setHeaderHeight(header ?? 0)
@@ -61,18 +70,12 @@ function MobileSecondaryMenu() {
                 <SearchField />
               </Container>
             </ClickTooltip>
-            <IconButton color="secondary" title='Call us' className={classNames("MenuButton", { "Active": false })} href="tel:+61731848300"><Call /></IconButton>
+            <IconButton color="secondary" title='Call us' className={classNames("MenuButton", { "Active": false })} href={"tel:" + configDetailsState?.companyphonenumber?.value}><Call /></IconButton>
             {configDetailsState?.enablechart?.value ?
-            <IconButton>
-              <ChartMenu />
-            </IconButton>
+              <ChartMenu onClick={handleChartMenu} />
             : null}
-          {configDetailsState?.enablecart?.value ?
-            <IconButton onClick={() => {
-              navigate("/shopping-cart")
-            }}>
-              <CartMenu />
-            </IconButton>
+            {configDetailsState?.enablecart?.value ?
+              <CartMenu onClick={handleCartMenu} />
             : null}
             <ActionMenu />
           </Stack>

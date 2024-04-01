@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Box, TextField, Autocomplete, IconButton } from "@mui/material";
+import { Box, TextField, Autocomplete, IconButton, Stack } from "@mui/material";
 import { Search } from "../../assets/icons/index"; // Assuming you have imported the Search icon
 
 // Assuming you have appropriate custom hooks for API calls and debouncing
@@ -76,8 +76,7 @@ function SearchField() {
         </Box>
       )}
       renderInput={(params) => (
-        // Attention:- Below needs to change the styles
-        <div style={{ display: "flex" }}>
+        <Stack className="Wrapper">
           <TextField
             {...params}
             variant="filled"
@@ -88,10 +87,10 @@ function SearchField() {
               ...params.inputProps,
             }}
           />
-          <IconButton onClick={handleSearch}>
-            <Search />
+          <IconButton color="secondary" className="SearchButton" onClick={handleSearch}>
+            <Search fontSize="small" />
           </IconButton>
-        </div>
+        </Stack>
       )}
     />
   );
