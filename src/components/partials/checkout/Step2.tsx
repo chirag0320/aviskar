@@ -16,8 +16,8 @@ import { ENDPOINTS } from "@/utils/constants"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { CartItemsWithLivePriceDetails } from "../shopping-cart/CartDetails"
 import useDebounce from "@/hooks/useDebounce"
-import { deleteShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
-import { hasFulfilled } from "@/utils/common"
+import { deleteShoppingCartData, getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
+import { bodyForGetShoppingCartData, hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 
 function Step2() {
@@ -146,6 +146,7 @@ function Step2() {
       response = await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: ids }) as any);
     }
     if (hasFulfilled(response.type)) {
+      dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
       setCartItemsWithLivePrice(updatedCartItem);
       dispatch(updateFinalDataForTheCheckout({ cartItemsWithLivePrice: updatedCartItem }))
       showToaster({ message: response?.payload?.data?.message, severity: 'success' })
