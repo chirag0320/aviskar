@@ -16,7 +16,6 @@ function OrderConfirmation(props: any) {
     const checkLoadingStatus = useAppSelector(state => state.orderConfirmationDetails.loading);
     // const orderId = props.location?.search?.split('=')[1];
     const orderConfirmationDetails = useAppSelector(state => state.orderConfirmationDetails);
-    console.log("🚀 ~ OrderConfirmation ~ orderConfirmationDetails:", orderConfirmationDetails)
     useAPIoneTime({
         service: getOrderConfirmationDetails,
         endPoint: ENDPOINTS.orderConfimationDetails + new URLSearchParams(location.search).get("id")

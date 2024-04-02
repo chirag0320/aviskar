@@ -6,7 +6,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // Hooks
-import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 
 // Componenets
 import StyledDialog from "@/components/common/StyledDialog"
@@ -17,12 +17,14 @@ import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
+import { AddressType } from "@/types/enums"
 
 interface AddAddress {
     open: boolean
     dialogTitle: string
     onClose: () => void
     addressTypeId: number
+    handleAddressUpdate: (addressData: any, isbilling: any)=>any
 }
 
 interface Inputs {
@@ -54,13 +56,12 @@ export const addressSchema = yup.object().shape({
 })
 
 function AddAddress(props: AddAddress) {
-    const { open, dialogTitle, onClose, addressTypeId } = props
+    const { open, dialogTitle, onClose, addressTypeId, handleAddressUpdate } = props
     const dispatch = useAppDispatch();
     const countryList = useAppSelector(state => state.checkoutPage.countryList);
     const stateList = useAppSelector(state => state.checkoutPage.stateList);
     const [stateId, setStateId] = useState<number | null>(null);
     const { showToaster } = useShowToaster();
-    const [state, toggle] = useToggle()
     const loading = useAppSelector(state => state.checkoutPage.loading);
     const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
     console.log("🚀 ~ AddAddress ~ googleAddressComponents:", googleAddressComponents)
@@ -103,26 +104,25 @@ function AddAddress(props: AddAddress) {
                 ...addressQuery
             }
         }))
-        // let addressId;
-        // if (hasFulfilled(response?.type)) {
-        //     addressId = (response?.payload as any)?.data?.data;
-        // }
+        let addressId;
+        if (hasFulfilled(response?.type)) {
+            addressId = (response?.payload as any)?.data?.data;
+        }
 
-        // const needToadd = {
-        //     ...addressQuery,
-        //     addressId: addressId,
-        //     addressType: addressTypeId,
-        //     customerId: null,
-        //     state: addressQuery.stateId,
-        //     country: addressQuery.countryId,
-        //     phone1: addressQuery.phoneNumber,
-        //     isSource: null,
-        //     "isactive": true,
-        //     "storeCode": 8,
-        //     "countryName": "Australia"
-        // }
+        const needToadd = {
+            ...addressQuery,
+            addressId: addressId,
+            addressType: addressTypeId,
+            customerId: null,
+            state: addressQuery.stateId,
+            country: addressQuery.countryId,
+            phone1: addressQuery.phoneNumber,
+            isSource: null,
+            "countryName": "Australia"
+        }
         if (hasFulfilled(response.type)) {
-            dispatch(addAddress(addressQuery))
+            dispatch(addAddress(needToadd))
+            handleAddressUpdate(needToadd, addressTypeId == AddressType.Billing)
             onClose()
             reset()
             showToaster({ message: "Address saved successfully", severity: "success" })
@@ -158,8 +158,8 @@ function AddAddress(props: AddAddress) {
             }
         }
     }, [googleAddressComponents])
-    const OnChange = () => {
-        toggle()
+    const OnChange = (value:any) => {
+        setcountryValue(value)
     }
     return (
         <StyledDialog
