@@ -580,7 +580,9 @@
         width: fit-content;
         border-radius: 30px;
         border: 1px solid $mercury;
-
+        @include media($md) {
+          border-radius: 10px;
+        }
         .MuiTabs-scroller {
           border-radius: inherit;
           .MuiTabs-flexContainer {
@@ -597,6 +599,10 @@
             color: rgba($dark, 0.5);
             border-radius: inherit;
             @include padding-horizontal(40);
+            @include media($md) {
+              flex-grow: 1;
+              @include padding-horizontal(20);
+            }
             @include media($sm) {
               @include padding-horizontal(12);
             }
