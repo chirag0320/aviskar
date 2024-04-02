@@ -102,9 +102,14 @@ function AddAddress(props: AddAddress) {
                 ...addressQuery
             }
         }))
+        // let addressId;
+        // if (hasFulfilled(response?.type)) {
+        //     addressId = (response?.payload as any)?.data?.data;
+        // }
+
         // const needToadd = {
         //     ...addressQuery,
-        //     addressId: '',
+        //     addressId: addressId,
         //     addressType: addressTypeId,
         //     customerId: null,
         //     state: addressQuery.stateId,
