@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react"
-import { Autocomplete, MenuItem, Button, Stack, TextField } from "@mui/material"
+import { Autocomplete, MenuItem, Button, Stack, TextField, Box, Typography } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -152,7 +152,7 @@ function UpdateAddress(props: UpdateAddress) {
               register={register}
               error={errors.FirstName}
               name="FirstName"
-              placeholder="Enter first name"
+              placeholder="Enter first name *"
               control={control}
               // setValue={setValue}
               defaultValue={existingAddress?.firstName}
@@ -164,7 +164,7 @@ function UpdateAddress(props: UpdateAddress) {
               error={errors.LastName}
               defaultValue={existingAddress?.lastName}
               name="LastName"
-              placeholder="Enter last name"
+              placeholder="Enter last name *"
               control={control}
               variant='outlined'
               margin='none'
@@ -187,7 +187,7 @@ function UpdateAddress(props: UpdateAddress) {
               name="Contact"
               defaultValue={existingAddress?.phone1}
               type="number"
-              placeholder="Enter contact"
+              placeholder="Enter contact *"
               control={control}
               variant='outlined'
               margin='none'
@@ -197,7 +197,7 @@ function UpdateAddress(props: UpdateAddress) {
               error={errors.Email}
               name="Email"
               defaultValue={existingAddress?.email}
-              placeholder="Enter email id"
+              placeholder="Enter email id *"
               control={control}
               variant='outlined'
               margin='none'
@@ -209,7 +209,7 @@ function UpdateAddress(props: UpdateAddress) {
             error={errors.Address1}
             name="Address1"
             defaultValue={existingAddress?.addressLine1}
-            placeholder="Enter address line 1"
+            placeholder="Enter address line 1 *"
             control={control}
             variant='outlined'
             margin='none'
@@ -230,7 +230,7 @@ function UpdateAddress(props: UpdateAddress) {
               error={errors.City}
               defaultValue={existingAddress?.city}
               name="City"
-              placeholder="Enter city"
+              placeholder="Enter city *"
               control={control}
               variant='outlined'
               margin='none'
@@ -240,7 +240,7 @@ function UpdateAddress(props: UpdateAddress) {
               type="select"
               control={control}
               error={errors.Country}
-              name="Country"
+              name="Country *"
               defaultValue={existingAddress?.country}
               variant='outlined'
               margin='none'
@@ -263,7 +263,7 @@ function UpdateAddress(props: UpdateAddress) {
                 }
                 return option.name;
               }}
-              renderInput={(params) => <TextField placeholder="Enter state" {...params} error={errors.State as boolean | undefined} />}
+              renderInput={(params) => <TextField placeholder="Enter state *" {...params} error={errors.State as boolean | undefined} required />}
               fullWidth
               onChange={(_, value) => {
                 if (!value) {
@@ -289,7 +289,7 @@ function UpdateAddress(props: UpdateAddress) {
               error={errors.Code}
               name="Code"
               defaultValue={existingAddress?.postcode}
-              placeholder="Enter pin code"
+              placeholder="Enter pin code *"
               control={control}
               variant='outlined'
               margin='none'

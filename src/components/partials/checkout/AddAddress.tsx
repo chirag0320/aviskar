@@ -177,7 +177,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.FirstName}
                             name="FirstName"
-                            placeholder="Enter first name"
+                            placeholder="Enter first name *"
                             control={control}
                             // setValue={setValue}
                             variant='outlined'
@@ -187,7 +187,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.LastName}
                             name="LastName"
-                            placeholder="Enter last name"
+                            placeholder="Enter last name *"
                             control={control}
                             variant='outlined'
                             margin='none'
@@ -208,7 +208,7 @@ function AddAddress(props: AddAddress) {
                             error={errors.Contact}
                             name="Contact"
                             type="number"
-                            placeholder="Enter contact"
+                            placeholder="Enter contact *"
                             control={control}
                             variant='outlined'
                             margin='none'
@@ -217,7 +217,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.Email}
                             name="Email"
-                            placeholder="Enter email id"
+                            placeholder="Enter email id *"
                             control={control}
                             variant='outlined'
                             margin='none'
@@ -228,7 +228,7 @@ function AddAddress(props: AddAddress) {
                         register={register}
                         error={errors.Address1}
                         name="Address1"
-                        placeholder="Enter address line 1"
+                        placeholder="Enter address line 1 *"
                         control={control}
                         variant='outlined'
                         margin='none'
@@ -247,7 +247,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.City}
                             name="City"
-                            placeholder="Enter city"
+                            placeholder="Enter city *"
                             control={control}
                             variant='outlined'
                             margin='none'
@@ -265,7 +265,7 @@ function AddAddress(props: AddAddress) {
                             setValue={setValue}
                             onChange={OnChange}
                         >
-                            <MenuItem value="-1">Select country</MenuItem>
+                            <MenuItem value="-1">Select country *</MenuItem>
                             {countryList.map((country: StateOrCountry) => (
                                 <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
                             ))}
@@ -281,7 +281,7 @@ function AddAddress(props: AddAddress) {
                                 }
                                 return option.name;
                             }}
-                            renderInput={(params) => <TextField placeholder="Enter state" {...params} error={errors.State as boolean | undefined} />}
+                            renderInput={(params) => <TextField placeholder="Enter state *" {...params} error={errors.State as boolean | undefined} />}
                             fullWidth
                             onChange={(_, value) => {
                                 if (!value) {
@@ -308,7 +308,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.Code}
                             name="Code"
-                            placeholder="Enter pin code"
+                            placeholder="Enter pin code *"
                             control={control}
                             variant='outlined'
                             margin='none'

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 let c = 0
 
 const defaultPrice = [0, 100]
-const PriceSlider = ({ minPrice, maxPrice, setSelectedPrice, selectedPrice }: { minPrice: number, maxPrice: number, setSelectedPrice: any, selectedPrice: number[] | null }) => {
+const PriceSlider = ({ minPrice, maxPrice, setSelectedPrice, selectedPrice }: { minPrice: number, maxPrice: number, setSelectedPrice: any, selectedPrice?: number[] | null }) => {
     const [value, setValue] = useState<number[]>(selectedPrice ? [selectedPrice[0], selectedPrice[1]] : [minPrice, maxPrice])
     const clearFilters = useAppSelector(state => state.category.clearFilters)
     const debouncedValue = useDebounce(value, 700);
