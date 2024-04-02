@@ -177,12 +177,27 @@ function AboutProduct({ productId }: any) {
     }
   }, [])
   const addToCartFunction = async (isInstantBuy: any) => {
-    await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+    const response = await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
       "productId": productId,
       "quantity": quantityCount,
       "IsInstantBuy": isInstantBuy
     } as any)
-    dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
+    if (response.code === 200) {
+      dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
+      if (response.data) {
+        showToaster({
+          message: 'The product has been added to your product cart',
+          buttonText: 'product cart',
+          redirectButtonUrl: 'shopping-cart',
+          severity: 'success'
+        })
+      } else {
+        showToaster({
+          message: response.message,
+          severity: 'warning'
+        })
+      }
+    }
   }
   const handleBuyNow = async () => {
     if (!isLoggedIn) {
@@ -339,7 +354,7 @@ function AboutProduct({ productId }: any) {
                     <Stack className="Right">
                       <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={async () => {
                         await addToCartFunction(false)
-                        navigate('/shopping-cart')
+                        // navigate('/shopping-cart')
                       }} disabled={loadingForAddToCart}>Add to cart</Button>
                       <Button size="large" variant="outlined" onClick={() => {
                         handleBuyNow()
