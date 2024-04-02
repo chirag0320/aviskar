@@ -165,7 +165,6 @@ function AddAddress(props: AddAddress) {
         })
         setStateList(data)
     }, [stateListall, countryValue])
-    console.log("🚀 ~ AddAddress ~ stateListall, countryValue:", stateListall, countryValue)
 
     const OnChange = (value: any) => {
         setcountryValue(value)
