@@ -511,6 +511,6 @@ export const CartCardAbstract = ({ product, quantity, deliveryMethod }: any) => 
       </CardContent>
       <Divider />
       <Typography className="DeliveryMethod" variant="overline" component="p">Delivery Method: <Typography variant="inherit" component="span">{deliveryMethod}</Typography></Typography>
-    </Card >
+    </Card>
   )
 }

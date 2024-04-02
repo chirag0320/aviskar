@@ -5,7 +5,7 @@
       background-color: rgba($mercury, 0.5);
       .MuiTableRow-root {
         .MuiTableCell-root {
-          @include padding-vertical(17);
+          @include padding-vertical(10);
         }
       }
     }
@@ -42,7 +42,7 @@
               display: flex;
               align-items: center;
               flex: 1;
-              text-align: center;
+              text-align: left;
               overflow-wrap: anywhere;
             }
           }
