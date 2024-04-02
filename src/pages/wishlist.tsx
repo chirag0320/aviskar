@@ -22,18 +22,18 @@ function Wishlist() {
   // const [snackbarOpen, setSnackbarOpen] = useState(false); // State for Snackbar
   const [showCopyIcon, setShowCopyIcon] = useState(false);
   const checkloadingstatus = useAppSelector(state => state.wishList.loading);
-
+  const [body] = useState({
+    "search": "",
+    "pageNo": 0,
+    "pageSize": -1,
+    "sortBy": "",
+    "sortOrder": "",
+    "filters": {}
+  })
   useAPIoneTime({
     service: getWishListData,
     endPoint: ENDPOINTS.getWishListData,
-    body: {
-      "search": "",
-      "pageNo": 0,
-      "pageSize": -1,
-      "sortBy": "",
-      "sortOrder": "",
-      "filters": {}
-    }
+    body
   });
 
   const handleCopyUrl = () => {
@@ -46,7 +46,7 @@ function Wishlist() {
 
   return (
     <Layout>
-     <Loader open={checkloadingstatus} />
+      <Loader open={checkloadingstatus} />
       {openToaster && <Toaster />}
       <Seo
         keywords={["QMint Wishlist"]}
