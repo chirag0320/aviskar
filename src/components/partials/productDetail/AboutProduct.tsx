@@ -332,7 +332,7 @@ function AboutProduct({ productId }: any) {
                 <Divider />
                 {productDetailsData?.availability === "In Stock" && <Stack className="OrderActions">
                   {(isLoggedIn || configDetailsState?.buybuttonenableforguests?.value) ? (!productDetailsData?.disableBuyButton && <><Stack className="QuantityWrapper">
-                    <IconButton id='minus' className="Minus" onClick={(e) => {
+                    <IconButton id='minus' className="Minus" disabled={quantityCount === 1} onClick={(e) => {
                       e.stopPropagation()
                       handleQuentityUpdate('minus')
                     }}><MinusIcon /></IconButton>
