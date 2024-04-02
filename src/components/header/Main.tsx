@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { useMediaQuery, Container, Stack, Button, Link as LinkM, IconButton } from "@mui/material"
+import { useMediaQuery, Container, Stack, Button, Link as LinkM, IconButton, Typography, Box } from "@mui/material"
 
 // Components
 import SearchField from "./SearchField"
@@ -16,13 +16,14 @@ import { LogOutUserAPI } from "@/redux/reducers/homepageReducer"
 function Main(props: any) {
   const dispatch = useAppDispatch()
   const { openMobileMenu, toggleMobileMenu } = (props)
-  const mobile = useMediaQuery((theme: any) => theme.breakpoints.down('sm'))
+  const mobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
   const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
   const handleAuth = () => {
     if (!isLoggedIn) {
       navigate('/login')
     } else {
       dispatch(LogOutUserAPI() as any)
+      navigate('/')
     }
   }
   return (
@@ -32,6 +33,7 @@ function Main(props: any) {
           <Link className="Logo" to="/"><img src={mobile ? configDetailsState?.storelogourl?.value : configDetailsState?.storelogourl?.value} width={mobile ? 189 : 246} height={mobile ? 30 : 40} alt="QMint logo" loading="eager" /></Link>
         </Stack>
         <Stack className="Right">
+          {!mobile && <Box className="Marketingoffer" dangerouslySetInnerHTML={{__html: configDetailsState?.["home.header.marketingoffer"]?.value}}></Box>}
           <LinkM href={"tel:" + configDetailsState?.companyphonenumber?.value} variant="overline" className="PhoneNumber"><Call />{configDetailsState?.companyphonenumber?.value}</LinkM>
           <SearchField />
           {/* <Link to={ENDPOINTS.login}> */}

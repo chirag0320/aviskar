@@ -34,7 +34,20 @@ interface CreateGuidelineState {
   redirectButtonUrl: string,
   toasterMessage: string,
   scrollPosition: number,
-  severity: 'error' | 'success' | 'info' | 'warning'
+  severity: 'error' | 'success' | 'info' | 'warning',
+  needToShowProgressLoader: false,
+  liveDashboardChartData: {
+    [key: string]: {
+      low: number,
+      high: number,
+      current: number,
+      position: number,
+      move: number,
+      percentage: number,
+      linechartdata: number[],
+      linechartdata2: number[]
+    }
+  }
 }
 const initialState: CreateGuidelineState = {
   configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
@@ -51,7 +64,9 @@ const initialState: CreateGuidelineState = {
   redirectButtonUrl: '',
   toasterMessage: '',
   scrollPosition: 0,
-  severity: 'info'
+  severity: 'info',
+  needToShowProgressLoader: false,
+  liveDashboardChartData: {}
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -97,6 +112,14 @@ export const membershipPlanDetails = appCreateAsyncThunk(
     return await ConfigServices.membershipPlanDetails(url)
   }
 )
+
+export const getLiveDashboardChartData = appCreateAsyncThunk(
+  'getLiveDashboardChartData/status',
+  async ({ url }: { url: string }) => {
+    return await ConfigServices.getLiveDashboardChartData(url)
+  }
+)
+
 // export const add = appCreateAsyncThunk(
 //   'add/status',
 //   async (data: GuidelineTitleParams) => {
@@ -169,8 +192,11 @@ export const createHomepageSlice = createSlice({
     // setRedirectUrl: (state, action) => {
     //   state.redirectButtonUrl = action.payload
     // },
-    setScrollPosition : (state,action) => {
+    setScrollPosition: (state, action) => {
       state.scrollPosition = action.payload;
+    },
+    serProgressLoaderStatus: (state, action) => {
+      state.needToShowProgressLoader = action.payload
     }
   },
 
@@ -197,8 +223,18 @@ export const createHomepageSlice = createSlice({
       state.loading = true
     })
     builder.addCase(membershipPlanDetails.fulfilled, (state, action) => {
-      state.mebershipPlanDetailsData = action?.payload?.data?.data
-      localStorageSetItem('mebershipPlanDetailsData', JSON.stringify(action?.payload?.data?.data))
+      const responseData = action?.payload?.data?.data;
+      // state.mebershipPlanDetailsData = action?.payload?.data?.data
+
+      //  exclude if some key has null value
+      const mebershipPlanDetailsData = Object.keys(responseData).reduce((acc: any, key: any) => {
+        if (responseData[key] !== null) {
+          acc[key] = responseData[key]
+        }
+        return acc
+      }, {})
+      state.mebershipPlanDetailsData = mebershipPlanDetailsData
+      localStorageSetItem('mebershipPlanDetailsData', JSON.stringify(membershipPlanDetails))
       state.loading = false
     })
     builder.addCase(membershipPlanDetails.rejected, (state, action) => {
@@ -277,9 +313,28 @@ export const createHomepageSlice = createSlice({
     builder.addCase(ImpersonateSignInAPI.rejected, (state, action) => {
       state.loading = false
     })
+
+    // Live Dashboard Chart Data
+    builder.addCase(getLiveDashboardChartData.pending, (state, action) => {
+      state.loading = true
+    })
+    builder.addCase(getLiveDashboardChartData.fulfilled, (state, action) => {
+      const responseData = action.payload.data.data;
+
+      Object.keys(responseData).map((key: string) => {
+        state.liveDashboardChartData = {
+          ...state.liveDashboardChartData,
+          [key]: responseData[key]["threedayrange"][0]
+        }
+      });
+      state.loading = false
+    })
+    builder.addCase(getLiveDashboardChartData.rejected, (state, action) => {
+      state.loading = false
+    })
   },
 })
 
-export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState , setScrollPosition} = createHomepageSlice.actions
+export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState, setScrollPosition, serProgressLoaderStatus } = createHomepageSlice.actions
 
 export default createHomepageSlice.reducer

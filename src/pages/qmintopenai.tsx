@@ -11,9 +11,11 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RenderFields from '@/components/common/RenderFields';
 import { any } from 'prop-types';
+import Loader from '@/components/common/Loader';
 
 
 function Qmintopenai() {
+    const checkLoadingStatus = useAppSelector(state => state.calculators.loading);
     const dispatch = useAppDispatch();
     const loading = useAppSelector(state => state.calculators.loading);
     const getopenai = useAppSelector(state => state.calculators.openai);
@@ -82,6 +84,8 @@ function Qmintopenai() {
         //   }, [dispatch]);
 
         return (
+            <>
+            <Loader open = {checkLoadingStatus} />
             <form onSubmit={handleSubmit(handleFormSubmission)}>
                 <Box className="SelectionWrapper">
                     <Stack className='WeightWrapper'>
@@ -96,12 +100,13 @@ function Qmintopenai() {
                             variant='outlined'
                             margin='none'
                             className='Weight'
-                        />
+                            />
                         {/* {Note:- refer to types/enums.ts file for reference for value of the input} */}
                     </Stack>
                     <Button className='AddMetaltBtn' size='large' variant="contained" type="submit" disabled={loading}>Submit</Button>
                 </Box>
             </form>
+            </>
         )
 
     }

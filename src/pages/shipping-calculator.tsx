@@ -11,8 +11,10 @@ import CalculatorCards from '@/components/partials/calculator/CalculatorCards';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { saveCalculatorsData } from '@/redux/reducers/calculatorsReducer';
 import { ENDPOINTS } from '@/utils/constants';
+import Loader from '@/components/common/Loader';
 
 function Calculator() {
+    const checkLoadingStatus = useAppSelector(state => state.calculators.loading);
     const dispatch = useAppDispatch();
     const calculators = useAppSelector(state => state.calculators)
 
@@ -28,6 +30,7 @@ function Calculator() {
 
     return (
         <Layout>
+            <Loader open={checkLoadingStatus} />
             <Seo
                 keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
                 title="Home"

@@ -41,8 +41,10 @@ import useSubscription from "@/hooks/useSubscription";
 import { navigate } from "gatsby";
 import { NewsDetailsAPI } from "@/redux/reducers/newsReducer";
 import { setLoadingFalse, setLoadingTrue } from "@/redux/reducers/homepageReducer";
+import Loader from "@/components/common/Loader";
 
 function NewsDetails(params: any) {
+  const checkLoadingStatus = useAppSelector(state => state.newsPage.loading);
   const dispatch = useAppDispatch()
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { newsDetailsData, newsList }: any = useAppSelector((state) => state.newsPage)
@@ -59,6 +61,7 @@ function NewsDetails(params: any) {
   }, [params?.params?.["news-details-friendly-name"]])
   return (
     <Layout>
+      <Loader open = {checkLoadingStatus} />
       <Box className="BlogDetailPage">
         <Breadcrumb arr={[{ navigate: '/news', name: 'News' }, { navigate: "/news/" + params?.params?.["news-details-friendly-name"], name: params?.params?.["news-details-friendly-name"] }]} />
         <Box className="PostDescription">

@@ -23,30 +23,21 @@ interface UiFormInputs {
   Number: string
 }
 
-const schema = yup.object().shape({
-  Name: yup.string().required(),
-  CompanySize: yup.number().required().nullable(),
-  Gender: yup.array().required().nullable(),
-  Password: yup.string().required(),
-  Subscribe: yup.string().required(),
-  Number: yup.string().required(),
-})
-
 // Hooks
 import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 
 // Utils
 import RenderFields from "@/components/common/RenderFields"
 import { SortingOption } from "@/types/enums"
-import { setSortedItems } from "@/redux/reducers/categoryReducer"
+import { setSortBy, setSortedItems } from "@/redux/reducers/categoryReducer"
 import { sortByMostPopular, sortByPriceHighToLow, sortByPriceLowToHigh } from "@/utils/itemsSorting"
 
-function SortBy({ page }: { page: number }) {
+function SortBy() {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
   const [openSortBy, toggleSortBy] = useToggle(false)
-  const [sortBy, setSortBy] = useState<SortingOption | null>(null);
+  // const [sortBy, setSortBy] = useState<SortingOption | null>(null);
   const dispatch = useAppDispatch();
-  const items = useAppSelector(state => state.category.items);
+  const clearFilters = useAppSelector(state => state.category.clearFilters);
 
   const {
     register,
@@ -56,41 +47,20 @@ function SortBy({ page }: { page: number }) {
     control,
     setValue,
     formState: { errors },
-  } = useForm<UiFormInputs>({
-    resolver: yupResolver(schema),
+  } = useForm<any>({
+    // resolver: yupResolver(schema),
     defaultValues: {},
   })
 
   useEffect(() => {
-    reset();
-  }, [page])
-
-  useEffect(() => {
-    if (!sortBy) return;
-
-    if (sortBy == SortingOption.Popular) {
-      dispatch(setSortedItems(sortByMostPopular(items)));
+    if (clearFilters) {
+      setValue("Sort By", null);
     }
-    else if (sortBy == SortingOption.PriceHighToLow) {
-      dispatch(setSortedItems(sortByPriceHighToLow(items)));
-    }
-    else if (sortBy == SortingOption.PriceLowToHigh) {
-      dispatch(setSortedItems(sortByPriceLowToHigh(items)));
-    }
-  }, [sortBy])
+  }, [clearFilters]);
 
   const handleChange = () => {
     const value = Object.values(getValues())[0]
-
-    if (value === SortingOption.Popular) {
-      setSortBy(SortingOption.Popular)
-    }
-    else if (value === SortingOption.PriceHighToLow) {
-      setSortBy(SortingOption.PriceHighToLow)
-    }
-    else if (value === SortingOption.PriceLowToHigh) {
-      setSortBy(SortingOption.PriceLowToHigh)
-    }
+    dispatch(setSortBy(value));
   }
 
   const renderSortByFields = (labelPlacement: FormControlLabelProps['labelPlacement']) => {
@@ -101,7 +71,7 @@ function SortBy({ page }: { page: number }) {
         register={register}
         name="Sort By"
         labelPlacement={labelPlacement}
-        error={errors.CompanySize}
+        // error={errors.CompanySize}
         options={sortByOptions}
         margin="none"
         fullWidth

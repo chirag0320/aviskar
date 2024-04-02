@@ -32,7 +32,6 @@ function Step1() {
   const [isBillingAddress, setIsBillingAddress] = useState<boolean>(false)
   const [openBillingAddreddOptions, setOpenBillingAddreddOptions] = useState<boolean>(false)
   const [isBillingAndShipingAddressSame, setisBillingAndShipingAddressSame] = useState<boolean>(false)
-  // const [addressTitle, setAddressTitle] = useState<string>("Add")
   const [selectAccount, setSelectAccount] = useState<any>(checkoutPageData?.customers?.[0]!)
   const [openUpdateAddress, toggleUpdateAddress] = useToggle(false)
   const [openAddAddress, toggleAddAddress] = useToggle(false)
@@ -104,6 +103,7 @@ function Step1() {
   }, [openUpdateAddress, openAddAddress])
 
   const handleAddressUpdate = useCallback((addressData: any, isbilling: any) => {
+    console.log("🚀 ~ handleAddressUpdate ~ addressData: any, isbilling: any:", addressData, isbilling)
     if (isbilling) {
       setBillingAddress(addressData)
       dispatch(updateFinalDataForTheCheckout({ billingAddress }))

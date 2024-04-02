@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import parse from 'autosuggest-highlight/parse';
 import { debounce } from '@mui/material/utils';
+import { parseAddressComponents } from '@/utils/parseAddressComponents';
 
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
@@ -39,8 +40,9 @@ interface PlaceType {
   structured_formatting: StructuredFormatting;
 }
 
-export default function GoogleMaps() {
+export default function GoogleMaps({ setParsedAddress }: { setParsedAddress: any }) {
   const [value, setValue] = React.useState<PlaceType | null>(null);
+  // console.log("🚀 ~ GoogleMaps ~ value:", value)
   const [inputValue, setInputValue] = React.useState('');
   const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
   const loaded = React.useRef(false);
@@ -74,7 +76,13 @@ export default function GoogleMaps() {
     [],
   );
 
-  // console.log('value', value);
+  React.useEffect(() => {
+    console.log("🚀 ~ React.useEffect ~ value:", value)
+    if (value) {
+      const parsedAddress = parseAddressComponents(value);
+      setParsedAddress(parsedAddress);
+    }
+  }, [value])
 
   React.useEffect(() => {
     let active = true;

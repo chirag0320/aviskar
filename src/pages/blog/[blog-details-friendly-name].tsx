@@ -41,8 +41,10 @@ import { useAppDispatch, useAppSelector } from "@/hooks";
 import useSubscription from "@/hooks/useSubscription";
 import { navigate } from "gatsby";
 import { setLoadingFalse, setLoadingTrue } from "@/redux/reducers/homepageReducer";
+import Loader from "@/components/common/Loader";
 
 function BlogDetails(params: any) {
+  const checkLoadingStatus = useAppSelector(state => state.blogPage.loading);
   const dispatch = useAppDispatch()
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { blogDetailsData, blogList }: any = useAppSelector((state) => state.blogPage);
@@ -59,6 +61,7 @@ function BlogDetails(params: any) {
   }, [params?.params?.["blog-details-friendly-name"]])
   return (
     <Layout>
+      <Loader open = {checkLoadingStatus} />
       <Box className="BlogDetailPage">
         <Breadcrumb arr={[{ navigate: '/blog', name: 'Blog' }, { navigate: "/blog/" + params?.params?.["blog-details-friendly-name"], name: params?.params?.["blog-details-friendly-name"] }]} />
         <Box className="PostDescription">

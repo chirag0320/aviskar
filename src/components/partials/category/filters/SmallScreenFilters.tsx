@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector, useToggle } from '@/hooks'
 import TabPanel from '@/components/common/TabPanel'
 import PriceSlider from './PriceSlider'
 import RenderCheckboxField from './RenderCheckboxField'
+import { setClearFilters } from '@/redux/reducers/categoryReducer'
 
 interface props {
     renderList: (data: any) => any
@@ -21,11 +22,14 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
 
     const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
     const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
+    // console.log("🚀 ~ SmallScreenFilters ~ selectedPrice:", selectedPrice)
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-        // console.log();
-
         setTabValue(newValue)
+    }
+
+    const clearFiltersHandler = () => {
+        dispatch(setClearFilters(true));
     }
 
     const applyFilterHandler = async () => {
@@ -33,9 +37,6 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
         setSelectedPriceMobile(selectedPrice)
         toggleFilterBy()
     }
-
-    console.log("SelectedFilters", selectedFilters);
-
 
     return (
         <Fragment>
@@ -56,7 +57,7 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
             >
                 <Stack className="DialogHeader">
                     <DialogTitle variant="subtitle2">FILTER BY</DialogTitle>
-                    <Button variant="text">Clear Filter</Button>
+                    <Button variant="text" onClick={clearFiltersHandler}>Clear Filter</Button>
                     <IconButton className="CloseButton" onClick={toggleFilterBy}><CrossIcon /></IconButton>
                 </Stack>
                 <DialogContent>
@@ -78,7 +79,7 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
                             {renderList(categoryData.categories)}
                         </TabPanel>
                         <TabPanel value={tabValue} index={1}>
-                            <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} page={page} />
+                            <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} selectedPrice={selectedPrice} />
                         </TabPanel>
                         {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
                             <TabPanel value={tabValue} index={index + 2} key={filter}>
@@ -96,7 +97,7 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
                                     }
                                     )}
                                     selectedFilters={selectedFilters}
-                                    setSelectedFilters={setSelectedFilters} page={page} />
+                                    setSelectedFilters={setSelectedFilters} />
                             </TabPanel>
                         ))}
                     </Stack>

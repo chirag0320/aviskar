@@ -4,17 +4,22 @@ import classNames from "classnames"
 
 // Components
 import { HoverTooltip } from "../common/CustomTooltip"
-import { ConstantApiLoader } from "./Loader"
+import { ConstantApiLoader, PageLoader } from "./Loader"
 const ChartMenu = lazy(() => import('./ChartMenu'))
 const CartMenu = lazy(() => import('./CartMenu'))
 import ActionMenu from "./ActionMenu"
 import MegaMenu from "./MegaMenu"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 import Badge from '@mui/material/Badge';
 
 // Utils
 import { subMenuItems } from "../../utils/data"
 import { Link, navigate } from "gatsby"
+import { ProductUpdateCountdown } from "../common/Utils"
+import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
+import { ENDPOINTS } from "@/utils/constants"
+import useAPIoneTime from "@/hooks/useAPIoneTime"
+import { bodyForGetShoppingCartData } from "@/utils/common"
 
 
 export interface Icategory {
@@ -30,11 +35,16 @@ export interface Icategory {
   categoryImages: any[]
 }
 function Navigation() {
-  const { configDetails: configDetailsState, categoriesList } = useAppSelector((state) => state.homePage)
+  const dispatch = useAppDispatch()
+  const { configDetails: configDetailsState, categoriesList, needToShowProgressLoader, isLoggedIn } = useAppSelector((state) => state.homePage)
+  const { cartItems } = useAppSelector((state) => state.shoppingCart)
   const [currententlySelected, setCurrententlySelected] = useState('')
   useEffect(() => {
     setCurrententlySelected(window?.location?.pathname?.toLocaleLowerCase()?.replace(/[\s/]/g, ''))
   }, [window?.location?.pathname])
+  useEffect(() => {
+    dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
+  }, [isLoggedIn])
   return (
     <Box className="NavigationHeader">
       <Container>
@@ -84,13 +94,14 @@ function Navigation() {
             }
           </Stack>
           <Stack className="RightPart">
+            {needToShowProgressLoader && <ProductUpdateCountdown needToShowText={false} />}
             {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
             {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
-              <Badge badgeContent={1} color="primary" max={99}>
-                <Link area-label="shopping-cart-link" to="/shopping-cart">
+              <Link area-label="shopping-cart-link" to="/shopping-cart">
+                <Badge badgeContent={cartItems?.length?.toString()} color="primary" max={99}>
                   <CartMenu />
-                </Link>
-              </Badge>
+                </Badge>
+              </Link>
             </Suspense> : null}
             <ActionMenu />
           </Stack>

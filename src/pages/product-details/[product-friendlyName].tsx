@@ -13,8 +13,10 @@ import { ENDPOINTS } from "@/utils/constants"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import { setRecentlyViewedProduct } from "@/redux/reducers/homepageReducer"
 import Toaster from "@/components/common/Toaster"
+import Loader from "@/components/common/Loader"
 
 function ProductDetail({ params }: any) {
+  const checkLoadingStatus = useAppSelector(state => state.category.loading)
   const { productDetailsData } = useAppSelector((state) => state.category)
   const dispatch = useAppDispatch()
 
@@ -31,6 +33,7 @@ function ProductDetail({ params }: any) {
 
   return (
     <Layout>
+      <Loader open = {checkLoadingStatus} />
       <Seo
         keywords={[`QMint categories`]}
         title="Category"

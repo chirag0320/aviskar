@@ -148,6 +148,11 @@
               .MuiInputBase-input {
                 padding: 14px;
               }
+              .MuiMenu-root {
+                .MuiMenu-paper {
+                  max-height: 190px;
+                }
+              }
             }
             .MuiAutocomplete-root {
               .MuiTextField-root {

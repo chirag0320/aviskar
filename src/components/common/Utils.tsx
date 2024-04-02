@@ -77,7 +77,7 @@ export const StockReturnWithName = React.memo(
           <Box className="FlipContainer">
             <Box className="Flipper">
               <Typography variant="body2" component="span" className="Value Front">{roundOfThePrice(percentage)}%</Typography>
-              <Typography variant="body2" component="span" className="Value Back">{roundOfThePrice(move)}$</Typography>
+              <Typography variant="body2" component="span" className="Value Back">${roundOfThePrice(move)}</Typography>
             </Box>
           </Box>
           {status ? <ChevronUp /> : <ChevronDown />}
@@ -206,12 +206,12 @@ export const LinkWithIcon = React.memo(({ icon, href, text }: any) => {
   );
 });
 
-export const ProductUpdateCountdown = React.memo(() => {
+export const ProductUpdateCountdown = React.memo((props:{needToShowText?:boolean | undefined}) => {
   const { remainingTime } = useRemainingTime()
   return (
     <Stack className="ProductUpdateCountdown">
       <CountDownTimer />
-      <Typography variant="bodySmall">Updates in {remainingTime} Sec</Typography>
+     {props?.needToShowText == undefined && <Typography variant="bodySmall">Updates in {remainingTime} Sec</Typography>}
     </Stack>
   )
 })

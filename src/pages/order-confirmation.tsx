@@ -10,8 +10,10 @@ import { ENDPOINTS } from "@/utils/constants";
 import { useAppSelector } from "@/hooks";
 import { rows } from "./order-details";
 import { navigate } from "gatsby";
+import Loader from "@/components/common/Loader";
 
 function OrderConfirmation(props: any) {
+    const checkLoadingStatus = useAppSelector(state => state.orderConfirmationDetails.loading);
     // const orderId = props.location?.search?.split('=')[1];
     const orderConfirmationDetails = useAppSelector(state => state.orderConfirmationDetails);
     console.log("🚀 ~ OrderConfirmation ~ orderConfirmationDetails:", orderConfirmationDetails)
@@ -22,6 +24,7 @@ function OrderConfirmation(props: any) {
     return (
         <Layout>
             <>
+            <Loader open = {checkLoadingStatus} />
                 <Seo
                     keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
                     title="Home"

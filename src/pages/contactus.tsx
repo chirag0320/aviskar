@@ -13,14 +13,20 @@ import useAPIoneTime from '@/hooks/useAPIoneTime';
 import { getConfiguration, getReasonsForContactUs } from '@/redux/reducers/contactUs';
 import { ENDPOINTS } from '@/utils/constants';
 import Map from '@/components/partials/contactus/Map';
+import { useAppSelector } from '@/hooks';
+import Loader from '@/components/common/Loader';
 
 function ContactUs() {
+  const checkLoadingStatus = useAppSelector(state => state.homePage.loading);
+  const configDetails = useAppSelector(state => state.homePage.configDetails)
+  // console.log("🚀 ~ ContactUs ~ configDetails:", configDetails)
   useAPIoneTime({ service: getReasonsForContactUs, endPoint: ENDPOINTS.reasonsForContact })
   useAPIoneTime({ service: getConfiguration, endPoint: ENDPOINTS.getContactUsConfiguration })
 
   return (
     <Layout>
       <>
+      <Loader open = {checkLoadingStatus} />
         <Seo
           keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
           title="Home"
@@ -37,21 +43,21 @@ function ContactUs() {
                   <Icon className='OriginalIcon'><AddressIcon /></Icon>
                 </Box>
                 <Typography variant="h4" component="h2" className="Title">Address</Typography>
-                <Typography variant="body1" className="AddressDesription">102 Adelaide St Brisbane <br /> Queensland 4000 Australia</Typography>
+                <Typography variant="body1" className="AddressDesription">{configDetails?.storeaddress?.value}</Typography>
               </Box>
               <Box className="CallUsWrapper ContactCard">
                 <Box className="IconWrapper">
                   <Icon className='OriginalIcon'><Calling /></Icon>
                 </Box>
                 <Typography variant="h4" component="h2" className="Title">Call us</Typography>
-                <Link href="tel:(07) 3184 8300" variant="body1" className="CallUsNumber">(07) 3184 8300</Link>
+                <Link href="tel:(07) 3184 8300" variant="body1" className="CallUsNumber">{configDetails?.displayphonenumber?.value}</Link>
               </Box>
               <Box className="EmailWrapper ContactCard">
                 <Box className="IconWrapper">
                   <Icon className='OriginalIcon'><Email /></Icon>
                 </Box>
                 <Typography variant="h4" component="h2" className="Title">Email Id</Typography>
-                <Link href="mailto:support@queenslandmint.com.ca" variant="body1" className="EmailAddress">support@queenslandmint.com.ca</Link>
+                <Link href="mailto:support@queenslandmint.com.ca" variant="body1" className="EmailAddress">{configDetails?.storecontactemail?.value}</Link>
               </Box>
             </Stack>
             <Box className="GetInTouchWrapper">

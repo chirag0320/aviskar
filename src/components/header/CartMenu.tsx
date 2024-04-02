@@ -6,13 +6,16 @@ import Badge from '@mui/material/Badge';
 // Assets
 import { CartIcon } from "../../assets/icons/index"
 
+interface CartMenuProps {
+  onClick?: () => void
+}
 
-
-function CartMenu() {
+function CartMenu(props: CartMenuProps) {
+  const { onClick } = props
   return (
     <>
       <Badge badgeContent={1} color="primary" max={99}>
-        <IconButton aria-label='cartIcon' className={classNames("MenuButton", { "Active": false })}><CartIcon /></IconButton>
+        <IconButton aria-label='cartIcon' className={classNames("MenuButton", { "Active": false })} onClick={onClick}><CartIcon /></IconButton>
       </Badge>
     </>
   )

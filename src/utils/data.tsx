@@ -26,14 +26,14 @@ export const navigationItems = [
 export const actionMenuItems = [
   {
     text: "My Vault",
-    href: "#",
+    href: "/my-vault",
     icon: <VaultIcon />,
     key: 'enablemyvault'
   },
   {
     text: "Sell to Us",
     icon: <SellToUsIcon />,
-    href: "#",
+    href: "/sell-to-us",
     key: 'enableselltous'
   },
   {
@@ -45,7 +45,7 @@ export const actionMenuItems = [
   {
     text: "Loans",
     icon: <LoanIcon />,
-    href: "#",
+    href: "/loans",
     key: 'enableloans'
   },
   {

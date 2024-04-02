@@ -22,7 +22,7 @@ import { qmintRating } from "@/utils/data"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { ENDPOINTS } from "@/utils/constants"
-import { roundOfThePrice, valueChangeForPrice } from "@/utils/common"
+import { bodyForGetShoppingCartData, roundOfThePrice, valueChangeForPrice } from "@/utils/common"
 import useCallAPI from "@/hooks/useCallAPI"
 import { navigate } from "gatsby"
 import { addProductToCompare } from "@/redux/reducers/compareProductsReducer"
@@ -33,6 +33,7 @@ import { resetProductDetails } from "@/redux/reducers/categoryReducer"
 
 import noImage from '../../../assets/images/noImage.png'
 import useShowToaster from "@/hooks/useShowToaster"
+import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
 
 function createData(
   quantity: string,
@@ -65,7 +66,7 @@ function AboutProduct({ productId }: any) {
   const dispatch = useAppDispatch();
   const styles: any = createStyles({
     tableBody: {
-      border: '1px solid #ddd', // border around the table body
+      // border: '1px solid #ddd', // border around the table body
     },
     tableRow: {
       '&:nth-of-type(odd)': {
@@ -85,7 +86,7 @@ function AboutProduct({ productId }: any) {
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
   const [tabValue, setTabValue] = useState<number>(0)
   const [priceHistoryDuration, setPriceHistoryDuration] = useState<string>('hour')
-  const {showToaster} = useShowToaster();
+  const { showToaster } = useShowToaster();
 
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
   const { data: progressData } = useApiRequest(urlForThePriceRange, 'get');
@@ -176,11 +177,27 @@ function AboutProduct({ productId }: any) {
     }
   }, [])
   const addToCartFunction = async (isInstantBuy: any) => {
-    await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+    const response = await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
       "productId": productId,
       "quantity": quantityCount,
       "IsInstantBuy": isInstantBuy
     } as any)
+    if (response.code === 200) {
+      dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
+      if (response.data) {
+        showToaster({
+          message: 'The product has been added to your product cart',
+          buttonText: 'product cart',
+          redirectButtonUrl: 'shopping-cart',
+          severity: 'success'
+        })
+      } else {
+        showToaster({
+          message: response.message,
+          severity: 'warning'
+        })
+      }
+    }
   }
   const handleBuyNow = async () => {
     if (!isLoggedIn) {
@@ -213,18 +230,19 @@ function AboutProduct({ productId }: any) {
             </Box>
             <Divider />
             <Box className="PricingDetails">
-              {(isLoggedIn || configDetailsState?.productpriceenableforguests?.value) ? <><Stack className="Top">
-                <Stack className="Left">
-                  <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
-                  {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue" variant="overline">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
-                  <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
-                  {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
+              {(isLoggedIn || configDetailsState?.productpriceenableforguests?.value) ? <>
+                <Stack className="Top">
+                  <Stack className="Left">
+                    <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
+                    {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue" variant="overline">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
+                    <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
+                    {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
+                  </Stack>
+                  <Stack className="Right">
+                    <ProductUpdateCountdown />
+                    <Typography className="DiscountMessage" variant="overline">{configDetailsState?.productboxdiscounttext?.value}</Typography>
+                  </Stack>
                 </Stack>
-                <Stack className="Right">
-                  <ProductUpdateCountdown />
-                  <Typography className="DiscountMessage" variant="overline">{configDetailsState?.productboxdiscounttext?.value}</Typography>
-                </Stack>
-              </Stack>
                 <Stack className="Bottom">
                   <Stack className="SliderWrapper">
                     <Stack className="PriceMinMax">
@@ -255,52 +273,101 @@ function AboutProduct({ productId }: any) {
                 }}>Activate Live Price</Button>}
             </Box>
             <Divider />
-            <Stack className="OrderDetails">
-              {isLoggedIn || configDetailsState?.availabilityenableforguests?.value ?
-                <><ProductStockStatus availability={productDetailsData?.availability} colorClass={productDetailsData?.colorClass} iconClass={productDetailsData?.iconClass} />
-                  <Typography className="ProductMessage" variant="overline">{productDetailsData?.condition}</Typography>
-                  <Typography className="ShipmentDetail" variant="overline">{productDetailsData?.description}</Typography></>
-                :
-                <Typography className="ProductMessage" variant="overline">{configDetailsState?.membershipunloacktext?.value}</Typography>
-              }
-            </Stack>
-            <Divider />
-            <Stack className="OrderActions">
-              {(isLoggedIn || configDetailsState?.buybuttonenableforguests?.value) ? (!productDetailsData?.disableBuyButton && <><Stack className="QuantityWrapper">
-                <IconButton id='minus' className="Minus" onClick={(e) => {
-                  e.stopPropagation()
-                  handleQuentityUpdate('minus')
-                }}><MinusIcon /></IconButton>
-                <RenderFields
-                  color="primary"
-                  register={register}
-                  error={errors.Quantity}
-                  name="Quantity"
-                  margin='none'
-                  fullWidth={false}
-                  value={quantityCount as any}
-                  disabled={true}
-                />
-                <IconButton id='plus' className="Plus" onClick={(e) => {
-                  e.stopPropagation()
-                  handleQuentityUpdate('plus')
-                }}><PlusIcon /></IconButton>
-              </Stack>
-                <Stack className="Right">
-                  <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={async () => {
-                    await addToCartFunction(false)
-                    navigate('/shopping-cart')
-                  }} disabled={loadingForAddToCart}>Add to cart</Button>
-                  <Button size="large" variant="outlined" onClick={() => {
-                    handleBuyNow()
-                  }}>Buy now</Button>
-                </Stack></>)
-                :
-                <Button size="large" color="success" variant="contained" onClick={() => {
-                  navigate('/login')
-                }}>Register to Buy</Button>}
-            </Stack>
-            <Divider />
+            <Box className="FixWrapper">
+              <Divider />
+              <Box className="PricingDetails">
+                {(isLoggedIn || configDetailsState?.productpriceenableforguests?.value) ? <>
+                  <Stack className="Top">
+                    <Stack className="Left">
+                      <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
+                      {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue" variant="overline">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
+                      <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
+                      {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
+                    </Stack>
+                    <Stack className="Right">
+                      <ProductUpdateCountdown />
+                      <Typography className="DiscountMessage" variant="overline">{configDetailsState?.productboxdiscounttext?.value}</Typography>
+                    </Stack>
+                  </Stack>
+                  <Stack className="Bottom">
+                    <Stack className="SliderWrapper">
+                      <Stack className="PriceMinMax">
+                        <Typography>Low: <Typography variant="titleLarge">${roundOfThePrice(progressData?.data?.minPrice)}</Typography></Typography>
+                        <Typography>High: <Typography variant="titleLarge">${roundOfThePrice(progressData?.data?.maxPrice)}</Typography></Typography>
+                      </Stack>
+                      <Slider
+                        className="Slider"
+                        value={Number(priceData?.data?.[0]?.price)}
+                        min={Number(progressData?.data?.minPrice)}
+                        max={Number(progressData?.data?.maxPrice)}
+                        disabled
+                      />
+                    </Stack>
+                    <Select
+                      color="secondary"
+                      className="PriceHistorySelect"
+                      value={priceHistoryDuration}
+                      onChange={handlePriceHistoryDuration}
+                    >
+                      <MenuItem value="hour">24H</MenuItem>
+                      <MenuItem value="week">1W</MenuItem>
+                      <MenuItem value="month">1M</MenuItem>
+                      <MenuItem value="year">1Y</MenuItem>
+                    </Select>
+                  </Stack></> : <Button size="large" variant="outlined" onClick={() => {
+                    navigate('/login')
+                  }}>Activate Live Price</Button>}
+              </Box>
+              <Divider />
+              <Box className="Mobileflex">
+                <Stack className="OrderDetails">
+                  {isLoggedIn || configDetailsState?.availabilityenableforguests?.value ?
+                    <><ProductStockStatus availability={productDetailsData?.availability} colorClass={productDetailsData?.colorClass} iconClass={productDetailsData?.iconClass} />
+                      <Typography className="ProductMessage" variant="overline">{productDetailsData?.condition}</Typography>
+                      <Typography className="ShipmentDetail" variant="overline">{productDetailsData?.description}</Typography></>
+                    :
+                    <Typography className="ProductMessage" variant="overline">{configDetailsState?.membershipunloacktext?.value}</Typography>
+                  }
+                </Stack>
+                <Divider />
+                {productDetailsData?.availability === "In Stock" && <Stack className="OrderActions">
+                  {(isLoggedIn || configDetailsState?.buybuttonenableforguests?.value) ? (!productDetailsData?.disableBuyButton && <><Stack className="QuantityWrapper">
+                    <IconButton id='minus' className="Minus" onClick={(e) => {
+                      e.stopPropagation()
+                      handleQuentityUpdate('minus')
+                    }}><MinusIcon /></IconButton>
+                    <RenderFields
+                      color="primary"
+                      register={register}
+                      error={errors.Quantity}
+                      name="Quantity"
+                      margin='none'
+                      fullWidth={false}
+                      value={quantityCount as any}
+                      disabled={true}
+                    />
+                    <IconButton id='plus' className="Plus" onClick={(e) => {
+                      e.stopPropagation()
+                      handleQuentityUpdate('plus')
+                    }}><PlusIcon /></IconButton>
+                  </Stack>
+                    <Stack className="Right">
+                      <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={async () => {
+                        await addToCartFunction(false)
+                        // navigate('/shopping-cart')
+                      }} disabled={loadingForAddToCart}>Add to cart</Button>
+                      <Button size="large" variant="outlined" onClick={() => {
+                        handleBuyNow()
+                      }}>Buy now</Button>
+                    </Stack></>)
+                    :
+                    <Button size="large" color="success" variant="contained" onClick={() => {
+                      navigate('/login')
+                    }}>Register to Buy</Button>}
+                </Stack>}
+              </Box>
+              <Divider />
+            </Box>
             <Stack className="SocialConnects">
               <Button color="secondary" className="IconWithText" onClick={async () => {
                 addIntoWishList(productId)
@@ -460,9 +527,9 @@ function AboutProduct({ productId }: any) {
                   <TableBody style={styles.tableBody}>
                     {Object.entries(productDetailsData?.specifications)?.map((bulkProduct: any, index) => (
                       <TableRow key={index} style={{ ...styles.tableRow }}>
-                        <TableCell style={styles.tableCell}>
+                        {/* <TableCell style={styles.tableCell}>
                           <Typography>{index + 1}</Typography>
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell align="left" style={{ ...styles.tableCell }}>
                           <Typography>{bulkProduct[0]}</Typography>
                         </TableCell>

@@ -19,8 +19,10 @@ import { useAppSelector } from "@/hooks"
 import useDeviceDetails from "@/hooks/useDeviceDetails"
 import { navigate } from "gatsby"
 import Toaster from "@/components/common/Toaster"
+import Loader from "@/components/common/Loader"
 
 function Checkout() {
+  const checkLoadingStatus = useAppSelector(state => state.checkoutPage.loading);
   const openToaster = useAppSelector(state => state.homePage.openToaster)
   const [state, setState] = useState({ service: getCheckoutPageData, endPoint: ENDPOINTS.checkoutDetails })
   const isLoggedIn = useAppSelector(state => state.homePage.isLoggedIn)
@@ -38,6 +40,7 @@ function Checkout() {
   useAPIoneTime(state)
   return (
     <Layout>
+      <Loader open = {checkLoadingStatus} />
       <Seo
         keywords={[`QMint categories`]}
         title="Category"
