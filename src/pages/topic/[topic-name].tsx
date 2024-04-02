@@ -7,15 +7,19 @@ import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { ENDPOINTS } from "@/utils/constants"
 import { getTopicDetails } from "@/redux/reducers/topicReducer"
 import { useAppSelector } from "@/hooks"
+import Loader from "@/components/common/Loader"
 function Topics(paramsData: any) {
   const { topicDetails, loading } = useAppSelector(state => state.topic)
   useAPIoneTime({ service: getTopicDetails, endPoint: ENDPOINTS.topicDetail?.replace('{{topic-name}}', paramsData?.params?.['topic-name']) })
   return (
-    !loading && <Layout>
+    <>
+    <Loader open = {loading}/>
+    {
+      !loading && <Layout>
       <Seo
-        keywords={[`QMint Topics`]}
-        title="Topics"
-        lang="en"
+      keywords={[`QMint Topics`]}
+      title="Topics"
+      lang="en"
       />
       <PageTitle title={topicDetails?.systemName} />
       <Container id="PageTopics">
@@ -24,7 +28,9 @@ function Topics(paramsData: any) {
         }} > 
         </Box>
       </Container>
-    </Layout>
+      </Layout>
+    }
+    </>
   )
 }
 
