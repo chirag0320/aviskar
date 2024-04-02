@@ -452,7 +452,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
               <TextField value={quantity} disabled />
               <IconButton className="Plus" onClick={() => increaseQuantity(cartItem.id)}><PlusIcon /></IconButton>
             </Stack>
-            <IconButton className="DeleteButton" onClick={() => removeItem(cartItem.id)}><Delete1Icon /></IconButton>
+            <IconButton className="DeleteButton MenuButton" onClick={() => removeItem(cartItem.id)}><Delete1Icon /></IconButton>
           </Box>
         </Stack>
         <Stack className="BottomWrapper">
