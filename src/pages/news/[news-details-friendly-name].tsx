@@ -61,7 +61,6 @@ function NewsDetails(params: any) {
     <Layout>
       <Loader open = {checkLoadingStatus} />
       <Box className="BlogDetailPage">
-        <Breadcrumb arr={[{ navigate: '/news', name: 'News' }, { navigate: "/news/" + params?.params?.["news-details-friendly-name"], name: params?.params?.["news-details-friendly-name"] }]} />
         <Box className="PostDescription">
           <Container maxWidth="lg">
             <Button
@@ -77,7 +76,7 @@ function NewsDetails(params: any) {
             <Typography variant="h2" component="h2" className="BlogTitle">
               {newsDetailsData?.title}
             </Typography>
-            <Stack className="PostUploadInfo" gap={6}>
+            <Stack className="PostUploadInfo">
               <Box>
                 <Typography variant="body1">Written by</Typography>
                 <Typography
@@ -115,7 +114,7 @@ function NewsDetails(params: any) {
               </Box>
               <Stack className="FooterContent">
                 <Box className="Left">
-                  <Typography variant="subtitle1">Share this post</Typography>
+                  <Typography>Share this post</Typography>
                   <Stack className="SocialIconWrapper">
                     <FacebookShareButton url={window.location.href} hashtag="qmint" title="Qmint news">
                       <IconButton className="SocialIcon" aria-label="Facebook Icon" >
@@ -179,7 +178,7 @@ function NewsDetails(params: any) {
             </Box> : null}
           </Container>
         </Box>
-        <Box className="NewsLetter">
+        {/* <Box className="NewsLetter">
           <Container>
             <Box className="NewsLetterWrapper">
               <Typography variant="h2" component="h2">
@@ -212,7 +211,7 @@ function NewsDetails(params: any) {
               </Typography>
             </Box>
           </Container>
-        </Box>
+        </Box> */}
       </Box>
     </Layout>
   );

@@ -72,7 +72,6 @@ function Blog() {
   return (
     <Layout>
       <Loader open = {checkLoadingStatus} />
-      <Breadcrumb arr={[{ navigate: '/blog', name: 'Blog' }]} />
       <Box className="BlogPage">
         <Box className="HeroSection">
           <Container>
@@ -81,7 +80,7 @@ function Blog() {
             </Typography>
             <Typography
               variant="body1"
-              sx={{ mt: 1.875, color: variable.greyRegent }}
+              sx={{ mt: 1, color: variable.greyRegent }}
             >
               {configDetailsState?.["blogpost.blogpostsubtital"]?.value}
             </Typography>
@@ -114,7 +113,7 @@ function Blog() {
               </Typography>
               <Typography
                 variant="body1"
-                sx={{ mt: 1.875, color: variable.greyRegent }}
+                sx={{ mt: 1, color: variable.greyRegent }}
               >
                 {configDetailsState?.["blogpost.blogpostsubtital"]?.value}
               </Typography>

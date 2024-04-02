@@ -68,7 +68,6 @@ function News() {
   return (
     <Layout>
       <Loader open = {checkLoadingStatus} />
-      <Breadcrumb arr={[{ navigate: '/news', name: 'News' }]} />
       <Box className="BlogPage">
         <Box className="HeroSection">
           <Container>
@@ -77,7 +76,7 @@ function News() {
             </Typography>
             <Typography
               variant="body1"
-              sx={{ mt: 1.875, color: variable.greyRegent }}
+              sx={{ mt: 1, color: variable.greyRegent }}
             >
               {configDetailsState?.["news.newssubtital"]?.value}
             </Typography>
@@ -100,7 +99,7 @@ function News() {
               </Typography>
               <Typography
                 variant="body1"
-                sx={{ mt: 1.875, color: variable.greyRegent }}
+                sx={{ mt: 1, color: variable.greyRegent }}
               >
                 {configDetailsState?.["news.newssubtital"]?.value}
               </Typography>

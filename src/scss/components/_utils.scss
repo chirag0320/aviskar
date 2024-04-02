@@ -125,10 +125,7 @@
 }
 
 .Breadcrumb {
-  @include padding-vertical(30);
-  @include media($sm) {
-    @include padding-vertical(20);
-  }
+  @include padding-vertical(20);
   .MuiBreadcrumbs-ol {
     .MuiBreadcrumbs-li {
       line-height: 20px;

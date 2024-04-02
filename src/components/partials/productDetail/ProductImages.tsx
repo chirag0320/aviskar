@@ -9,7 +9,7 @@ import {
 // Types
 import { type Swiper as SwiperTypes } from "swiper"
 
-function ProductImages({ productImages }: any) {
+function ProductImages({ productImages, offerBadge }: any) {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperTypes | null>(null)
 
   return (
@@ -25,13 +25,16 @@ function ProductImages({ productImages }: any) {
           {productImages?.length > 0 ? productImages.map((url: any) => (
             <SwiperSlide key={url}>
               <Stack className="ImageWrapper">
-                <GlassMagnifier
-                  imageSrc={url}
-                  imageAlt="Product image"
-                  className="Magnifier"
-                  magnifierSize="50%"
-                  square
-                />
+                <Box className="Image">
+                  <GlassMagnifier
+                    imageSrc={url}
+                    imageAlt="Product image"
+                    className="Magnifier"
+                    magnifierSize="50%"
+                    square
+                  />
+                  {offerBadge}
+                </Box>
               </Stack>
             </SwiperSlide>
           )) : null}
