@@ -82,6 +82,16 @@ import Email from "./social/Email";
 import Calling from "./social/Calling";
 import AddressIcon from "./social/AddressIcon";
 import OrdersIcon from "./OrdersIcon";
+import PrivateHoldingIcon from "./PrivateHoldingIcon";
+import AllotedHldingIcon from "./AllotedHldingIcon";
+import SmartMetalsIcon from "./SmartMetalsIcon";
+import AccountsIcon from "./AccountsIcon";
+import AddressesIcon from "./AddressesIcon";
+import RewardPointsIcon from "./RewardPointsIcon";
+import BuyBackOrderIcon from "./BuyBackOrderIcon";
+import MyVaultIcon from "./MyVaultIcon";
+import MyGoldIcon from "./MyGoldIcon";
+import MySilverIcon from "./MySilverIcon";
 
 export {
   ArrowLeft,
@@ -168,4 +178,14 @@ export {
   Calling,
   AddressIcon,
   OrdersIcon,
+  PrivateHoldingIcon,
+  AllotedHldingIcon,
+  SmartMetalsIcon,
+  AccountsIcon,
+  AddressesIcon,
+  RewardPointsIcon,
+  BuyBackOrderIcon,
+  MyVaultIcon,
+  MyGoldIcon,
+  MySilverIcon
 };
