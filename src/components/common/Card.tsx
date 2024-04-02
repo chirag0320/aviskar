@@ -286,7 +286,7 @@ export const TravelCard = (props: any) => {
       navigate(`blog/${friendlyName}`)
     }}>
       <Link className="ImageLink">
-        <img src={imageUrl} alt="Travel image" loading="lazy" />
+        <img src={imageUrl ?? noImage} alt="Travel image" loading="lazy" />
       </Link>
       <CardContent>
         <Link className="Place"><Typography variant="subtitle2" component="h3">{place}</Typography></Link>
@@ -435,7 +435,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
     <Card className="CartCard">
       <CardMedia
         component="img"
-        image={cartItem?.imageUrl}
+        image={cartItem?.imageUrl ?? noImage}
         alt="Product image"
       />
       <CardContent>
@@ -480,9 +480,11 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
             )}
             <ProductUpdateCountdown />
           </Stack>
-          {!hideRightSide && (
+          {(cartItem?.warnings?.length !== 0) && (
             <Stack className="RightSide">
-              <Typography className="ShippingMessage" variant="body2">{deliveryMethodMessage.noSecureShipping}</Typography>
+              {cartItem?.warnings?.map((warning) => (
+                <Typography className="ShippingMessage" variant="body2" key={warning}>{warning}</Typography>
+              ))}
             </Stack>
           )}
         </Stack>
@@ -497,7 +499,7 @@ export const CartCardAbstract = ({ product, quantity, deliveryMethod }: any) => 
       <CardContent>
         <CardMedia
           component="img"
-          image={product?.imageUrl}
+          image={product?.imageUrl ?? noImage}
           alt="Product image"
         />
         <Stack className="Wrapper">

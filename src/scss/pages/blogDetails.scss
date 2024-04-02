@@ -1,79 +1,100 @@
 .BlogDetailPage {
   .PostDescription {
     padding: 50px 0 80px;
+
     @include media($sm) {
       @include padding-vertical(30, 50);
     }
+
     .BackButton {
       color: $dark;
       font-size: 16px;
       line-height: 26px;
     }
+
     .PostUploadInfo {
       margin-top: 18px;
+
       .Value {
         @include media-min($lg) {
           margin-top: 8px;
         }
       }
     }
+
     .BlogTitle {
       margin-top: 48px;
+
       @include media($md) {
         margin-top: 32px;
       }
     }
+
     .ContentWrapper {
       .PostThumbnail {
         margin-top: 48px;
+
         @include media($sm) {
           margin-top: 30px;
         }
+
         img {
           width: 100%;
           max-height: 550px;
           object-fit: cover;
           border-radius: 20px;
+
           @include media($lg) {
             max-height: 450px;
           }
+
           @include media($md) {
             max-height: 400px;
           }
         }
       }
+
       .PostContent {
         padding-bottom: 60px;
         margin-top: 60px;
+
         @include media($md) {
           margin-top: 40px;
           padding-bottom: 20px;
         }
+
         @include media($sm) {
           margin-top: 30px;
         }
-        & > * {
+
+        &>* {
           margin-top: 14px;
+
           &:first-child {
             margin-top: 0;
           }
         }
       }
+
       .FooterContent {
         justify-content: space-between;
         align-items: flex-end;
+
         @include media($md) {
           flex-direction: column;
           align-items: flex-start;
           gap: 20px;
         }
+
         .Left {
           .SocialIconWrapper {
             margin-top: 16px;
             gap: 12px;
+
             .SocialIcon {
               background-color: $water;
               border-radius: 50%;
+
               svg {
                 path {
                   fill: $dark;
@@ -82,18 +103,22 @@
             }
           }
         }
+
         .Right {
           display: flex;
           gap: 11.5px;
+
           @include media($md) {
             flex-wrap: wrap;
           }
+
           .MuiChip-root {
             font-size: 14px;
             line-height: 20px;
             font-weight: 600;
             padding: 4px 13.3px;
             height: auto;
+
             .MuiChip-label {
               padding: 0;
             }
@@ -101,43 +126,58 @@
         }
       }
     }
+
     .RecentPosts {
       margin-top: 50px;
+
+      .MuiGrid-item {
+        flex-grow: 1;
+      }
     }
   }
+
   .NewsLetter {
     background: #eaa22b0d;
     @include padding-vertical(70);
+
     @include media($sm) {
       @include padding-vertical(40);
     }
+
     .NewsLetterWrapper {
       text-align: center;
+
       .NewsLetterBox {
         margin-top: 40px;
         gap: 16px;
         display: flex;
         justify-content: center;
+
         @include media($sm) {
           margin-top: 20px;
         }
+
         @include media($xxs) {
           gap: 10px;
         }
+
         .MuiFormControl-root {
           width: 394px;
+
           .MuiInputBase-root {
             .MuiInputBase-input {
               padding: 12px;
             }
           }
         }
+
         .MuiButton-root {
           @include media($xxs) {
             padding: 9px;
           }
         }
       }
+
       .TermsCondition {
         font-size: 12px;
         font-weight: 400;
