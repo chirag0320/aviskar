@@ -119,7 +119,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                   // field.onChange(e)
                   setValue(name, e.target.value)
                   if (onChange) {
-                    onChange()
+                    onChange(e.target.value)
                   }
                 }
                 }

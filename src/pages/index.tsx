@@ -38,7 +38,6 @@ function IndexPage() {
     }
   }, [])
 
-  useAPIoneTime({ service: configDetails, endPoint: ENDPOINTS.getConfigStore })
   useAPIoneTime({ service: HomePageSectionDetails, endPoint: ENDPOINTS.homePageSection })
   useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, body })
   useUserDetailsFromToken()
