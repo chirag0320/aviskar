@@ -64,7 +64,6 @@ function AddAddress(props: AddAddress) {
     const { showToaster } = useShowToaster();
     const loading = useAppSelector(state => state.checkoutPage.loading);
     const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
-    console.log("🚀 ~ AddAddress ~ googleAddressComponents:", googleAddressComponents)
     const [countryValue, setcountryValue] = useState<any>('-1')
     const [stateValue, setstateValue] = useState<any>('')
     const {
