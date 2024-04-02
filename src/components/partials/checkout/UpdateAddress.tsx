@@ -203,7 +203,7 @@ function UpdateAddress(props: UpdateAddress) {
               margin='none'
             />
           </Stack>
-          {/* <GoogleMaps setParsedAddress={setGoogleAddressComponents} /> */}
+          <GoogleMaps setParsedAddress={setGoogleAddressComponents} />
           <RenderFields
             register={register}
             error={errors.Address1}

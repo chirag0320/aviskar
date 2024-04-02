@@ -80,6 +80,7 @@ export const orderConfirmationDetailsPageSlice = createSlice({
             state.orderNumber = responseData?.orderNumber;
             state.orderItems = responseData?.orderItems;
             state.totalPaymentAmount = responseData?.orderTotal
+            state.loading = false;
         })
         builder.addCase(getOrderConfirmationDetails.rejected, (state) => {
             state.loading = false;

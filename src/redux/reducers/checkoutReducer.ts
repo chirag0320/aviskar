@@ -281,12 +281,12 @@ export const checkoutPage = createSlice({
             const updatedAddress = action.payload;
 
             if (updatedAddress.addressType === AddressType.Shipping) {
-                const updatedShippingDetails = [...structuredClone(state.checkoutPageData!.shippingAddressDetails), updatedAddress]
+                const updatedShippingDetails = [updatedAddress, ...state.checkoutPageData!.shippingAddressDetails]
 
                 state.checkoutPageData!.shippingAddressDetails = updatedShippingDetails as AddressDetail[];
             }
             else if (updatedAddress.addressType === AddressType.Billing) {
-                const updatedBillingDetails = [...structuredClone(state.checkoutPageData!.billingAddressDetails), updatedAddress]
+                const updatedBillingDetails = [updatedAddress, ...state.checkoutPageData!.billingAddressDetails]
 
                 state.checkoutPageData!.billingAddressDetails = updatedBillingDetails as AddressDetail[];
             }
@@ -308,15 +308,15 @@ export const checkoutPage = createSlice({
         })
         // get insurance and tax details calculation
         builder.addCase(getInsuranceAndTaxDetailsCalculation.pending, (state, action) => {
-            state.loading = true
+            // state.loading = true
         })
         builder.addCase(getInsuranceAndTaxDetailsCalculation.fulfilled, (state, action) => {
             state.insuranceAndTaxCalculation = action?.payload?.data?.data
             localStorageSetItem('insuranceAndTaxCalculation', JSON.stringify(state.insuranceAndTaxCalculation))
-            state.loading = false;
+            // state.loading = false;
         })
         builder.addCase(getInsuranceAndTaxDetailsCalculation.rejected, (state, action) => {
-            state.loading = false
+            // state.loading = false
         })
         // get credit card charges
         builder.addCase(getCraditCardCharges.pending, (state, action) => {
@@ -409,6 +409,6 @@ export const checkoutPage = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout, disableOTP, updateAddress, setCheckoutItemWarning,addAddress } = checkoutPage.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout, disableOTP, updateAddress, setCheckoutItemWarning, addAddress } = checkoutPage.actions
 
 export default checkoutPage.reducer
