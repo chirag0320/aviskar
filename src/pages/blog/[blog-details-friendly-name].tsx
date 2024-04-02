@@ -29,22 +29,20 @@ import * as variable from "../../scss/settings/variables.module.scss";
 import {
   ChevronLeft,
   FacebookIcon,
-  TwitterIcon,
-  InstagramIcon,
-  YoutubeIcon,
+  TwitterIcon
 } from "@/assets/icons";
 import { formatDate } from "@/utils/common";
-import useApiRequest from "@/hooks/useAPIRequest";
-import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { BlogDetailsAPI } from "@/redux/reducers/blogReducer";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import useSubscription from "@/hooks/useSubscription";
 import { navigate } from "gatsby";
 import { setLoadingFalse, setLoadingTrue } from "@/redux/reducers/homepageReducer";
-import { FacebookShareButton, InstapaperShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import { FacebookShareButton,TwitterShareButton, WhatsappShareButton } from "react-share";
 import WhatsappIcon from "@/assets/icons/WhatsappIcon";
+import Loader from "@/components/common/Loader";
 
 function BlogDetails(params: any) {
+  const checkLoadingStatus = useAppSelector(state => state.blogPage.loading);
   const dispatch = useAppDispatch()
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { blogDetailsData, blogList }: any = useAppSelector((state) => state.blogPage);
@@ -61,6 +59,7 @@ function BlogDetails(params: any) {
   }, [params?.params?.["blog-details-friendly-name"]])
   return (
     <Layout>
+      <Loader open = {checkLoadingStatus} />
       <Box className="BlogDetailPage">
         <Breadcrumb arr={[{ navigate: '/blog', name: 'Blog' }, { navigate: "/blog/" + params?.params?.["blog-details-friendly-name"], name: params?.params?.["blog-details-friendly-name"] }]} />
         <Box className="PostDescription">

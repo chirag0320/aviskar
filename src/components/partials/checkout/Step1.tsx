@@ -32,7 +32,6 @@ function Step1() {
   const [isBillingAddress, setIsBillingAddress] = useState<boolean>(false)
   const [openBillingAddreddOptions, setOpenBillingAddreddOptions] = useState<boolean>(false)
   const [isBillingAndShipingAddressSame, setisBillingAndShipingAddressSame] = useState<boolean>(false)
-  // const [addressTitle, setAddressTitle] = useState<string>("Add")
   const [selectAccount, setSelectAccount] = useState<any>(checkoutPageData?.customers?.[0]!)
   const [openUpdateAddress, toggleUpdateAddress] = useToggle(false)
   const [openAddAddress, toggleAddAddress] = useToggle(false)

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Seo from "../components/common/Seo"
 import { Box, Container, Stack, Typography } from "@mui/material"
 import Layout from "@/components/common/Layout";
@@ -11,11 +11,13 @@ import CalculatorCards from '@/components/partials/calculator/CalculatorCards';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { saveCalculatorsData } from '@/redux/reducers/calculatorsReducer';
 import { ENDPOINTS } from '@/utils/constants';
+import Loader from '@/components/common/Loader';
 
 function Calculator() {
     const dispatch = useAppDispatch();
     const calculators = useAppSelector(state => state.calculators.calculators)
     const vaultStorage = useAppSelector(state => state.calculators.vaultStorage)
+    const checkLoadingStatus = useAppSelector(state => state.calculators.loading);
 
     useEffect(() => {
         dispatch(saveCalculatorsData({
@@ -27,8 +29,10 @@ function Calculator() {
         }) as any);
     }, [])
 
+    console.log(checkLoadingStatus, " checkLoadingStatus");
     return (
         <Layout>
+            <Loader open={checkLoadingStatus} />
             <Seo
                 keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
                 title="Home"

@@ -33,7 +33,7 @@ function Step2() {
   const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
   const changeInQuantities = useDebounce(quantities, 500)
   const [changeDiffrenceDeliveryMethods, toggleChangeDiffrenceDeliveryMethods] = useToggle(false)
-  const {showToaster} = useShowToaster();
+  const { showToaster } = useShowToaster();
 
 
   useEffect(() => {
@@ -189,13 +189,13 @@ function Step2() {
             {configDetailsState?.vaultstorageenable?.value && <MenuItem value="VaultStorage">Vault Storage</MenuItem>}
           </Select>
         </Stack>
-        <FormControlLabel
+        {cartItemsWithLivePrice?.length > 1 && <FormControlLabel
           className="DeliveryCheckbox"
           control={<Checkbox checked={changeDiffrenceDeliveryMethods} onClick={() => {
             toggleChangeDiffrenceDeliveryMethods()
           }} />}
           label="Select different delivery method for products"
-        />
+        />}
       </Box>
       <Stack className="ProductList">
         {cartItemsWithLivePrice?.length > 0 && cartItemsWithLivePrice?.map((cartItem) => {

@@ -5,10 +5,14 @@ import { Box, Button, Container } from "@mui/material";
 import { navigate } from "gatsby";
 import React from "react"
 import { PageTitle } from "@/components/common/Utils"
+import { useAppSelector } from "@/hooks";
+import Loader from "@/components/common/Loader";
 
 const Calculators = () => {
+    const checkLoadingStatus = useAppSelector(state => state.calculators.loading);
     return (
         <Layout>
+            <Loader open = {checkLoadingStatus} />
             <Seo
                 keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
                 title="Home"

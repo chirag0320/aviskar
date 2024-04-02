@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import { categoryRequestBody } from "@/types/categoryRequestBody"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { serProgressLoaderStatus } from "@/redux/reducers/homepageReducer"
+import Loader from "@/components/common/Loader"
 
 export const pageSize = 12;
 export const requestBodyDefault: categoryRequestBody = {
@@ -33,10 +34,11 @@ function Category(props:any) {
     const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
     const [page, setPage] = useState(searchParams.has("page") ? parseInt(searchParams.get("page")!) : 1);
     const dispatch = useAppDispatch();
-
+    
     const [productIds, setProductIds] = useState({})
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
     const categoryData = useAppSelector(state => state.category);
+    const checkLoadingStatus = useAppSelector(state => state.category.loading);
 
     useEffect(() => {
         dispatch(serProgressLoaderStatus(true))
@@ -63,6 +65,7 @@ function Category(props:any) {
 
     return (
         <Layout>
+            <Loader open = {checkLoadingStatus} />
             <Seo
                 keywords={[`QMint categories`]}
                 title="Category"

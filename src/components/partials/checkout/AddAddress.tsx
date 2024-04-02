@@ -103,7 +103,24 @@ function AddAddress(props: AddAddress) {
                 ...addressQuery
             }
         }))
+        // let addressId;
+        // if (hasFulfilled(response?.type)) {
+        //     addressId = (response?.payload as any)?.data?.data;
+        // }
 
+        // const needToadd = {
+        //     ...addressQuery,
+        //     addressId: addressId,
+        //     addressType: addressTypeId,
+        //     customerId: null,
+        //     state: addressQuery.stateId,
+        //     country: addressQuery.countryId,
+        //     phone1: addressQuery.phoneNumber,
+        //     isSource: null,
+        //     "isactive": true,
+        //     "storeCode": 8,
+        //     "countryName": "Australia"
+        // }
         if (hasFulfilled(response.type)) {
             dispatch(addAddress(addressQuery))
             onClose()

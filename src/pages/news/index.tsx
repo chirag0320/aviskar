@@ -32,8 +32,10 @@ import { NewsList } from "@/redux/reducers/newsReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import useDebounce from "@/hooks/useDebounce";
 import { navigate } from "gatsby";
+import Loader from "@/components/common/Loader";
 
 function News() {
+  const checkLoadingStatus = useAppSelector(state => state.newsPage.loading);
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { newsList, topThree }: any = useAppSelector((state) => state.newsPage)
   const [value, setValue] = React.useState<any>('all');
@@ -65,6 +67,7 @@ function News() {
 
   return (
     <Layout>
+      <Loader open = {checkLoadingStatus} />
       <Breadcrumb arr={[{ navigate: '/news', name: 'News' }]} />
       <Box className="BlogPage">
         <Box className="HeroSection">

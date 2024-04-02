@@ -11,6 +11,7 @@ import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { membershipPlanDetails } from "@/redux/reducers/homepageReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { useAppSelector } from "@/hooks";
+import Loader from "@/components/common/Loader";
 import { navigate } from "gatsby";
 
 
@@ -23,7 +24,8 @@ const colourForMembership: any = {
 }
 
 function Memberships() {
-    const { mebershipPlanDetailsData } = useAppSelector((state) => state.homePage)
+    const { mebershipPlanDetailsData, loading } = useAppSelector((state) => state.homePage)
+
     useAPIoneTime({ service: membershipPlanDetails, endPoint: ENDPOINTS.membership })
     const isLoggedIn = useAppSelector(state => state.homePage.isLoggedIn)
 
@@ -35,6 +37,7 @@ function Memberships() {
     return (
         <Layout>
             <>
+            <Loader open = {loading} />
                 <Seo
                     keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
                     title="Home"

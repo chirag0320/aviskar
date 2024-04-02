@@ -29,13 +29,9 @@ import * as variable from "../../scss/settings/variables.module.scss";
 import {
   ChevronLeft,
   FacebookIcon,
-  TwitterIcon,
-  InstagramIcon,
-  YoutubeIcon,
+  TwitterIcon
 } from "@/assets/icons";
 import { formatDate } from "@/utils/common";
-import useApiRequest from "@/hooks/useAPIRequest";
-import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import useSubscription from "@/hooks/useSubscription";
 import { navigate } from "gatsby";
@@ -43,8 +39,10 @@ import { NewsDetailsAPI } from "@/redux/reducers/newsReducer";
 import { setLoadingFalse, setLoadingTrue } from "@/redux/reducers/homepageReducer";
 import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 import WhatsappIcon from "@/assets/icons/WhatsappIcon";
+import Loader from "@/components/common/Loader";
 
 function NewsDetails(params: any) {
+  const checkLoadingStatus = useAppSelector(state => state.newsPage.loading);
   const dispatch = useAppDispatch()
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { newsDetailsData, newsList }: any = useAppSelector((state) => state.newsPage)
@@ -61,6 +59,7 @@ function NewsDetails(params: any) {
   }, [params?.params?.["news-details-friendly-name"]])
   return (
     <Layout>
+      <Loader open = {checkLoadingStatus} />
       <Box className="BlogDetailPage">
         <Breadcrumb arr={[{ navigate: '/news', name: 'News' }, { navigate: "/news/" + params?.params?.["news-details-friendly-name"], name: params?.params?.["news-details-friendly-name"] }]} />
         <Box className="PostDescription">
