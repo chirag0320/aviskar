@@ -62,7 +62,8 @@ function AddAddress(props: AddAddress) {
     const { showToaster } = useShowToaster();
     const [state, toggle] = useToggle()
     const loading = useAppSelector(state => state.checkoutPage.loading);
-    const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents | null>(null);
+    const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
+    console.log("🚀 ~ AddAddress ~ googleAddressComponents:", googleAddressComponents)
     const [countryValue, setcountryValue] = useState<any>('-1')
     const [stateValue, setstateValue] = useState<any>('')
     const {
@@ -94,7 +95,7 @@ function AddAddress(props: AddAddress) {
             postcode: data.Code,
             countryId: data.Country,
         }
-        
+
 
         const response = await dispatch(addOrEditAddress({
             url: ENDPOINTS.addOrEditAddress,
@@ -135,12 +136,14 @@ function AddAddress(props: AddAddress) {
             setStateId(() => null);
             setValue('City', googleAddressComponents?.city)
             setValue('Address2', googleAddressComponents.address2)
+            if (googleAddressComponents?.postalCode) {
+                setValue("Code", Number(googleAddressComponents?.postalCode));
+            }
         }
     }, [googleAddressComponents])
     const OnChange = () => {
         toggle()
     }
-    console.log(getValues('Country'), "get value")
     return (
         <StyledDialog
             id="UpdateAddress"
