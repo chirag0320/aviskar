@@ -77,7 +77,7 @@ export const StockReturnWithName = React.memo(
           <Box className="FlipContainer">
             <Box className="Flipper">
               <Typography variant="body2" component="span" className="Value Front">{roundOfThePrice(percentage)}%</Typography>
-              <Typography variant="body2" component="span" className="Value Back">{roundOfThePrice(move)}$</Typography>
+              <Typography variant="body2" component="span" className="Value Back">${roundOfThePrice(move)}</Typography>
             </Box>
           </Box>
           {status ? <ChevronUp /> : <ChevronDown />}

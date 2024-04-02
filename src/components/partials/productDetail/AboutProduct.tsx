@@ -66,7 +66,7 @@ function AboutProduct({ productId }: any) {
   const dispatch = useAppDispatch();
   const styles: any = createStyles({
     tableBody: {
-      border: '1px solid #ddd', // border around the table body
+      // border: '1px solid #ddd', // border around the table body
     },
     tableRow: {
       '&:nth-of-type(odd)': {
@@ -527,9 +527,9 @@ function AboutProduct({ productId }: any) {
                   <TableBody style={styles.tableBody}>
                     {Object.entries(productDetailsData?.specifications)?.map((bulkProduct: any, index) => (
                       <TableRow key={index} style={{ ...styles.tableRow }}>
-                        <TableCell style={styles.tableCell}>
+                        {/* <TableCell style={styles.tableCell}>
                           <Typography>{index + 1}</Typography>
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell align="left" style={{ ...styles.tableCell }}>
                           <Typography>{bulkProduct[0]}</Typography>
                         </TableCell>

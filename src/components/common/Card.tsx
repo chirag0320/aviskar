@@ -471,7 +471,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
                   IconComponent={SelectDropdown}
                   disabled={!isDifferentMethod}
                 >
-                  <MenuItem value="LocalShipping">Local Shipping</MenuItem>
+                  <MenuItem value="LocalShipping">Local PickUp</MenuItem>
                   <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
                   <MenuItem value="VaultStorage">Vault Storage</MenuItem>
                 </Select>
