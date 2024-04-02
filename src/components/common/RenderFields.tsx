@@ -26,7 +26,7 @@ interface RenderFieldProps {
   variant?: 'standard' | 'outlined' | 'filled'
   color?: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'
   value?: string
-  onChange?: () => void
+  onChange?: (value:any) => void
   id?: string
   className?: string
   name: string
@@ -114,15 +114,6 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 error={!!error}
                 disabled={disabled}
                 defaultValue={defaultValue}
-                onChange={(e) => {
-                  console.log(name, e.target.value, "xxx")
-                  // field.onChange(e)
-                  setValue(name, e.target.value)
-                  if (onChange) {
-                    onChange(e.target.value)
-                  }
-                }
-                }
                 variant={variant}
                 MenuProps={MenuProps}
                 displayEmpty
@@ -138,6 +129,13 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 {...register(name)}
                 {...otherProps}
                 value={value}
+                onChange={(e) => {
+                  setValue(name, e.target.value)
+                  if (onChange) {
+                    onChange(e.target.value)
+                  }
+                }
+                }
               >
                 {children}
               </Select>
