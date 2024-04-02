@@ -41,6 +41,8 @@ import useSubscription from "@/hooks/useSubscription";
 import { navigate } from "gatsby";
 import { NewsDetailsAPI } from "@/redux/reducers/newsReducer";
 import { setLoadingFalse, setLoadingTrue } from "@/redux/reducers/homepageReducer";
+import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import WhatsappIcon from "@/assets/icons/WhatsappIcon";
 
 function NewsDetails(params: any) {
   const dispatch = useAppDispatch()
@@ -116,15 +118,21 @@ function NewsDetails(params: any) {
                 <Box className="Left">
                   <Typography variant="subtitle1">Share this post</Typography>
                   <Stack className="SocialIconWrapper">
-                    <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}>
-                      <FacebookIcon />
-                    </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Twitter Icon" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}>
-                      <TwitterIcon />
-                    </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Youtube Icon" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}>
-                      <YoutubeIcon />
-                    </IconButton>
+                    <FacebookShareButton url={window.location.href} hashtag="qmint" title="Qmint news">
+                      <IconButton className="SocialIcon" aria-label="Facebook Icon" >
+                        <FacebookIcon />
+                      </IconButton>
+                    </FacebookShareButton>
+                    <TwitterShareButton url={window.location.href} title="Qmint news" hashtags={["qmint", "news"]}>
+                      <IconButton className="SocialIcon" aria-label="Twitter Icon">
+                        <TwitterIcon />
+                      </IconButton>
+                    </TwitterShareButton>
+                    <WhatsappShareButton url={window.location.href} title="Qmint news">
+                      <IconButton className="SocialIcon" aria-label="Whatsapp Icon">
+                        <WhatsappIcon />
+                      </IconButton>
+                    </WhatsappShareButton>
                     {/* <IconButton className="SocialIcon" aria-label="Instagram Icon">
                       <InstagramIcon />
                     </IconButton> */}
