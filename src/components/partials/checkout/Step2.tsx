@@ -16,8 +16,8 @@ import { ENDPOINTS } from "@/utils/constants"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { CartItemsWithLivePriceDetails } from "../shopping-cart/CartDetails"
 import useDebounce from "@/hooks/useDebounce"
-import { deleteShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
-import { hasFulfilled } from "@/utils/common"
+import { deleteShoppingCartData, getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
+import { bodyForGetShoppingCartData, hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 
 function Step2() {
@@ -33,7 +33,7 @@ function Step2() {
   const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
   const changeInQuantities = useDebounce(quantities, 500)
   const [changeDiffrenceDeliveryMethods, toggleChangeDiffrenceDeliveryMethods] = useToggle(false)
-  const {showToaster} = useShowToaster();
+  const { showToaster } = useShowToaster();
 
 
   useEffect(() => {
@@ -146,6 +146,7 @@ function Step2() {
       response = await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: ids }) as any);
     }
     if (hasFulfilled(response.type)) {
+      dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
       setCartItemsWithLivePrice(updatedCartItem);
       dispatch(updateFinalDataForTheCheckout({ cartItemsWithLivePrice: updatedCartItem }))
       showToaster({ message: response?.payload?.data?.message, severity: 'success' })
@@ -183,18 +184,18 @@ function Step2() {
             onChange={handleDeliveryMethod}
             IconComponent={SelectDropdown}
           >
-            {configDetailsState?.localpickupenable?.value && <MenuItem value="LocalShipping">Local Shipping</MenuItem>}
+            {configDetailsState?.localpickupenable?.value && <MenuItem value="LocalShipping">Local PickUp</MenuItem>}
             {configDetailsState?.secureShippingenable?.value && <MenuItem value="SecureShipping">Secure Shipping</MenuItem>}
             {configDetailsState?.vaultstorageenable?.value && <MenuItem value="VaultStorage">Vault Storage</MenuItem>}
           </Select>
         </Stack>
-        <FormControlLabel
+        {cartItemsWithLivePrice?.length > 1 && <FormControlLabel
           className="DeliveryCheckbox"
           control={<Checkbox checked={changeDiffrenceDeliveryMethods} onClick={() => {
             toggleChangeDiffrenceDeliveryMethods()
           }} />}
           label="Select different delivery method for products"
-        />
+        />}
       </Box>
       <Stack className="ProductList">
         {cartItemsWithLivePrice?.length > 0 && cartItemsWithLivePrice?.map((cartItem) => {

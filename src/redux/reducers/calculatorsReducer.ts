@@ -64,7 +64,19 @@ export const calculatorsPagesSlice = createSlice({
         },
         addCalculator(state, action) {
             const calculatorData = action.payload;
-            state.calculators.push(calculatorData);
+            const index = state.calculators.findIndex((item) => {
+                return item.Metal === calculatorData?.Metal && item.MetalType === calculatorData?.MetalType && item.MetalWeightType === calculatorData?.MetalWeightType
+            })
+            if (index !== -1) {
+                const data = state.calculators.splice(index, 1)
+                data[0].Metal = calculatorData?.Metal
+                data[0].MetalWeight = Number(data[0].MetalWeight) +  Number(calculatorData?.MetalWeight)
+                data[0].MetalWeightType = calculatorData?.MetalWeightType
+                data[0].MetalType = calculatorData?.MetalType
+                state.calculators.unshift(data[0])
+            } else {
+                state.calculators.push(calculatorData);
+            }
         },
         removeCalculator(state, action) {
             const calculatorIndex = action.payload;

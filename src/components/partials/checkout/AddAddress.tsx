@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
-import { StateOrCountry, addOrEditAddress } from "@/redux/reducers/checkoutReducer";
+import { StateOrCountry, addAddress, addOrEditAddress } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
@@ -94,7 +94,7 @@ function AddAddress(props: AddAddress) {
             postcode: data.Code,
             countryId: data.Country,
         }
-        
+
 
         const response = await dispatch(addOrEditAddress({
             url: ENDPOINTS.addOrEditAddress,
@@ -102,8 +102,26 @@ function AddAddress(props: AddAddress) {
                 ...addressQuery
             }
         }))
+        // let addressId;
+        // if (hasFulfilled(response?.type)) {
+        //     addressId = (response?.payload as any)?.data?.data;
+        // }
 
+        // const needToadd = {
+        //     ...addressQuery,
+        //     addressId: addressId,
+        //     addressType: addressTypeId,
+        //     customerId: null,
+        //     state: addressQuery.stateId,
+        //     country: addressQuery.countryId,
+        //     phone1: addressQuery.phoneNumber,
+        //     isSource: null,
+        //     "isactive": true,
+        //     "storeCode": 8,
+        //     "countryName": "Australia"
+        // }
         if (hasFulfilled(response.type)) {
+            dispatch(addAddress(addressQuery))
             onClose()
             reset()
             showToaster({ message: "Address saved successfully", severity: "success" })

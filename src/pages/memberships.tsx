@@ -12,6 +12,7 @@ import { membershipPlanDetails } from "@/redux/reducers/homepageReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { useAppSelector } from "@/hooks";
 import Loader from "@/components/common/Loader";
+import { navigate } from "gatsby";
 
 
 const colourForMembership: any = {
@@ -26,6 +27,12 @@ function Memberships() {
     const { mebershipPlanDetailsData, loading } = useAppSelector((state) => state.homePage)
 
     useAPIoneTime({ service: membershipPlanDetails, endPoint: ENDPOINTS.membership })
+    const isLoggedIn = useAppSelector(state => state.homePage.isLoggedIn)
+
+    if (!isLoggedIn) {
+        navigate('/login', { replace: true })
+        return;
+    }
 
     return (
         <Layout>
@@ -45,14 +52,10 @@ function Memberships() {
                             {
                                 Object.entries(mebershipPlanDetailsData).flatMap((item: any, index) => {
                                     return (
-                                        item[0] !== 'currentMemberShip' ? [<MembershipCard bgcolor={variable[colourForMembership[item[0]]] === 'silver'? '#c0c0c0' : variable[colourForMembership[item[0]]]} cardtitle={item[0] as string} details={item[1]} />] : []
+                                        item[0] !== 'currentMemberShip' ? [<MembershipCard bgcolor={variable[colourForMembership[item[0]]] === 'silver' ? '#c0c0c0' : variable[colourForMembership[item[0]]]} cardtitle={item[0] as string} details={item[1]} />] : []
                                     )
                                 })
                             }
-                            {/* <MembershipCard bgcolor={variable.copper} cardtitle="COPPER" />
-                            <MembershipCard bgcolor={variable.silverSand} cardtitle="SILVER" />
-                            <MembershipCard bgcolor={variable.goldTips} cardtitle="GOLD" />
-                            <MembershipCard bgcolor={variable.mercury} cardtitle="PLATINUM" /> */}
                         </Box>
                     </Container>
                 </Box>

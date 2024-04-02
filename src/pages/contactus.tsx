@@ -19,7 +19,7 @@ import Loader from '@/components/common/Loader';
 function ContactUs() {
   const checkLoadingStatus = useAppSelector(state => state.homePage.loading);
   const configDetails = useAppSelector(state => state.homePage.configDetails)
-  console.log("🚀 ~ ContactUs ~ configDetails:", configDetails)
+  // console.log("🚀 ~ ContactUs ~ configDetails:", configDetails)
   useAPIoneTime({ service: getReasonsForContactUs, endPoint: ENDPOINTS.reasonsForContact })
   useAPIoneTime({ service: getConfiguration, endPoint: ENDPOINTS.getContactUsConfiguration })
 

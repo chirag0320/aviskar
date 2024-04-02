@@ -57,6 +57,7 @@ const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
 
         dispatch(addCalculator(calculatorData));
         reset();
+        setValue('SelectMetal', data.SelectMetal)
     }
     useEffect(() => {
         dispatch(saveCalculatorsData({
