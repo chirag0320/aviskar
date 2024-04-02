@@ -24,7 +24,7 @@ interface AddAddress {
     dialogTitle: string
     onClose: () => void
     addressTypeId: number
-    handleAddressUpdate: (addressData: any, isbilling: any)=>any
+    handleAddressUpdate: (addressData: any, isbilling: any) => any
 }
 
 interface Inputs {
@@ -59,7 +59,8 @@ function AddAddress(props: AddAddress) {
     const { open, dialogTitle, onClose, addressTypeId, handleAddressUpdate } = props
     const dispatch = useAppDispatch();
     const countryList = useAppSelector(state => state.checkoutPage.countryList);
-    const stateList = useAppSelector(state => state.checkoutPage.stateList);
+    const stateListall = useAppSelector(state => state.checkoutPage.stateList);
+    const [stateList, setStateList] = useState([])
     const [stateId, setStateId] = useState<number | null>(null);
     const { showToaster } = useShowToaster();
     const loading = useAppSelector(state => state.checkoutPage.loading);
@@ -157,7 +158,16 @@ function AddAddress(props: AddAddress) {
             }
         }
     }, [googleAddressComponents])
-    const OnChange = (value:any) => {
+
+    useEffect(() => {
+        const data: any = stateListall?.filter((state) => {
+            return state.enumValue == countryValue || countryValue == -1
+        })
+        setStateList(data)
+    }, [stateListall, countryValue])
+    console.log("🚀 ~ AddAddress ~ stateListall, countryValue:", stateListall, countryValue)
+
+    const OnChange = (value: any) => {
         setcountryValue(value)
     }
     return (

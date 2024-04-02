@@ -44,7 +44,8 @@ function UpdateAddress(props: UpdateAddress) {
   const { open, dialogTitle, onClose, existingAddress } = props
   const loading = useAppSelector(state => state.checkoutPage.loading);
   const countryList = useAppSelector(state => state.checkoutPage.countryList);
-  const stateList = useAppSelector(state => state.checkoutPage.stateList);
+  const stateListall = useAppSelector(state => state.checkoutPage.stateList);
+  const [stateList, setStateList] = useState([])
   const [stateId, setStateId] = useState<number | null>(null);
   const dispatch = useAppDispatch();
   const { showToaster } = useShowToaster();
@@ -142,10 +143,18 @@ function UpdateAddress(props: UpdateAddress) {
       reset()
     }
   }, [existingAddress])
-  const OnChange = (value:any) => {
+
+  useEffect(() => {
+    const data: any = stateListall?.filter((state) => {
+      return state.enumValue == countryValue || countryValue == -1
+    })
+    setStateList(data)
+  }, [stateListall, countryValue])
+
+  const OnChange = (value: any) => {
     setcountryValue(value)
     setValue('Country', value)
-}
+  }
   return (
     <StyledDialog
       id="UpdateAddress"
