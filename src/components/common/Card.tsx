@@ -286,7 +286,7 @@ export const TravelCard = (props: any) => {
       navigate(`blog/${friendlyName}`)
     }}>
       <Link className="ImageLink">
-        <img src={imageUrl} alt="Travel image" loading="lazy" />
+        <img src={imageUrl ?? noImage} alt="Travel image" loading="lazy" />
       </Link>
       <CardContent>
         <Link className="Place"><Typography variant="subtitle2" component="h3">{place}</Typography></Link>
@@ -422,8 +422,7 @@ export const LineChartCard = (props: any) => {
 };
 
 
-export const CartCard = ({ cartItem, hideDeliveryMethod, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
-  console.log("🚀 ~ CartCard ~ cartItem:", cartItem)
+export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
   // const [deliveryMethod, setDeliveryMethod] = useState<string>('LocalShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     // setDeliveryMethod(event.target.value as string);
@@ -435,7 +434,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, quantity, increaseQuant
     <Card className="CartCard">
       <CardMedia
         component="img"
-        image={cartItem?.imageUrl}
+        image={cartItem?.imageUrl ?? noImage}
         alt="Product image"
       />
       <CardContent>
@@ -469,7 +468,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, quantity, increaseQuant
                   IconComponent={SelectDropdown}
                   disabled={!isDifferentMethod}
                 >
-                  <MenuItem value="LocalShipping">Local Shipping</MenuItem>
+                  <MenuItem value="LocalShipping">Local PickUp</MenuItem>
                   <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
                   <MenuItem value="VaultStorage">Vault Storage</MenuItem>
                 </Select>
@@ -478,7 +477,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, quantity, increaseQuant
             <ProductUpdateCountdown />
           </Stack>
           {(cartItem?.warnings?.length !== 0) && (
-            <Stack className="RightSide"> 
+            <Stack className="RightSide">
               {cartItem?.warnings?.map((warning) => (
                 <Typography className="ShippingMessage" variant="body2" key={warning}>{warning}</Typography>
               ))}
@@ -497,7 +496,7 @@ export const CartCardAbstract = ({ product, quantity, deliveryMethod }: any) => 
       <CardContent>
         <CardMedia
           component="img"
-          image={product?.imageUrl}
+          image={product?.imageUrl ?? noImage}
           alt="Product image"
         />
         <Stack className="Wrapper">

@@ -10,7 +10,7 @@ import { IproductPrice } from '../home/FeaturedProducts'
 import { clearShoppingCart, deleteShoppingCartData, getShoppingCartData, resetSubTotal, setCartItemWarning, setLoadingFalse, setLoadingTrue, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
 import { navigate } from 'gatsby'
 import useDebounce from '@/hooks/useDebounce'
-import { hasFulfilled } from '@/utils/common'
+import { bodyForGetShoppingCartData, hasFulfilled } from '@/utils/common'
 import useShowToaster from '@/hooks/useShowToaster'
 
 interface Props {
@@ -83,6 +83,7 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
         const response = await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: [id] }) as any);
 
         if (hasFulfilled(response.type)) {
+            dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
             setCartItemsWithLivePrice(() => cartItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => item.id !== id));
             showToaster({ message: response?.payload?.data?.message, severity: 'success' })
         }

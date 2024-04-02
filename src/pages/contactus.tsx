@@ -17,7 +17,7 @@ import { useAppSelector } from '@/hooks';
 
 function ContactUs() {
   const configDetails = useAppSelector(state => state.homePage.configDetails)
-  console.log("🚀 ~ ContactUs ~ configDetails:", configDetails)
+  // console.log("🚀 ~ ContactUs ~ configDetails:", configDetails)
   useAPIoneTime({ service: getReasonsForContactUs, endPoint: ENDPOINTS.reasonsForContact })
   useAPIoneTime({ service: getConfiguration, endPoint: ENDPOINTS.getContactUsConfiguration })
 

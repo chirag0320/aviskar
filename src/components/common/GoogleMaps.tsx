@@ -42,7 +42,7 @@ interface PlaceType {
 
 export default function GoogleMaps({ setParsedAddress }: { setParsedAddress: any }) {
   const [value, setValue] = React.useState<PlaceType | null>(null);
-  console.log("🚀 ~ GoogleMaps ~ value:", value)
+  // console.log("🚀 ~ GoogleMaps ~ value:", value)
   const [inputValue, setInputValue] = React.useState('');
   const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
   const loaded = React.useRef(false);

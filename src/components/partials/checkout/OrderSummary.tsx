@@ -14,7 +14,7 @@ import { OutlinedCheckIcon } from "@/assets/icons"
 import OTPConfirmation from "./OTPConfirmation"
 import { hasFulfilled, roundOfThePrice, shipmentTypeToEnum } from "@/utils/common"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
-import { checkValidationOnConfirmOrder, disableOTP, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation, placeOrder } from "@/redux/reducers/checkoutReducer"
+import { checkValidationOnConfirmOrder, disableOTP, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation, placeOrder, setCheckoutItemWarning } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import useDeviceDetails from "@/hooks/useDeviceDetails"
 import { navigate } from "gatsby"
@@ -183,7 +183,7 @@ function OrderSummary() {
         }))
       }
       else {
-        // dispatch(setCartItemWarning(response?.payload?.data?.data));
+        dispatch(setCheckoutItemWarning(response?.payload?.data?.data));
         showToaster({ message: "Cannot Place order as Some items have warnings", severity: 'warning' })
       }
     }
@@ -204,10 +204,10 @@ function OrderSummary() {
       <Box className="PricingDetails">
         {renderPricingItem("Subtotal", '$' + roundOfThePrice(subTotal as any) as any)}
         <Divider />
-        {renderPricingItem("Secure Shipping", `$${insuranceAndTaxCalculation?.secureShippingFeeIncludingTax}`)}
-        {renderPricingItem("Vault storage", `$${insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax}`)}
+        {renderPricingItem("Secure Shipping", `$${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax))}`)}
+        {renderPricingItem("Vault storage", `$${roundOfThePrice(Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax))}`)}
         <Divider />
-        {finalDataForTheCheckout?.paymentType === 'CreditCard' && renderPricingItem("Credit Card Fees", craditCardCharges?.creditCardFeeIncludingTax)}
+        {finalDataForTheCheckout?.paymentType === 'CreditCard' && renderPricingItem("Credit Card Fees", roundOfThePrice(Number(craditCardCharges?.creditCardFeeIncludingTax)))}
         {finalDataForTheCheckout?.paymentType === 'CreditCard' && < Divider />}
         {renderPricingItem("GST Included", `$${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingTax) + Number(insuranceAndTaxCalculation?.vaultStorageTax) + Number(finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 ? finalDataForTheCheckout?.cartItemsWithLivePrice?.reduce((total: number, product: {
           LivePriceDetails: { taxPrice: number }
