@@ -94,7 +94,7 @@ function AddAddress(props: AddAddress) {
             postcode: data.Code,
             countryId: data.Country,
         }
-        
+
 
         const response = await dispatch(addOrEditAddress({
             url: ENDPOINTS.addOrEditAddress,
@@ -102,7 +102,19 @@ function AddAddress(props: AddAddress) {
                 ...addressQuery
             }
         }))
-
+        // const needToadd = {
+        //     ...addressQuery,
+        //     addressId: '',
+        //     addressType: addressTypeId,
+        //     customerId: null,
+        //     state: addressQuery.stateId,
+        //     country: addressQuery.countryId,
+        //     phone1: addressQuery.phoneNumber,
+        //     isSource: null,
+        //     "isactive": true,
+        //     "storeCode": 8,
+        //     "countryName": "Australia"
+        // }
         if (hasFulfilled(response.type)) {
             dispatch(addAddress(addressQuery))
             onClose()
