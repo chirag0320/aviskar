@@ -29,18 +29,16 @@ import * as variable from "../../scss/settings/variables.module.scss";
 import {
   ChevronLeft,
   FacebookIcon,
-  TwitterIcon,
-  InstagramIcon,
-  YoutubeIcon,
+  TwitterIcon
 } from "@/assets/icons";
 import { formatDate } from "@/utils/common";
-import useApiRequest from "@/hooks/useAPIRequest";
-import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { BlogDetailsAPI } from "@/redux/reducers/blogReducer";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import useSubscription from "@/hooks/useSubscription";
 import { navigate } from "gatsby";
 import { setLoadingFalse, setLoadingTrue } from "@/redux/reducers/homepageReducer";
+import { FacebookShareButton,TwitterShareButton, WhatsappShareButton } from "react-share";
+import WhatsappIcon from "@/assets/icons/WhatsappIcon";
 import Loader from "@/components/common/Loader";
 
 function BlogDetails(params: any) {
@@ -120,18 +118,21 @@ function BlogDetails(params: any) {
                 <Box className="Left">
                   <Typography>Share this post</Typography>
                   <Stack className="SocialIconWrapper">
-                    <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}>
-                      <FacebookIcon />
-                    </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Twitter Icon" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}>
-                      <TwitterIcon />
-                    </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Youtube Icon" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}>
-                      <YoutubeIcon />
-                    </IconButton>
-                    {/* <IconButton className="SocialIcon" aria-label="Instagram Icon">
-                      <InstagramIcon />
-                    </IconButton> */}
+                    <FacebookShareButton url={window.location.href} hashtag="qmint" title="Qmint blog">
+                      <IconButton className="SocialIcon" aria-label="Facebook Icon" >
+                        <FacebookIcon />
+                      </IconButton>
+                    </FacebookShareButton>
+                    <TwitterShareButton url={window.location.href} title="Qmint blog" hashtags={["qmint", "blog"]}>
+                      <IconButton className="SocialIcon" aria-label="Twitter Icon">
+                        <TwitterIcon />
+                      </IconButton>
+                    </TwitterShareButton>
+                    <WhatsappShareButton url={window.location.href} title="Qmint blog">
+                      <IconButton className="SocialIcon" aria-label="Whatsapp Icon">
+                        <WhatsappIcon />
+                      </IconButton>
+                    </WhatsappShareButton>
                   </Stack>
                 </Box>
                 <Box className="Right">
@@ -199,11 +200,11 @@ function BlogDetails(params: any) {
                       return (
                         <Grid item md={4} sm={6} key={item?.id}>
                           <PostCard
-                          details={item}
-                          navigate={() =>
-                            navigate(`/blog/${item?.friendlyName}`)
-                          }
-                        />
+                            details={item}
+                            navigate={() =>
+                              navigate(`/blog/${item?.friendlyName}`)
+                            }
+                          />
                         </Grid>
                       );
                     })}

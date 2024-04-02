@@ -442,9 +442,6 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
           <Box className="LeftWrapper">
             <Typography className="Name" component="p" variant="titleLarge" onClick={() => navigate(`/product-details/${cartItem.friendlypagename}`)}>{cartItem.productName}</Typography>
             <Typography variant="body2">{cartItem?.shippingInfo}</Typography>
-            {cartItem?.warnings?.map((warning) => (
-              <Typography variant="body2" key={warning}>{warning}</Typography>
-            ))}
           </Box>
           <Box className="RightWrapper">
             <Typography className="LivePrice" variant="body2">Live Price</Typography>
