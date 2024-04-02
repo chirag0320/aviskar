@@ -32,8 +32,10 @@ import { BlogList } from "@/redux/reducers/blogReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import useDebounce from "@/hooks/useDebounce";
 import { navigate } from "gatsby";
+import Loader from "@/components/common/Loader";
 
 function Blog() {
+  const checkLoadingStatus = useAppSelector(state => state.blogPage.loading);
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { blogList, topThree }: any = useAppSelector((state) => state.blogPage);
   const [value, setValue] = React.useState<any>("all");
@@ -69,6 +71,7 @@ function Blog() {
 
   return (
     <Layout>
+      <Loader open = {checkLoadingStatus} />
       <Breadcrumb arr={[{ navigate: '/blog', name: 'Blog' }]} />
       <Box className="BlogPage">
         <Box className="HeroSection">

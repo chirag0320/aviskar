@@ -35,7 +35,7 @@ export interface IdispatchType {
 }
 function SignInPage() {
   const { configDetails: configDetailsState, loadingForSignIn } = useAppSelector((state) => state.homePage)
-  let checkLoadingStatus = useAppSelector(state => state.homePage.loading);
+  const checkLoadingStatus = useAppSelector(state => state.homePage.loadingForSignIn);
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [loadingForNavigate, setLoadingForNavigate] = useState(false)
   const [loginError, setLoginError] = useState<string | null>(null);
@@ -70,10 +70,10 @@ function SignInPage() {
     setLoadingForNavigate(false)
   }
   
-  console.log(loadingForNavigate, "loadingForNavigate");
+  console.log(checkLoadingStatus, "checkLoadingStatus");
   return (
     <>
-    <Loader open = {loadingForNavigate} />
+    <Loader open = {checkLoadingStatus} />
     <Box id="SignInPage">
       <Container maxWidth="sm" >
         <DialogTitle component="p">
