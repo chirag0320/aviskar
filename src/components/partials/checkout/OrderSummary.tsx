@@ -179,7 +179,7 @@ function OrderSummary() {
         }))
       }
       else {
-        dispatch(setCheckoutItemWarning(response?.payload?.data?.data));
+        dispatch(setCheckoutItemWarning({ warnings: response?.payload?.data?.data, quantities: finalDataForTheCheckout?.quantitiesWithProductId }));
         showToaster({ message: "Cannot Place order as Some items have warnings", severity: 'warning' })
       }
     }

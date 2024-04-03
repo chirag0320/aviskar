@@ -29,7 +29,7 @@ export type CartItemsWithLivePriceDetails = CartItem & {
 const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quantities, setQuantities }: Props) => {
     const loading = useAppSelector(state => state.shoppingCart.loading);
     const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
-    // console.log("🚀 ~ CartDetails ~ cartItems:", cartItems)
+    console.log("🚀 ~ CartDetails ~ cartItems:", cartItems)
     const [productIds, setProductIds] = useState({})
     const dispatch = useAppDispatch();
     const { showToaster } = useShowToaster();
@@ -57,9 +57,10 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
 
             setCartItemsWithLivePrice(cartItemsWithLivePrice)
         }
-    }, [priceData, cartItems])
+    }, [priceData])
 
     useEffect(() => {
+        // console.log("Qmint", "IM in the cart items effect")
         if (cartItems.length > 0) {
             const productIds = cartItems.map((item: CartItem) => item.productId);
             setProductIds({ productIds })
@@ -111,11 +112,11 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
             // NOTE :- Proper response is not coming from backend to show the right toaster so bottom can be a bug for showing right toaster message
             if (hasFulfilled(response.type)) {
                 if (!response?.payload?.data?.data || response?.payload?.data?.data?.length === 0) {
-                    dispatch(resetCartItemWarning())
+                    dispatch(resetCartItemWarning({ quantities }))
                     showToaster({ message: "Cart updated", severity: 'success' })
                 }
                 else {
-                    dispatch(setCartItemWarning(response?.payload?.data?.data));
+                    dispatch(setCartItemWarning({ warnings: response?.payload?.data?.data, quantities }));
                     showToaster({ message: "Some items have warnings", severity: 'warning' })
                 }
             }

@@ -40,7 +40,7 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
                 navigate('/checkout')
             }
             else {
-                dispatch(setCartItemWarning(response?.payload?.data?.data));
+                dispatch(setCartItemWarning({ warnings: response?.payload?.data?.data, quantities }));
                 showToaster({ message: "Cannot Checkout as Some items have warnings", severity: 'warning' })
             }
         }

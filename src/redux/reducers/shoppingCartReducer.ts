@@ -60,23 +60,27 @@ export const shoppingCart = createSlice({
             state.subTotal = Math.round((state.subTotal + Number.EPSILON) * 100) / 100
         },
         setCartItemWarning: (state, action) => {
-            const warnings = action.payload;
+            const warnings = action.payload?.warnings;
+            const quantities = action.payload?.quantities;
 
             state.cartItems.forEach((item: CartItem) => {
-                warnings.forEach((warning: any) => {
+                warnings?.forEach((warning: any) => {
                     if (item.productId === warning.productId) {
                         item.warnings = warning.warnings;
                     } else {
                         item.warnings = []
                     }
                 })
+                item.quantity = quantities[item.id];
             })
 
             // localStorageSetItem('cartItems', state.cartItems)
         },
-        resetCartItemWarning: (state) => {
+        resetCartItemWarning: (state, action) => {
+            const quantities = action.payload?.quantities;
             state.cartItems.forEach((item: CartItem) => {
                 item.warnings = [];
+                item.quantity = quantities[item.id]
             })
         }
     },
@@ -118,6 +122,6 @@ export const shoppingCart = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotal, resetSubTotal, clearShoppingCart, setCartItemWarning,resetCartItemWarning } = shoppingCart.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotal, resetSubTotal, clearShoppingCart, setCartItemWarning, resetCartItemWarning } = shoppingCart.actions
 
 export default shoppingCart.reducer
