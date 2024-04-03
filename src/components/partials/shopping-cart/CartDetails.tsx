@@ -7,7 +7,7 @@ import { ENDPOINTS } from '@/utils/constants'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { IproductPrice } from '../home/FeaturedProducts'
-import { clearShoppingCart, deleteShoppingCartData, getShoppingCartData, resetSubTotal, setCartItemWarning, setLoadingFalse, setLoadingTrue, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
+import { clearShoppingCart, deleteShoppingCartData, getShoppingCartData, resetCartItemWarning, resetSubTotal, setCartItemWarning, setLoadingFalse, setLoadingTrue, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
 import { navigate } from 'gatsby'
 import useDebounce from '@/hooks/useDebounce'
 import { bodyForGetShoppingCartData, hasFulfilled } from '@/utils/common'
@@ -29,6 +29,7 @@ export type CartItemsWithLivePriceDetails = CartItem & {
 const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quantities, setQuantities }: Props) => {
     const loading = useAppSelector(state => state.shoppingCart.loading);
     const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
+    // console.log("🚀 ~ CartDetails ~ cartItems:", cartItems)
     const [productIds, setProductIds] = useState({})
     const dispatch = useAppDispatch();
     const { showToaster } = useShowToaster();
@@ -110,6 +111,7 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
             // NOTE :- Proper response is not coming from backend to show the right toaster so bottom can be a bug for showing right toaster message
             if (hasFulfilled(response.type)) {
                 if (!response?.payload?.data?.data || response?.payload?.data?.data?.length === 0) {
+                    dispatch(resetCartItemWarning())
                     showToaster({ message: "Cart updated", severity: 'success' })
                 }
                 else {

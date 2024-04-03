@@ -66,13 +66,18 @@ export const shoppingCart = createSlice({
                 warnings.forEach((warning: any) => {
                     if (item.productId === warning.productId) {
                         item.warnings = warning.warnings;
-                    }else{
+                    } else {
                         item.warnings = []
                     }
                 })
             })
 
             // localStorageSetItem('cartItems', state.cartItems)
+        },
+        resetCartItemWarning: (state) => {
+            state.cartItems.forEach((item: CartItem) => {
+                item.warnings = [];
+            })
         }
     },
 
@@ -113,6 +118,6 @@ export const shoppingCart = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotal, resetSubTotal, clearShoppingCart, setCartItemWarning } = shoppingCart.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotal, resetSubTotal, clearShoppingCart, setCartItemWarning,resetCartItemWarning } = shoppingCart.actions
 
 export default shoppingCart.reducer
