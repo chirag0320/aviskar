@@ -1,7 +1,7 @@
-import React, { Fragment, useEffect } from "react"
+import React from "react"
 import Seo from "../components/common/Seo"
 import Layout from "@/components/common/Layout";
-import { Box, Stack, Container, Typography, Icon, Button, TableContainer, Table, TableHead, TableCell, TableRow, TableBody } from "@mui/material"
+import { Box, Stack, Container, Typography, Icon, Button, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Divider } from "@mui/material"
 import GreenConfirmationIcon from "@/assets/icons/GreenConfirmationIcon";
 import LogoGoldCoin from "@/assets/logos/LogoGoldCoin.png";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
@@ -11,15 +11,27 @@ import { useAppSelector } from "@/hooks";
 import { rows } from "./order-details";
 import { navigate } from "gatsby";
 import Loader from "@/components/common/Loader";
+import { roundOfThePrice } from "@/utils/common";
+import { OutlinedCheckIcon } from "@/assets/icons";
 
 function OrderConfirmation(props: any) {
     const checkLoadingStatus = useAppSelector(state => state.orderConfirmationDetails.loading);
     // const orderId = props.location?.search?.split('=')[1];
-    const orderConfirmationDetails = useAppSelector(state => state.orderConfirmationDetails);
+    const orderConfirmationDetailsData = useAppSelector(state => state.orderConfirmationDetails.orderConfirmationDetailsData);
     useAPIoneTime({
         service: getOrderConfirmationDetails,
         endPoint: ENDPOINTS.orderConfimationDetails + new URLSearchParams(location.search).get("id")
     })
+
+    const renderPricingItem = (title: string, value: string) => {
+        return (
+            <Stack className="PricingItem">
+                <Typography variant="titleLarge">{title}</Typography>
+                <Typography>{value}</Typography>
+            </Stack>
+        )
+    }
+
     return (
         <Layout>
             <>
@@ -37,18 +49,22 @@ function OrderConfirmation(props: any) {
                         </Stack>
                         <Box className="DetailsWrapper">
                             <Box className="ThankyouWrapper">
-                                <Typography className="ThankyouText">Thank you for choosing Queensland Mint</Typography>
-                                <Typography variant="subtitle2" className="OrderID">Your order id is: {orderConfirmationDetails.orderNumber}</Typography>
+                                <Typography className="ThankyouText" dangerouslySetInnerHTML={{ __html: orderConfirmationDetailsData?.thankyousection }} />
+                                <Typography variant="subtitle2" className="OrderID">Your order id is: {orderConfirmationDetailsData?.orderNumber}</Typography>
                                 <Typography variant="body1">You will receive an order confirmation email with details of your order and a link to track its progress.</Typography>
                             </Box>
                             <Box className="OrderDetailsWrapper">
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Order No.</Typography>
+<<<<<<< Updated upstream
                                     <Button variant="text" onClick={() => navigate(`/order-details/?orderNo=${orderConfirmationDetails?.orderNumber}`)}>{orderConfirmationDetails?.orderNumber}</Button>
+=======
+                                    <Typography variant="subtitle1">{orderConfirmationDetailsData?.orderNumber}</Typography>
+>>>>>>> Stashed changes
                                 </Stack>
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Transaction Date and Time</Typography>
-                                    <Typography variant="subtitle1">{orderConfirmationDetails.orderTime}, {orderConfirmationDetails.orderDate}</Typography>
+                                    <Typography variant="subtitle1">{orderConfirmationDetailsData?.orderTime}, {orderConfirmationDetailsData?.orderDate}</Typography>
                                 </Stack>
                                 <Box className="TitleValueWrapper Orders">
                                     <Typography variant="body1" className="Title">Products:-</Typography>
@@ -74,7 +90,7 @@ function OrderConfirmation(props: any) {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {orderConfirmationDetails?.orderItems?.map((row) => (
+                                                {orderConfirmationDetailsData?.orderItems?.map((row) => (
                                                     <TableRow
                                                         key={row.productId}
                                                         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -95,13 +111,36 @@ function OrderConfirmation(props: any) {
                                     </TableContainer>
                                 </Box>
                                 <Stack className="TitleValueWrapper PaymentAmountWrapper">
+<<<<<<< Updated upstream
                                     <Typography variant="body1" className="Title">Order Summary</Typography>
                                     <Typography variant="subtitle1">${orderConfirmationDetails.totalPaymentAmount}</Typography>
+=======
+                                    <Box className="PricingDetails">
+                                        {renderPricingItem("Subtotal", '$' + roundOfThePrice(orderConfirmationDetailsData?.orderTotal as number))}
+                                        <Divider />
+                                        {renderPricingItem("Shipping fee", `$${roundOfThePrice(Number(orderConfirmationDetailsData?.shippingFee))}`)}
+                                        {renderPricingItem("Payment fee", `$${roundOfThePrice(Number(orderConfirmationDetailsData?.paymentFee))}`)}
+                                        <Divider />
+                                        {renderPricingItem("Order Tax", `$${roundOfThePrice(orderConfirmationDetailsData?.orderTax)}`)}
+                                        <Divider />
+                                        {renderPricingItem("Order Discount", `$${roundOfThePrice(orderConfirmationDetailsData?.orderDiscount)}`)}
+                                        <Stack className="PricingItem TotalItem">
+                                            <Typography variant="subtitle1">Total</Typography>
+                                            <Typography variant="subtitle1">${roundOfThePrice(Number(orderConfirmationDetailsData?.shippingFee) + Number(orderConfirmationDetailsData?.orderTotal) + Number(orderConfirmationDetailsData?.orderTax)) + Number(orderConfirmationDetailsData?.paymentFee)}</Typography>
+                                        </Stack>
+                                        {/* <Stack className="PaymentMethod">
+                                            <OutlinedCheckIcon />
+                                            <Typography className="Message" variant="titleLarge" component="p">Payment Method: <Typography variant="inherit" component="span">{finalDataForTheCheckout?.paymentType}</Typography></Typography>
+                                        </Stack> */}
+                                    </Box>
+>>>>>>> Stashed changes
                                 </Stack>
                             </Box>
                             <Box className="BottomContentWrapper">
-                                <Typography variant="body1">An email has been sent with your order details and payment instructions.You can also download or view on the following links: <Button variant="text">
+                                {/* <Typography variant="body1">An email has been sent with your order details and payment instructions.You can also download or view on the following links: <Button variant="text">
                                     Download (download pdf)</Button></Typography>
+                                <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography> */}
+                                <Typography variant="body1" dangerouslySetInnerHTML={{ __html: orderConfirmationDetailsData?.orderdescription }} />
                                 <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography>
                             </Box>
                         </Box>
