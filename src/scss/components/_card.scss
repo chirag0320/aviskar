@@ -842,6 +842,7 @@
         .RightWrapper {
           display: grid;
           align-items: center;
+          grid-template-columns: repeat(3, auto);
           gap: 8px 40px;
           flex-shrink: 0;
 
@@ -893,17 +894,6 @@
                   display: none;
                 }
               }
-            }
-          }
-
-          .DeleteButton {
-            grid-row-start: 1;
-            grid-row-end: 3;
-            grid-column-start: 3;
-            grid-column-end: 4;
-            align-self: flex-end;
-            @include media-min($xxl) {
-              margin-bottom: 4px;
             }
           }
         }
