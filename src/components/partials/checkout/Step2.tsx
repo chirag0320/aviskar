@@ -35,65 +35,83 @@ function Step2() {
   const [changeDiffrenceDeliveryMethods, toggleChangeDiffrenceDeliveryMethods] = useToggle(false)
   const { showToaster } = useShowToaster();
 
+  // useEffect(() => {
+  //   if (priceData?.data?.length > 0) {
+  //     const idwithpriceObj: any = {}
+  //     priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
 
+  //     let subTotal = 0;
+  //     const cartItemsWithLivePrice = checkoutPageData?.shoppingCartItems.map((item: shopingCartItem) => {
+  //       subTotal += (idwithpriceObj?.[item.productId]?.price * item.quantity)
+  //       return {
+  //         ...item,
+  //         LivePriceDetails: idwithpriceObj[item.productId]
+  //       }
+  //     })
+  //     dispatch(resetSubTotalCheckoutPage())
+  //     dispatch(updateSubTotalCheckoutPage(subTotal))
+
+  //     setCartItemsWithLivePrice(cartItemsWithLivePrice!)
+  //   }
+  // }, [priceData, checkoutPageData?.shoppingCartItems])
   useEffect(() => {
-    if (priceData?.data?.length > 0) {
-      const idwithpriceObj: any = {}
-      priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
+    const idwithpriceObj: any = {}
 
-      let subTotal = 0;
-      const cartItemsWithLivePrice = checkoutPageData?.shoppingCartItems.map((item: shopingCartItem) => {
-        subTotal += (idwithpriceObj?.[item.productId]?.price * item.quantity)
+    if (priceData?.data?.length > 0) {
+      priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
+      const cartItemsWithLivePricez = checkoutPageData?.shoppingCartItems.map((item: shopingCartItem) => {
         return {
           ...item,
           LivePriceDetails: idwithpriceObj[item.productId]
         }
       })
-      dispatch(resetSubTotalCheckoutPage())
-      dispatch(updateSubTotalCheckoutPage(subTotal))
-
-      // const subTotal = cartItemsWithLivePrice.reduce((acc: number, item: CartItemsWithLivePriceDetails) => {
-      //     return acc + (item.LivePriceDetails.price * item.quantity)
-      // }, 0)
-
-      setCartItemsWithLivePrice(cartItemsWithLivePrice!)
+      setCartItemsWithLivePrice(cartItemsWithLivePricez!)
     }
   }, [priceData, checkoutPageData?.shoppingCartItems])
-  useEffect(() => {
-    if (priceData?.data?.length > 0 && cartItemsWithLivePrice?.length > 0) {
-      const idwithpriceObj: any = {}
-      priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
 
-      let subTotal = 0;
+  useEffect(() => {
+    let subTotal = 0;
+    const idwithpriceObj: any = {}
+    if (priceData?.data?.length > 0) {
+      priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
+    }
+    if (cartItemsWithLivePrice?.length > 0) {
       cartItemsWithLivePrice?.map((item: shopingCartItem) => {
-        subTotal += (idwithpriceObj?.[item.productId]?.price * quantities[item.productId])
+        subTotal += (idwithpriceObj?.[item.productId]?.price * changeInQuantities[item.productId])
       })
       dispatch(resetSubTotalCheckoutPage())
       dispatch(updateSubTotalCheckoutPage(subTotal))
-    } else if (cartItemsWithLivePrice?.length === 0) {
+    }
+    if (cartItemsWithLivePrice?.length === 0) {
       let subTotal = 0;
       dispatch(resetSubTotalCheckoutPage())
       dispatch(updateSubTotalCheckoutPage(subTotal))
     }
-  }, [priceData, changeInQuantities, cartItemsWithLivePrice, checkoutPageData?.shoppingCartItems])
-
+  }, [cartItemsWithLivePrice, priceData, changeInQuantities])
+  // ===============
   useEffect(() => {
     if (checkoutPageData?.shoppingCartItems?.length! > 0) {
       const productIds = checkoutPageData?.shoppingCartItems.map((item: shopingCartItem) => item.productId);
       setProductIds({ productIds })
     }
 
-    let quantities: any = {}
     let deliveryMethods: any = {}
     checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
-      quantities[item.productId] = item.quantity
       deliveryMethods[item.productId] = deliveryMethod
     })
-    setQuantities(quantities)
     setDeliveryMethods(deliveryMethods)
-    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: quantities, deliveryMethodsWithProductId: deliveryMethods, IsDifferentShippingMethod: changeDiffrenceDeliveryMethods }))
+    dispatch(updateFinalDataForTheCheckout({ deliveryMethodsWithProductId: deliveryMethods, IsDifferentShippingMethod: changeDiffrenceDeliveryMethods }))
   }, [checkoutPageData?.shoppingCartItems, changeDiffrenceDeliveryMethods, deliveryMethod])
 
+  useEffect(() => {
+    let quantities: any = {}
+    checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
+      quantities[item.productId] = item.quantity
+    })
+    setQuantities(quantities)
+    dispatch(updateFinalDataForTheCheckout({ quantitiesWithProductId: quantities }))
+  }, [checkoutPageData?.shoppingCartItems])
+  // =============================
   useEffect(() => {
     dispatch(updateFinalDataForTheCheckout({ cartItemsWithLivePrice }))
   }, [cartItemsWithLivePrice])
@@ -107,13 +125,6 @@ function Step2() {
       deliveryMethods[item.productId] = event.target.value
     })
     makeObject['deliveryMethodsWithProductId'] = deliveryMethods
-    // } 
-    // else {
-    //   checkoutPageData?.shoppingCartItems?.forEach((item: shopingCartItem) => {
-    //     deliveryMethods[item.productId] = 'SecureShipping'
-    //   })
-    //   makeObject['deliveryMethodsWithProductId'] = deliveryMethods
-    // }
     dispatch(updateFinalDataForTheCheckout({ ...makeObject, parentDeliveryMethod: event.target.value }))
   }
 
@@ -126,7 +137,6 @@ function Step2() {
 
   const decreaseQuantity = (productId: number) => {
     const productIdOfId = cartItemsWithLivePrice.find((item) => item.id === productId)
-
 
     const updatedQuantities = { ...quantities, [productIdOfId?.productId ?? productId]: quantities[productIdOfId?.productId ?? productId] - 1 }
     setQuantities(updatedQuantities)
