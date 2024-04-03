@@ -35,6 +35,11 @@ export const shipmentTypeToEnum: any = {
   'SecureShipping': 2,
   'VaultStorage': 1
 }
+export const shipmentNameEnum: any= {
+  'LocalShipping': 'Local Pick Up',
+  'SecureShipping': 'Secure Shipping',
+  'VaultStorage': 'Vault storage'
+}
 export const isBrowser = typeof window !== "undefined"
 export function localStorageGetItem(key: any) {
   return isBrowser && key ? (localStorage?.getItem(key) === 'undefined' ? undefined : localStorage?.getItem(key)) : undefined

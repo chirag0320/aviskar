@@ -196,7 +196,7 @@ function Step2() {
             onChange={handleDeliveryMethod}
             IconComponent={SelectDropdown}
           >
-            {configDetailsState?.localpickupenable?.value && <MenuItem value="LocalShipping">Local PickUp</MenuItem>}
+            {configDetailsState?.localpickupenable?.value && <MenuItem value="LocalShipping">Local Pick Up</MenuItem>}
             {configDetailsState?.secureShippingenable?.value && <MenuItem value="SecureShipping">Secure Shipping</MenuItem>}
             {configDetailsState?.vaultstorageenable?.value && <MenuItem value="VaultStorage">Vault Storage</MenuItem>}
           </Select>
@@ -206,7 +206,7 @@ function Step2() {
           control={<Checkbox checked={changeDiffrenceDeliveryMethods} onClick={() => {
             toggleChangeDiffrenceDeliveryMethods()
           }} />}
-          label="Select different delivery method for products"
+          label="Select different delivery method per products"
         />}
       </Box>
       <Stack className="ProductList">
