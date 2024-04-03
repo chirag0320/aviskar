@@ -51,7 +51,7 @@ function OrderConfirmation(props: any) {
                                     <Typography variant="subtitle1">{orderConfirmationDetails.orderTime}, {orderConfirmationDetails.orderDate}</Typography>
                                 </Stack>
                                 <Box className="TitleValueWrapper Orders">
-                                    <Typography variant="body1" className="Title">Orders:-</Typography>
+                                    <Typography variant="body1" className="Title">Products:-</Typography>
                                     {/* <Stack className="LogoWrapper">
                                         <img src={LogoGoldCoin} alt="Logo" />
                                         <Box sx={{ padding: "6px 0" }}>
@@ -84,9 +84,9 @@ function OrderConfirmation(props: any) {
                                                                 src={row.imageUrl} alt="Product image" loading="lazy"></img>
                                                             {row.productName}
                                                         </TableCell>
-                                                        <TableCell>{row.unitPrice}</TableCell>
+                                                        <TableCell>${row.unitPrice}</TableCell>
                                                         <TableCell>{row.quantity}</TableCell>
-                                                        <TableCell>{row.subTotal}</TableCell>
+                                                        <TableCell>${row.subTotal}</TableCell>
                                                     </TableRow>
 
                                                 ))}
@@ -95,7 +95,7 @@ function OrderConfirmation(props: any) {
                                     </TableContainer>
                                 </Box>
                                 <Stack className="TitleValueWrapper PaymentAmountWrapper">
-                                    <Typography variant="body1" className="Title">Payment Amount</Typography>
+                                    <Typography variant="body1" className="Title">Order Summary</Typography>
                                     <Typography variant="subtitle1">${orderConfirmationDetails.totalPaymentAmount}</Typography>
                                 </Stack>
                             </Box>

@@ -384,7 +384,7 @@ function AboutProduct({ productId }: any) {
                 addIntoWishList(productId)
               }} >
                 <Box className="IconWrapper"><HeartIcon /></Box>
-                <Typography>Wishlist</Typography>
+                <Typography>Watchlist</Typography>
               </Button>
               <Button color="secondary" className="IconWithText" onClick={() => { addIntoComapreProduct(productId) }}>
                 <Box className="IconWrapper"><CompareIcon /></Box>
