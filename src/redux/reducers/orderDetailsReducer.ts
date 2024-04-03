@@ -6,15 +6,22 @@ import { OrderDetails } from '@/types/orderDetails'
 import OrderDetailsServices from '@/apis/services/orderDetailsServices'
 // Services
 
-const initialState: { loading: boolean, orderHistoryDetailData: OrderDetails | null } = {
+const initialState: { loading: boolean, orderDetailsData: OrderDetails | null } = {
     loading: false,
-    orderHistoryDetailData: null
+    orderDetailsData: null
 }
 
-export const getOrderHistoryDetailData = appCreateAsyncThunk(
-    "getOrderHistoryDetailData",
+export const getOrderDetailsData = appCreateAsyncThunk(
+    "getOrderDetailsData",
     async ({ url }: { url: string }) => {
-        return await OrderDetailsServices.getOrderHistoryDetailData(url);
+        return await OrderDetailsServices.getOrderDetailsData(url);
+    }
+)
+
+export const downloadOrderInvoice = appCreateAsyncThunk(
+    "downloadOrderInvoice",
+    async ({ url }: { url: string }) => {
+        return await OrderDetailsServices.downloadOrderInvoice(url);
     }
 )
 
@@ -31,15 +38,25 @@ export const orderDetailsPageSlice = createSlice({
     },
     extraReducers: (builder) => {
         //get order details data
-        builder.addCase(getOrderHistoryDetailData.pending, (state, action) => {
+        builder.addCase(getOrderDetailsData.pending, (state, action) => {
             state.loading = true;
         })
-        builder.addCase(getOrderHistoryDetailData.fulfilled, (state, action) => {
+        builder.addCase(getOrderDetailsData.fulfilled, (state, action) => {
             const responseData = action?.payload?.data?.data;
-            state.orderHistoryDetailData = responseData;
+            state.orderDetailsData = responseData;
             state.loading = false;
         })
-        builder.addCase(getOrderHistoryDetailData.rejected, (state, action) => {
+        builder.addCase(getOrderDetailsData.rejected, (state, action) => {
+            state.loading = false;
+        })
+        //download order invoice
+        builder.addCase(downloadOrderInvoice.pending, (state, action) => {
+            state.loading = true;
+        })
+        builder.addCase(downloadOrderInvoice.fulfilled, (state, action) => {
+            state.loading = false;
+        })
+        builder.addCase(downloadOrderInvoice.rejected, (state, action) => {
             state.loading = false;
         })
     },

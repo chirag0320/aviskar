@@ -68,7 +68,8 @@ export const ENDPOINTS = {
     getLiveDashboardChartData: "calculator/C2hhcnRzCg",
 
     // order details
-    getOrderHistoryDetail: "myvault/fthBVUKhWUGKKJhSdaFe7w/29367"
+    getOrderDetailsData: "myvault/fthBVUKhWUGKKJhSdaFe7w/",
+    downloadOrderInvoice : "myvault/sSPabQ518EeEccLnRuWg0w/"
 }
 export const StoreData = {
     storeCode: 12,

@@ -20,19 +20,24 @@ interface Address {
     orderStatusId: number | null;
 }
 
-interface EvaInvoiceManagerValues {
-    [key: string]: string | null;
+interface OrderItem {
+    productId: number;
+    parentProductId: number;
+    quantity: number;
+    unitPrice: number;
+    totalPrice: number;
+    productName: string;
 }
 
 export interface OrderDetails {
     orderId: number;
-    orderGuid: string;
     customOrderNumber: string;
-    storeCode: number;
     billingAddressId: number;
     shippingAddressId: number;
     orderStatusId: number;
+    alertStatusId: number | null;
     orderStatus: string;
+    alertStatus: string | null;
     shippingStatusId: number;
     paymentStatusId: number;
     paymentMethodSystemName: string;
@@ -44,18 +49,28 @@ export interface OrderDetails {
     createdOnUtc: string;
     orderDate: string;
     orderTime: string;
-    orderSubtotalInclTax: number;
-    orderSubtotalExclTax: number;
-    orderSubTotalDiscountInclTax: number;
-    orderSubTotalDiscountExclTax: number;
-    orderShippingInclTax: number;
-    orderShippingExclTax: number;
-    paymentMethodAdditionalFeeInclTax: number;
-    paymentMethodAdditionalFeeExclTax: number;
+    orderSubtotal: number;
+    orderShippingFee: number;
+    paymentMethodFee: number;
     orderTax: number;
     orderDiscount: number;
     orderTotal: number;
     addresses: Address[];
-    orderItems: any[]; 
-    evaInvoiceManagerValues: EvaInvoiceManagerValues;
+    orderItems: OrderItem[];
+    congratulationsText: string | null;
+    shippingTextP1: string | null;
+    shippingTextP2: string | null;
+    shippingTextP3: string | null;
+    shippingTextP4: string | null;
+    paymentTextP1: string | null;
+    paymentTextP2: string | null;
+    paymentTextP3: string | null;
+    paymentTextP4: string | null;
+    paymentTextP5: string | null;
+    paymentTextP6: string | null;
+    paymentTextP7: string | null;
+    sellingTextP1: string | null;
+    sellingTextP2: string | null;
+    sellingTextP3: string | null;
 }
+

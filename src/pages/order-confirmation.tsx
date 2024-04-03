@@ -23,7 +23,7 @@ function OrderConfirmation(props: any) {
     return (
         <Layout>
             <>
-            <Loader open = {checkLoadingStatus} />
+                <Loader open={checkLoadingStatus} />
                 <Seo
                     keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
                     title="Home"
@@ -44,7 +44,7 @@ function OrderConfirmation(props: any) {
                             <Box className="OrderDetailsWrapper">
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Order No.</Typography>
-                                    <Typography variant="subtitle1">{orderConfirmationDetails.orderNumber}</Typography>
+                                    <Button variant="text" onClick={() => navigate(`/order-details/?orderNo=${orderConfirmationDetails?.orderNumber}`)}>{orderConfirmationDetails?.orderNumber}</Button>
                                 </Stack>
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Transaction Date and Time</Typography>
