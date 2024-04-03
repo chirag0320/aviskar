@@ -21,7 +21,6 @@ function SearchField() {
 
   useEffect(() => {
     if (searchParams.has("keyword")) {
-      console.log("🚀 ~ SearchField ~ searchParams:", searchParams.get("keyword"))
       setInputValue(searchParams.get("keyword")!);
     }
   }, [searchParams])

@@ -34,8 +34,6 @@ function Step2() {
   const changeInQuantities = useDebounce(quantities, 500)
   const [changeDiffrenceDeliveryMethods, toggleChangeDiffrenceDeliveryMethods] = useToggle(false)
   const { showToaster } = useShowToaster();
-  console.log("🚀 ~ quantities:", quantities, "->", cartItemsWithLivePrice)
-
 
   // useEffect(() => {
   //   if (priceData?.data?.length > 0) {

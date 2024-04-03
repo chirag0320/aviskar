@@ -8,7 +8,6 @@ export interface AddressComponents {
 }
 
 export function parseAddressComponents(data: any): AddressComponents {
-    console.log("🚀 ~ parseAddressComponents ~ data:", data)
     // const terms = data.description.split(',');
     // let country = '';
     // let state = '';
@@ -45,7 +44,6 @@ export function parseAddressComponents(data: any): AddressComponents {
 
 export const parsePostalCode = (data: any) => {
     const addressComponents = data?.results[0]?.address_components;
-    console.log("🚀 ~ parsePostalCode ~ addressComponents:", addressComponents)
     let postalCode;
 
     if (!addressComponents) return;
