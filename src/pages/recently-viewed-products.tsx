@@ -49,8 +49,8 @@ function RecentlyViewedProducts() {
 
   return (
     <Layout>
-      <Loader open={checkLoadingStatus} />
       {openToaster && <Toaster />}
+      <Loader open={checkLoadingStatus} />
       <Seo
         keywords={[`QMint RecentlyViewedProducts`]}
         title="RecentlyViewedProducts"

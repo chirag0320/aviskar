@@ -38,7 +38,7 @@ function OrderConfirmation(props: any) {
                         <Box className="DetailsWrapper">
                             <Box className="ThankyouWrapper">
                                 <Typography className="ThankyouText">Thank you for choosing Queensland Mint</Typography>
-                                <Typography variant="subtitle2" className="OrderID">Your order id is: {orderConfirmationDetails.orderId}</Typography>
+                                <Typography variant="subtitle2" className="OrderID">Your order id is: {orderConfirmationDetails.orderNumber}</Typography>
                                 <Typography variant="body1">You will receive an order confirmation email with details of your order and a link to track its progress.</Typography>
                             </Box>
                             <Box className="OrderDetailsWrapper">

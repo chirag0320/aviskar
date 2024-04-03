@@ -15,7 +15,7 @@ import { PriceChangeReturn, ProductStockStatus, ProductUpdateCountdown } from "@
 import ProductImages from "./ProductImages"
 
 // Assets
-import { AlarmIcon, CameraIcon, CompareIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MinusIcon, PlusIcon, TwitterIcon, YoutubeIcon } from "@/assets/icons"
+import { AlarmIcon, CameraIcon, CartIcon, CompareIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MinusIcon, PlusIcon, TwitterIcon, YoutubeIcon } from "@/assets/icons"
 
 // Data
 import { qmintRating } from "@/utils/data"
@@ -212,20 +212,24 @@ function AboutProduct({ productId }: any) {
     <Box className="AboutProduct">
       {openToaster && <Toaster />}
       <Stack className="AboutWrapper">
-        <ProductImages productImages={productDetailsData?.imageUrls?.length > 0 ? productDetailsData?.imageUrls : [noImage]} />
+        <ProductImages
+          productImages={productDetailsData?.imageUrls?.length > 0 ? productDetailsData?.imageUrls : [noImage]}
+          offerBadge={
+            <Typography
+              variant="caption"
+              className="OfferBadge"
+              sx={{ backgroundColor: productDetailsData?.tagColor }}
+            >
+              {productDetailsData?.tagName}
+            </Typography>
+          }
+        />
         <Box className="ProductAbout">
           <form>
             <Box className="Heading">
               <Typography className="ProductName" variant="h4">{productDetailsData?.name}</Typography>
               <Stack className="Wrapper">
                 <Typography>{productDetailsData?.shortDescription}</Typography>
-                <Typography
-                  variant="caption"
-                  className="OfferBadge"
-                  sx={{ backgroundColor: productDetailsData?.tagColor }}
-                >
-                  {productDetailsData?.tagName}
-                </Typography>
               </Stack>
             </Box>
             <Divider />
@@ -234,13 +238,13 @@ function AboutProduct({ productId }: any) {
                 <Stack className="Top">
                   <Stack className="Left">
                     <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
-                    {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue" variant="overline">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
+                    {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
                     <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
                     {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
                   </Stack>
                   <Stack className="Right">
                     <ProductUpdateCountdown />
-                    <Typography className="DiscountMessage" variant="overline">{configDetailsState?.productboxdiscounttext?.value}</Typography>
+                    <Typography className="DiscountMessage">{configDetailsState?.productboxdiscounttext?.value}</Typography>
                   </Stack>
                 </Stack>
                 <Stack className="Bottom">
@@ -272,15 +276,13 @@ function AboutProduct({ productId }: any) {
                   navigate('/login')
                 }}>Activate Live Price</Button>}
             </Box>
-            <Divider />
             <Box className="FixWrapper">
-              <Divider />
               <Box className="PricingDetails">
                 {(isLoggedIn || configDetailsState?.productpriceenableforguests?.value) ? <>
                   <Stack className="Top">
                     <Stack className="Left">
                       <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
-                      {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue" variant="overline">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
+                      {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
                       <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
                       {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
                     </Stack>
@@ -323,48 +325,50 @@ function AboutProduct({ productId }: any) {
                 <Stack className="OrderDetails">
                   {isLoggedIn || configDetailsState?.availabilityenableforguests?.value ?
                     <><ProductStockStatus availability={productDetailsData?.availability} colorClass={productDetailsData?.colorClass} iconClass={productDetailsData?.iconClass} />
-                      <Typography className="ProductMessage" variant="overline">{productDetailsData?.condition}</Typography>
-                      <Typography className="ShipmentDetail" variant="overline">{productDetailsData?.description}</Typography></>
+                      {productDetailsData?.condition && <Typography className="ProductMessage">{productDetailsData?.condition}</Typography>}
+                      <Typography className="ShipmentDetail">{productDetailsData?.description}</Typography></>
                     :
-                    <Typography className="ProductMessage" variant="overline">{configDetailsState?.membershipunloacktext?.value}</Typography>
+                    <Typography className="ProductMessage">{configDetailsState?.membershipunloacktext?.value}</Typography>
                   }
                 </Stack>
-                <Divider />
-                {productDetailsData?.availability !== "Sold Out" && <Stack className="OrderActions">
-                  {(isLoggedIn || configDetailsState?.buybuttonenableforguests?.value) ? (!productDetailsData?.disableBuyButton && <><Stack className="QuantityWrapper">
-                    <IconButton id='minus' className="Minus" disabled={quantityCount === 1} onClick={(e) => {
-                      e.stopPropagation()
-                      handleQuentityUpdate('minus')
-                    }}><MinusIcon /></IconButton>
-                    <RenderFields
-                      color="primary"
-                      register={register}
-                      error={errors.Quantity}
-                      name="Quantity"
-                      margin='none'
-                      fullWidth={false}
-                      value={quantityCount as any}
-                      disabled={true}
-                    />
-                    <IconButton id='plus' className="Plus" onClick={(e) => {
-                      e.stopPropagation()
-                      handleQuentityUpdate('plus')
-                    }}><PlusIcon /></IconButton>
-                  </Stack>
-                    <Stack className="Right">
-                      <Button size="large" color="success" variant="contained" endIcon={<DeleteIcon />} onClick={async () => {
-                        await addToCartFunction(false)
-                        // navigate('/shopping-cart')
-                      }} disabled={loadingForAddToCart}>Add to cart</Button>
-                      <Button size="large" variant="outlined" onClick={() => {
-                        handleBuyNow()
-                      }}>Buy now</Button>
-                    </Stack></>)
-                    :
-                    <Button size="large" color="success" variant="contained" onClick={() => {
-                      navigate('/login')
-                    }}>Register to Buy</Button>}
-                </Stack>}
+                {productDetailsData?.availability === "Sold Out" && 
+                  <>
+                    <Divider />
+                    <Stack className="OrderActions">
+                      {(isLoggedIn || configDetailsState?.buybuttonenableforguests?.value) ? (!productDetailsData?.disableBuyButton && <><Stack className="QuantityWrapper">
+                        <IconButton id='minus' className="Minus" onClick={(e) => {
+                          e.stopPropagation()
+                          handleQuentityUpdate('minus')
+                        }}><MinusIcon /></IconButton>
+                        <RenderFields
+                          color="primary"
+                          register={register}
+                          error={errors.Quantity}
+                          name="Quantity"
+                          margin='none'
+                          fullWidth={false}
+                          value={quantityCount as any}
+                          disabled={true}
+                        />
+                        <IconButton id='plus' className="Plus" onClick={(e) => {
+                          e.stopPropagation()
+                          handleQuentityUpdate('plus')
+                        }}><PlusIcon /></IconButton>
+                      </Stack>
+                          <Button color="success" variant="contained" endIcon={<CartIcon />} onClick={async () => {
+                            await addToCartFunction(false)
+                            // navigate('/shopping-cart')
+                          }} disabled={loadingForAddToCart}>Add to cart</Button>
+                          <Button variant="outlined" onClick={() => {
+                            handleBuyNow()
+                          }}>Buy now</Button>
+                        </>)
+                        :
+                        <Button color="success" variant="contained" onClick={() => {
+                          navigate('/login')
+                        }}>Register to Buy</Button>}
+                    </Stack>
+                </>}
               </Box>
               <Divider />
             </Box>
@@ -373,15 +377,15 @@ function AboutProduct({ productId }: any) {
                 addIntoWishList(productId)
               }} >
                 <Box className="IconWrapper"><HeartIcon /></Box>
-                <Typography variant="overline">Wishlist</Typography>
+                <Typography>Wishlist</Typography>
               </Button>
               <Button color="secondary" className="IconWithText" onClick={() => { addIntoComapreProduct(productId) }}>
                 <Box className="IconWrapper"><CompareIcon /></Box>
-                <Typography variant="overline">Compare</Typography>
+                <Typography>Compare</Typography>
               </Button>
               {/* <Button color="secondary" className="IconWithText">
                 <Box className="IconWrapper"><AlarmIcon /></Box>
-                <Typography variant="overline">Price Alert</Typography>
+                <Typography>Price Alert</Typography>
               </Button> */}
               <IconButton href={configDetailsState?.youtubelink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><YoutubeIcon /></IconButton>
               <IconButton href={configDetailsState?.facebooklink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><FacebookIcon /></IconButton>
@@ -398,8 +402,8 @@ function AboutProduct({ productId }: any) {
                     <Table size="small">
                       <TableHead>
                         <TableRow>
-                          <TableCell><Typography variant="subtitle1">Quantity</Typography></TableCell>
-                          <TableCell><Typography variant="subtitle1">Price</Typography></TableCell>
+                          <TableCell><Typography variant="titleLarge">Quantity</Typography></TableCell>
+                          <TableCell><Typography variant="titleLarge">Price</Typography></TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -454,8 +458,8 @@ function AboutProduct({ productId }: any) {
                       <Table size="small">
                         <TableHead>
                           <TableRow>
-                            <TableCell><Typography variant="subtitle1">Product Name</Typography></TableCell>
-                            <TableCell><Typography variant="subtitle1">Quantity</Typography></TableCell>
+                            <TableCell><Typography variant="titleLarge">Product Name</Typography></TableCell>
+                            <TableCell><Typography variant="titleLarge">Quantity</Typography></TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -495,7 +499,6 @@ function AboutProduct({ productId }: any) {
           onChange={handleTabChange}
           className="ProductDescriptionTabs"
           aria-label="Product description tabs"
-          variant="fullWidth"
         // variant="scrollable"
         // allowScrollButtonsMobile
         >
@@ -520,8 +523,8 @@ function AboutProduct({ productId }: any) {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      {/* <TableCell><Typography variant="subtitle1">specifications</Typography></TableCell> */}
-                      {/* <TableCell><Typography variant="subtitle1">Product Name</Typography></TableCell> */}
+                      {/* <TableCell><Typography variant="titleLarge">specifications</Typography></TableCell> */}
+                      {/* <TableCell><Typography variant="titleLarge">Product Name</Typography></TableCell> */}
                     </TableRow>
                   </TableHead>
                   <TableBody style={styles.tableBody}>

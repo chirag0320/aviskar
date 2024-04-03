@@ -18,12 +18,8 @@ interface props {
 }
 
 const RenderCheckboxField =({ filter, options, setSelectedFilters, selectedFilters }: props) => {
-    console.log("🚀 ~ RenderCheckboxField ~ selectedFilters:", selectedFilters, 
-    // "---",filter, "---", options
-)
     const [isPending, startTransition] = useTransition();
     const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
-    console.log("🚀 ~ useEffect ~ isMobile:", isMobile)
     const clearFilters = useAppSelector(state => state.category.clearFilters)
 
     const {

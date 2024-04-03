@@ -660,7 +660,7 @@ const theme: Theme = createTheme({
     MuiTab: {
       styleOverrides: {
         textColorSecondary: {
-          padding: "13px 42.8px",
+          padding: "13px 39px",
           minHeight: 54,
           borderRadius: 10,
           fontSize: 16,

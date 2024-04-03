@@ -136,11 +136,10 @@ export const Breadcrumb = React.memo(({ arr }: any) => {
   return (
     <Box
       className="Breadcrumb"
-      sx={{ backgroundColor: "#E5E6EB80" }}
     >
       <Container>
         <Breadcrumbs aria-label="breadcrumb" separator={<ChevronRight />}>
-          <Link underline="hover" color="inherit" variant="body2" onClick={() => { navigate('/') }}>
+          <Link color="inherit" variant="body2" onClick={() => { navigate('/') }}>
             Home
           </Link>
           {arr.map((item: any, index: any) => <Link key={index} color={true ? variable.dark : "inherit"} variant="body2" onClick={() => { navigate(item.navigate) }}>
@@ -186,7 +185,7 @@ export const ProductStockStatus = React.memo(
         ) : (
           <ContainedCrossIcon />
         )}
-        <Typography variant="overline" className="Message">
+        <Typography className="Message">
           {availability}
         </Typography>
       </Stack>
@@ -221,7 +220,7 @@ export const PriceChangeReturn = React.memo(({ percentage }: { percentage: strin
   return (
     <Stack className={classNames("PriceChangeReturn", [Number(percentage) === 0 ? "Nuetral" : Number(percentage) > 0 ? "Success" : "Error"])}>
       <ChevronUpRounded />
-      <Typography variant="overline">{percentage}%</Typography>
+      <Typography>{percentage}%</Typography>
     </Stack >
   )
 })

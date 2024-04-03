@@ -15,7 +15,7 @@ function CartMenu(props: CartMenuProps) {
   return (
     <>
       <Badge badgeContent={1} color="primary" max={99}>
-        <IconButton aria-label='cartIcon' className={classNames("MenuButton", { "Active": false })} onClick={onClick}><CartIcon /></IconButton>
+        <IconButton color="secondary" aria-label='cartIcon' className={classNames("MenuButton", { "Active": false })} onClick={onClick}><CartIcon /></IconButton>
       </Badge>
     </>
   )
