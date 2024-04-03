@@ -56,11 +56,7 @@ function OrderConfirmation(props: any) {
                             <Box className="OrderDetailsWrapper">
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Order No.</Typography>
-<<<<<<< Updated upstream
                                     <Button variant="text" onClick={() => navigate(`/order-details/?orderNo=${orderConfirmationDetails?.orderNumber}`)}>{orderConfirmationDetails?.orderNumber}</Button>
-=======
-                                    <Typography variant="subtitle1">{orderConfirmationDetailsData?.orderNumber}</Typography>
->>>>>>> Stashed changes
                                 </Stack>
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Transaction Date and Time</Typography>
@@ -111,10 +107,6 @@ function OrderConfirmation(props: any) {
                                     </TableContainer>
                                 </Box>
                                 <Stack className="TitleValueWrapper PaymentAmountWrapper">
-<<<<<<< Updated upstream
-                                    <Typography variant="body1" className="Title">Order Summary</Typography>
-                                    <Typography variant="subtitle1">${orderConfirmationDetails.totalPaymentAmount}</Typography>
-=======
                                     <Box className="PricingDetails">
                                         {renderPricingItem("Subtotal", '$' + roundOfThePrice(orderConfirmationDetailsData?.orderTotal as number))}
                                         <Divider />
@@ -133,7 +125,6 @@ function OrderConfirmation(props: any) {
                                             <Typography className="Message" variant="titleLarge" component="p">Payment Method: <Typography variant="inherit" component="span">{finalDataForTheCheckout?.paymentType}</Typography></Typography>
                                         </Stack> */}
                                     </Box>
->>>>>>> Stashed changes
                                 </Stack>
                             </Box>
                             <Box className="BottomContentWrapper">
