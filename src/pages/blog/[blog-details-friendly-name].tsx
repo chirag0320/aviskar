@@ -24,6 +24,7 @@ import { Breadcrumb } from "@/components/common/Utils";
 
 // CSS Variable
 import * as variable from "../../scss/settings/variables.module.scss";
+import noImage from '../../assets/images/noImage.png'
 
 // Assets
 import {
@@ -46,6 +47,7 @@ function BlogDetails(params: any) {
   const dispatch = useAppDispatch()
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { blogDetailsData, blogList }: any = useAppSelector((state) => state.blogPage);
+  console.log("🚀 ~ BlogDetails ~ blogDetailsData:", blogDetailsData)
   const { email, handleEmailChange, subscribe, loadingForEmailSub } = useSubscription();
   useEffect(() => {
     const apiCall = async () => {
@@ -101,8 +103,8 @@ function BlogDetails(params: any) {
             <Box className="ContentWrapper">
               <Box className="PostThumbnail">
                 <img
-                  src="https://picsum.photos/200"
-                  alt="https://picsum.photos/200"
+                  src={blogDetailsData?.imageUrl}
+                  alt={noImage}
                 />
               </Box>
               <Box className="PostContent">

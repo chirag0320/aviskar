@@ -36,8 +36,7 @@ import {
 import { Breadcrumb } from "@/components/common/Utils";
 
 // Assets
-import { ArrowRight } from "../../assets/icons/index";
-import { Console } from "console";
+import { ArrowRight, OrdersIcon, PrivateHoldingIcon, AllotedHldingIcon, SmartMetalsIcon, AccountsIcon, AddressesIcon, RewardPointsIcon, BuyBackOrderIcon, MyVaultIcon, MyGoldIcon, MySilverIcon } from "../../assets/icons/index";
 
 interface VaultProps {
   id: number;
@@ -83,7 +82,7 @@ function Vault() {
   return (
     <Layout>
       <Box className="VaultPage">
-        <Breadcrumb arr={[{navigate:'/vault',name:'vault'}]} />
+        <Breadcrumb arr={[{ navigate: '/vault', name: 'vault' }]} />
         <Box className="HeroSection">
           <Container>
             <Box className="HeroSectionWrapper">
@@ -107,10 +106,10 @@ function Vault() {
                   Shop Now
                 </Button>
                 <Box className="VaultStats">
-                  <StatsCard bgColor="rgb(52 145 250 / 6%)" />
-                  <StatsCard bgColor="rgb(234 162 43 / 6%)" />
-                  <StatsCard bgColor="rgb(255 31 31 / 6%)" />
-                  <StatsCard bgColor="rgb(0 128 1 / 6%)" />
+                  <StatsCard title="View Orders" statsNumber="5" icon={<OrdersIcon />} bgColor="rgb(52 145 250 / 6%)" />
+                  <StatsCard title="Private Holding" icon={<PrivateHoldingIcon />} statsNumber="35" bgColor="rgb(234 162 43 / 6%)" />
+                  <StatsCard title="Allocated Holdings" statsNumber="8" icon={<AllotedHldingIcon />} bgColor="rgb(255 31 31 / 6%)" />
+                  <StatsCard title="Smart Metals" statsNumber="460" icon={<SmartMetalsIcon />} bgColor="rgb(0 128 1 / 6%)" />
                 </Box>
               </Box>
               <Box className="Right">
@@ -148,7 +147,7 @@ function Vault() {
                                           //     : item.cdnUrlSmall
                                           // }
                                           alt="background"
-                                          
+
                                         />
                                       </>
                                     }
@@ -195,9 +194,9 @@ function Vault() {
         <Box className="UserStats" sx={{ mt: 9.625 }}>
           <Container>
             <Box className="UserStatsWrapper">
-              <UserStatsCard bgColor="#3491fa14" />
-              <UserStatsCard bgColor="rgb(234 162 43 / 5%)" />
-              <UserStatsCard bgColor="rgb(255 31 31 / 5%)" />
+              <UserStatsCard title="My Vault" icon={<MyVaultIcon />} bgColor="#3491fa14" />
+              <UserStatsCard title="My Gold" icon={<MyGoldIcon />} bgColor="rgb(234 162 43 / 5%)" />
+              <UserStatsCard title="My Silver" icon={<MySilverIcon />} bgColor="rgb(255 31 31 / 5%)" />
               <LineChartCard />
               <LineChartCard />
               <LineChartCard />
@@ -208,10 +207,10 @@ function Vault() {
           <Container>
             <Box className="UserInfoWrapper">
               <Box className="Left">
-                <StatsCard bgColor="rgb(52 145 250 / 6%)" />
-                <StatsCard bgColor="rgb(234 162 43 / 6%)" />
-                <StatsCard bgColor="rgb(255 31 31 / 6%)" />
-                <StatsCard bgColor="rgb(0 128 1 / 6%)" />
+                <StatsCard title="Smart Metals" statsNumber="5" icon={<AccountsIcon />} bgColor="rgb(52 145 250 / 6%)" />
+                <StatsCard title="Addresses" statsNumber="2" icon={<AddressesIcon />} bgColor="rgb(234 162 43 / 6%)" />
+                <StatsCard title="Rewards Points" statsNumber="460" icon={<RewardPointsIcon />} bgColor="rgb(255 31 31 / 6%)" />
+                <StatsCard title="Buyback Orders" statsNumber="8" icon={<BuyBackOrderIcon />} bgColor="rgb(0 128 1 / 6%)" />
               </Box>
               <Box className="Right">
                 <Box id="Banner" component="section" key={"banner"}>
