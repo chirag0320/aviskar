@@ -14,7 +14,7 @@ import ChartMenuChart from "./ChartMenuChart"
 
 function ChartMenu() {
   const isSmallScreen = useMediaQuery((theme: any) => theme.breakpoints.down("md"));
-  const [open, setOpen] = useState<boolean>(true)
+  const [open, setOpen] = useState<boolean>(false)
   const tooltipRef = useRef(null)
   const handleTooltipClose = (event: any) => {
     setOpen(false)
@@ -29,7 +29,7 @@ function ChartMenu() {
   }
   const renderStokeItem = (data: any) => {
     return (
-      <Box className="StokeItem">
+      <Box className="StokeItem" key={data.name}>
         <Stack className="Header">
           <Typography sx={{color: data.color}}>{data.name}</Typography>
           <Typography sx={{color: data.color}}>{data.range}</Typography>
