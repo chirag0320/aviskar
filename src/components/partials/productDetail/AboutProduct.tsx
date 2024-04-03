@@ -207,7 +207,14 @@ function AboutProduct({ productId }: any) {
     await addToCartFunction(true)
     navigate('/checkout/?isInstantBuy=true')
   }
-
+  const renderProductSpecification = (property: string, value: string) => {
+    return (
+      <Stack className="ProductSpecification">
+        <Typography>{property}</Typography>
+        <Typography className="Value">{value}</Typography>
+      </Stack>
+    )
+  }
   return (
     <Box className="AboutProduct">
       {openToaster && <Toaster />}
@@ -515,35 +522,15 @@ function AboutProduct({ productId }: any) {
             </Box>
           </Box>
         </TabPanel> : null}
-        {productDetailsData?.isAdditionalInformationShow ? <TabPanel value={tabValue} index={1}>
+        {productDetailsData?.isAdditionalInformationShow ? <TabPanel className="AdditionalInformation" value={tabValue} index={1}>
           <Typography variant="h4" className="TabTitle">Additional Information</Typography>
           <Box className="ScrollbarWrapper">
             <Box className="Content ScrollbarBlue">
-              <TableContainer className="GreyTable">
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      {/* <TableCell><Typography variant="titleLarge">specifications</Typography></TableCell> */}
-                      {/* <TableCell><Typography variant="titleLarge">Product Name</Typography></TableCell> */}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody style={styles.tableBody}>
-                    {Object.entries(productDetailsData?.specifications)?.map((bulkProduct: any, index) => (
-                      <TableRow key={index} style={{ ...styles.tableRow }}>
-                        {/* <TableCell style={styles.tableCell}>
-                          <Typography>{index + 1}</Typography>
-                        </TableCell> */}
-                        <TableCell align="left" style={{ ...styles.tableCell }}>
-                          <Typography>{bulkProduct[0]}</Typography>
-                        </TableCell>
-                        <TableCell align="left" style={{ ...styles.tableCell }}>
-                          <Typography>{bulkProduct[1]}</Typography>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <Box className="Wrapper">
+                {Object.entries(productDetailsData?.specifications)?.map((bulkProduct: any, index) => (
+                  renderProductSpecification(bulkProduct[0], bulkProduct[1])
+                ))}
+              </Box>
             </Box>
           </Box>
         </TabPanel> : null}

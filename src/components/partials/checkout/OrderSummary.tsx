@@ -76,12 +76,12 @@ function OrderSummary() {
   const dispatch = useAppDispatch()
   const { showToaster } = useShowToaster();
   const { deviceInfo, locationInfo }: any = useDeviceDetails()
-  // console.log("🚀 ~ OrderSummary ~ deviceInfo, locationInfo:", deviceInfo, locationInfo)
   const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading, orderId } = useAppSelector((state) => state.checkoutPage)
-  // console.log("🚀 ~ OrderSummary ~ finalDataForTheCheckout:", finalDataForTheCheckout)
   const [body, setBody] = useState<Body | null>(null)
   const [totalValueNeedToPayFromCraditCart, setTotalValueNeedToPayFromCraditCart] = useState<any>({ OrderTotal: 0 })
+  const [openOTPConfirmation, toggleOTPConfirmation] = useToggle(false)
 
+  useAPIoneTime({ service: getInsuranceAndTaxDetailsCalculation, endPoint: ENDPOINTS.calculateInsuranceAndTaxDetails, body })
   useEffect(() => {
     setBody({
       Postcode: finalDataForTheCheckout?.shippingAddress?.postcode?.toString(),
@@ -96,7 +96,6 @@ function OrderSummary() {
       })
     })
   }, [finalDataForTheCheckout])
-  useAPIoneTime({ service: getInsuranceAndTaxDetailsCalculation, endPoint: ENDPOINTS.calculateInsuranceAndTaxDetails, body })
   useEffect(() => {
     if (finalDataForTheCheckout?.paymentType === "CreditCard") {
       dispatch(getCraditCardCharges({
@@ -106,17 +105,6 @@ function OrderSummary() {
       }))
     }
   }, [subTotal, finalDataForTheCheckout, insuranceAndTaxCalculation])
-  const [openOTPConfirmation, toggleOTPConfirmation] = useToggle(false)
-  const renderPricingItem = (title: string, value: string) => {
-    return (
-      <Stack className="PricingItem">
-        <Typography variant="titleLarge">{title}</Typography>
-        <Typography>{value}</Typography>
-      </Stack>
-    )
-  }
-
-
   useEffect(() => {
     if (isOTPEnabled) {
       toggleOTPConfirmation()
@@ -157,6 +145,14 @@ function OrderSummary() {
       dispatch(disableOTP())
     }
   }, [isOTPEnabled])
+  const renderPricingItem = (title: string, value: string) => {
+    return (
+      <Stack className="PricingItem">
+        <Typography variant="titleLarge">{title}</Typography>
+        <Typography>{value}</Typography>
+      </Stack>
+    )
+  }
 
   const onConfirmOrderHandler = async () => {
     const itemsWithQuantity = finalDataForTheCheckout?.cartItemsWithLivePrice?.map((item: any) => {

@@ -580,7 +580,9 @@
         width: fit-content;
         border-radius: 30px;
         border: 1px solid $mercury;
-
+        @include media($md) {
+          border-radius: 10px;
+        }
         .MuiTabs-scroller {
           border-radius: inherit;
           .MuiTabs-flexContainer {
@@ -597,6 +599,10 @@
             color: rgba($dark, 0.5);
             border-radius: inherit;
             @include padding-horizontal(40);
+            @include media($md) {
+              flex-grow: 1;
+              @include padding-horizontal(20);
+            }
             @include media($sm) {
               @include padding-horizontal(12);
             }
@@ -619,6 +625,26 @@
 
         @include media($sm) {
           padding: 16px;
+        }
+
+        &.AdditionalInformation {
+          .Wrapper {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0 60px;
+            @include media($md) {
+              grid-template-columns: repeat(1, 1fr);
+            }
+            .ProductSpecification {
+              justify-content: space-between;
+              gap: 16px;
+              border-bottom: 1px solid rgba($dark, 0.1);
+              @include padding-vertical(10);
+              .Value {
+                text-align: right;
+              }
+            }
+          }
         }
 
         .TabTitle {
