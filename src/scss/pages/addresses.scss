@@ -1,0 +1,83 @@
+.AddressesPage {
+    padding: 50px 0;
+
+    @include media($mmd) {
+        padding: 25px 0;
+    }
+
+    .AddressList {
+        .MuiBox-root {
+
+            .MuiButtonBase-root {
+                @include media($ssm) {
+                    padding: 4px 10px;
+                }
+            }
+        }
+
+        .AddressListWrapper {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            flex: 0.75 1;
+            gap: 30px;
+            margin-top: 15px;
+
+            @include media($mmd) {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            @include media($ssm) {
+                grid-template-columns: repeat(1, 1fr);
+                gap: 15px;
+            }
+
+            .AddressCard {
+                justify-content: center;
+                border: 1px solid #1D21291A;
+                border-radius: 10px;
+                padding: 30px;
+
+                @include media($ssm) {
+                    padding: 15px;
+                }
+
+                .CardHeader {
+                    justify-content: space-between;
+                    padding-bottom: 10px;
+                    border-bottom: 1px solid #1d21294d;
+
+                    .ActionButton {
+                        display: flex;
+                        gap: 6px;
+
+                        .MuiButtonBase-root {
+                            font-size: 14px;
+                        }
+                    }
+                }
+
+                .CardBody {
+                    padding: 0;
+                    padding-top: 10px;
+                    margin: 0;
+
+                    li {
+                        list-style: none;
+                        margin: 5px 0;
+
+                        &.verificationstatus {
+                            color: $success;
+                            font-weight: 600;
+                            align-items: center;
+                            display: flex;
+                            gap: 6px;
+                            margin-top: 10px;
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
