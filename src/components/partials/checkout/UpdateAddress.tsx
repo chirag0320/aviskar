@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react"
-import { Autocomplete, MenuItem, Button, Stack, TextField } from "@mui/material"
+import { Autocomplete, MenuItem, Button, Stack, TextField, Box, Typography } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -44,13 +44,14 @@ function UpdateAddress(props: UpdateAddress) {
   const { open, dialogTitle, onClose, existingAddress } = props
   const loading = useAppSelector(state => state.checkoutPage.loading);
   const countryList = useAppSelector(state => state.checkoutPage.countryList);
-  const stateList = useAppSelector(state => state.checkoutPage.stateList);
+  const stateListall = useAppSelector(state => state.checkoutPage.stateList);
+  const [stateList, setStateList] = useState([])
   const [stateId, setStateId] = useState<number | null>(null);
-  // console.log("🚀 ~ UpdateAddress ~ existingAddress:", existingAddress)
   const dispatch = useAppDispatch();
   const { showToaster } = useShowToaster();
-  const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents | null>(null);
-
+  const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
+  const [countryValue, setcountryValue] = useState<any>('')
+  const [stateValue, setstateValue] = useState<any>('')
   const {
     register,
     reset,
@@ -73,7 +74,7 @@ function UpdateAddress(props: UpdateAddress) {
       addressLine1: data.Address1,
       addressLine2: data.Address2,
       city: data.City,
-      stateId: stateId,
+      stateId: stateId || 0,
       stateName: data.State,
       postcode: data.Code,
       countryId: data.Country,
@@ -113,29 +114,47 @@ function UpdateAddress(props: UpdateAddress) {
   }
 
   useEffect(() => {
-    // console.log("🚀 ~ useEffect ~ googleAddressComponents:", googleAddressComponents)
-
     if (googleAddressComponents) {
       setValue('Address1', googleAddressComponents.address)
-      // setValue('Country', googleAddressComponents.country)
       countryList.forEach((country: StateOrCountry) => {
         if (country.name === googleAddressComponents.country) {
           setValue('Country', country.id.toString())
+          setcountryValue(country.id.toString())
         }
       })
       setValue('State', googleAddressComponents.state)
+      setstateValue(googleAddressComponents.state)
       setStateId(() => null);
+      setValue('City', googleAddressComponents?.city)
+      setValue('Address2', googleAddressComponents.address2)
+      if (googleAddressComponents?.postalCode) {
+        setValue("Code", Number(googleAddressComponents?.postalCode));
+      }
     }
   }, [googleAddressComponents])
 
   useEffect(() => {
     setValue('State', existingAddress?.stateName);
     setStateId(existingAddress?.state);
+    setValue('Country', existingAddress?.country)
+    setcountryValue(existingAddress?.country)
+    setstateValue(existingAddress?.stateName)
     return () => {
       reset()
     }
   }, [existingAddress])
 
+  useEffect(() => {
+    const data: any = stateListall?.filter((state) => {
+      return state.enumValue == countryValue || countryValue == -1
+    })
+    setStateList(data)
+  }, [stateListall, countryValue])
+
+  const OnChange = (value: any) => {
+    setcountryValue(value)
+    setValue('Country', value)
+  }
   return (
     <StyledDialog
       id="UpdateAddress"
@@ -152,7 +171,7 @@ function UpdateAddress(props: UpdateAddress) {
               register={register}
               error={errors.FirstName}
               name="FirstName"
-              placeholder="Enter first name"
+              placeholder="Enter first name *"
               control={control}
               // setValue={setValue}
               defaultValue={existingAddress?.firstName}
@@ -164,7 +183,7 @@ function UpdateAddress(props: UpdateAddress) {
               error={errors.LastName}
               defaultValue={existingAddress?.lastName}
               name="LastName"
-              placeholder="Enter last name"
+              placeholder="Enter last name *"
               control={control}
               variant='outlined'
               margin='none'
@@ -187,7 +206,7 @@ function UpdateAddress(props: UpdateAddress) {
               name="Contact"
               defaultValue={existingAddress?.phone1}
               type="number"
-              placeholder="Enter contact"
+              placeholder="Enter contact *"
               control={control}
               variant='outlined'
               margin='none'
@@ -197,19 +216,19 @@ function UpdateAddress(props: UpdateAddress) {
               error={errors.Email}
               name="Email"
               defaultValue={existingAddress?.email}
-              placeholder="Enter email id"
+              placeholder="Enter email id *"
               control={control}
               variant='outlined'
               margin='none'
             />
           </Stack>
-          {/* <GoogleMaps setParsedAddress={setGoogleAddressComponents} /> */}
+          <GoogleMaps setParsedAddress={setGoogleAddressComponents} />
           <RenderFields
             register={register}
             error={errors.Address1}
             name="Address1"
             defaultValue={existingAddress?.addressLine1}
-            placeholder="Enter address line 1"
+            placeholder="Enter address line 1 *"
             control={control}
             variant='outlined'
             margin='none'
@@ -230,7 +249,7 @@ function UpdateAddress(props: UpdateAddress) {
               error={errors.City}
               defaultValue={existingAddress?.city}
               name="City"
-              placeholder="Enter city"
+              placeholder="Enter city *"
               control={control}
               variant='outlined'
               margin='none'
@@ -240,10 +259,12 @@ function UpdateAddress(props: UpdateAddress) {
               type="select"
               control={control}
               error={errors.Country}
-              name="Country"
+              name="Country *"
               defaultValue={existingAddress?.country}
+              value={countryValue}
               variant='outlined'
               margin='none'
+              onChange={OnChange}
               setValue={setValue}
             >
               <MenuItem value="none">Select country</MenuItem>
@@ -263,7 +284,7 @@ function UpdateAddress(props: UpdateAddress) {
                 }
                 return option.name;
               }}
-              renderInput={(params) => <TextField placeholder="Enter state" {...params} error={errors.State as boolean | undefined} />}
+              renderInput={(params) => <TextField placeholder="Enter state *" {...params} error={errors.State as boolean | undefined} required />}
               fullWidth
               onChange={(_, value) => {
                 if (!value) {
@@ -278,8 +299,10 @@ function UpdateAddress(props: UpdateAddress) {
                   setStateId(value.id);
                 }
               }}
+              inputValue={stateValue}
               onInputChange={(event, newInputValue) => {
                 setValue('State', newInputValue); // Update the form value with the manually typed input
+                setstateValue(newInputValue)
               }}
               freeSolo
             />
@@ -289,7 +312,7 @@ function UpdateAddress(props: UpdateAddress) {
               error={errors.Code}
               name="Code"
               defaultValue={existingAddress?.postcode}
-              placeholder="Enter pin code"
+              placeholder="Enter pin code *"
               control={control}
               variant='outlined'
               margin='none'

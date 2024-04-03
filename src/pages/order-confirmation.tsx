@@ -16,7 +16,6 @@ function OrderConfirmation(props: any) {
     const checkLoadingStatus = useAppSelector(state => state.orderConfirmationDetails.loading);
     // const orderId = props.location?.search?.split('=')[1];
     const orderConfirmationDetails = useAppSelector(state => state.orderConfirmationDetails);
-    console.log("🚀 ~ OrderConfirmation ~ orderConfirmationDetails:", orderConfirmationDetails)
     useAPIoneTime({
         service: getOrderConfirmationDetails,
         endPoint: ENDPOINTS.orderConfimationDetails + new URLSearchParams(location.search).get("id")
@@ -24,7 +23,7 @@ function OrderConfirmation(props: any) {
     return (
         <Layout>
             <>
-            <Loader open = {checkLoadingStatus} />
+                <Loader open={checkLoadingStatus} />
                 <Seo
                     keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
                     title="Home"
@@ -39,13 +38,13 @@ function OrderConfirmation(props: any) {
                         <Box className="DetailsWrapper">
                             <Box className="ThankyouWrapper">
                                 <Typography className="ThankyouText">Thank you for choosing Queensland Mint</Typography>
-                                <Typography variant="subtitle2" className="OrderID">Your order id is: {orderConfirmationDetails.orderId}</Typography>
+                                <Typography variant="subtitle2" className="OrderID">Your order id is: {orderConfirmationDetails.orderNumber}</Typography>
                                 <Typography variant="body1">You will receive an order confirmation email with details of your order and a link to track its progress.</Typography>
                             </Box>
                             <Box className="OrderDetailsWrapper">
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Order No.</Typography>
-                                    <Typography variant="subtitle1">{orderConfirmationDetails.orderNumber}</Typography>
+                                    <Button variant="text" onClick={() => navigate(`/order-details/?orderNo=${orderConfirmationDetails?.orderNumber}`)}>{orderConfirmationDetails?.orderNumber}</Button>
                                 </Stack>
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Transaction Date and Time</Typography>

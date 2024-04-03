@@ -1,18 +1,13 @@
 .BlogPage,
 .BlogDetailPage {
   .HeroSection {
-    margin-top: 50px;
-    @include media($sm) {
-      margin-top: 30px;
-    }
+    margin-top: 30px;
     .PostWrapper {
       display: flex;
-      margin-top: 50px;
+      margin-top: 40px;
       gap: 30px;
       @include media($lg) {
         flex-direction: column;
-      }
-      @include media($sm) {
         margin-top: 30px;
       }
       .LeftPostWrapper {
@@ -79,16 +74,13 @@
       text-align: center;
     }
     .SearchWrapper {
-      margin-top: 60px;
       justify-content: center;
       display: flex;
       gap: 20px;
-      @include media($md) {
-        margin-top: 30px;
-      }
+      @include padding-vertical(30);
       @include media($sm) {
         gap: 10px;
-        margin-top: 20px;
+        padding-top: 20px;
       }
       .MuiFormControl-root {
         .MuiInputBase-root {
@@ -114,7 +106,6 @@
     }
     .PostFilter {
       .MuiTabs-root {
-        margin-top: 40px;
         .MuiTabs-flexContainer {
           justify-content: center;
           flex-wrap: wrap;
@@ -122,6 +113,7 @@
             flex-direction: column;
           }
           .MuiTab-root {
+            font-size: pxToRem(16);
             @include media($xs) {
               min-height: initial;
               padding: 8px 20px;
@@ -130,22 +122,14 @@
         }
       }
       .TabPanel {
-        padding-top: 60px;
-        @include media($md) {
-          padding-top: 30px;
-        }
-        .RecordNotFound {
-          @include media($md) {
-            margin-top: 20px;
-          }
-        }
+        padding-top: 30px;
       }
     }
   }
 }
 
 .BlogPage {
-  padding-bottom: 60px;
+  padding-bottom: 40px;
   @include media($sm) {
     padding-bottom: 30px;
   }

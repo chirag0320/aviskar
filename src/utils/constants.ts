@@ -65,7 +65,11 @@ export const ENDPOINTS = {
     search: "home/f0HRWmBuZ3MZQ",
 
     // live dashboard data
-    getLiveDashboardChartData: "calculator/C2hhcnRzCg"
+    getLiveDashboardChartData: "calculator/C2hhcnRzCg",
+
+    // order details
+    getOrderDetailsData: "myvault/fthBVUKhWUGKKJhSdaFe7w/",
+    downloadOrderInvoice : "myvault/sSPabQ518EeEccLnRuWg0w/"
 }
 export const StoreData = {
     storeCode: 12,

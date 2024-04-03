@@ -27,7 +27,6 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
   }
 
   useEffect(() => {
-    console.log("categoryData", 1)
     if (!sortByValue) return;
     if (!categoryData.items) return;
     if (sortByValue === SortingOption.Popular) {

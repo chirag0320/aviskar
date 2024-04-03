@@ -36,7 +36,7 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
 
         if (hasFulfilled(response.type)) {
             if (!response?.payload?.data?.data || response?.payload?.data?.data?.length === 0) {
-                showToaster({ message: "Cart updated and redirecting to checkout", severity: 'success' })
+                // showToaster({ message: "Cart updated and redirecting to checkout", severity: 'success' })
                 navigate('/checkout')
             }
             else {

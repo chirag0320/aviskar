@@ -1,20 +1,21 @@
 .BlogDetailPage {
   .PostDescription {
-    padding: 50px 0 80px;
+    @include padding-vertical(20, 40);
 
     @include media($sm) {
-      @include padding-vertical(30, 50);
+      padding-bottom: 30px;
     }
 
     .BackButton {
       color: $dark;
-      font-size: 16px;
+      font-size: 15px;
       line-height: 26px;
     }
 
     .PostUploadInfo {
-      margin-top: 18px;
-
+      margin-top: 20px;
+      gap: 10px 48px;
+      flex-wrap: wrap;
       .Value {
         @include media-min($lg) {
           margin-top: 8px;
@@ -23,21 +24,16 @@
     }
 
     .BlogTitle {
-      margin-top: 48px;
+      margin-top: 20px;
 
       @include media($md) {
-        margin-top: 32px;
+        margin-top: 16px;
       }
     }
 
     .ContentWrapper {
       .PostThumbnail {
-        margin-top: 48px;
-
-        @include media($sm) {
-          margin-top: 30px;
-        }
-
+        margin-top: 20px;
         img {
           width: 100%;
           max-height: 550px;
@@ -55,17 +51,7 @@
       }
 
       .PostContent {
-        padding-bottom: 60px;
-        margin-top: 60px;
-
-        @include media($md) {
-          margin-top: 40px;
-          padding-bottom: 20px;
-        }
-
-        @include media($sm) {
-          margin-top: 30px;
-        }
+        @include padding-vertical(20);
 
         &>* {
           margin-top: 14px;

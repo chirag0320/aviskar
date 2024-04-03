@@ -474,6 +474,7 @@
 
     .MuiCardActions-root {
       .MuiButtonBase-root {
+        font-size: pxToRem(16);
         line-height: 20px;
 
         .MuiButton-endIcon {
@@ -908,6 +909,10 @@
             grid-row-end: 3;
             grid-column-start: 3;
             grid-column-end: 4;
+            align-self: flex-end;
+            @include media-min($xxl) {
+              margin-bottom: 4px;
+            }
           }
         }
       }

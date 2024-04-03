@@ -12,21 +12,22 @@ import { useAppSelector } from '@/hooks';
 
 function ShoppingCart() {
     const checkLoadingStatus = useAppSelector(state => state.shoppingCart.loading);
+    const [body] = useState({
+        "search": "",
+        "pageNo": 0,
+        "pageSize": -1,
+        "sortBy": "",
+        "sortOrder": "",
+        "filters": {}
+    })
     useAPIoneTime({
-        service: getShoppingCartData, endPoint: ENDPOINTS.getShoppingCartData, body: {
-            "search": "",
-            "pageNo": 0,
-            "pageSize": -1,
-            "sortBy": "",
-            "sortOrder": "",
-            "filters": {}
-        }
+        service: getShoppingCartData, endPoint: ENDPOINTS.getShoppingCartData, body
     });
 
     return (
         <Layout>
             <>
-            <Loader open = {checkLoadingStatus} />
+                <Loader open={checkLoadingStatus} />
                 <Seo
                     keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
                     title="Home"

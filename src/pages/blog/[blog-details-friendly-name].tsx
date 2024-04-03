@@ -29,18 +29,16 @@ import * as variable from "../../scss/settings/variables.module.scss";
 import {
   ChevronLeft,
   FacebookIcon,
-  TwitterIcon,
-  InstagramIcon,
-  YoutubeIcon,
+  TwitterIcon
 } from "@/assets/icons";
 import { formatDate } from "@/utils/common";
-import useApiRequest from "@/hooks/useAPIRequest";
-import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { BlogDetailsAPI } from "@/redux/reducers/blogReducer";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import useSubscription from "@/hooks/useSubscription";
 import { navigate } from "gatsby";
 import { setLoadingFalse, setLoadingTrue } from "@/redux/reducers/homepageReducer";
+import { FacebookShareButton,TwitterShareButton, WhatsappShareButton } from "react-share";
+import WhatsappIcon from "@/assets/icons/WhatsappIcon";
 import Loader from "@/components/common/Loader";
 
 function BlogDetails(params: any) {
@@ -63,7 +61,6 @@ function BlogDetails(params: any) {
     <Layout>
       <Loader open = {checkLoadingStatus} />
       <Box className="BlogDetailPage">
-        <Breadcrumb arr={[{ navigate: '/blog', name: 'Blog' }, { navigate: "/blog/" + params?.params?.["blog-details-friendly-name"], name: params?.params?.["blog-details-friendly-name"] }]} />
         <Box className="PostDescription">
           <Container maxWidth="lg">
             <Button
@@ -79,7 +76,7 @@ function BlogDetails(params: any) {
             <Typography variant="h2" component="h2" className="BlogTitle">
               {blogDetailsData?.title}
             </Typography>
-            <Stack className="PostUploadInfo" gap={6}>
+            <Stack className="PostUploadInfo">
               <Box>
                 <Typography variant="body1">Written by</Typography>
                 <Typography
@@ -119,20 +116,23 @@ function BlogDetails(params: any) {
               </Box>
               <Stack className="FooterContent">
                 <Box className="Left">
-                  <Typography variant="subtitle1">Share this post</Typography>
+                  <Typography>Share this post</Typography>
                   <Stack className="SocialIconWrapper">
-                    <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}>
-                      <FacebookIcon />
-                    </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Twitter Icon" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}>
-                      <TwitterIcon />
-                    </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Youtube Icon" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}>
-                      <YoutubeIcon />
-                    </IconButton>
-                    {/* <IconButton className="SocialIcon" aria-label="Instagram Icon">
-                      <InstagramIcon />
-                    </IconButton> */}
+                    <FacebookShareButton url={window.location.href} hashtag="qmint" title="Qmint blog">
+                      <IconButton className="SocialIcon" aria-label="Facebook Icon" >
+                        <FacebookIcon />
+                      </IconButton>
+                    </FacebookShareButton>
+                    <TwitterShareButton url={window.location.href} title="Qmint blog" hashtags={["qmint", "blog"]}>
+                      <IconButton className="SocialIcon" aria-label="Twitter Icon">
+                        <TwitterIcon />
+                      </IconButton>
+                    </TwitterShareButton>
+                    <WhatsappShareButton url={window.location.href} title="Qmint blog">
+                      <IconButton className="SocialIcon" aria-label="Whatsapp Icon">
+                        <WhatsappIcon />
+                      </IconButton>
+                    </WhatsappShareButton>
                   </Stack>
                 </Box>
                 <Box className="Right">
@@ -200,11 +200,11 @@ function BlogDetails(params: any) {
                       return (
                         <Grid item md={4} sm={6} key={item?.id}>
                           <PostCard
-                          details={item}
-                          navigate={() =>
-                            navigate(`/blog/${item?.friendlyName}`)
-                          }
-                        />
+                            details={item}
+                            navigate={() =>
+                              navigate(`/blog/${item?.friendlyName}`)
+                            }
+                          />
                         </Grid>
                       );
                     })}
@@ -214,7 +214,7 @@ function BlogDetails(params: any) {
             ) : null}
           </Container>
         </Box>
-        <Box className="NewsLetter">
+        {/* <Box className="NewsLetter">
           <Container>
             <Box className="NewsLetterWrapper">
               <Typography variant="h2" component="h2">
@@ -253,7 +253,7 @@ function BlogDetails(params: any) {
               </Typography>
             </Box>
           </Container>
-        </Box>
+        </Box> */}
       </Box>
     </Layout>
   );

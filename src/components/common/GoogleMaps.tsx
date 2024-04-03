@@ -6,7 +6,8 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import parse from 'autosuggest-highlight/parse';
 import { debounce } from '@mui/material/utils';
-import { parseAddressComponents } from '@/utils/parseAddressComponents';
+import { parseAddressComponents, parsePostalCode } from '@/utils/parseAddressComponents';
+import useCallAPI from '@/hooks/useCallAPI';
 
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
@@ -42,8 +43,8 @@ interface PlaceType {
 
 export default function GoogleMaps({ setParsedAddress }: { setParsedAddress: any }) {
   const [value, setValue] = React.useState<PlaceType | null>(null);
-  // console.log("🚀 ~ GoogleMaps ~ value:", value)
   const [inputValue, setInputValue] = React.useState('');
+  const { apiCallFunction } = useCallAPI()
   const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
   const loaded = React.useRef(false);
 
@@ -77,10 +78,39 @@ export default function GoogleMaps({ setParsedAddress }: { setParsedAddress: any
   );
 
   React.useEffect(() => {
-    console.log("🚀 ~ React.useEffect ~ value:", value)
     if (value) {
       const parsedAddress = parseAddressComponents(value);
-      setParsedAddress(parsedAddress);
+
+      const apiCalling = async () => {
+        const getPostalCode = async () => {
+          const response = await apiCallFunction(`https://maps.googleapis.com/maps/api/geocode/json?place_id=${parsedAddress?.place_id}&key=${GOOGLE_MAPS_API_KEY}`, 'GET', null, null, true);
+          return parsePostalCode(response);
+        }
+
+        let postalCode;
+        if (parsedAddress?.place_id) {
+          postalCode = await getPostalCode();
+          setParsedAddress({
+            country: parsedAddress?.country,
+            state: parsedAddress?.state,
+            address: parsedAddress?.address,
+            city: parsedAddress?.city,
+            address2: parsedAddress?.address2,
+            postalCode: postalCode
+          })
+        }
+        else {
+          setParsedAddress({
+            country: parsedAddress?.country,
+            state: parsedAddress?.state,
+            address: parsedAddress?.address,
+            city: parsedAddress?.city,
+            address2: parsedAddress?.address2
+          })
+        }
+      }
+
+      apiCalling();
     }
   }, [value])
 

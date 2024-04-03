@@ -13,9 +13,11 @@ import useApiRequest from "@/hooks/useAPIRequest"
 import { ENDPOINTS } from "@/utils/constants"
 import { IpriceForEachId } from "@/components/partials/home/FeaturedProducts"
 import Loader from "@/components/common/Loader"
+import Toaster from "@/components/common/Toaster"
 
 function RecentlyViewedProducts() {
   const checkLoadingStatus = useAppSelector(state => state.homePage.loading)
+  const openToaster = useAppSelector(state => state.homePage.openToaster)
   const { recentlyViewedProducts } = useAppSelector((state) => state.homePage)
   const [productIds, setProductId] = useState<any>(recentlyViewedProducts)
   const [priceForEachId, setPriceForEachId] = useState<IpriceForEachId | null>(null)
@@ -47,7 +49,8 @@ function RecentlyViewedProducts() {
 
   return (
     <Layout>
-      <Loader open = {checkLoadingStatus} />
+      {openToaster && <Toaster />}
+      <Loader open={checkLoadingStatus} />
       <Seo
         keywords={[`QMint RecentlyViewedProducts`]}
         title="RecentlyViewedProducts"

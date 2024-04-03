@@ -29,18 +29,16 @@ import * as variable from "../../scss/settings/variables.module.scss";
 import {
   ChevronLeft,
   FacebookIcon,
-  TwitterIcon,
-  InstagramIcon,
-  YoutubeIcon,
+  TwitterIcon
 } from "@/assets/icons";
 import { formatDate } from "@/utils/common";
-import useApiRequest from "@/hooks/useAPIRequest";
-import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import useSubscription from "@/hooks/useSubscription";
 import { navigate } from "gatsby";
 import { NewsDetailsAPI } from "@/redux/reducers/newsReducer";
 import { setLoadingFalse, setLoadingTrue } from "@/redux/reducers/homepageReducer";
+import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import WhatsappIcon from "@/assets/icons/WhatsappIcon";
 import Loader from "@/components/common/Loader";
 
 function NewsDetails(params: any) {
@@ -63,7 +61,6 @@ function NewsDetails(params: any) {
     <Layout>
       <Loader open = {checkLoadingStatus} />
       <Box className="BlogDetailPage">
-        <Breadcrumb arr={[{ navigate: '/news', name: 'News' }, { navigate: "/news/" + params?.params?.["news-details-friendly-name"], name: params?.params?.["news-details-friendly-name"] }]} />
         <Box className="PostDescription">
           <Container maxWidth="lg">
             <Button
@@ -79,7 +76,7 @@ function NewsDetails(params: any) {
             <Typography variant="h2" component="h2" className="BlogTitle">
               {newsDetailsData?.title}
             </Typography>
-            <Stack className="PostUploadInfo" gap={6}>
+            <Stack className="PostUploadInfo">
               <Box>
                 <Typography variant="body1">Written by</Typography>
                 <Typography
@@ -117,17 +114,23 @@ function NewsDetails(params: any) {
               </Box>
               <Stack className="FooterContent">
                 <Box className="Left">
-                  <Typography variant="subtitle1">Share this post</Typography>
+                  <Typography>Share this post</Typography>
                   <Stack className="SocialIconWrapper">
-                    <IconButton className="SocialIcon" aria-label="Facebook Icon" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}>
-                      <FacebookIcon />
-                    </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Twitter Icon" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}>
-                      <TwitterIcon />
-                    </IconButton>
-                    <IconButton className="SocialIcon" aria-label="Youtube Icon" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}>
-                      <YoutubeIcon />
-                    </IconButton>
+                    <FacebookShareButton url={window.location.href} hashtag="qmint" title="Qmint news">
+                      <IconButton className="SocialIcon" aria-label="Facebook Icon" >
+                        <FacebookIcon />
+                      </IconButton>
+                    </FacebookShareButton>
+                    <TwitterShareButton url={window.location.href} title="Qmint news" hashtags={["qmint", "news"]}>
+                      <IconButton className="SocialIcon" aria-label="Twitter Icon">
+                        <TwitterIcon />
+                      </IconButton>
+                    </TwitterShareButton>
+                    <WhatsappShareButton url={window.location.href} title="Qmint news">
+                      <IconButton className="SocialIcon" aria-label="Whatsapp Icon">
+                        <WhatsappIcon />
+                      </IconButton>
+                    </WhatsappShareButton>
                     {/* <IconButton className="SocialIcon" aria-label="Instagram Icon">
                       <InstagramIcon />
                     </IconButton> */}
@@ -175,7 +178,7 @@ function NewsDetails(params: any) {
             </Box> : null}
           </Container>
         </Box>
-        <Box className="NewsLetter">
+        {/* <Box className="NewsLetter">
           <Container>
             <Box className="NewsLetterWrapper">
               <Typography variant="h2" component="h2">
@@ -208,7 +211,7 @@ function NewsDetails(params: any) {
               </Typography>
             </Box>
           </Container>
-        </Box>
+        </Box> */}
       </Box>
     </Layout>
   );

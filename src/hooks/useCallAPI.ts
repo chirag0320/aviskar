@@ -1,4 +1,5 @@
 import axiosInstance from '@/axiosfolder';
+import axios from 'axios';
 import { useCallback, useState } from 'react';
 
 const useCallAPI = () => {
@@ -6,7 +7,7 @@ const useCallAPI = () => {
     const [error, setError] = useState(null);
 
     const apiCallFunction = useCallback(
-        async (url: string, requestType = 'GET', data = null, params:any = null) => {
+        async (url: string, requestType = 'GET', data = null, params: any = null, callWithPlainAxios: boolean = false) => {
             setLoading(true);
             setError(null);
 
@@ -14,7 +15,12 @@ const useCallAPI = () => {
                 let response;
                 switch (requestType) {
                     case 'GET':
-                        response = await axiosInstance.get(url, { params });
+                        if (callWithPlainAxios) {
+                            response = await axios.get(url);
+                        }
+                        else {
+                            response = await axiosInstance.get(url, { params });
+                        }
                         break;
                     case 'POST':
                         let headers = {}

@@ -443,9 +443,6 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
           <Box className="LeftWrapper">
             <Typography className="Name" component="p" variant="titleLarge" onClick={() => navigate(`/product-details/${cartItem.friendlypagename}`)}>{cartItem.productName}</Typography>
             <Typography variant="body2">{cartItem?.shippingInfo}</Typography>
-            {cartItem?.warnings?.map((warning) => (
-              <Typography variant="body2" key={warning}>{warning}</Typography>
-            ))}
           </Box>
           <Box className="RightWrapper">
             <Typography className="LivePrice" variant="body2">Live Price</Typography>
@@ -456,7 +453,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
               <TextField value={quantity} disabled />
               <IconButton className="Plus" onClick={() => increaseQuantity(cartItem.id)}><PlusIcon /></IconButton>
             </Stack>
-            <IconButton className="DeleteButton" onClick={() => removeItem(cartItem.id)}><Delete1Icon /></IconButton>
+            <IconButton className="DeleteButton MenuButton" onClick={() => removeItem(cartItem.id)}><Delete1Icon /></IconButton>
           </Box>
         </Stack>
         <Stack className="BottomWrapper">
@@ -512,7 +509,7 @@ export const CartCardAbstract = ({ product, quantity, deliveryMethod }: any) => 
       </CardContent>
       <Divider />
       <Typography className="DeliveryMethod" variant="overline" component="p">Delivery Method: <Typography variant="inherit" component="span">{deliveryMethod}</Typography></Typography>
-    </Card >
+    </Card>
   )
 }
 

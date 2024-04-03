@@ -6,7 +6,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // Hooks
-import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 
 // Componenets
 import StyledDialog from "@/components/common/StyledDialog"
@@ -17,12 +17,14 @@ import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
+import { AddressType } from "@/types/enums"
 
 interface AddAddress {
     open: boolean
     dialogTitle: string
     onClose: () => void
     addressTypeId: number
+    handleAddressUpdate: (addressData: any, isbilling: any) => any
 }
 
 interface Inputs {
@@ -40,8 +42,8 @@ interface Inputs {
 }
 
 export const addressSchema = yup.object().shape({
-    FirstName: yup.string().trim().required(),
-    LastName: yup.string().trim().required(),
+    FirstName: yup.string().trim().required('First Name is a required field'),
+    LastName: yup.string().trim().required('Last Name is a required field'),
     Company: yup.string().trim(),
     Contact: yup.string().trim().required(),
     Email: yup.string().email().required(),
@@ -50,19 +52,19 @@ export const addressSchema = yup.object().shape({
     City: yup.string().required().trim(),
     State: yup.string().required(),
     Country: yup.string().required(),
-    Code: yup.string().required().trim()
+    Code: yup.string().required('Pin Code is a required field').trim()
 })
 
 function AddAddress(props: AddAddress) {
-    const { open, dialogTitle, onClose, addressTypeId } = props
+    const { open, dialogTitle, onClose, addressTypeId, handleAddressUpdate } = props
     const dispatch = useAppDispatch();
     const countryList = useAppSelector(state => state.checkoutPage.countryList);
-    const stateList = useAppSelector(state => state.checkoutPage.stateList);
+    const stateListall = useAppSelector(state => state.checkoutPage.stateList);
+    const [stateList, setStateList] = useState([])
     const [stateId, setStateId] = useState<number | null>(null);
     const { showToaster } = useShowToaster();
-    const [state, toggle] = useToggle()
     const loading = useAppSelector(state => state.checkoutPage.loading);
-    const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents | null>(null);
+    const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
     const [countryValue, setcountryValue] = useState<any>('-1')
     const [stateValue, setstateValue] = useState<any>('')
     const {
@@ -102,26 +104,25 @@ function AddAddress(props: AddAddress) {
                 ...addressQuery
             }
         }))
-        // let addressId;
-        // if (hasFulfilled(response?.type)) {
-        //     addressId = (response?.payload as any)?.data?.data;
-        // }
+        let addressId;
+        if (hasFulfilled(response?.type)) {
+            addressId = (response?.payload as any)?.data?.data;
+        }
 
-        // const needToadd = {
-        //     ...addressQuery,
-        //     addressId: addressId,
-        //     addressType: addressTypeId,
-        //     customerId: null,
-        //     state: addressQuery.stateId,
-        //     country: addressQuery.countryId,
-        //     phone1: addressQuery.phoneNumber,
-        //     isSource: null,
-        //     "isactive": true,
-        //     "storeCode": 8,
-        //     "countryName": "Australia"
-        // }
+        const needToadd = {
+            ...addressQuery,
+            addressId: addressId,
+            addressType: addressTypeId,
+            customerId: null,
+            state: addressQuery.stateId,
+            country: addressQuery.countryId,
+            phone1: addressQuery.phoneNumber,
+            isSource: null,
+            "countryName": "Australia"
+        }
         if (hasFulfilled(response.type)) {
-            dispatch(addAddress(addressQuery))
+            dispatch(addAddress(needToadd))
+            handleAddressUpdate(needToadd, addressTypeId == AddressType.Billing)
             onClose()
             reset()
             showToaster({ message: "Address saved successfully", severity: "success" })
@@ -152,12 +153,22 @@ function AddAddress(props: AddAddress) {
             setStateId(() => null);
             setValue('City', googleAddressComponents?.city)
             setValue('Address2', googleAddressComponents.address2)
+            if (googleAddressComponents?.postalCode) {
+                setValue("Code", Number(googleAddressComponents?.postalCode));
+            }
         }
     }, [googleAddressComponents])
-    const OnChange = () => {
-        toggle()
+
+    useEffect(() => {
+        const data: any = stateListall?.filter((state) => {
+            return state.enumValue == countryValue || countryValue == -1
+        })
+        setStateList(data)
+    }, [stateListall, countryValue])
+
+    const OnChange = (value: any) => {
+        setcountryValue(value)
     }
-    console.log(getValues('Country'), "get value")
     return (
         <StyledDialog
             id="UpdateAddress"
@@ -174,7 +185,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.FirstName}
                             name="FirstName"
-                            placeholder="Enter first name"
+                            placeholder="Enter first name *"
                             control={control}
                             // setValue={setValue}
                             variant='outlined'
@@ -184,7 +195,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.LastName}
                             name="LastName"
-                            placeholder="Enter last name"
+                            placeholder="Enter last name *"
                             control={control}
                             variant='outlined'
                             margin='none'
@@ -205,7 +216,7 @@ function AddAddress(props: AddAddress) {
                             error={errors.Contact}
                             name="Contact"
                             type="number"
-                            placeholder="Enter contact"
+                            placeholder="Enter contact *"
                             control={control}
                             variant='outlined'
                             margin='none'
@@ -214,7 +225,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.Email}
                             name="Email"
-                            placeholder="Enter email id"
+                            placeholder="Enter email id *"
                             control={control}
                             variant='outlined'
                             margin='none'
@@ -225,7 +236,7 @@ function AddAddress(props: AddAddress) {
                         register={register}
                         error={errors.Address1}
                         name="Address1"
-                        placeholder="Enter address line 1"
+                        placeholder="Enter address line 1 *"
                         control={control}
                         variant='outlined'
                         margin='none'
@@ -244,7 +255,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.City}
                             name="City"
-                            placeholder="Enter city"
+                            placeholder="Enter city *"
                             control={control}
                             variant='outlined'
                             margin='none'
@@ -262,7 +273,7 @@ function AddAddress(props: AddAddress) {
                             setValue={setValue}
                             onChange={OnChange}
                         >
-                            <MenuItem value="-1">Select country</MenuItem>
+                            <MenuItem value="-1">Select country *</MenuItem>
                             {countryList.map((country: StateOrCountry) => (
                                 <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
                             ))}
@@ -278,7 +289,7 @@ function AddAddress(props: AddAddress) {
                                 }
                                 return option.name;
                             }}
-                            renderInput={(params) => <TextField placeholder="Enter state" {...params} error={errors.State as boolean | undefined} />}
+                            renderInput={(params) => <TextField placeholder="Enter state *" {...params} error={errors.State as boolean | undefined} />}
                             fullWidth
                             onChange={(_, value) => {
                                 if (!value) {
@@ -305,7 +316,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.Code}
                             name="Code"
-                            placeholder="Enter pin code"
+                            placeholder="Enter pin code *"
                             control={control}
                             variant='outlined'
                             margin='none'

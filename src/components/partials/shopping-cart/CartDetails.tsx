@@ -128,8 +128,15 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
         for (const id in quantities) {
             ids.push(Number(id));
         }
-        dispatch(clearShoppingCart());
-        await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: ids }) as any)
+        const reponse = await dispatch(deleteShoppingCartData({ url: ENDPOINTS.deleteShoppingCartData, body: ids }) as any)
+        if (hasFulfilled(reponse.type)) {
+            dispatch(clearShoppingCart());
+            showToaster({ message: reponse?.payload?.data?.message, severity: 'success' })
+
+        }
+        else {
+            showToaster({ message: "Clear cart failed", severity: 'error' })
+        }
     }
 
     return (
