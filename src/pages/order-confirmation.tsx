@@ -56,7 +56,7 @@ function OrderConfirmation(props: any) {
                             <Box className="OrderDetailsWrapper">
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Order No.</Typography>
-                                    <Button variant="text" onClick={() => navigate(`/order-details/?orderNo=${orderConfirmationDetails?.orderNumber}`)}>{orderConfirmationDetails?.orderNumber}</Button>
+                                    <Button variant="text" onClick={() => navigate(`/order-details/?orderNo=${orderConfirmationDetailsData?.orderNumber}`)}>{orderConfirmationDetailsData?.orderNumber}</Button>
                                 </Stack>
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Transaction Date and Time</Typography>
