@@ -1,6 +1,8 @@
 import React from "react"
-import { Box, Container } from "@mui/material"
+import { Box, Container, Divider } from "@mui/material"
 import { PageTitle } from "@/components/common/Utils"
+import OrderDateStatusSelector from "@/components/partials/my-vault/OrderDateStatusSelector"
+import OrderDetailsCard from "@/components/partials/my-vault/OrderDetailsCard"
 import Seo from "@/components/common/Seo"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { ENDPOINTS } from "@/utils/constants"
@@ -13,23 +15,31 @@ function Topics(paramsData: any) {
   useAPIoneTime({ service: getTopicDetails, endPoint: ENDPOINTS.topicDetail?.replace('{{topic-name}}', paramsData?.params?.['topic-name']) })
   return (
     <>
-    <Loader open = {loading} />
-    {
-      !loading && <Layout>
-      <Seo
-        keywords={[`QMint Topics`]}
-        title="Order History"
-        lang="en"
-        />
-      <PageTitle title={topicDetails?.systemName} />
-      <Container id="PageTopics">
-        <Box className="Content"> 
-        Comming Soon
-        </Box>
-      </Container>
-    </Layout>
+      <Loader open={loading} />
+      {
+        !loading && <Layout>
+          <Seo
+            keywords={[`QMint Topics`]}
+            title="Order History"
+            lang="en"
+          />
+          <Box id="OrderHistoryPage" className='OrderHistoryPage' component="section">
+            <Container id="PageTopics">
+              <Box className="Content OrderHistoryContent">
+                <OrderDateStatusSelector />
+                <Divider />
+                <Box className="OrderDetailsCardsWrapper">
+                  <OrderDetailsCard />
+                  <OrderDetailsCard />
+                  <OrderDetailsCard />
+                  <OrderDetailsCard />
+                </Box>
+              </Box>
+            </Container>
+          </Box>
+        </Layout>
       }
-        </>
+    </>
   )
 }
 

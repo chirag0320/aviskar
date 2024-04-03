@@ -364,6 +364,9 @@ const theme: Theme = createTheme({
           fontWeight: 600,
           padding: "16px 23px",
         },
+        containedInfo: {
+          backgroundColor: `${variable.elephant}`,
+        },
       },
     },
     MuiIconButton: {

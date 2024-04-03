@@ -902,6 +902,7 @@
             grid-column-start: 3;
             grid-column-end: 4;
             align-self: flex-end;
+
             @include media-min($xxl) {
               margin-bottom: 4px;
             }
@@ -1011,3 +1012,38 @@
     }
   }
 }
+
+// Start :: orderdetailscard css
+.OrderDetailsCardsWrapper {
+  .OrderDetailsCard {
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 6px 6px 27px 0px rgba($black, 0.05);
+
+    .MuiTypography-body1 {
+      color: rgba($black, 0.7);
+    }
+
+    .TopWrapper {
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 15px;
+    }
+
+    .OderDateInfoWrapper {
+      padding: 15px 0;
+    }
+
+    .OrderTotalButtonsWrapper {
+      align-items: center;
+      justify-content: space-between;
+
+      .OrderButtonsWrapper {
+        gap: 5px;
+        flex-direction: column;
+      }
+    }
+  }
+}
+
+// End :: orderdetailscard css
