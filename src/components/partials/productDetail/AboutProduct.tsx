@@ -338,7 +338,7 @@ function AboutProduct({ productId }: any) {
                     <Typography className="ProductMessage">{configDetailsState?.membershipunloacktext?.value}</Typography>
                   }
                 </Stack>
-                {productDetailsData?.availability === "In Stock" && 
+                {productDetailsData?.availability !== "Sold Out" && 
                   <>
                     <Divider />
                     <Stack className="OrderActions">

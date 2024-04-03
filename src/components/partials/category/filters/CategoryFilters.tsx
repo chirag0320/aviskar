@@ -116,7 +116,7 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
     isSmallScreen ? (
       <SmallScreenFilters renderList={renderList} setSelectedFiltersMobile={setSelectedFilters} setSelectedPriceMobile={setSelectedPrice} page={page} />
     ) : (
-      <LargerScreenFilters renderList={renderList} setSelectedFilters={setSelectedFilters} setSelectedPrice={setSelectedPrice} selectedFilters={selectedFilters} page={page} />
+      <LargerScreenFilters renderList={renderList} setSelectedFilters={setSelectedFilters} setSelectedPrice={setSelectedPrice} selectedFilters={selectedFilters} searchParams={searchParams} />
     )
   )
 }
