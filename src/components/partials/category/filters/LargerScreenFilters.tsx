@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Box, List, Divider, Button } from "@mui/material"
 import SortBy from './SortBy'
 import PriceSlider from './PriceSlider'
@@ -10,11 +10,12 @@ interface props {
     selectedFilters: { [key: string]: string[] },
     setSelectedFilters: any,
     setSelectedPrice: any,
-    page: number
+    searchParams: any
 }
 
-const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice, selectedFilters, page }: props) => {
+const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice, selectedFilters, searchParams }: props) => {
     // console.log("🚀 ~ LargerScreenFilters ~ selectedFilters:", selectedFilters)
+    // const searchParams = useMemo(() => new URLSearchParams(window.location.search), [window.location.search])
     const dispatch = useAppDispatch();
     const categoryData = useAppSelector(state => state.category)
 
@@ -27,7 +28,7 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
             <Box sx={{ padding: '16px 14px 0', textAlign: 'center' }}>
                 <Button variant="outlined" onClick={clearFiltersHandler}>Clear Filter</Button>
             </Box>
-            <Box className="CategoriesWrapper">
+            {!searchParams.has("keyword") && <Box className="CategoriesWrapper">
                 <Accordion defaultExpanded>
                     <AccordionSummary
                         id="Categories-header"
@@ -43,7 +44,7 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
                         </Box>
                     </AccordionDetails>
                 </Accordion>
-            </Box>
+            </Box>}
             {categoryData.items.length > 0 && <Box className="SortByWrapper">
                 <Divider />
                 <Accordion >

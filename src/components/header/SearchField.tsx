@@ -7,6 +7,7 @@ import useCallAPI from "@/hooks/useCallAPI";
 import useDebounce from "@/hooks/useDebounce";
 import { ENDPOINTS } from "@/utils/constants";
 import { navigate } from "gatsby";
+import useShowToaster from "@/hooks/useShowToaster";
 
 interface Option {
   name: string;
@@ -18,6 +19,7 @@ function SearchField() {
   const { apiCallFunction } = useCallAPI();
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
+  const { showToaster } = useShowToaster()
 
   useEffect(() => {
     if (searchParams.has("keyword")) {
@@ -51,8 +53,20 @@ function SearchField() {
     }
   }, []);
 
+  const handleKeyPress = (event: any) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSearch();
+    }
+  };
+
   const handleSearch = () => {
-    navigate(`/search/?keyword=${inputValue}`);
+    if (inputValue !== "") {
+      navigate(`/search/?keyword=${inputValue}`);
+    }
+    else {
+      showToaster({ message: "Can not search with empty field", severity: "info" })
+    }
   }
 
   return (
@@ -86,8 +100,9 @@ function SearchField() {
             inputProps={{
               ...params.inputProps,
             }}
+            onKeyDown={handleKeyPress}
           />
-          <IconButton color="secondary" className="SearchButton" onClick={handleSearch}>
+          <IconButton color="secondary" className="SearchButton" onClick={handleSearch} >
             <Search fontSize="small" />
           </IconButton>
         </Stack>
