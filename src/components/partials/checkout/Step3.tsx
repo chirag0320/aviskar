@@ -12,10 +12,10 @@ import { updateFinalDataForTheCheckout } from "@/redux/reducers/checkoutReducer"
 
 function Step3() {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+  console.log("🚀 ~ Step3 ~ configDetailsState:", configDetailsState)
   const dispatch = useAppDispatch()
   const [paymentType, setPaymentType] = useState('BankTransfer')
   const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
-  console.log("🚀 ~ Step3 ~ checkoutPageData:", checkoutPageData)
   useEffect(() => {
     dispatch(updateFinalDataForTheCheckout({ paymentType }))
   }, [paymentType])

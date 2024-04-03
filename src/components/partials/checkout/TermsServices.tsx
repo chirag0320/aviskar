@@ -32,7 +32,7 @@ function TermsServices() {
         <FormControlLabel
           className="Checkbox"
           control={<Checkbox checked={readedTermAndServices} onChange={() => {
-            setreadedTermAndServices((prev)=>!prev)
+            setreadedTermAndServices((prev) => !prev)
           }} />}
           label="I have read and agree to the terms of service."
         />
@@ -41,9 +41,12 @@ function TermsServices() {
         id="TermsServices"
         open={openTermsServices}
         dialogTitle="Terms of services"
-        onClose={()=>{
+        onClose={() => {
           toggleTermsServices()
+        }}
+        onAgree={() => {
           setreadedTermAndServices(true)
+          toggleTermsServices();
         }}
         primaryActionText="Agree"
         actions
