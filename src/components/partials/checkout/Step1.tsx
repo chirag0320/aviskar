@@ -124,7 +124,7 @@ function Step1() {
               <Stack className="Badge"><Typography variant="overline">{selectAccount?.membershipName}</Typography></Stack>
               <Button onClick={() => {
                 navigate('/memberships')
-              }}>Click here to upgrade</Button>
+              }}>Upgrade</Button>
             </Stack>
           </Box>
           {checkoutPageData?.customers && checkoutPageData?.customers?.length > 0 && selectAccount && <Select

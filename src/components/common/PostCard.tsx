@@ -24,6 +24,11 @@ function PostCard({ details, navigate, isNews = false }: any) {
         src={details?.imageUrl}
         alt="Product image"
         loading="lazy"
+        onClick={() => {
+          if (navigate) {
+            navigate()
+          }
+        }}
       />
       <Box className="CardContentWrapper">
         <CardContent>
@@ -49,13 +54,18 @@ function PostCard({ details, navigate, isNews = false }: any) {
               {details?.title}
             </Typography>
           </Button>
-          <Typography variant="body1" sx={{ mt: 1.25 }}>
-            {isNews ? details?.shortDescription : details?.bodyOverview}
+          <Typography variant="body1" className='PostDescription' sx={{ mt: 1.25 }} dangerouslySetInnerHTML={{
+            __html: isNews ? details?.shortDescription : details?.bodyOverview
+          }} onClick={() => {
+            if (navigate) {
+              navigate()
+            }
+          }}>
           </Typography>
         </CardContent>
         <CardActions sx={{ mt: 1.25, p: 0 }}>
           <Button variant="text" endIcon={<ArrowRight />} onClick={() => {
-            if(navigate){
+            if (navigate) {
               navigate()
             }
           }}>

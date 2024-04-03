@@ -13,6 +13,7 @@ import compareProductsReducer from './reducers/compareProductsReducer'
 import wishListReducer from './reducers/wishListReducer'
 import orderConfirmationDetails, { orderConfirmationDetailsPageSlice } from './reducers/orderConfirmationDetails';
 import topicReducer from './reducers/topicReducer';
+import orderDetailsReducer from './reducers/orderDetailsReducer';
 // Configuration for redux-persist
 const persistConfig = {
   key: 'root',
@@ -39,7 +40,8 @@ const store = configureStore({
     compareProducts: persistReducer(persistConfig, compareProductsReducer),
     wishList: wishListReducer,
     orderConfirmationDetails: orderConfirmationDetailsPageSlice.reducer,
-    topic: topicReducer
+    topic: topicReducer,
+    orderDetails: orderDetailsReducer
 
 
     // profile: persistedProfileReducer,

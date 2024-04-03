@@ -430,6 +430,7 @@
   width: 100%;
 
   .PostImage {
+    cursor: pointer;
     width: 100%;
     object-fit: cover;
     border-radius: 20px;
@@ -470,6 +471,9 @@
         text-align: left;
         text-decoration: none;
       }
+      .PostDescription{
+        cursor: pointer;
+      }
     }
 
     .MuiCardActions-root {
@@ -506,6 +510,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    svg{
+      width: 41px;
+      height: 41px;
+    }
   }
 
   .BottomWrapper {
@@ -628,6 +636,10 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      svg{
+        width: 41px;
+        height: 41px;
+      }
     }
   }
 }
@@ -842,6 +854,7 @@
         .RightWrapper {
           display: grid;
           align-items: center;
+          grid-template-columns: repeat(3, auto);
           gap: 8px 40px;
           flex-shrink: 0;
 
@@ -893,17 +906,6 @@
                   display: none;
                 }
               }
-            }
-          }
-
-          .DeleteButton {
-            grid-row-start: 1;
-            grid-row-end: 3;
-            grid-column-start: 3;
-            grid-column-end: 4;
-            align-self: flex-end;
-            @include media-min($xxl) {
-              margin-bottom: 4px;
             }
           }
         }

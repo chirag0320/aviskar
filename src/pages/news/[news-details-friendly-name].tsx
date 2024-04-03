@@ -24,6 +24,7 @@ import { Breadcrumb } from "@/components/common/Utils";
 
 // CSS Variable
 import * as variable from "../../scss/settings/variables.module.scss";
+import noImage from '../../assets/images/noImage.png'
 
 // Assets
 import {
@@ -102,7 +103,7 @@ function NewsDetails(params: any) {
               <Box className="PostThumbnail">
                 <img
                   src={newsDetailsData?.imageUrl}
-                  alt="https://picsum.photos/200"
+                  alt={noImage}
                 />
               </Box>
               <Box className="PostContent">
