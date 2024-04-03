@@ -447,6 +447,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
           <Box className="RightWrapper">
             <Typography className="LivePrice" variant="body2">Live Price</Typography>
             <Typography variant="body2">Qty.</Typography>
+            <Typography variant="body2"></Typography>
             <Typography variant="subtitle1">${roundOfThePrice(cartItem?.LivePriceDetails?.price)}</Typography>
             <Stack className="Quantity">
               <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.id)} disabled={quantity === 1}><MinusIcon /></IconButton>
@@ -469,7 +470,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
                   IconComponent={SelectDropdown}
                   disabled={!isDifferentMethod}
                 >
-                  <MenuItem value="LocalShipping">Local PickUp</MenuItem>
+                  <MenuItem value="LocalShipping">Local Pick Up</MenuItem>
                   <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
                   <MenuItem value="VaultStorage">Vault Storage</MenuItem>
                 </Select>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useMediaQuery, Box, Checkbox, FormControlLabel, IconButton, MenuItem, Select, Stack, Typography } from "@mui/material"
 
 // Type
@@ -17,7 +17,7 @@ import useApiRequest from "@/hooks/useAPIRequest"
 import { CartItemsWithLivePriceDetails } from "../shopping-cart/CartDetails"
 import useDebounce from "@/hooks/useDebounce"
 import { deleteShoppingCartData, getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
-import { bodyForGetShoppingCartData, hasFulfilled } from "@/utils/common"
+import { bodyForGetShoppingCartData, getDefaultOption, hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 
 function Step2() {
@@ -25,7 +25,17 @@ function Step2() {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { checkoutPageData, finalDataForTheCheckout } = useAppSelector((state) => state.checkoutPage)
-  const [deliveryMethod, setDeliveryMethod] = useState<'LocalShipping' | 'VaultStorage' | 'SecureShipping'>('LocalShipping')
+  
+  const enabledPaymentMethods = useMemo(() => {
+    const defaultPaymentType = getDefaultOption([
+      { enabled: configDetailsState?.secureShippingenable?.value, value: 'SecureShipping' },
+      { enabled: configDetailsState?.localpickupenable?.value, value: 'LocalShipping' },
+      { enabled: configDetailsState?.vaultstorageenable?.value, value: 'VaultStorage' }
+    ], 'SecureShipping');
+    return defaultPaymentType
+  }, [configDetailsState]);
+
+  const [deliveryMethod, setDeliveryMethod] = useState<'LocalShipping' | 'VaultStorage' | 'SecureShipping'>(enabledPaymentMethods)
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
   const [deliveryMethods, setDeliveryMethods] = useState<{ [key: number]: string }>({})
   const [productIds, setProductIds] = useState({})
@@ -196,7 +206,7 @@ function Step2() {
             onChange={handleDeliveryMethod}
             IconComponent={SelectDropdown}
           >
-            {configDetailsState?.localpickupenable?.value && <MenuItem value="LocalShipping">Local PickUp</MenuItem>}
+            {configDetailsState?.localpickupenable?.value && <MenuItem value="LocalShipping">Local Pick Up</MenuItem>}
             {configDetailsState?.secureShippingenable?.value && <MenuItem value="SecureShipping">Secure Shipping</MenuItem>}
             {configDetailsState?.vaultstorageenable?.value && <MenuItem value="VaultStorage">Vault Storage</MenuItem>}
           </Select>
@@ -206,7 +216,7 @@ function Step2() {
           control={<Checkbox checked={changeDiffrenceDeliveryMethods} onClick={() => {
             toggleChangeDiffrenceDeliveryMethods()
           }} />}
-          label="Select different delivery method for products"
+          label="Select different delivery method per products"
         />}
       </Box>
       <Stack className="ProductList">
