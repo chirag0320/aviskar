@@ -152,7 +152,6 @@ function Step2() {
       showToaster({ message: response?.payload?.data?.message, severity: 'success' })
     } else {
       showToaster({ message: "Remove item failed", severity: 'error' })
-
     }
   }
 
@@ -165,7 +164,10 @@ function Step2() {
   return (
     <StepWrapper title="Step 2" className="Step2">
       <Box className="StepHeader">
-        <Stack className="HeaderWrapper">
+        <Stack
+          className="HeaderWrapper"
+          sx={cartItemsWithLivePrice?.length > 1 ? {} : { mb: 1 }}
+        >
           <Typography className="Title" variant="subtitle1">
             Delivery Method
             <HoverTooltip

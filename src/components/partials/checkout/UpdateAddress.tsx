@@ -44,13 +44,14 @@ function UpdateAddress(props: UpdateAddress) {
   const { open, dialogTitle, onClose, existingAddress } = props
   const loading = useAppSelector(state => state.checkoutPage.loading);
   const countryList = useAppSelector(state => state.checkoutPage.countryList);
-  const stateList = useAppSelector(state => state.checkoutPage.stateList);
+  const stateListall = useAppSelector(state => state.checkoutPage.stateList);
+  const [stateList, setStateList] = useState([])
   const [stateId, setStateId] = useState<number | null>(null);
-  // console.log("🚀 ~ UpdateAddress ~ existingAddress:", existingAddress)
   const dispatch = useAppDispatch();
   const { showToaster } = useShowToaster();
-  const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents | null>(null);
-
+  const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
+  const [countryValue, setcountryValue] = useState<any>('')
+  const [stateValue, setstateValue] = useState<any>('')
   const {
     register,
     reset,
@@ -73,7 +74,7 @@ function UpdateAddress(props: UpdateAddress) {
       addressLine1: data.Address1,
       addressLine2: data.Address2,
       city: data.City,
-      stateId: stateId,
+      stateId: stateId || 0,
       stateName: data.State,
       postcode: data.Code,
       countryId: data.Country,
@@ -113,29 +114,47 @@ function UpdateAddress(props: UpdateAddress) {
   }
 
   useEffect(() => {
-    // console.log("🚀 ~ useEffect ~ googleAddressComponents:", googleAddressComponents)
-
     if (googleAddressComponents) {
       setValue('Address1', googleAddressComponents.address)
-      // setValue('Country', googleAddressComponents.country)
       countryList.forEach((country: StateOrCountry) => {
         if (country.name === googleAddressComponents.country) {
           setValue('Country', country.id.toString())
+          setcountryValue(country.id.toString())
         }
       })
       setValue('State', googleAddressComponents.state)
+      setstateValue(googleAddressComponents.state)
       setStateId(() => null);
+      setValue('City', googleAddressComponents?.city)
+      setValue('Address2', googleAddressComponents.address2)
+      if (googleAddressComponents?.postalCode) {
+        setValue("Code", Number(googleAddressComponents?.postalCode));
+      }
     }
   }, [googleAddressComponents])
 
   useEffect(() => {
     setValue('State', existingAddress?.stateName);
     setStateId(existingAddress?.state);
+    setValue('Country', existingAddress?.country)
+    setcountryValue(existingAddress?.country)
+    setstateValue(existingAddress?.stateName)
     return () => {
       reset()
     }
   }, [existingAddress])
 
+  useEffect(() => {
+    const data: any = stateListall?.filter((state) => {
+      return state.enumValue == countryValue || countryValue == -1
+    })
+    setStateList(data)
+  }, [stateListall, countryValue])
+
+  const OnChange = (value: any) => {
+    setcountryValue(value)
+    setValue('Country', value)
+  }
   return (
     <StyledDialog
       id="UpdateAddress"
@@ -242,8 +261,10 @@ function UpdateAddress(props: UpdateAddress) {
               error={errors.Country}
               name="Country *"
               defaultValue={existingAddress?.country}
+              value={countryValue}
               variant='outlined'
               margin='none'
+              onChange={OnChange}
               setValue={setValue}
             >
               <MenuItem value="none">Select country</MenuItem>
@@ -278,8 +299,10 @@ function UpdateAddress(props: UpdateAddress) {
                   setStateId(value.id);
                 }
               }}
+              inputValue={stateValue}
               onInputChange={(event, newInputValue) => {
                 setValue('State', newInputValue); // Update the form value with the manually typed input
+                setstateValue(newInputValue)
               }}
               freeSolo
             />

@@ -61,7 +61,6 @@ function BlogDetails(params: any) {
     <Layout>
       <Loader open = {checkLoadingStatus} />
       <Box className="BlogDetailPage">
-        <Breadcrumb arr={[{ navigate: '/blog', name: 'Blog' }, { navigate: "/blog/" + params?.params?.["blog-details-friendly-name"], name: params?.params?.["blog-details-friendly-name"] }]} />
         <Box className="PostDescription">
           <Container maxWidth="lg">
             <Button
@@ -77,7 +76,7 @@ function BlogDetails(params: any) {
             <Typography variant="h2" component="h2" className="BlogTitle">
               {blogDetailsData?.title}
             </Typography>
-            <Stack className="PostUploadInfo" gap={6}>
+            <Stack className="PostUploadInfo">
               <Box>
                 <Typography variant="body1">Written by</Typography>
                 <Typography
@@ -117,7 +116,7 @@ function BlogDetails(params: any) {
               </Box>
               <Stack className="FooterContent">
                 <Box className="Left">
-                  <Typography variant="subtitle1">Share this post</Typography>
+                  <Typography>Share this post</Typography>
                   <Stack className="SocialIconWrapper">
                     <FacebookShareButton url={window.location.href} hashtag="qmint" title="Qmint blog">
                       <IconButton className="SocialIcon" aria-label="Facebook Icon" >
@@ -215,7 +214,7 @@ function BlogDetails(params: any) {
             ) : null}
           </Container>
         </Box>
-        <Box className="NewsLetter">
+        {/* <Box className="NewsLetter">
           <Container>
             <Box className="NewsLetterWrapper">
               <Typography variant="h2" component="h2">
@@ -254,7 +253,7 @@ function BlogDetails(params: any) {
               </Typography>
             </Box>
           </Container>
-        </Box>
+        </Box> */}
       </Box>
     </Layout>
   );

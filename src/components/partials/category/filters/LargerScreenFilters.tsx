@@ -14,7 +14,6 @@ interface props {
 }
 
 const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice, selectedFilters, page }: props) => {
-    // console.log("🚀 ~ LargerScreenFilters ~ selectedFilters:", selectedFilters)
     const dispatch = useAppDispatch();
     const categoryData = useAppSelector(state => state.category)
 
