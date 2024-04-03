@@ -8,6 +8,7 @@ import {
   Container,
   Breadcrumbs,
   Icon,
+  Button
 } from "@mui/material";
 import classNames from "classnames";
 import * as variable from "../../scss/settings/variables.module.scss";
@@ -23,6 +24,7 @@ import {
   ContainedCrossIcon,
   TimerIcon,
   ChevronUpRounded,
+  PlusIcon
 } from "../../assets/icons/index";
 import useRemainingTime from "@/hooks/useRemainingTime";
 import { navigate } from "gatsby";
@@ -123,11 +125,17 @@ export const SectionHeading = React.memo(({ title, description }: SectionHeading
   );
 });
 
-export const PageTitle = React.memo(({ title }: any) => {
+export const PageTitle = React.memo(({ title, backToDashboard }: any) => {
+  const handleBackToDashboard = () => {
+    // Logic to redirect to the homepage
+  };
   return (
     <Box className="PageTitle">
       <Container>
-        <Typography variant="h4" component="h2">{title}</Typography>
+        <Stack justifyContent="space-between" alignItems="center">
+          <Typography variant="h4" component="h2">{title}</Typography>
+          {backToDashboard && <Button className="BackToDashboard" onClick={handleBackToDashboard} startIcon={<ArrowLeft />}>Back To Dashboard</Button>}
+        </Stack>
       </Container>
     </Box>
   );
@@ -206,12 +214,12 @@ export const LinkWithIcon = React.memo(({ icon, href, text }: any) => {
   );
 });
 
-export const ProductUpdateCountdown = React.memo((props:{needToShowText?:boolean | undefined}) => {
+export const ProductUpdateCountdown = React.memo((props: { needToShowText?: boolean | undefined }) => {
   const { remainingTime } = useRemainingTime()
   return (
     <Stack className="ProductUpdateCountdown">
       <CountDownTimer />
-     {props?.needToShowText == undefined && <Typography variant="bodySmall">Updates in {remainingTime} Sec</Typography>}
+      {props?.needToShowText == undefined && <Typography variant="bodySmall">Updates in {remainingTime} Sec</Typography>}
     </Stack>
   )
 })

@@ -92,6 +92,12 @@ import BuyBackOrderIcon from "./BuyBackOrderIcon";
 import MyVaultIcon from "./MyVaultIcon";
 import MyGoldIcon from "./MyGoldIcon";
 import MySilverIcon from "./MySilverIcon";
+import VerifiedIcon from "./VerifiedIcon";
+import IndividualUserIcon from "./IndividualUserIcon";
+import JointAccountIcon from "./JointAccountIcon";
+import ShowcaseIcon from "./ShowcaseIcon";
+import TrustIcon from "./TrustIcon";
+import SuperFundIcon from "./SuperFundIcon";
 
 export {
   ArrowLeft,
@@ -187,5 +193,11 @@ export {
   BuyBackOrderIcon,
   MyVaultIcon,
   MyGoldIcon,
-  MySilverIcon
+  MySilverIcon,
+  VerifiedIcon,
+  IndividualUserIcon,
+  JointAccountIcon,
+  ShowcaseIcon,
+  TrustIcon,
+  SuperFundIcon
 };

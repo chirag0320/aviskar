@@ -3,34 +3,41 @@
     flex-shrink: 0;
     align-items: center;
     gap: 10px;
+
     .FlipContainer {
       perspective: 1000px;
       position: relative;
       width: 40px;
       height: 20px;
+
       .Flipper {
         position: absolute;
         width: 100%;
         height: 100%;
         transform-style: preserve-3d;
         animation: flipAnimation 6s infinite;
+
         @keyframes flipAnimation {
           0% {
             transform: rotateX(0deg);
           }
+
           50% {
             transform: rotateX(180deg);
           }
+
           100% {
             transform: rotateX(360deg);
           }
         }
+
         .Value {
           position: absolute;
           width: 100%;
           height: 100%;
           backface-visibility: hidden;
           text-align: right;
+
           &.Back {
             transform: rotateX(180deg);
           }
@@ -122,13 +129,39 @@
       line-height: pxToRem(33);
     }
   }
+
+  .BackToDashboard {
+    font-size: 14px;
+
+    @include media($ssm) {
+      font-size: 12px;
+    }
+
+    span {
+      margin-right: 4px;
+
+      @include media($ssm) {
+        margin-right: 2px;
+      }
+
+      svg {
+        width: 16px;
+
+        @include media($ssm) {
+          width: 14px;
+        }
+      }
+    }
+  }
 }
 
 .Breadcrumb {
   @include padding-vertical(30);
+
   @include media($sm) {
     @include padding-vertical(20);
   }
+
   .MuiBreadcrumbs-ol {
     .MuiBreadcrumbs-li {
       line-height: 20px;
