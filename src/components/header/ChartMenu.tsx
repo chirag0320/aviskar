@@ -14,7 +14,7 @@ import ChartMenuChart from "./ChartMenuChart"
 
 function ChartMenu() {
   const isSmallScreen = useMediaQuery((theme: any) => theme.breakpoints.down("md"));
-  const [open, setOpen] = useState<boolean>(true)
+  const [open, setOpen] = useState<boolean>(false)
   const tooltipRef = useRef(null)
   const handleTooltipClose = (event: any) => {
     setOpen(false)

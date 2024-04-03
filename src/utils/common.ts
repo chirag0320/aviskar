@@ -69,3 +69,7 @@ export const bodyForGetShoppingCartData={
   "sortOrder": "",
   "filters": {}
 }
+export function getDefaultOption(enabledOptions:any[], defaultOption:string) {
+  const enabledValues = enabledOptions.filter(option => option.enabled).map(option => option.value);
+  return enabledValues.length > 0 ? enabledValues[0] : defaultOption;
+}

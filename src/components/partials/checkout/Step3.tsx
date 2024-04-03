@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { Box, FormControlLabel, IconButton, Radio, RadioGroup, Stack, Typography } from "@mui/material"
 
 // Componenets
@@ -9,12 +9,22 @@ import { HoverTooltip } from "@/components/common/CustomTooltip"
 import { InfoIcon, BankIcon, CashIcon, CardIcon } from "@/assets/icons"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import { updateFinalDataForTheCheckout } from "@/redux/reducers/checkoutReducer"
+import { getDefaultOption } from "@/utils/common"
 
 function Step3() {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
-  console.log("🚀 ~ Step3 ~ configDetailsState:", configDetailsState)
   const dispatch = useAppDispatch()
-  const [paymentType, setPaymentType] = useState('BankTransfer')
+
+  const enabledPaymentMethods = useMemo(() => {
+    const defaultPaymentType = getDefaultOption([
+      { enabled: configDetailsState?.banktransferenable?.value, value: 'BankTransfer' },
+      { enabled: configDetailsState?.cashenable?.value, value: 'Cash' },
+      { enabled: configDetailsState?.creditcardenable?.value, value: 'CreditCard' }
+    ], 'BankTransfer');
+    return defaultPaymentType
+  }, [configDetailsState]);
+
+  const [paymentType, setPaymentType] = useState(enabledPaymentMethods)
   const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
   useEffect(() => {
     dispatch(updateFinalDataForTheCheckout({ paymentType }))
@@ -48,9 +58,9 @@ function Step3() {
         <RadioGroup name="payment-method" defaultValue="BankTransfer" row value={paymentType} onChange={(e) => {
           setPaymentType(e.target.value)
         }}>
-          {checkoutPageData?.storeDetail?.isBankTransfer && <FormControlLabel value="BankTransfer" control={<Radio />} label={renderRadioLabelWithIcon("Bank Transfer", <BankIcon />, undefined, configDetailsState?.["checkout.payment.banktransferinfotext"]?.value)} />}
-          {checkoutPageData?.storeDetail?.isCash && <FormControlLabel value="Cash" control={<Radio />} label={renderRadioLabelWithIcon("Cash", <CashIcon />, undefined, configDetailsState?.["checkout.payment.cashinfotext"]?.value)} />}
-          {checkoutPageData?.storeDetail?.isCreditCard && <FormControlLabel value="CreditCard" control={<Radio />} label={renderRadioLabelWithIcon("Credit Card", <CardIcon />, checkoutPageData?.storeDetail?.creadatcardTax?.toString(), configDetailsState?.["checkout.payment.creditcardinfotext"]?.value)} />}
+          {configDetailsState?.banktransferenable?.value && <FormControlLabel value="BankTransfer" control={<Radio />} label={renderRadioLabelWithIcon("Bank Transfer", <BankIcon />, undefined, configDetailsState?.["checkout.payment.banktransferinfotext"]?.value)} />}
+          {configDetailsState?.cashenable?.value && <FormControlLabel value="Cash" control={<Radio />} label={renderRadioLabelWithIcon("Cash", <CashIcon />, undefined, configDetailsState?.["checkout.payment.cashinfotext"]?.value)} />}
+          {configDetailsState?.creditcardenable?.value && <FormControlLabel value="CreditCard" control={<Radio />} label={renderRadioLabelWithIcon("Credit Card", <CardIcon />, checkoutPageData?.storeDetail?.creadatcardTax?.toString(), configDetailsState?.["checkout.payment.creditcardinfotext"]?.value)} />}
         </RadioGroup>
       </Stack>
     </StepWrapper>

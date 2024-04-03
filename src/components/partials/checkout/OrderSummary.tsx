@@ -203,7 +203,7 @@ function OrderSummary() {
         {renderPricingItem("Secure Shipping", `$${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax))}`)}
         {renderPricingItem("Vault storage", `$${roundOfThePrice(Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax))}`)}
         <Divider />
-        {finalDataForTheCheckout?.paymentType === 'CreditCard' && renderPricingItem("Credit Card Fees", roundOfThePrice(Number(craditCardCharges?.creditCardFeeIncludingTax)))}
+        {finalDataForTheCheckout?.paymentType === 'CreditCard' && renderPricingItem("Credit Card Fees", `$${roundOfThePrice(Number(craditCardCharges?.creditCardFeeIncludingTax))}`)}
         {finalDataForTheCheckout?.paymentType === 'CreditCard' && < Divider />}
         {renderPricingItem("GST Included", `$${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingTax) + Number(insuranceAndTaxCalculation?.vaultStorageTax) + Number(finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 ? finalDataForTheCheckout?.cartItemsWithLivePrice?.reduce((total: number, product: {
           LivePriceDetails: { taxPrice: number }

@@ -125,7 +125,10 @@ interface CheckoutPageState {
             "availableRewardPoints": number,
             "rewardPointAmount": number
         },
-        "customerId": number
+        "customerId": number,
+        "termsConditionsOverview": any,
+        "termsConditionsTital": any,
+        "termsConditionsbody": any,
     } | null,
     subTotal: number,
     finalDataForTheCheckout: any,
