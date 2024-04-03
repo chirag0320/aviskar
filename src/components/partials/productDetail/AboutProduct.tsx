@@ -16,6 +16,8 @@ import ProductImages from "./ProductImages"
 
 // Assets
 import { AlarmIcon, CameraIcon, CartIcon, CompareIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MinusIcon, PlusIcon, TwitterIcon, YoutubeIcon } from "@/assets/icons"
+import WhatsappIcon from "@/assets/icons/WhatsappIcon";
+import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 
 // Data
 import { qmintRating } from "@/utils/data"
@@ -338,7 +340,7 @@ function AboutProduct({ productId }: any) {
                     <Typography className="ProductMessage">{configDetailsState?.membershipunloacktext?.value}</Typography>
                   }
                 </Stack>
-                {productDetailsData?.availability !== "Sold Out" && 
+                {productDetailsData?.availability !== "Sold Out" &&
                   <>
                     <Divider />
                     <Stack className="OrderActions">
@@ -362,20 +364,20 @@ function AboutProduct({ productId }: any) {
                           handleQuentityUpdate('plus')
                         }}><PlusIcon /></IconButton>
                       </Stack>
-                          <Button color="success" variant="contained" endIcon={<CartIcon />} onClick={async () => {
-                            await addToCartFunction(false)
-                            // navigate('/shopping-cart')
-                          }} disabled={loadingForAddToCart}>Add to cart</Button>
-                          <Button variant="outlined" onClick={() => {
-                            handleBuyNow()
-                          }}>Buy now</Button>
-                        </>)
+                        <Button color="success" variant="contained" endIcon={<CartIcon />} onClick={async () => {
+                          await addToCartFunction(false)
+                          // navigate('/shopping-cart')
+                        }} disabled={loadingForAddToCart}>Add to cart</Button>
+                        <Button variant="outlined" onClick={() => {
+                          handleBuyNow()
+                        }}>Buy now</Button>
+                      </>)
                         :
                         <Button color="success" variant="contained" onClick={() => {
                           navigate('/login')
                         }}>Register to Buy</Button>}
                     </Stack>
-                </>}
+                  </>}
               </Box>
               <Divider />
             </Box>
@@ -394,9 +396,26 @@ function AboutProduct({ productId }: any) {
                 <Box className="IconWrapper"><AlarmIcon /></Box>
                 <Typography>Price Alert</Typography>
               </Button> */}
-              <IconButton href={configDetailsState?.youtubelink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><YoutubeIcon /></IconButton>
+
+              <FacebookShareButton url={window.location.href} hashtag="qmint" title="Qmint Product Detail">
+                <IconButton className="IconWrapper" aria-label="Facebook Icon" >
+                  <FacebookIcon />
+                </IconButton>
+              </FacebookShareButton>
+              <TwitterShareButton url={window.location.href} title="Qmint Product Detail" hashtags={["qmint", "productDetail"]}>
+                <IconButton className="IconWrapper" aria-label="Twitter Icon">
+                  <TwitterIcon />
+                </IconButton>
+              </TwitterShareButton>
+              <WhatsappShareButton url={window.location.href} title="Qmint Product Detail">
+                <IconButton className="IconWrapper" aria-label="Whatsapp Icon">
+                  <WhatsappIcon />
+                </IconButton>
+              </WhatsappShareButton>
+
+              {/* <IconButton href={configDetailsState?.youtubelink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><YoutubeIcon /></IconButton>
               <IconButton href={configDetailsState?.facebooklink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><FacebookIcon /></IconButton>
-              <IconButton href={configDetailsState?.twitterlink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><TwitterIcon /></IconButton>
+              <IconButton href={configDetailsState?.twitterlink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><TwitterIcon /></IconButton> */}
             </Stack>
             <Divider />
             {(priceData?.data?.[0]?.tierPriceList?.length > 0 || productDetailsData?.isGradingShow) ? <Stack className="AdditionalDetails">
