@@ -152,7 +152,6 @@ function Step2() {
       showToaster({ message: response?.payload?.data?.message, severity: 'success' })
     } else {
       showToaster({ message: "Remove item failed", severity: 'error' })
-
     }
   }
 
