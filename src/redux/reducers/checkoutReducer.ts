@@ -143,11 +143,11 @@ const initialState: CheckoutPageState = {
     isOTPEnabled: null,
     isOTPSent: null,
     isOTPVerified: null,
-    checkoutPageData: isBrowser && JSON.parse(localStorageGetItem("checkoutPageData") ?? JSON.stringify({})),
-    subTotal: Number(JSON.parse(localStorageGetItem("checkoutPageData") ?? '0')) || 0,
+    checkoutPageData: null,
+    subTotal: 0,
     finalDataForTheCheckout: {},
-    insuranceAndTaxCalculation: (isBrowser && JSON.parse(localStorageGetItem("insuranceAndTaxCalculation") ?? JSON.stringify({}))) ?? null,
-    craditCardCharges: (isBrowser && JSON.parse(localStorageGetItem("craditCardCharges") ?? JSON.stringify({}))) ?? null,
+    insuranceAndTaxCalculation: null,
+    craditCardCharges: null,
     orderId: null,
     stateList: [],
     countryList: []
@@ -241,7 +241,6 @@ export const checkoutPage = createSlice({
         },
         updateAddress: (state, action) => {
             const updatedAddress = action.payload;
-            console.log("🚀 ~ updatedAddress:", updatedAddress)
 
             if (updatedAddress.addressType === AddressType.Shipping) {
                 const updatedShippingDetails = state.checkoutPageData?.shippingAddressDetails.map((address) => {

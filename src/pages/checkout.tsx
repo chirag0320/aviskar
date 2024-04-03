@@ -23,6 +23,7 @@ import Loader from "@/components/common/Loader"
 
 function Checkout() {
   const checkLoadingStatus = useAppSelector(state => state.checkoutPage.loading);
+  const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
   const openToaster = useAppSelector(state => state.homePage.openToaster)
   const [state, setState] = useState({ service: getCheckoutPageData, endPoint: ENDPOINTS.checkoutDetails })
   const isLoggedIn = useAppSelector(state => state.homePage.isLoggedIn)
@@ -36,7 +37,7 @@ function Checkout() {
     const urlParams = new URLSearchParams(window.location.search);
     const isInstantBuy = urlParams.get('isInstantBuy')
     setState((prev: any) => ({ ...prev, params: { isInstantBuy: isInstantBuy ?? false } }))
-  }, [window.location.search])
+  }, [window.location.search, cartItems?.length])
   useAPIoneTime(state)
   return (
     <Layout>
