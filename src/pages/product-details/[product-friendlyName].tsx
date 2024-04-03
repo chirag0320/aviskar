@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import { setRecentlyViewedProduct } from "@/redux/reducers/homepageReducer"
 import Toaster from "@/components/common/Toaster"
 import Loader from "@/components/common/Loader"
+import FourZeroFour from "@/components/partials/404"
 
 function ProductDetail({ params }: any) {
   const checkLoadingStatus = useAppSelector(state => state.category.loading)
@@ -33,17 +34,17 @@ function ProductDetail({ params }: any) {
 
   return (
     <Layout>
-      <Loader open = {checkLoadingStatus} />
+      <Loader open={checkLoadingStatus} />
       <Seo
         keywords={[`QMint categories`]}
         title="Category"
         lang="en"
       />
-      <Breadcrumb arr={[{ navigate: '/shop', name: 'Shop' }, { navigate: '/product-details/' + params?.["product-friendlyName"], name: params?.["product-friendlyName"] }]} />
-      <Container id="PageProductDetail">
-        {productDetailsData?.productId && <AboutProduct productId={productDetailsData?.productId} />}
-        {productDetailsData?.relatedProducts?.length > 0 && <RelatedProduct relatedProductsList={structuredClone(productDetailsData?.relatedProducts)} />}
-      </Container>
+      {productDetailsData ? (<><Breadcrumb arr={[{ navigate: '/shop', name: 'Shop' }, { navigate: '/product-details/' + params?.["product-friendlyName"], name: params?.["product-friendlyName"] }]} />
+        <Container id="PageProductDetail">
+          {productDetailsData?.productId && <AboutProduct productId={productDetailsData?.productId} />}
+          {productDetailsData?.relatedProducts?.length > 0 && <RelatedProduct relatedProductsList={structuredClone(productDetailsData?.relatedProducts)} />}
+        </Container></>) : <FourZeroFour />}
     </Layout>
   )
 }
