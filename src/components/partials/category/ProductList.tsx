@@ -23,7 +23,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
     // navigate(`?page=${value}`, { replace: true });
     const pageQuery = new URLSearchParams(location.search);
     pageQuery.set('page', value.toString());
-      navigate(`?${pageQuery.toString()}`, { replace: true });
+    navigate(`?${pageQuery.toString()}`, { replace: true });
   }
 
   useEffect(() => {
@@ -46,12 +46,11 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
       <Box className="ProductListWrapper">
         {
           !categoryData.loading ? (
-            categoryData?.sortedItems?.length > 0 ? categoryData.sortedItems.map((product: any) => {
+            categoryData.sortedItems.map((product: any) => {
               return (
                 <ProductCard key={product.productId} product={product} stickyProduct={false} />
               );
             })
-              : <Typography variant="body1">Record not found</Typography>
           ) : (
             Array(6).fill(0).map((_, index) => {
               return (
@@ -66,6 +65,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
             })
           )
         }
+        {!categoryData.loading && categoryData.items?.length === 0 && <Typography variant="h6" component="p">There are no products in this category or filters you have selected.</Typography>}
       </Box>
       <Stack className="Pagination">
         {categoryData?.count > 0 && <Pagination count={Math.ceil(categoryData?.count / pageSize)} page={page} shape="rounded" onChange={handlePageChange} />}
