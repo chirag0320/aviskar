@@ -484,7 +484,7 @@
                 color: $yellowFuel;
 
                 .IconWrapper {
-                  color: inherit;
+                  color: $yellowFuel;
                   border-color: $yellowFuel;
                 }
               }
@@ -516,6 +516,11 @@
 
               .MuiSvgIcon-root {
                 font-size: inherit;
+              }
+
+              &.Watchlist {
+                font-size: pxToRem(18);
+                margin-right: -2px;
               }
             }
           }
