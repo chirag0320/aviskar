@@ -76,7 +76,7 @@ export const StockReturnWithName = React.memo(
               : null,
           }}
         >
-          <Box className="FlipContainer" marginRight={name === "AUD/USD" ? "6px" : "0px"}>
+          <Box className="FlipContainer" marginRight={name === "AUD/USD" ? "8px" : "0px"}>
             <Box className="Flipper">
               <Typography variant="body2" component="span" className="Value Front">{roundOfThePrice(percentage)}%</Typography>
               <Typography variant="body2" component="span" className="Value Back">${name === "AUD/USD" ? move : roundOfThePrice(move)}</Typography>
