@@ -1,16 +1,15 @@
 #PageCheckout {
   display: flex;
   gap: 25px;
-  @include padding-vertical(30, 80);
+  padding-bottom: 40px;
   @include media-min($lg) {
     align-items: flex-start;
   }
   @include media($lg) {
     flex-direction: column;
-    @include padding-vertical(40);
   }
-  @include media($sm) {
-    @include padding-vertical(30);
+  @include media($md) {
+    padding-bottom: 24px;
   }
   @include media($xs) {
     gap: 15px;

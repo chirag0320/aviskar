@@ -33,6 +33,7 @@ import { ENDPOINTS } from "@/utils/constants";
 import useDebounce from "@/hooks/useDebounce";
 import { navigate } from "gatsby";
 import Loader from "@/components/common/Loader";
+import Seo from "@/components/common/Seo";
 
 function Blog() {
   const checkLoadingStatus = useAppSelector(state => state.blogPage.loading);
@@ -71,7 +72,14 @@ function Blog() {
 
   return (
     <Layout>
-      <Loader open = {checkLoadingStatus} />
+      <Loader open={checkLoadingStatus} />
+      <Seo
+        keywords={['blog', 'latest posts', 'articles']}
+        title="Blog"
+        lang="en"
+        meta={[{name: '',}]}
+        description={"Explore our latest blog posts for informative articles on various topics. Stay updated with our insights and analysis."}
+      />
       <Box className="BlogPage">
         <Box className="HeroSection">
           <Container>
