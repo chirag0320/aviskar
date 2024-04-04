@@ -15,7 +15,8 @@ import { ENDPOINTS } from '@/utils/constants'
 import { useAppSelector } from '@/hooks'
 import { apicall, trimAllSpaceFromString } from '@/utils/helper'
 import useSubscription from '@/hooks/useSubscription'
-import { navigate } from 'gatsby'
+import { Link as NavigationLink, navigate } from "gatsby"
+
 export interface FooterLink {
   linkTitle: string;
   linkUrl: string;
@@ -36,11 +37,13 @@ function index() {
       <Container className="Container">
         <Stack className="FooterWrapper">
           <Stack className="LogoPart">
-            <Link style={{cursor: 'pointer'}}>
-            <img src={configDetailsState?.brandlogourl?.value} alt="Footer logo" loading="lazy" onClick={()=>{
-              navigate('/')
-            }}/>
-            </Link>
+            <NavigationLink style={{cursor: 'pointer'}} to={'/'}>
+            <img src={configDetailsState?.brandlogourl?.value} alt="Footer logo" loading="lazy" 
+            // onClick={()=>{
+            //   navigate('/')
+            // }}
+            />
+            </NavigationLink>
             <Stack className="AboutWrapper">
               <Stack className="LocationWrapper About">
                 <MapIcon />
