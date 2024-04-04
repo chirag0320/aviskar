@@ -29,6 +29,7 @@
                   border-bottom: 1px solid $mercury;
                   background-color: rgba($mercury, 0.2);
                   text-align: left;
+
                   &.Mui-selected {
                     font-weight: 700;
                   }
@@ -81,33 +82,41 @@
     .MuiDialog-container {
       .MuiDialog-paper {
         max-width: $mmd;
+
         .DialogHeader {
           justify-content: space-between;
           align-items: center;
           padding: 20px;
           color: $elephant;
+
           .CloseButton {
             margin-right: -10px;
           }
         }
+
         .MuiDialogContent-root {
           max-height: 313px;
           margin-right: 16px;
           @include padding-horizontal(20);
+
           @include media($xs) {
             padding-right: 10px;
           }
+
           .Content {
             overflow-wrap: break-word;
           }
         }
+
         .MuiDialogActions-root {
           justify-content: flex-start;
           gap: 16px;
           padding: 25px 20px 20px;
           flex-wrap: wrap;
+
           .MuiButton-root {
             min-width: 157px;
+
             @include media($sm) {
               flex-grow: 1;
             }
@@ -124,43 +133,55 @@
       .MuiDialog-paper {
         width: 100%;
         max-width: 800px;
+
         .DialogHeader {
           justify-content: space-between;
           align-items: center;
           padding: 20px;
+
           .CloseButton {
             margin-right: -10px;
           }
         }
+
         .MuiDialogContent-root {
           @include padding-horizontal(20);
+
           .AllFields {
             flex-direction: column;
             gap: 20px;
+
             .Column {
               gap: 20px;
+
               @include media($sm) {
                 flex-wrap: wrap;
               }
             }
+
             .InputRow {
               width: 100%;
+
               .MuiInputBase-input {
                 padding: 14px;
               }
+
               .MuiMenu-root {
                 .MuiMenu-paper {
                   max-height: 190px;
                 }
               }
             }
+
             .MuiAutocomplete-root {
               .MuiTextField-root {
                 .MuiAutocomplete-inputRoot {
                   padding: 0;
+
                   .MuiAutocomplete-input {
                     padding: 14px;
                   }
+
                   .MuiAutocomplete-endAdornment {
                     position: static;
                   }
@@ -168,10 +189,12 @@
               }
             }
           }
+
           .ActionWrapper {
             justify-content: flex-end;
             gap: 20px;
             padding-bottom: 20px;
+
             .MuiButton-root {
               @include media($xs) {
                 flex: 1;
@@ -189,35 +212,44 @@
     .MuiDialog-container {
       .MuiDialog-paper {
         width: 100%;
+
         .DialogHeader {
           justify-content: space-between;
           align-items: center;
           padding: 20px 20px 0;
           z-index: 1301;
+
           .CloseButton {
             margin-right: -10px;
           }
         }
+
         .MuiDialogContent-root {
           padding: 20px;
+
           .MuiInputBase-root {
             .MuiSelect-select {
               white-space: normal;
+
               .MuiTypography-root {
                 display: block;
               }
             }
           }
+
           .MuiMenu-root {
             .MuiBackdrop-root {
               display: none;
             }
+
             .MuiMenu-paper {
-              @include media-min($sm){
+              @include media-min($sm) {
                 max-width: $sm;
               }
+
               .MuiList-root {
                 max-height: 300px;
+
                 .MuiMenuItem-root {
                   flex-direction: column;
                   align-items: flex-start;
@@ -237,23 +269,29 @@
     .MuiDialog-container {
       .MuiDialog-paper {
         width: 100%;
+
         .DialogHeader {
           justify-content: space-between;
           align-items: center;
           padding: 20px 20px 0;
+
           .MuiDialogTitle-root {
             flex: 1;
           }
+
           .CloseButton {
             margin-right: -10px;
           }
         }
+
         .MuiDialogContent-root {
           padding: 20px;
+
           .AllFields {
             flex-direction: column;
             gap: 20px;
           }
+
           .ActionWrapper {
             gap: 16px;
             margin-top: 30px;
@@ -269,11 +307,14 @@
     .MuiDialog-container {
       .MuiDialog-paper {
         padding: 20px;
+
         .MuiDialogContent-root {
           @include padding-vertical(15);
         }
+
         .MuiDialogActions-root {
           gap: 20px;
+
           .MuiButton-root {
             flex: 1;
           }
@@ -288,30 +329,67 @@
     .MuiDialog-container {
       .MuiDialog-paper {
         width: 100%;
+
         .DialogHeader {
           justify-content: space-between;
           align-items: center;
           padding: 20px 20px 0;
+
           .CloseButton {
             margin-right: -10px;
           }
         }
+
         .MuiDialogContent-root {
           padding: 30px 20px 20px;
+
           .MuiTextField-root {
             .MuiInputBase-root {
               font-size: pxToRem(20);
+
               .MuiInputBase-input {
                 padding: 10px 20px;
               }
             }
           }
         }
+
         .ActionWrapper {
           gap: 20px;
           margin-top: 30px;
+
           .MuiButton-root {
             flex: 1;
+          }
+        }
+      }
+    }
+  }
+}
+
+#AccountType {
+  &.MuiDialog-root {
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        width: 100%;
+
+        .DialogHeader {
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px 20px 0;
+
+          .CloseButton {
+            margin-right: -10px;
+          }
+        }
+
+        .MuiDialogContent-root {
+          padding: 30px 20px 20px;
+
+          .DialogFooter {
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
           }
         }
       }

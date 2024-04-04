@@ -125,7 +125,10 @@ interface CheckoutPageState {
             "availableRewardPoints": number,
             "rewardPointAmount": number
         },
-        "customerId": number
+        "customerId": number,
+        "termsConditionsOverview": any,
+        "termsConditionsTital": any,
+        "termsConditionsbody": any,
     } | null,
     subTotal: number,
     finalDataForTheCheckout: any,
@@ -264,7 +267,8 @@ export const checkoutPage = createSlice({
             }
         },
         setCheckoutItemWarning: (state, action) => {
-            const warnings = action.payload;
+            const quantities = action.payload?.quantities;
+            const warnings = action.payload?.warnings;
 
             state?.checkoutPageData?.shoppingCartItems.forEach((item: CartItem) => {
                 warnings.forEach((warning: any) => {
@@ -274,6 +278,7 @@ export const checkoutPage = createSlice({
                         item.warnings = []
                     }
                 })
+                item.quantity = quantities[item.productId]
             })
         },
         addAddress: (state, action) => {

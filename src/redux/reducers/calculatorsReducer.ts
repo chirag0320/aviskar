@@ -70,7 +70,7 @@ export const calculatorsPagesSlice = createSlice({
             if (index !== -1) {
                 const data = state.calculators.splice(index, 1)
                 data[0].Metal = calculatorData?.Metal
-                data[0].MetalWeight = Number(data[0].MetalWeight) +  Number(calculatorData?.MetalWeight)
+                data[0].MetalWeight = Number(data[0].MetalWeight) + Number(calculatorData?.MetalWeight)
                 data[0].MetalWeightType = calculatorData?.MetalWeightType
                 data[0].MetalType = calculatorData?.MetalType
                 state.calculators.unshift(data[0])
@@ -81,6 +81,15 @@ export const calculatorsPagesSlice = createSlice({
         removeCalculator(state, action) {
             const calculatorIndex = action.payload;
             state.calculators.splice(calculatorIndex, 1)
+        },
+        resetCalculatorData(state) {
+            state.loading = false
+            state.calculatorType = 0
+            state.calculators = []
+            state.shipping = 0.00
+            state.insurance = 0.00
+            state.vaultStorage = 0.00
+            state.openai = []
         }
     },
 
@@ -114,6 +123,6 @@ export const calculatorsPagesSlice = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, addCalculator, removeCalculator } = calculatorsPagesSlice.actions;
+export const { setLoadingTrue, setLoadingFalse, addCalculator, removeCalculator, resetCalculatorData } = calculatorsPagesSlice.actions;
 
 export default calculatorsPagesSlice.reducer

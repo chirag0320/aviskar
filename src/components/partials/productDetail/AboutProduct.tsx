@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { Box, Stack, Tabs, Tab, Typography, Slider, Select, MenuItem, Divider, Button, IconButton, TextField, Icon, Accordion, AccordionDetails, AccordionSummary, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, createStyles } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -22,7 +22,7 @@ import { qmintRating } from "@/utils/data"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { ENDPOINTS } from "@/utils/constants"
-import { bodyForGetShoppingCartData, roundOfThePrice, valueChangeForPrice } from "@/utils/common"
+import { bodyForGetShoppingCartData, getDefaultOption, roundOfThePrice, valueChangeForPrice } from "@/utils/common"
 import useCallAPI from "@/hooks/useCallAPI"
 import { navigate } from "gatsby"
 import { addProductToCompare } from "@/redux/reducers/compareProductsReducer"
@@ -84,7 +84,15 @@ function AboutProduct({ productId }: any) {
   const [quantityCount, setQuantityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
   const [productIds, setProductIds] = useState({ productIds: [Number(productId)] })
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
-  const [tabValue, setTabValue] = useState<number>(0)
+  const defaultTabValue = useMemo(() => {
+    const defaultTabValue = getDefaultOption([
+      { enabled: productDetailsData?.isProductDescriptionShow, value: 0 },
+      { enabled: productDetailsData?.isAdditionalInformationShow, value: 1 },
+      { enabled: productDetailsData?.isRatingReviewShow, value: 2 },
+    ], 0);
+    return defaultTabValue
+  }, [productDetailsData]);
+  const [tabValue, setTabValue] = useState<number>(defaultTabValue)
   const [priceHistoryDuration, setPriceHistoryDuration] = useState<string>('hour')
   const { showToaster } = useShowToaster();
 
@@ -338,7 +346,7 @@ function AboutProduct({ productId }: any) {
                     <Typography className="ProductMessage">{configDetailsState?.membershipunloacktext?.value}</Typography>
                   }
                 </Stack>
-                {productDetailsData?.availability !== "Sold Out" && 
+                {productDetailsData?.availability !== "Sold Out" &&
                   <>
                     <Divider />
                     <Stack className="OrderActions">
@@ -362,20 +370,20 @@ function AboutProduct({ productId }: any) {
                           handleQuentityUpdate('plus')
                         }}><PlusIcon /></IconButton>
                       </Stack>
-                          <Button color="success" variant="contained" endIcon={<CartIcon />} onClick={async () => {
-                            await addToCartFunction(false)
-                            // navigate('/shopping-cart')
-                          }} disabled={loadingForAddToCart}>Add to cart</Button>
-                          <Button variant="outlined" onClick={() => {
-                            handleBuyNow()
-                          }}>Buy now</Button>
-                        </>)
+                        <Button color="success" variant="contained" endIcon={<CartIcon />} onClick={async () => {
+                          await addToCartFunction(false)
+                          // navigate('/shopping-cart')
+                        }} disabled={loadingForAddToCart}>Add to cart</Button>
+                        <Button variant="outlined" onClick={() => {
+                          handleBuyNow()
+                        }}>Buy now</Button>
+                      </>)
                         :
                         <Button color="success" variant="contained" onClick={() => {
                           navigate('/login')
                         }}>Register to Buy</Button>}
                     </Stack>
-                </>}
+                  </>}
               </Box>
               <Divider />
             </Box>
@@ -384,7 +392,7 @@ function AboutProduct({ productId }: any) {
                 addIntoWishList(productId)
               }} >
                 <Box className="IconWrapper"><HeartIcon /></Box>
-                <Typography>Wishlist</Typography>
+                <Typography>Watchlist</Typography>
               </Button>
               <Button color="secondary" className="IconWithText" onClick={() => { addIntoComapreProduct(productId) }}>
                 <Box className="IconWrapper"><CompareIcon /></Box>

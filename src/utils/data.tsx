@@ -49,9 +49,9 @@ export const actionMenuItems = [
     key: 'enableloans'
   },
   {
-    text: "Wishlist",
+    text: "Watchlist",
     icon: <WishlistIcon />,
-    href: "/wishlist",
+    href: "/watchlist",
     key: 'enablewishlist'
   },
   {
