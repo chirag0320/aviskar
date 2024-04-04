@@ -17,7 +17,6 @@ import { useAppSelector } from "@/hooks"
 
 function ChartMenu() {
   const chartData = useAppSelector(state => state.homePage.liveDashboardChartData);
-  console.log("🚀 ~ ChartMenu ~ chartData:", chartData)
   const isSmallScreen = useMediaQuery((theme: any) => theme.breakpoints.down("md"));
   const [open, setOpen] = useState<boolean>(false)
   const tooltipRef = useRef(null)
