@@ -18,6 +18,7 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
     // const searchParams = useMemo(() => new URLSearchParams(window.location.search), [window.location.search])
     const dispatch = useAppDispatch();
     const categoryData = useAppSelector(state => state.category)
+    console.log("🚀 ~ LargerScreenFilters ~ categoryData:", categoryData)
 
     const clearFiltersHandler = () => {
         dispatch(setClearFilters(true));
@@ -60,7 +61,7 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
                 </Accordion>
             </Box>}
             <Box className="FilterByWrapper">
-                {categoryData.price && <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} />}
+                {categoryData.price && <PriceSlider minPrice={categoryData?.price?.minPrice} maxPrice={categoryData?.price?.maxPrice} setSelectedPrice={setSelectedPrice} />}
                 {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
                     <Accordion key={filter} className="Divider">
                         <AccordionSummary

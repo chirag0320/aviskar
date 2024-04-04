@@ -21,7 +21,7 @@ const initialState: categoryData = {
   items: [],
   count: isBrowser && JSON.parse(localStorageGetItem("count") ?? JSON.stringify(0)),
   categories: isBrowser && JSON.parse(localStorageGetItem("categories") ?? JSON.stringify([])),
-  price: isBrowser && JSON.parse(localStorageGetItem("price") ?? JSON.stringify({ minPrice: 0, maxPrice: 0 })),
+  price: isBrowser && JSON.parse(localStorageGetItem("price") ?? JSON.stringify(null)),
   specifications: isBrowser && JSON.parse(localStorageGetItem("specifications") ?? JSON.stringify({})),
   manufactureres: isBrowser && JSON.parse(localStorageGetItem("manufactureres") ?? JSON.stringify([])),
   productDetailsData: {},
