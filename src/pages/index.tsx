@@ -40,7 +40,7 @@ function IndexPage() {
   }, [])
 
   useAPIoneTime({ service: HomePageSectionDetails, endPoint: ENDPOINTS.homePageSection })
-  useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, body })
+  // useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, body })
   useUserDetailsFromToken()
   const [wait1, setWait1] = useState(false)
   const [wait2, setWait2] = useState(false)

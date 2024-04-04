@@ -5,13 +5,15 @@ import { Skeleton } from "@mui/material";
 // Components
 import LazyHeader from "../header/index"
 import { storeLastPage } from "@/utils/common";
-import { configDetails } from "@/redux/reducers/homepageReducer";
+import { CategoriesListDetails, configDetails } from "@/redux/reducers/homepageReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
+import { useAppDispatch } from "@/hooks";
 const LazyFooter = lazy(() => import('../footer/index'));
 function Layout({ children }: any) {
   // const [loading, setLoading] = useState(true);
   const [wait, setWait] = useState(false)
+  const dispatch = useAppDispatch()
   useEffect(() => {
     const x = setTimeout(() => {
       setWait(true)
@@ -23,6 +25,36 @@ function Layout({ children }: any) {
     }
   }, [])
   useAPIoneTime({ service: configDetails, endPoint: ENDPOINTS.getConfigStore })
+  useEffect(() => {
+    const fetchCategories = async () => {
+      await dispatch(CategoriesListDetails({
+        url: ENDPOINTS.topCategoriesListWithSubCategories, body: {
+          "search": "",
+          "pageNo": 0,
+          "pageSize": -1,
+          "sortBy": "",
+          "sortOrder": "",
+          "filters": {
+            "includeInTopMenu": true
+          }
+        }
+      }))
+    }
+    fetchCategories();
+  }, [])
+  // useAPIoneTime({
+  //   service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, body: {
+  //     "search": "",
+  //     "pageNo": 0,
+  //     "pageSize": -1,
+  //     "sortBy": "",
+  //     "sortOrder": "",
+  //     "filters": {
+  //       "includeInTopMenu": true
+  //     }
+  //   }
+  // })
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* <Suspense fallback={<Box id="HeaderWrapper"></Box>}> */}

@@ -7,6 +7,7 @@ import { Idata, IpriceForEachId } from "@/components/partials/home/FeaturedProdu
 import useApiRequest from "@/hooks/useAPIRequest"
 import { ProductCard } from "@/components/common/Card"
 import { navigate } from "gatsby"
+import Toaster from "../common/Toaster"
 
 // Components
 // import Layout from "../components/common/Layout"
@@ -26,7 +27,8 @@ const defaultData = {
 }
 
 function FourZeroFour() {
-  const configDetails = useAppSelector(state => state.homePage.configDetails)
+  const openToaster = useAppSelector(state => state.homePage.openToaster)
+  // const configDetails = useAppSelector(state => state.homePage.configDetails)
   const [priceForEachId, setPriceForEachId] = useState<IpriceForEachId | null>(null)
   const [dataforbody, setDataforbody] = useState<any>(defaultData)
   const [productIds, setProductIds] = useState({})
@@ -59,6 +61,7 @@ function FourZeroFour() {
     //       title="404"
     //     />
     <>
+      {openToaster && <Toaster />}
       <Box className="ErrorPage">
         <Container>
           <Box className="ErrorPageWrapper">
