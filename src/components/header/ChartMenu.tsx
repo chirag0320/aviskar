@@ -48,7 +48,7 @@ function ChartMenu() {
         </Stack>
         <Box className="ChartWrapper">
           <Typography className="Price High" variant="body2">{max}</Typography>
-          <ChartMenuChart data={value?.linechartdata} color={'red'} />
+          <ChartMenuChart data={value?.linechartdata} color={'red'} min={min} max={max}/>
           <Typography className="Price Low" variant="body2">{min}</Typography>
         </Box>
       </Box>
