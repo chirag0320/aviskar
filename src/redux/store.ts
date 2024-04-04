@@ -22,10 +22,6 @@ const persistConfig = {
     'configDetails', 'isLoggedIn', 'userDetails']
   // Reducers you want to persist
 }
-// const persistedHomePageReducer = persistReducer(persistConfig, homepageReducer)
-// const persistedblogReducer = persistReducer(persistConfig, blogReducer)
-// const persistednewsReducer = persistReducer(persistConfig, newsReducer)
-// const persistedCalculator = persistReducer(persistConfig, calculatorsReducer)
 
 const store = configureStore({
   reducer: {
