@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { useMediaQuery, Box, Button, IconButton, Stack, Typography } from "@mui/material"
 import classNames from "classnames"
 
@@ -15,11 +15,22 @@ import ChartMenuChart from "./ChartMenuChart"
 // Hooks
 import { useAppSelector } from "@/hooks"
 
+const requiredChartKeys = new Set(["gold","silver","platinum","palladium"])
+
 function ChartMenu() {
   const chartData = useAppSelector(state => state.homePage.liveDashboardChartData);
+  // let requiredChartData;
+  // requiredChartData = Object.keys(chartData).forEach((key) => {
+    // if(requiredChartKeys.has(key))
+  // })
+  // console.log("Qmint",chartData)
   const isSmallScreen = useMediaQuery((theme: any) => theme.breakpoints.down("md"));
   const [open, setOpen] = useState<boolean>(false)
   const tooltipRef = useRef(null)
+
+  useEffect(()) => {
+
+  }
   const handleTooltipClose = (event: any) => {
     setOpen(false)
   }
@@ -68,6 +79,7 @@ function ChartMenu() {
       <Stack className="Content">
         {
          Object.entries(chartData).map((chartItemArr:any[]) => (
+          // if(requiredChartKeys.has(c))
             renderStokeItem(chartItemArr[0], chartItemArr[1] )
          ))
         }
