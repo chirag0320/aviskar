@@ -7,7 +7,7 @@ import { CartItem } from '@/types/shoppingCart'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { MinusIcon, PlusIcon } from '@/assets/icons'
 import { updateShoppingCartData } from '@/redux/reducers/shoppingCartReducer'
-import { addToWishListToShoppingCart, deleteWishListData } from '@/redux/reducers/wishListReducer'
+import { addToWishListToShoppingCart, deleteWishListData, removeItemFromWishlist } from '@/redux/reducers/wishListReducer'
 import { navigate } from 'gatsby'
 import { hasFulfilled } from '@/utils/common'
 import useShowToaster from '@/hooks/useShowToaster'
@@ -23,6 +23,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
     const [wishListItemsWithLivePrice, setWishListItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
     const [selectedItems, setSelectedItems] = useState<{ [key: number]: boolean }>([])
+    console.log("🚀 ~ WishListDetails ~ selectedItems:", selectedItems)
     const [isWishListUpdated, setIsWishListUpdated] = useState(false)
 
     useEffect(() => {
@@ -77,7 +78,6 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                 quantity: quantities[item]
             }
         })
-
         setIsWishListUpdated(false)
         const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateWishListData, body: itemsWithQuantity }) as any);
         if (hasFulfilled(response.type)) {
@@ -98,6 +98,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
 
         const response = await dispatch(deleteWishListData({ url: ENDPOINTS.deleteWishListData, body: checkedItems }) as any)
         if (hasFulfilled(response.type)) {
+            dispatch(removeItemFromWishlist(checkedItems))
             setWishListItemsWithLivePrice(wishListItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => !checkedItems.includes(item.id)));
             showToaster({ message: response.payload.data.message, severity: 'success' })
         }
