@@ -13,13 +13,14 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import Badge from '@mui/material/Badge';
 
 // Utils
-import { subMenuItems } from "../../utils/data"
+import { chartMenuData, subMenuItems } from "../../utils/data"
 import { Link, navigate } from "gatsby"
 import { ProductUpdateCountdown } from "../common/Utils"
 import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { bodyForGetShoppingCartData } from "@/utils/common"
+import { getLiveDashboardChartData } from "@/redux/reducers/homepageReducer"
 
 
 export interface Icategory {
@@ -37,7 +38,6 @@ export interface Icategory {
 function Navigation() {
   const dispatch = useAppDispatch()
   const { configDetails: configDetailsState, categoriesList, needToShowProgressLoader, isLoggedIn } = useAppSelector((state) => state.homePage)
-  console.log("🚀 ~ Navigation ~ configDetails:", configDetailsState, categoriesList)
   const { cartItems } = useAppSelector((state) => state.shoppingCart)
   const [currententlySelected, setCurrententlySelected] = useState('')
   useEffect(() => {
@@ -46,7 +46,9 @@ function Navigation() {
   useEffect(() => {
     dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
   }, [isLoggedIn])
-
+  useEffect(() => {
+    dispatch(getLiveDashboardChartData({ url: ENDPOINTS.getLiveDashboardChartData }))
+  }, [])
   return (
     <Box className="NavigationHeader">
       <Container>

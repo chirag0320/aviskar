@@ -12,7 +12,11 @@ import { ActivityIcon } from "../../assets/icons/index"
 import { ClickTooltip } from "@/components/common/CustomTooltip"
 import ChartMenuChart from "./ChartMenuChart"
 
+// Hooks
+import { useAppSelector } from "@/hooks"
+
 function ChartMenu() {
+  const chartData = useAppSelector(state => state.homePage.liveDashboardChartData);
   const isSmallScreen = useMediaQuery((theme: any) => theme.breakpoints.down("md"));
   const [open, setOpen] = useState<boolean>(false)
   const tooltipRef = useRef(null)
@@ -27,17 +31,24 @@ function ChartMenu() {
       setOpen(false)
     }
   }
-  const renderStokeItem = (data: any) => {
+  const renderStokeItem = (key:any, value:any) => {
+    let max = Number.MIN_VALUE, min = Number.MAX_VALUE;
+
+    value?.linechartdata.forEach((num : number) => {
+      max = Math.max(max, num);
+      min = Math.min(min, num);
+    })
+
     return (
       <Box className="StokeItem">
         <Stack className="Header">
-          <Typography sx={{color: data.color}}>{data.name}</Typography>
-          <Typography sx={{color: data.color}}>{data.range}</Typography>
+          <Typography sx={{color: 'CaptionText'}}>{key}</Typography>
+          <Typography sx={{color: 'tomato'}}>{"3 Day Range"}</Typography>
         </Stack>
         <Box className="ChartWrapper">
-          <Typography className="Price High" variant="body2">{data.highPrice}</Typography>
-          <ChartMenuChart data={data.data} color={data.color} />
-          <Typography className="Price Low" variant="body2">{data.lowPrice}</Typography>
+          <Typography className="Price High" variant="body2">{max}</Typography>
+          <ChartMenuChart data={value?.linechartdata} color={'red'} min={min} max={max}/>
+          <Typography className="Price Low" variant="body2">{min}</Typography>
         </Box>
       </Box>
     )
@@ -55,9 +66,12 @@ function ChartMenu() {
       arrow
     >
       <Stack className="Content">
-        {chartMenuData.map((chartItem) => (
-          renderStokeItem(chartItem)
-        ))}
+        {
+         Object.entries(chartData).map((chartItemArr:any[]) => (
+            renderStokeItem(chartItemArr[0], chartItemArr[1] )
+         ))
+        }
+        
         <Button color="secondary" variant="contained" fullWidth>See More</Button>
       </Stack>
     </ClickTooltip>
