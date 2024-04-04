@@ -16,17 +16,14 @@
     gap: 30px;
     padding: 16px;
     img {
-      animation: rotation 3s infinite linear;
+      animation: spin 2s infinite linear;
     }
-    @keyframes rotation {
-      0% {
+    @keyframes spin {
+      from {
         transform: rotateY(0deg);
       }
-      50% {
+      to {
         transform: rotateY(360deg);
-      }
-      100% {
-        transform: rotateY(0deg);
       }
     }
   }
