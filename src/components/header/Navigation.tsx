@@ -48,7 +48,7 @@ function Navigation() {
   }, [isLoggedIn])
   useEffect(() => {
     dispatch(getLiveDashboardChartData({ url: ENDPOINTS.getLiveDashboardChartData }))
-  }, [chartMenuData])
+  }, [])
   return (
     <Box className="NavigationHeader">
       <Container>
