@@ -53,7 +53,7 @@ function Wishlist() {
         title="Watchlist"
         lang="en"
       />
-      <PageTitle title="Watchlist" />
+      <PageTitle title="Watchlist" maxWidth="lg" />
       <Container id="Pagewishlist" maxWidth="lg">
         <WishListDetails toggleEmailFriend={toggleEmailFriend} />
         {/* <Box className="WishlistLink">
