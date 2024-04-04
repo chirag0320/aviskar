@@ -138,7 +138,7 @@ function OrderSummary() {
         const data = await dispatch(placeOrder({ url: ENDPOINTS.placeOrder, body: prepareBodyData }) as any);
         if (hasFulfilled(data?.type)) {
           const id = data?.payload?.data?.data
-          navigate(`/order-confirmation/?id=${id}`)
+          navigate(`/order-confirmation/?orderNo=${id}`)
         }
       }
       placeOrderFun();

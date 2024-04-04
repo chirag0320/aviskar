@@ -8,7 +8,7 @@ import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { getOrderConfirmationDetails } from "@/redux/reducers/orderConfirmationDetails";
 import { ENDPOINTS } from "@/utils/constants";
 import { useAppSelector } from "@/hooks";
-import { rows } from "./order-details";
+// import { rows } from "./order-details";
 import { navigate } from "gatsby";
 import Loader from "@/components/common/Loader";
 import { roundOfThePrice } from "@/utils/common";
@@ -20,7 +20,7 @@ function OrderConfirmation(props: any) {
     const orderConfirmationDetailsData = useAppSelector(state => state.orderConfirmationDetails.orderConfirmationDetailsData);
     useAPIoneTime({
         service: getOrderConfirmationDetails,
-        endPoint: ENDPOINTS.orderConfimationDetails + new URLSearchParams(location.search).get("id")
+        endPoint: ENDPOINTS.orderConfimationDetails + new URLSearchParams(location.search).get("orderNo")
     })
 
     const renderPricingItem = (title: string, value: string) => {
@@ -50,8 +50,8 @@ function OrderConfirmation(props: any) {
                         <Box className="DetailsWrapper">
                             <Box className="ThankyouWrapper">
                                 <Typography className="ThankyouText" dangerouslySetInnerHTML={{ __html: orderConfirmationDetailsData?.thankyousection }} />
-                                <Typography variant="subtitle2" className="OrderID">Your order id is: {orderConfirmationDetailsData?.orderNumber}</Typography>
-                                <Typography variant="body1">You will receive an order confirmation email with details of your order and a link to track its progress.</Typography>
+                                {/* <Typography variant="subtitle2" className="OrderID">Your order id is: {orderConfirmationDetailsData?.orderNumber}</Typography> */}
+                                {/* <Typography variant="body1">You will receive an order confirmation email with details of your order and a link to track its progress.</Typography> */}
                             </Box>
                             <Box className="OrderDetailsWrapper">
                                 <Stack className="TitleValueWrapper">
@@ -113,9 +113,9 @@ function OrderConfirmation(props: any) {
                                         {renderPricingItem("Shipping fee", `$${roundOfThePrice(Number(orderConfirmationDetailsData?.shippingFee))}`)}
                                         {renderPricingItem("Payment fee", `$${roundOfThePrice(Number(orderConfirmationDetailsData?.paymentFee))}`)}
                                         <Divider />
-                                        {renderPricingItem("Order Tax", `$${roundOfThePrice(orderConfirmationDetailsData?.orderTax)}`)}
+                                        {orderConfirmationDetailsData?.orderTax !== 0 && renderPricingItem("Order Tax", `$${roundOfThePrice(orderConfirmationDetailsData?.orderTax)}`)}
                                         <Divider />
-                                        {renderPricingItem("Order Discount", `$${roundOfThePrice(orderConfirmationDetailsData?.orderDiscount)}`)}
+                                        {orderConfirmationDetailsData?.orderDiscount !== 0 && renderPricingItem("Order Discount", `$${roundOfThePrice(orderConfirmationDetailsData?.orderDiscount)}`)}
                                         <Stack className="PricingItem TotalItem">
                                             <Typography variant="subtitle1">Total</Typography>
                                             <Typography variant="subtitle1">${roundOfThePrice(Number(orderConfirmationDetailsData?.shippingFee) + Number(orderConfirmationDetailsData?.orderTotal) + Number(orderConfirmationDetailsData?.orderTax)) + Number(orderConfirmationDetailsData?.paymentFee)}</Typography>
@@ -132,7 +132,7 @@ function OrderConfirmation(props: any) {
                                     Download (download pdf)</Button></Typography>
                                 <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography> */}
                                 <Typography variant="body1" dangerouslySetInnerHTML={{ __html: orderConfirmationDetailsData?.orderdescription }} />
-                                <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography>
+                                {/* <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography> */}
                             </Box>
                         </Box>
                         <Button className='ContinueBtn' size='large' variant="contained" onClick={() => {
