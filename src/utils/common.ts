@@ -74,7 +74,7 @@ export function getDefaultOption(enabledOptions:any[], defaultOption:string | nu
   return enabledValues.length > 0 ? enabledValues[0] : defaultOption;
 }
 export const paymentMethodType:any={
-  "CreditCard" : 'Bank Transfer',
-  "BankTransfer" : 'Credit Card',
+  "CreditCard" : 'Credit Card',
+  "BankTransfer" : 'Bank Transfer',
   "Cash" : 'Cash',
 }
