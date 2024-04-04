@@ -1,0 +1,34 @@
+.MuiTooltip-popper {
+  &.ChartMenuTooltip {
+    .MuiTooltip-tooltip {
+      .Content {
+        flex-direction: column;
+        padding: 16px;
+        gap: 16px;
+        max-height: 60vh;
+        overflow: auto;
+        .StokeItem {
+          .Header {
+            justify-content: space-between;
+            align-items: center;
+          }
+          .ChartWrapper {
+            .Price {
+              position: relative;
+              &.High {
+                bottom: -4px;
+                color: $success;
+                border-bottom: 1px solid $success;
+              }
+              &.Low {
+                top: -10px;
+                color: $redCoral;
+                border-top: 1px solid $redCoral;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

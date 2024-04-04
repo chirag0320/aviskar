@@ -35,6 +35,11 @@ export const shipmentTypeToEnum: any = {
   'SecureShipping': 2,
   'VaultStorage': 1
 }
+export const shipmentNameEnum: any= {
+  'LocalShipping': 'Local Pick Up',
+  'SecureShipping': 'Secure Shipping',
+  'VaultStorage': 'Vault storage'
+}
 export const isBrowser = typeof window !== "undefined"
 export function localStorageGetItem(key: any) {
   return isBrowser && key ? (localStorage?.getItem(key) === 'undefined' ? undefined : localStorage?.getItem(key)) : undefined
@@ -63,4 +68,13 @@ export const bodyForGetShoppingCartData={
   "sortBy": "",
   "sortOrder": "",
   "filters": {}
+}
+export function getDefaultOption(enabledOptions:any[], defaultOption:string | number) {
+  const enabledValues = enabledOptions.filter(option => option.enabled).map(option => option.value);
+  return enabledValues.length > 0 ? enabledValues[0] : defaultOption;
+}
+export const paymentMethodType:any={
+  "CreditCard" : 'Bank Transfer',
+  "BankTransfer" : 'Credit Card',
+  "Cash" : 'Cash',
 }

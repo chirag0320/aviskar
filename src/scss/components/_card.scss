@@ -251,6 +251,7 @@
         $placement: 12px;
         top: $placement;
         border-radius: 50%;
+        color: $yellowFuel;
 
         &.Stack {
           left: $placement;
@@ -430,6 +431,7 @@
   width: 100%;
 
   .PostImage {
+    cursor: pointer;
     width: 100%;
     object-fit: cover;
     border-radius: 20px;
@@ -469,6 +471,10 @@
       .PostTitle {
         text-align: left;
         text-decoration: none;
+      }
+
+      .PostDescription {
+        cursor: pointer;
       }
     }
 
@@ -852,6 +858,7 @@
         .RightWrapper {
           display: grid;
           align-items: center;
+          grid-template-columns: repeat(3, auto);
           gap: 8px 40px;
           flex-shrink: 0;
 

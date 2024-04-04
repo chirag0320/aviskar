@@ -20,6 +20,7 @@
 @import "components/loader";
 @import "components/orderDateStatusSelector";
 @import "components/reactSpectrum";
+@import "components/tooltip";
 
 // Common
 @import "common/header";
@@ -50,3 +51,4 @@
 @import "pages/orderHistory.scss";
 @import "pages/addresses.scss";
 @import "pages/accountTypeWrapper.scss";
+@import "pages/Error404.scss";

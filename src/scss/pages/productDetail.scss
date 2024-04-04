@@ -455,6 +455,7 @@
             .MuiButton-root {
               padding: 10px 8px;
               .MuiButton-endIcon {
+                margin-right: initial;
                 @include media-between($md, $lg) {
                   display: none;
                 }
