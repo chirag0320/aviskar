@@ -28,7 +28,7 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
             <Box sx={{ padding: '16px 14px 0', textAlign: 'center' }}>
                 <Button variant="outlined" onClick={clearFiltersHandler}>Clear Filter</Button>
             </Box>
-            {!searchParams.has("keyword") && <Box className="CategoriesWrapper">
+            {categoryData.categories.length > 0 && <Box className="CategoriesWrapper">
                 <Accordion defaultExpanded>
                     <AccordionSummary
                         id="Categories-header"
