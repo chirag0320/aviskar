@@ -64,7 +64,7 @@ function SearchField() {
       navigate(`/search/?keyword=${inputValue}`);
     }
     else {
-      showToaster({ message: "Can not search with empty field", severity: "info" })
+      showToaster({ message: "Please enter some search keyword.", severity: "info" })
     }
   }
 

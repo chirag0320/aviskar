@@ -50,13 +50,13 @@ function SelectAddress(props: SelectAddress) {
     setSelectAccount(event.target.value as string);
     handleAddressUpdate(event.target.value, isbillingAddress)
   }
-  const x = document.getElementById('menu-')
 
   useEffect(() => {
+    const x = document.getElementById('menu-')
     x?.addEventListener('click', () => {
       onClose()
     })
-  }, [x])
+  }, [])
 
   return (
     <StyledDialog

@@ -80,10 +80,10 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
         setIsWishListUpdated(false)
         const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateWishListData, body: itemsWithQuantity }) as any);
         if(hasFulfilled(response.type)){
-            showToaster({message : "Wishlist items updated successfully", severity: 'success'})
+            showToaster({message : "Watchlist items updated successfully", severity: 'success'})
         }
         else{
-            showToaster({message : "Failed to update wishlist items.", severity: 'error'})
+            showToaster({message : "Failed to update Watchlist items.", severity: 'error'})
         }
     }
 
@@ -101,7 +101,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
             showToaster({message : response.payload.data.message, severity: 'success'})
         }
         else{
-            showToaster({message : "Failed to delete wishlist items.", severity: 'error'})
+            showToaster({message : "Failed to delete watchlist items.", severity: 'error'})
         }
     }
 
@@ -167,11 +167,11 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                             </TableRow>
                         ))}
                     </TableBody>
-                </Table>) : <Typography variant="h6" style={{textAlign:"center"}}>No items in wishlist</Typography>}
+                </Table>) : <Typography variant="h6" style={{textAlign:"center"}}>No items in watchlist</Typography>}
             </TableContainer>
             <Stack className="ActionWrapper">
                 <Stack className="Left">
-                    <Button color="primary" variant="contained" onClick={updateWishListHandler} disabled={wishListstate.loading || !isWishListUpdated}>Update Wishlist</Button>
+                    <Button color="primary" variant="contained" onClick={updateWishListHandler} disabled={wishListstate.loading || !isWishListUpdated}>Update Watchlist</Button>
                     <Button color="primary" variant="outlined" onClick={toggleEmailFriend}>Email a friend</Button>
                 </Stack>
                 <Stack className="Right">

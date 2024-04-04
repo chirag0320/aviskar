@@ -17,10 +17,11 @@ interface StyledDialog {
   secondaryActionText?: string
   maxWidth?: Breakpoint
   actions?: boolean
+  onAgree:any
 }
 
 function StyledDialog(props: StyledDialog) {
-  const { open, children, id, dialogTitle, onClose, primaryActionText, secondaryActionText, maxWidth, actions } = props
+  const { open, children, id, dialogTitle, onClose, primaryActionText, secondaryActionText, maxWidth, actions, onAgree } = props
 
   return (
     <Dialog
@@ -46,7 +47,7 @@ function StyledDialog(props: StyledDialog) {
         <Button variant="outlined" onClick={onClose}>
           {secondaryActionText ? secondaryActionText : "Close"}
         </Button>
-        <Button variant="contained" onClick={onClose}>
+        <Button variant="contained" onClick={onAgree}>
           {primaryActionText ? primaryActionText : "Yes"}
         </Button>
       </DialogActions>}

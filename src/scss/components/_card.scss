@@ -430,6 +430,7 @@
   width: 100%;
 
   .PostImage {
+    cursor: pointer;
     width: 100%;
     object-fit: cover;
     border-radius: 20px;
@@ -469,6 +470,9 @@
       .PostTitle {
         text-align: left;
         text-decoration: none;
+      }
+      .PostDescription{
+        cursor: pointer;
       }
     }
 
