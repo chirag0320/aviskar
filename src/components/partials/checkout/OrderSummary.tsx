@@ -12,7 +12,7 @@ import { productImages } from "@/utils/data"
 import { CartCardAbstract } from "@/components/common/Card"
 import { OutlinedCheckIcon } from "@/assets/icons"
 import OTPConfirmation from "./OTPConfirmation"
-import { hasFulfilled, roundOfThePrice, shipmentNameEnum, shipmentTypeToEnum } from "@/utils/common"
+import { hasFulfilled, paymentMethodType, roundOfThePrice, shipmentNameEnum, shipmentTypeToEnum } from "@/utils/common"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { checkValidationOnConfirmOrder, disableOTP, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation, placeOrder, setCheckoutItemWarning } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
@@ -214,7 +214,7 @@ function OrderSummary() {
         </Stack>
         <Stack className="PaymentMethod">
           <OutlinedCheckIcon />
-          <Typography className="Message" variant="titleLarge" component="p">Payment Method: <Typography variant="inherit" component="span">{finalDataForTheCheckout?.paymentType}</Typography></Typography>
+          <Typography className="Message" variant="titleLarge" component="p">Payment Method: <Typography variant="inherit" component="span">{paymentMethodType[finalDataForTheCheckout?.paymentType] ?? finalDataForTheCheckout?.paymentType}</Typography></Typography>
         </Stack>
         <Divider className="ActionDivider" />
         <Stack className="ActionWrapper">
