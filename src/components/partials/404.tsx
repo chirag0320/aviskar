@@ -65,9 +65,9 @@ function FourZeroFour() {
       <Box className="ErrorPage">
         <Container>
           <Box className="ErrorPageWrapper">
-            <Typography className="ErrorTitle" variant="h6" component="h2">We're sorry, it looks like the page that you are looking for doesn't exist. Please check the URL and try again.</Typography>
+          <Typography className="ErrorTitle" variant="h6" component="h2">We're sorry,</Typography>
+            <Typography className="ErrorTitleSubTitle" variant="h6" component="h2">It looks like the page that you are looking for doesn't exist. Please check the URL and try again.</Typography>
             <Typography className="ErrorDescription" component="p" variant="subtitle1">Can’t find what you were looking for?</Typography>
-            <Typography sx={{ mb: 2 }} component="p" variant="subtitle1">We hope you strike better luck with this popular product:</Typography>
           </Box>
         </Container>
       </Box>
@@ -78,6 +78,8 @@ function FourZeroFour() {
               title={configDetails?.["home.popularproducts.tital"]?.value ?? "Explore our Popular Products*"}
               description={configDetails?.["home.popularproducts.subtital"]?.value ?? "description*"}
             /> */}
+            <Typography sx={{  textAlign:'center', fontWeight: '500', fontSize:'20px' }} component="p" variant="subtitle1">We hope you strike better luck with this popular product</Typography>
+
           <Box className="ProductsWrapper">
             <Box className="Wrapper">
               {
