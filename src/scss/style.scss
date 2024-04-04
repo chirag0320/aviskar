@@ -18,6 +18,9 @@
 @import "components/circularProgressbar";
 @import "components/formFields";
 @import "components/loader";
+@import "components/orderDateStatusSelector";
+@import "components/reactSpectrum";
+@import "components/tooltip";
 
 // Common
 @import "common/header";
@@ -45,3 +48,7 @@
 @import "pages/recentlyViewedProducts.scss";
 @import "pages/wishlist.scss";
 @import "pages/topics.scss";
+@import "pages/orderHistory.scss";
+@import "pages/addresses.scss";
+@import "pages/accountTypeWrapper.scss";
+@import "pages/Error404.scss";

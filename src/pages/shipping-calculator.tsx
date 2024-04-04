@@ -9,7 +9,7 @@ import MetalForm from '@/components/partials/calculator/MetalForm';
 import CalculatorCards from '@/components/partials/calculator/CalculatorCards';
 // import TotalPageFooter from '@/components/partials/calculator/TotalPageFooter';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { saveCalculatorsData } from '@/redux/reducers/calculatorsReducer';
+import { resetCalculatorData, saveCalculatorsData } from '@/redux/reducers/calculatorsReducer';
 import { ENDPOINTS } from '@/utils/constants';
 import Loader from '@/components/common/Loader';
 
@@ -26,8 +26,10 @@ function Calculator() {
                 CalculatorData: calculators.calculators
             }
         }) as any);
+        return () => {
+            dispatch(resetCalculatorData())
+        }
     }, [])
-
     return (
         <Layout>
             <Loader open={checkLoadingStatus} />

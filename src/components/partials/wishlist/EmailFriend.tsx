@@ -46,7 +46,7 @@ function EmailFriend(props: EmailFriend) {
     <StyledDialog
       id="EmailFriend"
       open={open}
-      dialogTitle="Email your wishlist to a friend"
+      dialogTitle="Email your watchlist to a friend"
       onClose={onClose}
       maxWidth="sm"
     >

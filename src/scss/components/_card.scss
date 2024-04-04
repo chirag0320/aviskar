@@ -251,6 +251,7 @@
         $placement: 12px;
         top: $placement;
         border-radius: 50%;
+        color: $yellowFuel;
 
         &.Stack {
           left: $placement;
@@ -430,6 +431,7 @@
   width: 100%;
 
   .PostImage {
+    cursor: pointer;
     width: 100%;
     object-fit: cover;
     border-radius: 20px;
@@ -470,6 +472,10 @@
         text-align: left;
         text-decoration: none;
       }
+
+      .PostDescription {
+        cursor: pointer;
+      }
     }
 
     .MuiCardActions-root {
@@ -506,6 +512,11 @@
     display: flex;
     align-items: center;
     gap: 10px;
+
+    svg {
+      width: 41px;
+      height: 41px;
+    }
   }
 
   .BottomWrapper {
@@ -628,6 +639,11 @@
       display: flex;
       align-items: center;
       gap: 10px;
+
+      svg {
+        width: 41px;
+        height: 41px;
+      }
     }
   }
 }
@@ -842,6 +858,7 @@
         .RightWrapper {
           display: grid;
           align-items: center;
+          grid-template-columns: repeat(3, auto);
           gap: 8px 40px;
           flex-shrink: 0;
 
@@ -902,6 +919,7 @@
             grid-column-start: 3;
             grid-column-end: 4;
             align-self: flex-end;
+
             @include media-min($xxl) {
               margin-bottom: 4px;
             }
@@ -1011,3 +1029,45 @@
     }
   }
 }
+
+// Start :: orderdetailscard css
+.OrderDetailsCard {
+  &.MuiCard-root {
+
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 6px 6px 27px 0px rgba($black, 0.05);
+
+    .MuiTypography-body1 {
+      color: rgba($black, 0.7);
+    }
+
+    .TopWrapper {
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 20px;
+    }
+
+    .OderDateInfoWrapper {
+      padding: 20px 0;
+    }
+
+    .OrderTotalButtonsWrapper {
+      align-items: center;
+      justify-content: space-between;
+
+      @include media($xs) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+
+      .OrderButtonsWrapper {
+        gap: 5px;
+        flex-direction: column;
+      }
+    }
+  }
+}
+
+// End :: orderdetailscard css

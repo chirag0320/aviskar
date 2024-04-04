@@ -12,10 +12,16 @@ interface OrderDetails {
     loading: boolean,
     orderId: number | null;
     orderDate: string | null;
+    thankyousection: string | null;
+    orderdescription: string | null;
     orderTime: string | null;
     orderNumber: string | null;
-    orderItems: OrderItem[];
-    totalPaymentAmount: number | null;
+    orderTotal: number | null;
+    shippingFee: number | null;
+    paymentFee: number | null;
+    orderDiscount: number | null;
+    orderTax: number | null;
+    orderItems: any[]; // Define this according to your actual structure
 }
 
 
@@ -37,15 +43,10 @@ interface Order {
     orderTotal: number;
     orderItems: OrderItem[];
 }
-const initialState: OrderDetails = {
+const initialState: { loading: boolean, orderConfirmationDetailsData: OrderDetails | null } = {
     loading: false,
-    orderId: null,
-    orderDate: null,
-    orderTime: null,
-    orderNumber: null,
-    orderItems: [],
-    totalPaymentAmount: null
-}
+    orderConfirmationDetailsData: null
+};
 
 export const getOrderConfirmationDetails = appCreateAsyncThunk(
     "getOrderConfirmationDetails",
@@ -71,15 +72,8 @@ export const orderConfirmationDetailsPageSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(getOrderConfirmationDetails.fulfilled, (state, action) => {
-            const responseData: Order = action.payload.data?.data;
-
-            if (!responseData) return;
-            state.orderId = responseData?.orderId;
-            state.orderDate = responseData?.orderDate;
-            state.orderTime = responseData?.orderTime;
-            state.orderNumber = responseData?.orderNumber;
-            state.orderItems = responseData?.orderItems;
-            state.totalPaymentAmount = responseData?.orderTotal
+            const responseData: OrderDetails = action.payload.data?.data;
+            state.orderConfirmationDetailsData = responseData;
             state.loading = false;
         })
         builder.addCase(getOrderConfirmationDetails.rejected, (state) => {

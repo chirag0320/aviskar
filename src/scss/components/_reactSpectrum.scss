@@ -1,0 +1,42 @@
+.DateRangePickerWrapper {
+    div {
+        &[class$="_spectrum--medium"] {
+            background: transparent;
+        }
+    }
+
+    .DateRangePicker {
+        span {
+            &[class$="_spectrum-FieldLabel"] {
+                display: none;
+            }
+        }
+
+        div {
+            &[class$="_react-spectrum-Datepicker-inputContents"] {
+                @include media($xs) {
+                    font-size: 14px;
+                }
+            }
+        }
+
+        div {
+            &[class$="_spectrum-InputGroup-input"] {
+                @include media($lg) {
+                    padding: 3px 8px;
+                }
+            }
+        }
+    }
+}
+
+div {
+    &[class$="_spectrum-Dialog-grid"] {
+        @include media($xs) {
+            display: block !important;
+            padding: 10px;
+        }
+
+    }
+
+}

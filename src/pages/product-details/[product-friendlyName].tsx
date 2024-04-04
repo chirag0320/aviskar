@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react"
 import { Button, Container } from "@mui/material"
 
 // Components
@@ -14,15 +14,17 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import { setRecentlyViewedProduct } from "@/redux/reducers/homepageReducer"
 import Toaster from "@/components/common/Toaster"
 import Loader from "@/components/common/Loader"
+import FourZeroFour from "@/components/partials/404"
 
 function ProductDetail({ params }: any) {
   const checkLoadingStatus = useAppSelector(state => state.category.loading)
   const { productDetailsData } = useAppSelector((state) => state.category)
   const dispatch = useAppDispatch()
-
+  const endPoint = useMemo(() => {
+    return ENDPOINTS.productDetails.replace('{{product-id}}', params?.["product-friendlyName"])
+  }, [params])
   useAPIoneTime({
-    service: getProductDetailsData, endPoint: ENDPOINTS.productDetails.replace('{{product-id}}', params?.["product-friendlyName"] //params?.["product-friendlyName"]
-    )
+    service: getProductDetailsData, endPoint, params : params
   })
 
   useEffect(() => {
@@ -33,17 +35,17 @@ function ProductDetail({ params }: any) {
 
   return (
     <Layout>
-      <Loader open = {checkLoadingStatus} />
+      <Loader open={checkLoadingStatus} />
       <Seo
         keywords={[`QMint categories`]}
         title="Category"
         lang="en"
       />
-      <Breadcrumb arr={[{ navigate: '/shop', name: 'Shop' }, { navigate: '/product-details/' + params?.["product-friendlyName"], name: params?.["product-friendlyName"] }]} />
-      <Container id="PageProductDetail">
-        {productDetailsData?.productId && <AboutProduct productId={productDetailsData?.productId} />}
-        {productDetailsData?.relatedProducts?.length > 0 && <RelatedProduct relatedProductsList={structuredClone(productDetailsData?.relatedProducts)} />}
-      </Container>
+      {productDetailsData ? (<><Breadcrumb arr={[{ navigate: '/shop', name: 'Shop' }, { navigate: '/product-details/' + params?.["product-friendlyName"], name: params?.["product-friendlyName"] }]} />
+        <Container id="PageProductDetail">
+          {productDetailsData?.productId && <AboutProduct productId={productDetailsData?.productId} />}
+          {productDetailsData?.relatedProducts?.length > 0 && <RelatedProduct relatedProductsList={structuredClone(productDetailsData?.relatedProducts)} />}
+        </Container></>) : <FourZeroFour />}
     </Layout>
   )
 }

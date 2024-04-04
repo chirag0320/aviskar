@@ -22,17 +22,18 @@ function TermsServices() {
   }, [readedTermAndServices])
   return (
     <>
-      <StepWrapper title="Terms of service" className="TermsService">
+      <StepWrapper title={checkoutPageData?.termsConditionsTital} className="TermsService">
         <Typography className="Condition">
           <span className="TermsService_html" dangerouslySetInnerHTML={{
-            __html: checkoutPageData?.termsConditions?.value?.slice(0, 202) + '...'
+            __html: checkoutPageData?.termsConditionsOverview
+            // ?.slice(0, 202) + '...'
           }} />
           <Button className="ReadMore" onClick={toggleTermsServices}>Read More</Button>
         </Typography>
         <FormControlLabel
           className="Checkbox"
           control={<Checkbox checked={readedTermAndServices} onChange={() => {
-            setreadedTermAndServices((prev)=>!prev)
+            setreadedTermAndServices((prev) => !prev)
           }} />}
           label="I have read and agree to the terms of service."
         />
@@ -40,16 +41,19 @@ function TermsServices() {
       <StyledDialog
         id="TermsServices"
         open={openTermsServices}
-        dialogTitle="Terms of services"
-        onClose={()=>{
+        dialogTitle={checkoutPageData?.termsConditionsTital}
+        onClose={() => {
           toggleTermsServices()
+        }}
+        onAgree={() => {
           setreadedTermAndServices(true)
+          toggleTermsServices();
         }}
         primaryActionText="Agree"
         actions
       >
         <Box className="Content" dangerouslySetInnerHTML={{
-          __html: checkoutPageData?.termsConditions?.value
+          __html: checkoutPageData?.termsConditionsbody
         }}
         >
         </Box>

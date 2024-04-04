@@ -49,15 +49,15 @@ function Wishlist() {
       <Loader open={checkloadingstatus} />
       {openToaster && <Toaster />}
       <Seo
-        keywords={["QMint Wishlist"]}
-        title="Wishlist"
+        keywords={["QMint Watchlist"]}
+        title="Watchlist"
         lang="en"
       />
-      <PageTitle title="Wishlist" />
+      <PageTitle title="Watchlist" />
       <Container id="Pagewishlist" maxWidth="lg">
         <WishListDetails toggleEmailFriend={toggleEmailFriend} />
         {/* <Box className="WishlistLink">
-          <Typography>Your wishlist URL for sharing</Typography>
+          <Typography>Your Watchlist URL for sharing</Typography>
           <Stack className="Wrapper">
             <Button>{WISHLIST_URL}</Button>
             {!showCopyIcon && <IconButton size="small" color="secondary" onClick={handleCopyUrl}>

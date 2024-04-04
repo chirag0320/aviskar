@@ -35,6 +35,7 @@ import {
   OrdersIcon,
   FilledUpButton,
   OptionsIcon,
+  VerifiedIcon
 } from "../../assets/icons/index";
 import noImage from '../../assets/images/noImage.png'
 // Utils
@@ -300,19 +301,19 @@ export const TravelCard = (props: any) => {
 };
 
 export const StatsCard = (props: any) => {
-  const { place, description, bgColor } = props;
+  const { title, icon, statsNumber, bgColor } = props;
   return (
     <Card className="StatsCard" style={{ background: bgColor }}>
       <CardContent>
         <Box className="TopWrapper">
-          <OrdersIcon />
+          {icon ? icon : <OrdersIcon />}
           <Typography variant="subtitle2" component="h3">
-            View Orders
+            {title}
           </Typography>
         </Box>
         <Stack className="BottomWrapper">
           <Typography className="StatNumber" variant="h4">
-            5
+            {statsNumber}
           </Typography>
           <IconButton>
             <ArrowRight />
@@ -323,7 +324,7 @@ export const StatsCard = (props: any) => {
   );
 };
 export const UserStatsCard = (props: any) => {
-  const { place, description, bgColor } = props;
+  const { title, icon, bgColor } = props;
   return (
     <Card className="UserStatsCard" style={{ borderColor: bgColor }}>
       <CardContent
@@ -351,9 +352,9 @@ export const UserStatsCard = (props: any) => {
         </Box>
         <Box className="BottomWrapper">
           <Box className="Left">
-            <OrdersIcon />
+            {icon ? icon : <OrdersIcon />}
             <Typography variant="subtitle2" component="h3">
-              View Orders
+              {title}
             </Typography>
           </Box>
           <Typography variant="body1">Live</Typography>
@@ -446,6 +447,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
           <Box className="RightWrapper">
             <Typography className="LivePrice" variant="body2">Live Price</Typography>
             <Typography variant="body2">Qty.</Typography>
+            <Typography variant="body2"></Typography>
             <Typography variant="subtitle1">${roundOfThePrice(cartItem?.LivePriceDetails?.price)}</Typography>
             <Stack className="Quantity">
               <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.id)} disabled={quantity === 1}><MinusIcon /></IconButton>
@@ -468,7 +470,7 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
                   IconComponent={SelectDropdown}
                   disabled={!isDifferentMethod}
                 >
-                  <MenuItem value="LocalShipping">Local PickUp</MenuItem>
+                  <MenuItem value="LocalShipping">Local Pick Up</MenuItem>
                   <MenuItem value="SecureShipping">Secure Shipping</MenuItem>
                   <MenuItem value="VaultStorage">Vault Storage</MenuItem>
                 </Select>
@@ -511,3 +513,28 @@ export const CartCardAbstract = ({ product, quantity, deliveryMethod }: any) => 
     </Card>
   )
 }
+
+export const AddressCard = (props: any) => {
+  const { title, icon, statsNumber, showDelete } = props;
+  return (
+    <Box className="AddressCard">
+      <Stack className="CardHeader">
+        <Typography variant="subtitle2" className="AccountType">Joint</Typography>
+        <Box className="ActionButton">
+          <Button variant="contained" size="small" color="success">Edit</Button>
+          {showDelete && <Button variant="contained" size="small" color="error">Delete</Button>}
+        </Box>
+      </Stack>
+      <Box className="CardBody" component="ul">
+        <Typography component="li" className="UserName">ew ewr</Typography>
+        <Typography component="li" className="UserEmail"><strong>Name:</strong> testss user</Typography>
+        <Typography component="li" className="UserEmail"><strong>Email:</strong> usernewtest425@yopmail.com</Typography>
+        <Typography component="li" className="UserPhoneNumber"><strong>Phone number:</strong> 917228040585</Typography>
+        <Typography component="li" className="UserAddress"><strong>Address:</strong> 12, Austrey Lane Newton Regis, Queensland 4443 United Kingdom</Typography>
+        <Typography component="li" className="verificationstatus">
+          <VerifiedIcon /> Address Verified
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
