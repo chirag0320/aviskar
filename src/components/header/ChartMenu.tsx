@@ -32,33 +32,28 @@ function ChartMenu() {
       setOpen(false)
     }
   }
-  const renderStokeItem = (data: any) => {
-    console.log("Data: ", data);
+  const renderStokeItem = (key:any, value:any) => {
     let max = Number.MIN_VALUE, min = Number.MAX_VALUE;
 
-    data.map((num : number) => {
+    value?.linechartdata.forEach((num : number) => {
       max = Math.max(max, num);
       min = Math.min(min, num);
     })
 
-    console.log("MAX_VALUE: ", max);
-    console.log("MAX_VALUE: ", min);
-
     return (
       <Box className="StokeItem">
         <Stack className="Header">
-          <Typography sx={{color: data.color}}>{data.name}</Typography>
-          <Typography sx={{color: data.color}}>{data.range}</Typography>
+          <Typography sx={{color: 'CaptionText'}}>{key}</Typography>
+          <Typography sx={{color: 'tomato'}}>{"3 Day Range"}</Typography>
         </Stack>
         <Box className="ChartWrapper">
           <Typography className="Price High" variant="body2">{max}</Typography>
-          <ChartMenuChart data={data.data} color={data.color} />
+          <ChartMenuChart data={value?.linechartdata} color={'red'} />
           <Typography className="Price Low" variant="body2">{min}</Typography>
         </Box>
       </Box>
     )
   }
-  console.log("chartData: ", chartData);
   return (
     <ClickTooltip
       open={open}
@@ -73,8 +68,8 @@ function ChartMenu() {
     >
       <Stack className="Content">
         {
-         Object.keys(chartData).map((chartItem) => (
-            renderStokeItem(chartData[chartItem]?.linechartdata)
+         Object.entries(chartData).map((chartItemArr:any[]) => (
+            renderStokeItem(chartItemArr[0], chartItemArr[1] )
          ))
         }
         

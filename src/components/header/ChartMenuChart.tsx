@@ -8,10 +8,11 @@ interface ChartMenuChart {
 
 function ChartMenuChart(props: ChartMenuChart) {
   const { data, color } = props
+  console.log("🚀 ~ ChartMenuChart ~ data:", data)
   return (
     <ResponsiveContainer width={240} height={60}>
-      <LineChart data={data} >
-        <Line type="linear" dataKey="pv" stroke={color} strokeWidth={2} dot={false} />
+      <LineChart data={data.map((item:number)=>({amt: item}))} >
+        <Line type="linear" dataKey="amt" stroke={color} strokeWidth={1} dot={false} />
       </LineChart>
     </ResponsiveContainer>
   );
