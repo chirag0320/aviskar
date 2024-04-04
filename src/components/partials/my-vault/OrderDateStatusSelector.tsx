@@ -58,8 +58,8 @@ const OrderDateStatusSelector = () => {
                         </Box>
                     </Stack>
                     <Stack className="ButtonsWrapper">
-                        <Button variant="contained" type="submit" size="small" color='success' className="SearchButton">Search</Button>
-                        <Button variant="contained" size="small" color='info'>Clear</Button>
+                        <Button variant="contained" type="submit" size="large" color='primary' className="SearchButton">Search</Button>
+                        <Button variant="contained" size="large" color='info'>Clear</Button>
                     </Stack>
                 </Stack>
             </form>
