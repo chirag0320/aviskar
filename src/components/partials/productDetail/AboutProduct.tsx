@@ -81,7 +81,6 @@ function AboutProduct({ productId }: any) {
   });
   const { productDetailsData } = useAppSelector((state) => state.category)
   const { configDetails: configDetailsState, isLoggedIn, openToaster } = useAppSelector((state) => state.homePage)
-  console.log("🚀 ~ AboutProduct ~ productDetailsData:", configDetailsState)
   const [quantityCount, setQuantityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
   const [productIds, setProductIds] = useState({ productIds: [Number(productId)] })
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
@@ -254,7 +253,10 @@ function AboutProduct({ productId }: any) {
                 <Stack className="Top">
                   <Stack className="Left">
                     <Box className="PriceWrapper">
-                      <Typography className="ProductOriginalValue" variant="titleLarge">$123.00</Typography>
+                    {priceData?.data?.[0]?.discount > 0 &&<Typography className="ProductOriginalValue" variant="titleLarge">${roundOfThePrice(
+                        priceData?.data?.[0]?.price +
+                        priceData?.data?.[0]?.discount
+                      )}</Typography>}
                       <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
                     </Box>
                     {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
