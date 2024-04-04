@@ -15,7 +15,7 @@ import { PriceChangeReturn, ProductStockStatus, ProductUpdateCountdown } from "@
 import ProductImages from "./ProductImages"
 
 // Assets
-import { AlarmIcon, CameraIcon, CartIcon, CompareIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MinusIcon, PlusIcon, TwitterIcon, YoutubeIcon } from "@/assets/icons"
+import { AlarmIcon, CameraIcon, AddToCartIcon, CompareIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MinusIcon, PlusIcon, TwitterIcon, YoutubeIcon } from "@/assets/icons"
 
 // Data
 import { qmintRating } from "@/utils/data"
@@ -370,7 +370,7 @@ function AboutProduct({ productId }: any) {
                           handleQuentityUpdate('plus')
                         }}><PlusIcon /></IconButton>
                       </Stack>
-                        <Button color="success" variant="contained" endIcon={<CartIcon />} onClick={async () => {
+                        <Button color="success" variant="contained" endIcon={<AddToCartIcon />} onClick={async () => {
                           await addToCartFunction(false)
                           // navigate('/shopping-cart')
                         }} disabled={loadingForAddToCart}>Add to cart</Button>

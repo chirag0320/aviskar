@@ -40,7 +40,7 @@ function ChartMenu() {
     })
 
     return (
-      <Box className="StokeItem">
+      <Box className="StokeItem" key={key}>
         <Stack className="Header">
           <Typography sx={{color: 'CaptionText'}}>{key}</Typography>
           <Typography sx={{color: 'tomato'}}>{"3 Day Range"}</Typography>
