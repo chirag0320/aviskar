@@ -17,8 +17,8 @@ const useApiRequest = (url: string, method: 'get' | 'post' = 'get', requestData:
     useEffect(() => {
         if (requestData === null || (typeof requestData === 'object' && Object.keys(requestData).length > 0) || (Array.isArray(requestData) && requestData.length > 0)) {
             const fetchData = async () => {
-                setLoading(true);
-                dispatch(setLoadingTrue())
+                // setLoading(true);
+                // dispatch(setLoadingTrue())
                 // Clear any pending timeout or request
                 timeoutId.current && clearTimeout(timeoutId?.current);
                 if (cancellationSource.current) {
@@ -59,7 +59,7 @@ const useApiRequest = (url: string, method: 'get' | 'post' = 'get', requestData:
                     setTimeout(() => {
                         dispatch(setLoadingFalse())
                     }, 2000);
-                    setLoading(false);
+                    // setLoading(false);
                 }
             };
 
