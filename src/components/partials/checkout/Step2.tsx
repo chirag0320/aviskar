@@ -216,7 +216,7 @@ function Step2() {
           control={<Checkbox checked={changeDiffrenceDeliveryMethods} onClick={() => {
             toggleChangeDiffrenceDeliveryMethods()
           }} />}
-          label="Select different delivery method per products"
+          label="Select different delivery method per product"
         />}
       </Box>
       <Stack className="ProductList">
