@@ -73,12 +73,12 @@ const ContactUsForm = () => {
                     register={register}
                     error={errors.reason}
                     name="reason"
-                    label="Reason:"
+                    label="Reason* :"
                     control={control}
                     variant='outlined'
                     margin='none'
                     setValue={setValue}
-                    required
+                    // required
                     className='SelectReason'
                 >
                     {reasonsForContact.length > 0 && reasonsForContact.map((reason) => (
@@ -89,21 +89,21 @@ const ContactUsForm = () => {
                     register={register}
                     error={errors.name}
                     name="name"
-                    label="Your name:"
+                    label="Your name* :"
                     placeholder="Enter your name."
                     variant='outlined'
                     margin='none'
-                    required
+                    // required
                 />
                 <RenderFields
                     register={register}
                     error={errors.email}
                     name="email"
-                    label="Your email:"
+                    label="Your email* :"
                     placeholder="Enter your email address."
                     variant='outlined'
                     margin='none'
-                    required
+                    // required
                 />
                 <RenderFields
                     register={register}
@@ -111,24 +111,24 @@ const ContactUsForm = () => {
                     control={control}
                     type='number'
                     name="phone"
-                    label="Your phone:"
+                    label="Your phone* :"
                     placeholder="Enter your phone number."
                     variant='outlined'
                     margin='none'
-                    required
+                    // required
                 />
                 <RenderFields
                     register={register}
                     error={errors.enquiry}
                     name="enquiry"
-                    label="Enquiry:"
+                    label="Enquiry* :"
                     placeholder="Enter your enquiry."
                     variant='outlined'
                     multiline={true}
                     rows={7}
                     className='EnquiryTexaea'
                     margin='none'
-                    required
+                    // required
                 />
                 <Box className="FormAction">
                     <Button className='GetInTouchSubmitBtn' variant="contained" type="submit" disabled={loading}>Submit</Button>
