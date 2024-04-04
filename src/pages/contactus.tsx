@@ -15,8 +15,10 @@ import { ENDPOINTS } from '@/utils/constants';
 import Map from '@/components/partials/contactus/Map';
 import { useAppSelector } from '@/hooks';
 import Loader from '@/components/common/Loader';
+import Toaster from '@/components/common/Toaster';
 
 function ContactUs() {
+  const openToaster = useAppSelector(state => state.homePage.openToaster)
   const checkLoadingStatus = useAppSelector(state => state.homePage.loading);
   const configDetails = useAppSelector(state => state.homePage.configDetails)
   // console.log("🚀 ~ ContactUs ~ configDetails:", configDetails)
@@ -32,6 +34,7 @@ function ContactUs() {
           title="Home"
           lang="en"
         />
+        {openToaster && <Toaster/>}
         <Box id="ContactUsPage" className='ContactUsPage' component="section">
           <Box className="TitleWrapper">
             <PageTitle title="Contact us" />

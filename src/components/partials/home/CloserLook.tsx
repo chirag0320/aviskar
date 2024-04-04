@@ -142,11 +142,16 @@ function CloserLook() {
           : <RecordNotFound message="No destination available" />
         }
       </Container>
-      <Stack className="Action" onClick={() => {
+      {/* <Stack className="Action" onClick={() => {
           navigate('/blog')
         }}>
         <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained">Discover More</Button>
-      </Stack>
+      </Stack> */}
+      <Stack className="Action">
+          <Button className="DiscoverMore" name='CloserLook' aria-label="CloserLook" variant="contained" onClick={()=>{
+            navigate('/blog')
+          }}>Discover More</Button>
+        </Stack>
     </Container>
   )
 }
