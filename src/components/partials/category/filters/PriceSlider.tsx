@@ -4,9 +4,7 @@ import { Box, Slider, Typography } from '@mui/material'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 let temp = 0
 
-const defaultPrice = [0, 100]
 const PriceSlider = ({ minPrice, maxPrice, setSelectedPrice, selectedPrice }: { minPrice: number, maxPrice: number, setSelectedPrice: any, selectedPrice?: number[] | null }) => {
-    console.log("🚀 ~ PriceSlider ~ minPrice:", minPrice,maxPrice,selectedPrice)
     const [value, setValue] = useState<number[]>(selectedPrice ? [selectedPrice[0], selectedPrice[1]] : [minPrice, maxPrice])
     const clearFilters = useAppSelector(state => state.category.clearFilters)
     const debouncedValue = useDebounce(value, 700);

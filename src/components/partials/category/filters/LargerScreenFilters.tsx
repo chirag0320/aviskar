@@ -18,7 +18,6 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
     // const searchParams = useMemo(() => new URLSearchParams(window.location.search), [window.location.search])
     const dispatch = useAppDispatch();
     const categoryData = useAppSelector(state => state.category)
-    console.log("🚀 ~ LargerScreenFilters ~ categoryData:", categoryData)
 
     const clearFiltersHandler = () => {
         dispatch(setClearFilters(true));
