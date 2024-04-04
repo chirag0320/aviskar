@@ -125,13 +125,13 @@ export const SectionHeading = React.memo(({ title, description }: SectionHeading
   );
 });
 
-export const PageTitle = React.memo(({ title, backToDashboard }: any) => {
+export const PageTitle = React.memo(({ title, backToDashboard, maxWidth }: any) => {
   const handleBackToDashboard = () => {
     // Logic to redirect to the homepage
   };
   return (
     <Box className="PageTitle">
-      <Container>
+      <Container maxWidth={maxWidth}>
         <Stack justifyContent="space-between" alignItems="center">
           <Typography variant="h4" component="h2">{title}</Typography>
           {backToDashboard && <Button className="BackToDashboard" onClick={handleBackToDashboard} startIcon={<ArrowLeft />}>Back To Dashboard</Button>}

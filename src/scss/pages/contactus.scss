@@ -64,21 +64,24 @@
     padding-bottom: 70px;
 
     @include media($md) {
-        padding-bottom: 60px;
+        padding-bottom: 40px;
+    }
+
+    @include media($sm) {
+        padding-bottom: 24px;
     }
 
     .Title {
         line-height: 36px;
-        letter-spacing: -1px;
 
         @include media($md) {
-            font-size: 26px;
+            // font-size: 26px;
             line-height: 33px;
         }
     }
 
     .ContactCardsWrapper {
-        padding-top: 72px;
+        padding-top: 20px;
         gap: 30px;
         justify-content: center;
         flex-wrap: wrap;
@@ -88,13 +91,8 @@
         }
 
         @include media($md) {
-            padding-top: 60px;
+            padding-top: 0px;
         }
-
-        @include media($sm) {
-            padding-top: 40px;
-        }
-
 
         .ContactCard {
             padding: 35px 30px 30px 30px;
@@ -113,11 +111,7 @@
             }
 
             @include media($sm) {
-                width: calc(75% - 20px);
-            }
-
-            @include media($xs) {
-                width: calc(100% - 20px);
+                width: 100%;
             }
 
 
@@ -156,12 +150,12 @@
 
         @include media($md) {
             flex-direction: column;
-            padding: 50px 0;
+            padding: 30px 0;
 
         }
 
         @include media($sm) {
-            padding: 40px 0;
+            @include padding-vertical(30, 20);
         }
 
 
@@ -170,12 +164,19 @@
 
             #GetintouchForm {
                 margin-top: 28px;
+                @include media($sm) {
+                    margin-top: 20px;
+                }
 
                 .InputRow {
                     margin-bottom: 38px;
 
-                    @include media($sm) {
+                    @include media($md) {
                         margin-bottom: 24px;
+                    }
+
+                    @include media($sm) {
+                        margin-bottom: 20px;
                     }
 
 

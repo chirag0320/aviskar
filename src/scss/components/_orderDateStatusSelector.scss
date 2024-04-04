@@ -1,0 +1,81 @@
+.OrderDateStatusSelector {
+    padding: 30px 0;
+
+    .OrderDateStatusSelectorWrapper {
+        justify-content: space-between;
+        align-items: center;
+        gap: 50px;
+
+        @include media($md) {
+            flex-direction: column;
+            align-items: start;
+            gap: 30px;
+        }
+
+        .OrderDateStatusWrapper {
+            gap: 20px;
+            flex: 1;
+            // width: 70%;
+
+            @include media($md) {
+                width: 100%;
+            }
+
+            @include media($ssm) {
+                flex-direction: column;
+            }
+
+            .DateCalenderWrapper,
+            .SelectStatusWrapper {
+                width: 50%;
+
+                @include media($md) {
+                    width: 100%;
+                }
+            }
+
+            .DateCalenderWrapper {
+                .DateRangePickerWrapper {
+                    height: 100%;
+
+                    .DateRangePicker {
+                        height: 100%;
+                        width: 100%;
+
+                        [class*="_spectrum-InputGroup"],
+                        [class*="_spectrum-FieldButton"] {
+                            height: 100%;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        .ButtonsWrapper {
+            gap: 5px;
+            align-items: center;
+            justify-content: flex-end;
+
+            @include media($md) {
+                align-self: end;
+            }
+
+            .MuiButton-root {
+                @include media-min($xl) {
+                    min-width: 150px;
+                    font-size: 18px;
+                }
+
+                @include media($md) {
+                    padding: 12px 20px;
+                }
+
+                @include media($sm) {
+                    padding: 9px 18px;
+                }
+            }
+
+        }
+    }
+}
