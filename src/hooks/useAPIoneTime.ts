@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useAppDispatch } from '.'
 import { setLoadingFalse, setLoadingTrue } from '@/redux/reducers/homepageReducer'
 
-const useAPIoneTime = ({ service, endPoint, body, params }: { service: any, endPoint?: string, body?: any, params?: any }) => {
+const useAPIoneTime = ({ service, endPoint, body, params }: { service: any, endPoint?: string, body?: any, params?: any,callAgain?:any }) => {
     const dispatch = useAppDispatch()
     useEffect(() => {
         const apiCall = async () => {

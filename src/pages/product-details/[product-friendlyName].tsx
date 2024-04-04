@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react"
 import { Button, Container } from "@mui/material"
 
 // Components
@@ -20,10 +20,11 @@ function ProductDetail({ params }: any) {
   const checkLoadingStatus = useAppSelector(state => state.category.loading)
   const { productDetailsData } = useAppSelector((state) => state.category)
   const dispatch = useAppDispatch()
-
+  const endPoint = useMemo(() => {
+    return ENDPOINTS.productDetails.replace('{{product-id}}', params?.["product-friendlyName"])
+  }, [params])
   useAPIoneTime({
-    service: getProductDetailsData, endPoint: ENDPOINTS.productDetails.replace('{{product-id}}', params?.["product-friendlyName"] //params?.["product-friendlyName"]
-    )
+    service: getProductDetailsData, endPoint, params : params
   })
 
   useEffect(() => {

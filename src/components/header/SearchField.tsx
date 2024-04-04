@@ -61,7 +61,8 @@ function SearchField() {
 
   const handleSearch = () => {
     if (inputValue !== "") {
-      navigate(`/search/?keyword=${inputValue}`);
+      const key = Date.now()
+      navigate(`/search/?keyword=${inputValue}`, { state: key });
     }
     else {
       showToaster({ message: "Please enter some search keyword.", severity: "info" })
@@ -76,7 +77,10 @@ function SearchField() {
       getOptionLabel={(option: Option) => option.name}
       inputValue={inputValue}
       renderOption={(props, option: Option) => (
-        <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props} onClick={() => navigate(`/product-details/${option?.friendlypagename}`)}>
+        <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props} onClick={() => {
+          const key = Date.now()
+          navigate(`/product-details/${option?.friendlypagename}`, { state: key })
+        }}>
           {/* Uncomment below if you have an image associated with each option */}
           {/* <img
             loading="lazy"
