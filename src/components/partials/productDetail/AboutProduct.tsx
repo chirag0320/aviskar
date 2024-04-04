@@ -81,6 +81,7 @@ function AboutProduct({ productId }: any) {
   });
   const { productDetailsData } = useAppSelector((state) => state.category)
   const { configDetails: configDetailsState, isLoggedIn, openToaster } = useAppSelector((state) => state.homePage)
+  console.log("🚀 ~ AboutProduct ~ productDetailsData:", configDetailsState)
   const [quantityCount, setQuantityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
   const [productIds, setProductIds] = useState({ productIds: [Number(productId)] })
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
@@ -508,9 +509,9 @@ function AboutProduct({ productId }: any) {
                 </Accordion>
               </Box>
               <Divider /></> : null}
-            {!!productDetailsData?.imagesCondition && <Stack className="InfoMessage">
+            {!!productDetailsData?.imageConditionEnable && <Stack className="InfoMessage">
               <CameraIcon />
-              <Typography variant="body2">{productDetailsData?.imagesCondition}</Typography>
+              <Typography variant="body2">{configDetailsState?.imageconditiontext?.value}</Typography>
             </Stack>}
           </form>
         </Box>
