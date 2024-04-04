@@ -5,36 +5,45 @@
         justify-content: space-between;
         align-items: center;
 
+        @include media($md) {
+            flex-direction: column;
+            align-items: start;
+            gap: 30px;
+        }
+
         .OrderDateStatusWrapper {
             gap: 30px;
             width: 70%;
 
+            @include media($md) {
+                width: 100%;
+            }
+
+            @include media($ssm) {
+                flex-direction: column;
+            }
+
             .DateCalenderWrapper,
             .SelectStatusWrapper {
                 width: 50%;
-                // height: 50px;
+
+                @include media($ssm) {
+                    width: 100%;
+                }
             }
 
             .DateCalenderWrapper {
-                .A-HlBa_spectrum-FieldLabel {
-                    display: none;
-                }
-
-                .xSyFOq_spectrum--medium {
-                    background-color: transparent;
-                }
-
-                ._2n04KW_react-spectrum-Datepicker-fieldWrapper {
-                    width: 100%;
+                .DateRangePickerWrapper {
                     height: 100%;
 
-                    .ZTA2ya_spectrum-InputGroup {
+                    .DateRangePicker {
                         height: 100%;
-                    }
+                        width: 100%;
 
-                    .YO3Nla_spectrum-Textfield-input,
-                    .Dniwja_spectrum-FieldButton {
-                        height: 100%;
+                        [class*="_spectrum-InputGroup"],
+                        [class*="_spectrum-FieldButton"] {
+                            height: 100%;
+                        }
                     }
                 }
             }
@@ -47,9 +56,9 @@
             justify-content: flex-end;
             width: 30%;
 
-            // .SearchButton {
-            //     background-color: $success;
-            // }
+            @include media($md) {
+                width: 100%;
+            }
         }
     }
 }

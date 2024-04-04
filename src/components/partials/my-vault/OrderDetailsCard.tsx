@@ -21,7 +21,7 @@ function OrderDetailsCard() {
                     </Box>
                     <Stack className='OrderButtonsWrapper'>
                         <Button variant="contained" size="small" color="error">Cancelled</Button>
-                        <Button variant="contained" size="small" color="error">Approved Cancellation</Button>
+                        <Button variant="contained" size="small" color="success">Approved Cancellation</Button>
                     </Stack>
                 </Stack>
             </Card>

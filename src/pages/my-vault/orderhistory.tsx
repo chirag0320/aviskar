@@ -23,8 +23,9 @@ function Topics(paramsData: any) {
             title="Order History"
             lang="en"
           />
+          <PageTitle title="Orders" backToDashboard={true} />
           <Box id="OrderHistoryPage" className='OrderHistoryPage' component="section">
-            <Container id="PageTopics">
+            <Container>
               <Box className="Content OrderHistoryContent">
                 <OrderDateStatusSelector />
                 <Divider />

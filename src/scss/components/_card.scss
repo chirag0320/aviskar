@@ -506,7 +506,8 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    svg{
+
+    svg {
       width: 41px;
       height: 41px;
     }
@@ -632,7 +633,8 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      svg{
+
+      svg {
         width: 41px;
         height: 41px;
       }
@@ -1022,9 +1024,10 @@
 }
 
 // Start :: orderdetailscard css
-.OrderDetailsCardsWrapper {
-  .OrderDetailsCard {
-    padding: 15px;
+.OrderDetailsCard {
+  &.MuiCard-root {
+
+    padding: 20px;
     border-radius: 15px;
     box-shadow: 6px 6px 27px 0px rgba($black, 0.05);
 
@@ -1035,16 +1038,22 @@
     .TopWrapper {
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 15px;
+      padding-bottom: 20px;
     }
 
     .OderDateInfoWrapper {
-      padding: 15px 0;
+      padding: 20px 0;
     }
 
     .OrderTotalButtonsWrapper {
       align-items: center;
       justify-content: space-between;
+
+      @include media($xs) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
 
       .OrderButtonsWrapper {
         gap: 5px;
