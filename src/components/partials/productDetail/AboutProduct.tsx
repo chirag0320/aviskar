@@ -174,9 +174,9 @@ function AboutProduct({ productId }: any) {
       }
     }) as any)
     showToaster({
-      message: 'The product has been added to your product wishlist',
-      buttonText: 'product wishlist',
-      redirectButtonUrl: 'wishlist',
+      message: 'The product has been added to your product watchlist',
+      buttonText: 'product watchlist',
+      redirectButtonUrl: 'watchlist',
       severity: 'success'
     })
   }

@@ -58,6 +58,9 @@ export const wishListPageSlice = createSlice({
         },
         setLoadingFalse: (state) => {
             state.loading = false
+        },
+        removeItemFromWishlist:(state,action)=>{
+            state.wishListItems = state.wishListItems.filter((item:any)=> !action.payload.includes(item.id))
         }
     },
 
@@ -132,6 +135,6 @@ export const wishListPageSlice = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse } = wishListPageSlice.actions
+export const { setLoadingTrue, setLoadingFalse, removeItemFromWishlist } = wishListPageSlice.actions
 
 export default wishListPageSlice.reducer
