@@ -150,9 +150,8 @@
                 }
 
 
-
                 &.PaymentAmountWrapper {
-                    background-color: rgba($blueCyan, 0.1);
+                    background-color: $white;
                     border-radius: 0 0 15px 15px;
                     border-bottom: none;
                     .ProductList {
@@ -165,7 +164,6 @@
                         }
                       }
                       .PricingDetails {
-                        margin-top: 50px;
                         width: 100%;
                         @include media($sm) {
                           margin-top: 30px;

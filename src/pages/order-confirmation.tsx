@@ -5,14 +5,13 @@ import { Box, Stack, Container, Typography, Icon, Button, TableContainer, Table,
 import GreenConfirmationIcon from "@/assets/icons/GreenConfirmationIcon";
 import LogoGoldCoin from "@/assets/logos/LogoGoldCoin.png";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
-import { getOrderConfirmationDetails } from "@/redux/reducers/orderConfirmationDetails";
+import { getOrderConfirmationDetails } from "@/redux/reducers/orderConfirmationDetailsReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { useAppSelector } from "@/hooks";
 // import { rows } from "./order-details";
 import { navigate } from "gatsby";
 import Loader from "@/components/common/Loader";
 import { roundOfThePrice } from "@/utils/common";
-import { OutlinedCheckIcon } from "@/assets/icons";
 
 function OrderConfirmation(props: any) {
     const checkLoadingStatus = useAppSelector(state => state.orderConfirmationDetails.loading);
@@ -34,15 +33,16 @@ function OrderConfirmation(props: any) {
 
     return (
         <Layout>
-            <>
-                <Loader open={checkLoadingStatus} />
-                <Seo
-                    keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
-                    title="Home"
-                    lang="en"
-                />
-                <Box id="OrderConfirmation" className="OrderConfirmationPage" component="section">
-                    <Container>
+            <Loader open={checkLoadingStatus} />
+            <Seo
+                keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
+                title="Home"
+                lang="en"
+            />
+
+            <Box id="OrderConfirmation" className="OrderConfirmationPage" component="section">
+                {!orderConfirmationDetailsData?.orderNumber ? <Typography variant="body1" style={{ textAlign: "center" }}>Order Not Found</Typography> :
+                    (<Container>
                         <Stack className="OrderReceivedMessageWrapper">
                             <Icon className='GreenConfirmationIcon'><GreenConfirmationIcon /></Icon>
                             <Typography variant="subtitle2" className="OrderReceivedMessage">Your order has been received.</Typography>
@@ -109,21 +109,27 @@ function OrderConfirmation(props: any) {
                                 <Stack className="TitleValueWrapper PaymentAmountWrapper">
                                     <Box className="PricingDetails">
                                         {renderPricingItem("Subtotal", '$' + roundOfThePrice(orderConfirmationDetailsData?.orderTotal as number))}
-                                        <Divider />
-                                        {renderPricingItem("Shipping fee", `$${roundOfThePrice(Number(orderConfirmationDetailsData?.shippingFee))}`)}
-                                        {renderPricingItem("Payment fee", `$${roundOfThePrice(Number(orderConfirmationDetailsData?.paymentFee))}`)}
-                                        <Divider />
-                                        {orderConfirmationDetailsData?.orderTax !== 0 && renderPricingItem("Order Tax", `$${roundOfThePrice(orderConfirmationDetailsData?.orderTax)}`)}
-                                        <Divider />
-                                        {orderConfirmationDetailsData?.orderDiscount !== 0 && renderPricingItem("Order Discount", `$${roundOfThePrice(orderConfirmationDetailsData?.orderDiscount)}`)}
+
+                                        {orderConfirmationDetailsData?.shippingMethod && <>
+                                            <Divider />
+                                            {renderPricingItem(orderConfirmationDetailsData?.shippingMethod, `$${roundOfThePrice(Number(orderConfirmationDetailsData?.shippingFee))}`)}
+                                        </>}
+                                        {orderConfirmationDetailsData?.paymentMethod && <>
+                                            <Divider />
+                                            {renderPricingItem(orderConfirmationDetailsData?.paymentMethod, `$${roundOfThePrice(Number(orderConfirmationDetailsData?.paymentFee))}`)}
+                                        </>}
+
+                                        {orderConfirmationDetailsData?.orderTax !== 0 && <><Divider />
+                                            {renderPricingItem("GST Incuded", `$${roundOfThePrice(orderConfirmationDetailsData?.orderTax as number)}`)}
+                                        </>}
+
+                                        {orderConfirmationDetailsData?.orderDiscount !== 0 && <><Divider />
+                                            {renderPricingItem("Order Discount", `$${roundOfThePrice(orderConfirmationDetailsData?.orderDiscount as number)}`)}
+                                        </>}
                                         <Stack className="PricingItem TotalItem">
                                             <Typography variant="subtitle1">Total</Typography>
-                                            <Typography variant="subtitle1">${roundOfThePrice(Number(orderConfirmationDetailsData?.shippingFee) + Number(orderConfirmationDetailsData?.orderTotal) + Number(orderConfirmationDetailsData?.orderTax)) + Number(orderConfirmationDetailsData?.paymentFee)}</Typography>
+                                            <Typography variant="subtitle1">${roundOfThePrice(Number(orderConfirmationDetailsData?.orderTotal))}</Typography>
                                         </Stack>
-                                        {/* <Stack className="PaymentMethod">
-                                            <OutlinedCheckIcon />
-                                            <Typography className="Message" variant="titleLarge" component="p">Payment Method: <Typography variant="inherit" component="span">{finalDataForTheCheckout?.paymentType}</Typography></Typography>
-                                        </Stack> */}
                                     </Box>
                                 </Stack>
                             </Box>
@@ -138,9 +144,8 @@ function OrderConfirmation(props: any) {
                         <Button className='ContinueBtn' size='large' variant="contained" onClick={() => {
                             navigate("/");
                         }}>Continue</Button>
-                    </Container>
-                </Box>
-            </>
+                    </Container>)}
+            </Box>
         </Layout>
     )
 }

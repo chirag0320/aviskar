@@ -175,7 +175,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
             <Stack className="ActionWrapper">
                 <Stack className="Left">
                     <Button color="primary" variant="contained" onClick={updateWishListHandler} disabled={wishListstate.loading || !isWishListUpdated}>Update Watchlist</Button>
-                    <Button color="primary" variant="outlined" onClick={toggleEmailFriend}>Email a friend</Button>
+                    {/* <Button color="primary" variant="outlined" onClick={toggleEmailFriend}>Email a friend</Button> */}
                 </Stack>
                 <Stack className="Right">
                     <Button color="primary" variant="outlined" onClick={removeSelectedItemsHandler} disabled={wishListstate.loading || !Object.values(selectedItems).some((value) => value === true)}>Remove</Button>
