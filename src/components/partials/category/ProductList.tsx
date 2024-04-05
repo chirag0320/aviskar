@@ -70,11 +70,11 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
             </>
           )
         }
-        {!categoryData.loading && categoryData.items?.length === 0 && <Typography variant="h6" component="p">There are no products in this category or filters you have selected.</Typography>}
       </Box>
-      <Stack className="Pagination">
-        {categoryData?.count > 0 && <Pagination count={Math.ceil(categoryData?.count / pageSize)} page={page} shape="rounded" onChange={handlePageChange} />}
-      </Stack>
+      {!categoryData.loading && categoryData.items?.length === 0 && <Typography variant="h6" component="p">There are no products in this category or filters you have selected.</Typography>}
+      {categoryData?.count > 0 && <Stack className="Pagination">
+        <Pagination count={Math.ceil(categoryData?.count / pageSize)} page={page} shape="rounded" onChange={handlePageChange} />
+      </Stack>}
     </Box>
   )
 }

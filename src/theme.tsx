@@ -670,7 +670,7 @@ const theme: Theme = createTheme({
           lineHeight: "28px",
           fontWeight: 500,
           "&.Mui-selected": {
-            backgroundColor: variable.elephant,
+            backgroundColor: variable.yellowFuel,
             color: variable.white,
             fontWeight: 700,
           },
