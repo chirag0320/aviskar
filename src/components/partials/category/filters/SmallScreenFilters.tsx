@@ -58,7 +58,7 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
                 <Stack className="DialogHeader">
                     <DialogTitle variant="subtitle2">FILTER BY</DialogTitle>
                     <Button variant="text" onClick={clearFiltersHandler}>Clear Filter</Button>
-                    <IconButton className="CloseButton" onClick={toggleFilterBy}><CrossIcon /></IconButton>
+                    <IconButton className="CloseButton" onClick={toggleFilterBy}><CrossIcon fontSize="small" /></IconButton>
                 </Stack>
                 <DialogContent>
                     <Stack className="TabsWrapper">
