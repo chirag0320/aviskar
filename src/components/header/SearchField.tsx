@@ -105,7 +105,7 @@ function SearchField() {
             }}
             onKeyDown={handleKeyPress}
           />
-          <IconButton color="secondary" className="SearchButton" onClick={handleSearch} >
+          <IconButton color="secondary" aria-label='SearchButton' className="SearchButton" onClick={handleSearch} >
             <Search fontSize="small" />
           </IconButton>
         </Stack>
