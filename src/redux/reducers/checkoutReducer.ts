@@ -137,7 +137,7 @@ interface CheckoutPageState {
     subTotal: number,
     finalDataForTheCheckout: any,
     insuranceAndTaxCalculation: Fees | null,
-    craditCardCharges: CreditCardCharges,
+    craditCardCharges: CreditCardCharges | null,
     isOTPEnabled: boolean | null,
     isOTPSent: boolean | null,
     isOTPVerified: boolean | null,
@@ -238,7 +238,6 @@ export const checkoutPage = createSlice({
         updateSubTotalCheckoutPage: (state, action) => {
             state.subTotal += action.payload;
             state.subTotal = Math.round((state.subTotal + Number.EPSILON) * 100) / 100
-            localStorageSetItem('subTotal', JSON.stringify(state.subTotal))
         },
         updateFinalDataForTheCheckout: (state, action) => {
             state.finalDataForTheCheckout = { ...state.finalDataForTheCheckout, ...action.payload }
@@ -310,7 +309,6 @@ export const checkoutPage = createSlice({
         })
         builder.addCase(getCheckoutPageData.fulfilled, (state, action) => {
             state.checkoutPageData = action?.payload?.data?.data
-            localStorageSetItem('checkoutPageData', JSON.stringify(state.checkoutPageData))
             state.loading = false;
         })
         builder.addCase(getCheckoutPageData.rejected, (state, action) => {
@@ -322,7 +320,6 @@ export const checkoutPage = createSlice({
         })
         builder.addCase(getInsuranceAndTaxDetailsCalculation.fulfilled, (state, action) => {
             state.insuranceAndTaxCalculation = action?.payload?.data?.data
-            localStorageSetItem('insuranceAndTaxCalculation', JSON.stringify(state.insuranceAndTaxCalculation))
             // state.loading = false;
         })
         builder.addCase(getInsuranceAndTaxDetailsCalculation.rejected, (state, action) => {
