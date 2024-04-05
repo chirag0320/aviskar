@@ -16,7 +16,7 @@ import { ENDPOINTS } from "@/utils/constants";
 import { downloadOrderInvoice, getOrderDetailsData } from "@/redux/reducers/orderDetailsReducer";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import Toaster from "@/components/common/Toaster";
-import { hasFulfilled } from "@/utils/common";
+import { hasFulfilled, roundOfThePrice } from "@/utils/common";
 import useShowToaster from "@/hooks/useShowToaster";
 import { AxiosError } from "axios";
 import Loader from "@/components/common/Loader";
@@ -57,7 +57,7 @@ function orderDetails({ location }: { location: any }) {
             // link.setAttribute('download', 'file.pdf'); //or any other extension
             // document.body.appendChild(link);
             // link.click();
-            console.log("🚀 ~ downloadInvoiceHandler ~ response:", response.payload?.data)
+            // console.log("🚀 ~ downloadInvoiceHandler ~ response:", response.payload?.data)
             const blob = new Blob([pdfData], { type: 'application/pdf' });
 
             const link = document.createElement('a');
@@ -106,10 +106,10 @@ function orderDetails({ location }: { location: any }) {
                                         <Box className="OrderStatusWrapper">
                                             <Typography variant="body1">Order Status</Typography>
                                             <Stack sx={{ gap: "10px" }} className="ButtonsWrapper">
-                                                <Button variant="contained" size="small" className="RedButton">{orderDetails?.orderStatus}</Button>
-                                                {/* <Button variant="contained" size="small" className="RedButton">Approved Cancellation</Button> */}
+                                                <Button variant="contained" size="small" className="StatusButton" style={{ backgroundColor: orderDetails?.orderStatusColor ?? "" }}>{orderDetails?.orderStatus}</Button>
+                                                {orderDetails?.alertStatus &&
+                                                    <Button variant="contained" size="small" className="StatusButton" style={{ backgroundColor: orderDetails?.alertStatusColor ?? "" }}>{orderDetails?.alertStatus}</Button>}
                                             </Stack>
-
                                         </Box>
                                         <Box className="PaymentWrapper">
                                             <Typography variant="body1">Payment</Typography>
@@ -151,7 +151,7 @@ function orderDetails({ location }: { location: any }) {
                                     </Box>
                                 </Box>
 
-                                {/* <Box className="OrderDetailTableWrapper"> */}
+                                <Box className="TableContainerWrapper">
                                 <TableContainer
                                     className="OrderDetailTableWrapper"
                                     sx={{}}
@@ -175,21 +175,21 @@ function orderDetails({ location }: { location: any }) {
                                                     <TableCell component="th" scope="row">
                                                         {row.productName}
                                                     </TableCell>
-                                                    <TableCell>{row.unitPrice}</TableCell>
+                                                    <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
                                                     <TableCell>{row.quantity}</TableCell>
-                                                    <TableCell>{row.totalPrice}</TableCell>
+                                                    <TableCell>${roundOfThePrice(row.totalPrice)}</TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-                                {/* </Box> */}
+                                </Box>
 
                                 <Stack className='TotalShippingDetailsWrapper'>
                                     <Stack className='SubtotalShippingWrapper'>
                                         <Box className="Subtotal">
                                             <Typography variant="body1" sx={{ marginBottom: "2px" }}>Subtotal</Typography>
-                                            <Typography variant="subtitle1"   >${orderDetails?.orderSubtotal}</Typography>
+                                            <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.orderSubtotal)}</Typography>
                                         </Box>
                                         <Box className="SecureShipping">
                                             <Typography variant="body1" sx={{ marginBottom: "2px" }}>Secure Shipping</Typography>
@@ -198,10 +198,10 @@ function orderDetails({ location }: { location: any }) {
                                     </Stack>
                                     <Box className="TotalWrapper">
                                         <Typography variant="body1">Total</Typography>
-                                        <Typography variant="subtitle2" className="TotalValue">${orderDetails?.orderTotal}</Typography>
+                                        <Typography variant="subtitle2" className="TotalValue">${roundOfThePrice(orderDetails?.orderTotal)}</Typography>
                                         <Stack sx={{ gap: "12px" }}>
                                             <Typography variant="overline">GST Included:</Typography>
-                                            <Typography variant="overline">${orderDetails?.orderTax}</Typography>
+                                            <Typography variant="overline">${roundOfThePrice(orderDetails?.orderTax)}</Typography>
                                         </Stack>
                                     </Box>
                                 </Stack>
@@ -215,7 +215,8 @@ function orderDetails({ location }: { location: any }) {
                                             <Typography variant="subtitle2">{orderDetails?.shippingTextP1}</Typography>
                                         </Stack>
                                         <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.shippingTextP2}</Typography>
-                                        <Link variant="overline" className="lineHeight25" target="_blank" href={orderDetails?.shippingTextP3 ?? "#"}>{orderDetails?.shippingTextP3}</Link>
+                                        <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.shippingTextP3}</Typography>
+                                        <Link variant="overline" className="lineHeight25" target="_blank" href={orderDetails?.shippingTextP4 ?? "#"}>{orderDetails?.shippingTextP4}</Link>
                                     </Box>
                                     <Box className="Card PaymentCard">
                                         <Stack className='IconTitleWrapper'>
@@ -223,15 +224,11 @@ function orderDetails({ location }: { location: any }) {
                                             <Typography variant="subtitle2">{orderDetails?.paymentTextP1}</Typography>
                                         </Stack>
                                         <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.paymentTextP2}</Typography>
-                                        {/* <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{Bank transfer payments are free and required <br />within 24 hours of order Commonwealth Bank <br />
-                                        Account Name: <Typography
-                                            variant="overline" className="lineHeight25">Queenslandmint</Typography><br />
-                                        BSB: <Typography
-                                            variant="overline" className="lineHeight25">000-000</Typography><br />
-                                        Account: <Typography
-                                            variant="overline" className="lineHeight25">12345 67890 123456
-                                        </Typography>}</Typography> */}
-                                        <Link variant="overline" className="lineHeight25" target="_blank" href={orderDetails?.paymentTextP3 ?? "#"}>{orderDetails?.paymentTextP3}</Link>
+                                        <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.paymentTextP3}</Typography>
+                                        <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.paymentTextP4}</Typography>
+                                        <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.paymentTextP5}</Typography>
+                                        <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.paymentTextP6}</Typography>
+                                        <Link variant="overline" className="lineHeight25" target="_blank" href={orderDetails?.paymentTextP7 ?? "#"} >{orderDetails?.paymentTextP7}</Link>
                                     </Box>
                                     <Box className="Card SellingCard">
                                         <Stack className='IconTitleWrapper'>

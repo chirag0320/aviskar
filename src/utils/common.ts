@@ -25,10 +25,12 @@ export function progressBarLogic({ currentprice, min, max }: any) {
 export function valueChangeForPrice({ currentprice, yesterdayprice }: { currentprice: number, yesterdayprice: number }) {
   return (((currentprice - yesterdayprice) / yesterdayprice) * 100).toFixed(2)
 }
-export function roundOfThePrice(price: number) {
-  // return Math.round((price + Number.EPSILON) * 100) / 100
-  // return (price).toFixed(2);
-  return (Math.round((price + Number.EPSILON) * 100) / 100).toFixed(2);
+export function roundOfThePrice(price: any) {
+  if (price == null || isNaN(Number(price))) {
+    return '...';
+  }
+  const roundedPrice = Number(price).toFixed(2);
+  return roundedPrice;
 }
 export const shipmentTypeToEnum: any = {
   'LocalShipping': 3,
@@ -87,4 +89,9 @@ export const debounceFunction = (func: any, delay: any) => {
       func.apply(this, args);
     }, delay);
   };
+};
+// Function to capitalize the first character
+export const capitalizeFirstChar = (str: any) => {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
 };

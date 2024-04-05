@@ -76,7 +76,7 @@ function OrderSummary() {
   const dispatch = useAppDispatch()
   const { showToaster } = useShowToaster();
   const { deviceInfo, locationInfo }: any = useDeviceDetails()
-  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading, orderId } = useAppSelector((state) => state.checkoutPage)
+  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading, orderId, message } = useAppSelector((state) => state.checkoutPage)
   const [body, setBody] = useState<Body | null>(null)
   const [totalValueNeedToPayFromCraditCart, setTotalValueNeedToPayFromCraditCart] = useState<any>({ OrderTotal: 0 })
   const [openOTPConfirmation, toggleOTPConfirmation] = useToggle(false)
@@ -117,14 +117,14 @@ function OrderSummary() {
           }
         }))
       }, 1000);
-      return ()=>{
+      return () => {
         timeoutid && clearTimeout(timeoutid)
       }
     }
     // }
   }, [orderTotal])
   useEffect(() => {
-    if (isOTPEnabled) {
+    if (isOTPEnabled || message) {
       toggleOTPConfirmation()
     }
     else if (isOTPEnabled === false) {
@@ -162,7 +162,7 @@ function OrderSummary() {
       placeOrderFun();
       dispatch(disableOTP())
     }
-  }, [isOTPEnabled])
+  }, [isOTPEnabled, message])
   const renderPricingItem = (title: string, value: string) => {
     return (
       <Stack className="PricingItem">
@@ -223,12 +223,12 @@ function OrderSummary() {
         <Divider />
         {finalDataForTheCheckout?.paymentType === 'CreditCard' && renderPricingItem("Credit Card Fees", `$${roundOfThePrice(Number(craditCardCharges?.creditCardFeeIncludingTax))}`)}
         {finalDataForTheCheckout?.paymentType === 'CreditCard' && < Divider />}
-        {renderPricingItem("GST Included", `$${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingTax) + Number(insuranceAndTaxCalculation?.vaultStorageTax) + Number(finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 ? finalDataForTheCheckout?.cartItemsWithLivePrice?.reduce((total: number, product: {
+        {renderPricingItem("GST Included", `$${roundOfThePrice(Number(craditCardCharges?.creditCardTax) + Number(insuranceAndTaxCalculation?.secureShippingTax) + Number(insuranceAndTaxCalculation?.vaultStorageTax) + Number(finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 ? finalDataForTheCheckout?.cartItemsWithLivePrice?.reduce((total: number, product: {
           LivePriceDetails: { taxPrice: number }
         }) => total + product?.LivePriceDetails?.taxPrice, 0) : 0))}`)}
         <Stack className="PricingItem TotalItem">
           <Typography variant="subtitle1">Total</Typography>
-          <Typography variant="subtitle1">${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax))}</Typography>
+          <Typography variant="subtitle1">${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax) + (finalDataForTheCheckout?.paymentType === 'CreditCard' ? Number(craditCardCharges?.creditCardFeeIncludingTax) : 0))}</Typography>
         </Stack>
         <Stack className="PaymentMethod">
           <OutlinedCheckIcon />
@@ -241,7 +241,7 @@ function OrderSummary() {
           <Button variant="contained" onClick={onConfirmOrderHandler} disabled={!finalDataForTheCheckout?.termAndServiceIsRead || loading || finalDataForTheCheckout?.cartItemsWithLivePrice?.length < 1}>Confirm Order</Button>
         </Stack>
       </Box>
-      <OTPConfirmation open={openOTPConfirmation} onClose={toggleOTPConfirmation} />
+      <OTPConfirmation open={openOTPConfirmation} onClose={toggleOTPConfirmation} message={message} />
     </StepWrapper>
   )
 }

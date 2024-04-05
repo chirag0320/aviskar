@@ -12,6 +12,7 @@ import { useAppSelector } from "@/hooks";
 import { navigate } from "gatsby";
 import Loader from "@/components/common/Loader";
 import { roundOfThePrice } from "@/utils/common";
+import noImage from '../assets/images/noImage.png'
 
 function OrderConfirmation(props: any) {
     const checkLoadingStatus = useAppSelector(state => state.orderConfirmationDetails.loading);
@@ -44,7 +45,7 @@ function OrderConfirmation(props: any) {
                 {!orderConfirmationDetailsData?.orderNumber ? <Typography variant="body1" style={{ textAlign: "center" }}>Order Not Found</Typography> :
                     (<Container>
                         <Stack className="OrderReceivedMessageWrapper">
-                            <Icon className='GreenConfirmationIcon'><GreenConfirmationIcon /></Icon>
+                            <GreenConfirmationIcon />
                             <Typography variant="subtitle2" className="OrderReceivedMessage">Your order has been received.</Typography>
                         </Stack>
                         <Box className="DetailsWrapper">
@@ -54,13 +55,13 @@ function OrderConfirmation(props: any) {
                                 {/* <Typography variant="body1">You will receive an order confirmation email with details of your order and a link to track its progress.</Typography> */}
                             </Box>
                             <Box className="OrderDetailsWrapper">
-                                <Stack className="TitleValueWrapper">
+                                <Stack className="TitleValueWrapper OrderNo">
                                     <Typography variant="body1" className="Title">Order No.</Typography>
                                     <Button variant="text" onClick={() => navigate(`/order-details/?orderNo=${orderConfirmationDetailsData?.orderNumber}`)}>{orderConfirmationDetailsData?.orderNumber}</Button>
                                 </Stack>
                                 <Stack className="TitleValueWrapper">
                                     <Typography variant="body1" className="Title">Transaction Date and Time</Typography>
-                                    <Typography variant="subtitle1">{orderConfirmationDetailsData?.orderTime}, {orderConfirmationDetailsData?.orderDate}</Typography>
+                                    <Typography variant="titleLarge">{orderConfirmationDetailsData?.orderTime}, {orderConfirmationDetailsData?.orderDate}</Typography>
                                 </Stack>
                                 <Box className="TitleValueWrapper Orders">
                                     <Typography variant="body1" className="Title">Products:-</Typography>
@@ -71,44 +72,46 @@ function OrderConfirmation(props: any) {
                                             <Typography>$204.22</Typography>
                                         </Box>
                                     </Stack> */}
-                                    <TableContainer
-                                        className="OrderDetailTableWrapper"
-                                        sx={{}}
-                                    // component={Paper}
-                                    >
-                                        <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
-                                            <TableHead>
-                                                <TableRow className="OrderDetailsHeadRow">
-                                                    <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
-                                                    <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
-                                                    <TableCell sx={{ minWidth: "150px" }}>Quantity</TableCell>
-                                                    <TableCell sx={{ minWidth: "200px" }}>Total</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {orderConfirmationDetailsData?.orderItems?.map((row) => (
-                                                    <TableRow
-                                                        key={row.productId}
-                                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                    >
-                                                        <TableCell component="th" scope="row">
-                                                            <img className="ProductImage"
-                                                                src={row.imageUrl} alt="Product image" loading="lazy"></img>
-                                                            {row.productName}
-                                                        </TableCell>
-                                                        <TableCell>${row.unitPrice}</TableCell>
-                                                        <TableCell>{row.quantity}</TableCell>
-                                                        <TableCell>${row.subTotal}</TableCell>
+                                    <Box className="TableContainerWrapper">
+                                        <TableContainer
+                                            className="OrderDetailTableWrapper"
+                                            sx={{}}
+                                        // component={Paper}
+                                        >
+                                            <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
+                                                <TableHead>
+                                                    <TableRow className="OrderDetailsHeadRow">
+                                                        <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
+                                                        <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
+                                                        <TableCell sx={{ minWidth: "150px" }}>Quantity</TableCell>
+                                                        <TableCell sx={{ minWidth: "200px" }}>Total</TableCell>
                                                     </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {orderConfirmationDetailsData?.orderItems?.map((row) => (
+                                                        <TableRow
+                                                            key={row.productId}
+                                                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                        >
+                                                            <TableCell component="th" scope="row">
+                                                                <img className="ProductImage"
+                                                                    src={row.imageUrl ?? noImage} alt="Product image" loading="lazy"></img>
+                                                                {row.productName}
+                                                            </TableCell>
+                                                            <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
+                                                            <TableCell>{row.quantity}</TableCell>
+                                                            <TableCell>${roundOfThePrice(row.subTotal)}</TableCell>
+                                                        </TableRow>
 
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </Box>
                                 </Box>
                                 <Stack className="TitleValueWrapper PaymentAmountWrapper">
                                     <Box className="PricingDetails">
-                                        {renderPricingItem("Subtotal", '$' + roundOfThePrice(orderConfirmationDetailsData?.orderTotal as number))}
+                                        {renderPricingItem("Subtotal", '$' + roundOfThePrice(orderConfirmationDetailsData?.subTotal as number))}
 
                                         {orderConfirmationDetailsData?.shippingMethod && <>
                                             <Divider />

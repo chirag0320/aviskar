@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, Typography, Card, CardContent, CardActions, Button, Stack, Box, } from "@mui/material"
 import { useAppSelector } from '@/hooks';
+import { capitalizeFirstChar } from '@/utils/common';
 
 interface MembershipCardProps {
   bgcolor: string,
@@ -30,7 +31,7 @@ function MembershipCard({ bgcolor, cardtitle, details }: MembershipCardProps) {
         }}
       >
         <CardContent>
-          <Typography className="CardTitle" variant='h4' sx={{ background: opacityColor }} component="h3">{cardtitle}</Typography>
+          <Typography className="CardTitle" variant='h4' sx={{ background: opacityColor }} component="h3">{capitalizeFirstChar(cardtitle)}</Typography>
           <Box className="Details" dangerouslySetInnerHTML={{ __html: details }}>
             {/* <Stack className="ContentWrapper">
               <Typography variant="body1" className="ContentTitle">Trade instantly:</Typography>

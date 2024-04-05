@@ -12,9 +12,9 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 let timeOut: any;
 function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: number, searchParams: URLSearchParams }) {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
-
   const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
   const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
+  const categoryItems = useAppSelector(state => state.category.items)
   const [isPriceChanged, setIsPriceChanged] = useState<boolean>(false);
   const clearFilters = useAppSelector(state => state.category.clearFilters)
   const dispatch = useAppDispatch();
@@ -120,11 +120,12 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
   }, [])
 
   return (
-    isSmallScreen ? (
+    // ensure that filtrs and price are not empty before hiding the all filters section
+    <Fragment>{(categoryItems.length > 0 || Object.keys(selectedFilters).length > 0 || isPriceChanged) ? (isSmallScreen ? (
       <SmallScreenFilters renderList={renderList} setSelectedFiltersMobile={setSelectedFilters} setSelectedPriceMobile={setSelectedPrice} setIsPriceChanged={setIsPriceChanged} />
     ) : (
       <LargerScreenFilters renderList={renderList} setSelectedFilters={setSelectedFilters} setSelectedPrice={setSelectedPrice} selectedFilters={selectedFilters} setIsPriceChanged={setIsPriceChanged} />
-    )
+    )) : null}</Fragment>
   )
 }
 
