@@ -69,13 +69,13 @@
                             flex-direction: column;
                         }
 
-                        .RedButton {
+                        .StatusButton {
                             font-size: 14px;
                             line-height: 20px;
                             font-weight: 600;
                             padding: 5px 15px;
                             border-radius: 31px;
-                            background-color: $error;
+                            // background-color: $error;
                         }
                     }
 
@@ -253,7 +253,7 @@
 
                 .lineHeight25 {
                     line-height: 25px;
-                    display: inline-block;
+                    display: block;
                 }
             }
         }
