@@ -108,7 +108,7 @@ function OrderConfirmation(props: any) {
                                 </Box>
                                 <Stack className="TitleValueWrapper PaymentAmountWrapper">
                                     <Box className="PricingDetails">
-                                        {renderPricingItem("Subtotal", '$' + roundOfThePrice(orderConfirmationDetailsData?.orderTotal as number))}
+                                        {renderPricingItem("Subtotal", '$' + roundOfThePrice(orderConfirmationDetailsData?.subTotal as number))}
 
                                         {orderConfirmationDetailsData?.shippingMethod && <>
                                             <Divider />
