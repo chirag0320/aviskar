@@ -84,8 +84,8 @@ function orderDetails({ location }: { location: any }) {
                     <Container>
                         <Box className="OrderDetailsContent">
                             {orderDetails && <>
-                                <Box className="Ribbon" sx={{backgroundColor: "#ff1f1f"}}>
-                                    Status: Cancelled
+                                <Box className="Ribbon" sx={{ backgroundColor: orderDetails?.orderStatusColor ?? "" }}>
+                                    Status: {orderDetails?.orderStatus}
                                 </Box> 
                                 <Box className="OrderDetailsWrapper">
                                     <Box className='PDFBtnWrapper'>
