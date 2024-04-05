@@ -97,9 +97,9 @@ function OrderConfirmation(props: any) {
                                                                     src={row.imageUrl} alt="Product image" loading="lazy"></img>
                                                                 {row.productName}
                                                             </TableCell>
-                                                            <TableCell>${row.unitPrice}</TableCell>
+                                                            <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
                                                             <TableCell>{row.quantity}</TableCell>
-                                                            <TableCell>${row.subTotal}</TableCell>
+                                                            <TableCell>${roundOfThePrice(row.subTotal)}</TableCell>
                                                         </TableRow>
 
                                                     ))}
