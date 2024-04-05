@@ -5,7 +5,7 @@ import { Button, Container, Box, DialogActions, DialogContent, DialogTitle, Inpu
 import { EyeOffIcon, EyeOnIcon } from "../assets/icons/index"
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { useForm } from "react-hook-form";
-import { LoginUserAPI } from '@/redux/reducers/homepageReducer';
+import { LoginUserAPI, configDetails } from '@/redux/reducers/homepageReducer';
 import { ENDPOINTS, StoreData } from '@/utils/constants';
 import { Dispatch } from '@reduxjs/toolkit';
 import { isActionRejected } from '@/components/common/Utils';
@@ -13,6 +13,7 @@ import { Link, navigate } from 'gatsby';
 import { AxiosError } from 'axios';
 import { getLastPage } from '@/utils/common';
 import Loader from '@/components/common/Loader';
+import useAPIoneTime from '@/hooks/useAPIoneTime';
 export interface IdispatchType {
   type: string,
   meta: {
@@ -69,8 +70,8 @@ function SignInPage() {
     navigate(ENDPOINTS.createMyAccount + StoreData.returnUrl);
     setLoadingForNavigate(false)
   }
+  useAPIoneTime({ service: configDetails, endPoint: ENDPOINTS.getConfigStore })
   
-  console.log(checkLoadingStatus, "checkLoadingStatus");
   return (
     <>
     <Loader open = {checkLoadingStatus} />
