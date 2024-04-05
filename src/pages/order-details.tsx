@@ -151,7 +151,7 @@ function orderDetails({ location }: { location: any }) {
                                     </Box>
                                 </Box>
 
-                                {/* <Box className="OrderDetailTableWrapper"> */}
+                                <Box className="TableContainerWrapper">
                                 <TableContainer
                                     className="OrderDetailTableWrapper"
                                     sx={{}}
@@ -183,7 +183,7 @@ function orderDetails({ location }: { location: any }) {
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-                                {/* </Box> */}
+                                </Box>
 
                                 <Stack className='TotalShippingDetailsWrapper'>
                                     <Stack className='SubtotalShippingWrapper'>
