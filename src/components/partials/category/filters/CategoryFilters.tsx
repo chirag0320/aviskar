@@ -36,8 +36,6 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
     if (Object.keys(debounceFilter).length === 0 && !isPriceChanged) {
       return;
     }
-    console.log("Qmint", debounceFilter, isPriceChanged)
-    console.log("Qmint", "IM at the filter change effect")
     searchParams.set('page', "1");
     navigate(`?${searchParams.toString()}`, { replace: true });
     if (page === 1) {

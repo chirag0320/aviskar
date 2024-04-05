@@ -34,7 +34,6 @@ const PriceSlider = ({ minPrice, maxPrice, setSelectedPrice, selectedPrice, setI
     }
 
     const handleChange = (event: Event, newValue: number | number[]) => {
-        console.log("Qmint", "price changed")
         setValue(newValue as number[]);
     }
     const renderPriceRange = useMemo(() => {

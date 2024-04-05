@@ -29,7 +29,6 @@ export type CartItemsWithLivePriceDetails = CartItem & {
 const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quantities, setQuantities }: Props) => {
     const loading = useAppSelector(state => state.shoppingCart.loading);
     const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
-    console.log("🚀 ~ CartDetails ~ cartItems:", cartItems)
     const [productIds, setProductIds] = useState({})
     const dispatch = useAppDispatch();
     const { showToaster } = useShowToaster();
@@ -60,7 +59,6 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
     }, [priceData])
 
     useEffect(() => {
-        // console.log("Qmint", "IM in the cart items effect")
         if (cartItems.length > 0) {
             const productIds = cartItems.map((item: CartItem) => item.productId);
             setProductIds({ productIds })
