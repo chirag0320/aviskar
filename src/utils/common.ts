@@ -29,8 +29,8 @@ export function roundOfThePrice(price: any) {
   if (price == null || isNaN(Number(price))) {
     return '...';
   }
-  const roundedPrice = parseFloat(Number(price).toFixed(2));
-  return isNaN(roundedPrice) ? '...' : roundedPrice;
+  const roundedPrice = Number(price).toFixed(2);
+  return roundedPrice;
 }
 export const shipmentTypeToEnum: any = {
   'LocalShipping': 3,

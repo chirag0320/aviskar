@@ -81,7 +81,11 @@
 
   .LoginError{
     text-align: center;
-    margin-top: 20px;
-    color: $error;
+    margin-top: 40px;
+    color: $sinopia;
+    a {
+      text-decoration: underline;
+      @include transition;
+    }
   }
 }

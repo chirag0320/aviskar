@@ -38,7 +38,7 @@ const RenderCheckboxField = ({ filter, options, setSelectedFilters, selectedFilt
             for (const key in selectedFilters) {
                 if (key === filter) {
                     const obj: any = {};
-                    selectedFilters[key].forEach((value: string) => {
+                    selectedFilters[key]?.length > 0 && selectedFilters[key].forEach((value: string) => {
                         obj[value] = true;
                     })
                     setValue(filter, obj)
