@@ -187,20 +187,25 @@
 
                   .Left {
                     align-items: center;
+
                     @include media($xs) {
                       gap: 8px;
                     }
+
                     .PriceWrapper {
                       align-items: center;
                       gap: 8px;
+
                       @include media($xs) {
                         flex-wrap: wrap;
                         gap: 2px;
                       }
                     }
+
                     .DiscountValue {
                       flex-shrink: 0;
                     }
+
                     .PriceChangeReturn {
                       @include media($sm) {
                         margin: 0;
@@ -230,8 +235,7 @@
                 .OrderDetails,
                 .OrderActions {
                   padding: 8px 0;
-                  gap: 8px;
-
+                  gap: 5px;
                 }
 
                 .OrderDetails {
@@ -244,6 +248,7 @@
                   @include media($xs) {
                     width: 55%;
                   }
+
 
                 }
 
@@ -310,7 +315,7 @@
                   }
                 }
 
-                .DiscountValue {  
+                .DiscountValue {
                   color: $sinopia;
                 }
 
@@ -337,6 +342,7 @@
               align-items: center;
               flex-wrap: wrap;
               max-width: $sm;
+
               @include media($sm) {
                 gap: 18px;
               }
@@ -457,6 +463,10 @@
                 $borderRadius: 10px;
                 height: auto;
 
+                @include media($md) {
+                  padding: 3px;
+                }
+
                 &.Minus {
                   border-radius: $borderRadius 0px 0px $borderRadius;
                 }
@@ -487,6 +497,11 @@
                       .MuiInputBase-input {
                         text-align: center;
                         @include padding-horizontal(0);
+
+                        @include media($md) {
+                          @include padding-vertical(3);
+                          height: auto;
+                        }
                       }
                     }
                   }
@@ -496,6 +511,12 @@
 
             .MuiButton-root {
               padding: 10px 8px;
+
+              @include media($md) {
+                padding: 5px;
+                font-size: 12px;
+                line-height: 15px;
+              }
 
               .MuiButton-endIcon {
                 margin-right: initial;

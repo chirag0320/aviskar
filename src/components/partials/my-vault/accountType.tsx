@@ -5,7 +5,7 @@ import { Box, Stack, Typography, Button } from '@mui/material';
 import StyledDialog from "@/components/common/StyledDialog"
 
 // Asstes
-import { IndividualUserIcon, JointAccountIcon, ShowcaseIcon, TrustIcon, SuperFundIcon } from "../../assets/icons/index"
+import { IndividualUserIcon, JointAccountIcon, ShowcaseIcon, TrustIcon, SuperFundIcon } from "../../../assets/icons/index"
 
 interface AccountTypeProps {
     open: boolean
@@ -34,9 +34,6 @@ export default function AccountType(props: AccountTypeProps) {
                 onClose={onClose}
             >
                 <Box className="DialogBody">
-
-
-
                     <Typography variant='body1'>Please select account type:</Typography>
                     <ToggleButtonGroup
                         color="primary"
