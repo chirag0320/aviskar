@@ -12,7 +12,7 @@ interface MembershipCardProps {
 function MembershipCard({ bgcolor, cardtitle, details }: MembershipCardProps) {
   const { mebershipPlanDetailsData } = useAppSelector((state) => state.homePage)
   const isCurrentPlan = cardtitle?.toLocaleLowerCase() === mebershipPlanDetailsData?.currentMemberShip?.toLocaleLowerCase()
-  const opacityColor = `${bgcolor}80`; // '33' represents 20% opacity
+  const opacityColor = `${bgcolor}80`;
   return (
     <>
       <Card
@@ -59,7 +59,7 @@ function MembershipCard({ bgcolor, cardtitle, details }: MembershipCardProps) {
             </Stack> */}
           </Box>
         </CardContent>
-        <CardActions>
+        <CardActions className="UpgradPlanButtonWrapper">
           <Button name='upgradePlan' aria-label='upgradePlan' variant="outlined" size='large' className="UpgradPlanButton" fullWidth>{isCurrentPlan ? 'Current Plan' : 'Upgrade Plan'}</Button>
         </CardActions>
       </Card >

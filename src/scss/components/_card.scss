@@ -328,6 +328,9 @@
     text-align: center;
     border-radius: 20px;
     @include transition;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     &:hover {
       .UpgradPlanButton {
@@ -393,7 +396,7 @@
       // }
     }
 
-    .MuiCardActions-root {
+    .UpgradPlanButtonWrapper {
       padding: 0 30px 30px;
 
       @include media($sm) {

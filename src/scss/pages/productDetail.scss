@@ -26,7 +26,7 @@
           position: sticky;
           top: calc(132px + 8px); // 132px: header hegiht
         }
-        
+
         .swiper {
           .swiper-wrapper {
             .swiper-slide {
@@ -42,6 +42,7 @@
                   &>img {
                     max-height: 300px;
                     object-fit: contain;
+
                     @include media-min($lg) {
                       max-height: 420px;
                     }
@@ -57,9 +58,11 @@
             .swiper-wrapper {
               .swiper-slide {
                 padding: 20px;
+
                 .ImageWrapper {
                   .Image {
                     position: relative;
+
                     .OfferBadge {
                       position: absolute;
                       top: 0;
@@ -81,6 +84,7 @@
               .swiper-slide {
                 display: flex;
                 align-items: center;
+
                 img {
                   cursor: pointer;
                   object-fit: contain;
@@ -183,20 +187,25 @@
 
                   .Left {
                     align-items: center;
+
                     @include media($xs) {
                       gap: 8px;
                     }
+
                     .PriceWrapper {
                       align-items: center;
                       gap: 8px;
+
                       @include media($xs) {
                         flex-wrap: wrap;
                         gap: 2px;
                       }
                     }
+
                     .DiscountValue {
                       flex-shrink: 0;
                     }
+
                     .PriceChangeReturn {
                       @include media($sm) {
                         margin: 0;
@@ -226,8 +235,7 @@
                 .OrderDetails,
                 .OrderActions {
                   padding: 8px 0;
-                  gap: 8px;
-
+                  gap: 5px;
                 }
 
                 .OrderDetails {
@@ -241,6 +249,13 @@
                     width: 55%;
                   }
 
+
+                }
+
+                .OrderDetails:has(> div.NotAvailable) {
+                  @include media($xs) {
+                    width: 100%;
+                  }
                 }
 
                 .OrderActions {
@@ -300,7 +315,7 @@
                   }
                 }
 
-                .DiscountValue {  
+                .DiscountValue {
                   color: $sinopia;
                 }
 
@@ -327,6 +342,7 @@
               align-items: center;
               flex-wrap: wrap;
               max-width: $sm;
+
               @include media($sm) {
                 gap: 18px;
               }
@@ -426,12 +442,14 @@
             gap: 16px;
             max-width: $sm;
             @include padding-vertical($spacing);
+
             @include media($sm) {
               flex-wrap: wrap;
             }
 
-            & > * {
+            &>* {
               width: 33%;
+
               @include media($md) {
                 width: 100%;
               }
@@ -444,6 +462,10 @@
               .MuiIconButton-root {
                 $borderRadius: 10px;
                 height: auto;
+
+                @include media($md) {
+                  padding: 3px;
+                }
 
                 &.Minus {
                   border-radius: $borderRadius 0px 0px $borderRadius;
@@ -475,6 +497,11 @@
                       .MuiInputBase-input {
                         text-align: center;
                         @include padding-horizontal(0);
+
+                        @include media($md) {
+                          @include padding-vertical(3);
+                          height: auto;
+                        }
                       }
                     }
                   }
@@ -484,8 +511,16 @@
 
             .MuiButton-root {
               padding: 10px 8px;
+
+              @include media($md) {
+                padding: 5px;
+                font-size: 12px;
+                line-height: 15px;
+              }
+
               .MuiButton-endIcon {
                 margin-right: initial;
+
                 @include media-between($md, $lg) {
                   display: none;
                 }
@@ -616,11 +651,14 @@
         width: fit-content;
         border-radius: 30px;
         border: 1px solid $mercury;
+
         @include media($md) {
           border-radius: 10px;
         }
+
         .MuiTabs-scroller {
           border-radius: inherit;
+
           .MuiTabs-flexContainer {
             flex-wrap: wrap;
             border-radius: inherit;
@@ -635,10 +673,12 @@
             color: rgba($dark, 0.5);
             border-radius: inherit;
             @include padding-horizontal(40);
+
             @include media($md) {
               flex-grow: 1;
               @include padding-horizontal(20);
             }
+
             @include media($sm) {
               @include padding-horizontal(12);
             }
@@ -668,14 +708,17 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 0 60px;
+
             @include media($md) {
               grid-template-columns: repeat(1, 1fr);
             }
+
             .ProductSpecification {
               justify-content: space-between;
               gap: 16px;
               border-bottom: 1px solid rgba($dark, 0.1);
               @include padding-vertical(10);
+
               .Value {
                 text-align: right;
               }
@@ -694,6 +737,7 @@
         .ScrollbarWrapper {
           .Content {
             overflow-wrap: break-word;
+
             .MuiTableContainer-root {
               .MuiTable-root {
                 border: none;
