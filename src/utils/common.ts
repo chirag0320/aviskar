@@ -88,3 +88,8 @@ export const debounceFunction = (func: any, delay: any) => {
     }, delay);
   };
 };
+// Function to capitalize the first character
+export const capitalizeFirstChar = (str: any) => {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
