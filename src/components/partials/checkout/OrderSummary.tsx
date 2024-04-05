@@ -1,4 +1,4 @@
-import React, { useDeferredValue, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react"
 import { Typography, Button, Divider, Stack, Box } from "@mui/material"
 
 // Hooks
@@ -123,46 +123,54 @@ function OrderSummary() {
     }
     // }
   }, [orderTotal])
+  const placeOrderFun = useCallback(
+    async () => {
+      // call place order API
+      const prepareBodyData: PlaceOrderBody = {
+        "OrderCustomerID": finalDataForTheCheckout?.userAccount?.customerId,
+        "BillingAddressId": finalDataForTheCheckout?.billingAddress?.addressId,
+        "ShippingAddressId": finalDataForTheCheckout?.shippingAddress?.addressId,
+        "OrderItems": finalDataForTheCheckout?.cartItemsWithLivePrice?.map((item: any) => {
+          return ({
+            "ShoppingCartId": item.id,
+            "ProductId": item.productId,
+            "ParentProductId": item?.parentProductId,
+            "Quantity": finalDataForTheCheckout?.quantitiesWithProductId[item.productId],
+            "ShippingMethod": shipmentTypeToEnum[finalDataForTheCheckout?.deliveryMethodsWithProductId[item.productId]]
+          })
+        }),
+        "PaymentMethod": paymentMethodEnum[finalDataForTheCheckout?.paymentType],
+        "ShippingMethod": shipmentTypeToEnum[finalDataForTheCheckout?.parentDeliveryMethod || 'SecureShipping'],
+        "IsDifferentShippingMethod": finalDataForTheCheckout?.IsDifferentShippingMethod,
+        "IsUsedRewardPoints": false,
+        "AgentId": "",
+        "Location": 'lat' + locationInfo?.latitude + ',' + 'long' + locationInfo?.longitude,
+        "Device": deviceInfo?.platform!,
+        "Browser": deviceInfo?.userAgent,
+        "IsInstantBuy": false
+      }
+      const data = await dispatch(placeOrder({ url: ENDPOINTS.placeOrder, body: prepareBodyData }) as any);
+      if (hasFulfilled(data?.type)) {
+        const id = data?.payload?.data?.data
+        navigate(`/order-confirmation/?orderNo=${id}`)
+      }
+    }, [finalDataForTheCheckout, deviceInfo, locationInfo])
+
   useEffect(() => {
     if (isOTPEnabled || message) {
       toggleOTPConfirmation()
     }
     else if (isOTPEnabled === false) {
-      const placeOrderFun = async () => {
-        // call place order API
-        const prepareBodyData: PlaceOrderBody = {
-          "OrderCustomerID": finalDataForTheCheckout?.userAccount?.customerId,
-          "BillingAddressId": finalDataForTheCheckout?.billingAddress?.addressId,
-          "ShippingAddressId": finalDataForTheCheckout?.shippingAddress?.addressId,
-          "OrderItems": finalDataForTheCheckout?.cartItemsWithLivePrice?.map((item: any) => {
-            return ({
-              "ShoppingCartId": item.id,
-              "ProductId": item.productId,
-              "ParentProductId": item?.parentProductId,
-              "Quantity": finalDataForTheCheckout?.quantitiesWithProductId[item.productId],
-              "ShippingMethod": shipmentTypeToEnum[finalDataForTheCheckout?.deliveryMethodsWithProductId[item.productId]]
-            })
-          }),
-          "PaymentMethod": paymentMethodEnum[finalDataForTheCheckout?.paymentType],
-          "ShippingMethod": shipmentTypeToEnum[finalDataForTheCheckout?.parentDeliveryMethod || 'SecureShipping'],
-          "IsDifferentShippingMethod": finalDataForTheCheckout?.IsDifferentShippingMethod,
-          "IsUsedRewardPoints": false,
-          "AgentId": "",
-          "Location": 'lat' + locationInfo?.latitude + ',' + 'long' + locationInfo?.longitude,
-          "Device": deviceInfo?.platform!,
-          "Browser": deviceInfo?.userAgent,
-          "IsInstantBuy": false
-        }
-        const data = await dispatch(placeOrder({ url: ENDPOINTS.placeOrder, body: prepareBodyData }) as any);
-        if (hasFulfilled(data?.type)) {
-          const id = data?.payload?.data?.data
-          navigate(`/order-confirmation/?orderNo=${id}`)
-        }
-      }
       placeOrderFun();
       dispatch(disableOTP())
     }
   }, [isOTPEnabled, message])
+
+  useEffect(() => {
+    if (!openOTPConfirmation) {
+      dispatch(disableOTP())
+    }
+  }, [openOTPConfirmation])
   const renderPricingItem = (title: string, value: string) => {
     return (
       <Stack className="PricingItem">
@@ -241,7 +249,7 @@ function OrderSummary() {
           <Button variant="contained" onClick={onConfirmOrderHandler} disabled={!finalDataForTheCheckout?.termAndServiceIsRead || loading || finalDataForTheCheckout?.cartItemsWithLivePrice?.length < 1}>Confirm Order</Button>
         </Stack>
       </Box>
-      <OTPConfirmation open={openOTPConfirmation} onClose={toggleOTPConfirmation} message={message} />
+      {openOTPConfirmation && <OTPConfirmation open={openOTPConfirmation} onClose={toggleOTPConfirmation} message={message} placeOrderFun={placeOrderFun} />}
     </StepWrapper>
   )
 }
