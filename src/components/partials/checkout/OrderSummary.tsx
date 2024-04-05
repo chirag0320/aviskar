@@ -117,7 +117,7 @@ function OrderSummary() {
           }
         }))
       }, 1000);
-      return ()=>{
+      return () => {
         timeoutid && clearTimeout(timeoutid)
       }
     }
@@ -223,12 +223,12 @@ function OrderSummary() {
         <Divider />
         {finalDataForTheCheckout?.paymentType === 'CreditCard' && renderPricingItem("Credit Card Fees", `$${roundOfThePrice(Number(craditCardCharges?.creditCardFeeIncludingTax))}`)}
         {finalDataForTheCheckout?.paymentType === 'CreditCard' && < Divider />}
-        {renderPricingItem("GST Included", `$${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingTax) + Number(insuranceAndTaxCalculation?.vaultStorageTax) + Number(finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 ? finalDataForTheCheckout?.cartItemsWithLivePrice?.reduce((total: number, product: {
+        {renderPricingItem("GST Included", `$${roundOfThePrice(Number(craditCardCharges?.creditCardTax) + Number(insuranceAndTaxCalculation?.secureShippingTax) + Number(insuranceAndTaxCalculation?.vaultStorageTax) + Number(finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 ? finalDataForTheCheckout?.cartItemsWithLivePrice?.reduce((total: number, product: {
           LivePriceDetails: { taxPrice: number }
         }) => total + product?.LivePriceDetails?.taxPrice, 0) : 0))}`)}
         <Stack className="PricingItem TotalItem">
           <Typography variant="subtitle1">Total</Typography>
-          <Typography variant="subtitle1">${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax))}</Typography>
+          <Typography variant="subtitle1">${roundOfThePrice(Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(subTotal) + Number(insuranceAndTaxCalculation?.vaultStorageFeeIncludingTax) + (finalDataForTheCheckout?.paymentType === 'CreditCard' ? Number(craditCardCharges?.creditCardFeeIncludingTax) : 0))}</Typography>
         </Stack>
         <Stack className="PaymentMethod">
           <OutlinedCheckIcon />

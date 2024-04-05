@@ -90,7 +90,11 @@ interface AddressDetail {
     "stateName": string,
     "countryName": string
 }
-
+interface CreditCardCharges {
+    creditCardFee: number;
+    creditCardTax: number;
+    creditCardFeeIncludingTax: number;
+}
 interface CheckoutPageState {
     loading: boolean,
     checkoutPageData: {
@@ -133,7 +137,7 @@ interface CheckoutPageState {
     subTotal: number,
     finalDataForTheCheckout: any,
     insuranceAndTaxCalculation: Fees | null,
-    craditCardCharges: any,
+    craditCardCharges: CreditCardCharges,
     isOTPEnabled: boolean | null,
     isOTPSent: boolean | null,
     isOTPVerified: boolean | null,
@@ -330,7 +334,6 @@ export const checkoutPage = createSlice({
         })
         builder.addCase(getCraditCardCharges.fulfilled, (state, action) => {
             state.craditCardCharges = action?.payload?.data?.data
-            localStorageSetItem('craditCardCharges', JSON.stringify(state.craditCardCharges))
             // state.loading = false;
         })
         builder.addCase(getCraditCardCharges.rejected, (state, action) => {
