@@ -111,7 +111,7 @@ function SignInPage() {
           <DialogTitle component="p">
             <img onClick={() => { navigate('/') }} src={configDetailsState?.storelogourl?.value} alt="QMint logo" loading='eager' />
           </DialogTitle>
-          {loginError && <Typography variant='subtitle1' className='LoginError' dangerouslySetInnerHTML={{
+          {loginError && <Typography variant='subtitle1' component="p" className='LoginError' dangerouslySetInnerHTML={{
             __html: loginError
           }}></Typography>}
           <DialogContent>
