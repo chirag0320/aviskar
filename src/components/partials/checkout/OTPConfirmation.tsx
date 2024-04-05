@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { Button, Stack, TextField } from "@mui/material"
+import { Button, Stack, TextField, Typography } from "@mui/material"
 
 // Componenets
 import StyledDialog from "@/components/common/StyledDialog"
@@ -10,11 +10,12 @@ import { ENDPOINTS } from "@/utils/constants"
 interface OTPConfirmation {
   open: boolean
   onClose: () => void
+  message?: string | null | undefined
 }
 
 function OTPConfirmation(props: OTPConfirmation) {
   const dispatch = useAppDispatch();
-  const { open, onClose } = props
+  const { open, onClose, message } = props
   const { isOTPVerified } = useAppSelector((state) => state.checkoutPage)
   const [otp, setOTP] = React.useState('')
 
@@ -36,21 +37,21 @@ function OTPConfirmation(props: OTPConfirmation) {
   return (
     <StyledDialog
       id="OTPConfirmation"
-      dialogTitle="OTP Confirmation"
+      dialogTitle={message ? 'Message' : "OTP Confirmation"}
       open={open}
       onClose={onClose}
     >
-      <TextField type="number" placeholder="Enter OTP" fullWidth value={otp} onChange={(e) => {
+      {message ? <Typography dangerouslySetInnerHTML={{_html: message}}></Typography> : <TextField type="number" placeholder="Enter OTP" fullWidth value={otp} onChange={(e) => {
         setOTP(e.target.value)
-      }} />
-      <Stack className="ActionWrapper">
+      }} />}
+      {!message && <Stack className="ActionWrapper">
         <Button variant="outlined" onClick={onClose}>
           Close
         </Button>
         <Button variant="contained" onClick={otpSubmissionHandler}>
           Submit
         </Button>
-      </Stack>
+      </Stack>}
     </StyledDialog>
   )
 }

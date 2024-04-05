@@ -144,6 +144,7 @@ interface CheckoutPageState {
     orderId: number | null,
     stateList: StateOrCountry[],
     countryList: StateOrCountry[]
+    message: string | null
 }
 const initialState: CheckoutPageState = {
     loading: false,
@@ -157,7 +158,8 @@ const initialState: CheckoutPageState = {
     craditCardCharges: null,
     orderId: null,
     stateList: [],
-    countryList: []
+    countryList: [],
+    message: null
 }
 
 export const getCheckoutPageData = appCreateAsyncThunk(
@@ -170,9 +172,9 @@ export const getCheckoutPageData = appCreateAsyncThunk(
 export const getInsuranceAndTaxDetailsCalculation = appCreateAsyncThunk(
     'getInsuranceAndTaxDetailsCalculation',
     async ({ url, body }: { url: string, body: any }) => {
-        if(url && Object.keys(body).length){
-        return await CheckoutPageServices.getInsuranceAndTaxInfo(url, body)
-    }
+        if (url && Object.keys(body).length) {
+            return await CheckoutPageServices.getInsuranceAndTaxInfo(url, body)
+        }
     }
 )
 export const getCraditCardCharges = appCreateAsyncThunk(
@@ -246,6 +248,7 @@ export const checkoutPage = createSlice({
         disableOTP: (state) => {
             state.isOTPEnabled = null
             state.isOTPVerified = null
+            state.message = null
         },
         updateAddress: (state, action) => {
             const updatedAddress = action.payload;
@@ -342,7 +345,7 @@ export const checkoutPage = createSlice({
         })
         builder.addCase(checkValidationOnConfirmOrder.fulfilled, (state, action) => {
             const responseData = action.payload.data.data;
-
+            state.message = responseData.message
             state.isOTPEnabled = responseData.isOTPEnabled;
             // state.isOTPSent = responseData.isOTPSent;
             state.loading = false;

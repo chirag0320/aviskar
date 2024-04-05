@@ -76,7 +76,7 @@ function OrderSummary() {
   const dispatch = useAppDispatch()
   const { showToaster } = useShowToaster();
   const { deviceInfo, locationInfo }: any = useDeviceDetails()
-  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading, orderId } = useAppSelector((state) => state.checkoutPage)
+  const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading, orderId, message } = useAppSelector((state) => state.checkoutPage)
   const [body, setBody] = useState<Body | null>(null)
   const [totalValueNeedToPayFromCraditCart, setTotalValueNeedToPayFromCraditCart] = useState<any>({ OrderTotal: 0 })
   const [openOTPConfirmation, toggleOTPConfirmation] = useToggle(false)
@@ -124,7 +124,7 @@ function OrderSummary() {
     // }
   }, [orderTotal])
   useEffect(() => {
-    if (isOTPEnabled) {
+    if (isOTPEnabled || message) {
       toggleOTPConfirmation()
     }
     else if (isOTPEnabled === false) {
@@ -162,7 +162,7 @@ function OrderSummary() {
       placeOrderFun();
       dispatch(disableOTP())
     }
-  }, [isOTPEnabled])
+  }, [isOTPEnabled, message])
   const renderPricingItem = (title: string, value: string) => {
     return (
       <Stack className="PricingItem">
@@ -241,7 +241,7 @@ function OrderSummary() {
           <Button variant="contained" onClick={onConfirmOrderHandler} disabled={!finalDataForTheCheckout?.termAndServiceIsRead || loading || finalDataForTheCheckout?.cartItemsWithLivePrice?.length < 1}>Confirm Order</Button>
         </Stack>
       </Box>
-      <OTPConfirmation open={openOTPConfirmation} onClose={toggleOTPConfirmation} />
+      <OTPConfirmation open={openOTPConfirmation} onClose={toggleOTPConfirmation} message={message} />
     </StepWrapper>
   )
 }
