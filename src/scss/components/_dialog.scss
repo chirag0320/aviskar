@@ -21,7 +21,7 @@
             .MuiTabs-root {
               flex: 0.35;
               min-width: 150px;
-
+              max-height: calc(100vh - 82px - 48px); // 82px - header, 48px - footer
               .MuiTabs-flexContainer {
                 .MuiTab-root {
                   align-items: flex-start;
@@ -58,6 +58,24 @@
 
               &.Category {
                 padding: 0;
+              }
+
+              .PriceRangeWrapper {
+                .MuiSlider-root {
+                  .MuiSlider-thumb {
+                    &::after {
+                      @include media($md) {
+                        width: 20px;
+                        height: 20px;
+                      }
+                    }
+                    .MuiSlider-valueLabel {
+                      @include media($md) {
+                        display: none;
+                      }
+                    }
+                  }
+                }
               }
             }
           }

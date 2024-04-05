@@ -68,6 +68,8 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
                             onChange={handleTabChange}
                             orientation="vertical"
                             aria-label="Filter tabs"
+                            variant="scrollable"
+                            scrollButtons={false}
                         >
                             <Tab label="Categories" value={0} />
                             <Tab label="Price Range" value={1} />
