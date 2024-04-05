@@ -305,7 +305,11 @@ function AboutProduct({ productId }: any) {
                     <Stack className="Left">
                       <Stack className="PriceWrapper">
                         <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
-                        <Typography className="ProductOriginalValue" variant="overline">$123.00</Typography>
+                        {priceData?.data?.[0]?.discount > 0 && <Typography className="ProductOriginalValue" variant="titleLarge">${roundOfThePrice(
+                          priceData?.data?.[0]?.price +
+                          priceData?.data?.[0]?.discount
+                        )}
+                        </Typography>}
                       </Stack>
                       {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
                       <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
