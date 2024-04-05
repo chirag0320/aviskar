@@ -12,8 +12,6 @@ const ShoppingCartComponent = () => {
     const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
 
-    console.log("Qmint",quantities);
-    
     return (
         <>
             {openToaster && <Toaster />}

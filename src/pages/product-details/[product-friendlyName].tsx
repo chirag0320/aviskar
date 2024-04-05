@@ -17,6 +17,8 @@ import Loader from "@/components/common/Loader"
 import FourZeroFour from "@/components/partials/404"
 
 function ProductDetail({ params }: any) {
+  const configDetails = useAppSelector(state => state.homePage.configDetails)
+  console.log("🚀 ~ ProductDetail ~ configDetails:", configDetails)
   const checkLoadingStatus = useAppSelector(state => state.category.loading)
   const { productDetailsData } = useAppSelector((state) => state.category)
   const dispatch = useAppDispatch()
@@ -44,7 +46,7 @@ function ProductDetail({ params }: any) {
       {productDetailsData ? (<><Breadcrumb arr={[{ navigate: '/shop', name: 'Shop' }, { navigate: '/product-details/' + params?.["product-friendlyName"], name: params?.["product-friendlyName"] }]} />
         <Container id="PageProductDetail">
           {productDetailsData?.productId && <AboutProduct productId={productDetailsData?.productId} />}
-          {productDetailsData?.relatedProducts?.length > 0 && <RelatedProduct relatedProductsList={structuredClone(productDetailsData?.relatedProducts)} />}
+          {productDetailsData?.relatedProducts?.length > 0 && <RelatedProduct relatedProductsList={structuredClone(productDetailsData?.relatedProducts)} heading={configDetails["productdetails.relatedproducttital"]?.value} description={configDetails["productdetails.relatedproductsubtital"]?.value}/>}
         </Container></>) : <FourZeroFour />}
     </Layout>
   )
