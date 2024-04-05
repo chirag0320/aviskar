@@ -178,15 +178,33 @@
 
                 .Top {
                   display: flex;
+                  align-items: center;
                   margin-bottom: 0;
 
-                  @include media($xs) {
+                  @include media($sm) {
                     gap: 5px;
                   }
 
                   .Left {
+                    align-items: center;
+                    @include media($xs) {
+                      gap: 8px;
+                    }
+                    .PriceWrapper {
+                      align-items: center;
+                      gap: 8px;
+                      @include media($xs) {
+                        flex-wrap: wrap;
+                        gap: 2px;
+                      }
+                    }
+                    .DiscountValue {
+                      flex-shrink: 0;
+                    }
                     .PriceChangeReturn {
-                      padding: 4px 7px;
+                      @include media($sm) {
+                        margin: 0;
+                      }
                     }
                   }
                 }
@@ -271,9 +289,9 @@
 
             .Top {
               justify-content: space-between;
-              align-items: center;
+              align-items: flex-end;
               flex-wrap: wrap;
-              gap: 8px;
+              gap: 16px;
               margin-bottom: 10px;
 
               @include media($md) {
@@ -281,10 +299,18 @@
               }
 
               .Left {
-                align-items: center;
-                gap: 8px;
+                align-items: flex-end;
+                gap: 16px;
 
-                .DiscountValue {
+                .PriceWrapper {
+                  .ProductOriginalValue {
+                    font-weight: 600;
+                    text-decoration: line-through;
+                    color: rgba($dark, 0.5);
+                  }
+                }
+
+                .DiscountValue {  
                   color: $sinopia;
                 }
 
@@ -307,10 +333,10 @@
             }
 
             .Bottom {
-              gap: 30px;
+              gap: 20px;
               align-items: center;
               flex-wrap: wrap;
-
+              max-width: $sm;
               @include media($sm) {
                 gap: 18px;
               }
@@ -318,12 +344,9 @@
               .SliderWrapper {
                 flex-direction: column;
                 min-width: fit-content;
-                width: 60%;
+                flex-grow: 1;
                 max-width: calc(100% - 1px);
-
-                @include media($sm) {
-                  flex-grow: 1;
-                }
+                padding-right: 8px;
 
                 .PriceMinMax {
                   justify-content: space-between;
@@ -354,7 +377,14 @@
                 }
               }
 
+              .PriceChangeReturn {
+                .MuiTypography-body1 {
+                  line-height: normal;
+                }
+              }
+
               .PriceHistorySelect {
+                line-height: normal;
                 background-color: $whiteMilk;
                 min-width: 75px;
 
@@ -368,7 +398,7 @@
                   height: initial;
                   min-height: initial;
                   padding-left: 10px;
-                  @include padding-vertical(6);
+                  @include padding-vertical(8);
                 }
 
                 .MuiSvgIcon-root {
@@ -498,7 +528,7 @@
                 color: $yellowFuel;
 
                 .IconWrapper {
-                  color: inherit;
+                  color: $yellowFuel;
                   border-color: $yellowFuel;
                 }
               }
@@ -530,6 +560,11 @@
 
               .MuiSvgIcon-root {
                 font-size: inherit;
+              }
+
+              &.Watchlist {
+                font-size: pxToRem(18);
+                margin-right: -2px;
               }
             }
           }

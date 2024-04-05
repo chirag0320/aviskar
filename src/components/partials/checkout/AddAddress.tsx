@@ -42,17 +42,17 @@ interface Inputs {
 }
 
 export const addressSchema = yup.object().shape({
-    FirstName: yup.string().trim().required('First Name is a required field'),
-    LastName: yup.string().trim().required('Last Name is a required field'),
+    FirstName: yup.string().trim().required('First name is a required field'),
+    LastName: yup.string().trim().required('Last name is a required field'),
     Company: yup.string().trim(),
     Contact: yup.string().trim().required(),
     Email: yup.string().email().required(),
-    Address1: yup.string().trim().required(),
+    Address1: yup.string().trim().required("Address 1 in required field"),
     Address2: yup.string().trim(),
     City: yup.string().required().trim(),
     State: yup.string().required(),
     Country: yup.string().required(),
-    Code: yup.string().required('Pin Code is a required field').trim()
+    Code: yup.string().required('Zip / Postal code is required').trim()
 })
 
 function AddAddress(props: AddAddress) {
@@ -316,7 +316,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.Code}
                             name="Code"
-                            placeholder="Enter pin code *"
+                            placeholder="Enter zip / postal code *"
                             control={control}
                             variant='outlined'
                             margin='none'

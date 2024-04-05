@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Stack, Box, Button, Skeleton, Card } from "@mui/material"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Autoplay, Pagination, A11y } from 'swiper/modules'
@@ -65,8 +65,14 @@ function SkeletonCloserLook({ index }: { index: number | string }) {
 }
 function CloserLook() {
   const { configDetails } = useAppSelector((state) => state.homePage)
-  const { data, loading }: Idata = useApiRequest(ENDPOINTS.getBlog, 'post', dataforbody);
-
+  const { data }: Idata = useApiRequest(ENDPOINTS.getBlog, 'post', dataforbody);
+  const [loading, setLoading] = useState(false)
+  useEffect(() => {
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+    }, 2000);
+  }, [])
   const config = {
     slidesPerView: 1.4,
     spaceBetween: 20,
@@ -142,10 +148,15 @@ function CloserLook() {
           : <RecordNotFound message="No destination available" />
         }
       </Container>
-      <Stack className="Action" onClick={() => {
+      {/* <Stack className="Action" onClick={() => {
           navigate('/blog')
         }}>
         <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained">Discover More</Button>
+      </Stack> */}
+      <Stack className="Action">
+        <Button className="DiscoverMore" name='CloserLook' aria-label="CloserLook" variant="contained" onClick={() => {
+          navigate('/blog')
+        }}>Discover More</Button>
       </Stack>
     </Container>
   )

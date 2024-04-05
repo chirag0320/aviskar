@@ -1,20 +1,23 @@
 .ShoppingCartPage {
+    padding-bottom: 40px;
+    @include media($md) {
+        padding-bottom: 30px;
+    }
+    @include media($sm) {
+        padding-bottom: 20px;
+    }
     .MuiContainer-root {
         @include media($xs) {
             @include padding-horizontal(15);
         }
     }
     .ShoppingCartContent {
-        padding: 30px 0 80px;
         display: flex;
         align-items: flex-start;
         gap: 29px;
 
         @include media($lg) {
             flex-direction: column;
-        }
-        @include media($sm) {
-            @include padding-vertical(30);
         }
         @include media($xs) {
             gap: 15px;

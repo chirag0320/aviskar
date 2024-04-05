@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useDeferredValue, useEffect, useMemo, useState } from "react"
 import { Typography, Button, Divider, Stack, Box } from "@mui/material"
 
 // Hooks
@@ -80,8 +80,10 @@ function OrderSummary() {
   const [body, setBody] = useState<Body | null>(null)
   const [totalValueNeedToPayFromCraditCart, setTotalValueNeedToPayFromCraditCart] = useState<any>({ OrderTotal: 0 })
   const [openOTPConfirmation, toggleOTPConfirmation] = useToggle(false)
-
-  useAPIoneTime({ service: getInsuranceAndTaxDetailsCalculation, endPoint: ENDPOINTS.calculateInsuranceAndTaxDetails, body })
+  const needtocalltheTaxDetailscalculation = useMemo(() => {
+    return (body?.products?.length ? body?.products?.length > 0 : false)
+  }, [body])
+  useAPIoneTime({ service: getInsuranceAndTaxDetailsCalculation, endPoint: ENDPOINTS.calculateInsuranceAndTaxDetails, body, conditionalCall: needtocalltheTaxDetailscalculation })
   useEffect(() => {
     setBody({
       Postcode: finalDataForTheCheckout?.shippingAddress?.postcode?.toString(),
@@ -96,15 +98,31 @@ function OrderSummary() {
       })
     })
   }, [finalDataForTheCheckout])
+  const subTotalDiffer = useDeferredValue(subTotal)
+  const finalDataForTheCheckoutDiffer = useDeferredValue(finalDataForTheCheckout)
+  const insuranceAndTaxCalculationDiffer = useDeferredValue(insuranceAndTaxCalculation)
+
+  const orderTotal = useMemo(() => {
+    const orderTotal = Number(insuranceAndTaxCalculationDiffer?.secureShippingFeeIncludingTax) + Number(insuranceAndTaxCalculationDiffer?.vaultStorageFee) + Number(subTotalDiffer)
+    return orderTotal
+  }, [subTotalDiffer, insuranceAndTaxCalculationDiffer, finalDataForTheCheckoutDiffer])
   useEffect(() => {
-    if (finalDataForTheCheckout?.paymentType === "CreditCard") {
-      dispatch(getCraditCardCharges({
-        url: ENDPOINTS.calculateCraditCardCharges, body: {
-          "OrderTotal": Number(insuranceAndTaxCalculation?.secureShippingFeeIncludingTax) + Number(insuranceAndTaxCalculation?.vaultStorageFee) + Number(subTotal)
-        }
-      }))
+    // if (finalDataForTheCheckout?.paymentType === "CreditCard") {
+    if (orderTotal !== null) {
+      let timeoutid: any;
+      timeoutid = setTimeout(() => {
+        dispatch(getCraditCardCharges({
+          url: ENDPOINTS.calculateCraditCardCharges, body: {
+            "OrderTotal": orderTotal
+          }
+        }))
+      }, 1000);
+      return ()=>{
+        timeoutid && clearTimeout(timeoutid)
+      }
     }
-  }, [subTotal, finalDataForTheCheckout, insuranceAndTaxCalculation])
+    // }
+  }, [orderTotal])
   useEffect(() => {
     if (isOTPEnabled) {
       toggleOTPConfirmation()
@@ -126,7 +144,7 @@ function OrderSummary() {
             })
           }),
           "PaymentMethod": paymentMethodEnum[finalDataForTheCheckout?.paymentType],
-          "ShippingMethod": shipmentTypeToEnum[finalDataForTheCheckout?.parentDeliveryMethod || 'LocalShipping'],
+          "ShippingMethod": shipmentTypeToEnum[finalDataForTheCheckout?.parentDeliveryMethod || 'SecureShipping'],
           "IsDifferentShippingMethod": finalDataForTheCheckout?.IsDifferentShippingMethod,
           "IsUsedRewardPoints": false,
           "AgentId": "",
@@ -138,7 +156,7 @@ function OrderSummary() {
         const data = await dispatch(placeOrder({ url: ENDPOINTS.placeOrder, body: prepareBodyData }) as any);
         if (hasFulfilled(data?.type)) {
           const id = data?.payload?.data?.data
-          navigate(`/order-confirmation/?id=${id}`)
+          navigate(`/order-confirmation/?orderNo=${id}`)
         }
       }
       placeOrderFun();

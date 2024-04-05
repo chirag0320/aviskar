@@ -6,7 +6,7 @@ export interface categoryData {
   price: {
     minPrice: number,
     maxPrice: number
-  },
+  } | null,
   specifications: {},
   manufactureres: [],
   productDetailsData: any,

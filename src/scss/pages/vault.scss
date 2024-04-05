@@ -1,6 +1,5 @@
 .VaultPage {
   .HeroSection {
-    margin-top: 70px;
 
     .HeroSectionWrapper {
       display: flex;
@@ -218,8 +217,10 @@
   }
 
   .AccountInformation {
-    margin-bottom: 80px;
-
+    margin-bottom: 60px;
+    @include media($md) {
+      margin-bottom: 40px;
+    }
     .AccountInformationText {
       font-size: 30px;
       line-height: 23px;

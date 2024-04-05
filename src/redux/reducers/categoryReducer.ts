@@ -17,13 +17,13 @@ interface filterQuery {
 }
 
 const initialState: categoryData = {
-  loading: isBrowser && JSON.parse(localStorageGetItem("loading") ?? JSON.stringify(false)),
+  loading: false,
   items: [],
-  count: isBrowser && JSON.parse(localStorageGetItem("count") ?? JSON.stringify(0)),
-  categories: isBrowser && JSON.parse(localStorageGetItem("categories") ?? JSON.stringify([])),
-  price: isBrowser && JSON.parse(localStorageGetItem("price") ?? JSON.stringify({ minPrice: 0, maxPrice: 0 })),
-  specifications: isBrowser && JSON.parse(localStorageGetItem("specifications") ?? JSON.stringify({})),
-  manufactureres: isBrowser && JSON.parse(localStorageGetItem("manufactureres") ?? JSON.stringify([])),
+  count: 0,
+  categories: [],
+  price: null,
+  specifications: {},
+  manufactureres: [],
   productDetailsData: {},
   sortBy: null,
   sortedItems: [],

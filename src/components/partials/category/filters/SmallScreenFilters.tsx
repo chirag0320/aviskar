@@ -11,10 +11,10 @@ interface props {
     renderList: (data: any) => any
     setSelectedFiltersMobile: any,
     setSelectedPriceMobile: any,
-    page: number
+    setIsPriceChanged : any
 }
 
-const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedPriceMobile, page }: props) => {
+const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedPriceMobile ,setIsPriceChanged}: props) => {
     const categoryData = useAppSelector(state => state.category)
     const dispatch = useAppDispatch()
     const [openFilterBy, toggleFilterBy] = useToggle(false)
@@ -79,7 +79,7 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
                             {renderList(categoryData.categories)}
                         </TabPanel>
                         <TabPanel value={tabValue} index={1}>
-                            <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} selectedPrice={selectedPrice} />
+                            <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} selectedPrice={selectedPrice} setIsPriceChanged={setIsPriceChanged}/>
                         </TabPanel>
                         {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
                             <TabPanel value={tabValue} index={index + 2} key={filter}>

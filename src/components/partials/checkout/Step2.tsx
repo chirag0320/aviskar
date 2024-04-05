@@ -25,7 +25,7 @@ function Step2() {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { checkoutPageData, finalDataForTheCheckout } = useAppSelector((state) => state.checkoutPage)
-  
+
   const enabledPaymentMethods = useMemo(() => {
     const defaultPaymentType = getDefaultOption([
       { enabled: configDetailsState?.secureShippingenable?.value, value: 'SecureShipping' },
@@ -180,7 +180,9 @@ function Step2() {
     setDeliveryMethods(updatedDeliverymethod)
     dispatch(updateFinalDataForTheCheckout({ deliveryMethodsWithProductId: updatedDeliverymethod }))
   }
-
+  useEffect(() => {
+    dispatch(updateFinalDataForTheCheckout({ parentDeliveryMethod: deliveryMethod }))
+  }, [deliveryMethod])
   return (
     <StepWrapper title="Step 2" className="Step2">
       <Box className="StepHeader">

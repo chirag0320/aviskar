@@ -1,8 +1,20 @@
 .CompareProductsWrapper {
-    padding: 70px 0;
+    padding-bottom: 40px;
+    @include media($md) {
+        padding-bottom: 30px;
+    }
+    @include media($sm) {
+        padding-bottom: 20px;
+    }
 
     .ClearList {
-        margin-bottom: 30px;
+        margin-bottom: 34px;
+        @include media($md) {
+            margin-bottom: 26px;
+        }
+        @include media($sm) {
+            margin-bottom: 20px;
+        }
     }
 
     .CompareProductTableWrapper {

@@ -25,7 +25,7 @@ const defaultData = {
   }
 }
 
-function RelatedProduct({relatedProductsList}:any) {
+function RelatedProduct({relatedProductsList, heading, description}:any) {
   const [priceForEachId, setPriceForEachId] = useState<IpriceForEachId | null>(null)
   const [productIds, setProductIds] = useState({})
   const [dataforbody, setDataforbody] = useState<any>(defaultData)
@@ -50,8 +50,8 @@ function RelatedProduct({relatedProductsList}:any) {
   return (
     <Box className="RelatedProduct">
       <SectionHeading
-        title="Related Products"
-        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        title={heading ?? "Related Products"}
+        description={description ?? "Lorem Ipsum is simply dummy text of the printing and typesetting industry."}
       />
       <Box className="ProductList">
         {

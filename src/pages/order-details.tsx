@@ -19,6 +19,7 @@ import Toaster from "@/components/common/Toaster";
 import { hasFulfilled } from "@/utils/common";
 import useShowToaster from "@/hooks/useShowToaster";
 import { AxiosError } from "axios";
+import Loader from "@/components/common/Loader";
 
 export function createData(
     Name: string,
@@ -31,6 +32,7 @@ export function createData(
 
 function orderDetails({ location }: { location: any }) {
     const openToaster = useAppSelector(state => state.homePage.openToaster)
+    const checkLoadingStatus = useAppSelector(state => state.homePage.loading);
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search])
     useAPIoneTime({ service: getOrderDetailsData, endPoint: ENDPOINTS.getOrderDetailsData + searchParams.get("orderNo") ?? "" });
     const orderDetails = useAppSelector(state => state.orderDetails.orderDetailsData)
@@ -40,170 +42,188 @@ function orderDetails({ location }: { location: any }) {
     // console.log("🚀 ~ orderHistoryDetail:", orderDetails)
 
     const downloadInvoiceHandler = async () => {
-        console.log("clicked")
         const response = await dispatch(downloadOrderInvoice({ url: ENDPOINTS.downloadOrderInvoice + searchParams.get("orderNo") ?? "" }) as any)
 
         if (!hasFulfilled(response.type)) {
-            console.log("🚀 ~ downloadInvoiceHandler ~ response:", response)
-            showToaster({ message: ((response?.payload as AxiosError)?.response?.data as { message: string })?.message as string, severity: "error"
-        })
-    }
-}
+            showToaster({
+                message: ((response?.payload as AxiosError)?.response?.data as { message: string })?.message as string, severity: "error"
+            })
+        }
+        else {
+            const pdfData = response.payload?.data;
+            // const url = window.URL.createObjectURL(new Blob([pdfData]));
+            // const link = document.createElement('a');
+            // link.href = url;
+            // link.setAttribute('download', 'file.pdf'); //or any other extension
+            // document.body.appendChild(link);
+            // link.click();
+            console.log("🚀 ~ downloadInvoiceHandler ~ response:", response.payload?.data)
+            const blob = new Blob([pdfData], { type: 'application/pdf' });
 
-return (
-    <Layout>
-        <>
-            <Seo
-                keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
-                title="Home"
-                lang="en"
-            />
-            {openToaster && <Toaster />}
-            <Box id="OrderDetailsPage" className='OrderDetailsPage' component="section">
-                <Container>
-                    <Box className="OrderDetailsContent">
-                        {loading && <Typography variant="body1" style={{ textAlign: "center" }}>Loading...</Typography>}
-                        {orderDetails && <>
-                            <img src={StatusImage} className="StatusImage" alt="StatusImage" />
-                            <Box className="OrderDetailsWrapper">
-                                <Box className='PDFBtnWrapper'>
-                                    <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained"><Icon className='PdfIcon' onClick={downloadInvoiceHandler}><PdfIcon /></Icon>PDF invoice</Button>
-                                </Box>
-                                <Typography variant="subtitle2" className="OrderID">Order : {orderDetails?.customOrderNumber}</Typography>
-                                <Stack className="OrderDetails">
-                                    <Box className="OrderDateWrapper">
-                                        <Typography variant="body1">Order Date</Typography>
-                                        <Typography variant="subtitle1" className="Font16">{orderDetails?.orderDate}</Typography>
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'invoice-qmint.pdf';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+
+    return (
+        <Layout>
+            <>
+                <Loader open={checkLoadingStatus} />
+                <Seo
+                    keywords={[`gatsby`, `order-details`, `react`]}
+                    title="Order details"
+                    lang="en"
+                />
+                {openToaster && <Toaster />}
+                <Box id="OrderDetailsPage" className='OrderDetailsPage' component="section">
+                    <Container>
+                        <Box className="OrderDetailsContent">
+                            {orderDetails && <>
+                                <img src={StatusImage} className="StatusImage" alt="StatusImage" />
+                                <Box className="OrderDetailsWrapper">
+                                    <Box className='PDFBtnWrapper'>
+                                        <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained" onClick={downloadInvoiceHandler} disabled={loading}><Icon className='PdfIcon' ><PdfIcon /></Icon>PDF invoice</Button>
                                     </Box>
-                                    <Box className="OrderTimeWrapper">
-                                        <Typography variant="body1">Order Time</Typography>
-                                        <Typography variant="subtitle1" className="Font16">{orderDetails?.orderTime}</Typography>
-                                    </Box>
-                                    {/* <Box className="OrderNumberWrapper">
+                                    <Typography variant="subtitle2" className="OrderID">Order : {orderDetails?.customOrderNumber}</Typography>
+                                    <Stack className="OrderDetails">
+                                        <Box className="OrderDateWrapper">
+                                            <Typography variant="body1">Order Date</Typography>
+                                            <Typography variant="subtitle1" className="Font16">{orderDetails?.orderDate}</Typography>
+                                        </Box>
+                                        <Box className="OrderTimeWrapper">
+                                            <Typography variant="body1">Order Time</Typography>
+                                            <Typography variant="subtitle1" className="Font16">{orderDetails?.orderTime}</Typography>
+                                        </Box>
+                                        {/* <Box className="OrderNumberWrapper">
                                         <Typography variant="body1">Order Number</Typography>
                                         <Typography variant="subtitle1" className="Font16">{orderDetails?.customOrderNumber}</Typography>
                                     </Box> */}
-                                    <Box className="OrderStatusWrapper">
-                                        <Typography variant="body1">Order Status</Typography>
-                                        <Stack sx={{ gap: "10px" }} className="ButtonsWrapper">
-                                            <Button variant="contained" size="small" className="RedButton">{orderDetails?.orderStatus}</Button>
-                                            {/* <Button variant="contained" size="small" className="RedButton">Approved Cancellation</Button> */}
+                                        <Box className="OrderStatusWrapper">
+                                            <Typography variant="body1">Order Status</Typography>
+                                            <Stack sx={{ gap: "10px" }} className="ButtonsWrapper">
+                                                <Button variant="contained" size="small" className="RedButton">{orderDetails?.orderStatus}</Button>
+                                                {/* <Button variant="contained" size="small" className="RedButton">Approved Cancellation</Button> */}
+                                            </Stack>
+
+                                        </Box>
+                                        <Box className="PaymentWrapper">
+                                            <Typography variant="body1">Payment</Typography>
+                                            <Typography variant="subtitle1" className="Font16">{orderDetails?.paymentMethod}</Typography>
+                                        </Box>
+                                        <Box className="DeliveryWrapper">
+                                            <Typography variant="body1">Delivery</Typography>
+                                            <Typography variant="subtitle1" className="Font16">{orderDetails?.shippingMethod}</Typography>
+                                        </Box>
+                                    </Stack>
+                                </Box>
+
+                                <Box className="AddressWrapper">
+                                    <Box className="BillingWrapper">
+                                        <Typography variant="subtitle1" className="AddressTitle">Billing Address</Typography>
+                                        {orderDetails?.addresses[0]?.firstName && <Typography variant="subtitle1" className="CommonBottomMargin Font16">{orderDetails?.addresses[0]?.firstName + " " + orderDetails?.addresses[0]?.lastName}</Typography>}
+                                        <Stack sx={{ gap: "10px", alignItems: "center" }} className="CommonBottomMargin">
+                                            <Typography variant="body1">Email: </Typography><Typography variant="subtitle1" className='Font16'>{orderDetails?.addresses[0]?.email}</Typography>
                                         </Stack>
-
-                                    </Box>
-                                    <Box className="PaymentWrapper">
-                                        <Typography variant="body1">Payment</Typography>
-                                        <Typography variant="subtitle1" className="Font16">{orderDetails?.paymentMethod}</Typography>
-                                    </Box>
-                                    <Box className="DeliveryWrapper">
-                                        <Typography variant="body1">Delivery</Typography>
-                                        <Typography variant="subtitle1" className="Font16">{orderDetails?.shippingMethod}</Typography>
-                                    </Box>
-                                </Stack>
-                            </Box>
-
-                            <Box className="AddressWrapper">
-                                <Box className="BillingWrapper">
-                                    <Typography variant="subtitle1" className="AddressTitle">Billing Address</Typography>
-                                    {orderDetails?.addresses[0]?.firstName && <Typography variant="subtitle1" className="CommonBottomMargin Font16">{orderDetails?.addresses[0]?.firstName + " " + orderDetails?.addresses[0]?.lastName}</Typography>}
-                                    <Stack sx={{ gap: "10px", alignItems: "center" }} className="CommonBottomMargin">
-                                        <Typography variant="body1">Email: </Typography><Typography variant="subtitle1" className='Font16'>{orderDetails?.addresses[0]?.email}</Typography>
-                                    </Stack>
-                                    <Stack sx={{ gap: "10px", alignItems: "center" }} className="CommonBottomMargin">
-                                        <Typography variant="body1">Phone </Typography><Typography variant="subtitle1" className='Font16'> : {orderDetails?.addresses[0]?.phoneNumber}</Typography>
-                                    </Stack>
-                                    <Typography variant="body1" className="CommonBottomMargin">{orderDetails?.addresses[0]?.addressLine1 + ", " + orderDetails?.addresses[0]?.addressLine2 + ", " + orderDetails?.addresses[0]?.city + " - " + orderDetails?.addresses[0]?.postcode + ", " + orderDetails?.addresses[0]?.stateName + ", " + orderDetails?.addresses[0]?.countryName}</Typography>
-                                    {/* <Stack sx={{ gap: "10px", alignItems: "center" }}   >
+                                        <Stack sx={{ gap: "10px", alignItems: "center" }} className="CommonBottomMargin">
+                                            <Typography variant="body1">Phone </Typography><Typography variant="subtitle1" className='Font16'> : {orderDetails?.addresses[0]?.phoneNumber}</Typography>
+                                        </Stack>
+                                        <Typography variant="body1" className="CommonBottomMargin">{orderDetails?.addresses[0]?.addressLine1 + ", " + orderDetails?.addresses[0]?.addressLine2 + ", " + orderDetails?.addresses[0]?.city + " - " + orderDetails?.addresses[0]?.postcode + ", " + orderDetails?.addresses[0]?.stateName + ", " + orderDetails?.addresses[0]?.countryName}</Typography>
+                                        {/* <Stack sx={{ gap: "10px", alignItems: "center" }}   >
                                         <Typography variant="body1">Account Type: </Typography><Typography variant="subtitle1" className='Font16'>{orderDetails?.addresses[0]?.}</Typography>
                                     </Stack> */}
-                                </Box>
-                                <Box className="ShippingWrapper">
-                                    <Typography variant="subtitle1" className="AddressTitle">Shipping Address</Typography>
-                                    <Typography variant="subtitle1" className="CommonBottomMargin Font16">{orderDetails?.addresses[1]?.firstName + " " + orderDetails?.addresses[1]?.lastName}</Typography>
-                                    <Stack sx={{ gap: "10px", alignItems: "center" }} className="CommonBottomMargin">
-                                        <Typography variant="body1">Email: </Typography><Typography variant="subtitle1" className='Font16'>{orderDetails?.addresses[1]?.email}</Typography>
-                                    </Stack>
-                                    <Stack sx={{ gap: "10px", alignItems: "center" }} className="CommonBottomMargin">
-                                        <Typography variant="body1">Phone </Typography><Typography variant="subtitle1" className='Font16'> : {orderDetails?.addresses[1]?.phoneNumber}</Typography>
-                                    </Stack>
-                                    <Typography variant="body1" className="CommonBottomMargin">{orderDetails?.addresses[1]?.addressLine1 + ", " + orderDetails?.addresses[1]?.addressLine2 + ", " + orderDetails?.addresses[1]?.city + " - " + orderDetails?.addresses[1]?.postcode + ", " + orderDetails?.addresses[1]?.stateName + ", " + orderDetails?.addresses[1]?.countryName}</Typography>
-                                    {orderDetails?.addresses[1]?.isVerified && <Typography variant="subtitle1" className='Font16'>Address Verified</Typography>}
-                                </Box>
-                            </Box>
-
-                            {/* <Box className="OrderDetailTableWrapper"> */}
-                            <TableContainer
-                                className="OrderDetailTableWrapper"
-                                sx={{}}
-                            // component={Paper}
-                            >
-                                <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
-                                            <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
-                                            <TableCell sx={{ minWidth: "156px" }}>Quantity</TableCell>
-                                            <TableCell sx={{ minWidth: "200px" }}>Total</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {orderDetails?.orderItems?.map((row) => (
-                                            <TableRow
-                                                key={row.productId}
-                                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                            >
-                                                <TableCell component="th" scope="row">
-                                                    {row.productName}
-                                                </TableCell>
-                                                <TableCell>{row.unitPrice}</TableCell>
-                                                <TableCell>{row.quantity}</TableCell>
-                                                <TableCell>{row.totalPrice}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            {/* </Box> */}
-
-                            <Stack className='TotalShippingDetailsWrapper'>
-                                <Stack className='SubtotalShippingWrapper'>
-                                    <Box className="Subtotal">
-                                        <Typography variant="body1" sx={{ marginBottom: "2px" }}>Subtotal</Typography>
-                                        <Typography variant="subtitle1"   >${orderDetails?.orderSubtotal}</Typography>
                                     </Box>
-                                    <Box className="SecureShipping">
-                                        <Typography variant="body1" sx={{ marginBottom: "2px" }}>Secure Shipping</Typography>
-                                        <Typography variant="subtitle1"   >{orderDetails?.shippingMethod}</Typography>
+                                    <Box className="ShippingWrapper">
+                                        <Typography variant="subtitle1" className="AddressTitle">Shipping Address</Typography>
+                                        <Typography variant="subtitle1" className="CommonBottomMargin Font16">{orderDetails?.addresses[1]?.firstName + " " + orderDetails?.addresses[1]?.lastName}</Typography>
+                                        <Stack sx={{ gap: "10px", alignItems: "center" }} className="CommonBottomMargin">
+                                            <Typography variant="body1">Email: </Typography><Typography variant="subtitle1" className='Font16'>{orderDetails?.addresses[1]?.email}</Typography>
+                                        </Stack>
+                                        <Stack sx={{ gap: "10px", alignItems: "center" }} className="CommonBottomMargin">
+                                            <Typography variant="body1">Phone </Typography><Typography variant="subtitle1" className='Font16'> : {orderDetails?.addresses[1]?.phoneNumber}</Typography>
+                                        </Stack>
+                                        <Typography variant="body1" className="CommonBottomMargin">{orderDetails?.addresses[1]?.addressLine1 + ", " + orderDetails?.addresses[1]?.addressLine2 + ", " + orderDetails?.addresses[1]?.city + " - " + orderDetails?.addresses[1]?.postcode + ", " + orderDetails?.addresses[1]?.stateName + ", " + orderDetails?.addresses[1]?.countryName}</Typography>
+                                        {orderDetails?.addresses[1]?.isVerified && <Typography variant="subtitle1" className='Font16'>Address Verified</Typography>}
+                                    </Box>
+                                </Box>
+
+                                {/* <Box className="OrderDetailTableWrapper"> */}
+                                <TableContainer
+                                    className="OrderDetailTableWrapper"
+                                    sx={{}}
+                                // component={Paper}
+                                >
+                                    <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
+                                                <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
+                                                <TableCell sx={{ minWidth: "156px" }}>Quantity</TableCell>
+                                                <TableCell sx={{ minWidth: "200px" }}>Total</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {orderDetails?.orderItems?.map((row) => (
+                                                <TableRow
+                                                    key={row.productId}
+                                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                >
+                                                    <TableCell component="th" scope="row">
+                                                        {row.productName}
+                                                    </TableCell>
+                                                    <TableCell>{row.unitPrice}</TableCell>
+                                                    <TableCell>{row.quantity}</TableCell>
+                                                    <TableCell>{row.totalPrice}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                                {/* </Box> */}
+
+                                <Stack className='TotalShippingDetailsWrapper'>
+                                    <Stack className='SubtotalShippingWrapper'>
+                                        <Box className="Subtotal">
+                                            <Typography variant="body1" sx={{ marginBottom: "2px" }}>Subtotal</Typography>
+                                            <Typography variant="subtitle1"   >${orderDetails?.orderSubtotal}</Typography>
+                                        </Box>
+                                        <Box className="SecureShipping">
+                                            <Typography variant="body1" sx={{ marginBottom: "2px" }}>Secure Shipping</Typography>
+                                            <Typography variant="subtitle1"   >{orderDetails?.shippingMethod}</Typography>
+                                        </Box>
+                                    </Stack>
+                                    <Box className="TotalWrapper">
+                                        <Typography variant="body1">Total</Typography>
+                                        <Typography variant="subtitle2" className="TotalValue">${orderDetails?.orderTotal}</Typography>
+                                        <Stack sx={{ gap: "12px" }}>
+                                            <Typography variant="overline">GST Included:</Typography>
+                                            <Typography variant="overline">${orderDetails?.orderTax}</Typography>
+                                        </Stack>
                                     </Box>
                                 </Stack>
-                                <Box className="TotalWrapper">
-                                    <Typography variant="body1">Total</Typography>
-                                    <Typography variant="subtitle2" className="TotalValue">${orderDetails?.orderTotal}</Typography>
-                                    <Stack sx={{ gap: "12px" }}>
-                                        <Typography variant="overline">GST Included:</Typography>
-                                        <Typography variant="overline">${orderDetails?.orderTax}</Typography>
-                                    </Stack>
-                                </Box>
-                            </Stack>
-                            <Typography variant="body1" className="KeyPoints" dangerouslySetInnerHTML={{
-                                __html: orderDetails?.congratulationsText ?? ""
-                            }} />
-                            <Box className="CardsWrapper">
-                                <Box className="Card SecureShippingCard">
-                                    <Stack className='IconTitleWrapper'>
-                                        <Icon className="AddToCartIcon"><AddToCartIcon /></Icon>
-                                        <Typography variant="subtitle2">{orderDetails?.shippingTextP1}</Typography>
-                                    </Stack>
-                                    <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.shippingTextP2}</Typography>
-                                    <Link variant="overline" className="lineHeight25">{orderDetails?.shippingTextP3}</Link>
-                                </Box>
-                                <Box className="Card PaymentCard">
-                                    <Stack className='IconTitleWrapper'>
-                                        <Icon><AddToCartIcon /></Icon>
-                                        <Typography variant="subtitle2">{orderDetails?.paymentTextP1}</Typography>
-                                    </Stack>
-                                    <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.paymentTextP2}</Typography>
-                                    {/* <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{Bank transfer payments are free and required <br />within 24 hours of order Commonwealth Bank <br />
+                                <Typography variant="body1" className="KeyPoints" dangerouslySetInnerHTML={{
+                                    __html: orderDetails?.congratulationsText ?? ""
+                                }} />
+                                <Box className="CardsWrapper">
+                                    <Box className="Card SecureShippingCard">
+                                        <Stack className='IconTitleWrapper'>
+                                            <Icon className="AddToCartIcon"><AddToCartIcon /></Icon>
+                                            <Typography variant="subtitle2">{orderDetails?.shippingTextP1}</Typography>
+                                        </Stack>
+                                        <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.shippingTextP2}</Typography>
+                                        <Link variant="overline" className="lineHeight25" target="_blank" href={orderDetails?.shippingTextP3 ?? "#"}>{orderDetails?.shippingTextP3}</Link>
+                                    </Box>
+                                    <Box className="Card PaymentCard">
+                                        <Stack className='IconTitleWrapper'>
+                                            <Icon><AddToCartIcon /></Icon>
+                                            <Typography variant="subtitle2">{orderDetails?.paymentTextP1}</Typography>
+                                        </Stack>
+                                        <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.paymentTextP2}</Typography>
+                                        {/* <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{Bank transfer payments are free and required <br />within 24 hours of order Commonwealth Bank <br />
                                         Account Name: <Typography
                                             variant="overline" className="lineHeight25">Queenslandmint</Typography><br />
                                         BSB: <Typography
@@ -211,25 +231,25 @@ return (
                                         Account: <Typography
                                             variant="overline" className="lineHeight25">12345 67890 123456
                                         </Typography>}</Typography> */}
-                                    <Link variant="overline" className="lineHeight25">{orderDetails?.paymentTextP3}</Link>
+                                        <Link variant="overline" className="lineHeight25" target="_blank" href={orderDetails?.paymentTextP3 ?? "#"}>{orderDetails?.paymentTextP3}</Link>
+                                    </Box>
+                                    <Box className="Card SellingCard">
+                                        <Stack className='IconTitleWrapper'>
+                                            <Icon><AddToCartIcon /></Icon>
+                                            <Typography variant="subtitle2">{orderDetails?.sellingTextP1}</Typography>
+                                        </Stack>
+                                        <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.sellingTextP2}</Typography>
+                                        <Link variant="overline" className="lineHeight25" target="_blank" href={orderDetails?.sellingTextP3 ?? "#"}>{orderDetails?.sellingTextP3}</Link>
+                                    </Box>
                                 </Box>
-                                <Box className="Card SellingCard">
-                                    <Stack className='IconTitleWrapper'>
-                                        <Icon><AddToCartIcon /></Icon>
-                                        <Typography variant="subtitle2">{orderDetails?.sellingTextP1}</Typography>
-                                    </Stack>
-                                    <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.sellingTextP2}</Typography>
-                                    <Link variant="overline" className="lineHeight25">{orderDetails?.sellingTextP3}</Link>
-                                </Box>
-                            </Box>
-                        </>}
-                        {!orderDetails && !loading && <Typography variant="body1" style={{ textAlign: "center" }}>Order not found</Typography>}
-                    </Box>
-                </Container>
-            </Box >
-        </>
-    </Layout >
-)
+                            </>}
+                            {!orderDetails && !loading && <Typography variant="body1" style={{ textAlign: "center" }}>Order not found</Typography>}
+                        </Box>
+                    </Container>
+                </Box >
+            </>
+        </Layout >
+    )
 }
 
 export default orderDetails

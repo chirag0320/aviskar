@@ -35,7 +35,7 @@ export const shipmentTypeToEnum: any = {
   'SecureShipping': 2,
   'VaultStorage': 1
 }
-export const shipmentNameEnum: any= {
+export const shipmentNameEnum: any = {
   'LocalShipping': 'Local Pick Up',
   'SecureShipping': 'Secure Shipping',
   'VaultStorage': 'Vault storage'
@@ -53,7 +53,7 @@ export function hasFulfilled(dataType: string): boolean {
 }
 
 // Function to store the last page in session storage
-export const storeLastPage = (pageUrl:string) => {
+export const storeLastPage = (pageUrl: string) => {
   sessionStorage.setItem('lastPage', pageUrl);
 };
 
@@ -61,7 +61,7 @@ export const storeLastPage = (pageUrl:string) => {
 export const getLastPage = () => {
   return sessionStorage.getItem('lastPage');
 };
-export const bodyForGetShoppingCartData={
+export const bodyForGetShoppingCartData = {
   "search": "",
   "pageNo": 0,
   "pageSize": -1,
@@ -69,12 +69,22 @@ export const bodyForGetShoppingCartData={
   "sortOrder": "",
   "filters": {}
 }
-export function getDefaultOption(enabledOptions:any[], defaultOption:string | number) {
+export function getDefaultOption(enabledOptions: any[], defaultOption: string | number) {
   const enabledValues = enabledOptions.filter(option => option.enabled).map(option => option.value);
   return enabledValues.length > 0 ? enabledValues[0] : defaultOption;
 }
-export const paymentMethodType:any={
-  "CreditCard" : 'Bank Transfer',
-  "BankTransfer" : 'Credit Card',
-  "Cash" : 'Cash',
+export const paymentMethodType: any = {
+  "CreditCard": 'Credit Card',
+  "BankTransfer": 'Bank Transfer',
+  "Cash": 'Cash',
 }
+// Debounce function
+export const debounceFunction = (func: any, delay: any) => {
+  let timeoutId: any;
+  return function (...args: any) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+};

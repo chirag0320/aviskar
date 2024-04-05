@@ -21,9 +21,11 @@ interface OrderDetails {
     paymentFee: number | null;
     orderDiscount: number | null;
     orderTax: number | null;
-    orderItems: any[]; // Define this according to your actual structure
+    subTotal: number | null;
+    shippingMethod : string | null;
+    paymentMethod : string | null;
+    orderItems: any[]; 
 }
-
 
 interface OrderItem {
     productId: number;
@@ -35,14 +37,6 @@ interface OrderItem {
     subTotal: number;
 }
 
-interface Order {
-    orderId: number;
-    orderDate: string;
-    orderTime: string;
-    orderNumber: string;
-    orderTotal: number;
-    orderItems: OrderItem[];
-}
 const initialState: { loading: boolean, orderConfirmationDetailsData: OrderDetails | null } = {
     loading: false,
     orderConfirmationDetailsData: null

@@ -166,7 +166,9 @@ export const getCheckoutPageData = appCreateAsyncThunk(
 export const getInsuranceAndTaxDetailsCalculation = appCreateAsyncThunk(
     'getInsuranceAndTaxDetailsCalculation',
     async ({ url, body }: { url: string, body: any }) => {
+        if(url && Object.keys(body).length){
         return await CheckoutPageServices.getInsuranceAndTaxInfo(url, body)
+    }
     }
 )
 export const getCraditCardCharges = appCreateAsyncThunk(
@@ -324,15 +326,15 @@ export const checkoutPage = createSlice({
         })
         // get credit card charges
         builder.addCase(getCraditCardCharges.pending, (state, action) => {
-            state.loading = true
+            // state.loading = true
         })
         builder.addCase(getCraditCardCharges.fulfilled, (state, action) => {
             state.craditCardCharges = action?.payload?.data?.data
             localStorageSetItem('craditCardCharges', JSON.stringify(state.craditCardCharges))
-            state.loading = false;
+            // state.loading = false;
         })
         builder.addCase(getCraditCardCharges.rejected, (state, action) => {
-            state.loading = false
+            // state.loading = false
         })
         // checkValidationOnConfirmOrder
         builder.addCase(checkValidationOnConfirmOrder.pending, (state, action) => {

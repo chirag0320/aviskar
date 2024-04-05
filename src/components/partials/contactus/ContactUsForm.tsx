@@ -7,6 +7,8 @@ import { Box, Button, MenuItem, Typography } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { saveContactUsDetails } from '@/redux/reducers/contactUs'
 import { ENDPOINTS } from '@/utils/constants'
+import { hasFulfilled } from '@/utils/common'
+import useShowToaster from '@/hooks/useShowToaster'
 
 interface GetInTouchInputs {
     reason: string
@@ -17,11 +19,11 @@ interface GetInTouchInputs {
 }
 
 const schema = yup.object().shape({
-    reason: yup.string().trim().required(),
-    name: yup.string().trim().required(),
-    email: yup.string().email().required(), // Email field is required and must be in email format
-    phone: yup.string().trim().required(),
-    enquiry: yup.string().trim().required(),
+    reason: yup.string().trim().required("Reason is required field"),
+    name: yup.string().trim().required("Name is required field"),
+    email: yup.string().email("Email must be valid").required("Email is required field"), // Email field is required and must be in email format
+    phone: yup.string().trim().required("Phone number is required field"),
+    enquiry: yup.string().trim().required("Enquiry is required field"),
 });
 
 
@@ -29,19 +31,21 @@ const ContactUsForm = () => {
     const reasonsForContact = useAppSelector(state => state.contactUs.reasonsForContact);
     const loading = useAppSelector(state => state.contactUs.loading);
     const dispatch = useAppDispatch();
+    const { showToaster } = useShowToaster()
 
     const {
         register,
         handleSubmit,
         reset,
         control,
+        setValue,
         formState: { errors },
     } = useForm<GetInTouchInputs>({
         resolver: yupResolver(schema)
     })
 
     const onSubmit = async (data: any) => {
-        await dispatch(saveContactUsDetails({
+        const response = await dispatch(saveContactUsDetails({
             url: ENDPOINTS.saveContactUsDetails, body: {
                 ReasonId: data.reason,
                 Email: data.email,
@@ -50,7 +54,14 @@ const ContactUsForm = () => {
                 PhoneNumber: data.phone
             }
         }) as any);
-        reset();
+
+        if (hasFulfilled(response.type)) {
+            showToaster({ message: "Enquiry Form has been submitted successfully", severity: "success" })
+            reset();
+        }
+        else {
+            showToaster({ message: "Submission failed! Try again." })
+        }
     }
 
     return (
@@ -62,11 +73,12 @@ const ContactUsForm = () => {
                     register={register}
                     error={errors.reason}
                     name="reason"
-                    label="Reason:"
+                    label="Reason* :"
                     control={control}
                     variant='outlined'
                     margin='none'
-                    required
+                    setValue={setValue}
+                    // required
                     className='SelectReason'
                 >
                     {reasonsForContact.length > 0 && reasonsForContact.map((reason) => (
@@ -77,44 +89,46 @@ const ContactUsForm = () => {
                     register={register}
                     error={errors.name}
                     name="name"
-                    label="Your name:"
+                    label="Your name* :"
                     placeholder="Enter your name."
                     variant='outlined'
                     margin='none'
-                    required
+                    // required
                 />
                 <RenderFields
                     register={register}
                     error={errors.email}
                     name="email"
-                    label="Your email:"
+                    label="Your email* :"
                     placeholder="Enter your email address."
                     variant='outlined'
                     margin='none'
-                    required
+                    // required
                 />
                 <RenderFields
                     register={register}
                     error={errors.phone}
+                    control={control}
+                    type='number'
                     name="phone"
-                    label="Your phone:"
+                    label="Your phone* :"
                     placeholder="Enter your phone number."
                     variant='outlined'
                     margin='none'
-                    required
+                    // required
                 />
                 <RenderFields
                     register={register}
                     error={errors.enquiry}
                     name="enquiry"
-                    label="Enquiry:"
+                    label="Enquiry* :"
                     placeholder="Enter your enquiry."
                     variant='outlined'
                     multiline={true}
                     rows={7}
                     className='EnquiryTexaea'
                     margin='none'
-                    required
+                    // required
                 />
                 <Box className="FormAction">
                     <Button className='GetInTouchSubmitBtn' variant="contained" type="submit" disabled={loading}>Submit</Button>

@@ -1,21 +1,43 @@
 #PageCalculators {
-    @include padding-vertical(80);
+    padding-bottom: 40px;
     @include media($md) {
-        @include padding-vertical(40);
+        padding-bottom: 30px;
+    }
+    @include media($sm) {
+        padding-bottom: 20px;
     }
     .AllCalculators {
         display: flex;
-        justify-content: space-around;
+        gap: 4vw;
 
         .CalculatorLink {
             .ShippingCard {
+                @include transition;
                 &:hover {
                     background-color: #ebc486;
+                }
+                .IconWrapper {
+                    @include media($md) {
+                        height: 40px;
+                        width: 40px;
+                    }
+                    @include media($xs) {
+                        height: 30px;
+                        width: 30px;
+                    }
+                    .IconCalculatorsPage {
+                        width: inherit;
+                        height: inherit;
+                        svg {
+                            width: inherit;
+                            height: inherit;
+                        }
+                    }
                 }
             }
         }
 
-        @include media($md) {
+        @include media($sm) {
             height: 100%;
             flex-direction: column;
             gap: 20px;
