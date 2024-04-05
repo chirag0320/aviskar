@@ -12,6 +12,7 @@ import { useAppSelector } from "@/hooks";
 import { navigate } from "gatsby";
 import Loader from "@/components/common/Loader";
 import { roundOfThePrice } from "@/utils/common";
+import noImage from '../assets/images/noImage.png'
 
 function OrderConfirmation(props: any) {
     const checkLoadingStatus = useAppSelector(state => state.orderConfirmationDetails.loading);
@@ -94,7 +95,7 @@ function OrderConfirmation(props: any) {
                                                         >
                                                             <TableCell component="th" scope="row">
                                                                 <img className="ProductImage"
-                                                                    src={row.imageUrl} alt="Product image" loading="lazy"></img>
+                                                                    src={row.imageUrl ?? noImage} alt="Product image" loading="lazy"></img>
                                                                 {row.productName}
                                                             </TableCell>
                                                             <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
