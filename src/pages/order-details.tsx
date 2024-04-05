@@ -84,7 +84,9 @@ function orderDetails({ location }: { location: any }) {
                     <Container>
                         <Box className="OrderDetailsContent">
                             {orderDetails && <>
-                                <img src={StatusImage} className="StatusImage" alt="StatusImage" />
+                                <Box className="Ribbon" sx={{backgroundColor: "#ff1f1f"}}>
+                                    Status: Cancelled
+                                </Box> 
                                 <Box className="OrderDetailsWrapper">
                                     <Box className='PDFBtnWrapper'>
                                         <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained" onClick={downloadInvoiceHandler} disabled={loading}><Icon className='PdfIcon' ><PdfIcon /></Icon>PDF invoice</Button>
