@@ -45,10 +45,28 @@ function orderDetails({ location }: { location: any }) {
         const response = await dispatch(downloadOrderInvoice({ url: ENDPOINTS.downloadOrderInvoice + searchParams.get("orderNo") ?? "" }) as any)
 
         if (!hasFulfilled(response.type)) {
-            console.log("🚀 ~ downloadInvoiceHandler ~ response:", response)
             showToaster({
                 message: ((response?.payload as AxiosError)?.response?.data as { message: string })?.message as string, severity: "error"
             })
+        }
+        else {
+            const pdfData = response.payload?.data;
+            // const url = window.URL.createObjectURL(new Blob([pdfData]));
+            // const link = document.createElement('a');
+            // link.href = url;
+            // link.setAttribute('download', 'file.pdf'); //or any other extension
+            // document.body.appendChild(link);
+            // link.click();
+            console.log("🚀 ~ downloadInvoiceHandler ~ response:", response.payload?.data)
+            const blob = new Blob([pdfData], { type: 'application/pdf' });
+
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'invoice-qmint.pdf';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     }
 
@@ -57,8 +75,8 @@ function orderDetails({ location }: { location: any }) {
             <>
                 <Loader open={checkLoadingStatus} />
                 <Seo
-                    keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
-                    title="Home"
+                    keywords={[`gatsby`, `order-details`, `react`]}
+                    title="Order details"
                     lang="en"
                 />
                 {openToaster && <Toaster />}
@@ -69,7 +87,7 @@ function orderDetails({ location }: { location: any }) {
                                 <img src={StatusImage} className="StatusImage" alt="StatusImage" />
                                 <Box className="OrderDetailsWrapper">
                                     <Box className='PDFBtnWrapper'>
-                                        <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained"><Icon className='PdfIcon' onClick={downloadInvoiceHandler}><PdfIcon /></Icon>PDF invoice</Button>
+                                        <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained" onClick={downloadInvoiceHandler} disabled={loading}><Icon className='PdfIcon' ><PdfIcon /></Icon>PDF invoice</Button>
                                     </Box>
                                     <Typography variant="subtitle2" className="OrderID">Order : {orderDetails?.customOrderNumber}</Typography>
                                     <Stack className="OrderDetails">
@@ -197,7 +215,7 @@ function orderDetails({ location }: { location: any }) {
                                             <Typography variant="subtitle2">{orderDetails?.shippingTextP1}</Typography>
                                         </Stack>
                                         <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.shippingTextP2}</Typography>
-                                        <Link variant="overline" className="lineHeight25">{orderDetails?.shippingTextP3}</Link>
+                                        <Link variant="overline" className="lineHeight25" target="_blank" href={orderDetails?.shippingTextP3 ?? "#"}>{orderDetails?.shippingTextP3}</Link>
                                     </Box>
                                     <Box className="Card PaymentCard">
                                         <Stack className='IconTitleWrapper'>
@@ -213,7 +231,7 @@ function orderDetails({ location }: { location: any }) {
                                         Account: <Typography
                                             variant="overline" className="lineHeight25">12345 67890 123456
                                         </Typography>}</Typography> */}
-                                        <Link variant="overline" className="lineHeight25">{orderDetails?.paymentTextP3}</Link>
+                                        <Link variant="overline" className="lineHeight25" target="_blank" href={orderDetails?.paymentTextP3 ?? "#"}>{orderDetails?.paymentTextP3}</Link>
                                     </Box>
                                     <Box className="Card SellingCard">
                                         <Stack className='IconTitleWrapper'>
@@ -221,7 +239,7 @@ function orderDetails({ location }: { location: any }) {
                                             <Typography variant="subtitle2">{orderDetails?.sellingTextP1}</Typography>
                                         </Stack>
                                         <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.sellingTextP2}</Typography>
-                                        <Link variant="overline" className="lineHeight25">{orderDetails?.sellingTextP3}</Link>
+                                        <Link variant="overline" className="lineHeight25" target="_blank" href={orderDetails?.sellingTextP3 ?? "#"}>{orderDetails?.sellingTextP3}</Link>
                                     </Box>
                                 </Box>
                             </>}
