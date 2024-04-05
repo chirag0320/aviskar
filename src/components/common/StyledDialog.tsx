@@ -17,7 +17,7 @@ interface StyledDialog {
   secondaryActionText?: string
   maxWidth?: Breakpoint
   actions?: boolean
-  onAgree:any
+  onAgree?: any
 }
 
 function StyledDialog(props: StyledDialog) {

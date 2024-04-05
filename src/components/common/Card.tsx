@@ -274,7 +274,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
           </ClickTooltip>
         }
 
-        <IconButton className="Outlined AddToCart" onClick={handleAddToCart}><AddToCartIcon /></IconButton>
+        <IconButton aria-label="AddToCartButton" className="Outlined AddToCart" onClick={handleAddToCart}><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
   );
