@@ -1,9 +1,9 @@
 .OrderConfirmationPage {
-    padding: 66px 0 70px;
+    @include padding-vertical(30);
 
 
     @include media($sm) {
-        padding: 50px 0 50px;
+        @include padding-vertical(20);
     }
 
     .MuiTypography-root {
@@ -13,32 +13,37 @@
     .OrderReceivedMessageWrapper {
         align-items: center;
         gap: 15px;
-        margin-bottom: 40px;
+        margin-bottom: 30px;
 
         @include media($sm) {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .GreenConfirmationIcon {
-            height: 30px;
-            width: 30px;
-            object-fit: contain;
-
             svg {
-                height: 100%;
-                width: 100%;
+                font-size: pxToRem(22);
             }
         }
     }
 
     .DetailsWrapper {
+        padding: 16px;
+        border-radius: 15px;
+        border: 1px solid rgba($dark, 0.1);
         .ThankyouWrapper {
-            padding: 25px 20px;
+            padding: 15px 10px 10px;
             background-color: rgba($blueCyan, 0.1);
             background-color: $white;
             border-radius: 15px 15px 0 0;
 
+            @include media($xs) {
+                padding: 8px 0px 4px;
+            }
 
+            @include media($ssm) {
+                font-size: 26px;
+                line-height: 34px;
+            }
 
             .ThankyouText {
                 font-size: 30px;
@@ -73,13 +78,13 @@
         }
 
         .OrderDetailsWrapper {
-            border: 1px solid rgba($blueCyan, 0.15);
-            border-radius: 0 0 15px 15px;
+            border: 1px solid rgba($dark, 0.1);
+            border-radius: 15px;
 
             .TitleValueWrapper {
-                padding: 20px;
+                padding: 16px;
                 align-items: center;
-                border-bottom: 1px solid rgba($blueCyan, 0.15);
+                border-bottom: 1px solid rgba($dark, 0.1);
 
                 @include media($sm) {
                     flex-direction: column;
@@ -95,10 +100,21 @@
                     }
                 }
 
+                &.OrderNo {
+                    .MuiButton-root {
+                        font-size: pxToRem(16);
+                        font-weight: 600;
+                    }
+                }
+
+                .TableContainerWrapper {
+                    border: 1px solid rgba($dark, 0.1);
+                    border-radius: 15px;
+                    overflow: hidden;
+                }
+
                 .OrderDetailTableWrapper {
                     margin-top: 20px;
-                    border: 1px solid rgba(227, 228, 229, 1);
-                    border-radius: 15px;
                     box-shadow: none;
 
                     .OrderDetailTable {
@@ -222,7 +238,7 @@
         }
 
         .BottomContentWrapper {
-            margin: 30px 0 40px;
+            margin-top: 30px;
 
             p {
                 &:first-child {
@@ -242,6 +258,7 @@
     }
 
     .ContinueBtn {
+        margin-top: 30px;
         @include media-min($xxl) {
             min-width: 169px;
         }
