@@ -113,6 +113,7 @@ export const categoryPageSlice = createSlice({
 
     })
     builder.addCase(getCategoryData.rejected, (state) => {
+      state.items = []; // to show the product not found text
       state.loading = false;
     })
 
