@@ -38,7 +38,7 @@ function CompareProducts() {
     }
     return (
         <Layout>
-            <Loader open = {checkLoadingStatus} />
+            <Loader open={checkLoadingStatus} />
             {openToaster && <Toaster />}
             <Seo
                 keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
@@ -87,14 +87,14 @@ function CompareProducts() {
                                                     ))}
                                                 </TableRow>
                                             ))}
-                                            <TableRow>
+                                            {comparedProducts.length > 0 && <TableRow>
                                                 <TableCell className="StickyCell">Delete</TableCell>
                                                 {comparedProducts.map((product) => (
                                                     <TableCell key={product.productId} align="center">
                                                         <IconButton className="DeleteButton" onClick={() => { removeProduct(product.productId) }}><Delete1Icon /></IconButton>
                                                     </TableCell>
                                                 ))}
-                                            </TableRow>
+                                            </TableRow>}
                                         </TableBody>
                                     </Table>
                                 </TableContainer>

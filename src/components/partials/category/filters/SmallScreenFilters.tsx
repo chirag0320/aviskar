@@ -82,7 +82,7 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
                             {renderList(categoryData.categories)}
                         </TabPanel>}
                         <TabPanel value={tabValue} index={1}>
-                            <PriceSlider minPrice={categoryData?.price?.minPrice} maxPrice={categoryData?.price?.maxPrice} setSelectedPrice={setSelectedPrice} selectedPrice={selectedPrice} setIsPriceChanged={setIsPriceChanged}/>
+                            <PriceSlider minPrice={categoryData?.price?.minPrice as number} maxPrice={categoryData?.price?.maxPrice as number} setSelectedPrice={setSelectedPrice} selectedPrice={selectedPrice} setIsPriceChanged={setIsPriceChanged}/>
                         </TabPanel>
                         {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
                             <TabPanel value={tabValue} index={index + 2} key={filter}>

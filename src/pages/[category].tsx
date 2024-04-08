@@ -48,7 +48,7 @@ function Category(props:any) {
     }, [])
 
     useEffect(() => {
-        if (categoryData?.items?.length > 0) {
+        if (categoryData.items?.length ?? 0 > 0) {
             const productIds = categoryData?.items?.map((product: any) => product?.productId);
             setProductIds({ productIds })
         }

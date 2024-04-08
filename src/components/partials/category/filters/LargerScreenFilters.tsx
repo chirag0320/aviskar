@@ -45,7 +45,7 @@ const LargerScreenFilters = ({ renderList, setSelectedFilters, setSelectedPrice,
                     </AccordionDetails>
                 </Accordion>
             </Box>}
-            {categoryData.items.length > 0 && <Box className="SortByWrapper">
+            {categoryData.items && categoryData.items.length > 0 && <Box className="SortByWrapper">
                 <Divider />
                 <Accordion >
                     <AccordionSummary
