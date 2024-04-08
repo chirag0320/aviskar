@@ -367,6 +367,11 @@ const theme: Theme = createTheme({
         containedInfo: {
           backgroundColor: `${variable.elephant}`,
         },
+        containedSecondary: {
+          "&:hover": {
+            backgroundColor: variable.yellowFuel,
+          },
+        },
       },
     },
     MuiIconButton: {
