@@ -390,7 +390,7 @@ const theme: Theme = createTheme({
           color: "#1D2129",
           overflowWrap: "anywhere",
           // overflowWrap: anywhere;
-          transition: "400ms all ease",
+          transition: "300ms all ease",
           "&:hover": {
             color: "#EAA22B",
           },
