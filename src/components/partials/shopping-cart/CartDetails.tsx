@@ -135,7 +135,6 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
         if (hasFulfilled(reponse.type)) {
             dispatch(clearShoppingCart());
             showToaster({ message: reponse?.payload?.data?.message, severity: 'success' })
-
         }
         else {
             showToaster({ message: "Clear cart failed", severity: 'error' })

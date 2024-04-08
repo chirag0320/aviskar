@@ -7,7 +7,7 @@ interface AdditionalBeneficiary {
 }
 
 export interface AddressQuery {
-    addressId: number;
+    addressId?: number;
     firstName: string;
     lastName: string;
     company: string;

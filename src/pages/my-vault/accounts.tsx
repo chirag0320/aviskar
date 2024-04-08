@@ -4,7 +4,6 @@ import { PageTitle } from "@/components/common/Utils"
 import Seo from "@/components/common/Seo"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { ENDPOINTS } from "@/utils/constants"
-import { getTopicDetails } from "@/redux/reducers/topicReducer"
 import { useAppSelector } from "@/hooks"
 import Layout from "@/components/common/Layout"
 import { AddressCard } from "@/components/common/Card"
@@ -30,15 +29,15 @@ function Accounts() {
     const handleAccountTypeDialog = () => {
         setAccountTypeDialog(true);
     }
-    const handleCloseAccountTypeDialog = () => {
-        setAccountTypeDialog(false);
-    }
-
-    const handleUpdateAddress = () => {
-        setUpdateAddress(true);
-    }
     const handleCloseUpdateAddress = () => {
         setUpdateAddress(false);
+    }
+    const handleAccountTypeNextButton = () => {
+        setUpdateAddress(true);
+        setAccountTypeDialog(false);
+    }
+    const handleCloseAccountTypeDialog = () => {
+        setAccountTypeDialog(false);
     }
 
     return (
@@ -47,7 +46,7 @@ function Accounts() {
             <Layout>
                 <Seo
                     keywords={[`QMint Accounts`]}
-                    title="Address"
+                    title="Accounts"
                     lang="en"
                 />
                 <PageTitle title="Accounts" backToDashboard={true} />
@@ -74,7 +73,7 @@ function Accounts() {
                             ))}
                         </Box>
                         <UpdateAddress dialogTitle="Add new address" open={updateAddress} onClose={handleCloseUpdateAddress} />
-                        <AccountType dialogTitle="Add new Account" open={accountTypeDialog} onClose={handleCloseAccountTypeDialog} handleUpdateAddress={handleUpdateAddress} />
+                        <AccountType dialogTitle="Select Account Type" open={accountTypeDialog} onClose={handleCloseAccountTypeDialog} handleAccountTypeNextButton={handleAccountTypeNextButton} />
                     </Container>
                 </Box>
             </Layout>

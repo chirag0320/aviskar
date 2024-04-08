@@ -12,18 +12,20 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
-import { StateOrCountry, addOrEditAddress, updateAddress } from "@/redux/reducers/checkoutReducer";
+import { StateOrCountry, addOrEditAddress as addOrEditAddressForCheckout, updateAddress } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import { addressSchema } from "./AddAddress"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
+import { addOrEditAddresses as addOrEditAddressForMyVault } from "@/redux/reducers/myVaultReducer"
 
 interface UpdateAddress {
   open: boolean
   dialogTitle: string
   onClose: () => void
   existingAddress?: any
+  isComingFromMyVault?: boolean
 }
 
 interface Inputs {
@@ -41,7 +43,8 @@ interface Inputs {
 }
 
 function UpdateAddress(props: UpdateAddress) {
-  const { open, dialogTitle, onClose, existingAddress } = props
+  const { open, dialogTitle, onClose, existingAddress, isComingFromMyVault } = props
+  console.log("🚀 ~ UpdateAddress ~ existingAddress:", existingAddress)
   const loading = useAppSelector(state => state.checkoutPage.loading);
   const countryList = useAppSelector(state => state.checkoutPage.countryList);
   const stateListall = useAppSelector(state => state.checkoutPage.stateList);
@@ -80,36 +83,55 @@ function UpdateAddress(props: UpdateAddress) {
       countryId: data.Country,
     }
 
-    const response = await dispatch(addOrEditAddress({
-      url: ENDPOINTS.addOrEditAddress,
-      body: {
-        ...addressQuery,
-        addressId: existingAddress.addressId
-      }
-    }))
-
-    if (hasFulfilled(response.type)) {
-      onClose()
-      reset()
-      showToaster({ message: "Address saved successfully", severity: 'success' })
-      dispatch(updateAddress({
-        ...existingAddress,
-        firstName: data.FirstName,
-        lastName: data.LastName,
-        company: data.Company,
-        phone1: data.Contact,
-        email: data.Email,
-        addressLine1: data.Address1,
-        addressLine2: data.Address2,
-        city: data.City,
-        stateName: data.State,
-        postcode: data.Code,
-        country: data.Country,
-        countryName: countryList.find((country: StateOrCountry) => country.id === data.Country)?.name,
-        state: stateId,
+    if (isComingFromMyVault === true) {
+      const response = await dispatch(addOrEditAddressForMyVault({
+        url: ENDPOINTS.addOrEditAddressesInMyVault,
+        body: {
+          ...addressQuery,
+          addressId: existingAddress.addressId
+        }
       }))
-    } else {
-      showToaster({ message: "Failed to save address", severity: 'error' })
+
+      if (hasFulfilled(response.type)) {
+        onClose()
+        reset()
+        showToaster({ message: "Address saved successfully", severity: 'success' })
+      } else {
+        showToaster({ message: "Failed to save address", severity: 'error' })
+      }
+    }
+    else {
+      const response = await dispatch(addOrEditAddressForCheckout({
+        url: ENDPOINTS.addOrEditAddress,
+        body: {
+          ...addressQuery,
+          addressId: existingAddress.addressId
+        }
+      }))
+
+      if (hasFulfilled(response.type)) {
+        onClose()
+        reset()
+        showToaster({ message: "Address saved successfully", severity: 'success' })
+        dispatch(updateAddress({
+          ...existingAddress,
+          firstName: data.FirstName,
+          lastName: data.LastName,
+          company: data.Company,
+          phone1: data.Contact,
+          email: data.Email,
+          addressLine1: data.Address1,
+          addressLine2: data.Address2,
+          city: data.City,
+          stateName: data.State,
+          postcode: data.Code,
+          country: data.Country,
+          countryName: countryList.find((country: StateOrCountry) => country.id === data.Country)?.name,
+          state: stateId,
+        }))
+      } else {
+        showToaster({ message: "Failed to save address", severity: 'error' })
+      }
     }
   }
 
@@ -136,8 +158,8 @@ function UpdateAddress(props: UpdateAddress) {
   useEffect(() => {
     setValue('State', existingAddress?.stateName);
     setStateId(existingAddress?.state);
-    setValue('Country', existingAddress?.country)
-    setcountryValue(existingAddress?.country)
+    setValue('Country', existingAddress?.country || existingAddress?.countryId)
+    setcountryValue(existingAddress?.country || existingAddress?.countryId)
     setstateValue(existingAddress?.stateName)
     return () => {
       reset()
@@ -204,7 +226,7 @@ function UpdateAddress(props: UpdateAddress) {
               register={register}
               error={errors.Contact}
               name="Contact"
-              defaultValue={existingAddress?.phone1}
+              defaultValue={existingAddress?.phone1 || existingAddress?.phoneNumber}
               type="number"
               placeholder="Enter contact *"
               control={control}
@@ -260,7 +282,7 @@ function UpdateAddress(props: UpdateAddress) {
               control={control}
               error={errors.Country}
               name="Country *"
-              defaultValue={existingAddress?.country}
+              defaultValue={existingAddress?.country || existingAddress?.countryId}
               value={countryValue}
               variant='outlined'
               margin='none'
@@ -299,7 +321,7 @@ function UpdateAddress(props: UpdateAddress) {
                   setStateId(value.id);
                 }
               }}
-              inputValue={stateValue}
+              inputValue={stateValue ?? ""}
               onInputChange={(event, newInputValue) => {
                 setValue('State', newInputValue); // Update the form value with the manually typed input
                 setstateValue(newInputValue)

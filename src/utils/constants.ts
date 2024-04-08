@@ -80,7 +80,7 @@ export const ENDPOINTS = {
 
     // my vault > addresses
     getAddresses: "myvault/j71euLEXRE6zhEOO9lVyIw",
-    addOrEditAddresses: "myvault/mIKu7TMRFUW49i97slxpDg",
+    addOrEditAddressesInMyVault: "myvault/mIKu7TMRFUW49i97slxpDg",
     deleteAddress: "myvault/wrbG7PIz7U2a5Bx7wEgygQ/" // dynamic
 }
 export const StoreData = {

@@ -79,7 +79,7 @@ export const StockReturnWithName = React.memo(
         >
           <Box className="FlipContainer"
             width={containerWidth}
-            // marginRight={name === "AUD/USD" ? "8px" : "0px"}
+          // marginRight={name === "AUD/USD" ? "8px" : "0px"}
           >
             <Box className="Flipper">
               <Typography variant="body2" component="span" className="Value Front">{roundOfThePrice(percentage)}%</Typography>
@@ -131,8 +131,9 @@ export const SectionHeading = React.memo(({ title, description }: SectionHeading
 
 export const PageTitle = React.memo(({ title, backToDashboard, maxWidth }: any) => {
   const handleBackToDashboard = () => {
-    // Logic to redirect to the homepage
+    navigate('/my-vault')
   };
+
   return (
     <Box className="PageTitle">
       <Container maxWidth={maxWidth}>
