@@ -2,10 +2,12 @@
   box-shadow: none !important;
   border: 1px solid $mercury;
   border-radius: 15px !important;
+
   table {
     &.MuiTable-root {
       .MuiTableHead-root {
         background-color: $mercury30;
+
         .MuiTableRow-root {
           .MuiTableCell-root {
             font-size: 18px;
@@ -14,21 +16,24 @@
             padding: 18px 23px;
             border-left: 1px solid $mercury;
             border-bottom: 1px solid $mercury;
+
             &:first-child {
               border-left: 0;
             }
           }
         }
       }
+
       .MuiTableBody-root {
         .MuiTableRow-root {
           .MuiTableCell-root {
             border-left: 1px solid $mercury;
-            border-bottom: 1px solid $mercury;
+            // border-bottom: 1px solid $mercury;
             font-size: 16px;
             line-height: 26px;
             font-weight: 500;
             padding: 14px 23px;
+
             .ChipWrapper {
               display: flex;
               gap: 15px;
@@ -47,6 +52,7 @@
                   color: $red;
                 }
               }
+
               .MuiChip-colorSuccess {
                 height: 26px;
                 padding: 3px 15px;
@@ -62,6 +68,7 @@
                 }
               }
             }
+
             &:first-child {
               border-left: 0;
             }

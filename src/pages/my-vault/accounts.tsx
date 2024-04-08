@@ -13,7 +13,7 @@ import { AddressCard } from "@/components/common/Card"
 import UpdateAddress from "@/components/partials/checkout/UpdateAddress"
 import { PlusIcon } from "../../assets/icons/index"
 
-import AccountType from './accountType'
+import AccountType from '../../components/partials/my-vault/accountType'
 
 function Accounts(paramsData: any) {
     const { topicDetails, loading } = useAppSelector(state => state.topic)

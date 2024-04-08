@@ -29,7 +29,6 @@ export type CartItemsWithLivePriceDetails = CartItem & {
 const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quantities, setQuantities }: Props) => {
     const loading = useAppSelector(state => state.shoppingCart.loading);
     const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
-    console.log("🚀 ~ CartDetails ~ cartItems:", cartItems)
     const [productIds, setProductIds] = useState({})
     const dispatch = useAppDispatch();
     const { showToaster } = useShowToaster();
@@ -45,7 +44,7 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
             priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
 
             let subTotal = 0;
-            const cartItemsWithLivePrice = cartItems.map((item: CartItem) => {
+            const cartItemsWithLivePrice = cartItems?.map((item: CartItem) => {
                 subTotal += (idwithpriceObj?.[item.productId]?.price * item.quantity)
                 return {
                     ...item,
@@ -55,19 +54,20 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
 
             dispatch(updateSubTotal(subTotal))
 
-            setCartItemsWithLivePrice(cartItemsWithLivePrice)
+            if (cartItemsWithLivePrice) {
+                setCartItemsWithLivePrice(cartItemsWithLivePrice)
+            }
         }
     }, [priceData])
 
     useEffect(() => {
-        // console.log("Qmint", "IM in the cart items effect")
-        if (cartItems.length > 0) {
-            const productIds = cartItems.map((item: CartItem) => item.productId);
+        if (cartItems?.length ?? 0 > 0) {
+            const productIds = cartItems?.map((item: CartItem) => item.productId);
             setProductIds({ productIds })
         }
 
         let quantities: any = {}
-        cartItems.forEach((item: CartItem) => {
+        cartItems?.forEach((item: CartItem) => {
             quantities[item.id] = item.quantity
         })
         setQuantities(quantities)
@@ -145,7 +145,7 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
     return (
         <Box className="ShoppingCartDetails">
             <Box className="ShoppingProductsDetailsWrapper">
-                {cartItemsWithLivePrice && cartItemsWithLivePrice.length === 0 && <Typography variant="body1" style={{ textAlign: "center" }}>No items in the cart</Typography>}
+                {!loading && cartItems && cartItems?.length === 0 && <Typography variant="body1" style={{ textAlign: "center" }}>No items in the cart</Typography>}
                 {cartItemsWithLivePrice?.length > 0 && cartItemsWithLivePrice?.map((cartItem) => {
                     return (
                         <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={true} quantity={quantities[cartItem.id]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />

@@ -340,8 +340,8 @@
 
     .SwiperContainer {
       .swiper {
-        @include padding-vertical(40);
-        @include margin-vertical(-40);
+        padding-top: 30px;
+        margin-top: -30px;
 
         @include media-min($md) {
           @include padding-horizontal(24);

@@ -15,7 +15,9 @@ import { PriceChangeReturn, ProductStockStatus, ProductUpdateCountdown } from "@
 import ProductImages from "./ProductImages"
 
 // Assets
-import { AlarmIcon, CameraIcon, CartIcon, CompareIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MinusIcon, PlusIcon, TwitterIcon, YoutubeIcon } from "@/assets/icons"
+import { AddToCartIcon, AlarmIcon, CameraIcon, CartIcon, CompareIcon, DeleteIcon, FacebookIcon, HeartIcon, InstagramIcon1, MinusIcon, PlusIcon, TwitterIcon, WishlistIcon, YoutubeIcon } from "@/assets/icons"
+import WhatsappIcon from "@/assets/icons/WhatsappIcon";
+import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 
 // Data
 import { qmintRating } from "@/utils/data"
@@ -173,9 +175,9 @@ function AboutProduct({ productId }: any) {
       }
     }) as any)
     showToaster({
-      message: 'The product has been added to your product wishlist',
-      buttonText: 'product wishlist',
-      redirectButtonUrl: 'wishlist',
+      message: 'The product has been added to your product watchlist',
+      buttonText: 'product watchlist',
+      redirectButtonUrl: 'watchlist',
       severity: 'success'
     })
   }
@@ -252,9 +254,14 @@ function AboutProduct({ productId }: any) {
               {(isLoggedIn || configDetailsState?.productpriceenableforguests?.value) ? <>
                 <Stack className="Top">
                   <Stack className="Left">
-                    <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
+                    <Box className="PriceWrapper">
+                    {priceData?.data?.[0]?.discount > 0 &&<Typography className="ProductOriginalValue" variant="titleLarge">${roundOfThePrice(
+                        priceData?.data?.[0]?.price +
+                        priceData?.data?.[0]?.discount
+                      )}</Typography>}
+                      <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
+                    </Box>
                     {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
-                    <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
                     {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
                   </Stack>
                   <Stack className="Right">
@@ -276,6 +283,7 @@ function AboutProduct({ productId }: any) {
                       disabled
                     />
                   </Stack>
+                  <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
                   <Select
                     color="secondary"
                     className="PriceHistorySelect"
@@ -296,9 +304,16 @@ function AboutProduct({ productId }: any) {
                 {(isLoggedIn || configDetailsState?.productpriceenableforguests?.value) ? <>
                   <Stack className="Top">
                     <Stack className="Left">
-                      <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
+                      <Stack className="PriceWrapper">
+                        <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
+                        {priceData?.data?.[0]?.discount > 0 &&<Typography className="ProductOriginalValue" variant="titleLarge">${roundOfThePrice(
+                        priceData?.data?.[0]?.price +
+                        priceData?.data?.[0]?.discount
+                      )}
+                      </Typography>}
+                      </Stack>
                       {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
-                      <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} />
+                      {/* <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} /> */}
                       {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
                     </Stack>
                     <Stack className="Right">
@@ -370,7 +385,7 @@ function AboutProduct({ productId }: any) {
                           handleQuentityUpdate('plus')
                         }}><PlusIcon /></IconButton>
                       </Stack>
-                        <Button color="success" variant="contained" endIcon={<CartIcon />} onClick={async () => {
+                        <Button color="success" variant="contained" endIcon={<AddToCartIcon />} onClick={async () => {
                           await addToCartFunction(false)
                           // navigate('/shopping-cart')
                         }} disabled={loadingForAddToCart}>Add to cart</Button>
@@ -391,7 +406,7 @@ function AboutProduct({ productId }: any) {
               <Button color="secondary" className="IconWithText" onClick={async () => {
                 addIntoWishList(productId)
               }} >
-                <Box className="IconWrapper"><HeartIcon /></Box>
+                <Box className="IconWrapper Watchlist"><WishlistIcon /></Box>
                 <Typography>Watchlist</Typography>
               </Button>
               <Button color="secondary" className="IconWithText" onClick={() => { addIntoComapreProduct(productId) }}>
@@ -402,9 +417,26 @@ function AboutProduct({ productId }: any) {
                 <Box className="IconWrapper"><AlarmIcon /></Box>
                 <Typography>Price Alert</Typography>
               </Button> */}
-              <IconButton href={configDetailsState?.youtubelink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><YoutubeIcon /></IconButton>
+
+              <FacebookShareButton url={window.location.href} hashtag="qmint" title="Qmint Product Detail">
+                <IconButton className="IconWrapper" aria-label="Facebook Icon" >
+                  <FacebookIcon />
+                </IconButton>
+              </FacebookShareButton>
+              <TwitterShareButton url={window.location.href} title="Qmint Product Detail" hashtags={["qmint", "productDetail"]}>
+                <IconButton className="IconWrapper" aria-label="Twitter Icon">
+                  <TwitterIcon />
+                </IconButton>
+              </TwitterShareButton>
+              <WhatsappShareButton url={window.location.href} title="Qmint Product Detail">
+                <IconButton className="IconWrapper" aria-label="Whatsapp Icon">
+                  <WhatsappIcon />
+                </IconButton>
+              </WhatsappShareButton>
+
+              {/* <IconButton href={configDetailsState?.youtubelink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><YoutubeIcon /></IconButton>
               <IconButton href={configDetailsState?.facebooklink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><FacebookIcon /></IconButton>
-              <IconButton href={configDetailsState?.twitterlink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><TwitterIcon /></IconButton>
+              <IconButton href={configDetailsState?.twitterlink?.value ?? window?.location?.href} target="_blank" className="IconWrapper"><TwitterIcon /></IconButton> */}
             </Stack>
             <Divider />
             {(priceData?.data?.[0]?.tierPriceList?.length > 0 || productDetailsData?.isGradingShow) ? <Stack className="AdditionalDetails">
@@ -501,9 +533,9 @@ function AboutProduct({ productId }: any) {
                 </Accordion>
               </Box>
               <Divider /></> : null}
-            {!!productDetailsData?.imagesCondition && <Stack className="InfoMessage">
+            {!!productDetailsData?.imageConditionEnable && <Stack className="InfoMessage">
               <CameraIcon />
-              <Typography variant="body2">{productDetailsData?.imagesCondition}</Typography>
+              <Typography variant="body2">{configDetailsState?.imageconditiontext?.value}</Typography>
             </Stack>}
           </form>
         </Box>

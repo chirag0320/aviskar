@@ -15,6 +15,7 @@ import {
 // Assets
 import { ArrowRight } from "../../assets/icons/index";
 import { formatDate } from "@/utils/common";
+import noImage from '../../assets/images/noImage.png'
 
 function PostCard({ details, navigate, isNews = false }: any) {
   return (
@@ -34,7 +35,7 @@ function PostCard({ details, navigate, isNews = false }: any) {
         <CardContent>
           <Stack className="PostInfo">
             <Box className="UserInfo">
-              <img className="UserImage" src="https://picsum.photos/200" />
+              <img className="UserImage" src="https://picsum.photos/200"  alt={noImage}/>
               <Typography variant="body1">{details?.createdBy}</Typography>
             </Box>
             <Typography variant="body1">{formatDate(isNews ? details?.createdOnUtc : details?.createdOnUtc)}</Typography>

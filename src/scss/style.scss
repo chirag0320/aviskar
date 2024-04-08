@@ -18,11 +18,14 @@
 @import "components/circularProgressbar";
 @import "components/formFields";
 @import "components/loader";
+@import "components/orderDateStatusSelector";
+@import "components/reactSpectrum";
 @import "components/tooltip";
 
 // Common
 @import "common/header";
 @import "common/footer";
+@import "common/layout";
 
 // Pages
 @import "pages/signin.scss";
@@ -39,14 +42,14 @@
 @import "pages/shopping-cart.scss";
 @import "pages/vault.scss";
 @import "pages/productDetail.scss";
-@import "pages/order-confirmation.scss";
-@import "pages/recentlyViewedProducts.scss";
 @import "pages/order-details.scss";
 @import "pages/checkout.scss";
 @import "pages/compare-products.scss";
 @import "pages/recentlyViewedProducts.scss";
 @import "pages/wishlist.scss";
 @import "pages/topics.scss";
+@import "pages/orderHistory.scss";
 @import "pages/addresses.scss";
 @import "pages/accountTypeWrapper.scss";
 @import "pages/Error404.scss";
+@import "pages/history.scss";

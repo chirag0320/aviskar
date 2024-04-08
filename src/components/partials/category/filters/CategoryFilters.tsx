@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useState } from "react"
+import React, { Fragment, useCallback, useEffect, useRef, useState } from "react"
 import { useMediaQuery, Theme, ListItem, ListItemButton, ListItemText, Divider } from "@mui/material"
 
 import SmallScreenFilters from "./SmallScreenFilters"
@@ -12,36 +12,16 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 let timeOut: any;
 function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: number, searchParams: URLSearchParams }) {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
-
   const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
   const [selectedPrice, setSelectedPrice] = useState<number[] | null>(null);
+  const categoryItems = useAppSelector(state => state.category.items)
+  const [isPriceChanged, setIsPriceChanged] = useState<boolean>(false);
   const clearFilters = useAppSelector(state => state.category.clearFilters)
   const dispatch = useAppDispatch();
+  const firstUpdate = useRef(true);
 
   const debounceFilter = useDebounce(selectedFilters, 700);
   const debouncePrice = useDebounce(selectedPrice, 700);
-
-  const fetchData = async () => {
-    const commonArgument = {
-      pageNo: page - 1, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters }
-    };
-
-    const argumentForService = {
-      url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `${location.pathname}`,
-      body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, ...commonArgument } : { ...requestBodyDefault, ...commonArgument }
-    }
-    if (timeOut) {
-      clearTimeout(timeOut)
-    }
-    timeOut = setTimeout(() => {
-      dispatch(getCategoryData(
-        argumentForService) as any)
-    }, 1000);
-    // if (selectedFilters && Object.keys(selectedFilters)?.length || (selectedPrice)) {
-    // await dispatch(getCategoryData(
-    //   argumentForService) as any)
-    // }
-  }
 
   useEffect(() => {
     if (setPage) {
@@ -53,11 +33,16 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
   }, [window.location, searchParams]);
 
   useEffect(() => {
-    const pageQuery = new URLSearchParams(location.search);
-    pageQuery.set('page', "1");
-    navigate(`?${pageQuery.toString()}`, { replace: true });
+    if (Object.keys(debounceFilter).length === 0 && !isPriceChanged) {
+      return;
+    }
+    searchParams.set('page', "1");
+    navigate(`?${searchParams.toString()}`, { replace: true });
     if (page === 1) {
       fetchData();
+    }
+    return () => {
+      firstUpdate.current = true;
     }
   }, [debounceFilter, debouncePrice])
 
@@ -93,6 +78,28 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
     navigate(`/${searchEngineFriendlyPageName}`, { state: { categoryId: categoryId } })
   }
 
+  const fetchData = async () => {
+    const commonArgument = {
+      pageNo: page - 1, filters: { minPrice: selectedPrice?.[0], maxPrice: selectedPrice?.[1], specification: selectedFilters }
+    };
+
+    const argumentForService = {
+      url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `${location.pathname}`,
+      body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, ...commonArgument } : { ...requestBodyDefault, ...commonArgument }
+    }
+    if (timeOut) {
+      clearTimeout(timeOut)
+    }
+    timeOut = setTimeout(() => {
+      dispatch(getCategoryData(
+        argumentForService) as any)
+    }, 1000);
+    // if (selectedFilters && Object.keys(selectedFilters)?.length || (selectedPrice)) {
+    // await dispatch(getCategoryData(
+    //   argumentForService) as any)
+    // }
+  }
+
   const renderList = useCallback((data: any) => {
     return (
       <>
@@ -113,11 +120,12 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
   }, [])
 
   return (
-    isSmallScreen ? (
-      <SmallScreenFilters renderList={renderList} setSelectedFiltersMobile={setSelectedFilters} setSelectedPriceMobile={setSelectedPrice} page={page} />
+    // ensure that filtrs and price are not empty before hiding the all filters section
+    <Fragment>{((categoryItems && categoryItems.length > 0) || Object.keys(selectedFilters).length > 0 || isPriceChanged) ? (isSmallScreen ? (
+      <SmallScreenFilters renderList={renderList} setSelectedFiltersMobile={setSelectedFilters} setSelectedPriceMobile={setSelectedPrice} setIsPriceChanged={setIsPriceChanged} />
     ) : (
-      <LargerScreenFilters renderList={renderList} setSelectedFilters={setSelectedFilters} setSelectedPrice={setSelectedPrice} selectedFilters={selectedFilters} searchParams={searchParams} />
-    )
+      <LargerScreenFilters renderList={renderList} setSelectedFilters={setSelectedFilters} setSelectedPrice={setSelectedPrice} selectedFilters={selectedFilters} setIsPriceChanged={setIsPriceChanged} />
+    )) : null}</Fragment>
   )
 }
 

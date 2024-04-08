@@ -27,7 +27,7 @@ interface CreateGuidelineState {
   isLoggedIn: boolean,
   loadingForSignIn: boolean,
   mebershipPlanDetailsData: any,
-  recentlyViewedProducts: any[],
+  recentlyViewedProducts: any[] | null,
   // toaster
   openToaster: boolean,
   buttonText: string,
@@ -58,7 +58,8 @@ const initialState: CreateGuidelineState = {
   isLoggedIn: isBrowser && JSON.parse(localStorageGetItem('isLoggedIn') || JSON.stringify(false)),
   loadingForSignIn: false,
   mebershipPlanDetailsData: isBrowser && JSON.parse(localStorageGetItem('mebershipPlanDetailsData') ?? JSON.stringify({})),
-  recentlyViewedProducts: isBrowser && JSON.parse(localStorageGetItem('recentlyViewedProducts') ?? JSON.stringify([])),
+  // recentlyViewedProducts: isBrowser && JSON.parse(localStorageGetItem('recentlyViewedProducts') ?? JSON.stringify([])),
+  recentlyViewedProducts: null,
   openToaster: false,
   buttonText: '',
   redirectButtonUrl: '',
@@ -158,6 +159,7 @@ export const createHomepageSlice = createSlice({
       state.loading = false
     },
     setRecentlyViewedProduct: (state, action) => {
+      if (!state.recentlyViewedProducts) return;
       const newProductId = action.payload;
       // Check if the product already exists in the recently viewed list
       const existingIndex = state.recentlyViewedProducts.findIndex(productId => productId === newProductId);

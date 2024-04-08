@@ -1,9 +1,6 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { useMediaQuery, Box, Button, IconButton, Stack, Typography } from "@mui/material"
 import classNames from "classnames"
-
-// Data
-import { chartMenuData } from "@/utils/data"
 
 // Assets
 import { ActivityIcon } from "../../assets/icons/index"
@@ -14,12 +11,16 @@ import ChartMenuChart from "./ChartMenuChart"
 
 // Hooks
 import { useAppSelector } from "@/hooks"
+import { metalColors } from "@/utils/common"
+
+const requiredChartKeys = new Set(["gold", "silver", "platinum", "palladium"])
 
 function ChartMenu() {
   const chartData = useAppSelector(state => state.homePage.liveDashboardChartData);
   const isSmallScreen = useMediaQuery((theme: any) => theme.breakpoints.down("md"));
   const [open, setOpen] = useState<boolean>(false)
   const tooltipRef = useRef(null)
+
   const handleTooltipClose = (event: any) => {
     setOpen(false)
   }
@@ -31,23 +32,23 @@ function ChartMenu() {
       setOpen(false)
     }
   }
-  const renderStokeItem = (key:any, value:any) => {
+  const renderStokeItem = (key: string, value: any, color: string) => {
     let max = Number.MIN_VALUE, min = Number.MAX_VALUE;
 
-    value?.linechartdata.forEach((num : number) => {
+    value?.linechartdata.forEach((num: number) => {
       max = Math.max(max, num);
       min = Math.min(min, num);
     })
 
     return (
-      <Box className="StokeItem">
+      <Box className="StokeItem" key={key}>
         <Stack className="Header">
-          <Typography sx={{color: 'CaptionText'}}>{key}</Typography>
-          <Typography sx={{color: 'tomato'}}>{"3 Day Range"}</Typography>
+          <Typography sx={{ color: color ?? 'CaptionText' }}>{key.toUpperCase()}</Typography>
+          <Typography sx={{ color: color ?? 'tomato' }}>{"3 Day Range"}</Typography>
         </Stack>
         <Box className="ChartWrapper">
           <Typography className="Price High" variant="body2">{max}</Typography>
-          <ChartMenuChart data={value?.linechartdata} color={'red'} min={min} max={max}/>
+          <ChartMenuChart data={value?.linechartdata} color={color ?? "red"} min={min} max={max} />
           <Typography className="Price Low" variant="body2">{min}</Typography>
         </Box>
       </Box>
@@ -66,14 +67,15 @@ function ChartMenu() {
       arrow
     >
       <Stack className="Content">
-        {
-         Object.entries(chartData).map((chartItemArr:any[]) => (
-            renderStokeItem(chartItemArr[0], chartItemArr[1] )
-         ))
-        }
-        
+        {Object.entries(chartData).map(([key, value]) => {
+          if (requiredChartKeys.has(key)) {
+            return renderStokeItem(key, value, metalColors[key]);
+          }
+          return null;
+        })}
         <Button color="secondary" variant="contained" fullWidth>See More</Button>
       </Stack>
+
     </ClickTooltip>
   )
 }

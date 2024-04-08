@@ -251,6 +251,7 @@
         $placement: 12px;
         top: $placement;
         border-radius: 50%;
+        color: $yellowFuel;
 
         &.Stack {
           left: $placement;
@@ -327,6 +328,9 @@
     text-align: center;
     border-radius: 20px;
     @include transition;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     &:hover {
       .UpgradPlanButton {
@@ -392,7 +396,7 @@
       // }
     }
 
-    .MuiCardActions-root {
+    .UpgradPlanButtonWrapper {
       padding: 0 30px 30px;
 
       @include media($sm) {
@@ -471,7 +475,8 @@
         text-align: left;
         text-decoration: none;
       }
-      .PostDescription{
+
+      .PostDescription {
         cursor: pointer;
       }
     }
@@ -510,7 +515,8 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    svg{
+
+    svg {
       width: 41px;
       height: 41px;
     }
@@ -636,7 +642,8 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      svg{
+
+      svg {
         width: 41px;
         height: 41px;
       }
@@ -1013,3 +1020,45 @@
     }
   }
 }
+
+// Start :: orderdetailscard css
+.OrderDetailsCard {
+  &.MuiCard-root {
+
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 6px 6px 27px 0px rgba($black, 0.05);
+
+    .MuiTypography-body1 {
+      color: rgba($black, 0.7);
+    }
+
+    .TopWrapper {
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 20px;
+    }
+
+    .OderDateInfoWrapper {
+      padding: 20px 0;
+    }
+
+    .OrderTotalButtonsWrapper {
+      align-items: center;
+      justify-content: space-between;
+
+      @include media($xs) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+
+      .OrderButtonsWrapper {
+        gap: 5px;
+        flex-direction: column;
+      }
+    }
+  }
+}
+
+// End :: orderdetailscard css

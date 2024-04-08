@@ -117,7 +117,9 @@
 
     .RecentPosts {
       margin-top: 50px;
-
+      @include media($md) {
+        margin-top: 40px;
+      }
       .MuiGrid-item {
         flex-grow: 1;
       }

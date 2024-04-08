@@ -90,7 +90,11 @@ interface AddressDetail {
     "stateName": string,
     "countryName": string
 }
-
+interface CreditCardCharges {
+    creditCardFee: number;
+    creditCardTax: number;
+    creditCardFeeIncludingTax: number;
+}
 interface CheckoutPageState {
     loading: boolean,
     checkoutPageData: {
@@ -133,13 +137,15 @@ interface CheckoutPageState {
     subTotal: number,
     finalDataForTheCheckout: any,
     insuranceAndTaxCalculation: Fees | null,
-    craditCardCharges: any,
+    craditCardCharges: CreditCardCharges | null,
     isOTPEnabled: boolean | null,
     isOTPSent: boolean | null,
     isOTPVerified: boolean | null,
     orderId: number | null,
     stateList: StateOrCountry[],
     countryList: StateOrCountry[]
+    message: string | null
+    otpverfiedMessage: string | null
 }
 const initialState: CheckoutPageState = {
     loading: false,
@@ -153,7 +159,9 @@ const initialState: CheckoutPageState = {
     craditCardCharges: null,
     orderId: null,
     stateList: [],
-    countryList: []
+    countryList: [],
+    message: null,
+    otpverfiedMessage: null 
 }
 
 export const getCheckoutPageData = appCreateAsyncThunk(
@@ -166,7 +174,9 @@ export const getCheckoutPageData = appCreateAsyncThunk(
 export const getInsuranceAndTaxDetailsCalculation = appCreateAsyncThunk(
     'getInsuranceAndTaxDetailsCalculation',
     async ({ url, body }: { url: string, body: any }) => {
-        return await CheckoutPageServices.getInsuranceAndTaxInfo(url, body)
+        if (url && Object.keys(body).length) {
+            return await CheckoutPageServices.getInsuranceAndTaxInfo(url, body)
+        }
     }
 )
 export const getCraditCardCharges = appCreateAsyncThunk(
@@ -232,7 +242,6 @@ export const checkoutPage = createSlice({
         updateSubTotalCheckoutPage: (state, action) => {
             state.subTotal += action.payload;
             state.subTotal = Math.round((state.subTotal + Number.EPSILON) * 100) / 100
-            localStorageSetItem('subTotal', JSON.stringify(state.subTotal))
         },
         updateFinalDataForTheCheckout: (state, action) => {
             state.finalDataForTheCheckout = { ...state.finalDataForTheCheckout, ...action.payload }
@@ -241,6 +250,11 @@ export const checkoutPage = createSlice({
         disableOTP: (state) => {
             state.isOTPEnabled = null
             state.isOTPVerified = null
+            state.message = null
+            state.otpverfiedMessage = null
+        },
+        removeOTPvalidationMessage:(state)=>{
+            state.otpverfiedMessage = null
         },
         updateAddress: (state, action) => {
             const updatedAddress = action.payload;
@@ -304,7 +318,6 @@ export const checkoutPage = createSlice({
         })
         builder.addCase(getCheckoutPageData.fulfilled, (state, action) => {
             state.checkoutPageData = action?.payload?.data?.data
-            localStorageSetItem('checkoutPageData', JSON.stringify(state.checkoutPageData))
             state.loading = false;
         })
         builder.addCase(getCheckoutPageData.rejected, (state, action) => {
@@ -316,7 +329,6 @@ export const checkoutPage = createSlice({
         })
         builder.addCase(getInsuranceAndTaxDetailsCalculation.fulfilled, (state, action) => {
             state.insuranceAndTaxCalculation = action?.payload?.data?.data
-            localStorageSetItem('insuranceAndTaxCalculation', JSON.stringify(state.insuranceAndTaxCalculation))
             // state.loading = false;
         })
         builder.addCase(getInsuranceAndTaxDetailsCalculation.rejected, (state, action) => {
@@ -324,28 +336,30 @@ export const checkoutPage = createSlice({
         })
         // get credit card charges
         builder.addCase(getCraditCardCharges.pending, (state, action) => {
-            state.loading = true
+            // state.loading = true
         })
         builder.addCase(getCraditCardCharges.fulfilled, (state, action) => {
             state.craditCardCharges = action?.payload?.data?.data
-            localStorageSetItem('craditCardCharges', JSON.stringify(state.craditCardCharges))
-            state.loading = false;
+            // state.loading = false;
         })
         builder.addCase(getCraditCardCharges.rejected, (state, action) => {
-            state.loading = false
+            // state.loading = false
         })
         // checkValidationOnConfirmOrder
         builder.addCase(checkValidationOnConfirmOrder.pending, (state, action) => {
             state.loading = true
         })
         builder.addCase(checkValidationOnConfirmOrder.fulfilled, (state, action) => {
-            const responseData = action.payload.data.data;
-
-            state.isOTPEnabled = responseData.isOTPEnabled;
+            const responseData = action?.payload?.data?.data;
+            state.message = responseData?.message
+            state.isOTPEnabled = responseData?.isOTPEnabled;
             // state.isOTPSent = responseData.isOTPSent;
             state.loading = false;
         })
         builder.addCase(checkValidationOnConfirmOrder.rejected, (state, action) => {
+            const responseData = action.payload.response.data.data;
+            state.message = responseData.message
+            state.isOTPEnabled = responseData.isOTPEnabled;
             state.loading = false
         })
 
@@ -368,9 +382,12 @@ export const checkoutPage = createSlice({
         builder.addCase(orderPlaceOTPVerify.fulfilled, (state, action) => {
             state.isOTPVerified = true;
             state.loading = false;
+            state.otpverfiedMessage = action?.payload?.data?.message
         })
         builder.addCase(orderPlaceOTPVerify.rejected, (state, action) => {
+            state.isOTPVerified = action?.payload?.response?.data?.data?.isOTPVerified;
             state.loading = false
+            state.otpverfiedMessage = action?.payload?.response?.data?.message
         })
 
         // placeOrder
@@ -413,6 +430,6 @@ export const checkoutPage = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout, disableOTP, updateAddress, setCheckoutItemWarning, addAddress } = checkoutPage.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout, disableOTP, updateAddress, setCheckoutItemWarning, addAddress, removeOTPvalidationMessage } = checkoutPage.actions
 
 export default checkoutPage.reducer

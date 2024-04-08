@@ -9,7 +9,7 @@ const CalculatorCards = () => {
     const calculators = useAppSelector(state => state.calculators.calculators);
 
     return (
-        <Box className="CardsWrapper">
+        (calculators.length > 0) && <Box className="CardsWrapper">
             {/* Note :- Make unique key later */}
             {calculators.map((cal: Calculator, index: number) => (
                 <CalculatorCard

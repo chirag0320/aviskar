@@ -8,6 +8,7 @@ import parse from 'autosuggest-highlight/parse';
 import { debounce } from '@mui/material/utils';
 import { parseAddressComponents, parsePostalCode } from '@/utils/parseAddressComponents';
 import useCallAPI from '@/hooks/useCallAPI';
+import { ArrowDown } from '@/assets/icons';
 
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
@@ -163,6 +164,7 @@ export default function GoogleMaps({ setParsedAddress }: { setParsedAddress: any
       autoComplete
       includeInputInList
       filterSelectedOptions
+      popupIcon={<ArrowDown />}
       value={value}
       noOptionsText="No locations"
       onChange={(event: any, newValue: PlaceType | null) => {

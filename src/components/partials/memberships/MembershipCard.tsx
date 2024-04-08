@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, Typography, Card, CardContent, CardActions, Button, Stack, Box, } from "@mui/material"
 import { useAppSelector } from '@/hooks';
+import { capitalizeFirstChar } from '@/utils/common';
 
 interface MembershipCardProps {
   bgcolor: string,
@@ -11,7 +12,7 @@ interface MembershipCardProps {
 function MembershipCard({ bgcolor, cardtitle, details }: MembershipCardProps) {
   const { mebershipPlanDetailsData } = useAppSelector((state) => state.homePage)
   const isCurrentPlan = cardtitle?.toLocaleLowerCase() === mebershipPlanDetailsData?.currentMemberShip?.toLocaleLowerCase()
-  const opacityColor = `${bgcolor}80`; // '33' represents 20% opacity
+  const opacityColor = `${bgcolor}80`;
   return (
     <>
       <Card
@@ -30,7 +31,7 @@ function MembershipCard({ bgcolor, cardtitle, details }: MembershipCardProps) {
         }}
       >
         <CardContent>
-          <Typography className="CardTitle" variant='h4' sx={{ background: opacityColor }} component="h3">{cardtitle}</Typography>
+          <Typography className="CardTitle" variant='h4' sx={{ background: opacityColor }} component="h3">{capitalizeFirstChar(cardtitle)}</Typography>
           <Box className="Details" dangerouslySetInnerHTML={{ __html: details }}>
             {/* <Stack className="ContentWrapper">
               <Typography variant="body1" className="ContentTitle">Trade instantly:</Typography>
@@ -58,7 +59,7 @@ function MembershipCard({ bgcolor, cardtitle, details }: MembershipCardProps) {
             </Stack> */}
           </Box>
         </CardContent>
-        <CardActions>
+        <CardActions className="UpgradPlanButtonWrapper">
           <Button name='upgradePlan' aria-label='upgradePlan' variant="outlined" size='large' className="UpgradPlanButton" fullWidth>{isCurrentPlan ? 'Current Plan' : 'Upgrade Plan'}</Button>
         </CardActions>
       </Card >

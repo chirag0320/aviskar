@@ -35,9 +35,11 @@ export interface OrderDetails {
     billingAddressId: number;
     shippingAddressId: number;
     orderStatusId: number;
+    orderStatusColor : string | null;
     alertStatusId: number | null;
     orderStatus: string;
     alertStatus: string | null;
+    alertStatusColor : string | null;
     shippingStatusId: number;
     paymentStatusId: number;
     paymentMethodSystemName: string;

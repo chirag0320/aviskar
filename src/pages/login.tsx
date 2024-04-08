@@ -5,7 +5,7 @@ import { Button, Container, Box, DialogActions, DialogContent, DialogTitle, Inpu
 import { EyeOffIcon, EyeOnIcon } from "../assets/icons/index"
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { useForm } from "react-hook-form";
-import { LoginUserAPI } from '@/redux/reducers/homepageReducer';
+import { LoginUserAPI, configDetails } from '@/redux/reducers/homepageReducer';
 import { ENDPOINTS, StoreData } from '@/utils/constants';
 import { Dispatch } from '@reduxjs/toolkit';
 import { isActionRejected } from '@/components/common/Utils';
@@ -13,6 +13,10 @@ import { Link, navigate } from 'gatsby';
 import { AxiosError } from 'axios';
 import { getLastPage } from '@/utils/common';
 import Loader from '@/components/common/Loader';
+import useAPIoneTime from '@/hooks/useAPIoneTime';
+import ConfigServices from '@/apis/services/ConfigServices';
+import useShowToaster from '@/hooks/useShowToaster';
+import Toaster from '@/components/common/Toaster';
 export interface IdispatchType {
   type: string,
   meta: {
@@ -33,20 +37,35 @@ export interface IdispatchType {
     code: string
   }
 }
+// Declare the global function on the window object
+declare global {
+  interface Window {
+    handleLinkClick: () => void;
+  }
+}
+
 function SignInPage() {
   const { configDetails: configDetailsState, loadingForSignIn } = useAppSelector((state) => state.homePage)
   const checkLoadingStatus = useAppSelector(state => state.homePage.loadingForSignIn);
+  const isLoggedIn = useAppSelector(state => state.homePage.isLoggedIn)
+  const openToaster = useAppSelector(state => state.homePage.openToaster)
+  console.log("🚀 ~ SignInPage ~ openToaster:", openToaster)
+  const { showToaster } = useShowToaster();
+
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [loadingForNavigate, setLoadingForNavigate] = useState(false)
   const [loginError, setLoginError] = useState<string | null>(null);
-
+  if (isLoggedIn) {
+    navigate('/', { replace: true })
+    return;
+  }
   const dispatch: Dispatch<any> = useAppDispatch()
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible)
   }
 
-  const { register, handleSubmit, formState: { errors, touchedFields } } = useForm();
+  const { register, handleSubmit, formState: { errors, touchedFields }, getValues } = useForm();
 
   const onSubmit = async (data: any) => {
     const response: any = await dispatch<any>(LoginUserAPI({ url: ENDPOINTS.loginUser, body: data }))
@@ -69,19 +88,40 @@ function SignInPage() {
     navigate(ENDPOINTS.createMyAccount + StoreData.returnUrl);
     setLoadingForNavigate(false)
   }
+  useAPIoneTime({ service: configDetails, endPoint: ENDPOINTS.getConfigStore })
 
-  console.log(checkLoadingStatus, "checkLoadingStatus");
+  window.handleLinkClick = async () => {
+    setLoadingForNavigate(true)
+    const email = getValues('email');
+    const response = await ConfigServices.sendVerificationEmailAPI(ENDPOINTS.sendVerificationEmail.replace('useEmail', email));
+    setLoadingForNavigate(false)
+    setLoginError(null)
+    showToaster({
+      message: response.data.message,
+      severity: 'success'
+    })
+  };
+
+  const handleEnterKeyPress = (e: any) => {
+    if (e.key === 'Enter') {
+      handleSubmit(onSubmit)()
+    }
+  }
+
   return (
     <>
-      <Loader open={checkLoadingStatus} />
+      {openToaster && <Toaster />}
+      <Loader open={checkLoadingStatus || loadingForNavigate} />
       <Box id="SignInPage">
         <Container maxWidth="sm" >
           <DialogTitle component="p">
             <img onClick={() => { navigate('/') }} src={configDetailsState?.storelogourl?.value} alt="QMint logo" loading='eager' />
           </DialogTitle>
-          {loginError && <Typography variant='subtitle1' className='LoginError'>{loginError}</Typography>}
+          {loginError && <Typography variant='subtitle1' component="p" className='LoginError' dangerouslySetInnerHTML={{
+            __html: loginError
+          }}></Typography>}
           <DialogContent>
-            <form id='login-form'>
+            <form id='login-form' onKeyDown={handleEnterKeyPress}>
               <Stack className="FieldWrapper">
                 <TextField
                   variant="standard"

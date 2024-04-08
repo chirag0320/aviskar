@@ -1,13 +1,12 @@
 .Calculator {
     .CalculatorPageContent {
-        padding: 72px 0 80px;
+        padding-bottom: 50px;
 
         @include media($sm) {
-            padding: 50px 0 50px;
+            padding-bottom: 24px;
         }
 
         .SelectionWrapper {
-            margin-bottom: 50px;
             padding: 46px 50px 50px 48px;
             border: 1px solid $mercury;
             border-radius: 10px;
@@ -76,11 +75,13 @@
         }
 
         .CardsWrapper {
-            margin-bottom: 50px;
+            margin-top: 50px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 30px;
-
+            @include media($sm) {
+                margin-top: 24px;
+            }
             @include media-min($xxl) {
                 grid-template-columns: repeat(4, 1fr);
             }
@@ -98,7 +99,10 @@
         .TotalWrapper {
             border: 1px solid $mercury;
             border-radius: 10px;
-
+            margin-top: 50px;
+            @include media($sm) {
+                margin-top: 24px;
+            }
             .DataValueWrapper {
                 padding: 19px 30px;
                 justify-content: space-between;
@@ -147,24 +151,25 @@
     }
 
     .openaiPageContent {
-        padding: 50px 0 0px;
-
-        @include media($sm) {
-            padding: 50px 0 0px;
-        }
 
         .GreyTable {
             margin-bottom: 50px;
         }
 
         .SelectionWrapper {
-            margin-bottom: 50px;
+            margin-bottom: 40px;
             padding: 46px 50px 50px 48px;
             border: 1px solid $mercury;
             border-radius: 10px;
 
+            @include media($md) {
+                margin-bottom: 30px;
+                padding: 24px 30px 30px 30px;
+            }
+
             @include media($sm) {
-                padding: 30px;
+                margin-bottom: 24px;
+                padding: 24px;
             }
 
             .MetalWrapper,
@@ -214,10 +219,6 @@
 
             .AddMetaltBtn {
                 margin-top: 20px;
-
-                @include media($ssm) {
-                    margin-top: 30px;
-                }
 
                 @include media-min($xxl) {
                     min-width: 168px;

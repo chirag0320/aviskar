@@ -9,10 +9,11 @@ import { HoverTooltip } from "@/components/common/CustomTooltip"
 import { InfoIcon, BankIcon, CashIcon, CardIcon } from "@/assets/icons"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import { updateFinalDataForTheCheckout } from "@/redux/reducers/checkoutReducer"
-import { getDefaultOption } from "@/utils/common"
+import { getDefaultOption, roundOfThePrice } from "@/utils/common"
 
 function Step3() {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+  const { checkoutPageData, craditCardCharges }: any = useAppSelector((state) => state.checkoutPage)
   const dispatch = useAppDispatch()
 
   const enabledPaymentMethods = useMemo(() => {
@@ -25,7 +26,6 @@ function Step3() {
   }, [configDetailsState]);
 
   const [paymentType, setPaymentType] = useState(enabledPaymentMethods)
-  const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
   useEffect(() => {
     dispatch(updateFinalDataForTheCheckout({ paymentType }))
   }, [paymentType])
@@ -60,7 +60,11 @@ function Step3() {
         }}>
           {configDetailsState?.banktransferenable?.value && <FormControlLabel value="BankTransfer" control={<Radio />} label={renderRadioLabelWithIcon("Bank Transfer", <BankIcon />, undefined, configDetailsState?.["checkout.payment.banktransferinfotext"]?.value)} />}
           {configDetailsState?.cashenable?.value && <FormControlLabel value="Cash" control={<Radio />} label={renderRadioLabelWithIcon("Cash", <CashIcon />, undefined, configDetailsState?.["checkout.payment.cashinfotext"]?.value)} />}
-          {configDetailsState?.creditcardenable?.value && <FormControlLabel value="CreditCard" control={<Radio />} label={renderRadioLabelWithIcon("Credit Card", <CardIcon />, checkoutPageData?.storeDetail?.creadatcardTax?.toString(), configDetailsState?.["checkout.payment.creditcardinfotext"]?.value)} />}
+          {configDetailsState?.creditcardenable?.value && <FormControlLabel value="CreditCard" control={<Radio />} label={renderRadioLabelWithIcon("Credit Card", <CardIcon />, (craditCardCharges?.creditCardFeeIncludingTax as any) && Number(craditCardCharges?.creditCardFeeIncludingTax) !== 0 ? (
+            `${'$' + roundOfThePrice(Number(craditCardCharges?.creditCardFeeIncludingTax))}`
+          ) : (
+            "No charge"
+          ), configDetailsState?.["checkout.payment.creditcardinfotext"]?.value)} />}
         </RadioGroup>
       </Stack>
     </StepWrapper>
