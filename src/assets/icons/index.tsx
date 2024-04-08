@@ -100,6 +100,7 @@ import JointAccountIcon from "./JointAccountIcon";
 import ShowcaseIcon from "./ShowcaseIcon";
 import TrustIcon from "./TrustIcon";
 import SuperFundIcon from "./SuperFundIcon";
+import PlayIcon from "./PlayIcon";
 
 export {
   ArrowLeft,
@@ -203,5 +204,6 @@ export {
   JointAccountIcon,
   ShowcaseIcon,
   TrustIcon,
-  SuperFundIcon
+  SuperFundIcon,
+  PlayIcon
 };

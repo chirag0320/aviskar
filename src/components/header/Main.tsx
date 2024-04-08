@@ -3,11 +3,10 @@ import { useMediaQuery, Container, Stack, Button, Link as LinkM, IconButton, Typ
 
 // Components
 import SearchField from "./SearchField"
-import SessionExpiredDialog from "./SessionExpiredDialog"
 
 // Assets
 import { Call, Profile, HamburgerIcon, CrossIcon } from "../../assets/icons/index"
-import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 
 // Utils
 import { ENDPOINTS } from "../../utils/constants"
@@ -19,13 +18,14 @@ function Main(props: any) {
   const { openMobileMenu, toggleMobileMenu } = (props)
   const mobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
   const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
-  const [openTermsServices, toggleTermsServices] = useToggle(false)
   const handleAuth = () => {
     if (!isLoggedIn) {
       navigate('/login')
+      return
     } else {
       dispatch(LogOutUserAPI() as any)
       navigate('/')
+      return
     }
   }
   return (
@@ -44,10 +44,6 @@ function Main(props: any) {
           <IconButton color="secondary" area-label="HamburgerMenuButton" className="HamburgerButton MenuButton" onClick={toggleMobileMenu}>{!openMobileMenu ? <HamburgerIcon className="HamburgerIcon" /> : <CrossIcon className="CrossIcon" />}</IconButton>
         </Stack>
       </Stack>
-      <SessionExpiredDialog
-        open={openTermsServices}
-        onClose={toggleTermsServices}
-      />
     </Container>
   )
 }

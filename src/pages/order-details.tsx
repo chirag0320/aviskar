@@ -16,10 +16,11 @@ import { ENDPOINTS } from "@/utils/constants";
 import { downloadOrderInvoice, getOrderDetailsData } from "@/redux/reducers/orderDetailsReducer";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import Toaster from "@/components/common/Toaster";
-import { hasFulfilled, roundOfThePrice } from "@/utils/common";
+import { hasFulfilled, paymentMethodType, roundOfThePrice } from "@/utils/common";
 import useShowToaster from "@/hooks/useShowToaster";
 import { AxiosError } from "axios";
 import Loader from "@/components/common/Loader";
+import useDownloadInvoiceHandler from "@/hooks/useDownloadInvoiceHandler";
 
 export function createData(
     Name: string,
@@ -37,39 +38,10 @@ function orderDetails({ location }: { location: any }) {
     useAPIoneTime({ service: getOrderDetailsData, endPoint: ENDPOINTS.getOrderDetailsData + searchParams.get("orderNo") ?? "" });
     const orderDetails = useAppSelector(state => state.orderDetails.orderDetailsData)
     const dispatch = useAppDispatch();
-    const { showToaster } = useShowToaster()
     const loading = useAppSelector(state => state.orderDetails.loading)
-    // console.log("🚀 ~ orderHistoryDetail:", orderDetails)
+    const isOrderFound = useAppSelector(state => state.orderDetails.isOrderFound)
 
-    const downloadInvoiceHandler = async () => {
-        const response = await dispatch(downloadOrderInvoice({ url: ENDPOINTS.downloadOrderInvoice + searchParams.get("orderNo") ?? "" }) as any)
-
-        if (!hasFulfilled(response.type)) {
-            showToaster({
-                message: ((response?.payload as AxiosError)?.response?.data as { message: string })?.message as string, severity: "error"
-            })
-        }
-        else {
-            const pdfData = response.payload?.data;
-            // const url = window.URL.createObjectURL(new Blob([pdfData]));
-            // const link = document.createElement('a');
-            // link.href = url;
-            // link.setAttribute('download', 'file.pdf'); //or any other extension
-            // document.body.appendChild(link);
-            // link.click();
-            // console.log("🚀 ~ downloadInvoiceHandler ~ response:", response.payload?.data)
-            const blob = new Blob([pdfData], { type: 'application/pdf' });
-
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = 'invoice-qmint.pdf';
-
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    }
-
+    const downloadInvoiceHandler = useDownloadInvoiceHandler()
     return (
         <Layout>
             <>
@@ -83,13 +55,16 @@ function orderDetails({ location }: { location: any }) {
                 <Box id="OrderDetailsPage" className='OrderDetailsPage' component="section">
                     <Container>
                         <Box className="OrderDetailsContent">
+                            {!orderDetails && isOrderFound === false && !loading && <Typography variant="body1" style={{ textAlign: "center" }}>Order not found</Typography>}
                             {orderDetails && <>
                                 <Box className="Ribbon" sx={{ backgroundColor: orderDetails?.orderStatusColor ?? "" }}>
                                     Status: {orderDetails?.orderStatus}
-                                </Box> 
+                                </Box>
                                 <Box className="OrderDetailsWrapper">
                                     <Box className='PDFBtnWrapper'>
-                                        <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained" onClick={downloadInvoiceHandler} disabled={loading}><Icon className='PdfIcon' ><PdfIcon /></Icon>PDF invoice</Button>
+                                        <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained" onClick={() => {
+                                            downloadInvoiceHandler(searchParams.get("orderNo") ?? "")
+                                        }} disabled={loading}><Icon className='PdfIcon' ><PdfIcon /></Icon>PDF invoice</Button>
                                     </Box>
                                     <Typography variant="subtitle2" className="OrderID">Order : {orderDetails?.customOrderNumber}</Typography>
                                     <Stack className="OrderDetails">
@@ -118,7 +93,7 @@ function orderDetails({ location }: { location: any }) {
                                             <Typography variant="subtitle1" className="Font16">{orderDetails?.paymentMethod}</Typography>
                                         </Box>
                                         <Box className="DeliveryWrapper">
-                                            <Typography variant="body1">Delivery</Typography>
+                                            <Typography variant="body1">Shipping Method</Typography>
                                             <Typography variant="subtitle1" className="Font16">{orderDetails?.shippingMethod}</Typography>
                                         </Box>
                                     </Stack>
@@ -197,8 +172,12 @@ function orderDetails({ location }: { location: any }) {
                                         </Box>
                                         <Box className="SecureShipping">
                                             <Typography variant="body1" sx={{ marginBottom: "2px" }}>Secure Shipping</Typography>
-                                            <Typography variant="subtitle1"   >{orderDetails?.shippingMethod}</Typography>
+                                            <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.orderShippingFee)}</Typography>
                                         </Box>
+                                        {orderDetails?.paymentMethod === paymentMethodType["CreditCard"] && <Box className="SecureShipping">
+                                            <Typography variant="body1" sx={{ marginBottom: "2px" }}>Credit Card Fee</Typography>
+                                            <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.paymentMethodFee)}</Typography>
+                                        </Box>}
                                     </Stack>
                                     <Box className="TotalWrapper">
                                         <Typography variant="body1">Total</Typography>
@@ -244,7 +223,6 @@ function orderDetails({ location }: { location: any }) {
                                     </Box>
                                 </Box>
                             </>}
-                            {!orderDetails && !loading && <Typography variant="body1" style={{ textAlign: "center" }}>Order not found</Typography>}
                         </Box>
                     </Container>
                 </Box >
