@@ -107,3 +107,9 @@ export const metalColors: any = {
   "platinum": "#99CCFF",
   "palladium": "#CC99CC"
 }
+// function to convert minutes to milliseconds
+export const convertMinutesToMilliseconds = (minutes: number | string): number => {
+  // Convert minutes to milliseconds
+  const milliseconds = Number(minutes) * 60 * 1000;
+  return milliseconds;
+};
