@@ -12,13 +12,13 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
-import { StateOrCountry, addOrEditAddress as addOrEditAddressForCheckout, updateAddress } from "@/redux/reducers/checkoutReducer";
+import { StateOrCountry, addOrEditAddress as addOrEditAddressForCheckout, updateAddress as updateAddressForCheckout} from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import { addressSchema } from "./AddAddress"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
-import { addOrEditAddresses as addOrEditAddressForMyVault } from "@/redux/reducers/myVaultReducer"
+import { addOrEditAddresses as addOrEditAddressForMyVault, updateAddress as updateAddressForMyVault} from "@/redux/reducers/myVaultReducer"
 
 interface UpdateAddress {
   open: boolean
@@ -44,7 +44,6 @@ interface Inputs {
 
 function UpdateAddress(props: UpdateAddress) {
   const { open, dialogTitle, onClose, existingAddress, isComingFromMyVault } = props
-  console.log("🚀 ~ UpdateAddress ~ existingAddress:", existingAddress)
   const loading = useAppSelector(state => state.checkoutPage.loading);
   const countryList = useAppSelector(state => state.checkoutPage.countryList);
   const stateListall = useAppSelector(state => state.checkoutPage.stateList);
@@ -96,6 +95,21 @@ function UpdateAddress(props: UpdateAddress) {
         onClose()
         reset()
         showToaster({ message: "Address saved successfully", severity: 'success' })
+        dispatch(updateAddressForMyVault({
+          ...existingAddress,
+          firstName: data.FirstName,
+          lastName: data.LastName,
+          company: data.Company,
+          phoneNumber: data.Contact,
+          email: data.Email,
+          addressLine1: data.Address1,
+          addressLine2: data.Address2,
+          city: data.City,
+          stateName: data.State,
+          postcode: data.Code,
+          countryId: data.Country,
+          stateId: stateId,
+        }))
       } else {
         showToaster({ message: "Failed to save address", severity: 'error' })
       }
@@ -113,7 +127,7 @@ function UpdateAddress(props: UpdateAddress) {
         onClose()
         reset()
         showToaster({ message: "Address saved successfully", severity: 'success' })
-        dispatch(updateAddress({
+        dispatch(updateAddressForCheckout({
           ...existingAddress,
           firstName: data.FirstName,
           lastName: data.LastName,

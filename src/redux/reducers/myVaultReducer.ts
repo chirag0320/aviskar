@@ -62,6 +62,39 @@ export const myVaultSlice = createSlice({
         },
         setLoadingFalse: (state) => {
             state.loading = false
+        },
+        updateAddress: (state, action) => {
+            const { addressId, addressTypeId, customerId, firstName, lastName, addressLine1, addressLine2, city, stateId, postcode, countryId, phoneNumber, email, isSource, isVerified, stateName, countryName, addressType, orderStatusId } = action.payload;
+
+            state.addresses = state.addresses?.map((address) => {
+                if (address.addressId === addressId) {
+                    return {
+                        addressId,
+                        addressTypeId,
+                        customerId,
+                        firstName,
+                        lastName,
+                        addressLine1,
+                        addressLine2,
+                        city,
+                        stateId,
+                        postcode,
+                        countryId,
+                        phoneNumber,
+                        email,
+                        isSource,
+                        isVerified,
+                        stateName,
+                        countryName,
+                        addressType,
+                        orderStatusId
+                    }
+                }
+                return address;
+            }) ?? null;
+        },
+        addAddress : (state,action) => {
+            state.addresses = [...state.addresses,action.payload]
         }
     },
     extraReducers: (builder) => {
@@ -141,6 +174,6 @@ export const myVaultSlice = createSlice({
     }
 })
 
-export const { setLoadingTrue, setLoadingFalse } = myVaultSlice.actions;
+export const { setLoadingTrue, setLoadingFalse,updateAddress ,addAddress} = myVaultSlice.actions;
 
 export default myVaultSlice.reducer;
