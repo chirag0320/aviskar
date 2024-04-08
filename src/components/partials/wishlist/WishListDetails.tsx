@@ -31,26 +31,28 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
             const idwithpriceObj: any = {}
             priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
 
-            const wishListItemsWithLivePrice = wishListstate.wishListItems.map((item: CartItem) => {
+            const wishListItemsWithLivePrice = wishListstate.wishListItems?.map((item: CartItem) => {
                 return {
                     ...item,
                     LivePriceDetails: idwithpriceObj[item.productId]
                 }
             })
 
-            setWishListItemsWithLivePrice(wishListItemsWithLivePrice)
+            if (wishListItemsWithLivePrice) {
+                setWishListItemsWithLivePrice(wishListItemsWithLivePrice)
+            }
         }
     }, [priceData])
 
     useEffect(() => {
-        if (wishListstate.wishListItems.length > 0) {
-            const productIds = wishListstate.wishListItems.map((item: CartItem) => item.productId);
+        if (wishListstate.wishListItems?.length ?? 0 > 0) {
+            const productIds = wishListstate.wishListItems?.map((item: CartItem) => item.productId);
             setProductIds({ productIds })
         }
 
         let quantities: any = {}
         let checkedItems: any = {}
-        wishListstate.wishListItems.forEach((item: CartItem) => {
+        wishListstate.wishListItems?.forEach((item: CartItem) => {
             checkedItems[item.id] = false
             quantities[item.id] = item.quantity
         })
@@ -138,7 +140,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
     return (
         <Fragment>
             <TableContainer>
-                {wishListstate.wishListItems.length > 0 && <Table >
+                {(wishListstate.wishListItems?.length ?? 0) > 0 && <Table >
                     <TableHead>
                         <TableRow>
                             <TableCell padding="checkbox"></TableCell>
@@ -170,7 +172,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                         ))}
                     </TableBody>
                 </Table>}
-                {!loading && wishListstate.wishListItems.length === 0 && <Typography variant="h6" style={{ textAlign: "center" }}>No items in watchlist</Typography>}
+                {!loading && wishListstate.wishListItems?.length === 0 && <Typography variant="h6" style={{ textAlign: "center" }}>No items in watchlist</Typography>}
             </TableContainer>
             <Stack className="ActionWrapper">
                 <Stack className="Left">

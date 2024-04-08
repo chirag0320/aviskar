@@ -4,16 +4,15 @@ import { createSlice } from '@reduxjs/toolkit'
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import { CartItem } from '@/types/shoppingCart'
 import ShoppingCartServices from '@/apis/services/shoppingCartServices'
-import { localStorageSetItem } from '@/utils/common'
 
 interface ShoppingCartState {
     loading: boolean,
-    cartItems: CartItem[],
+    cartItems: CartItem[] | null,
     subTotal: number
 }
 const initialState: ShoppingCartState = {
     loading: false,
-    cartItems: [],
+    cartItems: null,
     subTotal: 0
 }
 
@@ -63,7 +62,7 @@ export const shoppingCart = createSlice({
             const warnings = action.payload?.warnings;
             const quantities = action.payload?.quantities;
 
-            state.cartItems.forEach((item: CartItem) => {
+            state.cartItems?.forEach((item: CartItem) => {
                 warnings?.forEach((warning: any) => {
                     if (item.productId === warning.productId) {
                         item.warnings = warning.warnings;
@@ -78,7 +77,7 @@ export const shoppingCart = createSlice({
         },
         resetCartItemWarning: (state, action) => {
             const quantities = action.payload?.quantities;
-            state.cartItems.forEach((item: CartItem) => {
+            state.cartItems?.forEach((item: CartItem) => {
                 item.warnings = [];
                 item.quantity = quantities[item.id]
             })

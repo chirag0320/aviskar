@@ -46,7 +46,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
       <Box className="ProductListWrapper">
         {
           !categoryData.loading ? (
-            categoryData.sortedItems.map((product: any) => {
+            categoryData.sortedItems?.map((product: any) => {
               return (
                 <ProductCard key={product.productId} product={product} stickyProduct={false} />
               );
@@ -71,7 +71,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
           )
         }
       </Box>
-      {!categoryData.loading && categoryData.items?.length === 0 && <Typography variant="h6" component="p">There are no products in this category or filters you have selected.</Typography>}
+      {!categoryData.loading && categoryData.items && categoryData.items.length === 0 && <Typography variant="h6" component="p">There are no products in this category or filters you have selected.</Typography>}
       {categoryData?.count > 0 && <Stack className="Pagination">
         <Pagination count={Math.ceil(categoryData?.count / pageSize)} page={page} shape="rounded" onChange={handlePageChange} />
       </Stack>}

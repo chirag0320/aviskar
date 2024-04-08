@@ -9,11 +9,13 @@ import { CategoriesListDetails, configDetails } from "@/redux/reducers/homepageR
 import { ENDPOINTS } from "@/utils/constants";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { useAppDispatch } from "@/hooks";
+import useInactiveLogout from "@/hooks/useInactiveLogout";
 const LazyFooter = lazy(() => import('../footer/index'));
 function Layout({ children }: any) {
   // const [loading, setLoading] = useState(true);
   const [wait, setWait] = useState(false)
   const dispatch = useAppDispatch()
+    // Call the custom hook to handle user inactivity and logout
   useEffect(() => {
     const x = setTimeout(() => {
       setWait(true)
@@ -25,6 +27,7 @@ function Layout({ children }: any) {
     }
   }, [])
   useAPIoneTime({ service: configDetails, endPoint: ENDPOINTS.getConfigStore })
+  useInactiveLogout();
   useEffect(() => {
     const fetchCategories = async () => {
       await dispatch(CategoriesListDetails({
@@ -54,7 +57,6 @@ function Layout({ children }: any) {
   //     }
   //   }
   // })
-
   return (
     <Stack id="PageLayout">
       {/* <Suspense fallback={<Box id="HeaderWrapper"></Box>}> */}

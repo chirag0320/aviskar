@@ -12,6 +12,7 @@ export const stockStatus: any = {
   profit: 'profit',
   loss: 'loss',
 }
+
 export function formatDate(dateString: any) {
   const options: any = { year: 'numeric', month: 'long', day: 'numeric' };
   const date = new Date(dateString);
@@ -32,6 +33,7 @@ export function roundOfThePrice(price: any) {
   const roundedPrice = Number(price).toFixed(2);
   return roundedPrice;
 }
+
 export const shipmentTypeToEnum: any = {
   'LocalShipping': 3,
   'SecureShipping': 2,
@@ -50,6 +52,7 @@ export function localStorageGetItem(key: any) {
 export function localStorageSetItem(key: any, value: any) {
   isBrowser && localStorage?.setItem(key, typeof value !== 'string' ? JSON.stringify(value) : value)
 }
+
 export function hasFulfilled(dataType: string): boolean {
   return dataType.includes('/fulfilled');
 }
@@ -71,6 +74,7 @@ export const bodyForGetShoppingCartData = {
   "sortOrder": "",
   "filters": {}
 }
+
 export function getDefaultOption(enabledOptions: any[], defaultOption: string | number) {
   const enabledValues = enabledOptions.filter(option => option.enabled).map(option => option.value);
   return enabledValues.length > 0 ? enabledValues[0] : defaultOption;

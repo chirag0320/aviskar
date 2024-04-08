@@ -69,7 +69,7 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
                     <Typography variant="subtitle1">Calculated during checkout </Typography>
                 </Stack>
             </Box>
-            <Button className='ProceedtoCheckoutBtn' size='large' variant="contained" onClick={handleProccedToCheckout} disabled={shoppingCartItems.loading || shoppingCartItems.cartItems.length === 0}>Proceed to Checkout</Button>
+            <Button className='ProceedtoCheckoutBtn' size='large' variant="contained" onClick={handleProccedToCheckout} disabled={shoppingCartItems.loading || shoppingCartItems.cartItems?.length === 0}>Proceed to Checkout</Button>
         </Box>
     )
 }
