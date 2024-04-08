@@ -801,13 +801,23 @@
                             }
 
                             img {
-                                height: 104px;
+                                height: 327px;
+
+                                @include media($md) {
+                                    height: 104px;
+
+                                }
                             }
                         }
 
                         .Bottom {
                             img {
-                                height: 104px;
+                                height: 327px;
+
+                                @include media($md) {
+                                    height: 104px;
+
+                                }
                             }
                         }
                     }
@@ -834,10 +844,21 @@
 
                     .Left {
                         img {
-                            min-width: 850px;
+                            min-width: 600px;
 
                             @include media($md) {
                                 min-width: 100%;
+                            }
+                        }
+                    }
+
+                    .Right {
+                        img {
+                            width: 327px;
+
+                            @include media($md) {
+                                height: 112px;
+                                width: 100%;
                             }
                         }
                     }
