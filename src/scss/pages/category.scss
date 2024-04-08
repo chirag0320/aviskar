@@ -227,15 +227,6 @@
           }
         }
       }
-      .NoProducts {
-        &.AndFilter {
-          @include media-min($lg) {
-            display: flex;
-            align-items: center;
-            min-height: calc(100vh - 186px - 418px - 120px);
-          }
-        }
-      }
       .Pagination {
         justify-content: center;
         margin-top: 60px;

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react"
 import { Box, Skeleton, Card, Pagination, Stack, Typography } from "@mui/material"
-import classNames from "classnames"
 
 // Components
 import { ProductCard } from "@/components/common/Card"
@@ -72,7 +71,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
           )
         }
       </Box>
-      {!categoryData.loading && categoryData.items?.length === 0 && <Typography variant="h6" component="p" className={classNames("NoProducts", {"AndFilter": false})}>There are no products in this category or filters you have selected.</Typography>}
+      {!categoryData.loading && categoryData.items?.length === 0 && <Typography variant="h6" component="p">There are no products in this category or filters you have selected.</Typography>}
       {categoryData?.count > 0 && <Stack className="Pagination">
         <Pagination count={Math.ceil(categoryData?.count / pageSize)} page={page} shape="rounded" onChange={handlePageChange} />
       </Stack>}
