@@ -11,6 +11,15 @@ import {
     Box,
 } from "@mui/material";
 
+import { ENDPOINTS } from "@/utils/constants";
+
+// Hooks
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import useAPIoneTime from "@/hooks/useAPIoneTime";
+import { getRewardPointsHistory } from "@/redux/reducers/myVaultReducer";
+import { requestBodyDefault } from "@/pages/[category]";
+
 function createData(
     date: string,
     points: string,
@@ -42,6 +51,15 @@ const rows = [
 ];
 
 function RewardsPointsTable() {
+    const dispatch = useAppDispatch();
+    // useAPIoneTime({service : getRewardPointsHistory, endPoint : ENDPOINTS.getRewardPointsHistory, body : { ...requestBodyDefault, filter : {} }})
+
+    useEffect(() => {
+        dispatch(getRewardPointsHistory({ url: ENDPOINTS.getRewardPointsHistory, body: { ...requestBodyDefault, filters : {}}}));
+    }, []);
+
+    const rewardPointsData = useAppSelector(state => state.myVault.rewardPointsHistory);
+   
     return (
         <>
             <TableContainer
@@ -59,15 +77,15 @@ function RewardsPointsTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {rewardPointsData?.items?.map((item) => (
                             <TableRow
-                                key={row.date}
+                                key={item.id}
                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                             >
-                                <TableCell component="th" scope="row">{row.date}</TableCell>
-                                <TableCell>{row.points}</TableCell>
-                                <TableCell>{row.pointsBalance}</TableCell>
-                                <TableCell>{row.Message}</TableCell>
+                                <TableCell component="th" scope="row">{item.createdOnUtc}</TableCell>
+                                <TableCell>{item.points}</TableCell>
+                                <TableCell>{item.pointsBalance}</TableCell>
+                                <TableCell>{item.message}</TableCell>
                             </TableRow>
                         ))}
 
