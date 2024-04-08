@@ -141,7 +141,7 @@ function OrderConfirmation(props: any) {
                             {/* <Typography variant="body1">An email has been sent with your order details and payment instructions.You can also download or view on the following links: <Button variant="text">
                                     Download (download pdf)</Button></Typography>
                                 <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography> */}
-                            <Typography variant="body1" dangerouslySetInnerHTML={{ __html: orderConfirmationDetailsData?.orderdescription }} />
+                            <Typography className="DownloadMessage" variant="body1" dangerouslySetInnerHTML={{ __html: orderConfirmationDetailsData?.orderdescription }} />
                             {/* <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography> */}
                         </Box>
                     </Box>
