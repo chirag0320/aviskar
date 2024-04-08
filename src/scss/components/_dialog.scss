@@ -201,6 +201,33 @@
               }
             }
 
+            .ContactField {
+              width: 100%;
+              .ContactSelect {
+                position: absolute;
+                width: 75px;
+                z-index: 1;
+                .MuiFormControl-root {
+                  .MuiOutlinedInput-root {
+                    .MuiOutlinedInput-notchedOutline {
+                      border-radius: 0;
+                      border: none;
+                      border-right: 1px solid rgba($dark, 0.2);
+                    }
+                  }
+                }
+              }
+              .ContactTextField {
+                .MuiFormControl-root {
+                  .MuiInputBase-root {
+                    .MuiInputBase-input {
+                      padding-left: 90px;
+                    }
+                  }
+                }
+              }
+            }
+
             .MuiAutocomplete-root {
               .MuiTextField-root {
                 .MuiAutocomplete-inputRoot {
@@ -212,6 +239,7 @@
 
                   .MuiAutocomplete-endAdornment {
                     position: static;
+                    transform: none;
                   }
                 }
               }
