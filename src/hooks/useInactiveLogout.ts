@@ -30,13 +30,13 @@ const useInactiveLogout = (logoutTimeout = 300000) => {
     // Set up the interval to check for user inactivity
     const interval = setInterval(() => {
       console.log("increment time",userInactiveTime)
-      setUserInactiveTime(prevTime => prevTime + 2000); // Increment the inactive time by 1 second
+      setUserInactiveTime(prevTime => prevTime + 10000); // Increment the inactive time by 1 second
 
       // Check if the user has been inactive for the logout timeout duration
       if (userInactiveTime >= logoutTimeout) {
         handleLogout(); // Call the logout function
       }
-    }, 2000); // Check every 1 second for user inactivity
+    }, 10000); // Check every 1 second for user inactivity
 
     // Cleanup function to remove event listeners and clear interval
     return () => {

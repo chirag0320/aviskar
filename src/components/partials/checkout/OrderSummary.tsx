@@ -123,6 +123,8 @@ function OrderSummary() {
     }
     // }
   }, [orderTotal])
+
+  const searchParams = new URLSearchParams(window.location.search);
   const placeOrderFun = useCallback(
     async () => {
       // call place order API
@@ -147,7 +149,7 @@ function OrderSummary() {
         "Location": 'lat' + locationInfo?.latitude + ',' + 'long' + locationInfo?.longitude,
         "Device": deviceInfo?.platform!,
         "Browser": deviceInfo?.userAgent,
-        "IsInstantBuy": false
+        "IsInstantBuy": searchParams.has("isInstantBuy") && searchParams.get("isInstantBuy") ? true : false
       }
       const data = await dispatch(placeOrder({ url: ENDPOINTS.placeOrder, body: prepareBodyData }) as any);
       if (hasFulfilled(data?.type)) {

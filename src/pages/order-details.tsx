@@ -16,7 +16,7 @@ import { ENDPOINTS } from "@/utils/constants";
 import { downloadOrderInvoice, getOrderDetailsData } from "@/redux/reducers/orderDetailsReducer";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import Toaster from "@/components/common/Toaster";
-import { hasFulfilled, roundOfThePrice } from "@/utils/common";
+import { hasFulfilled, paymentMethodType, roundOfThePrice } from "@/utils/common";
 import useShowToaster from "@/hooks/useShowToaster";
 import { AxiosError } from "axios";
 import Loader from "@/components/common/Loader";
@@ -39,6 +39,7 @@ function orderDetails({ location }: { location: any }) {
     const dispatch = useAppDispatch();
     const { showToaster } = useShowToaster()
     const loading = useAppSelector(state => state.orderDetails.loading)
+    const isOrderFound = useAppSelector(state => state.orderDetails.isOrderFound)
     // console.log("🚀 ~ orderHistoryDetail:", orderDetails)
 
     const downloadInvoiceHandler = async () => {
@@ -83,10 +84,11 @@ function orderDetails({ location }: { location: any }) {
                 <Box id="OrderDetailsPage" className='OrderDetailsPage' component="section">
                     <Container>
                         <Box className="OrderDetailsContent">
+                            {!orderDetails && isOrderFound === false && !loading && <Typography variant="body1" style={{ textAlign: "center" }}>Order not found</Typography>}
                             {orderDetails && <>
                                 <Box className="Ribbon" sx={{ backgroundColor: orderDetails?.orderStatusColor ?? "" }}>
                                     Status: {orderDetails?.orderStatus}
-                                </Box> 
+                                </Box>
                                 <Box className="OrderDetailsWrapper">
                                     <Box className='PDFBtnWrapper'>
                                         <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained" onClick={downloadInvoiceHandler} disabled={loading}><Icon className='PdfIcon' ><PdfIcon /></Icon>PDF invoice</Button>
@@ -118,7 +120,7 @@ function orderDetails({ location }: { location: any }) {
                                             <Typography variant="subtitle1" className="Font16">{orderDetails?.paymentMethod}</Typography>
                                         </Box>
                                         <Box className="DeliveryWrapper">
-                                            <Typography variant="body1">Delivery</Typography>
+                                            <Typography variant="body1">Shipping Method</Typography>
                                             <Typography variant="subtitle1" className="Font16">{orderDetails?.shippingMethod}</Typography>
                                         </Box>
                                     </Stack>
@@ -154,37 +156,37 @@ function orderDetails({ location }: { location: any }) {
                                 </Box>
 
                                 <Box className="TableContainerWrapper">
-                                <TableContainer
-                                    className="OrderDetailTableWrapper"
-                                    sx={{}}
-                                // component={Paper}
-                                >
-                                    <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
-                                                <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
-                                                <TableCell sx={{ minWidth: "156px" }}>Quantity</TableCell>
-                                                <TableCell sx={{ minWidth: "200px" }}>Total</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {orderDetails?.orderItems?.map((row) => (
-                                                <TableRow
-                                                    key={row.productId}
-                                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                >
-                                                    <TableCell component="th" scope="row">
-                                                        {row.productName}
-                                                    </TableCell>
-                                                    <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
-                                                    <TableCell>{row.quantity}</TableCell>
-                                                    <TableCell>${roundOfThePrice(row.totalPrice)}</TableCell>
+                                    <TableContainer
+                                        className="OrderDetailTableWrapper"
+                                        sx={{}}
+                                    // component={Paper}
+                                    >
+                                        <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
+                                                    <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
+                                                    <TableCell sx={{ minWidth: "156px" }}>Quantity</TableCell>
+                                                    <TableCell sx={{ minWidth: "200px" }}>Total</TableCell>
                                                 </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
+                                            </TableHead>
+                                            <TableBody>
+                                                {orderDetails?.orderItems?.map((row) => (
+                                                    <TableRow
+                                                        key={row.productId}
+                                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                    >
+                                                        <TableCell component="th" scope="row">
+                                                            {row.productName}
+                                                        </TableCell>
+                                                        <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
+                                                        <TableCell>{row.quantity}</TableCell>
+                                                        <TableCell>${roundOfThePrice(row.totalPrice)}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
                                 </Box>
 
                                 <Stack className='TotalShippingDetailsWrapper'>
@@ -195,8 +197,12 @@ function orderDetails({ location }: { location: any }) {
                                         </Box>
                                         <Box className="SecureShipping">
                                             <Typography variant="body1" sx={{ marginBottom: "2px" }}>Secure Shipping</Typography>
-                                            <Typography variant="subtitle1"   >{orderDetails?.shippingMethod}</Typography>
+                                            <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.orderShippingFee)}</Typography>
                                         </Box>
+                                        {orderDetails?.paymentMethod === paymentMethodType["CreditCard"] && <Box className="SecureShipping">
+                                            <Typography variant="body1" sx={{ marginBottom: "2px" }}>Credit Card Fee</Typography>
+                                            <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.paymentMethodFee)}</Typography>
+                                        </Box>}
                                     </Stack>
                                     <Box className="TotalWrapper">
                                         <Typography variant="body1">Total</Typography>
@@ -242,7 +248,6 @@ function orderDetails({ location }: { location: any }) {
                                     </Box>
                                 </Box>
                             </>}
-                            {!orderDetails && !loading && <Typography variant="body1" style={{ textAlign: "center" }}>Order not found</Typography>}
                         </Box>
                     </Container>
                 </Box >

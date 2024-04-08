@@ -23,9 +23,11 @@ function Main(props: any) {
   const handleAuth = () => {
     if (!isLoggedIn) {
       navigate('/login')
+      return
     } else {
       dispatch(LogOutUserAPI() as any)
       navigate('/')
+      return
     }
   }
   return (

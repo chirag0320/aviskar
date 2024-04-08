@@ -11,6 +11,7 @@ import ChartMenuChart from "./ChartMenuChart"
 
 // Hooks
 import { useAppSelector } from "@/hooks"
+import { metalColors } from "@/utils/common"
 
 const requiredChartKeys = new Set(["gold", "silver", "platinum", "palladium"])
 
@@ -31,7 +32,7 @@ function ChartMenu() {
       setOpen(false)
     }
   }
-  const renderStokeItem = (key: any, value: any) => {
+  const renderStokeItem = (key: string, value: any, color: string) => {
     let max = Number.MIN_VALUE, min = Number.MAX_VALUE;
 
     value?.linechartdata.forEach((num: number) => {
@@ -42,12 +43,12 @@ function ChartMenu() {
     return (
       <Box className="StokeItem" key={key}>
         <Stack className="Header">
-          <Typography sx={{ color: 'CaptionText' }}>{key}</Typography>
-          <Typography sx={{ color: 'tomato' }}>{"3 Day Range"}</Typography>
+          <Typography sx={{ color: color ?? 'CaptionText' }}>{key.toUpperCase()}</Typography>
+          <Typography sx={{ color: color ?? 'tomato' }}>{"3 Day Range"}</Typography>
         </Stack>
         <Box className="ChartWrapper">
           <Typography className="Price High" variant="body2">{max}</Typography>
-          <ChartMenuChart data={value?.linechartdata} color={'red'} min={min} max={max} />
+          <ChartMenuChart data={value?.linechartdata} color={color ?? "red"} min={min} max={max} />
           <Typography className="Price Low" variant="body2">{min}</Typography>
         </Box>
       </Box>
@@ -68,9 +69,9 @@ function ChartMenu() {
       <Stack className="Content">
         {Object.entries(chartData).map(([key, value]) => {
           if (requiredChartKeys.has(key)) {
-            return renderStokeItem(key, value);
+            return renderStokeItem(key, value, metalColors[key]);
           }
-          return null; 
+          return null;
         })}
         <Button color="secondary" variant="contained" fullWidth>See More</Button>
       </Stack>
