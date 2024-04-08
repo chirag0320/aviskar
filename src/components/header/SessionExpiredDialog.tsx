@@ -1,5 +1,6 @@
 import React from "react"
 import { Dialog, DialogContent, Typography, DialogActions, Button, Stack } from "@mui/material"
+import { navigate } from "gatsby"
 
 interface SessionExpiredDialog {
   open: boolean
@@ -13,7 +14,7 @@ function SessionExpiredDialog(props: SessionExpiredDialog) {
     <Dialog
       id="SessionExpiredDialog"
       open={open}
-      onClose={onClose}
+      // onClose={onClose}
       fullWidth
       maxWidth="md"
     >
@@ -24,7 +25,9 @@ function SessionExpiredDialog(props: SessionExpiredDialog) {
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained">Login</Button>
+        <Button variant="contained" onClick={()=>{
+          navigate('/login')
+        }}>Login</Button>
       </DialogActions>
     </Dialog>
   )

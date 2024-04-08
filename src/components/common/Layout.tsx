@@ -8,12 +8,15 @@ import { convertMinutesToMilliseconds, storeLastPage } from "@/utils/common";
 import { CategoriesListDetails, configDetails } from "@/redux/reducers/homepageReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector, useToggle } from "@/hooks";
 import useInactiveLogout from "@/hooks/useInactiveLogout";
+import SessionExpiredDialog from "../header/SessionExpiredDialog";
 const LazyFooter = lazy(() => import('../footer/index'));
 function Layout({ children }: any) {
   const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
-  useInactiveLogout(isLoggedIn ? convertMinutesToMilliseconds(configDetailsState?.sessiontimeout?.value) : convertMinutesToMilliseconds(configDetailsState?.guestsessiontimeout?.value));
+  const [openSessionExpireDialog, toggleSessionExpireDialog] = useToggle(false)
+  useInactiveLogout(20000, toggleSessionExpireDialog);
+  // isLoggedIn ? convertMinutesToMilliseconds(configDetailsState?.sessiontimeout?.value) : convertMinutesToMilliseconds(configDetailsState?.guestsessiontimeout?.value)
   // const [loading, setLoading] = useState(true);
   const [wait, setWait] = useState(false)
   const dispatch = useAppDispatch()
@@ -60,6 +63,10 @@ function Layout({ children }: any) {
       {<Suspense fallback={<Skeleton height='30vh'></Skeleton>}>
         <LazyFooter />
       </Suspense>}
+      {openSessionExpireDialog && <SessionExpiredDialog
+        open={openSessionExpireDialog}
+        onClose={toggleSessionExpireDialog}
+      />}
     </Stack>
   )
 }
