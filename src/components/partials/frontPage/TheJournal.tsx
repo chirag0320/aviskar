@@ -65,7 +65,7 @@ function TheJournal() {
                 <Container className="TheJounalPostWrapperContainer" maxWidth="lg">
                     {data?.data?.items?.length !== 0 ? (
                         <Box className="TheJounalPostWrapper">
-                            {!loading ? (
+                            {loading ? (
                                 data?.data?.items?.slice(0, 2).map((destination) => (
                                     <Box className="TheJounalPost" key={destination.id}>
                                         <TravelCard
@@ -92,7 +92,8 @@ function TheJournal() {
                                             </Box>
                                         );
                                     })
-                            )}
+                            )
+                            }
                         </Box>
                     ) : (
                         <RecordNotFound message="No destination available" />
