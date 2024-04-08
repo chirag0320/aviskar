@@ -15,8 +15,7 @@ const LazyFooter = lazy(() => import('../footer/index'));
 function Layout({ children }: any) {
   const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
   const [openSessionExpireDialog, toggleSessionExpireDialog] = useToggle(false)
-  useInactiveLogout(20000, toggleSessionExpireDialog);
-  // isLoggedIn ? convertMinutesToMilliseconds(configDetailsState?.sessiontimeout?.value) : convertMinutesToMilliseconds(configDetailsState?.guestsessiontimeout?.value)
+  useInactiveLogout(isLoggedIn ? convertMinutesToMilliseconds(configDetailsState?.sessiontimeout?.value) : convertMinutesToMilliseconds(configDetailsState?.guestsessiontimeout?.value), toggleSessionExpireDialog);
   // const [loading, setLoading] = useState(true);
   const [wait, setWait] = useState(false)
   const dispatch = useAppDispatch()
