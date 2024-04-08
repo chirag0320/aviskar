@@ -67,8 +67,8 @@ function RecentlyViewedProducts() {
                 <ProductCard key={product.productId} product={product} />
               )
             })}
-          {recentlyViewedProducts && recentlyViewedProducts.length === 0 && <RecordNotFound />}
         </Box>
+        {recentlyViewedProducts && recentlyViewedProducts.length === 0 && <RecordNotFound />}
       </Container>
     </Layout>
   )
