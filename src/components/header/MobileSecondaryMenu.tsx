@@ -33,10 +33,6 @@ function MobileSecondaryMenu() {
     }
   }
 
-  const handleChartMenu = () => {
-    console.log("handleChartMenu clicked.")
-  }
-
   const handleCartMenu = () => {
     navigate("/shopping-cart")
   }
@@ -72,7 +68,7 @@ function MobileSecondaryMenu() {
             </ClickTooltip>
             <IconButton color="secondary" title='Call us' className={classNames("MenuButton", { "Active": false })} href={"tel:" + configDetailsState?.companyphonenumber?.value}><Call /></IconButton>
             {configDetailsState?.enablechart?.value ?
-              <ChartMenu onClick={handleChartMenu} />
+              <ChartMenu />
             : null}
             {configDetailsState?.enablecart?.value ?
               <CartMenu onClick={handleCartMenu} />
