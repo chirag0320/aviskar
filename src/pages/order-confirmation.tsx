@@ -16,6 +16,7 @@ import noImage from '../assets/images/noImage.png'
 
 function OrderConfirmation(props: any) {
     const loading = useAppSelector(state => state.orderConfirmationDetails.loading)
+    const isOrderFound = useAppSelector(state => state.orderConfirmationDetails.isOrderFound)
     const checkLoadingStatus = useAppSelector(state => state.orderConfirmationDetails.loading);
     // const orderId = props.location?.search?.split('=')[1];
     const orderConfirmationDetailsData = useAppSelector(state => state.orderConfirmationDetails.orderConfirmationDetailsData);
@@ -43,7 +44,7 @@ function OrderConfirmation(props: any) {
             />
 
             <Box id="OrderConfirmation" className="OrderConfirmationPage" component="section">
-                {!orderConfirmationDetailsData && !loading && <Typography variant="body1" style={{ textAlign: "center" }}>Order Not Found</Typography>}
+                {!orderConfirmationDetailsData && isOrderFound === false && !loading && <Typography variant="body1" style={{ textAlign: "center" }}>Order Not Found</Typography>}
                 {orderConfirmationDetailsData && <Container>
                     <Stack className="OrderReceivedMessageWrapper">
                         <Icon className='GreenConfirmationIcon'><GreenConfirmationIcon /></Icon>

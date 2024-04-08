@@ -22,9 +22,9 @@ interface OrderDetails {
     orderDiscount: number | null;
     orderTax: number | null;
     subTotal: number | null;
-    shippingMethod : string | null;
-    paymentMethod : string | null;
-    orderItems: any[]; 
+    shippingMethod: string | null;
+    paymentMethod: string | null;
+    orderItems: any[];
 }
 
 interface OrderItem {
@@ -37,9 +37,10 @@ interface OrderItem {
     subTotal: number;
 }
 
-const initialState: { loading: boolean, orderConfirmationDetailsData: OrderDetails | null } = {
+const initialState: { loading: boolean, orderConfirmationDetailsData: OrderDetails | null, isOrderFound: boolean | null } = {
     loading: false,
-    orderConfirmationDetailsData: null
+    orderConfirmationDetailsData: null,
+    isOrderFound: null
 };
 
 export const getOrderConfirmationDetails = appCreateAsyncThunk(
@@ -67,6 +68,11 @@ export const orderConfirmationDetailsPageSlice = createSlice({
         })
         builder.addCase(getOrderConfirmationDetails.fulfilled, (state, action) => {
             const responseData: OrderDetails = action.payload.data?.data;
+            if (responseData === null) {
+                state.isOrderFound = false;
+                state.loading = false;
+                return;
+            }
             state.orderConfirmationDetailsData = responseData;
             state.loading = false;
         })
