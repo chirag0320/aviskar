@@ -82,10 +82,11 @@ function OrderConfirmation(props: any) {
                                         <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
                                             <TableHead>
                                                 <TableRow className="OrderDetailsHeadRow">
-                                                    <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
-                                                    <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
-                                                    <TableCell sx={{ minWidth: "150px" }}>Quantity</TableCell>
-                                                    <TableCell sx={{ minWidth: "200px" }}>Total</TableCell>
+                                                    <TableCell className="Name">Name</TableCell>
+                                                    <TableCell>Shipping Method</TableCell>
+                                                    <TableCell>Price</TableCell>
+                                                    <TableCell>Quantity</TableCell>
+                                                    <TableCell>Total</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -99,6 +100,7 @@ function OrderConfirmation(props: any) {
                                                                 src={row.imageUrl ?? noImage} alt="Product image" loading="lazy"></img>
                                                             {row.productName}
                                                         </TableCell>
+                                                        <TableCell>{orderConfirmationDetailsData.shippingMethod}</TableCell>
                                                         <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
                                                         <TableCell>{row.quantity}</TableCell>
                                                         <TableCell>${roundOfThePrice(row.subTotal)}</TableCell>
@@ -129,6 +131,7 @@ function OrderConfirmation(props: any) {
                                     {orderConfirmationDetailsData?.orderDiscount !== 0 && <><Divider />
                                         {renderPricingItem("Order Discount", `$${roundOfThePrice(orderConfirmationDetailsData?.orderDiscount as number)}`)}
                                     </>}
+                                    <Divider />
                                     <Stack className="PricingItem TotalItem">
                                         <Typography variant="subtitle1">Total</Typography>
                                         <Typography variant="subtitle1">${roundOfThePrice(Number(orderConfirmationDetailsData?.orderTotal))}</Typography>
@@ -144,9 +147,11 @@ function OrderConfirmation(props: any) {
                             {/* <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography> */}
                         </Box>
                     </Box>
-                    <Button className='ContinueBtn' size='large' variant="contained" onClick={() => {
-                        navigate("/");
-                    }}>Continue</Button>
+                    <Stack className="ActionWrapper">
+                        <Button className='ContinueBtn' size='large' variant="contained" onClick={() => {
+                            navigate("/");
+                        }}>Continue</Button>
+                    </Stack>
                 </Container>}
             </Box>
         </Layout>
