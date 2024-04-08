@@ -56,7 +56,7 @@ interface ProductStockStatus {
 
 export const StockReturnWithName = React.memo(
   ({ name, value, charturl, status, percentage, tickerStyle, move }: Iprops) => {
-    const containerWidth = (move.toString().length)*10
+    const containerWidth = Math.max(...[(move?.toString()?.length || 0), 4]) * 10;
     return (
       <Stack
         className={classNames(
@@ -77,7 +77,10 @@ export const StockReturnWithName = React.memo(
               : null,
           }}
         >
-          <Box className="FlipContainer" width={containerWidth}>
+          <Box className="FlipContainer"
+            width={containerWidth}
+            // marginRight={name === "AUD/USD" ? "8px" : "0px"}
+          >
             <Box className="Flipper">
               <Typography variant="body2" component="span" className="Value Front">{roundOfThePrice(percentage)}%</Typography>
               <Typography variant="body2" component="span" className="Value Back">${name === "AUD/USD" ? move : roundOfThePrice(move)}</Typography>

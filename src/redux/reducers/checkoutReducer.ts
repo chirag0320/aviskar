@@ -144,6 +144,8 @@ interface CheckoutPageState {
     orderId: number | null,
     stateList: StateOrCountry[],
     countryList: StateOrCountry[]
+    message: string | null
+    otpverfiedMessage: string | null
 }
 const initialState: CheckoutPageState = {
     loading: false,
@@ -157,7 +159,9 @@ const initialState: CheckoutPageState = {
     craditCardCharges: null,
     orderId: null,
     stateList: [],
-    countryList: []
+    countryList: [],
+    message: null,
+    otpverfiedMessage: null 
 }
 
 export const getCheckoutPageData = appCreateAsyncThunk(
@@ -170,9 +174,9 @@ export const getCheckoutPageData = appCreateAsyncThunk(
 export const getInsuranceAndTaxDetailsCalculation = appCreateAsyncThunk(
     'getInsuranceAndTaxDetailsCalculation',
     async ({ url, body }: { url: string, body: any }) => {
-        if(url && Object.keys(body).length){
-        return await CheckoutPageServices.getInsuranceAndTaxInfo(url, body)
-    }
+        if (url && Object.keys(body).length) {
+            return await CheckoutPageServices.getInsuranceAndTaxInfo(url, body)
+        }
     }
 )
 export const getCraditCardCharges = appCreateAsyncThunk(
@@ -246,6 +250,11 @@ export const checkoutPage = createSlice({
         disableOTP: (state) => {
             state.isOTPEnabled = null
             state.isOTPVerified = null
+            state.message = null
+            state.otpverfiedMessage = null
+        },
+        removeOTPvalidationMessage:(state)=>{
+            state.otpverfiedMessage = null
         },
         updateAddress: (state, action) => {
             const updatedAddress = action.payload;
@@ -341,13 +350,16 @@ export const checkoutPage = createSlice({
             state.loading = true
         })
         builder.addCase(checkValidationOnConfirmOrder.fulfilled, (state, action) => {
-            const responseData = action.payload.data.data;
-
-            state.isOTPEnabled = responseData.isOTPEnabled;
+            const responseData = action?.payload?.data?.data;
+            state.message = responseData?.message
+            state.isOTPEnabled = responseData?.isOTPEnabled;
             // state.isOTPSent = responseData.isOTPSent;
             state.loading = false;
         })
         builder.addCase(checkValidationOnConfirmOrder.rejected, (state, action) => {
+            const responseData = action.payload.response.data.data;
+            state.message = responseData.message
+            state.isOTPEnabled = responseData.isOTPEnabled;
             state.loading = false
         })
 
@@ -370,9 +382,12 @@ export const checkoutPage = createSlice({
         builder.addCase(orderPlaceOTPVerify.fulfilled, (state, action) => {
             state.isOTPVerified = true;
             state.loading = false;
+            state.otpverfiedMessage = action?.payload?.data?.message
         })
         builder.addCase(orderPlaceOTPVerify.rejected, (state, action) => {
+            state.isOTPVerified = action?.payload?.response?.data?.data?.isOTPVerified;
             state.loading = false
+            state.otpverfiedMessage = action?.payload?.response?.data?.message
         })
 
         // placeOrder
@@ -415,6 +430,6 @@ export const checkoutPage = createSlice({
     },
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout, disableOTP, updateAddress, setCheckoutItemWarning, addAddress } = checkoutPage.actions
+export const { setLoadingTrue, setLoadingFalse, updateSubTotalCheckoutPage, resetSubTotalCheckoutPage, updateFinalDataForTheCheckout, disableOTP, updateAddress, setCheckoutItemWarning, addAddress, removeOTPvalidationMessage } = checkoutPage.actions
 
 export default checkoutPage.reducer

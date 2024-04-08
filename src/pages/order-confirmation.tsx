@@ -12,6 +12,7 @@ import { useAppSelector } from "@/hooks";
 import { navigate } from "gatsby";
 import Loader from "@/components/common/Loader";
 import { roundOfThePrice } from "@/utils/common";
+import noImage from '../assets/images/noImage.png'
 
 function OrderConfirmation(props: any) {
     const loading = useAppSelector(state => state.orderConfirmationDetails.loading)
@@ -43,7 +44,7 @@ function OrderConfirmation(props: any) {
 
             <Box id="OrderConfirmation" className="OrderConfirmationPage" component="section">
                 {!orderConfirmationDetailsData && !loading && <Typography variant="body1" style={{ textAlign: "center" }}>Order Not Found</Typography>}
-                {orderConfirmationDetailsData && (<Container>
+                {orderConfirmationDetailsData && <Container>
                     <Stack className="OrderReceivedMessageWrapper">
                         <Icon className='GreenConfirmationIcon'><GreenConfirmationIcon /></Icon>
                         <Typography variant="subtitle2" className="OrderReceivedMessage">Your order has been received.</Typography>
@@ -72,40 +73,41 @@ function OrderConfirmation(props: any) {
                                             <Typography>$204.22</Typography>
                                         </Box>
                                     </Stack> */}
-                                <TableContainer
-                                    className="OrderDetailTableWrapper"
-                                    sx={{}}
-                                // component={Paper}
-                                >
-                                    <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
-                                        <TableHead>
-                                            <TableRow className="OrderDetailsHeadRow">
-                                                <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
-                                                <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
-                                                <TableCell sx={{ minWidth: "150px" }}>Quantity</TableCell>
-                                                <TableCell sx={{ minWidth: "200px" }}>Total</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {orderConfirmationDetailsData?.orderItems?.map((row) => (
-                                                <TableRow
-                                                    key={row.productId}
-                                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                >
-                                                    <TableCell component="th" scope="row">
-                                                        <img className="ProductImage"
-                                                            src={row.imageUrl} alt="Product image" loading="lazy"></img>
-                                                        {row.productName}
-                                                    </TableCell>
-                                                    <TableCell>${row.unitPrice}</TableCell>
-                                                    <TableCell>{row.quantity}</TableCell>
-                                                    <TableCell>${row.subTotal}</TableCell>
+                                <Box className="TableContainerWrapper">
+                                    <TableContainer
+                                        className="OrderDetailTableWrapper"
+                                        sx={{}}
+                                    // component={Paper}
+                                    >
+                                        <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
+                                            <TableHead>
+                                                <TableRow className="OrderDetailsHeadRow">
+                                                    <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
+                                                    <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
+                                                    <TableCell sx={{ minWidth: "150px" }}>Quantity</TableCell>
+                                                    <TableCell sx={{ minWidth: "200px" }}>Total</TableCell>
                                                 </TableRow>
-
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
+                                            </TableHead>
+                                            <TableBody>
+                                                {orderConfirmationDetailsData?.orderItems?.map((row) => (
+                                                    <TableRow
+                                                        key={row.productId}
+                                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                    >
+                                                        <TableCell component="th" scope="row">
+                                                            <img className="ProductImage"
+                                                                src={row.imageUrl ?? noImage} alt="Product image" loading="lazy"></img>
+                                                            {row.productName}
+                                                        </TableCell>
+                                                        <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
+                                                        <TableCell>{row.quantity}</TableCell>
+                                                        <TableCell>${roundOfThePrice(row.subTotal)}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </Box>
                             </Box>
                             <Stack className="TitleValueWrapper PaymentAmountWrapper">
                                 <Box className="PricingDetails">
@@ -145,7 +147,7 @@ function OrderConfirmation(props: any) {
                     <Button className='ContinueBtn' size='large' variant="contained" onClick={() => {
                         navigate("/");
                     }}>Continue</Button>
-                </Container>)}
+                </Container>}
             </Box>
         </Layout>
     )

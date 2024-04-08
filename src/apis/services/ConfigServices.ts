@@ -78,5 +78,9 @@ class ConfigServices {
   static async getLiveDashboardChartData(url: string) {
     return axiosInstance.get(url)
   }
+
+  static async sendVerificationEmailAPI(url:any) {
+    return await axiosInstance.post(url)
+  }
 }
 export default ConfigServices

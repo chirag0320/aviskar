@@ -69,7 +69,10 @@ export const ENDPOINTS = {
 
     // order details
     getOrderDetailsData: "myvault/fthBVUKhWUGKKJhSdaFe7w/",
-    downloadOrderInvoice : "myvault/sSPabQ518EeEccLnRuWg0w/"
+    downloadOrderInvoice : "myvault/sSPabQ518EeEccLnRuWg0w/",
+
+    //send verification email
+    sendVerificationEmail : 'account/Posb5zZpZUCS2QQEp6Fvjw/useEmail'
 }
 export const StoreData = {
     storeCode: 12,

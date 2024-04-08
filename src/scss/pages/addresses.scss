@@ -1,8 +1,8 @@
 .AddressesPage {
-    padding: 50px 0;
+    padding: 20px 0 50px;
 
     @include media($mmd) {
-        padding: 25px 0;
+        padding: 10px 0 30px;
     }
 
     .AddressList {

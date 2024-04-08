@@ -102,7 +102,7 @@ function Navigation() {
             {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
             {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
               <Link area-label="shopping-cart-link" to="/shopping-cart">
-                <Badge badgeContent={cartItems?.length?.toString()} color="primary" max={99}>
+                <Badge badgeContent={cartItems?.length?.toString()} color="primary">
                   <CartMenu />
                 </Badge>
               </Link>

@@ -84,7 +84,9 @@ function orderDetails({ location }: { location: any }) {
                     <Container>
                         <Box className="OrderDetailsContent">
                             {orderDetails && <>
-                                <img src={StatusImage} className="StatusImage" alt="StatusImage" />
+                                <Box className="Ribbon" sx={{ backgroundColor: orderDetails?.orderStatusColor ?? "" }}>
+                                    Status: {orderDetails?.orderStatus}
+                                </Box> 
                                 <Box className="OrderDetailsWrapper">
                                     <Box className='PDFBtnWrapper'>
                                         <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained" onClick={downloadInvoiceHandler} disabled={loading}><Icon className='PdfIcon' ><PdfIcon /></Icon>PDF invoice</Button>
@@ -151,7 +153,7 @@ function orderDetails({ location }: { location: any }) {
                                     </Box>
                                 </Box>
 
-                                {/* <Box className="OrderDetailTableWrapper"> */}
+                                <Box className="TableContainerWrapper">
                                 <TableContainer
                                     className="OrderDetailTableWrapper"
                                     sx={{}}
@@ -183,7 +185,7 @@ function orderDetails({ location }: { location: any }) {
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-                                {/* </Box> */}
+                                </Box>
 
                                 <Stack className='TotalShippingDetailsWrapper'>
                                     <Stack className='SubtotalShippingWrapper'>

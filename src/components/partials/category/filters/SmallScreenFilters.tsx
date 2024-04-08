@@ -57,8 +57,8 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
             >
                 <Stack className="DialogHeader">
                     <DialogTitle variant="subtitle2">FILTER BY</DialogTitle>
-                    <Button variant="text" onClick={clearFiltersHandler}>Clear Filter</Button>
-                    <IconButton className="CloseButton" onClick={toggleFilterBy}><CrossIcon /></IconButton>
+                    <Button className="ClearFilter" variant="text" onClick={clearFiltersHandler}>Clear Filter</Button>
+                    <IconButton className="CloseButton" onClick={toggleFilterBy}><CrossIcon fontSize="small" /></IconButton>
                 </Stack>
                 <DialogContent>
                     <Stack className="TabsWrapper">
@@ -68,6 +68,9 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
                             onChange={handleTabChange}
                             orientation="vertical"
                             aria-label="Filter tabs"
+                            variant="scrollable"
+                            scrollButtons={false}
+                            visibleScrollbar
                         >
                             {categoryData.categories.length > 0 && <Tab label="Categories" value={0} />}
                             <Tab label="Price Range" value={1} />

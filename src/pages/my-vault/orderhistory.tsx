@@ -27,6 +27,7 @@ function Topics(paramsData: any) {
           <Box id="OrderHistoryPage" className='OrderHistoryPage' component="section">
             <Container>
               <Box className="Content OrderHistoryContent">
+                <Divider />
                 <OrderDateStatusSelector />
                 <Divider />
                 <Box className="OrderDetailsCardsWrapper">

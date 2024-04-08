@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useCallback, useState } from 'react'
+import React, { Suspense, lazy, useCallback, useState, useEffect } from 'react'
 import { Box, Container, Link, Stack, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Button, Skeleton, IconButton } from "@mui/material"
 import classNames from 'classnames'
 
@@ -32,8 +32,13 @@ function index() {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const { data }: { data: { data: FooterSection[] } } = useApiRequest(ENDPOINTS.getFooterLink);
   const { email, handleEmailChange, subscribe } = useSubscription()
+  const [fixWrapperHeight, setFixWrapperHeight] = useState<number>(0)
+  const FixWrapperHeight = document.querySelector(".FixWrapper")?.clientHeight
+  useEffect(() => {
+    setFixWrapperHeight(FixWrapperHeight ?? 0)
+  }, [FixWrapperHeight] )
   return (
-    <Box id="MainFooterSection" component="footer">
+    <Box id="MainFooterSection" component="footer" sx={{paddingBottom: `${fixWrapperHeight}px` }}>
       <Container className="Container">
         <Stack className="FooterWrapper">
           <Stack className="LogoPart">
