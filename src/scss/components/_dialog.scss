@@ -452,3 +452,31 @@
     }
   }
 }
+
+#SessionExpiredDialog {
+  &.MuiDialog-root {
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        padding: 60px 20px;
+        @include media($md) {
+          @include padding-vertical(50);
+        }
+        @include media($xxs) {
+          padding: 30px 10px;
+        }
+        .MuiDialogContent-root {
+          color: $paleGrey;
+          text-align: center;
+          .Content {
+            flex-direction: column;
+            gap: 10px;
+          }
+        }
+        .MuiDialogActions-root {
+          justify-content: center;
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+}
