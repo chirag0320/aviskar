@@ -99,3 +99,9 @@ export const capitalizeFirstChar = (str: any) => {
   if (!str) return '';
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
+// function to convert minutes to milliseconds
+export const convertMinutesToMilliseconds = (minutes: number | string): number => {
+  // Convert minutes to milliseconds
+  const milliseconds = Number(minutes) * 60 * 1000;
+  return milliseconds;
+};

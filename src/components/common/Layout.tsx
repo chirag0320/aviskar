@@ -4,18 +4,20 @@ import { Skeleton } from "@mui/material";
 
 // Components
 import LazyHeader from "../header/index"
-import { storeLastPage } from "@/utils/common";
+import { convertMinutesToMilliseconds, storeLastPage } from "@/utils/common";
 import { CategoriesListDetails, configDetails } from "@/redux/reducers/homepageReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
-import { useAppDispatch } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import useInactiveLogout from "@/hooks/useInactiveLogout";
 const LazyFooter = lazy(() => import('../footer/index'));
 function Layout({ children }: any) {
+  const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
+  useInactiveLogout(isLoggedIn ? convertMinutesToMilliseconds(configDetailsState?.sessiontimeout?.value) : convertMinutesToMilliseconds(configDetailsState?.guestsessiontimeout?.value));
   // const [loading, setLoading] = useState(true);
   const [wait, setWait] = useState(false)
   const dispatch = useAppDispatch()
-    // Call the custom hook to handle user inactivity and logout
+  // Call the custom hook to handle user inactivity and logout
   useEffect(() => {
     const x = setTimeout(() => {
       setWait(true)
@@ -27,7 +29,7 @@ function Layout({ children }: any) {
     }
   }, [])
   useAPIoneTime({ service: configDetails, endPoint: ENDPOINTS.getConfigStore })
-  useInactiveLogout();
+
   useEffect(() => {
     const fetchCategories = async () => {
       await dispatch(CategoriesListDetails({
@@ -45,18 +47,6 @@ function Layout({ children }: any) {
     }
     fetchCategories();
   }, [])
-  // useAPIoneTime({
-  //   service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, body: {
-  //     "search": "",
-  //     "pageNo": 0,
-  //     "pageSize": -1,
-  //     "sortBy": "",
-  //     "sortOrder": "",
-  //     "filters": {
-  //       "includeInTopMenu": true
-  //     }
-  //   }
-  // })
   return (
     <div className="flex flex-col min-h-screen">
       {/* <Suspense fallback={<Box id="HeaderWrapper"></Box>}> */}
@@ -79,3 +69,15 @@ Layout.propTypes = {
 }
 
 export default Layout
+  // useAPIoneTime({
+  //   service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, body: {
+  //     "search": "",
+  //     "pageNo": 0,
+  //     "pageSize": -1,
+  //     "sortBy": "",
+  //     "sortOrder": "",
+  //     "filters": {
+  //       "includeInTopMenu": true
+  //     }
+  //   }
+  // })
