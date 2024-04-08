@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect, useState } from "react"
 import PropTypes from "prop-types"
-import { Skeleton } from "@mui/material";
+import { Skeleton, Stack } from "@mui/material";
 
 // Components
 import LazyHeader from "../header/index"
@@ -56,7 +56,7 @@ function Layout({ children }: any) {
   // })
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <Stack id="PageLayout">
       {/* <Suspense fallback={<Box id="HeaderWrapper"></Box>}> */}
       <LazyHeader />
       {/* </Suspense> */}
@@ -68,7 +68,7 @@ function Layout({ children }: any) {
       {<Suspense fallback={<Skeleton height='30vh'></Skeleton>}>
         <LazyFooter />
       </Suspense>}
-    </div>
+    </Stack>
   )
 }
 
