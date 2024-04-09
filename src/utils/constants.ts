@@ -87,7 +87,8 @@ export const ENDPOINTS = {
     getRewardPointsHistory: "myvault/kSFuIpNrDUuygzsl4bE3Hw",
 
     //popup details
-    getPopUpDetails: "utility/85WwxAopc7Rn"
+    getPopUpDetails: "utility/85WwxAopc7Rn",
+    savePopUpData: "utility/CLWL6vMSSrzB"
 }
 export const StoreData = {
     storeCode: 12,

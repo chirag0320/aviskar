@@ -10,17 +10,20 @@ import FeaturedProducts from "../components/partials/home/FeaturedProducts"
 import { ENDPOINTS } from "@/utils/constants"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { CategoriesListDetails, HomePageSectionDetails, configDetails, serProgressLoaderStatus, setScrollPosition } from "@/redux/reducers/homepageReducer"
-import { useAppDispatch, useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 import { useMediaQuery } from "@mui/material";
 import Layout from "@/components/common/Layout";
 import useUserDetailsFromToken from "@/hooks/useUserDetailsFromToken";
 import Toaster from "@/components/common/Toaster";
 import Loader from "@/components/common/Loader";
+import useAlertPopUp from "@/hooks/useAlertPopUp";
+import SessionExpiredDialog from "@/components/header/SessionExpiredDialog";
 
 function IndexPage() {
   const dispatch = useAppDispatch()
   const { configDetails: configDetailsState, openToaster, scrollPosition, loading } = useAppSelector((state) => state.homePage)
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
+  const [openSessionExpireDialog, toggleSessionExpireDialog] = useToggle(false)
 
   const [body] = useState({
     "search": "",
@@ -63,7 +66,7 @@ function IndexPage() {
       clearTimeout(timeout3)
     }
   }, [])
-
+  useAlertPopUp({pageName: 'Home',openPopup:toggleSessionExpireDialog})
   return (
     <Layout>
       <>
@@ -81,6 +84,10 @@ function IndexPage() {
         <Suspense fallback={<></>}><PopularProducts /></Suspense>
         <Suspense fallback={<></>}><DiscoverTreasure /></Suspense>
         <Suspense fallback={<></>}><CloserLook /></Suspense>
+        {openSessionExpireDialog && <SessionExpiredDialog
+        open={openSessionExpireDialog}
+        onClose={toggleSessionExpireDialog}
+      />}
       </>
     </Layout>
   )
