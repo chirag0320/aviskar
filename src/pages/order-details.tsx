@@ -20,6 +20,7 @@ import { hasFulfilled, paymentMethodType, roundOfThePrice } from "@/utils/common
 import useShowToaster from "@/hooks/useShowToaster";
 import { AxiosError } from "axios";
 import Loader from "@/components/common/Loader";
+import useDownloadInvoiceHandler from "@/hooks/useDownloadInvoiceHandler";
 
 export function createData(
     Name: string,
@@ -37,40 +38,10 @@ function orderDetails({ location }: { location: any }) {
     useAPIoneTime({ service: getOrderDetailsData, endPoint: ENDPOINTS.getOrderDetailsData + searchParams.get("orderNo") ?? "" });
     const orderDetails = useAppSelector(state => state.orderDetails.orderDetailsData)
     const dispatch = useAppDispatch();
-    const { showToaster } = useShowToaster()
     const loading = useAppSelector(state => state.orderDetails.loading)
     const isOrderFound = useAppSelector(state => state.orderDetails.isOrderFound)
-    // console.log("🚀 ~ orderHistoryDetail:", orderDetails)
 
-    const downloadInvoiceHandler = async () => {
-        const response = await dispatch(downloadOrderInvoice({ url: ENDPOINTS.downloadOrderInvoice + searchParams.get("orderNo") ?? "" }) as any)
-
-        if (!hasFulfilled(response.type)) {
-            showToaster({
-                message: ((response?.payload as AxiosError)?.response?.data as { message: string })?.message as string, severity: "error"
-            })
-        }
-        else {
-            const pdfData = response.payload?.data;
-            // const url = window.URL.createObjectURL(new Blob([pdfData]));
-            // const link = document.createElement('a');
-            // link.href = url;
-            // link.setAttribute('download', 'file.pdf'); //or any other extension
-            // document.body.appendChild(link);
-            // link.click();
-            // console.log("🚀 ~ downloadInvoiceHandler ~ response:", response.payload?.data)
-            const blob = new Blob([pdfData], { type: 'application/pdf' });
-
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = 'invoice-qmint.pdf';
-
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    }
-
+    const downloadInvoiceHandler = useDownloadInvoiceHandler()
     return (
         <Layout>
             <>
@@ -91,7 +62,9 @@ function orderDetails({ location }: { location: any }) {
                                 </Box>
                                 <Box className="OrderDetailsWrapper">
                                     <Box className='PDFBtnWrapper'>
-                                        <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained" onClick={downloadInvoiceHandler} disabled={loading}><Icon className='PdfIcon' ><PdfIcon /></Icon>PDF invoice</Button>
+                                        <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained" onClick={() => {
+                                            downloadInvoiceHandler(searchParams.get("orderNo") ?? "")
+                                        }} disabled={loading}><Icon className='PdfIcon' ><PdfIcon /></Icon>PDF invoice</Button>
                                     </Box>
                                     <Typography variant="subtitle2" className="OrderID">Order : {orderDetails?.customOrderNumber}</Typography>
                                     <Stack className="OrderDetails">

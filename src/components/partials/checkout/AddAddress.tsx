@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react"
-import { Autocomplete, MenuItem, Button, Stack, TextField } from "@mui/material"
+import { Autocomplete, MenuItem, Button, Stack, TextField, Box } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -33,6 +33,7 @@ interface Inputs {
     LastName: string,
     Company: string,
     Contact: string,
+    ContactCode: string,
     Email: string,
     Address1: string,
     Address2: string,
@@ -47,6 +48,7 @@ export const addressSchema = yup.object().shape({
     LastName: yup.string().trim().required('Last name is a required field'),
     Company: yup.string().trim(),
     Contact: yup.string().trim().required(),
+    ContactCode: yup.string().required(),
     Email: yup.string().email().required(),
     Address1: yup.string().trim().required("Address 1 in required field"),
     Address2: yup.string().trim(),
@@ -248,16 +250,32 @@ function AddAddress(props: AddAddress) {
                         margin='none'
                     />
                     <Stack className="Column">
-                        <RenderFields
-                            register={register}
-                            error={errors.Contact}
-                            name="Contact"
-                            type="number"
-                            placeholder="Enter contact *"
-                            control={control}
-                            variant='outlined'
-                            margin='none'
-                        />
+                        <Box className="ContactField">
+                            <RenderFields
+                                register={register}
+                                type="select"
+                                control={control}
+                                error={errors.ContactCode}
+                                name="ContactCode"
+                                variant="outlined"
+                                margin="none"
+                                className="ContactSelect"
+                            >
+                                <MenuItem value="91">+91</MenuItem>
+                                <MenuItem value="11">+11</MenuItem>
+                            </RenderFields>
+                            <RenderFields
+                                register={register}
+                                error={errors.Contact}
+                                name="Contact"
+                                type="number"
+                                placeholder="Enter contact *"
+                                control={control}
+                                variant='outlined'
+                                margin='none'
+                                className="ContactTextField"
+                            />
+                        </Box>
                         <RenderFields
                             register={register}
                             error={errors.Email}

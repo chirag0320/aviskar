@@ -4,6 +4,8 @@
 
 // Typography
 $fontFamily: "Montserrat", sans-serif;
+$fontFamilyOpenSans: 'Open Sans';
+
 
 // Breakpoints
 $xxs: 350px;
@@ -27,6 +29,8 @@ $sinopia: #d13200;
 $success: #008001;
 $success10: #04ca041a;
 $yellowFuel: #eaa22b;
+$yellowFuel05: #eaa22b0d;
+
 $dark: #1d2129;
 $black: #000000;
 $mirage: #212121;
@@ -61,6 +65,8 @@ $shadow8: 0px 20px 30px 0px #0000000f;
 $shadow9: 0px -14px 53px 0px #00000026;
 $shadow11: 0px -2px 17px 0px #0000000D, 0px 5px 35px 0px #00000012;
 $shadow10: 6px 6px 27px 0px #0000000d;
+$shadow11: 0px 12px 31.6px 0px #0000000F;
+
 
 // Text Shadow
 $textShadow1: 0px 11px 11.7px rgba(0, 0, 0, 0.25);
