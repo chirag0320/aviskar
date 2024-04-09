@@ -1,18 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { appCreateAsyncThunk } from "../middleware/thunkMiddleware";
 import MyVaultServices from "@/apis/services/MyVaultServices";
-import { Account, AccountQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems } from "@/types/myVault";
+import { Account, AccountQuery, rewardPointsHistoryData, IOrderHistoryApiResponseData } from "@/types/myVault";
 
 interface MyVaultInitialState {
     loading: boolean,
     accounts: Account[] | null,
-    rewardPointsHistory: rewardPointsHistoryData | null
+    rewardPointsHistory: rewardPointsHistoryData | null,
+    orderHistory: IOrderHistoryApiResponseData | null
 }
 
 const initialState: MyVaultInitialState = {
     loading: false,
     accounts: null,
-    rewardPointsHistory: null
+    rewardPointsHistory: null,
+    orderHistory: null
 }
 
 // ACCOUNTS
@@ -35,6 +37,14 @@ export const getRewardPointsHistory = appCreateAsyncThunk(
     "getRewardPointsHistory",
     async({ url, body } : { url: string, body: any }) => {
         return await MyVaultServices.getRewardPointsHistory(url, body);
+    }
+)
+
+// ORDER HISTORY
+export const getOrderHistory = appCreateAsyncThunk(
+    "getOrderHistory",
+    async({ url, body } : { url: string, body: any }) => {
+        return await MyVaultServices.getOrderHistory(url, body);
     }
 )
 
@@ -90,7 +100,19 @@ export const myVaultSlice = createSlice({
         builder.addCase(getRewardPointsHistory.rejected, (state) => {
             state.loading = false;
         })
-        
+
+        // order history
+        builder.addCase(getOrderHistory.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(getOrderHistory.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.orderHistory = responseData.data;
+            state.loading = false;
+        })
+        builder.addCase(getOrderHistory.rejected, (state) => {
+            state.loading = false;
+        })
     }
 })
 

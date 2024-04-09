@@ -101,5 +101,53 @@ export interface rewardPointsHistoryDataItems {
     validPoints: number;
 }
 
+// ORDER HISTORY
+export interface IOrderHistoryData {
+    search: string;
+    pageNo: number;
+    pageSize: number;
+    sortBy: string;
+    sortOrder: string;
+    filters: IOrderHistoryDataFilters;
+}
+
+export interface IOrderHistoryDataFilters {
+    fromDate: Date;
+    toDate: Date;
+    orderStatusId: number;
+    orderCustomerId: number;
+}
+
+export interface IOrderHistoryItems {
+    accountName: string;
+    accountType: string;
+    alertOrderStatus: null | string;
+    alertOrderStatusId: number;
+    billingAddressId: number;
+    createdOnUtc: string; // Assuming this is a date string
+    customOrderNumber: string;
+    customerId: number;
+    orderCustomerId: number;
+    orderGuid: string;
+    orderId: number;
+    orderStatus: string;
+    orderStatusId: number;
+    paymentMethodSystemName: null | string;
+    paymentStatusId: number;
+    shippingAddressId: number;
+    shippingMethod: string;
+    shippingStatusId: number;
+    storeCode: number;
+  }
+  
+  export interface IOrderHistoryApiResponseData {
+    additionalField: any | null;
+    count: number;
+    extraProperty: any | null;
+    items: IOrderHistoryItems[];
+    page: number;
+    pageSize: number;
+  }
+
 // ADDRESSES
 
