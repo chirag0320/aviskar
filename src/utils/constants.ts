@@ -90,7 +90,10 @@ export const ENDPOINTS = {
     getBuyBackOrderHistory : "myvault/oz5pMSV4SUqP92QIId5KmQ",
 
     // my vault -> orderHistory
-    getOrderHistory: "myvault/tBryhxlMq0qgjzuUfbewkA"
+    getOrderHistory: "myvault/tBryhxlMq0qgjzuUfbewkA",
+    
+    //popup details
+    getPopUpDetails: "utility/85WwxAopc7Rn"
 }
 export const StoreData = {
     storeCode: 12,

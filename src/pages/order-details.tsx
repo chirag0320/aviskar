@@ -9,7 +9,7 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material"
-import { AddToCartIcon, PdfIcon } from '@/assets/icons';
+import { AddToCartIcon, CreditCard, CartIcon, GreenConfirmationIcon, PdfIcon, ShieldIcon } from '@/assets/icons';
 import StatusImage from '../assets/images/StatusImage.png';
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { ENDPOINTS } from "@/utils/constants";
@@ -124,42 +124,44 @@ function orderDetails({ location }: { location: any }) {
                                             <Typography variant="body1">Phone </Typography><Typography variant="subtitle1" className='Font16'> : {orderDetails?.addresses[1]?.phoneNumber}</Typography>
                                         </Stack>
                                         <Typography variant="body1" className="CommonBottomMargin">{orderDetails?.addresses[1]?.addressLine1 + ", " + orderDetails?.addresses[1]?.addressLine2 + ", " + orderDetails?.addresses[1]?.city + " - " + orderDetails?.addresses[1]?.postcode + ", " + orderDetails?.addresses[1]?.stateName + ", " + orderDetails?.addresses[1]?.countryName}</Typography>
-                                        {orderDetails?.addresses[1]?.isVerified && <Typography variant="subtitle1" className='Font16'>Address Verified</Typography>}
+                                        {orderDetails?.addresses[1]?.isVerified && <Typography variant="subtitle1" className='Font16 AddressVerified'><GreenConfirmationIcon fontSize="small" /> Address Verified</Typography>}
                                     </Box>
                                 </Box>
 
                                 <Box className="TableContainerWrapper">
-                                    <TableContainer
-                                        className="OrderDetailTableWrapper"
-                                        sx={{}}
-                                    // component={Paper}
-                                    >
-                                        <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
-                                                    <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
-                                                    <TableCell sx={{ minWidth: "156px" }}>Quantity</TableCell>
-                                                    <TableCell sx={{ minWidth: "200px" }}>Total</TableCell>
+                                <TableContainer
+                                    className="OrderDetailTableWrapper"
+                                    sx={{}}
+                                // component={Paper}
+                                >
+                                    <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell className="Name">Name</TableCell>
+                                                <TableCell>Shipping Method</TableCell>
+                                                <TableCell>Price</TableCell>
+                                                <TableCell>Quantity</TableCell>
+                                                <TableCell>Total</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {orderDetails?.orderItems?.map((row) => (
+                                                <TableRow
+                                                    key={row.productId}
+                                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                >
+                                                    <TableCell component="th" scope="row">
+                                                        {row.productName}
+                                                    </TableCell>
+                                                    <TableCell>{orderDetails.shippingMethod}</TableCell>
+                                                    <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
+                                                    <TableCell>{row.quantity}</TableCell>
+                                                    <TableCell>${roundOfThePrice(row.totalPrice)}</TableCell>
                                                 </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {orderDetails?.orderItems?.map((row) => (
-                                                    <TableRow
-                                                        key={row.productId}
-                                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                    >
-                                                        <TableCell component="th" scope="row">
-                                                            {row.productName}
-                                                        </TableCell>
-                                                        <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
-                                                        <TableCell>{row.quantity}</TableCell>
-                                                        <TableCell>${roundOfThePrice(row.totalPrice)}</TableCell>
-                                                    </TableRow>
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
                                 </Box>
 
                                 <Stack className='TotalShippingDetailsWrapper'>
@@ -192,7 +194,7 @@ function orderDetails({ location }: { location: any }) {
                                 <Box className="CardsWrapper">
                                     <Box className="Card SecureShippingCard">
                                         <Stack className='IconTitleWrapper'>
-                                            <Icon className="AddToCartIcon"><AddToCartIcon /></Icon>
+                                            <Icon><ShieldIcon /></Icon>
                                             <Typography variant="subtitle2">{orderDetails?.shippingTextP1}</Typography>
                                         </Stack>
                                         <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.shippingTextP2}</Typography>
@@ -201,7 +203,7 @@ function orderDetails({ location }: { location: any }) {
                                     </Box>
                                     <Box className="Card PaymentCard">
                                         <Stack className='IconTitleWrapper'>
-                                            <Icon><AddToCartIcon /></Icon>
+                                            <Icon><CreditCard /></Icon>
                                             <Typography variant="subtitle2">{orderDetails?.paymentTextP1}</Typography>
                                         </Stack>
                                         <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.paymentTextP2}</Typography>
@@ -213,7 +215,7 @@ function orderDetails({ location }: { location: any }) {
                                     </Box>
                                     <Box className="Card SellingCard">
                                         <Stack className='IconTitleWrapper'>
-                                            <Icon><AddToCartIcon /></Icon>
+                                            <Icon><CartIcon /></Icon>
                                             <Typography variant="subtitle2">{orderDetails?.sellingTextP1}</Typography>
                                         </Stack>
                                         <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.sellingTextP2}</Typography>

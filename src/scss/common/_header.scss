@@ -1,9 +1,14 @@
 #HeaderWrapper {
+  position: sticky;
+  top: 0;
+  z-index: $appBar;
+
   .MuiContainer-root {
     @include media-between($md, $lg) {
       max-width: $lg;
     }
   }
+
   .PageLoader {
     .LinearLoader {
       &.MuiLinearProgress-root {
@@ -27,59 +32,6 @@
     }
   }
 
-  .PricingHeader {
-    @include padding-vertical(14);
-
-    @include media($md) {
-      display: none;
-    }
-
-    &__Wrapper {
-      $spaceBetweenChild: 3vw;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-
-      &:hover {
-        * {
-          animation-play-state: paused;
-        }
-      }
-
-      &--Content {
-        gap: $spaceBetweenChild;
-
-        .StockReturnWithName {
-          border-right: 1px solid color-mix(in srgb, currentColor 50%, transparent);
-          padding-right: $spaceBetweenChild;
-
-          p {
-            margin: 0;
-          }
-        }
-      }
-
-      .marquee-container {
-        cursor: all-scroll;
-        background: inherit;
-        width: 100%;
-        overflow: hidden;
-        white-space: nowrap;
-      }
-
-      .drag-span {
-        line-height: 50px;
-        position: relative;
-        user-select: none;
-      }
-    }
-
-    .MuiDivider-root {
-      height: 20px;
-      align-self: initial;
-    }
-  }
-
   .MuiAppBar-root {
     .MainHeader {
       @include padding-vertical(18);
@@ -92,9 +44,11 @@
         justify-content: space-between;
         align-items: center;
         gap: 8px;
+
         @include media-min($lg) {
           gap: 16px;
         }
+
         .Right {
           align-items: center;
           gap: 20px;
@@ -122,6 +76,7 @@
             @include media($md) {
               display: none;
             }
+
             svg {
               @include media-between($md, $mmd) {
                 display: none;
@@ -187,6 +142,7 @@
             @include media-min($lg) {
               width: 372px;
             }
+
             @include media-between($md, $mmd) {
               min-width: 160px;
             }
@@ -194,6 +150,7 @@
             .Wrapper {
               position: relative;
               height: 100%;
+
               .SearchButton {
                 position: absolute;
                 right: 0;
@@ -201,18 +158,22 @@
               }
             }
           }
+
           .Marketingoffer {
             align-self: stretch;
+
             a {
               display: flex;
               align-items: center;
               height: 100%;
               border-radius: 10px;
             }
+
             img {
               border-radius: inherit;
               max-height: 100%;
               max-width: 300px;
+
               @include media-between($md, $mmmd) {
                 max-width: 200px;
               }
@@ -226,6 +187,7 @@
             @include media($xs) {
               @include padding-horizontal(6);
             }
+
             @include media-between($md, $mmd) {
               @include padding-horizontal(10);
             }
@@ -479,6 +441,192 @@
       }
     }
   }
+
+  &.FrontHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+
+    .PricingHeader {
+      .PricingHeader__Wrapper {
+        .PricingHeader__Wrapper--Content {
+          .StockReturnWithName {
+            border-right: 1px solid #ffffff33;
+
+            &>.MuiTypography-root {
+              color: $white;
+            }
+          }
+        }
+      }
+    }
+
+    .MuiAppBar-positionStatic {
+      background: #1D212966;
+
+      .HeaderContainerWrapper {
+        .MainHeader__Wrapper {
+          .Center {
+            .NavigationHeader {
+              .NavigationHeader__Wrapper {
+                .LeftPart {
+                  Button {
+                    color: $white;
+                  }
+                }
+              }
+            }
+          }
+
+          .Right {
+            .HamburgerButton {
+
+              .HamburgerIcon,
+              .CrossIcon {
+                color: $white;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .MuiAppBar-positionFixed {
+      .HeaderContainerWrapper {
+        .MainHeader__Wrapper {
+          .Left {
+            .Logo {
+              img {
+                filter: brightness(0);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .HeaderContainerWrapper {
+      position: relative;
+
+      .MainHeader {
+        @include media($lg) {
+          padding-top: 15px;
+          padding-bottom: 6px;
+        }
+
+        .MainHeader__Wrapper {
+          @include media($lg) {
+            flex-wrap: wrap;
+          }
+
+          .Center {
+            @include media($lg) {
+              order: 3;
+              width: 100%;
+            }
+
+            .NavigationHeader {
+              position: static;
+
+              @include media($lg) {
+                width: 100%;
+              }
+
+              .NavigationHeader__Wrapper {
+                @include media($lg) {
+                  justify-content: center;
+                }
+
+                .LeftPart {
+                  hr {
+                    display: none;
+                  }
+
+                  .PopoverMegaMenu {
+                    margin-top: 18px !important;
+
+                    @include media($lg) {
+                      margin-top: 6px !important;
+                    }
+                  }
+                }
+              }
+
+              .ConstantApiLoader {
+                display: none;
+              }
+            }
+          }
+
+          .Right {
+            .ActionButton {
+              @include media($ssm) {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+}
+
+#PricingHeader {
+  .PricingHeader {
+    @include padding-vertical(14);
+
+    @include media($md) {
+      display: none;
+    }
+
+    &__Wrapper {
+      $spaceBetweenChild: 3vw;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+
+      &:hover {
+        * {
+          animation-play-state: paused;
+        }
+      }
+
+      &--Content {
+        gap: $spaceBetweenChild;
+
+        .StockReturnWithName {
+          border-right: 1px solid color-mix(in srgb, currentColor 50%, transparent);
+          padding-right: $spaceBetweenChild;
+
+          p {
+            margin: 0;
+          }
+        }
+      }
+
+      .marquee-container {
+        cursor: all-scroll;
+        background: inherit;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .drag-span {
+        line-height: 50px;
+        position: relative;
+        user-select: none;
+      }
+    }
+
+    .MuiDivider-root {
+      height: 20px;
+      align-self: initial;
+    }
+  }
 }
 
 #ActionMenu {
@@ -513,6 +661,13 @@
     // top: calc(67px + 1px);
     top: calc(67px + 50px + 1px);
 
+    &.FrontPageMenu {
+      top: 70px;
+
+      @include media($ssm) {
+        top: 65px;
+      }
+    }
 
     // &.isHomePage {
     //   top: calc(67px + 50px + 1px) !important;
@@ -682,6 +837,7 @@
             .Wrapper {
               position: relative;
               height: 100%;
+
               .SearchButton {
                 position: absolute;
                 right: 0;

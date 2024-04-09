@@ -65,6 +65,8 @@ import Map1Icon from "./Map1Icon";
 import Map2Icon from "./Map2Icon";
 import PencilIcon from "./PencilIcon";
 import ClipboardIcon from "./ClipboardIcon";
+import ShieldIcon from "./ShieldIcon";
+import CreditCard from "./CreditCard";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
@@ -99,6 +101,7 @@ import ShowcaseIcon from "./ShowcaseIcon";
 import TrustIcon from "./TrustIcon";
 import SuperFundIcon from "./SuperFundIcon";
 import PlayIcon from "./PlayIcon";
+import PhoneCall from "./PhoneCall";
 
 export {
   ArrowLeft,
@@ -168,6 +171,8 @@ export {
   Map2Icon,
   PencilIcon,
   ClipboardIcon,
+  ShieldIcon,
+  CreditCard,
 
   // Social
   FacebookIcon,
@@ -201,5 +206,6 @@ export {
   ShowcaseIcon,
   TrustIcon,
   SuperFundIcon,
-  PlayIcon
+  PlayIcon,
+  PhoneCall
 };

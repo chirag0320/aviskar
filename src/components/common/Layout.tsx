@@ -16,6 +16,7 @@ function Layout({ children }: any) {
   const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
   const [openSessionExpireDialog, toggleSessionExpireDialog] = useToggle(false)
   useInactiveLogout(isLoggedIn ? convertMinutesToMilliseconds(configDetailsState?.sessiontimeout?.value) : convertMinutesToMilliseconds(configDetailsState?.guestsessiontimeout?.value), toggleSessionExpireDialog);
+  // useInactiveLogout(2000, toggleSessionExpireDialog);
   // const [loading, setLoading] = useState(true);
   const [wait, setWait] = useState(false)
   const dispatch = useAppDispatch()

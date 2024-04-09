@@ -115,10 +115,10 @@
                     border: 1px solid rgba($dark, 0.1);
                     border-radius: 15px;
                     overflow: hidden;
+                    margin-top: 14px;
                 }
 
                 .OrderDetailTableWrapper {
-                    margin-top: 20px;
                     box-shadow: none;
 
                     .OrderDetailTable {
@@ -129,8 +129,12 @@
                             line-height: 26px;
                         }
 
-                        .MuiTableCell-head {
-                            font-weight: 600;
+                            .MuiTableCell-head {
+                                font-weight: 600;
+                                white-space: nowrap;
+                                &.Name {
+                                    min-width: 400px;
+                                }
                         }
 
                         .OrderDetailsHeadRow {
@@ -149,9 +153,14 @@
                                     max-height: 140px;
                                     object-fit: contain;
 
-                                    @include media($sm) {
+                                    @include media($lg) {
                                         max-width: 100px;
                                         max-height: 100px;
+                                    }
+
+                                    @include media($sm) {
+                                        max-width: 80px;
+                                        max-height: 80px;
                                     }
                                 }
                             }
@@ -188,7 +197,10 @@
 
                     .PricingDetails {
                         width: 100%;
-
+                        @include media-min($md) {
+                            max-width: 400px;
+                            margin-left: auto;
+                        }
                         @include media($sm) {
                             margin-top: 30px;
                         }
@@ -203,15 +215,6 @@
                             align-items: center;
                             gap: 10px;
                         }
-
-                        .TotalItem {
-                            margin-top: 30px;
-
-                            @include media($sm) {
-                                margin-top: 20px;
-                            }
-                        }
-
                         .PaymentMethod {
                             align-items: center;
                             gap: 12px;
@@ -293,11 +296,13 @@
 
     }
 
-    .ContinueBtn {
-        margin-top: 30px;
-
-        @include media-min($xxl) {
-            min-width: 169px;
+    .ActionWrapper {
+        justify-content: flex-end;
+        .ContinueBtn {
+            margin-top: 30px;
+            @include media-min($md) {
+                min-width: 169px;
+            }
         }
     }
 }

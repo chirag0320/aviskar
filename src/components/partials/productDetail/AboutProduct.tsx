@@ -233,7 +233,7 @@ function AboutProduct({ productId }: any) {
           productImages={productDetailsData?.imageUrls?.length > 0 ? productDetailsData?.imageUrls : [noImage]}
           offerBadge={
             <Typography
-              variant="caption"
+              variant="titleLarge"
               className="OfferBadge"
               sx={{ backgroundColor: productDetailsData?.tagColor }}
             >

@@ -5,6 +5,11 @@ export interface IloginUserBody {
   password: string
   ImpersonateId?: string | number
 }
+export interface IPopUpDetails {
+  "HRERYvCbB" : string | number,
+  "KhgMNHTfVh9C" ?: string,
+  "kRNqk" : number
+}
 class ConfigServices {
   static async details(url: string) {
     return axiosInstance.get(url)
@@ -81,6 +86,9 @@ class ConfigServices {
 
   static async sendVerificationEmailAPI(url:any) {
     return await axiosInstance.post(url)
+  }
+  static async getPopUpDetails(params: IPopUpDetails ) {
+    return await axiosInstance.post(ENDPOINTS.getPopUpDetails,{},{params:params})
   }
 }
 export default ConfigServices
