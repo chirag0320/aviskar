@@ -99,6 +99,7 @@ import ShowcaseIcon from "./ShowcaseIcon";
 import TrustIcon from "./TrustIcon";
 import SuperFundIcon from "./SuperFundIcon";
 import PlayIcon from "./PlayIcon";
+import PhoneCall from "./PhoneCall";
 
 export {
   ArrowLeft,
@@ -201,5 +202,6 @@ export {
   ShowcaseIcon,
   TrustIcon,
   SuperFundIcon,
-  PlayIcon
+  PlayIcon,
+  PhoneCall
 };

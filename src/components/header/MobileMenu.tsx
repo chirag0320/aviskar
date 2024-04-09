@@ -9,8 +9,8 @@ import { ArrowDown, ArrowUp } from '../../assets/icons/index'
 // Utils
 import { useAppSelector } from "@/hooks"
 import { navigate } from "gatsby";
-function MobileMenu(props: any) {
-  const { open, toggleMobileMenu, trigger } = props
+function FrontMobileMenu(props: any) {
+  const { open, toggleMobileMenu, trigger, isFrontPage } = props
   const location = useLocation();
   const [openMenu, setOpenMenu] = useState<any>({})
   const [openSubMenu, setOpenSubMenu] = useState<any>({})
@@ -38,7 +38,7 @@ function MobileMenu(props: any) {
   return (
     <Drawer
       id="MobileMenu"
-      className={classNames({ "ScrollActive": trigger, "isHomePage": isHomePage })}
+      className={classNames({ "ScrollActive": trigger, "isHomePage": isHomePage, 'FrontPageMenu': isFrontPage })}
       open={open}
       variant="temporary"
       onClose={toggleMobileMenu}
@@ -108,4 +108,4 @@ function MobileMenu(props: any) {
   )
 }
 
-export default MobileMenu
+export default FrontMobileMenu

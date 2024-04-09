@@ -35,7 +35,7 @@ export interface Icategory {
   subCategories: Icategory[],
   categoryImages: any[]
 }
-function Navigation() {
+function Navigation({ frontPage = false }: { frontPage?: boolean }) {
   const dispatch = useAppDispatch()
   const { configDetails: configDetailsState, categoriesList, needToShowProgressLoader, isLoggedIn } = useAppSelector((state) => state.homePage)
   const { cartItems } = useAppSelector((state) => state.shoppingCart)
@@ -97,18 +97,20 @@ function Navigation() {
                 : null
             }
           </Stack>
-          <Stack className="RightPart">
-            {needToShowProgressLoader && <ProductUpdateCountdown needToShowText={false} />}
-            {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
-            {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
-              <Link area-label="shopping-cart-link" to="/shopping-cart">
-                <Badge badgeContent={cartItems?.length?.toString()} color="primary" max={99}>
-                  <CartMenu />
-                </Badge>
-              </Link>
-            </Suspense> : null}
-            <ActionMenu />
-          </Stack>
+          {!frontPage && (
+            <Stack className="RightPart">
+              {needToShowProgressLoader && <ProductUpdateCountdown needToShowText={false} />}
+              {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
+              {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
+                <Link area-label="shopping-cart-link" to="/shopping-cart">
+                  <Badge badgeContent={cartItems?.length?.toString()} color="primary" max={99}>
+                    <CartMenu />
+                  </Badge>
+                </Link>
+              </Suspense> : null}
+              <ActionMenu />
+            </Stack>
+          )}
         </Stack>
       </Container>
       <ConstantApiLoader />
