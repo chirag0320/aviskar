@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Box, Container, Divider } from "@mui/material"
 import { PageTitle } from "@/components/common/Utils"
 import OrderDateStatusSelector from "@/components/partials/my-vault/OrderDateStatusSelector"
@@ -6,7 +6,7 @@ import OrderDetailsCard from "@/components/partials/my-vault/OrderDetailsCard"
 import Seo from "@/components/common/Seo"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { ENDPOINTS } from "@/utils/constants"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 import Layout from "@/components/common/Layout"
 import Loader from "@/components/common/Loader"
 import { getBuyBackOrderHistory } from "@/redux/reducers/myVaultReducer"
@@ -22,15 +22,26 @@ export const requestBodyOrderHistory = {
 }
 
 function BuyBackOrderHistory() {
-    // const loading = useAppSelector(state => state.myVault.loading)
+    const orderBuypackHistoryDetails = useAppSelector(state => state.myVault.buyBackOrderHistory)
+    const loading = useAppSelector(state => state.myVault.loading)
+    const dispatch = useAppDispatch()
 
-    useAPIoneTime({
-        service: getBuyBackOrderHistory, endPoint: ENDPOINTS.getBuyBackOrderHistory, body: requestBodyOrderHistory
-    })
+    useEffect(() => {
+        dispatch(
+            getBuyBackOrderHistory({
+                url: ENDPOINTS.getBuyBackOrderHistory,
+                body: { ...requestBodyOrderHistory, filters: {} },
+            })
+        );
+    }, []);
+
+    // useAPIoneTime({
+    //     service: getBuyBackOrderHistory, endPoint: ENDPOINTS.getBuyBackOrderHistory, body: requestBodyOrderHistory
+    // })
 
     return (
         <>
-            {/* <Loader open={loading} /> */}
+            <Loader open={loading} />
             <Layout>
                 <Seo
                     keywords={[`QMint BuyBackOrderHistory`]}
@@ -42,9 +53,10 @@ function BuyBackOrderHistory() {
                     <Container>
                         <Box className="Content OrderHistoryContent">
                             <Divider />
-                            <OrderDateStatusSelector />
+                            <OrderDateStatusSelector orderHistoryType="buy-pack" />
                             <Divider />
                             <Box className="OrderDetailsCardsWrapper">
+                                <OrderDetailsCard orderHistoryDetails={orderBuypackHistoryDetails} />
                             </Box>
                         </Box>
                     </Container>

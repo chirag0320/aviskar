@@ -7,7 +7,7 @@ interface MyVaultInitialState {
     loading: boolean,
     accounts: Account[] | null,
     addresses: Address[] | null,
-    buyBackOrderHistory: any | null
+    buyBackOrderHistory: IOrderHistoryApiResponseData | null,
     rewardPointsHistory: rewardPointsHistoryData | null,
     orderHistory: IOrderHistoryApiResponseData | null
 }
@@ -219,7 +219,6 @@ export const myVaultSlice = createSlice({
         })
         builder.addCase(getBuyBackOrderHistory.fulfilled, (state, action) => {
             const responseData = action.payload.data;
-            // console.log("🚀 ~ builder.addCase ~ responseData:", responseData.data)
             state.buyBackOrderHistory = responseData.data;
             state.loading = false;
         })

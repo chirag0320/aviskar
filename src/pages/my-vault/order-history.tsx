@@ -12,17 +12,18 @@ import Layout from "@/components/common/Layout";
 import Loader from "@/components/common/Loader";
 import { useEffect } from "react";
 import { getOrderHistory } from "@/redux/reducers/myVaultReducer";
-import { requestBodyDefault } from "../[category]";
+import { requestBodyOrderHistory } from "./buy-back-order-history";
 
 function OrderHistory() {
   const loading = useAppSelector(state => state.myVault.loading)
   const dispatch = useAppDispatch();
+  const orderHistoryDetails = useAppSelector((state) => state.myVault.orderHistory);
 
   useEffect(() => {
     dispatch(
       getOrderHistory({
         url: ENDPOINTS.getOrderHistory,
-        body: { ...requestBodyDefault, filters: {} },
+        body: { ...requestBodyOrderHistory },
       })
     );
   }, []);
@@ -46,10 +47,10 @@ function OrderHistory() {
           <Container>
             <Box className="Content OrderHistoryContent">
               <Divider />
-              <OrderDateStatusSelector />
+              <OrderDateStatusSelector orderHistoryType="normal" />
               <Divider />
               <Box className="OrderDetailsCardsWrapper">
-                <OrderDetailsCard />
+                <OrderDetailsCard orderHistoryDetails={orderHistoryDetails} />
               </Box>
             </Box>
           </Container>

@@ -1,14 +1,13 @@
 import RenderFields from '@/components/common/RenderFields'
 import React, { useState } from 'react'
-import { Box, Button, MenuItem, Typography, Stack, Divider, } from '@mui/material'
+import { Box, Button, MenuItem, Stack } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { requestBodyDefault } from '@/pages/[category]'
 import BasicDatePicker from "./BasicDatePicker"
 import { parseDate } from '@internationalized/date'
 import { useAppDispatch } from '@/hooks'
-import { getBuyBackOrderHistory } from '@/redux/reducers/myVaultReducer'
+import { getBuyBackOrderHistory, getOrderHistory } from '@/redux/reducers/myVaultReducer'
 import { ENDPOINTS } from '@/utils/constants'
 import { requestBodyOrderHistory } from '@/pages/my-vault/buy-back-order-history'
 interface OrderDateInputs {
@@ -19,12 +18,15 @@ const schema = yup.object().shape({
     OrderStatus: yup.string().trim().required("Order Status is required field"),
 });
 
-const OrderDateStatusSelector = () => {
+const defaultDate = {
+    start: parseDate("2020-02-08"),
+    end: parseDate("2020-02-08")
+}
+
+const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-pack" | "normal" }) => {
+    // console.log("🚀 ~ OrderDateStatusSelector ~ orderHistoryType:", orderHistoryType)
     const dispatch = useAppDispatch();
-    const [dateRangeValue, setDateRangeValue] = useState({
-        start: parseDate("2020-02-08"),
-        end: parseDate("2020-02-08")
-    });
+    const [dateRangeValue, setDateRangeValue] = useState(defaultDate);
 
     const {
         register,
@@ -38,9 +40,11 @@ const OrderDateStatusSelector = () => {
     })
 
     const onSubmit = async (data: any) => {
-        console.log("Qmint", data);
-        const response = await dispatch(getBuyBackOrderHistory({
-            url: ENDPOINTS.getBuyBackOrderHistory, body: {
+        const service = orderHistoryType === "buy-pack" ? getBuyBackOrderHistory : getOrderHistory;
+        const endPoint = orderHistoryType === "buy-pack" ? ENDPOINTS.getBuyBackOrderHistory : ENDPOINTS.getOrderHistory
+
+        const response = await dispatch(service({
+            url: endPoint, body: {
                 ...requestBodyOrderHistory, filters: {
                     fromDate: dateRangeValue.start.toString(),
                     toDate: dateRangeValue.end.toString(),
@@ -52,6 +56,8 @@ const OrderDateStatusSelector = () => {
 
     const clearFiltersHandler = async () => {
         const response = dispatch(getBuyBackOrderHistory({ url: ENDPOINTS.getBuyBackOrderHistory, body: requestBodyOrderHistory }));
+        reset();
+        setDateRangeValue(defaultDate)
     }
 
     return (
