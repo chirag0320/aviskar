@@ -1,32 +1,57 @@
 import RenderFields from '@/components/common/RenderFields'
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, Button, MenuItem, Typography, Stack, Divider, } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 import BasicDatePicker from "./BasicDatePicker"
+import { parseDate } from '@internationalized/date'
+import { useAppDispatch } from '@/hooks'
+import { getBuyBackOrderHistory } from '@/redux/reducers/myVaultReducer'
+import { ENDPOINTS } from '@/utils/constants'
+import { requestBodyOrderHistory } from '@/pages/my-vault/buy-back-order-history'
 interface OrderDateInputs {
     OrderStatus: string
 }
 
 const schema = yup.object().shape({
-    OrderStatus: yup.string().trim().required(),
+    OrderStatus: yup.string().trim().required("Order Status is required field"),
 });
 
 const OrderDateStatusSelector = () => {
+    const dispatch = useAppDispatch();
+    const [dateRangeValue, setDateRangeValue] = useState({
+        start: parseDate("2020-02-08"),
+        end: parseDate("2020-02-08")
+    });
+
     const {
         register,
         handleSubmit,
         reset,
         control,
+        setValue,
         formState: { errors },
     } = useForm<OrderDateInputs>({
         resolver: yupResolver(schema)
     })
 
     const onSubmit = async (data: any) => {
-        console.log(data);
+        console.log("Qmint", data);
+        const response = await dispatch(getBuyBackOrderHistory({
+            url: ENDPOINTS.getBuyBackOrderHistory, body: {
+                ...requestBodyOrderHistory, filters: {
+                    fromDate: dateRangeValue.start.toString(),
+                    toDate: dateRangeValue.end.toString(),
+                    orderStatusId: data.OrderStatus
+                }
+            }
+        }))
+    }
+
+    const clearFiltersHandler = async () => {
+        const response = dispatch(getBuyBackOrderHistory({ url: ENDPOINTS.getBuyBackOrderHistory, body: requestBodyOrderHistory }));
     }
 
     return (
@@ -35,7 +60,7 @@ const OrderDateStatusSelector = () => {
                 <Stack className='OrderDateStatusSelectorWrapper'>
                     <Stack className='OrderDateStatusWrapper'>
                         <Box className="DateCalenderWrapper">
-                            <BasicDatePicker />
+                            <BasicDatePicker dateRangeValue={dateRangeValue} setDateRangeValue={setDateRangeValue} />
                         </Box>
                         <Box className="SelectStatusWrapper">
                             <RenderFields
@@ -46,20 +71,21 @@ const OrderDateStatusSelector = () => {
                                 control={control}
                                 placeholder="Select Order Status"
                                 variant='outlined'
+                                setValue={setValue}
                                 margin='none'
                                 // required
                                 className='SelectOrderStatus'
                             >
                                 <MenuItem key="" value="none">Select Order Status</MenuItem>
-                                <MenuItem key="" value="pending">pending</MenuItem>
-                                <MenuItem key="" value="processing">processing</MenuItem>
-                                <MenuItem key="" value="completed">completed</MenuItem>
+                                <MenuItem key="" value="1">pending</MenuItem>
+                                <MenuItem key="" value="2">processing</MenuItem>
+                                <MenuItem key="" value="3">completed</MenuItem>
                             </RenderFields>
                         </Box>
                     </Stack>
                     <Stack className="ButtonsWrapper">
                         <Button variant="contained" type="submit" size="large" color='primary' className="SearchButton">Search</Button>
-                        <Button variant="contained" size="large" color='info'>Clear</Button>
+                        <Button variant="contained" size="large" color='info' onClick={clearFiltersHandler}>Clear</Button>
                     </Stack>
                 </Stack>
             </form>

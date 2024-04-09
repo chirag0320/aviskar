@@ -6,44 +6,53 @@ import OrderDetailsCard from "@/components/partials/my-vault/OrderDetailsCard"
 import Seo from "@/components/common/Seo"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { ENDPOINTS } from "@/utils/constants"
-import { getTopicDetails } from "@/redux/reducers/topicReducer"
 import { useAppSelector } from "@/hooks"
 import Layout from "@/components/common/Layout"
 import Loader from "@/components/common/Loader"
-function Topics(paramsData: any) {
-    const { topicDetails, loading } = useAppSelector(state => state.topic)
-    useAPIoneTime({ service: getTopicDetails, endPoint: ENDPOINTS.topicDetail?.replace('{{topic-name}}', paramsData?.params?.['topic-name']) })
+import { getBuyBackOrderHistory } from "@/redux/reducers/myVaultReducer"
+import { requestBodyDefault } from "../[category]"
+
+export const requestBodyOrderHistory = {
+    ...requestBodyDefault, filters: {
+        fromDate: "",
+        toDate: "",
+        orderStatusId: "",
+        orderCustomerId: ""
+    }
+}
+
+function BuyBackOrderHistory() {
+    // const loading = useAppSelector(state => state.myVault.loading)
+
+    useAPIoneTime({
+        service: getBuyBackOrderHistory, endPoint: ENDPOINTS.getBuyBackOrderHistory, body: requestBodyOrderHistory
+    })
+
     return (
         <>
-            <Loader open={loading} />
-            {
-                !loading && <Layout>
-                    <Seo
-                        keywords={[`QMint Topics`]}
-                        title="Buyback orders"
-                        lang="en"
-                    />
-                    <PageTitle title="Buyback orders" backToDashboard={true} />
-                    <Box id="BuybackOrderHistoryPage" className='BuybackOrderHistoryPage' component="section">
-                        <Container>
-                            <Box className="Content OrderHistoryContent">
-                                <Divider />
-                                <OrderDateStatusSelector />
-                                <Divider />
-                                <Box className="OrderDetailsCardsWrapper">
-                                    No orders
-                                    {/* <OrderDetailsCard />
-                                    <OrderDetailsCard />
-                                    <OrderDetailsCard />
-                                    <OrderDetailsCard /> */}
-                                </Box>
+            {/* <Loader open={loading} /> */}
+            <Layout>
+                <Seo
+                    keywords={[`QMint BuyBackOrderHistory`]}
+                    title="Buyback orders"
+                    lang="en"
+                />
+                <PageTitle title="Buyback orders" backToDashboard={true} />
+                <Box id="BuybackOrderHistoryPage" className='BuybackOrderHistoryPage' component="section">
+                    <Container>
+                        <Box className="Content OrderHistoryContent">
+                            <Divider />
+                            <OrderDateStatusSelector />
+                            <Divider />
+                            <Box className="OrderDetailsCardsWrapper">
                             </Box>
-                        </Container>
-                    </Box>
-                </Layout>
-            }
+                        </Box>
+                    </Container>
+                </Box>
+            </Layout>
+
         </>
     )
 }
 
-export default Topics
+export default BuyBackOrderHistory

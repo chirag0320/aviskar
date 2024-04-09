@@ -9,14 +9,15 @@ interface MyVaultInitialState {
     accounts: Account[] | null,
     addresses: Address[] | null,
     rewardPointsHistory: rewardPointsHistoryData | null,
-    // buyBackOrderHistory : 
+    buyBackOrderHistory: any | null
 }
 
 const initialState: MyVaultInitialState = {
     loading: false,
     accounts: null,
     addresses: null,
-    rewardPointsHistory: null
+    rewardPointsHistory: null,
+    buyBackOrderHistory: null
 }
 
 // ACCOUNTS
@@ -65,12 +66,13 @@ export const deleteAddress = appCreateAsyncThunk(
 )
 
 // BUY BACK ORDER HISTORY
-export const buyBackOrderHistory = appCreateAsyncThunk(
-    "buyBackOrderHistory",
+export const getBuyBackOrderHistory = appCreateAsyncThunk(
+    "getBuyBackOrderHistory",
     async ({ url, body }: { url: string, body: any }) => {
         return await MyVaultServices.getBuyBackOrderHostory(url, body);
     }
 )
+
 export const myVaultSlice = createSlice({
     name: "myVault",
     initialState,
@@ -203,15 +205,16 @@ export const myVaultSlice = createSlice({
         })
 
         // get buy back order history data
-        builder.addCase(getRewardPointsHistory.pending, (state) => {
+        builder.addCase(getBuyBackOrderHistory.pending, (state) => {
             state.loading = true;
         })
-        builder.addCase(getRewardPointsHistory.fulfilled, (state, action) => {
+        builder.addCase(getBuyBackOrderHistory.fulfilled, (state, action) => {
             const responseData = action.payload.data;
-            state.rewardPointsHistory = responseData.data;
+            // console.log("🚀 ~ builder.addCase ~ responseData:", responseData.data)
+            state.buyBackOrderHistory = responseData.data;
             state.loading = false;
         })
-        builder.addCase(getRewardPointsHistory.rejected, (state) => {
+        builder.addCase(getBuyBackOrderHistory.rejected, (state) => {
             state.loading = false;
         })
     }
