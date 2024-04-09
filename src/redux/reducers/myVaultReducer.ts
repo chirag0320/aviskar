@@ -41,7 +41,7 @@ export const getAccounts = appCreateAsyncThunk(
 
 export const addOrEditAccount = appCreateAsyncThunk(
     "addOrEditAccount",
-    async ({ url, body }: { url: string, body: AccountQuery }) => {
+    async ({ url, body }: { url: string, body: any }) => {
         return await MyVaultServices.addOrEditAccount(url, body);
     }
 )

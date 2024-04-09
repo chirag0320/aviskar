@@ -19,8 +19,7 @@ interface AccountTypeProps {
 
 export default function AccountType(props: AccountTypeProps) {
     const { open, dialogTitle, alignment, handleChange, onClose, handleAccountTypeNextButton } = props
-    const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
-    console.log("🚀 ~ AccountType ~ configDropdowns:", configDropdowns)
+    // console.log("🚀 ~ AccountType ~ configDropdowns:", configDropdowns)
 
     return (
         <>

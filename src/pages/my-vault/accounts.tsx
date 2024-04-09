@@ -21,6 +21,7 @@ function Accounts() {
     const accountsData = useAppSelector(state => state.myVault.accounts)
     const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
     const [updateAddress, setUpdateAddress] = useState<boolean>(false)
+    const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
     const [alignment, setAlignment] = React.useState('Individual');
     // console.log("🚀 ~ Accounts ~ alignment:", alignment)
 
@@ -92,7 +93,7 @@ function Accounts() {
                                 ))}
                             </Box>
                         </Box>
-                        <AddAccount dialogTitle="Add new account" open={updateAddress} alignment={alignment} onClose={handleCloseUpdateAddress} hadleSecondaryAction={hadleAddAccountSecondaryAction} />
+                        <AddAccount dialogTitle="Add new account" open={updateAddress} alignment={alignment} onClose={handleCloseUpdateAddress} hadleSecondaryAction={hadleAddAccountSecondaryAction} trusteeTypes={configDropdowns?.trusteeTypeList} />
                         <AccountType dialogTitle="Select Account Type" open={accountTypeDialog} alignment={alignment} handleChange={handleChange} onClose={handleCloseAccountTypeDialog} handleAccountTypeNextButton={handleAccountTypeNextButton} />
                     </Container>
                 </Box>

@@ -11,7 +11,7 @@ class MyVaultServices {
         return axiosInstance.get(url);
     }
 
-    static async addOrEditAccount(url: string, accountQuery: AccountQuery) {
+    static async addOrEditAccount(url: string, accountQuery: any) {
         return axiosInstance.post(url, accountQuery);
     }
 

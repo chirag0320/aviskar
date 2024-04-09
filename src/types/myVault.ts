@@ -14,6 +14,9 @@ export interface IConfigDropdown {
     accountTypeList: IDropdownItem[];
     buybackOrderStatusList: IDropdownItem[];
     countryList: IDropdownItem[];
+    orderStatusList : IDropdownItem[];
+    stateList : IDropdownItem[];
+    trusteeTypeList : IDropdownItem[];
 }
 
 // ACCOUNTS
