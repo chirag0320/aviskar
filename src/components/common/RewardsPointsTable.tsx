@@ -29,37 +29,17 @@ function createData(
 ) {
     return { date, points, pointsBalance, Message };
 }
-const rows = [
-    createData(
-        "3/23/2024 1:48:47 AM",
-        "550",
-        "0",
-        "Redeemed for order #873590716",
-    ),
-    createData(
-        "11/7/2023 1:55:39 AM",
-        "500",
-        "50",
-        "test reward point function",
-    ),
-    createData(
-        "11/7/2023 1:55:39 AM",
-        "500",
-        "50",
-        "test reward point function",
-    ),
-];
 
 function RewardsPointsTable() {
+    const rewardPointsData = useAppSelector(state => state.myVault.rewardPointsHistory);
     const dispatch = useAppDispatch();
     // useAPIoneTime({service : getRewardPointsHistory, endPoint : ENDPOINTS.getRewardPointsHistory, body : { ...requestBodyDefault, filter : {} }})
 
     useEffect(() => {
-        dispatch(getRewardPointsHistory({ url: ENDPOINTS.getRewardPointsHistory, body: { ...requestBodyDefault, filters : {}}}));
+        dispatch(getRewardPointsHistory({ url: ENDPOINTS.getRewardPointsHistory, body: { ...requestBodyDefault, filters: {} } }));
     }, []);
 
-    const rewardPointsData = useAppSelector(state => state.myVault.rewardPointsHistory);
-   
+
     return (
         <>
             <TableContainer
@@ -77,7 +57,7 @@ function RewardsPointsTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rewardPointsData?.items?.map((item) => (
+                        {!!rewardPointsData?.items?.length ? rewardPointsData?.items?.map((item) => (
                             <TableRow
                                 key={item.id}
                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -87,7 +67,7 @@ function RewardsPointsTable() {
                                 <TableCell>{item.pointsBalance}</TableCell>
                                 <TableCell>{item.message}</TableCell>
                             </TableRow>
-                        ))}
+                        )) : null}
 
                     </TableBody>
                 </Table>
