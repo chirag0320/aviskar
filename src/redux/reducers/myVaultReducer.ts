@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { appCreateAsyncThunk } from "../middleware/thunkMiddleware";
 import MyVaultServices from "@/apis/services/MyVaultServices";
-import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData } from "@/types/myVault";
+import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData, IConfigDropdown } from "@/types/myVault";
 
 interface MyVaultInitialState {
     loading: boolean,
+    configDropdowns: IConfigDropdown | null,
     accounts: Account[] | null,
     addresses: Address[] | null,
     buyBackOrderHistory: IOrderHistoryApiResponseData | null,
@@ -14,12 +15,21 @@ interface MyVaultInitialState {
 
 const initialState: MyVaultInitialState = {
     loading: false,
+    configDropdowns: null,
     accounts: null,
     addresses: null,
     rewardPointsHistory: null,
     buyBackOrderHistory: null,
     orderHistory: null
 }
+
+// CONFIG DROPDOWNS
+export const getConfigDropdowns = appCreateAsyncThunk(
+    "getConfigDropdowns",
+    async ({ url }: { url: string }) => {
+        return await MyVaultServices.getConfigDropdowns(url);
+    }
+)
 
 // ACCOUNTS
 export const getAccounts = appCreateAsyncThunk(
@@ -127,6 +137,19 @@ export const myVaultSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
+        // get config dropdowns
+        builder.addCase(getConfigDropdowns.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(getConfigDropdowns.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.configDropdowns = responseData.data;
+            state.loading = false;
+        })
+        builder.addCase(getConfigDropdowns.rejected, (state) => {
+            state.loading = false;
+        })
+
         // get accounts
         builder.addCase(getAccounts.pending, (state) => {
             state.loading = true;

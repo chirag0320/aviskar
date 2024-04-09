@@ -1,5 +1,22 @@
-// ACCOUNTS
+// CONFIG DROPDOWNS
+export interface IDropdownItem {
+    id: number;
+    name: string;
+    enumValue: number;
+    type: any; 
+    colorCode: string | null;
+    seqNo: number;
+    extraProperty: any;
+}
 
+export interface IConfigDropdown {
+    accountList: IDropdownItem[];
+    accountTypeList: IDropdownItem[];
+    buybackOrderStatusList: IDropdownItem[];
+    countryList: IDropdownItem[];
+}
+
+// ACCOUNTS
 interface AdditionalBeneficiary {
     customerAdditionalBeneficiaryId: number;
     firstName: string;

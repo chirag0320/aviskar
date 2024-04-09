@@ -2,6 +2,10 @@ import axiosInstance from "@/axiosfolder";
 import { AccountQuery, AddressQuery, rewardPointsHistoryData, IOrderHistoryData } from "@/types/myVault";
 
 class MyVaultServices {
+    // CONFIG DROPDOWNS
+    static async getConfigDropdowns(url : string){
+        return axiosInstance.get(url);
+    }
     // ACCOUNTS
     static async getAccounts(url: string) {
         return axiosInstance.get(url);
