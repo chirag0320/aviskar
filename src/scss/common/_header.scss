@@ -2,6 +2,7 @@
   position: sticky;
   top: 0;
   z-index: $appBar;
+
   .MuiContainer-root {
     @include media-between($md, $lg) {
       max-width: $lg;
@@ -576,36 +577,36 @@
 #PricingHeader {
   .PricingHeader {
     @include padding-vertical(14);
-  
+
     @include media($md) {
       display: none;
     }
-  
+
     &__Wrapper {
       $spaceBetweenChild: 3vw;
       justify-content: space-between;
       align-items: center;
       gap: 20px;
-  
+
       &:hover {
         * {
           animation-play-state: paused;
         }
       }
-  
+
       &--Content {
         gap: $spaceBetweenChild;
-  
+
         .StockReturnWithName {
           border-right: 1px solid color-mix(in srgb, currentColor 50%, transparent);
           padding-right: $spaceBetweenChild;
-  
+
           p {
             margin: 0;
           }
         }
       }
-  
+
       .marquee-container {
         cursor: all-scroll;
         background: inherit;
@@ -613,14 +614,14 @@
         overflow: hidden;
         white-space: nowrap;
       }
-  
+
       .drag-span {
         line-height: 50px;
         position: relative;
         user-select: none;
       }
     }
-  
+
     .MuiDivider-root {
       height: 20px;
       align-self: initial;
@@ -662,6 +663,10 @@
 
     &.FrontPageMenu {
       top: 70px;
+
+      @include media($ssm) {
+        top: 65px;
+      }
     }
 
     // &.isHomePage {
