@@ -14,7 +14,7 @@ import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
 import { StateOrCountry, addAddress as addAddressForCheckout, addOrEditAddress as addOrEditAddressForCheckout } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
-import { hasFulfilled } from "@/utils/common"
+import { PhoneNumberCountryCode, hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
 import { AddressType } from "@/types/enums"
@@ -48,14 +48,14 @@ export const addressSchema = yup.object().shape({
     LastName: yup.string().trim().required('Last name is a required field'),
     Company: yup.string().trim(),
     Contact: yup.string().trim().required(),
-    ContactCode: yup.string().required(),
+    ContactCode: yup.string().required("Country code is required field"),
     Email: yup.string().email().required(),
     Address1: yup.string().trim().required("Address 1 in required field"),
     Address2: yup.string().trim(),
     City: yup.string().required().trim(),
     State: yup.string().required(),
     Country: yup.string().required(),
-    Code: yup.string().required('Zip / Postal code is required').trim()
+    Code: yup.string().required('Zip / Postal code is required').trim(),
 })
 
 function AddAddress(props: AddAddress) {
@@ -83,12 +83,13 @@ function AddAddress(props: AddAddress) {
     })
 
     const onAddressFormSubmitHandler = async (data: any) => {
+        console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
         const addressQuery = {
             addressTypeId,
             firstName: data.FirstName,
             lastName: data.LastName,
             company: data.Company,
-            phoneNumber: data.Contact,
+            phoneNumber: data.ContactCode + data.Contact,
             email: data.Email,
             isVerified: true, // static
             addressLine1: data.Address1,
@@ -121,7 +122,7 @@ function AddAddress(props: AddAddress) {
                     firstName: data.FirstName,
                     lastName: data.LastName,
                     company: data.Company,
-                    phoneNumber: data.Contact,
+                    phoneNumber: data.ContactCode + data.Contact,
                     email: data.Email,
                     addressLine1: data.Address1,
                     addressLine2: data.Address2,
@@ -159,7 +160,7 @@ function AddAddress(props: AddAddress) {
                 "countryName": "Australia"
             }
             if (hasFulfilled(response.type)) {
-                dispatch(addAddress(needToadd))
+                dispatch(addAddressForCheckout(needToadd))
                 handleAddressUpdate!(needToadd, addressTypeId == AddressType.Billing)
                 onClose()
                 reset()
@@ -255,18 +256,18 @@ function AddAddress(props: AddAddress) {
                                 register={register}
                                 type="select"
                                 control={control}
-                                error={errors.ContactCode}
+                                // error={errors.ContactCode}
                                 name="ContactCode"
                                 variant="outlined"
+                                setValue={setValue}
                                 margin="none"
                                 className="ContactSelect"
                             >
-                                <MenuItem value="91">+91</MenuItem>
-                                <MenuItem value="11">+11</MenuItem>
+                                {PhoneNumberCountryCode.map((phone) => <MenuItem key={phone.code} value={phone.dial_code}>{`${phone.name} (${phone.dial_code})`}</MenuItem>)}
                             </RenderFields>
                             <RenderFields
                                 register={register}
-                                error={errors.Contact}
+                                error={errors.Contact || errors.ContactCode}
                                 name="Contact"
                                 type="number"
                                 placeholder="Enter contact *"
@@ -338,11 +339,11 @@ function AddAddress(props: AddAddress) {
                         <Autocomplete
                             disablePortal
                             options={stateList}
-                            getOptionLabel={option => {
+                            getOptionLabel={(option : any) => {
                                 if (typeof option === 'string') {
                                     return option;
                                 }
-                                return option.name;
+                                return option?.name;
                             }}
                             renderInput={(params) => <TextField placeholder="Enter state *" {...params} error={errors.State as boolean | undefined} />}
                             fullWidth

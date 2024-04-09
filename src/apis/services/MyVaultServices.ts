@@ -27,6 +27,11 @@ class MyVaultServices {
     static async getRewardPointsHistory(url: string, rewardPointsHistoryData: rewardPointsHistoryData) {
         return axiosInstance.post(url, rewardPointsHistoryData);
     }
+
+    // BUY BACK ORDER HISTORY
+    static async getBuyBackOrderHostory(url: string, query: any) {
+        return axiosInstance.post(url, query);
+    }
 }
 
 export default MyVaultServices;

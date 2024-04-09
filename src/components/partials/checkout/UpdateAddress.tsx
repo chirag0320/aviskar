@@ -242,9 +242,10 @@ function UpdateAddress(props: UpdateAddress) {
                 register={register}
                 type="select"
                 control={control}
-                error={errors.ContactCode}
+                // error={errors.ContactCode}
                 name="ContactCode"
                 variant="outlined"
+                setValue={setValue}
                 margin="none"
                 className="ContactSelect"
               >
@@ -253,7 +254,7 @@ function UpdateAddress(props: UpdateAddress) {
               </RenderFields>
               <RenderFields
                 register={register}
-                error={errors.Contact}
+                error={errors.Contact || errors.ContactCode}
                 name="Contact"
                 defaultValue={existingAddress?.phone1 || existingAddress?.phoneNumber}
                 type="number"

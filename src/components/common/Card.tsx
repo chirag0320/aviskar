@@ -524,9 +524,9 @@ interface AddressCardProps {
   email: string,
   phoneNumber: string,
   address: Address,
-  showDelete: any,
-  handleDelete: any,
-  id: number
+  showDelete: boolean,
+  handleDelete?: any,
+  id?: number
 }
 
 export const AddressCard = (props: AddressCardProps) => {

@@ -2,13 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { appCreateAsyncThunk } from "../middleware/thunkMiddleware";
 import MyVaultServices from "@/apis/services/MyVaultServices";
 import { string } from "prop-types";
-import { Account, AccountQuery,Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems } from "@/types/myVault";
+import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems } from "@/types/myVault";
 
 interface MyVaultInitialState {
     loading: boolean,
     accounts: Account[] | null,
-    addresses: Address[] | null
-    rewardPointsHistory: rewardPointsHistoryData | null
+    addresses: Address[] | null,
+    rewardPointsHistory: rewardPointsHistoryData | null,
+    // buyBackOrderHistory : 
 }
 
 const initialState: MyVaultInitialState = {
@@ -36,7 +37,7 @@ export const addOrEditAccount = appCreateAsyncThunk(
 // REWARD POINTS HISTORY
 export const getRewardPointsHistory = appCreateAsyncThunk(
     "getRewardPointsHistory",
-    async({ url, body } : { url: string, body: any }) => {
+    async ({ url, body }: { url: string, body: any }) => {
         return await MyVaultServices.getRewardPointsHistory(url, body);
     }
 )
@@ -63,6 +64,13 @@ export const deleteAddress = appCreateAsyncThunk(
     }
 )
 
+// BUY BACK ORDER HISTORY
+export const buyBackOrderHistory = appCreateAsyncThunk(
+    "buyBackOrderHistory",
+    async ({ url, body }: { url: string, body: any }) => {
+        return await MyVaultServices.getBuyBackOrderHostory(url, body);
+    }
+)
 export const myVaultSlice = createSlice({
     name: "myVault",
     initialState,
@@ -103,8 +111,8 @@ export const myVaultSlice = createSlice({
                 return address;
             }) ?? null;
         },
-        addAddress : (state,action) => {
-            state.addresses = [...state.addresses!,action.payload]
+        addAddress: (state, action) => {
+            state.addresses = [...state.addresses!, action.payload]
         }
     },
     extraReducers: (builder) => {
@@ -193,10 +201,22 @@ export const myVaultSlice = createSlice({
         builder.addCase(getRewardPointsHistory.rejected, (state) => {
             state.loading = false;
         })
-        
+
+        // get buy back order history data
+        builder.addCase(getRewardPointsHistory.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(getRewardPointsHistory.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.rewardPointsHistory = responseData.data;
+            state.loading = false;
+        })
+        builder.addCase(getRewardPointsHistory.rejected, (state) => {
+            state.loading = false;
+        })
     }
 })
 
-export const { setLoadingTrue, setLoadingFalse,updateAddress ,addAddress} = myVaultSlice.actions;
+export const { setLoadingTrue, setLoadingFalse, updateAddress, addAddress } = myVaultSlice.actions;
 
 export default myVaultSlice.reducer;
