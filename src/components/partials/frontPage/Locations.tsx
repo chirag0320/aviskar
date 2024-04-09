@@ -37,7 +37,7 @@ function Locations() {
             900: {
                 slidesPerView: 3,
             },
-            0: {
+            260: {
                 slidesPerView: 2,
                 slidesPerColumn: 2,
                 spaceBetween: 20,
@@ -51,7 +51,37 @@ function Locations() {
                     <SectionHeading title="Beyond Queensland" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
                     <Box component="section" key={'Locations'}>
                         <Box className="SwiperContainer">
-                            <Swiper {...config}>
+                            <Swiper {...config} >
+                                <SwiperSlide>
+                                    <Box className="LocationsSlide">
+                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
+                                        <Typography className="SlideDescription">Lady Elliot Island</Typography>
+                                    </Box>
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <Box className="LocationsSlide">
+                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
+                                        <Typography className="SlideDescription">Great Keppel Island</Typography>
+                                    </Box>
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <Box className="LocationsSlide">
+                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
+                                        <Typography className="SlideDescription">Great Keppel Island</Typography>
+                                    </Box>
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <Box className="LocationsSlide">
+                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
+                                        <Typography className="SlideDescription">The Gold Coast</Typography>
+                                    </Box>
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <Box className="LocationsSlide">
+                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
+                                        <Typography className="SlideDescription">Airlie Beach</Typography>
+                                    </Box>
+                                </SwiperSlide>
                                 <SwiperSlide>
                                     <Box className="LocationsSlide">
                                         <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />

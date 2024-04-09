@@ -1,10 +1,12 @@
 import React, { Suspense, lazy, useEffect, useState } from "react"
+import { Skeleton } from "@mui/material";
 import Seo from "../components/common/Seo"
 import Banner from '../components/partials/frontPage/Banner'
 const MobileSecondaryMenu = lazy(() => import('../components/header/MobileSecondaryMenu'));
 const LookingFor = lazy(() => import("../components/partials/home/LookingFor"))
 const PopularProducts = lazy(() => import("../components/partials/home/PopularProducts"))
 const DiscoverTreasure = lazy(() => import("../components/partials/home/DiscoverTreasure"))
+import LazyHeader from "../components/header/FrontHeader"
 const CloserLook = lazy(() => import("../components/partials/home/CloserLook"))
 const TheJournal = lazy(() => import("../components/partials/frontPage/TheJournal"))
 const Locations = lazy(() => import("../components/partials/frontPage/Locations"))
@@ -13,6 +15,7 @@ const Experience = lazy(() => import("../components/partials/frontPage/Experienc
 const KnowMore = lazy(() => import("../components/partials/frontPage/KnowMore"))
 const LatestStories = lazy(() => import("../components/partials/frontPage/LatestStories"))
 const Gallery = lazy(() => import("../components/partials/frontPage/Gallery"))
+const LazyFooter = lazy(() => import('../components/footer/FrontFooter'));
 import FeaturedProducts from "../components/partials/home/FeaturedProducts"
 import { ENDPOINTS } from "@/utils/constants"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
@@ -72,7 +75,9 @@ function MainHomePage() {
     }, [])
 
     return (
-        <Layout>
+        <div className="flex flex-col min-h-screen">
+            {/* <Suspense fallback={<Box id="HeaderWrapper"></Box>}> */}
+            <LazyHeader />
             <>
                 {/* <Loader open={loading} /> */}
                 {openToaster && <Toaster />}
@@ -94,7 +99,10 @@ function MainHomePage() {
                     <Suspense fallback={<></>}><TheJournal /></Suspense>
                 </Box>
             </>
-        </Layout>
+            {<Suspense fallback={<Skeleton height='30vh'></Skeleton>}>
+                <LazyFooter />
+            </Suspense>}
+        </div>
     )
 }
 
