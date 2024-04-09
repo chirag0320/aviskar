@@ -112,73 +112,73 @@ function AddAccount(props: AddAccount) {
     }
 
     // to show whether it is coming from my-vault or checkout
-    if (!addressTypeId) {
-      addressQuery["addressTypeId"] = undefined;
+    // if (!addressTypeId) {
+    //   addressQuery["addressTypeId"] = undefined;
 
-      const response = await dispatch(addOrEditAddressForMyVault(
-        {
-          url: ENDPOINTS.addOrEditAddressesInMyVault,
-          body: { ...addressQuery }
-        }
-      ))
+    //   const response = await dispatch(addOrEditAddressForMyVault(
+    //     {
+    //       url: ENDPOINTS.addOrEditAddressesInMyVault,
+    //       body: { ...addressQuery }
+    //     }
+    //   ))
 
-      if (hasFulfilled(response.type)) {
-        onClose()
-        reset()
-        showToaster({ message: "Address saved successfully", severity: "success" })
-        const addressId = (response?.payload as any)?.data?.data;
-        dispatch(addAddressForMyVault({
-          addressId: addressId,
-          firstName: data.FirstName,
-          lastName: data.LastName,
-          company: data.Company,
-          phoneNumber: data.Contact,
-          email: data.Email,
-          addressLine1: data.Address1,
-          addressLine2: data.Address2,
-          city: data.City,
-          stateName: data.State,
-          postcode: data.Code,
-          countryId: data.Country,
-          stateId: stateId,
-        }))
-      } else {
-        showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
-      }
-    }
-    else {
-      const response = await dispatch(addOrEditAddressForCheckout({
-        url: ENDPOINTS.addOrEditAddress,
-        body: {
-          ...addressQuery
-        }
-      }))
-      let addressId;
-      if (hasFulfilled(response?.type)) {
-        addressId = (response?.payload as any)?.data?.data;
-      }
+    //   if (hasFulfilled(response.type)) {
+    //     onClose()
+    //     reset()
+    //     showToaster({ message: "Address saved successfully", severity: "success" })
+    //     const addressId = (response?.payload as any)?.data?.data;
+    //     dispatch(addAddressForMyVault({
+    //       addressId: addressId,
+    //       firstName: data.FirstName,
+    //       lastName: data.LastName,
+    //       company: data.Company,
+    //       phoneNumber: data.Contact,
+    //       email: data.Email,
+    //       addressLine1: data.Address1,
+    //       addressLine2: data.Address2,
+    //       city: data.City,
+    //       stateName: data.State,
+    //       postcode: data.Code,
+    //       countryId: data.Country,
+    //       stateId: stateId,
+    //     }))
+    //   } else {
+    //     showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
+    //   }
+    // }
+    // else {
+    //   const response = await dispatch(addOrEditAddressForCheckout({
+    //     url: ENDPOINTS.addOrEditAddress,
+    //     body: {
+    //       ...addressQuery
+    //     }
+    //   }))
+    //   let addressId;
+    //   if (hasFulfilled(response?.type)) {
+    //     addressId = (response?.payload as any)?.data?.data;
+    //   }
 
-      const needToadd = {
-        ...addressQuery,
-        addressId: addressId,
-        addressType: addressTypeId,
-        customerId: null,
-        state: addressQuery.stateId,
-        country: addressQuery.countryId,
-        phone1: addressQuery.phoneNumber,
-        isSource: null,
-        "countryName": "Australia"
-      }
-      if (hasFulfilled(response.type)) {
-        dispatch(addAddress(needToadd))
-        handleAddressUpdate!(needToadd, addressTypeId == AddressType.Billing)
-        onClose()
-        reset()
-        showToaster({ message: "Address saved successfully", severity: "success" })
-      } else {
-        showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
-      }
-    }
+    //   const needToadd = {
+    //     ...addressQuery,
+    //     addressId: addressId,
+    //     addressType: addressTypeId,
+    //     customerId: null,
+    //     state: addressQuery.stateId,
+    //     country: addressQuery.countryId,
+    //     phone1: addressQuery.phoneNumber,
+    //     isSource: null,
+    //     "countryName": "Australia"
+    //   }
+    //   if (hasFulfilled(response.type)) {
+    //     // dispatch(addAddress(needToadd))
+    //     handleAddressUpdate!(needToadd, addressTypeId == AddressType.Billing)
+    //     onClose()
+    //     reset()
+    //     showToaster({ message: "Address saved successfully", severity: "success" })
+    //   } else {
+    //     showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
+    //   }
+    // }
   }
 
   useEffect(() => {

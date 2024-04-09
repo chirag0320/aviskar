@@ -14,6 +14,7 @@ import AccountType from '../../components/partials/my-vault/accountType'
 import Loader from "@/components/common/Loader"
 import { getAccounts } from "@/redux/reducers/myVaultReducer"
 import AddAccount from "@/components/partials/my-vault/AddAccount"
+import { getStateAndCountryLists } from "@/redux/reducers/checkoutReducer"
 
 function Accounts() {
     const loading = useAppSelector(state => state.myVault.loading)
@@ -26,6 +27,7 @@ function Accounts() {
         service: getAccounts,
         endPoint: ENDPOINTS.getAccounts
     })
+    useAPIoneTime({ service: getStateAndCountryLists, endPoint: ENDPOINTS.getStateAndCountryLists });
 
     const handleAccountTypeDialog = () => {
         setAccountTypeDialog(true);
