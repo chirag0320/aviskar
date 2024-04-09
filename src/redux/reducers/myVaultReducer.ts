@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { appCreateAsyncThunk } from "../middleware/thunkMiddleware";
 import MyVaultServices from "@/apis/services/MyVaultServices";
-import { string } from "prop-types";
-import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems } from "@/types/myVault";
+import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData } from "@/types/myVault";
 
 interface MyVaultInitialState {
     loading: boolean,
     accounts: Account[] | null,
     addresses: Address[] | null,
-    rewardPointsHistory: rewardPointsHistoryData | null,
     buyBackOrderHistory: any | null
+    rewardPointsHistory: rewardPointsHistoryData | null,
+    orderHistory: IOrderHistoryApiResponseData | null
 }
 
 const initialState: MyVaultInitialState = {
@@ -17,7 +17,8 @@ const initialState: MyVaultInitialState = {
     accounts: null,
     addresses: null,
     rewardPointsHistory: null,
-    buyBackOrderHistory: null
+    buyBackOrderHistory: null,
+    orderHistory: null
 }
 
 // ACCOUNTS
@@ -40,6 +41,14 @@ export const getRewardPointsHistory = appCreateAsyncThunk(
     "getRewardPointsHistory",
     async ({ url, body }: { url: string, body: any }) => {
         return await MyVaultServices.getRewardPointsHistory(url, body);
+    }
+)
+
+// ORDER HISTORY
+export const getOrderHistory = appCreateAsyncThunk(
+    "getOrderHistory",
+    async ({ url, body }: { url: string, body: any }) => {
+        return await MyVaultServices.getOrderHistory(url, body);
     }
 )
 
@@ -215,6 +224,19 @@ export const myVaultSlice = createSlice({
             state.loading = false;
         })
         builder.addCase(getBuyBackOrderHistory.rejected, (state) => {
+            state.loading = false;
+        });
+
+        // order history
+        builder.addCase(getOrderHistory.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(getOrderHistory.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.orderHistory = responseData.data;
+            state.loading = false;
+        })
+        builder.addCase(getOrderHistory.rejected, (state) => {
             state.loading = false;
         })
     }

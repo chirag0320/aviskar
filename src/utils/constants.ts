@@ -87,7 +87,10 @@ export const ENDPOINTS = {
     getRewardPointsHistory: "myvault/kSFuIpNrDUuygzsl4bE3Hw",
 
     // my vault > buy back order history
-    getBuyBackOrderHistory : "myvault/oz5pMSV4SUqP92QIId5KmQ"
+    getBuyBackOrderHistory : "myvault/oz5pMSV4SUqP92QIId5KmQ",
+
+    // my vault -> orderHistory
+    getOrderHistory: "myvault/tBryhxlMq0qgjzuUfbewkA"
 }
 export const StoreData = {
     storeCode: 12,

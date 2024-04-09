@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Provider, defaultTheme } from "@adobe/react-spectrum";
 import { DateRangePicker } from '@adobe/react-spectrum'
 import { Box } from "@mui/material";
@@ -23,6 +23,8 @@ export default function BasicDatePicker({ dateRangeValue, setDateRangeValue }: P
                     maxVisibleMonths={2}
                     pageBehavior="single"
                     UNSAFE_className="DateRangePicker"
+                    value={data}
+                    onChange={setData}
                 />
             </Provider>
         </Box>
