@@ -78,6 +78,28 @@ export interface Account {
     address: Address;
 }
 
+// REWARD POINTS HISTORY
+export interface rewardPointsHistoryData {
+    extraProperty: any | null;
+    count: number;
+    page: number;
+    pageSize: number;
+    items: rewardPointsHistoryDataItems[];
+    additionalField: any | null;
+}
+
+export interface rewardPointsHistoryDataItems {
+    id: number;
+    customerId: number;
+    storeCode: number;
+    points: number;
+    pointsBalance: number;
+    usedAmount: number;
+    message: string;
+    createdOnUtc: string;
+    endDateUtc: string;
+    validPoints: number;
+}
 
 // ADDRESSES
 

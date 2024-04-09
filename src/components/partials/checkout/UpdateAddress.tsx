@@ -12,13 +12,13 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
-import { StateOrCountry, addOrEditAddress as addOrEditAddressForCheckout, updateAddress as updateAddressForCheckout} from "@/redux/reducers/checkoutReducer";
+import { StateOrCountry, addOrEditAddress as addOrEditAddressForCheckout, updateAddress as updateAddressForCheckout } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import { addressSchema } from "./AddAddress"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
-import { addOrEditAddresses as addOrEditAddressForMyVault, updateAddress as updateAddressForMyVault} from "@/redux/reducers/myVaultReducer"
+import { addOrEditAddresses as addOrEditAddressForMyVault, updateAddress as updateAddressForMyVault } from "@/redux/reducers/myVaultReducer"
 
 interface UpdateAddress {
   open: boolean

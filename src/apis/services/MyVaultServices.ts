@@ -1,5 +1,5 @@
 import axiosInstance from "@/axiosfolder";
-import { AccountQuery, AddressQuery } from "@/types/myVault";
+import { AccountQuery, AddressQuery, rewardPointsHistoryData } from "@/types/myVault";
 
 class MyVaultServices {
     // ACCOUNTS
@@ -22,6 +22,10 @@ class MyVaultServices {
 
     static async deleteAddress(url: string) {
         return axiosInstance.delete(url);
+    }
+
+    static async getRewardPointsHistory(url: string, rewardPointsHistoryData: rewardPointsHistoryData) {
+        return axiosInstance.post(url, rewardPointsHistoryData);
     }
 }
 
