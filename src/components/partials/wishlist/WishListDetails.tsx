@@ -7,7 +7,7 @@ import { CartItem } from '@/types/shoppingCart'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { MinusIcon, PlusIcon } from '@/assets/icons'
 import { updateShoppingCartData } from '@/redux/reducers/shoppingCartReducer'
-import { addToWishListToShoppingCart, deleteWishListData } from '@/redux/reducers/wishListReducer'
+import { addToWishListToShoppingCart, deleteWishListData, removeItemFromWishlist } from '@/redux/reducers/wishListReducer'
 import { navigate } from 'gatsby'
 import { hasFulfilled } from '@/utils/common'
 import useShowToaster from '@/hooks/useShowToaster'
@@ -15,13 +15,15 @@ import useShowToaster from '@/hooks/useShowToaster'
 const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }) => {
     const wishListstate = useAppSelector(state => state.wishList)
     const dispatch = useAppDispatch();
+    const loading = useAppSelector(state => state.wishList.loading)
 
     const [productIds, setProductIds] = useState({})
-    const {showToaster} = useShowToaster();
+    const { showToaster } = useShowToaster();
     const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
     const [wishListItemsWithLivePrice, setWishListItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({})
     const [selectedItems, setSelectedItems] = useState<{ [key: number]: boolean }>([])
+    console.log("🚀 ~ WishListDetails ~ selectedItems:", selectedItems)
     const [isWishListUpdated, setIsWishListUpdated] = useState(false)
 
     useEffect(() => {
@@ -29,26 +31,28 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
             const idwithpriceObj: any = {}
             priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
 
-            const wishListItemsWithLivePrice = wishListstate.wishListItems.map((item: CartItem) => {
+            const wishListItemsWithLivePrice = wishListstate.wishListItems?.map((item: CartItem) => {
                 return {
                     ...item,
                     LivePriceDetails: idwithpriceObj[item.productId]
                 }
             })
 
-            setWishListItemsWithLivePrice(wishListItemsWithLivePrice)
+            if (wishListItemsWithLivePrice) {
+                setWishListItemsWithLivePrice(wishListItemsWithLivePrice)
+            }
         }
     }, [priceData])
 
     useEffect(() => {
-        if (wishListstate.wishListItems.length > 0) {
-            const productIds = wishListstate.wishListItems.map((item: CartItem) => item.productId);
+        if (wishListstate.wishListItems?.length ?? 0 > 0) {
+            const productIds = wishListstate.wishListItems?.map((item: CartItem) => item.productId);
             setProductIds({ productIds })
         }
 
         let quantities: any = {}
         let checkedItems: any = {}
-        wishListstate.wishListItems.forEach((item: CartItem) => {
+        wishListstate.wishListItems?.forEach((item: CartItem) => {
             checkedItems[item.id] = false
             quantities[item.id] = item.quantity
         })
@@ -76,14 +80,13 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                 quantity: quantities[item]
             }
         })
-
         setIsWishListUpdated(false)
         const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateWishListData, body: itemsWithQuantity }) as any);
-        if(hasFulfilled(response.type)){
-            showToaster({message : "Watchlist items updated successfully", severity: 'success'})
+        if (hasFulfilled(response.type)) {
+            showToaster({ message: "Watchlist items updated successfully", severity: 'success' })
         }
-        else{
-            showToaster({message : "Failed to update Watchlist items.", severity: 'error'})
+        else {
+            showToaster({ message: "Failed to update Watchlist items.", severity: 'error' })
         }
     }
 
@@ -94,14 +97,15 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                 checkedItems.push(Number(item));
             }
         }
-        
+
         const response = await dispatch(deleteWishListData({ url: ENDPOINTS.deleteWishListData, body: checkedItems }) as any)
-        if(hasFulfilled(response.type)){
+        if (hasFulfilled(response.type)) {
+            dispatch(removeItemFromWishlist(checkedItems))
             setWishListItemsWithLivePrice(wishListItemsWithLivePrice.filter((item: CartItemsWithLivePriceDetails) => !checkedItems.includes(item.id)));
-            showToaster({message : response.payload.data.message, severity: 'success'})
+            showToaster({ message: response.payload.data.message, severity: 'success' })
         }
-        else{
-            showToaster({message : "Failed to delete watchlist items.", severity: 'error'})
+        else {
+            showToaster({ message: "Failed to delete watchlist items.", severity: 'error' })
         }
     }
 
@@ -119,14 +123,14 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
         }
 
         const response = await dispatch(addToWishListToShoppingCart({ url: ENDPOINTS.addWishListToShoppingCart, body: checkedItemsWithQuantity }) as any)
-        if(hasFulfilled(response.type)){
+        if (hasFulfilled(response.type)) {
             // showToaster({message : "Selected items added to cart", severity: 'success'})
             navigate('/shopping-cart')
         }
-        else{
-            showToaster({message : "Failed to add items to cart", severity: 'error'})
+        else {
+            showToaster({ message: "Failed to add items to cart", severity: 'error' })
         }
-        
+
     }
 
     const handleCheckboxChange = (id: number) => {
@@ -136,7 +140,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
     return (
         <Fragment>
             <TableContainer>
-                {wishListstate.wishListItems.length > 0 ? (<Table >
+                {(wishListstate.wishListItems?.length ?? 0) > 0 && <Table >
                     <TableHead>
                         <TableRow>
                             <TableCell padding="checkbox"></TableCell>
@@ -153,7 +157,7 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                                     <Checkbox checked={selectedItems[item.id]} onChange={() => handleCheckboxChange(item.id)} />
                                 </TableCell>
                                 <TableCell align="left"><img src={item.imageUrl} width={100} height={100} /></TableCell>
-                                <TableCell><Button href="#" color="secondary">{item.productName}</Button></TableCell>
+                                <TableCell><Button onClick={() => navigate(`/product-details/${item.friendlypagename}`)} color="secondary">{item.productName}</Button></TableCell>
                                 <TableCell>{item?.LivePriceDetails?.price}</TableCell>
                                 <TableCell>
                                     <Stack className="Quantity">
@@ -167,12 +171,13 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                             </TableRow>
                         ))}
                     </TableBody>
-                </Table>) : <Typography variant="h6" style={{textAlign:"center"}}>No items in watchlist</Typography>}
+                </Table>}
+                {!loading && wishListstate.wishListItems?.length === 0 && <Typography variant="h6" style={{ textAlign: "center" }}>No items in watchlist</Typography>}
             </TableContainer>
             <Stack className="ActionWrapper">
                 <Stack className="Left">
                     <Button color="primary" variant="contained" onClick={updateWishListHandler} disabled={wishListstate.loading || !isWishListUpdated}>Update Watchlist</Button>
-                    <Button color="primary" variant="outlined" onClick={toggleEmailFriend}>Email a friend</Button>
+                    {/* <Button color="primary" variant="outlined" onClick={toggleEmailFriend}>Email a friend</Button> */}
                 </Stack>
                 <Stack className="Right">
                     <Button color="primary" variant="outlined" onClick={removeSelectedItemsHandler} disabled={wishListstate.loading || !Object.values(selectedItems).some((value) => value === true)}>Remove</Button>

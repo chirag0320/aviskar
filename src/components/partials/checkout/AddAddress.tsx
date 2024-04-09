@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react"
-import { Autocomplete, MenuItem, Button, Stack, TextField } from "@mui/material"
+import { Autocomplete, MenuItem, Button, Stack, TextField, Box } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -12,19 +12,20 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
-import { StateOrCountry, addAddress, addOrEditAddress } from "@/redux/reducers/checkoutReducer";
+import { StateOrCountry, addAddress as addAddressForCheckout, addOrEditAddress as addOrEditAddressForCheckout } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
 import { AddressType } from "@/types/enums"
+import { addOrEditAddresses as addOrEditAddressForMyVault, addAddress as addAddressForMyVault } from "@/redux/reducers/myVaultReducer"
 
 interface AddAddress {
     open: boolean
     dialogTitle: string
     onClose: () => void
-    addressTypeId: number
-    handleAddressUpdate: (addressData: any, isbilling: any) => any
+    addressTypeId?: number
+    handleAddressUpdate?: (addressData: any, isbilling: any) => any
 }
 
 interface Inputs {
@@ -32,6 +33,7 @@ interface Inputs {
     LastName: string,
     Company: string,
     Contact: string,
+    ContactCode: string,
     Email: string,
     Address1: string,
     Address2: string,
@@ -42,17 +44,18 @@ interface Inputs {
 }
 
 export const addressSchema = yup.object().shape({
-    FirstName: yup.string().trim().required('First Name is a required field'),
-    LastName: yup.string().trim().required('Last Name is a required field'),
+    FirstName: yup.string().trim().required('First name is a required field'),
+    LastName: yup.string().trim().required('Last name is a required field'),
     Company: yup.string().trim(),
     Contact: yup.string().trim().required(),
+    ContactCode: yup.string().required(),
     Email: yup.string().email().required(),
-    Address1: yup.string().trim().required(),
+    Address1: yup.string().trim().required("Address 1 in required field"),
     Address2: yup.string().trim(),
     City: yup.string().required().trim(),
     State: yup.string().required(),
     Country: yup.string().required(),
-    Code: yup.string().required('Pin Code is a required field').trim()
+    Code: yup.string().required('Zip / Postal code is required').trim()
 })
 
 function AddAddress(props: AddAddress) {
@@ -97,37 +100,73 @@ function AddAddress(props: AddAddress) {
             countryId: data.Country,
         }
 
+        // to show whether it is coming from my-vault or checkout
+        if (!addressTypeId) {
+            addressQuery["addressTypeId"] = undefined;
 
-        const response = await dispatch(addOrEditAddress({
-            url: ENDPOINTS.addOrEditAddress,
-            body: {
-                ...addressQuery
+            const response = await dispatch(addOrEditAddressForMyVault(
+                {
+                    url: ENDPOINTS.addOrEditAddressesInMyVault,
+                    body: { ...addressQuery }
+                }
+            ))
+
+            if (hasFulfilled(response.type)) {
+                onClose()
+                reset()
+                showToaster({ message: "Address saved successfully", severity: "success" })
+                const addressId = (response?.payload as any)?.data?.data;
+                dispatch(addAddressForMyVault({
+                    addressId: addressId,
+                    firstName: data.FirstName,
+                    lastName: data.LastName,
+                    company: data.Company,
+                    phoneNumber: data.Contact,
+                    email: data.Email,
+                    addressLine1: data.Address1,
+                    addressLine2: data.Address2,
+                    city: data.City,
+                    stateName: data.State,
+                    postcode: data.Code,
+                    countryId: data.Country,
+                    stateId: stateId,
+                }))
+            } else {
+                showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
             }
-        }))
-        let addressId;
-        if (hasFulfilled(response?.type)) {
-            addressId = (response?.payload as any)?.data?.data;
         }
+        else {
+            const response = await dispatch(addOrEditAddressForCheckout({
+                url: ENDPOINTS.addOrEditAddress,
+                body: {
+                    ...addressQuery
+                }
+            }))
+            let addressId;
+            if (hasFulfilled(response?.type)) {
+                addressId = (response?.payload as any)?.data?.data;
+            }
 
-        const needToadd = {
-            ...addressQuery,
-            addressId: addressId,
-            addressType: addressTypeId,
-            customerId: null,
-            state: addressQuery.stateId,
-            country: addressQuery.countryId,
-            phone1: addressQuery.phoneNumber,
-            isSource: null,
-            "countryName": "Australia"
-        }
-        if (hasFulfilled(response.type)) {
-            dispatch(addAddress(needToadd))
-            handleAddressUpdate(needToadd, addressTypeId == AddressType.Billing)
-            onClose()
-            reset()
-            showToaster({ message: "Address saved successfully", severity: "success" })
-        } else {
-            showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
+            const needToadd = {
+                ...addressQuery,
+                addressId: addressId,
+                addressType: addressTypeId,
+                customerId: null,
+                state: addressQuery.stateId,
+                country: addressQuery.countryId,
+                phone1: addressQuery.phoneNumber,
+                isSource: null,
+                "countryName": "Australia"
+            }
+            if (hasFulfilled(response.type)) {
+                dispatch(addAddress(needToadd))
+                handleAddressUpdate!(needToadd, addressTypeId == AddressType.Billing)
+                onClose()
+                reset()
+                showToaster({ message: "Address saved successfully", severity: "success" })
+            } else {
+                showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
+            }
         }
     }
 
@@ -160,7 +199,7 @@ function AddAddress(props: AddAddress) {
     }, [googleAddressComponents])
 
     useEffect(() => {
-        const data: any = stateListall?.filter((state) => {
+        const data: any = stateListall?.filter((state: any) => {
             return state.enumValue == countryValue || countryValue == -1
         })
         setStateList(data)
@@ -211,16 +250,32 @@ function AddAddress(props: AddAddress) {
                         margin='none'
                     />
                     <Stack className="Column">
-                        <RenderFields
-                            register={register}
-                            error={errors.Contact}
-                            name="Contact"
-                            type="number"
-                            placeholder="Enter contact *"
-                            control={control}
-                            variant='outlined'
-                            margin='none'
-                        />
+                        <Box className="ContactField">
+                            <RenderFields
+                                register={register}
+                                type="select"
+                                control={control}
+                                error={errors.ContactCode}
+                                name="ContactCode"
+                                variant="outlined"
+                                margin="none"
+                                className="ContactSelect"
+                            >
+                                <MenuItem value="91">+91</MenuItem>
+                                <MenuItem value="11">+11</MenuItem>
+                            </RenderFields>
+                            <RenderFields
+                                register={register}
+                                error={errors.Contact}
+                                name="Contact"
+                                type="number"
+                                placeholder="Enter contact *"
+                                control={control}
+                                variant='outlined'
+                                margin='none'
+                                className="ContactTextField"
+                            />
+                        </Box>
                         <RenderFields
                             register={register}
                             error={errors.Email}
@@ -316,7 +371,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.Code}
                             name="Code"
-                            placeholder="Enter pin code *"
+                            placeholder="Enter zip / postal code *"
                             control={control}
                             variant='outlined'
                             margin='none'

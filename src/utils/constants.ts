@@ -55,7 +55,7 @@ export const ENDPOINTS = {
     placeOrder: "Checkout/e3eQr12FQ06Hpan2VxeMYg",
 
     // order confimation
-    orderConfimationDetails: "Checkout/i6GZ9e5bWEOWTnfRwpSIVg/",
+    orderConfimationDetails: "Checkout/i6GZ9e5bWEOWTnfRwpSIVg/", // dynamic
 
     // topics
     topicDetail: "topic/DyTigzAfJkuIRqtL9g6MjQ/{{topic-name}}",
@@ -68,8 +68,23 @@ export const ENDPOINTS = {
     getLiveDashboardChartData: "calculator/C2hhcnRzCg",
 
     // order details
-    getOrderDetailsData: "myvault/fthBVUKhWUGKKJhSdaFe7w/",
-    downloadOrderInvoice : "myvault/sSPabQ518EeEccLnRuWg0w/"
+    getOrderDetailsData: "myvault/fthBVUKhWUGKKJhSdaFe7w/", // dynamic
+    downloadOrderInvoice: "myvault/sSPabQ518EeEccLnRuWg0w/", // dynamic
+
+    //send verification email
+    sendVerificationEmail: 'account/Posb5zZpZUCS2QQEp6Fvjw/useEmail',
+
+    // my vault > accounts
+    getAccounts: "myvault/oFCrPGc21E6E9cIxEArX4g",
+    addOrEditAccount: "myvault/d0axWq2BoUGRiP4GN0qHpg",
+
+    // my vault > addresses
+    getAddresses: "myvault/j71euLEXRE6zhEOO9lVyIw",
+    addOrEditAddressesInMyVault: "myvault/mIKu7TMRFUW49i97slxpDg",
+    deleteAddress: "myvault/wrbG7PIz7U2a5Bx7wEgygQ/", // dynamic
+
+    // my vault -> rewardPointsHistory
+    getRewardPointsHistory: "myvault/kSFuIpNrDUuygzsl4bE3Hw"
 }
 export const StoreData = {
     storeCode: 12,

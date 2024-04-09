@@ -1,8 +1,8 @@
 import React from "react"
-import { Backdrop, Stack, CircularProgress } from "@mui/material"
+import { Backdrop, Stack } from "@mui/material"
 
 // Assets
-import LogoBig from "@/assets/logos/logo-big.png"
+import LogoSmall from "@/assets/logos/logo-small.svg"
 interface LoaderProps {
   open: boolean
 }
@@ -12,8 +12,7 @@ const Loader = (props: LoaderProps) => {
   return (
     <Backdrop open={open} id="Loader">
       <Stack className="Wrapper">
-        <img src={LogoBig} />
-        <CircularProgress size={30} />
+        <img src={LogoSmall} />
       </Stack>
     </Backdrop>
   )

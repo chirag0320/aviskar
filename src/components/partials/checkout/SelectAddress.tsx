@@ -74,6 +74,9 @@ function SelectAddress(props: SelectAddress) {
         onChange={handleSelectAccount}
         IconComponent={SelectDropdown}
         fullWidth
+        MenuProps={{
+          disablePortal: true,
+        }}
       >
         {
           listOfAddress?.length > 0 && listOfAddress?.map((address: address) => <MenuItem value={address as any}><Typography variant="titleLarge">{address?.firstName} {address.lastName}</Typography>{address.addressLine1}, {address.addressLine2}, {address.city}, {address.postcode} {address.countryName}</MenuItem>)

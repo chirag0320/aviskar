@@ -6,9 +6,10 @@ import { OrderDetails } from '@/types/orderDetails'
 import OrderDetailsServices from '@/apis/services/orderDetailsServices'
 // Services
 
-const initialState: { loading: boolean, orderDetailsData: OrderDetails | null } = {
+const initialState: { loading: boolean, orderDetailsData: OrderDetails | null, isOrderFound: boolean | null } = {
     loading: false,
-    orderDetailsData: null
+    orderDetailsData: null,
+    isOrderFound: null
 }
 
 export const getOrderDetailsData = appCreateAsyncThunk(
@@ -43,6 +44,11 @@ export const orderDetailsPageSlice = createSlice({
         })
         builder.addCase(getOrderDetailsData.fulfilled, (state, action) => {
             const responseData = action?.payload?.data?.data;
+            if (!responseData) {
+                state.loading = false;
+                state.isOrderFound = false;
+                return;
+            }
             state.orderDetailsData = responseData;
             state.loading = false;
         })

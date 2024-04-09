@@ -23,7 +23,7 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
     // navigate(`?page=${value}`, { replace: true });
     const pageQuery = new URLSearchParams(location.search);
     pageQuery.set('page', value.toString());
-      navigate(`?${pageQuery.toString()}`, { replace: true });
+    navigate(`?${pageQuery.toString()}`, { replace: true });
   }
 
   useEffect(() => {
@@ -46,30 +46,35 @@ function ProductList({ page, setPage }: { page: number, setPage: any }) {
       <Box className="ProductListWrapper">
         {
           !categoryData.loading ? (
-            categoryData?.sortedItems?.length > 0 ? categoryData.sortedItems.map((product: any) => {
+            categoryData.sortedItems?.map((product: any) => {
               return (
                 <ProductCard key={product.productId} product={product} stickyProduct={false} />
               );
             })
-              : <Typography variant="body1">Record not found</Typography>
           ) : (
-            Array(6).fill(0).map((_, index) => {
-              return (
-                <Card className="ProductCard" key={index}>
-                  <Skeleton animation="wave" height={350} width="100%" style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
-                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                    <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
-                    <Skeleton animation="wave" height={70} width="95%" />
-                  </div>
-                </Card>
-              )
-            })
+            <>
+              {/* <Box className="CategoryFilters">
+                <Skeleton animation="wave" height="100vh" width="100%" style={{ margin: "0px", padding : "0px" , transform:"none" }} />
+              </Box> */}
+              {Array(6).fill(0).map((_, index) => {
+                return (
+                  <Card className="ProductCard" key={index}>
+                    <Skeleton animation="wave" height={350} width="100%" style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
+                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                      <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
+                      <Skeleton animation="wave" height={70} width="95%" />
+                    </div>
+                  </Card>
+                )
+              })}
+            </>
           )
         }
       </Box>
-      <Stack className="Pagination">
-        {categoryData?.count > 0 && <Pagination count={Math.ceil(categoryData?.count / pageSize)} page={page} shape="rounded" onChange={handlePageChange} />}
-      </Stack>
+      {!categoryData.loading && categoryData.items && categoryData.items.length === 0 && <Typography variant="h6" component="p">There are no products in this category or filters you have selected.</Typography>}
+      {categoryData?.count > 0 && <Stack className="Pagination">
+        <Pagination count={Math.ceil(categoryData?.count / pageSize)} page={page} shape="rounded" onChange={handlePageChange} />
+      </Stack>}
     </Box>
   )
 }

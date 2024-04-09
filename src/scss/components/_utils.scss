@@ -7,7 +7,6 @@
     .FlipContainer {
       perspective: 1000px;
       position: relative;
-      width: 40px;
       height: 20px;
 
       .Flipper {
@@ -115,7 +114,6 @@
 
 .PageTitle {
   @include padding-vertical(34);
-  background-color: $whiteLilac;
 
   @include media($md) {
     @include padding-vertical(20);
@@ -125,8 +123,8 @@
     line-height: 36px;
 
     @include media($sm) {
-      font-size: pxToRem(26);
-      line-height: pxToRem(33);
+      font-size: pxToRem(22);
+      line-height: pxToRem(30);
     }
   }
 
@@ -248,7 +246,7 @@
   gap: 4px;
   padding: 7px;
   color: $white;
-  border-radius: 5px;
+  border-radius: 10px;
 
   &.Success {
     background-color: $success;
@@ -273,5 +271,5 @@
 }
 
 .RecordNotFound {
-  text-align: center;
+  // text-align: center;
 }

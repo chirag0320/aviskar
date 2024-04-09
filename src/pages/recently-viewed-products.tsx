@@ -59,16 +59,16 @@ function RecentlyViewedProducts() {
       <PageTitle title="Recently viewed products" />
       <Container id="PageRecentlyViewedProducts">
         <Box className="ProductList">
-          {data?.data?.length > 0 && Object.keys(dataWithId)?.length > 0 ?
+          {data?.data?.length > 0 && Object.keys(dataWithId)?.length > 0 && recentlyViewedProducts &&
             recentlyViewedProducts.map((productId: any) => {
               const product = dataWithId[productId]
               product.priceWithDetails = priceForEachId ? priceForEachId[productId] : null;
               return (
                 <ProductCard key={product.productId} product={product} />
               )
-            })
-            : <RecordNotFound />}
+            })}
         </Box>
+        {recentlyViewedProducts && recentlyViewedProducts.length === 0 && <RecordNotFound />}
       </Container>
     </Layout>
   )

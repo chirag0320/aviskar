@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Stack, Box, Button, Skeleton, Card } from "@mui/material"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Autoplay, Pagination, A11y } from 'swiper/modules'
@@ -65,8 +65,14 @@ function SkeletonCloserLook({ index }: { index: number | string }) {
 }
 function CloserLook() {
   const { configDetails } = useAppSelector((state) => state.homePage)
-  const { data, loading }: Idata = useApiRequest(ENDPOINTS.getBlog, 'post', dataforbody);
-
+  const { data }: Idata = useApiRequest(ENDPOINTS.getBlog, 'post', dataforbody);
+  const [loading, setLoading] = useState(false)
+  useEffect(() => {
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+    }, 2000);
+  }, [])
   const config = {
     slidesPerView: 1.4,
     spaceBetween: 20,
@@ -101,55 +107,58 @@ function CloserLook() {
   }
 
   return (
-    <Box id="CloserLook">
-      <Container component="section">
-        <SectionHeading
-          title={configDetails?.["home.closerlook.tital"]?.value ?? "Take a closer look*"}
-          description={configDetails?.["home.closerlook.subtital"]?.value ?? "description*"}
-        />
-        <Container className="DestinationWrapper" maxWidth="lg">
-          {data?.data?.items?.length !== 0 ?
-            <Box className="SwiperContainer">
-              <Swiper {...config} >
-                {
-                  !loading ?
-                    (data?.data?.items?.length > 0 ? data?.data?.items?.map((destination) => (
-                      <SwiperSlide key={destination.id}>
-                        <TravelCard
-                          friendlyName={destination?.friendlyName}
-                          place={destination.title}
-                          description={destination.bodyOverview}
-                          imageUrl={destination.imageUrl}
-                        />
+    <Container id="CloserLook" component="section">
+      <SectionHeading
+        title={configDetails?.["home.closerlook.tital"]?.value ?? "Take a closer look*"}
+        description={configDetails?.["home.closerlook.subtital"]?.value ?? "description*"}
+      />
+      <Container className="DestinationWrapper" maxWidth="lg">
+        {data?.data?.items?.length !== 0 ?
+          <Box className="SwiperContainer">
+            <Swiper {...config} >
+              {
+                !loading ?
+                  (data?.data?.items?.length > 0 ? data?.data?.items?.map((destination) => (
+                    <SwiperSlide key={destination.id}>
+                      <TravelCard
+                        friendlyName={destination?.friendlyName}
+                        place={destination.title}
+                        description={destination.bodyOverview}
+                        imageUrl={destination.imageUrl}
+                      />
+                    </SwiperSlide>
+                  ))
+                    : null) :
+                  Array(5).fill(0).map((_, index) => {
+                    return (
+                      <SwiperSlide key={index}>
+                        <Card className="ProductCard">
+                          <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
+                          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                            <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
+                            <Skeleton animation="wave" height={70} width="95%" />
+                          </div>
+                        </Card>
                       </SwiperSlide>
-                    ))
-                      : null) :
-                    Array(5).fill(0).map((_, index) => {
-                      return (
-                        <SwiperSlide key={index}>
-                          <Card className="ProductCard">
-                            <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
-                            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                              <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
-                              <Skeleton animation="wave" height={70} width="95%" />
-                            </div>
-                          </Card>
-                        </SwiperSlide>
-                      );
-                    })
-                }
-              </Swiper>
-            </Box>
-            : <RecordNotFound message="No destination available" />
-          }
-        </Container>
-        <Stack className="Action" onClick={() => {
+                    );
+                  })
+              }
+            </Swiper>
+          </Box>
+          : <RecordNotFound message="No destination available" />
+        }
+      </Container>
+      {/* <Stack className="Action" onClick={() => {
           navigate('/blog')
         }}>
-          <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained">Discover More</Button>
-        </Stack>
-      </Container>
-    </Box>
+        <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained">Discover More</Button>
+      </Stack> */}
+      <Stack className="Action">
+        <Button className="DiscoverMore" name='CloserLook' aria-label="CloserLook" variant="contained" onClick={() => {
+          navigate('/blog')
+        }}>Discover More</Button>
+      </Stack>
+    </Container>
   )
 }
 

@@ -66,9 +66,9 @@
     }
   }
   .DiscoverPost {
-    margin-top: 80px;
-    @include media($sm) {
-      margin-top: 50px;
+    margin-top: 60px;
+    @include media($md) {
+      margin-top: 40px;
     }
     &__title {
       text-align: center;

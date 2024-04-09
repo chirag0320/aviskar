@@ -56,6 +56,7 @@ interface ProductStockStatus {
 
 export const StockReturnWithName = React.memo(
   ({ name, value, charturl, status, percentage, tickerStyle, move }: Iprops) => {
+    const containerWidth = Math.max(...[(move?.toString()?.length || 0), 4]) * 10;
     return (
       <Stack
         className={classNames(
@@ -76,10 +77,13 @@ export const StockReturnWithName = React.memo(
               : null,
           }}
         >
-          <Box className="FlipContainer">
+          <Box className="FlipContainer"
+            width={containerWidth}
+          // marginRight={name === "AUD/USD" ? "8px" : "0px"}
+          >
             <Box className="Flipper">
               <Typography variant="body2" component="span" className="Value Front">{roundOfThePrice(percentage)}%</Typography>
-              <Typography variant="body2" component="span" className="Value Back">${roundOfThePrice(move)}</Typography>
+              <Typography variant="body2" component="span" className="Value Back">${name === "AUD/USD" ? move : roundOfThePrice(move)}</Typography>
             </Box>
           </Box>
           {status ? <ChevronUp /> : <ChevronDown />}
@@ -125,13 +129,14 @@ export const SectionHeading = React.memo(({ title, description }: SectionHeading
   );
 });
 
-export const PageTitle = React.memo(({ title, backToDashboard }: any) => {
+export const PageTitle = React.memo(({ title, backToDashboard, maxWidth }: any) => {
   const handleBackToDashboard = () => {
-    // Logic to redirect to the homepage
+    navigate('/my-vault')
   };
+
   return (
     <Box className="PageTitle">
-      <Container>
+      <Container maxWidth={maxWidth}>
         <Stack justifyContent="space-between" alignItems="center">
           <Typography variant="h4" component="h2">{title}</Typography>
           {backToDashboard && <Button className="BackToDashboard" onClick={handleBackToDashboard} startIcon={<ArrowLeft />}>Back To Dashboard</Button>}

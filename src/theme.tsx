@@ -364,6 +364,14 @@ const theme: Theme = createTheme({
           fontWeight: 600,
           padding: "16px 23px",
         },
+        containedInfo: {
+          backgroundColor: `${variable.elephant}`,
+        },
+        containedSecondary: {
+          "&:hover": {
+            backgroundColor: variable.yellowFuel,
+          },
+        },
       },
     },
     MuiIconButton: {
@@ -387,6 +395,7 @@ const theme: Theme = createTheme({
           color: "#1D2129",
           overflowWrap: "anywhere",
           // overflowWrap: anywhere;
+          transition: "300ms all ease",
           "&:hover": {
             color: "#EAA22B",
           },
@@ -667,7 +676,7 @@ const theme: Theme = createTheme({
           lineHeight: "28px",
           fontWeight: 500,
           "&.Mui-selected": {
-            backgroundColor: variable.elephant,
+            backgroundColor: variable.yellowFuel,
             color: variable.white,
             fontWeight: 700,
           },

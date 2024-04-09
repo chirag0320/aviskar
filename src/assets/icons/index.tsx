@@ -65,6 +65,8 @@ import Map1Icon from "./Map1Icon";
 import Map2Icon from "./Map2Icon";
 import PencilIcon from "./PencilIcon";
 import ClipboardIcon from "./ClipboardIcon";
+import ShieldIcon from "./ShieldIcon";
+import CreditCard from "./CreditCard";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
@@ -169,6 +171,8 @@ export {
   Map2Icon,
   PencilIcon,
   ClipboardIcon,
+  ShieldIcon,
+  CreditCard,
 
   // Social
   FacebookIcon,

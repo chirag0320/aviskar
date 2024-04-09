@@ -11,9 +11,10 @@ import calculatorsReducer from './reducers/calculatorsReducer'
 import shoppingCartReducer from './reducers/shoppingCartReducer'
 import compareProductsReducer from './reducers/compareProductsReducer'
 import wishListReducer from './reducers/wishListReducer'
-import orderConfirmationDetails, { orderConfirmationDetailsPageSlice } from './reducers/orderConfirmationDetails';
+import orderConfirmationDetails, { orderConfirmationDetailsPageSlice } from './reducers/orderConfirmationDetailsReducer';
 import topicReducer from './reducers/topicReducer';
 import orderDetailsReducer from './reducers/orderDetailsReducer';
+import myVaultReducer from './reducers/myVaultReducer';
 // Configuration for redux-persist
 const persistConfig = {
   key: 'root',
@@ -22,10 +23,6 @@ const persistConfig = {
     'configDetails', 'isLoggedIn', 'userDetails']
   // Reducers you want to persist
 }
-// const persistedHomePageReducer = persistReducer(persistConfig, homepageReducer)
-// const persistedblogReducer = persistReducer(persistConfig, blogReducer)
-// const persistednewsReducer = persistReducer(persistConfig, newsReducer)
-// const persistedCalculator = persistReducer(persistConfig, calculatorsReducer)
 
 const store = configureStore({
   reducer: {
@@ -41,7 +38,8 @@ const store = configureStore({
     wishList: wishListReducer,
     orderConfirmationDetails: orderConfirmationDetailsPageSlice.reducer,
     topic: topicReducer,
-    orderDetails: orderDetailsReducer
+    orderDetails: orderDetailsReducer,
+    myVault: myVaultReducer
 
 
     // profile: persistedProfileReducer,

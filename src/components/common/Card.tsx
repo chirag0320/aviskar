@@ -52,6 +52,8 @@ import { ENDPOINTS } from "@/utils/constants";
 import { setToasterState } from "@/redux/reducers/homepageReducer";
 import useShowToaster from "@/hooks/useShowToaster";
 import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer";
+import { Address } from "@/types/myVault";
+import UpdateAddress from "../partials/checkout/UpdateAddress";
 
 interface Iproduct {
   product: IFeaturedProducts;
@@ -274,7 +276,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
           </ClickTooltip>
         }
 
-        <IconButton className="Outlined AddToCart" onClick={handleAddToCart}><AddToCartIcon /></IconButton>
+        <IconButton aria-label="AddToCartButton" className="Outlined AddToCart" onClick={handleAddToCart}><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
   );
@@ -514,27 +516,52 @@ export const CartCardAbstract = ({ product, quantity, deliveryMethod }: any) => 
   )
 }
 
-export const AddressCard = (props: any) => {
-  const { title, icon, statsNumber, showDelete } = props;
+interface AddressCardProps {
+  accountType?: string,
+  accountName?: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  phoneNumber: string,
+  address: Address,
+  showDelete: any,
+  handleDelete: any,
+  id: number
+}
+
+export const AddressCard = (props: AddressCardProps) => {
+  const { id, accountType, accountName, firstName, lastName, email, phoneNumber, address, showDelete, handleDelete } = props;
+  const [openUpdateAddress, setOpenUpdateAddress] = useState<boolean>(false)
+
+  const handleUpdateAddress = () => {
+    setOpenUpdateAddress(true);
+  }
+
+  const handleCloseUpdateAddress = () => {
+    setOpenUpdateAddress(false);
+  }
+
   return (
     <Box className="AddressCard">
       <Stack className="CardHeader">
-        <Typography variant="subtitle2" className="AccountType">Joint</Typography>
+        <Typography variant="subtitle2" className="AccountType">{accountType}</Typography>
         <Box className="ActionButton">
-          <Button variant="contained" size="small" color="success">Edit</Button>
-          {showDelete && <Button variant="contained" size="small" color="error">Delete</Button>}
+          <Button variant="contained" size="small" color="success" onClick={handleUpdateAddress}>Edit</Button>
+          {showDelete && <Button variant="contained" size="small" color="error" onClick={() => handleDelete(id)}>Delete</Button>}
         </Box>
       </Stack>
       <Box className="CardBody" component="ul">
-        <Typography component="li" className="UserName">ew ewr</Typography>
-        <Typography component="li" className="UserEmail"><strong>Name:</strong> testss user</Typography>
-        <Typography component="li" className="UserEmail"><strong>Email:</strong> usernewtest425@yopmail.com</Typography>
-        <Typography component="li" className="UserPhoneNumber"><strong>Phone number:</strong> 917228040585</Typography>
-        <Typography component="li" className="UserAddress"><strong>Address:</strong> 12, Austrey Lane Newton Regis, Queensland 4443 United Kingdom</Typography>
-        <Typography component="li" className="verificationstatus">
+        <Typography component="li" className="UserName">{accountName}</Typography>
+        <Typography component="li" className="UserEmail"><strong>Name:</strong> {firstName + " " + lastName}</Typography>
+        <Typography component="li" className="UserEmail"><strong>Email:</strong> {email}</Typography>
+        <Typography component="li" className="UserPhoneNumber"><strong>Phone number:</strong> {phoneNumber}</Typography>
+        <Typography component="li" className="UserAddress"><strong>Address:</strong> {address?.addressLine1 + ", " + address?.addressLine2 + ", " + address?.city + " - " + address?.postcode + ", " + address?.stateName + ", " + address?.countryName}</Typography>
+        {address?.isVerified && <Typography component="li" className="verificationstatus">
           <VerifiedIcon /> Address Verified
-        </Typography>
+        </Typography>}
       </Box>
+
+      <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={handleCloseUpdateAddress} existingAddress={address} isComingFromMyVault={true}/>
     </Box>
   );
 };

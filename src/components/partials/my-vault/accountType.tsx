@@ -5,17 +5,17 @@ import { Box, Stack, Typography, Button } from '@mui/material';
 import StyledDialog from "@/components/common/StyledDialog"
 
 // Asstes
-import { IndividualUserIcon, JointAccountIcon, ShowcaseIcon, TrustIcon, SuperFundIcon } from "../../assets/icons/index"
+import { IndividualUserIcon, JointAccountIcon, ShowcaseIcon, TrustIcon, SuperFundIcon } from "../../../assets/icons/index"
 
 interface AccountTypeProps {
     open: boolean
     dialogTitle: string
     onClose: () => void
-    handleUpdateAddress?: () => void
+    handleAccountTypeNextButton: () => void
 }
 
 export default function AccountType(props: AccountTypeProps) {
-    const { open, dialogTitle, onClose, handleUpdateAddress } = props
+    const { open, dialogTitle, onClose, handleAccountTypeNextButton } = props
     const [alignment, setAlignment] = React.useState('web');
 
     const handleChange = (
@@ -34,9 +34,6 @@ export default function AccountType(props: AccountTypeProps) {
                 onClose={onClose}
             >
                 <Box className="DialogBody">
-
-
-
                     <Typography variant='body1'>Please select account type:</Typography>
                     <ToggleButtonGroup
                         color="primary"
@@ -87,7 +84,7 @@ export default function AccountType(props: AccountTypeProps) {
                     <Button variant="outlined" onClick={onClose}>
                         Close
                     </Button>
-                    <Button variant="contained" onClick={handleUpdateAddress}>Next</Button>
+                    <Button variant="contained" onClick={handleAccountTypeNextButton}>Next</Button>
                 </Stack>
             </StyledDialog>
         </>

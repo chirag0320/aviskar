@@ -63,6 +63,7 @@ export const contactUsPageSlice = createSlice({
             state.reasonsForContact = responseData.data;
             state.loading = false;
             localStorageSetItem('reasonsForContact',JSON.stringify(responseData.data))
+            state.loading = false;
         })
         builder.addCase(getReasonsForContactUs.rejected, (state) => {
             state.loading = false;
@@ -90,6 +91,7 @@ export const contactUsPageSlice = createSlice({
 
             state.html = config;
             localStorageSetItem('html', JSON.stringify(config))
+            state.loading = false;
         })
         builder.addCase(getConfiguration.rejected, (state) => {
             state.loading = false;
