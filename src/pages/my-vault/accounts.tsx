@@ -4,47 +4,49 @@ import { PageTitle } from "@/components/common/Utils"
 import Seo from "@/components/common/Seo"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { ENDPOINTS } from "@/utils/constants"
-import { getTopicDetails } from "@/redux/reducers/topicReducer"
 import { useAppSelector } from "@/hooks"
 import Layout from "@/components/common/Layout"
-import Loader from "@/components/common/Loader"
 import { AddressCard } from "@/components/common/Card"
 
 import UpdateAddress from "@/components/partials/checkout/UpdateAddress"
 import { PlusIcon } from "../../assets/icons/index"
 
 import AccountType from '../../components/partials/my-vault/accountType'
+import Loader from "@/components/common/Loader"
+import { getAccounts } from "@/redux/reducers/myVaultReducer"
 
-function Accounts(paramsData: any) {
-    const { topicDetails, loading } = useAppSelector(state => state.topic)
-    useAPIoneTime({ service: getTopicDetails, endPoint: ENDPOINTS.topicDetail?.replace('{{topic-name}}', paramsData?.params?.['topic-name']) })
-
-
+function Accounts() {
+    const loading = useAppSelector(state => state.myVault.loading)
+    const accountsData = useAppSelector(state => state.myVault.accounts)
     const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
     const [updateAddress, setUpdateAddress] = useState<boolean>(false)
-    const [test] = useState<boolean>(false)
 
+    useAPIoneTime({
+        service: getAccounts,
+        endPoint: ENDPOINTS.getAccounts
+    })
 
     const handleAccountTypeDialog = () => {
         setAccountTypeDialog(true);
+    }
+    const handleCloseUpdateAddress = () => {
+        setUpdateAddress(false);
+    }
+    const handleAccountTypeNextButton = () => {
+        setUpdateAddress(true);
+        setAccountTypeDialog(false);
     }
     const handleCloseAccountTypeDialog = () => {
         setAccountTypeDialog(false);
     }
 
-    const handleUpdateAddress = () => {
-        setUpdateAddress(true);
-    }
-    const handleCloseUpdateAddress = () => {
-        setUpdateAddress(false);
-    }
     return (
         <>
-            {/* <Loader open={loading} /> */}
-            {!loading && <Layout>
+            <Loader open={loading} />
+            <Layout>
                 <Seo
                     keywords={[`QMint Accounts`]}
-                    title="Address"
+                    title="Accounts"
                     lang="en"
                 />
                 <PageTitle title="Accounts" backToDashboard={true} />
@@ -55,15 +57,26 @@ function Accounts(paramsData: any) {
                             <Box sx={{ textAlign: 'right' }}>
                                 <Button variant="outlined" onClick={handleAccountTypeDialog} startIcon={<PlusIcon />}>Add new</Button>
                             </Box>
-                            <Box className="AddressListWrapper">
-                                <AddressCard />
-                            </Box>
+                            {accountsData?.map(account => (
+                                <Box className="AddressListWrapper" key={account.customerId}>
+                                    <AddressCard
+                                        accountName={account.accountName}
+                                        accountType={account.accountType}
+                                        address={account.address}
+                                        firstName={account.firstName}
+                                        lastName={account.lastName}
+                                        email={account.email}
+                                        phoneNumber={account.phoneNumber}
+                                        showDelete={() => { }}
+                                    />
+                                </Box>
+                            ))}
                         </Box>
                         <UpdateAddress dialogTitle="Add new address" open={updateAddress} onClose={handleCloseUpdateAddress} />
-                        <AccountType dialogTitle="Add new Account" open={accountTypeDialog} onClose={handleCloseAccountTypeDialog} handleUpdateAddress={handleUpdateAddress} />
+                        <AccountType dialogTitle="Select Account Type" open={accountTypeDialog} onClose={handleCloseAccountTypeDialog} handleAccountTypeNextButton={handleAccountTypeNextButton} />
                     </Container>
                 </Box>
-            </Layout>}
+            </Layout>
         </>
     )
 }

@@ -11,11 +11,11 @@ interface AccountTypeProps {
     open: boolean
     dialogTitle: string
     onClose: () => void
-    handleUpdateAddress?: () => void
+    handleAccountTypeNextButton: () => void
 }
 
 export default function AccountType(props: AccountTypeProps) {
-    const { open, dialogTitle, onClose, handleUpdateAddress } = props
+    const { open, dialogTitle, onClose, handleAccountTypeNextButton } = props
     const [alignment, setAlignment] = React.useState('web');
 
     const handleChange = (
@@ -84,7 +84,7 @@ export default function AccountType(props: AccountTypeProps) {
                     <Button variant="outlined" onClick={onClose}>
                         Close
                     </Button>
-                    <Button variant="contained" onClick={handleUpdateAddress}>Next</Button>
+                    <Button variant="contained" onClick={handleAccountTypeNextButton}>Next</Button>
                 </Stack>
             </StyledDialog>
         </>

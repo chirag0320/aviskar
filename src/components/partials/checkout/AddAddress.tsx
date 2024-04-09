@@ -12,19 +12,20 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
-import { StateOrCountry, addAddress, addOrEditAddress } from "@/redux/reducers/checkoutReducer";
+import { StateOrCountry, addAddress as addAddressForCheckout, addOrEditAddress as addOrEditAddressForCheckout } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
 import { AddressType } from "@/types/enums"
+import { addOrEditAddresses as addOrEditAddressForMyVault, addAddress as addAddressForMyVault } from "@/redux/reducers/myVaultReducer"
 
 interface AddAddress {
     open: boolean
     dialogTitle: string
     onClose: () => void
-    addressTypeId: number
-    handleAddressUpdate: (addressData: any, isbilling: any) => any
+    addressTypeId?: number
+    handleAddressUpdate?: (addressData: any, isbilling: any) => any
 }
 
 interface Inputs {
@@ -99,37 +100,73 @@ function AddAddress(props: AddAddress) {
             countryId: data.Country,
         }
 
+        // to show whether it is coming from my-vault or checkout
+        if (!addressTypeId) {
+            addressQuery["addressTypeId"] = undefined;
 
-        const response = await dispatch(addOrEditAddress({
-            url: ENDPOINTS.addOrEditAddress,
-            body: {
-                ...addressQuery
+            const response = await dispatch(addOrEditAddressForMyVault(
+                {
+                    url: ENDPOINTS.addOrEditAddressesInMyVault,
+                    body: { ...addressQuery }
+                }
+            ))
+
+            if (hasFulfilled(response.type)) {
+                onClose()
+                reset()
+                showToaster({ message: "Address saved successfully", severity: "success" })
+                const addressId = (response?.payload as any)?.data?.data;
+                dispatch(addAddressForMyVault({
+                    addressId: addressId,
+                    firstName: data.FirstName,
+                    lastName: data.LastName,
+                    company: data.Company,
+                    phoneNumber: data.Contact,
+                    email: data.Email,
+                    addressLine1: data.Address1,
+                    addressLine2: data.Address2,
+                    city: data.City,
+                    stateName: data.State,
+                    postcode: data.Code,
+                    countryId: data.Country,
+                    stateId: stateId,
+                }))
+            } else {
+                showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
             }
-        }))
-        let addressId;
-        if (hasFulfilled(response?.type)) {
-            addressId = (response?.payload as any)?.data?.data;
         }
+        else {
+            const response = await dispatch(addOrEditAddressForCheckout({
+                url: ENDPOINTS.addOrEditAddress,
+                body: {
+                    ...addressQuery
+                }
+            }))
+            let addressId;
+            if (hasFulfilled(response?.type)) {
+                addressId = (response?.payload as any)?.data?.data;
+            }
 
-        const needToadd = {
-            ...addressQuery,
-            addressId: addressId,
-            addressType: addressTypeId,
-            customerId: null,
-            state: addressQuery.stateId,
-            country: addressQuery.countryId,
-            phone1: addressQuery.phoneNumber,
-            isSource: null,
-            "countryName": "Australia"
-        }
-        if (hasFulfilled(response.type)) {
-            dispatch(addAddress(needToadd))
-            handleAddressUpdate(needToadd, addressTypeId == AddressType.Billing)
-            onClose()
-            reset()
-            showToaster({ message: "Address saved successfully", severity: "success" })
-        } else {
-            showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
+            const needToadd = {
+                ...addressQuery,
+                addressId: addressId,
+                addressType: addressTypeId,
+                customerId: null,
+                state: addressQuery.stateId,
+                country: addressQuery.countryId,
+                phone1: addressQuery.phoneNumber,
+                isSource: null,
+                "countryName": "Australia"
+            }
+            if (hasFulfilled(response.type)) {
+                dispatch(addAddress(needToadd))
+                handleAddressUpdate!(needToadd, addressTypeId == AddressType.Billing)
+                onClose()
+                reset()
+                showToaster({ message: "Address saved successfully", severity: "success" })
+            } else {
+                showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
+            }
         }
     }
 
@@ -162,7 +199,7 @@ function AddAddress(props: AddAddress) {
     }, [googleAddressComponents])
 
     useEffect(() => {
-        const data: any = stateListall?.filter((state) => {
+        const data: any = stateListall?.filter((state: any) => {
             return state.enumValue == countryValue || countryValue == -1
         })
         setStateList(data)
