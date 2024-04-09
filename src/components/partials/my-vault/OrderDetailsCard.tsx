@@ -2,6 +2,7 @@ import { Box, Button, Card, Divider, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { IOrderHistoryApiResponseData } from '@/types/myVault'
 import { useAppSelector } from '@/hooks'
+import { Item } from '@adobe/react-spectrum';
 
 function OrderDetailsCard({ orderHistoryDetails }: { orderHistoryDetails: IOrderHistoryApiResponseData | null }) {
     const loading = useAppSelector(state => state.myVault.loading);
@@ -27,8 +28,8 @@ function OrderDetailsCard({ orderHistoryDetails }: { orderHistoryDetails: IOrder
                                     <Typography className='' variant="body1">{item.orderId}</Typography>
                                 </Box>
                                 <Stack className='OrderButtonsWrapper'>
-                                    <Button variant="contained" size="small" color="error">Cancelled</Button>
-                                    <Button variant="contained" size="small" color="success">Approved Cancellation</Button>
+                                    <Button variant="contained" size="small" style={{ backgroundColor: item?.orderStatusColor ?? "" }}>{item?.orderStatus}</Button>
+                                    {item.alertStatus && <Button variant="contained" size="small" style={{ backgroundColor: item?.alertStatusColor ?? "" }}>{item.alertStatus}</Button>}
                                 </Stack>
                             </Stack>
                         </Card>

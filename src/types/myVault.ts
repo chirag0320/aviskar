@@ -118,36 +118,61 @@ export interface IOrderHistoryDataFilters {
     orderCustomerId: number;
 }
 
+// export interface IOrderHistoryItems {
+//     accountName: string;
+//     accountType: string;
+//     alertOrderStatus: null | string;
+//     alertOrderStatusId: number;
+//     billingAddressId: number;
+//     createdOnUtc: string; // Assuming this is a date string
+//     customOrderNumber: string;
+//     customerId: number;
+//     orderCustomerId: number;
+//     orderGuid: string;
+//     orderId: number;
+//     orderStatus: string;
+//     // orderStatusColor : string;
+//     orderStatusId: number;
+//     paymentMethodSystemName: null | string;
+//     paymentStatusId: number;
+//     shippingAddressId: number;
+//     shippingMethod: string;
+//     shippingStatusId: number;
+//     storeCode: number;
+//   }
+
 export interface IOrderHistoryItems {
-    accountName: string;
-    accountType: string;
-    alertOrderStatus: null | string;
-    alertOrderStatusId: number;
-    billingAddressId: number;
-    createdOnUtc: string; // Assuming this is a date string
+    orderId: number;
+    orderGuid: string;
     customOrderNumber: string;
+    storeCode: number;
+    billingAddressId: number;
+    shippingAddressId: number;
+    orderStatusId: number;
+    alertStatusId: number;
+    shippingStatusId: number;
+    paymentStatusId: number;
+    paymentMethodSystemName: string;
     customerId: number;
     orderCustomerId: number;
-    orderGuid: string;
-    orderId: number;
-    orderStatus: string;
-    orderStatusId: number;
-    paymentMethodSystemName: null | string;
-    paymentStatusId: number;
-    shippingAddressId: number;
     shippingMethod: string;
-    shippingStatusId: number;
-    storeCode: number;
-  }
-  
-  export interface IOrderHistoryApiResponseData {
+    accountType: string;
+    accountName: string;
+    createdOnUtc: string;
+    orderStatus: string;
+    orderStatusColor: string;
+    alertStatus: string | null;
+    alertStatusColor: string | null;
+}
+
+export interface IOrderHistoryApiResponseData {
     additionalField: any | null;
     count: number;
     extraProperty: any | null;
     items: IOrderHistoryItems[];
     page: number;
     pageSize: number;
-  }
+}
 
 // ADDRESSES
 
