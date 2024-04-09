@@ -1,20 +1,31 @@
-import React from "react";
-import { Provider, defaultTheme } from "@adobe/react-spectrum";
-import { DateRangePicker } from '@adobe/react-spectrum'
-import { Box } from "@mui/material";
+import * as React from 'react';
+import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Box from '@mui/material/Box';
 
 
-export default function App() {
+function BasicDatePicker() {
     return (
-        <Box className="DateRangePickerWrapper">
-            <Provider theme={defaultTheme} height="100%">
-                <DateRangePicker
-                    label="Date range"
-                    maxVisibleMonths={2}
-                    pageBehavior="single"
-                    UNSAFE_className="DateRangePicker"
-                />
-            </Provider>
-        </Box>
-    );
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Box
+                sx={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    position: 'relative',
+                }}
+            >
+                <DemoItem label="DatePicker">
+                    <DatePicker
+                        sx={{ width: 260 }}
+                    />
+                </DemoItem>
+            </Box>
+        </LocalizationProvider>
+    )
 }
+
+export default BasicDatePicker

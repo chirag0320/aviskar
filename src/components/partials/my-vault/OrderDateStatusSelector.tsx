@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import BasicDatePicker from "./BasicDatePicker"
+import DateRangePicker from "./DateRangePicker"
 interface OrderDateInputs {
     OrderStatus: string
 }
@@ -35,7 +35,7 @@ const OrderDateStatusSelector = () => {
                 <Stack className='OrderDateStatusSelectorWrapper'>
                     <Stack className='OrderDateStatusWrapper'>
                         <Box className="DateCalenderWrapper">
-                            <BasicDatePicker />
+                            <DateRangePicker />
                         </Box>
                         <Box className="SelectStatusWrapper">
                             <RenderFields

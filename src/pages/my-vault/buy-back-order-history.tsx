@@ -10,7 +10,7 @@ import { getTopicDetails } from "@/redux/reducers/topicReducer"
 import { useAppSelector } from "@/hooks"
 import Layout from "@/components/common/Layout"
 import Loader from "@/components/common/Loader"
-function Topics(paramsData: any) {
+function buyBackOrderHistory(paramsData: any) {
     const { topicDetails, loading } = useAppSelector(state => state.topic)
     useAPIoneTime({ service: getTopicDetails, endPoint: ENDPOINTS.topicDetail?.replace('{{topic-name}}', paramsData?.params?.['topic-name']) })
     return (
@@ -46,4 +46,4 @@ function Topics(paramsData: any) {
     )
 }
 
-export default Topics
+export default buyBackOrderHistory

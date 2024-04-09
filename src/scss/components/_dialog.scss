@@ -11,12 +11,14 @@
           .ClearFilter {
             font-size: 16px;
           }
+
           .CloseButton {
             color: rgba($elephant, 0.6);
             margin-right: -10px;
             width: initial;
             height: initial;
             padding: 4px;
+
             .MuiSvgIcon-root {
               font-size: 16px;
             }
@@ -27,10 +29,12 @@
           .TabsWrapper {
             min-height: 100%;
             $maxheight: calc(100vh - 49px - 48px); // 82px - header, 48px - footer
+
             .MuiTabs-root {
               flex: 0.35;
               min-width: 150px;
               max-height: $maxheight;
+
               .MuiTabs-flexContainer {
                 .MuiTab-root {
                   align-items: flex-start;
@@ -62,6 +66,7 @@
               padding: 10px 20px;
               max-height: $maxheight;
               overflow: auto;
+
               &.Active {
                 flex: 0.65;
               }
@@ -79,6 +84,7 @@
                         height: 20px;
                       }
                     }
+
                     .MuiSlider-valueLabel {
                       @include media($md) {
                         display: none;
@@ -420,6 +426,82 @@
             margin-top: 20px;
           }
         }
+      }
+    }
+  }
+}
+
+.PrivateHoldingCommonPopup {
+  &.MuiDialog-root {
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        width: 30%;
+
+        @include media($llg) {
+          width: 100%;
+        }
+
+        .DialogHeader {
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px 20px 0;
+
+          .MuiDialogTitle-root {
+            flex: 1;
+          }
+
+          .CloseButton {
+            margin-right: -10px;
+          }
+        }
+
+        .MuiDialogContent-root {
+          padding: 20px;
+
+          .AllFields {
+            flex-direction: column;
+            gap: 15px;
+          }
+
+          .InputRow {
+            .MuiOutlinedInput-input {
+              padding: 11px 15px;
+            }
+          }
+
+          .ActionWrapper {
+            gap: 16px;
+            margin-top: 30px;
+          }
+        }
+      }
+    }
+  }
+
+  &#SellToUs {
+    .AllFields {
+      flex-direction: row;
+      gap: 50px;
+
+      @include media($md) {
+        gap: 30px;
+      }
+
+      @include media($xs) {
+        gap: 20px;
+        flex-direction: column;
+      }
+
+
+      img {
+        max-width: 140px;
+        object-fit: contain;
+      }
+    }
+
+    .ActionWrapper {
+      @include media($xs) {
+        flex-direction: column;
       }
     }
   }
