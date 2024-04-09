@@ -84,7 +84,10 @@ export const ENDPOINTS = {
     deleteAddress: "myvault/wrbG7PIz7U2a5Bx7wEgygQ/", // dynamic
 
     // my vault -> rewardPointsHistory
-    getRewardPointsHistory: "myvault/kSFuIpNrDUuygzsl4bE3Hw"
+    getRewardPointsHistory: "myvault/kSFuIpNrDUuygzsl4bE3Hw",
+
+    //popup details
+    getPopUpDetails: "utility/85WwxAopc7Rn"
 }
 export const StoreData = {
     storeCode: 12,

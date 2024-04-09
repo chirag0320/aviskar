@@ -2,10 +2,31 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // Types
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
-import ConfigServices, { IloginUserBody } from '@/apis/services/ConfigServices'
+import ConfigServices, { IPopUpDetails, IloginUserBody } from '@/apis/services/ConfigServices'
 import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 
 // Services
+interface IPopupDetails {
+  id: number;
+  name: string;
+  htmlCode: string;
+  reason: string;
+  displayPage: string;
+  displayCount: number;
+  startDate: string;
+  endDate: string;
+  active: boolean;
+  store: string;
+  positiveAnswer: any; // You may want to replace 'any' with a more specific type
+  negativeAnswer: any; // You may want to replace 'any' with a more specific type
+  updatedDate: string | null;
+  negativeAnswerUrl: string | null;
+  popupQueryId: number;
+  totalCustomer: number;
+  negativeRedirect: string | null;
+  issession: boolean;
+  classification: number;
+}
 
 interface CreateGuidelineState {
   configDetails: any,
@@ -47,7 +68,8 @@ interface CreateGuidelineState {
       linechartdata: number[],
       linechartdata2: number[]
     }
-  }
+  },
+  popUpdata: IPopupDetails | null
 }
 const initialState: CreateGuidelineState = {
   configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
@@ -67,7 +89,8 @@ const initialState: CreateGuidelineState = {
   scrollPosition: 0,
   severity: 'info',
   needToShowProgressLoader: false,
-  liveDashboardChartData: {}
+  liveDashboardChartData: {},
+  popUpdata: null
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -141,7 +164,12 @@ export const getLiveDashboardChartData = appCreateAsyncThunk(
 //     return await GuidelineService.deleteGuideline(data)
 //   }
 // )
-
+export const getPopUpDetailsAPI = appCreateAsyncThunk(
+  'getPopUpDetailsAPI/status',
+  async (params: IPopUpDetails) => {
+    return await ConfigServices.getPopUpDetails(params)
+  }
+)
 export const createHomepageSlice = createSlice({
   name: 'homepage',
   initialState,
@@ -332,6 +360,18 @@ export const createHomepageSlice = createSlice({
       state.loading = false
     })
     builder.addCase(getLiveDashboardChartData.rejected, (state, action) => {
+      state.loading = false
+    })
+    // popup details data
+    builder.addCase(getPopUpDetailsAPI.pending, (state, action) => {
+      state.loading = true
+    })
+    builder.addCase(getPopUpDetailsAPI.fulfilled, (state, action) => {
+      const responseData = action.payload.data.data;
+      state.popUpdata = responseData
+      state.loading = false
+    })
+    builder.addCase(getPopUpDetailsAPI.rejected, (state, action) => {
       state.loading = false
     })
   },
