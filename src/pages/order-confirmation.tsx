@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import Seo from "../components/common/Seo"
 import Layout from "@/components/common/Layout";
 import { Box, Stack, Container, Typography, Icon, Button, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Divider } from "@mui/material"
@@ -13,10 +13,12 @@ import { navigate } from "gatsby";
 import Loader from "@/components/common/Loader";
 import { roundOfThePrice } from "@/utils/common";
 import noImage from '../assets/images/noImage.png'
+import useDownloadInvoiceHandler from "@/hooks/useDownloadInvoiceHandler";
 
 function OrderConfirmation(props: any) {
     const loading = useAppSelector(state => state.orderConfirmationDetails.loading)
     const isOrderFound = useAppSelector(state => state.orderConfirmationDetails.isOrderFound)
+    const [loadingForNavigate, setLoadingForNavigate] = useState(false)
     const checkLoadingStatus = useAppSelector(state => state.orderConfirmationDetails.loading);
     // const orderId = props.location?.search?.split('=')[1];
     const orderConfirmationDetailsData = useAppSelector(state => state.orderConfirmationDetails.orderConfirmationDetailsData);
@@ -33,10 +35,16 @@ function OrderConfirmation(props: any) {
             </Stack>
         )
     }
-
+    const downloadInvoiceHandler = useDownloadInvoiceHandler()
+    window.handleLinkClick = async () => {
+        console.log('called')
+        setLoadingForNavigate(true)
+        await downloadInvoiceHandler(orderConfirmationDetailsData?.orderNumber)
+        setLoadingForNavigate(false)
+    };
     return (
         <Layout>
-            <Loader open={checkLoadingStatus} />
+            <Loader open={checkLoadingStatus || loadingForNavigate} />
             <Seo
                 keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
                 title="Home"
@@ -141,7 +149,7 @@ function OrderConfirmation(props: any) {
                             {/* <Typography variant="body1">An email has been sent with your order details and payment instructions.You can also download or view on the following links: <Button variant="text">
                                     Download (download pdf)</Button></Typography>
                                 <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography> */}
-                            <Typography variant="body1" dangerouslySetInnerHTML={{ __html: orderConfirmationDetailsData?.orderdescription }} />
+                            <Typography className="DownloadMessage" variant="body1" dangerouslySetInnerHTML={{ __html: orderConfirmationDetailsData?.orderdescription }} />
                             {/* <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography> */}
                         </Box>
                     </Box>

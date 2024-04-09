@@ -12,13 +12,13 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
-import { StateOrCountry, addOrEditAddress as addOrEditAddressForCheckout, updateAddress as updateAddressForCheckout} from "@/redux/reducers/checkoutReducer";
+import { StateOrCountry, addOrEditAddress as addOrEditAddressForCheckout, updateAddress as updateAddressForCheckout } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { hasFulfilled } from "@/utils/common"
 import { addressSchema } from "./AddAddress"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
-import { addOrEditAddresses as addOrEditAddressForMyVault, updateAddress as updateAddressForMyVault} from "@/redux/reducers/myVaultReducer"
+import { addOrEditAddresses as addOrEditAddressForMyVault, updateAddress as updateAddressForMyVault } from "@/redux/reducers/myVaultReducer"
 
 interface UpdateAddress {
   open: boolean
@@ -33,6 +33,7 @@ interface Inputs {
   LastName: string,
   Company: string,
   Contact: string,
+  ContactCode: string,
   Email: string,
   Address1: string,
   Address2: string,
@@ -236,17 +237,33 @@ function UpdateAddress(props: UpdateAddress) {
             margin='none'
           />
           <Stack className="Column">
-            <RenderFields
-              register={register}
-              error={errors.Contact}
-              name="Contact"
-              defaultValue={existingAddress?.phone1 || existingAddress?.phoneNumber}
-              type="number"
-              placeholder="Enter contact *"
-              control={control}
-              variant='outlined'
-              margin='none'
-            />
+            <Box className="ContactField">
+              <RenderFields
+                register={register}
+                type="select"
+                control={control}
+                error={errors.ContactCode}
+                name="ContactCode"
+                variant="outlined"
+                margin="none"
+                className="ContactSelect"
+              >
+                <MenuItem value="91">+91</MenuItem>
+                <MenuItem value="11">+11</MenuItem>
+              </RenderFields>
+              <RenderFields
+                register={register}
+                error={errors.Contact}
+                name="Contact"
+                defaultValue={existingAddress?.phone1 || existingAddress?.phoneNumber}
+                type="number"
+                placeholder="Enter contact *"
+                control={control}
+                variant='outlined'
+                margin='none'
+                className="ContactTextField"
+              />
+            </Box>
             <RenderFields
               register={register}
               error={errors.Email}
