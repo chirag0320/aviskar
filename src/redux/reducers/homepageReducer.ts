@@ -170,6 +170,12 @@ export const getPopUpDetailsAPI = appCreateAsyncThunk(
     return await ConfigServices.getPopUpDetails(params)
   }
 )
+export const savePopUpDataAPI = appCreateAsyncThunk(
+  'savePopUpDataAPI/status',
+  async (params: IPopUpDetails) => {
+    return await ConfigServices.savePoPUpDetails(params)
+  }
+)
 export const createHomepageSlice = createSlice({
   name: 'homepage',
   initialState,
@@ -364,15 +370,15 @@ export const createHomepageSlice = createSlice({
     })
     // popup details data
     builder.addCase(getPopUpDetailsAPI.pending, (state, action) => {
-      state.loading = true
+      // state.loading = true
     })
     builder.addCase(getPopUpDetailsAPI.fulfilled, (state, action) => {
       const responseData = action.payload.data.data;
       state.popUpdata = responseData
-      state.loading = false
+      // state.loading = false
     })
     builder.addCase(getPopUpDetailsAPI.rejected, (state, action) => {
-      state.loading = false
+      // state.loading = false
     })
   },
 })

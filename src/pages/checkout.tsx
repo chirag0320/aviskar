@@ -15,18 +15,23 @@ import OrderSummary from "@/components/partials/checkout/OrderSummary"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { getCheckoutPageData } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector, useToggle } from "@/hooks"
 import useDeviceDetails from "@/hooks/useDeviceDetails"
 import { navigate } from "gatsby"
 import Toaster from "@/components/common/Toaster"
 import Loader from "@/components/common/Loader"
+import useAlertPopUp from "@/hooks/useAlertPopUp"
+import SessionExpiredDialog from "@/components/header/SessionExpiredDialog"
 
 function Checkout() {
+  const dispatch = useAppDispatch()
   const checkLoadingStatus = useAppSelector(state => state.checkoutPage.loading);
   const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
   const openToaster = useAppSelector(state => state.homePage.openToaster)
   const [state, setState] = useState({ service: getCheckoutPageData, endPoint: ENDPOINTS.checkoutDetails })
-  const isLoggedIn = useAppSelector(state => state.homePage.isLoggedIn)
+  const { isLoggedIn } = useAppSelector((state) => state.homePage)
+  const [openSessionExpireDialog, toggleSessionExpireDialog] = useToggle(false)
+
 
   if (!isLoggedIn) {
     navigate('/login', { replace: true })
@@ -39,9 +44,10 @@ function Checkout() {
     setState((prev: any) => ({ ...prev, params: { isInstantBuy: isInstantBuy ?? false } }))
   }, [window.location.search, cartItems?.length])
   useAPIoneTime(state)
+  // useAlertPopUp({pageName: 'Checkout',openPopup:toggleSessionExpireDialog})
   return (
     <Layout>
-      <Loader open = {checkLoadingStatus} />
+      <Loader open={checkLoadingStatus} />
       <Seo
         keywords={[`QMint categories`]}
         title="Category"
@@ -58,6 +64,10 @@ function Checkout() {
         </Stack>
         <OrderSummary />
       </Container>
+      {openSessionExpireDialog && <SessionExpiredDialog
+        open={openSessionExpireDialog}
+        onClose={toggleSessionExpireDialog}
+      />}
     </Layout>
   )
 }

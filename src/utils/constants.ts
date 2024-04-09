@@ -93,7 +93,8 @@ export const ENDPOINTS = {
     getOrderHistory: "myvault/tBryhxlMq0qgjzuUfbewkA",
     
     //popup details
-    getPopUpDetails: "utility/85WwxAopc7Rn"
+    getPopUpDetails: "utility/85WwxAopc7Rn",
+    savePopUpData: "utility/CLWL6vMSSrzB"
 }
 export const StoreData = {
     storeCode: 12,

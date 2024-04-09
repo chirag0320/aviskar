@@ -10,21 +10,15 @@ import { IndividualUserIcon, JointAccountIcon, ShowcaseIcon, TrustIcon, SuperFun
 interface AccountTypeProps {
     open: boolean
     dialogTitle: string
+    alignment: string
     onClose: () => void
     handleAccountTypeNextButton: () => void
+    handleChange: (event: React.MouseEvent<HTMLElement>, newAlignment: string) => void
 }
 
 export default function AccountType(props: AccountTypeProps) {
-    const { open, dialogTitle, onClose, handleAccountTypeNextButton } = props
-    const [alignment, setAlignment] = React.useState('web');
-
-    const handleChange = (
-        event: React.MouseEvent<HTMLElement>,
-        newAlignment: string,
-    ) => {
-        setAlignment(newAlignment);
-    };
-
+    const { open, dialogTitle, alignment, handleChange, onClose, handleAccountTypeNextButton } = props
+    
     return (
         <>
             <StyledDialog
@@ -64,10 +58,10 @@ export default function AccountType(props: AccountTypeProps) {
                             </Stack>
                             <Typography variant='caption' className="description">For one person over the age of 18 . Only the account holder can act on the account. Invoices, valuation statements and vault records will be issued in a single name only</Typography>
                         </ToggleButton>
-                        <ToggleButton className='AccountType' value="SuperFundIcon">
+                        <ToggleButton className='AccountType' value="SuperFund">
                             <Stack className='AccountTypeName'>
                                 <SuperFundIcon />
-                                <Typography variant='body1'>SuperFundIcon</Typography>
+                                <Typography variant='body1'>SuperFund</Typography>
                             </Stack>
                             <Typography variant='caption' className="description">For one person over the age of 18 . Only the account holder can act on the account. Invoices, valuation statements and vault records will be issued in a single name only</Typography>
                         </ToggleButton>

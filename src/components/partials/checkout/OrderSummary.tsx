@@ -12,7 +12,7 @@ import { productImages } from "@/utils/data"
 import { CartCardAbstract } from "@/components/common/Card"
 import { OutlinedCheckIcon } from "@/assets/icons"
 import OTPConfirmation from "./OTPConfirmation"
-import { hasFulfilled, paymentMethodType, roundOfThePrice, shipmentNameEnum, shipmentTypeToEnum } from "@/utils/common"
+import { checkThePopUpDetails, hasFulfilled, paymentMethodType, roundOfThePrice, shipmentNameEnum, shipmentTypeToEnum } from "@/utils/common"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { checkValidationOnConfirmOrder, disableOTP, getCraditCardCharges, getInsuranceAndTaxDetailsCalculation, placeOrder, setCheckoutItemWarning } from "@/redux/reducers/checkoutReducer"
 import { ENDPOINTS } from "@/utils/constants"
@@ -20,6 +20,9 @@ import useDeviceDetails from "@/hooks/useDeviceDetails"
 import { navigate } from "gatsby"
 import { setCartItemWarning, updateShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
 import useShowToaster from "@/hooks/useShowToaster"
+import { IPopUpDetails } from "@/apis/services/ConfigServices"
+import { getPopUpDetailsAPI } from "@/redux/reducers/homepageReducer"
+import SessionExpiredDialog from "@/components/header/SessionExpiredDialog"
 
 export interface PlaceOrderBody {
   OrderCustomerID: number;
@@ -77,9 +80,12 @@ function OrderSummary() {
   const { showToaster } = useShowToaster();
   const { deviceInfo, locationInfo }: any = useDeviceDetails()
   const { finalDataForTheCheckout, subTotal, insuranceAndTaxCalculation, craditCardCharges, isOTPEnabled, loading, orderId, message } = useAppSelector((state) => state.checkoutPage)
+  const { isLoggedIn, userDetails } = useAppSelector((state) => state.homePage)
   const [body, setBody] = useState<Body | null>(null)
   const [totalValueNeedToPayFromCraditCart, setTotalValueNeedToPayFromCraditCart] = useState<any>({ OrderTotal: 0 })
   const [openOTPConfirmation, toggleOTPConfirmation] = useToggle(false)
+  const [openSessionExpireDialog, toggleSessionExpireDialog] = useToggle(false)
+
   const needtocalltheTaxDetailscalculation = useMemo(() => {
     return (body?.products?.length ? body?.products?.length > 0 : false)
   }, [body])
@@ -183,6 +189,16 @@ function OrderSummary() {
   }
 
   const onConfirmOrderHandler = async () => {
+    const paramsObj: IPopUpDetails = {
+      'HRERYvCbB': isLoggedIn ? userDetails?.customerId! : 0,
+      'kRNqk': 0,
+      'KhgMNHTfVh9C': 'ProceedtoCheckout'
+    }
+    const res: boolean = await checkThePopUpDetails(paramsObj, toggleSessionExpireDialog, dispatch, getPopUpDetailsAPI)
+    console.log("🚀 ~ handleProccedToCheckout ~ res:", res)
+    if (res) {
+      return
+    }
     const itemsWithQuantity = finalDataForTheCheckout?.cartItemsWithLivePrice?.map((item: any) => {
       return ({
         id: item.id,
@@ -252,6 +268,10 @@ function OrderSummary() {
         </Stack>
       </Box>
       {openOTPConfirmation && <OTPConfirmation open={openOTPConfirmation} onClose={toggleOTPConfirmation} message={message} placeOrderFun={placeOrderFun} />}
+      {openSessionExpireDialog && <SessionExpiredDialog
+        open={openSessionExpireDialog}
+        onClose={toggleSessionExpireDialog}
+      />}
     </StepWrapper>
   )
 }
