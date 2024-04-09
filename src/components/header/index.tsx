@@ -25,28 +25,30 @@ const Index = () => {
   }, [openMobileMenu])
 
   return (
-    <Box id="HeaderWrapper">
+    <>
       {!isMobile && <>
         <Suspense fallback={<Skeleton style={{ minHeight: '60px' }} />}>
           <Pricing />
         </Suspense>
         <Divider />
       </>}
-      <AppBar position={trigger ? "fixed" : "static"}>
-        {loading && <PageLoader />}
-        <Suspense fallback={<Skeleton style={{ minHeight: '80px' }} />}>
-          <Main toggleMobileMenu={toggleMobileMenu} openMobileMenu={openMobileMenu} />
-        </Suspense>
-        <Divider />
-        <Suspense fallback={<Skeleton style={{ minHeight: '53px' }} />}>
-          <Navigation />
-        </Suspense>
-      </AppBar>
-      <Suspense fallback={<></>}>
-        {isMobile && openMobileMenu && <MobileMenu open={isMobile && openMobileMenu} trigger={trigger} toggleMobileMenu={toggleMobileMenu} />}
-      </Suspense >
-      {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>}
-    </Box >
+      <Box id="HeaderWrapper">
+        <AppBar position="static">
+          {loading && <PageLoader />}
+          <Suspense fallback={<Skeleton style={{ minHeight: '80px' }} />}>
+            <Main toggleMobileMenu={toggleMobileMenu} openMobileMenu={openMobileMenu} />
+          </Suspense>
+          <Divider />
+          <Suspense fallback={<Skeleton style={{ minHeight: '53px' }} />}>
+            <Navigation />
+          </Suspense>
+        </AppBar>
+        <Suspense fallback={<></>}>
+          {isMobile && openMobileMenu && <MobileMenu open={isMobile && openMobileMenu} trigger={trigger} toggleMobileMenu={toggleMobileMenu} />}
+        </Suspense >
+        {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>}
+      </Box >
+    </>
   )
 }
 

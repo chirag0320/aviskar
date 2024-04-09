@@ -44,7 +44,7 @@ function MobileSecondaryMenu() {
   return (
     <Box id="MobileSecondaryMenu">
       <AppBar
-      position={trigger ? "fixed" : "static"}
+      position="static"
       component="div"
       sx={{top: headerHeight}}
       >
