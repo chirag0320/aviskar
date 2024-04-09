@@ -43,6 +43,7 @@ function FrontPricing() {
     }, [configDetailsState])
     return (
         <Box
+            id="PricingHeader"
             sx={{
                 backgroundColor: '#1D212966',
                 fontFamily: configDetailsState?.tickerfontstyle?.value,
