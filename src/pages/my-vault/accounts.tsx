@@ -18,7 +18,7 @@ import AddAccount from "@/components/partials/my-vault/AddAccount"
 function Accounts() {
     const loading = useAppSelector(state => state.myVault.loading)
     const accountsData = useAppSelector(state => state.myVault.accounts)
-    const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(true)
+    const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
     const [updateAddress, setUpdateAddress] = useState<boolean>(false)
     const [alignment, setAlignment] = React.useState('Individual');
 
