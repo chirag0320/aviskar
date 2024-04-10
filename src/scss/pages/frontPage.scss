@@ -222,6 +222,19 @@
                         }
                     }
                 }
+
+                .swiper {
+                    .swiper-slide {
+                        margin-top: 0 !important;
+                    }
+
+                    &.swiper-grid-column {
+                        .swiper-wrapper {
+                            flex-wrap: wrap;
+                            gap: 20px 0;
+                        }
+                    }
+                }
             }
         }
     }
@@ -391,12 +404,16 @@
                         width: 100%;
                         justify-content: space-between;
                         margin: auto;
-                        top: calc(50% - 30px);
+                        top: calc(50% + 40px);
                         left: 50%;
                         transform: translate(-50%);
                         height: 50px;
                         margin: 0;
                         z-index: 1;
+
+                        .SwiperButton {
+                            top: -70px;
+                        }
                     }
                 }
             }

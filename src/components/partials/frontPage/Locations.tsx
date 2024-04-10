@@ -37,10 +37,16 @@ function Locations() {
             900: {
                 slidesPerView: 3,
             },
-            260: {
+            600: {
+                slidesPerView: 2,
+            },
+            200: {
                 slidesPerView: 2,
                 slidesPerColumn: 2,
                 spaceBetween: 20,
+                grid: {
+                    rows: 2,
+                }
             },
         },
     }
