@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // Types
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
-import ConfigServices, { IPopUpDetails, IloginUserBody } from '@/apis/services/ConfigServices'
+import ConfigServices, { IPopUpDetails, ISavePopUpDetails, IloginUserBody } from '@/apis/services/ConfigServices'
 import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 
 // Services
@@ -172,8 +172,8 @@ export const getPopUpDetailsAPI = appCreateAsyncThunk(
 )
 export const savePopUpDataAPI = appCreateAsyncThunk(
   'savePopUpDataAPI/status',
-  async (params: IPopUpDetails) => {
-    return await ConfigServices.savePoPUpDetails(params)
+  async (body: ISavePopUpDetails) => {
+    return await ConfigServices.savePoPUpDetails(body)
   }
 )
 export const createHomepageSlice = createSlice({
@@ -233,6 +233,9 @@ export const createHomepageSlice = createSlice({
     },
     serProgressLoaderStatus: (state, action) => {
       state.needToShowProgressLoader = action.payload
+    },
+    setPopUpDetails:(state,action)=>{
+      state.popUpdata = action.payload ?? null
     }
   },
 
@@ -383,6 +386,6 @@ export const createHomepageSlice = createSlice({
   },
 })
 
-export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState, setScrollPosition, serProgressLoaderStatus } = createHomepageSlice.actions
+export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState, setScrollPosition, serProgressLoaderStatus, setPopUpDetails } = createHomepageSlice.actions
 
 export default createHomepageSlice.reducer
