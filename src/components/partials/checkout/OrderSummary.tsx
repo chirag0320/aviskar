@@ -114,7 +114,7 @@ function OrderSummary() {
   }, [subTotalDiffer, insuranceAndTaxCalculationDiffer, finalDataForTheCheckoutDiffer])
   useEffect(() => {
     // if (finalDataForTheCheckout?.paymentType === "CreditCard") {
-    if (orderTotal !== null) {
+    if (orderTotal && (orderTotal !== null)) {
       let timeoutid: any;
       timeoutid = setTimeout(() => {
         dispatch(getCraditCardCharges({
@@ -188,16 +188,19 @@ function OrderSummary() {
     )
   }
 
-  const onConfirmOrderHandler = async () => {
-    const paramsObj: IPopUpDetails = {
-      'HRERYvCbB': isLoggedIn ? userDetails?.customerId! : 0,
-      'kRNqk': 0,
-      'KhgMNHTfVh9C': 'ProceedtoCheckout'
-    }
-    const res: boolean = await checkThePopUpDetails(paramsObj, toggleSessionExpireDialog, dispatch, getPopUpDetailsAPI)
-    console.log("🚀 ~ handleProccedToCheckout ~ res:", res)
-    if (res) {
-      return
+  const onConfirmOrderHandler = async (continueWithoutCheck?:boolean) => {
+    continueWithoutCheck = continueWithoutCheck === undefined ? false : continueWithoutCheck;
+    if (!continueWithoutCheck) {
+      const paramsObj: IPopUpDetails = {
+        'HRERYvCbB': isLoggedIn ? userDetails?.customerId! : 0,
+        'kRNqk': 0,
+        'KhgMNHTfVh9C': 'ProceedtoCheckout'
+      }
+      const res: boolean = await checkThePopUpDetails(paramsObj, toggleSessionExpireDialog, dispatch, getPopUpDetailsAPI)
+      console.log("🚀 ~ handleProccedToCheckout ~ res:", res)
+      if (res) {
+        return
+      }
     }
     const itemsWithQuantity = finalDataForTheCheckout?.cartItemsWithLivePrice?.map((item: any) => {
       return ({
@@ -264,13 +267,14 @@ function OrderSummary() {
         <Stack className="ActionWrapper">
           <Button color="secondary" onClick={() => navigate("/")}>Continue Shopping</Button>
           {/* <Button variant="contained" onClick={toggleOTPConfirmation} disabled={!finalDataForTheCheckout?.termAndServiceIsRead}>Confirm Order</Button> */}
-          <Button variant="contained" onClick={onConfirmOrderHandler} disabled={!finalDataForTheCheckout?.termAndServiceIsRead || loading || finalDataForTheCheckout?.cartItemsWithLivePrice?.length < 1}>Confirm Order</Button>
+          <Button variant="contained" onClick={()=>{onConfirmOrderHandler()}} disabled={!finalDataForTheCheckout?.termAndServiceIsRead || loading || finalDataForTheCheckout?.cartItemsWithLivePrice?.length < 1}>Confirm Order</Button>
         </Stack>
       </Box>
       {openOTPConfirmation && <OTPConfirmation open={openOTPConfirmation} onClose={toggleOTPConfirmation} message={message} placeOrderFun={placeOrderFun} />}
       {openSessionExpireDialog && <SessionExpiredDialog
         open={openSessionExpireDialog}
         onClose={toggleSessionExpireDialog}
+        continueProcess={onConfirmOrderHandler}
       />}
     </StepWrapper>
   )

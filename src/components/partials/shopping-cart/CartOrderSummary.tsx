@@ -25,16 +25,18 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
     const { isLoggedIn, userDetails } = useAppSelector((state) => state.homePage)
     const [openSessionExpireDialog, toggleSessionExpireDialog] = useToggle(false)
 
-    const handleProccedToCheckout = async () => {
-        const paramsObj: IPopUpDetails = {
-            'HRERYvCbB': isLoggedIn ? userDetails?.customerId! : 0,
-            'kRNqk': 0,
-            'KhgMNHTfVh9C': 'ProceedtoCheckout'
-        }
-        const res: boolean = await checkThePopUpDetails(paramsObj, toggleSessionExpireDialog, dispatch, getPopUpDetailsAPI)
-        console.log("🚀 ~ handleProccedToCheckout ~ res:", res)
-        if (res) {
-            return
+    const handleProccedToCheckout = async (continueWithoutCheck = false) => {
+        if (!continueWithoutCheck) {
+            const paramsObj: IPopUpDetails = {
+                'HRERYvCbB': isLoggedIn ? userDetails?.customerId! : 0,
+                'kRNqk': 0,
+                'KhgMNHTfVh9C': 'ProceedtoCheckout'
+            }
+            const res: boolean = await checkThePopUpDetails(paramsObj, toggleSessionExpireDialog, dispatch, getPopUpDetailsAPI)
+            console.log("🚀 ~ handleProccedToCheckout ~ res:", res)
+            if (res) {
+                return
+            }
         }
         let subTotal = 0;
         const itemsWithQuantity = cartItemsWithLivePrice.map((item: CartItemsWithLivePriceDetails) => {
@@ -84,10 +86,11 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
                     <Typography variant="subtitle1">Calculated during checkout </Typography>
                 </Stack>
             </Box>
-            <Button className='ProceedtoCheckoutBtn' size='large' variant="contained" onClick={handleProccedToCheckout} disabled={shoppingCartItems.loading || shoppingCartItems.cartItems?.length === 0}>Proceed to Checkout</Button>
+            <Button className='ProceedtoCheckoutBtn' size='large' variant="contained" onClick={() => { handleProccedToCheckout() }} disabled={shoppingCartItems.loading || shoppingCartItems.cartItems?.length === 0}>Proceed to Checkout</Button>
             {openSessionExpireDialog && <SessionExpiredDialog
                 open={openSessionExpireDialog}
                 onClose={toggleSessionExpireDialog}
+                continueProcess={handleProccedToCheckout}
             />}
         </Box>
     )

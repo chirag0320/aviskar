@@ -1,11 +1,15 @@
-import React from "react"
-import { Dialog, DialogContent, Typography, DialogActions, Button, Stack } from "@mui/material"
+import React, { useState } from "react"
+import { Dialog, DialogContent, Typography, DialogActions, Button, Stack, IconButton } from "@mui/material"
 import { navigate } from "gatsby"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
+import { savePopUpDataAPI, setPopUpDetails } from "@/redux/reducers/homepageReducer"
+import { ISavePopUpDetails } from "@/apis/services/ConfigServices"
+import { CrossIconWithOutlineCircle } from "@/assets/icons"
 
 interface SessionExpiredDialog {
   open: boolean
-  onClose: () => void
+  onClose: (value?: boolean) => void
+  continueProcess?: (value?: boolean) => void
 }
 declare global {
   interface Window {
@@ -15,9 +19,102 @@ declare global {
     handleNo: () => void;
   }
 }
+interface IResponse {
+  type: string;
+  payload: {
+    data: {
+      code: number;
+      message: null | string;
+      exception: null | string;
+      extraProperty: null | any;
+      data: {
+        id: number;
+        positiveAnswer: null | string;
+        negativeAnswer: string;
+        negativeAnswerUrl: string;
+        popupQueryId: number;
+        isApprove: boolean;
+      };
+    };
+    status: number;
+    statusText: string;
+    headers: {
+      [key: string]: string;
+    };
+    config: {
+      transitional: {
+        silentJSONParsing: boolean;
+        forcedJSONParsing: boolean;
+        clarifyTimeoutError: boolean;
+      };
+      adapter: string[];
+      transformRequest: null | (() => void)[];
+      transformResponse: null | (() => void)[];
+      timeout: number;
+      xsrfCookieName: string;
+      xsrfHeaderName: string;
+      maxContentLength: number;
+      maxBodyLength: number;
+      env: {};
+      headers: {
+        [key: string]: string;
+      };
+      baseURL: string;
+      method: string;
+      url: string;
+      data: string;
+    };
+    request: {};
+  };
+  meta: {
+    arg: {
+      IsAccepted: boolean;
+      CustomerId: number;
+      Popupid: number;
+    };
+    requestId: string;
+    requestStatus: string;
+  };
+}
+
 function SessionExpiredDialog(props: SessionExpiredDialog) {
-  const { open, onClose } = props
+  const { isLoggedIn, userDetails } = useAppSelector((state) => state.homePage)
+  const [needTOShowClose, setNeedTOShowClose] = useState(false)
+  const dispatch = useAppDispatch()
+  const { open, onClose, continueProcess } = props
   const { popUpdata } = useAppSelector((state) => state.homePage)
+  const savePopUpDataFunctinon = async (IsAccepted: boolean) => {
+    const data: ISavePopUpDetails = {
+      IsAccepted,
+      CustomerId: isLoggedIn ? userDetails?.customerId! : 0,
+      Popupid: popUpdata?.id as number
+    }
+    //@ts-ignore
+    const res: IResponse = await dispatch(savePopUpDataAPI(data))
+    onClose()
+    if (!IsAccepted) {
+      if (!!res?.payload?.data?.data?.negativeAnswer) {
+        dispatch(setPopUpDetails(res.payload.data.data.negativeAnswer))
+        setNeedTOShowClose(true)
+        onClose(true)
+      } else if (res.payload.data.data.negativeAnswerUrl) {
+        navigate(res.payload.data.data.negativeAnswerUrl)
+      }
+    } else {
+      console.log("🚀 ~ savePopUpDataFunctinon ~ res.payload.data.data.negativeAnswer:", res.payload.data.data.negativeAnswer)
+      if (!!res?.payload?.data?.data?.positiveAnswer) {
+        dispatch(setPopUpDetails(res.payload.data.data.positiveAnswer))
+        setNeedTOShowClose(true)
+        onClose(true)
+      } else {
+        if (continueProcess) {
+          console.log("continue")
+          continueProcess(true)
+        }
+        // navigate(res.payload.data.data.negativeAnswerUrl)
+      }
+    }
+  }
   window.handleRefresh = async () => {
     console.log("here", "handleRefresh")
     location.reload()
@@ -26,19 +123,30 @@ function SessionExpiredDialog(props: SessionExpiredDialog) {
     navigate('/login')
   };
   window.handleYes = async () => {
-    onClose()
+    savePopUpDataFunctinon(true)
   };
   window.handleNo = async () => {
-    onClose()
+    savePopUpDataFunctinon(false)
   }
   return (
     <Dialog
       id="SessionExpiredDialog"
       open={open}
-      // onClose={onClose}
+      // onClose={needTOShowClose ? onClose : () => { }}
       fullWidth
       maxWidth="md"
     >
+      {needTOShowClose && <Stack className="DialogHeader">
+        <IconButton
+          aria-label="close"
+          className="CloseButton"
+          onClick={() => {
+            onClose(false)
+          }}
+        >
+          <CrossIconWithOutlineCircle />
+        </IconButton>
+      </Stack>}
       <DialogContent>
         <Stack className="Content" dangerouslySetInnerHTML={{
           __html: popUpdata?.htmlCode,

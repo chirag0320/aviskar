@@ -126,3 +126,6 @@ export const checkThePopUpDetails = async (paramsObj: IPopUpDetails, openPopup: 
 
   return false
 }
+export const calculationOfThePremiumaAndDiscount=()=>{
+  
+}
