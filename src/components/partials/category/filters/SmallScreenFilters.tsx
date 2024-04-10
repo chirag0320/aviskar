@@ -72,17 +72,17 @@ const SmallScreenFilters = ({ renderList, setSelectedFiltersMobile, setSelectedP
                             scrollButtons={false}
                             visibleScrollbar
                         >
-                            <Tab label="Categories" value={0} />
+                            {categoryData.categories.length > 0 && <Tab label="Categories" value={0} />}
                             <Tab label="Price Range" value={1} />
                             {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
                                 <Tab key={filter} label={filter} value={index + 2} />
                             ))}
                         </Tabs>
-                        <TabPanel className="Category" value={tabValue} index={0}>
+                        {categoryData.categories.length > 0 && <TabPanel className="Category" value={tabValue} index={0}>
                             {renderList(categoryData.categories)}
-                        </TabPanel>
+                        </TabPanel>}
                         <TabPanel value={tabValue} index={1}>
-                            <PriceSlider minPrice={categoryData.price.minPrice} maxPrice={categoryData.price.maxPrice} setSelectedPrice={setSelectedPrice} selectedPrice={selectedPrice} setIsPriceChanged={setIsPriceChanged}/>
+                            <PriceSlider minPrice={categoryData?.price?.minPrice as number} maxPrice={categoryData?.price?.maxPrice as number} setSelectedPrice={setSelectedPrice} selectedPrice={selectedPrice} setIsPriceChanged={setIsPriceChanged}/>
                         </TabPanel>
                         {Object.keys(categoryData.specifications).map((filter: any, index: number) => (
                             <TabPanel value={tabValue} index={index + 2} key={filter}>

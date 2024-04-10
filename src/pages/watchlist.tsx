@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Container, IconButton, Stack, Typography } from "@mui/material";
-import { ClipboardIcon } from "@/assets/icons";
+import { Container } from "@mui/material";
 import Layout from "@/components/common/Layout";
 import Seo from "@/components/common/Seo";
 import { PageTitle } from "@/components/common/Utils";
@@ -9,7 +8,6 @@ import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { ENDPOINTS } from "@/utils/constants";
 import { getWishListData } from "@/redux/reducers/wishListReducer";
 import WishListDetails from "@/components/partials/wishlist/WishListDetails";
-import CorrectIcon from "@/assets/icons/CorrectIcon";
 import Loader from "@/components/common/Loader";
 
 const WISHLIST_URL = "http://queenslandmint.com/wishlist/5b455134-e44c-492a-a79b-33487860ff00"

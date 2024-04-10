@@ -6,24 +6,20 @@ import StyledDialog from "@/components/common/StyledDialog"
 
 // Asstes
 import { IndividualUserIcon, JointAccountIcon, ShowcaseIcon, TrustIcon, SuperFundIcon } from "../../../assets/icons/index"
+import { useAppSelector } from '@/hooks';
 
 interface AccountTypeProps {
     open: boolean
     dialogTitle: string
+    alignment: string
     onClose: () => void
-    handleUpdateAddress?: () => void
+    handleAccountTypeNextButton: () => void
+    handleChange: (event: React.MouseEvent<HTMLElement>, newAlignment: string) => void
 }
 
 export default function AccountType(props: AccountTypeProps) {
-    const { open, dialogTitle, onClose, handleUpdateAddress } = props
-    const [alignment, setAlignment] = React.useState('web');
-
-    const handleChange = (
-        event: React.MouseEvent<HTMLElement>,
-        newAlignment: string,
-    ) => {
-        setAlignment(newAlignment);
-    };
+    const { open, dialogTitle, alignment, handleChange, onClose, handleAccountTypeNextButton } = props
+    // console.log("🚀 ~ AccountType ~ configDropdowns:", configDropdowns)
 
     return (
         <>
@@ -43,6 +39,17 @@ export default function AccountType(props: AccountTypeProps) {
                         aria-label="Platform"
                         className='AccountTypeWrapper'
                     >
+                        {/* {configDropdowns?.accountTypeList.map(accountType => {
+                            return (
+                                <ToggleButton className='AccountType' value={accountType.id} key={accountType.id}>
+                                    <Stack className='AccountTypeName'>
+                                        <IndividualUserIcon />
+                                        <Typography variant='body1'>{accountType.name}</Typography>
+                                    </Stack>
+                                    <Typography variant='caption' className="description">For one person over the age of 18 . Only the account holder can act on the account. Invoices, valuation statements and vault records will be issued in a single name only</Typography>
+                                </ToggleButton>
+                            )
+                        })} */}
                         <ToggleButton className='AccountType' value="Individual">
                             <Stack className='AccountTypeName'>
                                 <IndividualUserIcon />
@@ -64,10 +71,10 @@ export default function AccountType(props: AccountTypeProps) {
                             </Stack>
                             <Typography variant='caption' className="description">For one person over the age of 18 . Only the account holder can act on the account. Invoices, valuation statements and vault records will be issued in a single name only</Typography>
                         </ToggleButton>
-                        <ToggleButton className='AccountType' value="SuperFundIcon">
+                        <ToggleButton className='AccountType' value="SuperFund">
                             <Stack className='AccountTypeName'>
                                 <SuperFundIcon />
-                                <Typography variant='body1'>SuperFundIcon</Typography>
+                                <Typography variant='body1'>SuperFund</Typography>
                             </Stack>
                             <Typography variant='caption' className="description">For one person over the age of 18 . Only the account holder can act on the account. Invoices, valuation statements and vault records will be issued in a single name only</Typography>
                         </ToggleButton>
@@ -84,7 +91,7 @@ export default function AccountType(props: AccountTypeProps) {
                     <Button variant="outlined" onClick={onClose}>
                         Close
                     </Button>
-                    <Button variant="contained" onClick={handleUpdateAddress}>Next</Button>
+                    <Button variant="contained" onClick={handleAccountTypeNextButton}>Next</Button>
                 </Stack>
             </StyledDialog>
         </>

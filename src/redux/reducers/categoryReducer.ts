@@ -4,7 +4,6 @@ import { createSlice } from '@reduxjs/toolkit'
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import CategoryServices from '@/apis/services/CategoryServices'
 import { categoryData } from '@/types/categoryData'
-import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 // Services
 
 interface filterQuery {
@@ -18,7 +17,7 @@ interface filterQuery {
 
 const initialState: categoryData = {
   loading: false,
-  items: [],
+  items: null,
   count: 0,
   categories: [],
   price: null,
@@ -60,12 +59,12 @@ export const categoryPageSlice = createSlice({
     setPriceForEachItem: (state, action: any) => {
       const priceForEachId = action.payload;
 
-      state.items.forEach((item: any) => {
+      state.items?.forEach((item: any) => {
         if (priceForEachId[item.productId]) {
           item.priceWithDetails = priceForEachId[item.productId]
         }
       })
-      state.sortedItems.forEach((item: any) => {
+      state.sortedItems?.forEach((item: any) => {
         if (priceForEachId[item.productId]) {
           item.priceWithDetails = priceForEachId[item.productId]
         }
@@ -97,23 +96,24 @@ export const categoryPageSlice = createSlice({
 
         state.items = responseData.items;
         state.sortedItems = responseData.items;
-        localStorageSetItem('items', JSON.stringify(state.items))
+        // localStorageSetItem('items', JSON.stringify(state.items))
         state.count = responseData.count;
-        localStorageSetItem('count', JSON.stringify(state.count))
+        // localStorageSetItem('count', JSON.stringify(state.count))
         state.categories = filtersData.categories;
-        localStorageSetItem('categories', JSON.stringify(state.categories))
+        // localStorageSetItem('categories', JSON.stringify(state.categories))
         state.manufactureres = filtersData.manufactureres;
-        localStorageSetItem('manufactureres', JSON.stringify(state.manufactureres))
+        // localStorageSetItem('manufactureres', JSON.stringify(state.manufactureres))
         state.price = filtersData.price;
-        localStorageSetItem('price', JSON.stringify(state.price))
-        state.specifications = filtersData.sepecifications; // Corrected the spelling of 'specifications'
-        localStorageSetItem('specifications', JSON.stringify(state.specifications))
+        // localStorageSetItem('price', JSON.stringify(state.price))
+        state.specifications = filtersData.sepecifications; // Corrected the spelling of 'specifications' from the api
+        // localStorageSetItem('specifications', JSON.stringify(state.specifications))
       }
 
       state.loading = false;
 
     })
     builder.addCase(getCategoryData.rejected, (state) => {
+      state.items = []; // to show the product not found text
       state.loading = false;
     })
 

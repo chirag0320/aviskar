@@ -367,6 +367,11 @@ const theme: Theme = createTheme({
         containedInfo: {
           backgroundColor: `${variable.elephant}`,
         },
+        containedSecondary: {
+          "&:hover": {
+            backgroundColor: variable.yellowFuel,
+          },
+        },
       },
     },
     MuiIconButton: {
@@ -390,6 +395,7 @@ const theme: Theme = createTheme({
           color: "#1D2129",
           overflowWrap: "anywhere",
           // overflowWrap: anywhere;
+          transition: "300ms all ease",
           "&:hover": {
             color: "#EAA22B",
           },

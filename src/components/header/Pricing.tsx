@@ -43,6 +43,7 @@ function Pricing() {
   }, [configDetailsState])
   return (
     <Box
+      id="PricingHeader"
       sx={{
         backgroundColor: configDetailsState?.tickerbackgroundcolor?.value,
         fontFamily: configDetailsState?.tickerfontstyle?.value,

@@ -1,6 +1,6 @@
 export interface categoryData {
   loading: boolean,
-  items: [],
+  items: [] | null,
   count: 0,
   categories: [],
   price: {
@@ -11,6 +11,6 @@ export interface categoryData {
   manufactureres: [],
   productDetailsData: any,
   sortBy: SortingOption | null,
-  sortedItems: any[],
+  sortedItems: any[] | null,
   clearFilters: boolean
 }
