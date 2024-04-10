@@ -11,18 +11,26 @@ declare global {
   interface Window {
     handleRefresh: () => void;
     handleLogin: () => void;
+    handleYes: () => void;
+    handleNo: () => void;
   }
 }
 function SessionExpiredDialog(props: SessionExpiredDialog) {
   const { open, onClose } = props
   const { popUpdata } = useAppSelector((state) => state.homePage)
   window.handleRefresh = async () => {
-    console.log("here","handleRefresh")
+    console.log("here", "handleRefresh")
     location.reload()
   };
   window.handleLogin = async () => {
     navigate('/login')
   };
+  window.handleYes = async () => {
+    onClose()
+  };
+  window.handleNo = async () => {
+    onClose()
+  }
   return (
     <Dialog
       id="SessionExpiredDialog"

@@ -44,7 +44,7 @@ function Checkout() {
     setState((prev: any) => ({ ...prev, params: { isInstantBuy: isInstantBuy ?? false } }))
   }, [window.location.search, cartItems?.length])
   useAPIoneTime(state)
-  // useAlertPopUp({pageName: 'Checkout',openPopup:toggleSessionExpireDialog})
+  useAlertPopUp({pageName: 'Checkout',openPopup:toggleSessionExpireDialog})
   return (
     <Layout>
       <Loader open={checkLoadingStatus} />

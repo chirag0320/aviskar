@@ -2,7 +2,7 @@ import { IPopUpDetails } from '@/apis/services/ConfigServices'
 import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '.'
 import { checkThePopUpDetails } from '@/utils/common'
-import { getPopUpDetailsAPI } from '@/redux/reducers/homepageReducer'
+import { getPopUpDetailsAPI, setPopUpDetails } from '@/redux/reducers/homepageReducer'
 
 const useAlertPopUp = ({ pageName, openPopup }: { pageName: string, openPopup: any }) => {
     const dispatch = useAppDispatch()
@@ -18,6 +18,9 @@ const useAlertPopUp = ({ pageName, openPopup }: { pageName: string, openPopup: a
         // if(){
         checkThePopUpDetails(paramsObj, openPopup, dispatch, getPopUpDetailsAPI)
         // }
+        return () => {
+            dispatch(setPopUpDetails(null))
+        }
     }, [])
 }
 
