@@ -20,7 +20,7 @@ import {
 interface RenderFieldProps {
   type?: RenderFieldType
   error?: FieldError | boolean
-  register: UseFormRegister<any>
+  register?: UseFormRegister<any>
   placeholder?: string
   label?: string
   variant?: 'standard' | 'outlined' | 'filled'
