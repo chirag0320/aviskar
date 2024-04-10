@@ -116,6 +116,15 @@
                       color: $yellowFuel;
                       background-color: transparent;
                     }
+                    &.Mui-selected {
+                      color: $yellowFuel;
+                      background-color: transparent;
+                      .MuiListItemText-root {
+                        .MuiTypography-root {
+                          font-weight: 500;
+                        }
+                      }
+                    }
                   }
                 }
                 .MuiDivider-root {

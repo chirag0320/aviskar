@@ -1337,7 +1337,11 @@ export const PhoneNumberCountryCode = [
     "code": "ZW"
   }
 ]
+<<<<<<< HEAD
 export const checkThePopUpDetails = async (paramsObj: IPopUpDetails, openPopup: any, dispatch: any, service: any) => {
+=======
+export const checkThePopUpDetails = async (paramsObj: IPopUpDetails, openPopup: any, dispatch:any, service:any) => {
+>>>>>>> Staging
   // const res = await ConfigServices.getPopUpDetails(paramsObj)
   const res = await dispatch(service(paramsObj))
   console.log("🚀 ~ checkThePopUpDetails ~ res:", res)
@@ -1347,4 +1351,7 @@ export const checkThePopUpDetails = async (paramsObj: IPopUpDetails, openPopup: 
   }
 
   return false
+}
+export const calculationOfThePremiumaAndDiscount=()=>{
+  
 }

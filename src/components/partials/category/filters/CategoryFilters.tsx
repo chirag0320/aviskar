@@ -107,7 +107,7 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
           data.map((item: any, index: number) => (
             <Fragment key={item.categoryId}>
               <ListItem>
-                <ListItemButton onClick={() => navigatePageHandler(item.categoryId, item.searchEngineFriendlyPageName)}>
+                <ListItemButton onClick={() => navigatePageHandler(item.categoryId, item.searchEngineFriendlyPageName)} selected={false}>
                   <ListItemText primary={item.name} primaryTypographyProps={{ variant: "body2" }} />
                 </ListItemButton>
               </ListItem>
