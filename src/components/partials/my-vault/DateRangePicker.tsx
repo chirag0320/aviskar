@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Provider, defaultTheme } from "@adobe/react-spectrum";
+import { Provider, lightTheme } from "@adobe/react-spectrum";
 import { DateRangePicker } from '@adobe/react-spectrum'
 import { Box } from "@mui/material";
 import { CalendarDate } from "@internationalized/date";
@@ -15,7 +15,7 @@ interface Props {
 export default function App({ dateRangeValue, setDateRangeValue }: Props) {
     return (
         <Box className="DateRangePickerWrapper">
-            <Provider theme={defaultTheme} height="100%">
+            <Provider theme={lightTheme} height="100%" colorScheme="light">
                 <DateRangePicker
                     label="Date range"
                     value={dateRangeValue}
