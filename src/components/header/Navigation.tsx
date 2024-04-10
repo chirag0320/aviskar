@@ -14,7 +14,7 @@ import Badge from '@mui/material/Badge';
 
 // Utils
 import { chartMenuData, subMenuItems } from "../../utils/data"
-import { Link, navigate } from "gatsby"
+import { Link } from "gatsby"
 import { ProductUpdateCountdown } from "../common/Utils"
 import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
 import { ENDPOINTS } from "@/utils/constants"
@@ -66,32 +66,26 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
                         className="PopoverMegaMenu"
                         placement="bottom-start"
                         renderComponent={
-                          <Button
+                          <Link
+                            to={`/${category.searchEngineFriendlyPageName}`}
                             aria-label={category?.searchEngineFriendlyPageName ?? category.name}
-                            color="secondary"
-                            onClick={() => navigate(`/${category.searchEngineFriendlyPageName}`)}
                             className={classNames("MenuLink", { "Active": category?.name?.toLocaleLowerCase()?.replace(/[\s/]/g, '') === currententlySelected })}
-                            disableRipple
-                            name={category?.searchEngineFriendlyPageName ?? category.name}
                           >
                             {category.name}
-                          </Button>
+                          </Link>
                         }
                         disablePortal
                         lightTheme
                       >
                         <MegaMenu subCategorys={category.subCategories} category={category} />
                       </HoverTooltip></Fragment>
-                      : <Fragment key={category.name}><Button
-                        onClick={() => navigate(`/${category.searchEngineFriendlyPageName}`)}
-                        color="secondary"
+                      : <Fragment key={category.name}><Link
+                        to={`/${category.searchEngineFriendlyPageName}`}
                         aria-label={category?.searchEngineFriendlyPageName ?? category.name}
-                        name={category?.searchEngineFriendlyPageName ?? category.name}
                         className={classNames("MenuLink", { "Active": category?.name?.toLocaleLowerCase()?.replace(/[\s/]/g, '') === currententlySelected })}
-                        disableRipple
                       >
                         {category.name}
-                      </Button></Fragment>
+                      </Link></Fragment>
                   )
                 })
                 : null

@@ -245,8 +245,10 @@
           }
 
           .MenuLink {
+            color: $dark;
             text-transform: uppercase;
             text-decoration: none;
+            font-size: 14px;
             font-weight: 500;
             @include transition;
             @include padding-vertical(19);
@@ -254,7 +256,10 @@
             @include media($lg) {
               @include padding-vertical(10);
             }
-
+            &:hover {
+              color: $yellowFuel;
+            }
+            
             &.Active {
               font-weight: 600;
               color: $yellowFuel;
@@ -269,44 +274,35 @@
               border-top: 1px solid rgba($dark, 0.1);
 
               .SubMenu {
-                background-color: transparent;
-
                 .MuiList-root {
-                  .MuiListItemButton-root {
+                  .SubMenuLink {
                     color: rgba($dark, 0.6);
-                    background-color: transparent;
+                    text-decoration: none;
                     @include transition;
-                    @include padding-horizontal(0);
-
-                    @include media($lg) {
-                      @include padding-vertical(6);
-                    }
-
                     &:hover {
                       color: $yellowFuel;
                     }
-
                     &:first-of-type {
                       color: $dark;
-                      text-transform: uppercase;
-
                       &:hover {
                         color: $yellowFuel;
                       }
-
-                      @include media-min($lg) {
-                        margin-bottom: 9px;
-                      }
-
-                      .MuiListItemText-root {
-                        .MuiListItemText-primary {
-                          text-transform: inherit;
+                      .MuiTypography-root {
+                        text-transform: uppercase;
+                        @include media-min($lg) {
+                          margin-bottom: 9px;
                         }
                       }
                     }
-
-                    .MuiListItemText-root {
-                      @include margin-vertical(0);
+                    &.Active {
+                      color: $yellowFuel;
+                      text-transform: uppercase;
+                    }
+                    .MuiTypography-root {
+                      @include padding-vertical(8);
+                      @include media($lg) {
+                        @include padding-vertical(6);
+                      }
                     }
                   }
                 }

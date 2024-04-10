@@ -1,13 +1,16 @@
 import React from 'react'
 import { Box, Typography, Stack, Button } from "@mui/material"
 import { RightArrow } from '@/assets/icons'
-import { useAppDispatch, useAppSelector } from '@/hooks'
+import { useAppDispatch, useAppSelector, useToggle } from '@/hooks'
 import { navigate } from 'gatsby'
 import { resetSubTotal, setCartItemWarning, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer'
 import { ENDPOINTS } from '@/utils/constants'
-import { hasFulfilled, roundOfThePrice } from '@/utils/common'
+import { checkThePopUpDetails, hasFulfilled, roundOfThePrice } from '@/utils/common'
 import useShowToaster from '@/hooks/useShowToaster'
 import { CartItemsWithLivePriceDetails } from './CartDetails'
+import { IPopUpDetails } from '@/apis/services/ConfigServices'
+import SessionExpiredDialog from '@/components/header/SessionExpiredDialog'
+import { getPopUpDetailsAPI } from '@/redux/reducers/homepageReducer'
 
 interface Props {
     cartItemsWithLivePrice: CartItemsWithLivePriceDetails[],
@@ -19,8 +22,22 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
     const dispatch = useAppDispatch();
     const { showToaster } = useShowToaster();
     const shoppingCartItems = useAppSelector(state => state.shoppingCart);
+    const { isLoggedIn, userDetails } = useAppSelector((state) => state.homePage)
+    const [openSessionExpireDialog, toggleSessionExpireDialog] = useToggle(false)
 
-    const handleProccedToCheckout = async () => {
+    const handleProccedToCheckout = async (continueWithoutCheck = false) => {
+        if (!continueWithoutCheck) {
+            const paramsObj: IPopUpDetails = {
+                'HRERYvCbB': isLoggedIn ? userDetails?.customerId! : 0,
+                'kRNqk': 0,
+                'KhgMNHTfVh9C': 'ProceedtoCheckout'
+            }
+            const res: boolean = await checkThePopUpDetails(paramsObj, toggleSessionExpireDialog, dispatch, getPopUpDetailsAPI)
+            console.log("🚀 ~ handleProccedToCheckout ~ res:", res)
+            if (res) {
+                return
+            }
+        }
         let subTotal = 0;
         const itemsWithQuantity = cartItemsWithLivePrice.map((item: CartItemsWithLivePriceDetails) => {
             subTotal += (item?.LivePriceDetails?.price * quantities[item.id]);
@@ -31,7 +48,7 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
         })
         dispatch(resetSubTotal());
         dispatch(updateSubTotal(subTotal))
-        
+
         const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
 
         if (hasFulfilled(response.type)) {
@@ -69,7 +86,12 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
                     <Typography variant="subtitle1">Calculated during checkout </Typography>
                 </Stack>
             </Box>
-            <Button className='ProceedtoCheckoutBtn' size='large' variant="contained" onClick={handleProccedToCheckout} disabled={shoppingCartItems.loading || shoppingCartItems.cartItems?.length === 0}>Proceed to Checkout</Button>
+            <Button className='ProceedtoCheckoutBtn' size='large' variant="contained" onClick={() => { handleProccedToCheckout() }} disabled={shoppingCartItems.loading || shoppingCartItems.cartItems?.length === 0}>Proceed to Checkout</Button>
+            {openSessionExpireDialog && <SessionExpiredDialog
+                open={openSessionExpireDialog}
+                onClose={toggleSessionExpireDialog}
+                continueProcess={handleProccedToCheckout}
+            />}
         </Box>
     )
 }

@@ -6,9 +6,14 @@ export interface IloginUserBody {
   ImpersonateId?: string | number
 }
 export interface IPopUpDetails {
-  "HRERYvCbB" : string | number,
-  "KhgMNHTfVh9C" ?: string,
-  "kRNqk" : number
+  "HRERYvCbB": string | number,
+  "KhgMNHTfVh9C"?: string,
+  "kRNqk": number
+}
+export interface ISavePopUpDetails {
+  "CustomerId": number,
+  "IsAccepted": boolean,
+  "Popupid": number
 }
 class ConfigServices {
   static async details(url: string) {
@@ -51,8 +56,8 @@ class ConfigServices {
     return await axiosInstance.post(ENDPOINTS.logOutUser, {})
 
   }
-  static async ImpersonateSignIn(token:any) {
-    return await axiosInstance.post(ENDPOINTS.ImpersonateSignIn, {},{params:{token}})
+  static async ImpersonateSignIn(token: any) {
+    return await axiosInstance.post(ENDPOINTS.ImpersonateSignIn, {}, { params: { token } })
   }
   // static add(data: GuidelineTitleParams) {
   //   return api({
@@ -84,11 +89,14 @@ class ConfigServices {
     return axiosInstance.get(url)
   }
 
-  static async sendVerificationEmailAPI(url:any) {
+  static async sendVerificationEmailAPI(url: any) {
     return await axiosInstance.post(url)
   }
-  static async getPopUpDetails(params: IPopUpDetails ) {
-    return await axiosInstance.post(ENDPOINTS.getPopUpDetails,{},{params:params})
+  static async getPopUpDetails(params: IPopUpDetails) {
+    return await axiosInstance.post(ENDPOINTS.getPopUpDetails, {}, { params: params })
+  }
+  static async savePoPUpDetails(body: ISavePopUpDetails) {
+    return await axiosInstance.post(ENDPOINTS.savePopUpData,body)
   }
 }
 export default ConfigServices

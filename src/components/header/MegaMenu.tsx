@@ -1,5 +1,6 @@
 import React from "react"
-import { Box, Container, Stack, Link, Typography } from "@mui/material"
+import { Box, Container, Stack, Typography } from "@mui/material"
+import { Link } from "gatsby"
 
 // Componenets
 import SubMenu from "./SubMenu"
@@ -18,7 +19,7 @@ function MegaMenu({ subCategorys, category }: { subCategorys: Icategory[], categ
           <Box className="DestinationMenu">
             {category?.categoryImages?.length > 0 ? category?.categoryImages?.map((item) => {
               return (
-                <Link href={item.redirectUrl} className="DestinationLink" key={item.categoryId}>
+                <Link to={item.redirectUrl} className="DestinationLink" key={item.categoryId}>
                   <Box className="ImageWrapper"><img src={item.imageUrl} /></Box>
                   <Typography variant="overline" component="span">
                     {item.imageText}

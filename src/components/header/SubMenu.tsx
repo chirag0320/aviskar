@@ -1,9 +1,8 @@
 import React from "react"
-import { Box, List, ListItemButton, ListItemText } from "@mui/material"
+import { Box, List, Typography } from "@mui/material"
 import { Icategory } from "./Navigation"
+import { Link } from "gatsby";
 import classNames from "classnames"
-import { navigate } from "gatsby";
-
 
 function SubMenu(props: { name: string, subcategories: Icategory[], singleMenu?: boolean, searchEngineFriendlyPageName: string }) {
   const { name, subcategories, singleMenu } = props
@@ -13,17 +12,17 @@ function SubMenu(props: { name: string, subcategories: Icategory[], singleMenu?:
       <List
         component="nav"
       >
-        <ListItemButton key={'main'} onClick={() => navigate(`/${props.searchEngineFriendlyPageName}`)}>
-          <ListItemText primary={name} primaryTypographyProps={{ variant: "overline" }} />
-        </ListItemButton>
+        <Link className="SubMenuLink" activeClassName="Active" key={'main'} to={`/${props.searchEngineFriendlyPageName}`}>
+          <Typography variant="overline" component="p">{name}</Typography>
+        </Link>
         {subcategories.map((item: Icategory) => {
           return (
             item?.subCategories?.length > 0 ?
               <SubMenu name={item.name} subcategories={item.subCategories} key={item.categoryId} searchEngineFriendlyPageName={`/${item.searchEngineFriendlyPageName}`} /> :
               // @Note:: first menu render will be taken as main from css as per figma
-              <ListItemButton key={item.name} onClick={() => navigate(`/${item.searchEngineFriendlyPageName}`)}>
-                <ListItemText primary={item.name} primaryTypographyProps={{ variant: "overline" }} />
-              </ListItemButton>
+              <Link className="SubMenuLink" activeClassName="Active" key={item.name} to={`/${item.searchEngineFriendlyPageName}`}>
+                <Typography variant="overline" component="p">{item.name}</Typography>
+              </Link>
           )
         })}
       </List>
