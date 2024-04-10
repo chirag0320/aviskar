@@ -4,7 +4,7 @@ import { Box, Button, MenuItem, Stack } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import BasicDatePicker from "./BasicDatePicker"
+import DateRangePicker from "./DateRangePicker"
 import { parseDate } from '@internationalized/date'
 import { useAppDispatch } from '@/hooks'
 import { getBuyBackOrderHistory, getOrderHistory } from '@/redux/reducers/myVaultReducer'
@@ -66,7 +66,7 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
                 <Stack className='OrderDateStatusSelectorWrapper'>
                     <Stack className='OrderDateStatusWrapper'>
                         <Box className="DateCalenderWrapper">
-                            <BasicDatePicker dateRangeValue={dateRangeValue} setDateRangeValue={setDateRangeValue} />
+                            <DateRangePicker dateRangeValue={dateRangeValue} setDateRangeValue={setDateRangeValue} />
                         </Box>
                         <Box className="SelectStatusWrapper">
                             <RenderFields

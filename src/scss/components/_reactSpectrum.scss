@@ -40,3 +40,10 @@ div {
     }
 
 }
+
+div {
+    &[class$="_spectrum--medium"] {
+        isolation: initial !important;
+    }
+
+}

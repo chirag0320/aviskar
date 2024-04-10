@@ -180,6 +180,7 @@ export interface IOrderHistoryItems {
     accountName: string;
     createdOnUtc: string;
     orderStatus: string;
+    orderTotal: number;
     orderStatusColor: string;
     alertStatus: string | null;
     alertStatusColor: string | null;

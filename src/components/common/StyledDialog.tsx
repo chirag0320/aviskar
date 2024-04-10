@@ -18,10 +18,11 @@ interface StyledDialog {
   maxWidth?: Breakpoint
   actions?: boolean
   onAgree?: any
+  className?: string
 }
 
 function StyledDialog(props: StyledDialog) {
-  const { open, children, id, dialogTitle, onClose, primaryActionText, secondaryActionText, maxWidth, actions, onAgree } = props
+  const { open, children, id, dialogTitle, onClose, primaryActionText, secondaryActionText, maxWidth, actions, onAgree, className } = props
 
   return (
     <Dialog
@@ -29,6 +30,7 @@ function StyledDialog(props: StyledDialog) {
       open={open}
       onClose={onClose}
       maxWidth={maxWidth}
+      className={className}
     >
       <Stack className="DialogHeader">
         <DialogTitle variant="h4" component="p">{dialogTitle}</DialogTitle>

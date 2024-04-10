@@ -1,30 +1,30 @@
-import React, { useState } from "react";
-import { Provider, defaultTheme } from "@adobe/react-spectrum";
-import { DateRangePicker } from '@adobe/react-spectrum'
-import { Box } from "@mui/material";
-import { CalendarDate } from "@internationalized/date";
+import * as React from 'react';
+import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Box from '@mui/material/Box';
 
-interface Props {
-    dateRangeValue: {
-        start: CalendarDate,
-        end: CalendarDate
-    },
-    setDateRangeValue: (value: any) => void
-}
-
-export default function BasicDatePicker({ dateRangeValue, setDateRangeValue }: Props) {
+function BasicDatePicker() {
     return (
-        <Box className="DateRangePickerWrapper">
-            <Provider theme={defaultTheme} height="100%">
-                <DateRangePicker
-                    label="Date range"
-                    value={dateRangeValue}
-                    onChange={setDateRangeValue}
-                    maxVisibleMonths={2}
-                    pageBehavior="single"
-                    UNSAFE_className="DateRangePicker"
-                />
-            </Provider>
-        </Box>
-    );
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Box className="DatePickerWrapper"
+                sx={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    position: 'relative',
+                }}
+            >
+                <DemoItem label="DatePicker">
+                    <DatePicker className="DatePicker"
+                        sx={{ width: 260 }}
+                    />
+                </DemoItem>
+            </Box>
+        </LocalizationProvider>
+    )
 }
+
+export default BasicDatePicker
