@@ -96,7 +96,7 @@ class ConfigServices {
     return await axiosInstance.post(ENDPOINTS.getPopUpDetails, {}, { params: params })
   }
   static async savePoPUpDetails(body: ISavePopUpDetails) {
-    return await axiosInstance.post(ENDPOINTS.savePopUpData)
+    return await axiosInstance.post(ENDPOINTS.savePopUpData,body)
   }
 }
 export default ConfigServices

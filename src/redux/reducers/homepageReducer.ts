@@ -234,8 +234,8 @@ export const createHomepageSlice = createSlice({
     serProgressLoaderStatus: (state, action) => {
       state.needToShowProgressLoader = action.payload
     },
-    setPopUpDetails:(state,action)=>{
-      state.popUpdata = action.payload ?? null
+    setPopUpDetails: (state, action) => {
+      state.popUpdata = { ...state.popUpdata, htmlCode: action.payload ?? null } as any
     }
   },
 
