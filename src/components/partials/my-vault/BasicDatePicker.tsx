@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 function BasicDatePicker() {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Box
+            <Box className="DatePickerWrapper"
                 sx={{
                     width: '100%',
                     height: '100%',
@@ -19,7 +19,7 @@ function BasicDatePicker() {
                 }}
             >
                 <DemoItem label="DatePicker">
-                    <DatePicker
+                    <DatePicker className="DatePicker"
                         sx={{ width: 260 }}
                     />
                 </DemoItem>

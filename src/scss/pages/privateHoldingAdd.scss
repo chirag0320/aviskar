@@ -2,14 +2,93 @@
     .PrivateHoldingAddContent {
         padding: 20px 0 50px;
 
-        .MuiStack-root {
+        .RowWrapper {
             gap: 20px;
             margin-bottom: 20px;
 
+            @include media($mmd) {
+                flex-direction: column;
+            }
+
             .InputRow {
                 flex: 1;
-            }
-        }
 
+                @include media($mmd) {
+                    width: 100%;
+                }
+            }
+
+            &.SpecificationWrapper,
+            &.CustomSpecificationWrapper {
+                flex-direction: row;
+                align-items: center;
+
+                @include media($ssm) {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+            }
+
+            &.ButtonsWrapper {
+                flex-direction: row;
+
+                @include media($ssm) {
+                    flex-direction: column;
+
+                    .MuiButton-root {
+                        max-width: 260px;
+                    }
+                }
+            }
+
+            .DatePickerWrapper {
+                flex: 1;
+
+                .MuiStack-root {
+                    flex-direction: column;
+                    width: 100%;
+                    gap: 4px;
+
+                    .MuiTypography-root {
+                        font-size: 1rem;
+                        font-weight: 500;
+                        color: $dark;
+                        line-height: 1.625rem;
+                    }
+
+                    .DatePicker {
+                        width: 100%;
+                    }
+                }
+            }
+
+            // &.DocumentPhotosContentWrapper {
+            //     @include media($mmd) {
+            //         flex-direction: column;
+            //     }
+
+            .DocumentsContentwrapper,
+            .PhotosContentwrapper {
+                width: 50%;
+
+                @include media($mmd) {
+                    width: 100%;
+                }
+
+                .InputRow {
+                    margin-bottom: 20px;
+
+                    .FileUploadWrapper {
+                        @include media($xs) {
+                            .MuiInputBase-input {
+                                font-size: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // }
+        }
     }
 }
