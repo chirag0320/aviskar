@@ -13,7 +13,30 @@ interface MyVaultInitialState {
     orderHistory: IOrderHistoryApiResponseData | null,
     myVaultHomePageData: DashboardData | null
 }
-interface DashboardData {
+export interface IRecentOrders{
+    orderId: number;
+    orderGuid: string;
+    customOrderNumber: string;
+    orderTotal: number;
+    billingAddressId: number;
+    shippingAddressId: number;
+    orderStatusId: number;
+    alertOrderStatusId: number;
+    shippingStatusId: number;
+    paymentStatusId: number;
+    paymentMethodSystemName: string;
+    customerId: number;
+    orderCustomerId: number;
+    shippingMethod: string;
+    accountType: string;
+    accountName: string;
+    createdOnUtc: string;
+    orderStatus: string;
+    orderStatusColor: string;
+    alertOrderStatus: any; // You may need to define a type for this
+    alertOrderStatusColor: any; // You may need to define a type for this
+}
+export interface DashboardData {
     dashboards: {
         title: string;
         count: number;
@@ -33,29 +56,7 @@ interface DashboardData {
         email: string;
         phoneNumber: string;
     };
-    recentOrders: {
-        orderId: number;
-        orderGuid: string;
-        customOrderNumber: string;
-        orderTotal: number;
-        billingAddressId: number;
-        shippingAddressId: number;
-        orderStatusId: number;
-        alertOrderStatusId: number;
-        shippingStatusId: number;
-        paymentStatusId: number;
-        paymentMethodSystemName: string;
-        customerId: number;
-        orderCustomerId: number;
-        shippingMethod: string;
-        accountType: string;
-        accountName: string;
-        createdOnUtc: string;
-        orderStatus: string;
-        orderStatusColor: string;
-        alertOrderStatus: any; // You may need to define a type for this
-        alertOrderStatusColor: any; // You may need to define a type for this
-    }[];
+    recentOrders: IRecentOrders[];
     newsLetterDescription: string;
     availableRewardPoints: number;
     isRecentlyOrdersExist: boolean;

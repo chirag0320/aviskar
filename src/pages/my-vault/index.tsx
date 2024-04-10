@@ -299,7 +299,7 @@ function Vault() {
                 <Typography variant="h4">Recent Orders</Typography>
                 <Button endIcon={<ArrowRight />}>View All</Button>
               </Stack>
-              <RecentOrderTable />
+              <RecentOrderTable recentOrders={myVaultHomePageData?.recentOrders!}/>
             </Box>
           </Container>
         </Box>
