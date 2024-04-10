@@ -64,7 +64,7 @@ function Addresses() {
           title="Address"
           lang="en"
         />
-        <PageTitle title="Addresses" backToDashboard={true}/>
+        <PageTitle title="Addresses" backToDashboard={true} />
 
         <Box className="AddressesPage">
           <Container>
@@ -74,20 +74,19 @@ function Addresses() {
               </Box>
               <Box className="AddressListWrapper">
                 {addressesData?.map(address => (
-                  <Box className="AddressListWrapper" key={address.customerId}>
-                    <AddressCard
-                      // accountName={address.accountName}
-                      // accountType={address.accountType}
-                      id={address.addressId}
-                      address={address}
-                      firstName={address.firstName}
-                      lastName={address.lastName}
-                      email={address.email}
-                      phoneNumber={address.phoneNumber}
-                      showDelete={() => { }}
-                      handleDelete={handleDeleteAddress}
-                    />
-                  </Box>
+                  <AddressCard
+                    key={address.customerId}
+                    // accountName={address.accountName}
+                    // accountType={address.accountType}
+                    id={address.addressId}
+                    address={address}
+                    firstName={address.firstName}
+                    lastName={address.lastName}
+                    email={address.email}
+                    phoneNumber={address.phoneNumber}
+                    showDelete={true}
+                    handleDelete={handleDeleteAddress}
+                  />
                 ))}
               </Box>
             </Box>

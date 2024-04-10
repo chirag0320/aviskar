@@ -525,7 +525,7 @@ interface AddressCardProps {
   email: string,
   phoneNumber: string,
   address: Address,
-  showDelete: any,
+  showDelete: boolean,
   handleDelete?: any,
   id?: number
 }

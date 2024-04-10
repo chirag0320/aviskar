@@ -1,5 +1,5 @@
 import axiosInstance from "@/axiosfolder";
-import { AccountQuery, AddressQuery, rewardPointsHistoryData } from "@/types/myVault";
+import { AccountQuery, AddressQuery, rewardPointsHistoryData, IOrderHistoryData } from "@/types/myVault";
 
 class MyVaultServices {
     // ACCOUNTS
@@ -26,6 +26,16 @@ class MyVaultServices {
 
     static async getRewardPointsHistory(url: string, rewardPointsHistoryData: rewardPointsHistoryData) {
         return axiosInstance.post(url, rewardPointsHistoryData);
+    }
+
+    // BUY BACK ORDER HISTORY
+    static async getBuyBackOrderHostory(url: string, query: IOrderHistoryData) {
+        return axiosInstance.post(url, query);
+    }
+
+    // ORDER HISTORY
+    static async getOrderHistory(url: string, orderHistoryData: IOrderHistoryData){
+        return axiosInstance.post(url, orderHistoryData);
     }
 }
 

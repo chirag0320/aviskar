@@ -1,21 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { appCreateAsyncThunk } from "../middleware/thunkMiddleware";
 import MyVaultServices from "@/apis/services/MyVaultServices";
-import { string } from "prop-types";
-import { Account, AccountQuery,Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems } from "@/types/myVault";
+import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData } from "@/types/myVault";
 
 interface MyVaultInitialState {
     loading: boolean,
     accounts: Account[] | null,
-    addresses: Address[] | null
-    rewardPointsHistory: rewardPointsHistoryData | null
+    addresses: Address[] | null,
+    buyBackOrderHistory: IOrderHistoryApiResponseData | null,
+    rewardPointsHistory: rewardPointsHistoryData | null,
+    orderHistory: IOrderHistoryApiResponseData | null
 }
 
 const initialState: MyVaultInitialState = {
     loading: false,
     accounts: null,
     addresses: null,
-    rewardPointsHistory: null
+    rewardPointsHistory: null,
+    buyBackOrderHistory: null,
+    orderHistory: null
 }
 
 // ACCOUNTS
@@ -36,8 +39,16 @@ export const addOrEditAccount = appCreateAsyncThunk(
 // REWARD POINTS HISTORY
 export const getRewardPointsHistory = appCreateAsyncThunk(
     "getRewardPointsHistory",
-    async({ url, body } : { url: string, body: any }) => {
+    async ({ url, body }: { url: string, body: any }) => {
         return await MyVaultServices.getRewardPointsHistory(url, body);
+    }
+)
+
+// ORDER HISTORY
+export const getOrderHistory = appCreateAsyncThunk(
+    "getOrderHistory",
+    async ({ url, body }: { url: string, body: any }) => {
+        return await MyVaultServices.getOrderHistory(url, body);
     }
 )
 
@@ -60,6 +71,14 @@ export const deleteAddress = appCreateAsyncThunk(
     "deleteAddress",
     async ({ url }: { url: string }) => {
         return await MyVaultServices.deleteAddress(url);
+    }
+)
+
+// BUY BACK ORDER HISTORY
+export const getBuyBackOrderHistory = appCreateAsyncThunk(
+    "getBuyBackOrderHistory",
+    async ({ url, body }: { url: string, body: any }) => {
+        return await MyVaultServices.getBuyBackOrderHostory(url, body);
     }
 )
 
@@ -103,8 +122,8 @@ export const myVaultSlice = createSlice({
                 return address;
             }) ?? null;
         },
-        addAddress : (state,action) => {
-            state.addresses = [...state.addresses!,action.payload]
+        addAddress: (state, action) => {
+            state.addresses = [...state.addresses!, action.payload]
         }
     },
     extraReducers: (builder) => {
@@ -193,10 +212,35 @@ export const myVaultSlice = createSlice({
         builder.addCase(getRewardPointsHistory.rejected, (state) => {
             state.loading = false;
         })
-        
+
+        // get buy back order history data
+        builder.addCase(getBuyBackOrderHistory.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(getBuyBackOrderHistory.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.buyBackOrderHistory = responseData.data;
+            state.loading = false;
+        })
+        builder.addCase(getBuyBackOrderHistory.rejected, (state) => {
+            state.loading = false;
+        });
+
+        // order history
+        builder.addCase(getOrderHistory.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(getOrderHistory.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.orderHistory = responseData.data;
+            state.loading = false;
+        })
+        builder.addCase(getOrderHistory.rejected, (state) => {
+            state.loading = false;
+        })
     }
 })
 
-export const { setLoadingTrue, setLoadingFalse,updateAddress ,addAddress} = myVaultSlice.actions;
+export const { setLoadingTrue, setLoadingFalse, updateAddress, addAddress } = myVaultSlice.actions;
 
 export default myVaultSlice.reducer;

@@ -86,6 +86,12 @@ export const ENDPOINTS = {
     // my vault -> rewardPointsHistory
     getRewardPointsHistory: "myvault/kSFuIpNrDUuygzsl4bE3Hw",
 
+    // my vault > buy back order history
+    getBuyBackOrderHistory : "myvault/oz5pMSV4SUqP92QIId5KmQ",
+
+    // my vault -> orderHistory
+    getOrderHistory: "myvault/tBryhxlMq0qgjzuUfbewkA",
+    
     //popup details
     getPopUpDetails: "utility/85WwxAopc7Rn",
     savePopUpData: "utility/CLWL6vMSSrzB"

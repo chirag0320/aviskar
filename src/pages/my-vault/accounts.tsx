@@ -70,9 +70,10 @@ function Accounts() {
                             <Box sx={{ textAlign: 'right' }}>
                                 <Button variant="outlined" onClick={handleAccountTypeDialog} startIcon={<PlusIcon />}>Add new</Button>
                             </Box>
-                            {accountsData?.map(account => (
-                                <Box className="AddressListWrapper" key={account.customerId}>
+                            <Box className="AddressListWrapper" >
+                                {accountsData?.map(account => (
                                     <AddressCard
+                                        key={account.customerId}
                                         accountName={account.accountName}
                                         accountType={account.accountType}
                                         address={account.address}
@@ -80,10 +81,10 @@ function Accounts() {
                                         lastName={account.lastName}
                                         email={account.email}
                                         phoneNumber={account.phoneNumber}
-                                        showDelete={() => { }}
+                                        showDelete={false}
                                     />
-                                </Box>
-                            ))}
+                                ))}
+                            </Box>
                         </Box>
                         <AddAccount dialogTitle="Add new account" open={updateAddress} alignment={alignment} onClose={handleCloseUpdateAddress} hadleSecondaryAction={hadleAddAccountSecondaryAction} />
                         <AccountType dialogTitle="Select Account Type" open={accountTypeDialog} alignment={alignment} handleChange={handleChange} onClose={handleCloseAccountTypeDialog} handleAccountTypeNextButton={handleAccountTypeNextButton} />

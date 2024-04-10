@@ -26,7 +26,7 @@ interface RenderFieldProps {
   variant?: 'standard' | 'outlined' | 'filled'
   color?: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'
   value?: string
-  onChange?: (value:any) => void
+  onChange?: (value: any) => void
   id?: string
   className?: string
   name: string
