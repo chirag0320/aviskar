@@ -14,14 +14,18 @@ import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
 import { StateOrCountry, addAddress as addAddressForCheckout, addOrEditAddress as addOrEditAddressForCheckout } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
-import { hasFulfilled } from "@/utils/common"
+import { AccountTypeEnum, PhoneNumberCountryCode, hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
 import { AddressType } from "@/types/enums"
-import { addOrEditAddresses as addOrEditAddressForMyVault, addAddress as addAddressForMyVault } from "@/redux/reducers/myVaultReducer"
+import { addOrEditAddresses as addOrEditAddressForMyVault, addAddress as addAddressForMyVault, addOrEditAccount } from "@/redux/reducers/myVaultReducer"
 import { Delete1Icon } from "@/assets/icons"
+import { IDropdownItem } from "@/types/myVault"
+import { BussinessAccountFormSchema, IndividualAccountFormSchema, JointAccountFormSchema, SuperFundAccountFormSchema, TrustAccountFormSchema } from "@/utils/accountFormSchemas.schema"
+import { AxiosError } from "axios"
+import AdditionalFields from "./AdditionalFields"
 
-interface AddAccount {
+interface AddAccountProps {
   open: boolean
   dialogTitle: string
   alignment: string
@@ -36,6 +40,7 @@ interface Inputs {
   SuperfundName: string,
   TrustName: string,
   TrusteeName: string,
+  TrusteeType: string,
   FirstName: string,
   LastName: string,
   Company: string,
@@ -50,30 +55,30 @@ interface Inputs {
   Code: number,
 }
 
-export const addressSchema = yup.object().shape({
-  BusinessName: yup.string().trim().required('Business name is a required field'),
-  SuperfundName: yup.string().trim().required('Superfund name is a required field'),
-  TrustName: yup.string().trim().required('Trust name is a required field'),
-  TrusteeName: yup.string().trim().required('Trustee name is a required field'),
-  FirstName: yup.string().trim().required('First name is a required field'),
-  LastName: yup.string().trim().required('Last name is a required field'),
-  Company: yup.string().trim(),
-  Contact: yup.string().trim().required(),
-  ContactCode: yup.string().required(),
-  Email: yup.string().email().required(),
-  Address1: yup.string().trim().required("Address 1 in required field"),
-  Address2: yup.string().trim(),
-  City: yup.string().required().trim(),
-  State: yup.string().required(),
-  Country: yup.string().required(),
-  Code: yup.string().required('Zip / Postal code is required').trim()
-})
+function getSchemaFromAlignment(alignment: string) {
+  switch (alignment) {
+    case "Individual":
+      return IndividualAccountFormSchema;
+    case "Business":
+      return BussinessAccountFormSchema;
+    case "Joint":
+      return JointAccountFormSchema;
+    case "SuperFund":
+      return SuperFundAccountFormSchema;
+    case "Trust":
+      return TrustAccountFormSchema;
+    default:
+      return IndividualAccountFormSchema
+  }
+}
 
-function AddAccount(props: AddAccount) {
+function AddAccount(props: AddAccountProps) {
   const { open, dialogTitle, alignment, onClose, addressTypeId, handleAddressUpdate, hadleSecondaryAction } = props
+  // console.log("🚀 ~ AddAccount ~ trusteeTypes:", trusteeTypes)
+  const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
   const dispatch = useAppDispatch();
-  const countryList = useAppSelector(state => state.checkoutPage.countryList);
-  const stateListall = useAppSelector(state => state.checkoutPage.stateList);
+  // const countryList = useAppSelector(state => state.checkoutPage.countryList);
+  // const configDropdowns?.stateList = useAppSelector(state => state.checkoutPage.stateList);
   const [stateList, setStateList] = useState([])
   const [stateId, setStateId] = useState<number | null>(null);
   const { showToaster } = useShowToaster();
@@ -81,6 +86,7 @@ function AddAccount(props: AddAccount) {
   const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
   const [countryValue, setcountryValue] = useState<any>('-1')
   const [stateValue, setstateValue] = useState<any>('')
+
   const {
     register,
     reset,
@@ -90,94 +96,75 @@ function AddAccount(props: AddAccount) {
     getValues,
     formState: { errors },
   } = useForm<Inputs>({
-    resolver: yupResolver(addressSchema)
+    resolver: yupResolver(getSchemaFromAlignment(alignment))
   })
 
   const onAddressFormSubmitHandler = async (data: any) => {
-    const addressQuery = {
-      addressTypeId,
+    // console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
+
+    const commonAddressQueryForPreparation = {
+      // addressTypeId,
       firstName: data.FirstName,
       lastName: data.LastName,
-      company: data.Company,
       phoneNumber: data.Contact,
       email: data.Email,
       isVerified: true, // static
-      addressLine1: data.Address1,
-      addressLine2: data.Address2,
       city: data.City,
-      stateId: stateId || 0,
-      stateName: data.State,
-      postcode: data.Code,
-      countryId: data.Country,
+      state: stateId || 0,
+      country: data.Country,
+      accountTypeId: AccountTypeEnum[alignment],
+      additionalBeneficiary: [],
+      address: {
+        // "addressId": 0,
+        firstName: data.FirstName,
+        lastName: data.LastName,
+        phoneNumber: data.Contact,
+        email: data.Email,
+        isVerified: true, // static
+        addressLine1: data.Address1,
+        addressLine2: data.Address2,
+        city: data.City,
+        state: stateId || 0,
+        stateName: data.State,
+        postcode: data.Code,
+        countryId: data.Country,
+        accountTypeId: AccountTypeEnum[alignment],
+        additionalBeneficiary: [],
+      }
     }
 
-    // to show whether it is coming from my-vault or checkout
-    if (!addressTypeId) {
-      addressQuery["addressTypeId"] = undefined;
+    let prepareAddressQuery;
+    switch (alignment) {
+      case "Joint":
+        prepareAddressQuery = { ...commonAddressQueryForPreparation } // need to change for addtional beneficary
+        break;
+      case "Business":
+        prepareAddressQuery = { ...commonAddressQueryForPreparation, businessName: data.BusinessName }
+        break;
+      case "SuperFund":
+        prepareAddressQuery = { ...commonAddressQueryForPreparation, superfundName: data.SuperfundName, trusteeTypeId: data.TrusteeType, trusteeName: data.TrusteeName }
+        break;
+      case "Trust":
+        prepareAddressQuery = { ...commonAddressQueryForPreparation, trusteeName: data.TrusteeName, trustName: data.TrustName }
+        break;
+      default:
+        prepareAddressQuery = { ...commonAddressQueryForPreparation }
+        break;
+    }
 
-      const response = await dispatch(addOrEditAddressForMyVault(
-        {
-          url: ENDPOINTS.addOrEditAddressesInMyVault,
-          body: { ...addressQuery }
-        }
-      ))
+    const response = await dispatch(addOrEditAccount({
+      url: ENDPOINTS.addOrEditAccount,
+      body: prepareAddressQuery
+    }))
 
-      if (hasFulfilled(response.type)) {
-        onClose()
-        reset()
-        showToaster({ message: "Address saved successfully", severity: "success" })
-        const addressId = (response?.payload as any)?.data?.data;
-        dispatch(addAddressForMyVault({
-          addressId: addressId,
-          firstName: data.FirstName,
-          lastName: data.LastName,
-          company: data.Company,
-          phoneNumber: data.Contact,
-          email: data.Email,
-          addressLine1: data.Address1,
-          addressLine2: data.Address2,
-          city: data.City,
-          stateName: data.State,
-          postcode: data.Code,
-          countryId: data.Country,
-          stateId: stateId,
-        }))
-      } else {
-        showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
-      }
+    if (hasFulfilled(response.type)) {
+      onClose()
+      reset()
+      showToaster({ message: "Account saved successfully", severity: "success" })
     }
     else {
-      const response = await dispatch(addOrEditAddressForCheckout({
-        url: ENDPOINTS.addOrEditAddress,
-        body: {
-          ...addressQuery
-        }
-      }))
-      let addressId;
-      if (hasFulfilled(response?.type)) {
-        addressId = (response?.payload as any)?.data?.data;
-      }
 
-      const needToadd = {
-        ...addressQuery,
-        addressId: addressId,
-        addressType: addressTypeId,
-        customerId: null,
-        state: addressQuery.stateId,
-        country: addressQuery.countryId,
-        phone1: addressQuery.phoneNumber,
-        isSource: null,
-        "countryName": "Australia"
-      }
-      if (hasFulfilled(response.type)) {
-        dispatch(addAddress(needToadd))
-        handleAddressUpdate!(needToadd, addressTypeId == AddressType.Billing)
-        onClose()
-        reset()
-        showToaster({ message: "Address saved successfully", severity: "success" })
-      } else {
-        showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
-      }
+      showToaster({ message: ((response.payload as AxiosError).response?.data as { message?: string }).message || "Failed to save address! Please try again", severity: "error" })
     }
   }
 
@@ -192,7 +179,7 @@ function AddAccount(props: AddAccount) {
   useEffect(() => {
     if (googleAddressComponents) {
       setValue('Address1', googleAddressComponents.address)
-      countryList.forEach((country: StateOrCountry) => {
+      configDropdowns?.countryList.forEach((country) => {
         if (country.name === googleAddressComponents.country.trim()) {
           setValue('Country', country.id.toString())
           setcountryValue(country.id.toString())
@@ -210,11 +197,11 @@ function AddAccount(props: AddAccount) {
   }, [googleAddressComponents])
 
   useEffect(() => {
-    const data: any = stateListall?.filter((state: any) => {
+    const data: any = configDropdowns?.stateList.filter((state: any) => {
       return state.enumValue == countryValue || countryValue == -1
     })
     setStateList(data)
-  }, [stateListall, countryValue])
+  }, [configDropdowns?.stateList, countryValue])
 
   const OnChange = (value: any) => {
     setcountryValue(value)
@@ -257,13 +244,16 @@ function AddAccount(props: AddAccount) {
                 register={register}
                 type="select"
                 control={control}
-                error={errors.Country}
-                name="Country"
+                error={errors.TrusteeType}
+                setValue={setValue}
+                name="TrusteeType"
                 variant='outlined'
                 margin='none'
               >
                 <MenuItem value="none">Select trustee</MenuItem>
-                <MenuItem value="1">Select trustee</MenuItem>
+                {configDropdowns && configDropdowns.trusteeTypeList.map((trustee) =>
+                  <MenuItem key={trustee.id} value={trustee.id}>{trustee.name}</MenuItem>
+                )}
               </RenderFields>
               <RenderFields
                 register={register}
@@ -282,13 +272,16 @@ function AddAccount(props: AddAccount) {
                 register={register}
                 type="select"
                 control={control}
-                error={errors.Country}
-                name="Country"
+                error={errors.TrusteeType}
+                setValue={setValue}
+                name="TrusteeType"
                 variant='outlined'
                 margin='none'
               >
                 <MenuItem value="none">Select trustee</MenuItem>
-                <MenuItem value="1">Select trustee</MenuItem>
+                {configDropdowns && configDropdowns.trusteeTypeList.map((trustee) =>
+                  <MenuItem key={trustee.id} value={trustee.id}>{trustee.name}</MenuItem>
+                )}
               </RenderFields>
               <RenderFields
                 register={register}
@@ -337,18 +330,17 @@ function AddAccount(props: AddAccount) {
                   register={register}
                   type="select"
                   control={control}
-                  error={errors.ContactCode}
+                  setValue={setValue}
                   name="ContactCode"
                   variant="outlined"
                   margin="none"
                   className="ContactSelect"
                 >
-                  <MenuItem value="91">+91</MenuItem>
-                  <MenuItem value="11">+11</MenuItem>
+                  {PhoneNumberCountryCode.map((phone) => <MenuItem key={phone.code} value={phone.dial_code}>{`${phone.name} (${phone.dial_code})`}</MenuItem>)}
                 </RenderFields>
                 <RenderFields
                   register={register}
-                  error={errors.Contact}
+                  error={errors.Contact || errors.ContactCode}
                   name="Contact"
                   type="number"
                   placeholder="Enter contact *"
@@ -402,7 +394,7 @@ function AddAccount(props: AddAccount) {
               <Autocomplete
                 disablePortal
                 options={stateList}
-                getOptionLabel={option => {
+                getOptionLabel={(option: any) => {
                   if (typeof option === 'string') {
                     return option;
                   }
@@ -454,65 +446,13 @@ function AddAccount(props: AddAccount) {
                 onChange={OnChange}
               >
                 <MenuItem value="-1">Select country *</MenuItem>
-                {countryList.map((country: StateOrCountry) => (
+                {configDropdowns?.countryList.map((country) => (
                   <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
                 ))}
               </RenderFields>
             </Stack>
           </Stack>
-          {alignment === "Joint" && <Stack className="Fields JointFields">
-            <Stack className="Header">
-              <Typography>Additional Beneficiary / Account Holder</Typography>
-              <Button variant="contained" color="success">Add more</Button>
-            </Stack>
-            <Stack
-              className="FieldsWrapper"
-              divider={<Divider flexItem />}
-            >
-              <Stack className="Column">
-                <RenderFields
-                  register={register}
-                  error={errors.FirstName}
-                  name="FirstName"
-                  placeholder="Enter first name *"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                />
-                <RenderFields
-                  register={register}
-                  error={errors.LastName}
-                  name="LastName"
-                  placeholder="Enter last name *"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                />
-                <IconButton><Delete1Icon /></IconButton>
-              </Stack>
-              <Stack className="Column">
-                <RenderFields
-                  register={register}
-                  error={errors.FirstName}
-                  name="FirstName"
-                  placeholder="Enter first name"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                />
-                <RenderFields
-                  register={register}
-                  error={errors.LastName}
-                  name="LastName"
-                  placeholder="Enter last name"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                />
-                <IconButton><Delete1Icon /></IconButton>
-              </Stack>
-            </Stack>
-          </Stack>}
+          {alignment === "Joint" && <AdditionalFields />}
         </Stack>
         <Stack className="ActionWrapper">
           <Button variant="outlined" onClick={hadleSecondaryAction}>

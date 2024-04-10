@@ -12,20 +12,29 @@ import { PlusIcon } from "../../assets/icons/index"
 
 import AccountType from '../../components/partials/my-vault/accountType'
 import Loader from "@/components/common/Loader"
-import { getAccounts } from "@/redux/reducers/myVaultReducer"
+import { getAccounts, getConfigDropdowns } from "@/redux/reducers/myVaultReducer"
 import AddAccount from "@/components/partials/my-vault/AddAccount"
+import { getStateAndCountryLists } from "@/redux/reducers/checkoutReducer"
+import Toaster from "@/components/common/Toaster"
 
 function Accounts() {
+    const openToaster = useAppSelector(state => state.homePage.openToaster)
     const loading = useAppSelector(state => state.myVault.loading)
     const accountsData = useAppSelector(state => state.myVault.accounts)
     const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
     const [updateAddress, setUpdateAddress] = useState<boolean>(false)
     const [alignment, setAlignment] = React.useState('Individual');
+    // console.log("🚀 ~ Accounts ~ alignment:", alignment)
 
     useAPIoneTime({
         service: getAccounts,
         endPoint: ENDPOINTS.getAccounts
     })
+    useAPIoneTime({
+        service: getConfigDropdowns,
+        endPoint: ENDPOINTS.getConfigDropdown
+    })
+    // useAPIoneTime({ service: getStateAndCountryLists, endPoint: ENDPOINTS.getStateAndCountryLists });
 
     const handleAccountTypeDialog = () => {
         setAccountTypeDialog(true);
@@ -52,10 +61,10 @@ function Accounts() {
         setAlignment(newAlignment);
     };
 
-
     return (
         <>
             <Loader open={loading} />
+            {openToaster && <Toaster />}
             <Layout>
                 <Seo
                     keywords={[`QMint Accounts`]}

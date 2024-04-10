@@ -339,7 +339,7 @@ function AddAddress(props: AddAddress) {
                         <Autocomplete
                             disablePortal
                             options={stateList}
-                            getOptionLabel={(option : any) => {
+                            getOptionLabel={(option: any) => {
                                 if (typeof option === 'string') {
                                     return option;
                                 }
