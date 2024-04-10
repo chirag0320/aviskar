@@ -23,6 +23,7 @@ import { Delete1Icon } from "@/assets/icons"
 import { IDropdownItem } from "@/types/myVault"
 import { BussinessAccountFormSchema, IndividualAccountFormSchema, JointAccountFormSchema, SuperFundAccountFormSchema, TrustAccountFormSchema } from "@/utils/accountFormSchemas.schema"
 import { AxiosError } from "axios"
+import AdditionalFields from "./AdditionalFields"
 
 interface AddAccountProps {
   open: boolean
@@ -85,7 +86,6 @@ function AddAccount(props: AddAccountProps) {
   const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
   const [countryValue, setcountryValue] = useState<any>('-1')
   const [stateValue, setstateValue] = useState<any>('')
-  const [additionalFieldsCount, setAdditionalFieldsCount] = useState(0);
 
   const {
     register,
@@ -452,40 +452,7 @@ function AddAccount(props: AddAccountProps) {
               </RenderFields>
             </Stack>
           </Stack>
-          {alignment === "Joint" && <Stack className="Fields JointFields">
-            <Stack className="Header">
-              <Typography>Additional Beneficiary / Account Holder</Typography>
-              <Button variant="contained" color="success" onClick={() => setAdditionalFieldsCount(prev => prev + 1)}>Add more</Button>
-            </Stack>
-            {Array(additionalFieldsCount).map(() => {
-              return (<Stack
-                className="FieldsWrapper"
-                divider={<Divider flexItem />}
-              >
-                <Stack className="Column">
-                  <RenderFields
-                    register={register}
-                    error={errors.FirstName}
-                    name="FirstName"
-                    placeholder="Enter first name *"
-                    control={control}
-                    variant='outlined'
-                    margin='none'
-                  />
-                  <RenderFields
-                    register={register}
-                    error={errors.LastName}
-                    name="LastName"
-                    placeholder="Enter last name *"
-                    control={control}
-                    variant='outlined'
-                    margin='none'
-                  />
-                  <IconButton><Delete1Icon /></IconButton>
-                </Stack>
-              </Stack>)
-            })}
-          </Stack>}
+          {alignment === "Joint" && <AdditionalFields />}
         </Stack>
         <Stack className="ActionWrapper">
           <Button variant="outlined" onClick={hadleSecondaryAction}>

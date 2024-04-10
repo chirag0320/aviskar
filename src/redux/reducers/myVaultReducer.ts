@@ -10,7 +10,56 @@ interface MyVaultInitialState {
     addresses: Address[] | null,
     buyBackOrderHistory: IOrderHistoryApiResponseData | null,
     rewardPointsHistory: rewardPointsHistoryData | null,
-    orderHistory: IOrderHistoryApiResponseData | null
+    orderHistory: IOrderHistoryApiResponseData | null,
+    myVaultHomePageData: DashboardData | null
+}
+export interface IRecentOrders{
+    orderId: number;
+    orderGuid: string;
+    customOrderNumber: string;
+    orderTotal: number;
+    billingAddressId: number;
+    shippingAddressId: number;
+    orderStatusId: number;
+    alertOrderStatusId: number;
+    shippingStatusId: number;
+    paymentStatusId: number;
+    paymentMethodSystemName: string;
+    customerId: number;
+    orderCustomerId: number;
+    shippingMethod: string;
+    accountType: string;
+    accountName: string;
+    createdOnUtc: string;
+    orderStatus: string;
+    orderStatusColor: string;
+    alertOrderStatus: any; // You may need to define a type for this
+    alertOrderStatusColor: any; // You may need to define a type for this
+}
+export interface DashboardData {
+    dashboards: {
+        title: string;
+        count: number;
+    }[];
+    sliders: {
+        myVaultEvaPeakSliderId: number;
+        storeCode: number;
+        displayOrder: number;
+        sliderTime: number;
+        cdnUrlLarge: string;
+        cdnUrlSmall: string;
+    }[];
+    customerInformation: {
+        customerId: number;
+        firstName: string;
+        lastName: string;
+        email: string;
+        phoneNumber: string;
+    };
+    recentOrders: IRecentOrders[];
+    newsLetterDescription: string;
+    availableRewardPoints: number;
+    isRecentlyOrdersExist: boolean;
 }
 
 const initialState: MyVaultInitialState = {
@@ -20,7 +69,8 @@ const initialState: MyVaultInitialState = {
     addresses: null,
     rewardPointsHistory: null,
     buyBackOrderHistory: null,
-    orderHistory: null
+    orderHistory: null,
+    myVaultHomePageData: null
 }
 
 // CONFIG DROPDOWNS
@@ -92,6 +142,13 @@ export const getBuyBackOrderHistory = appCreateAsyncThunk(
     }
 )
 
+// My vault home page data
+export const getMyVaultHomePageData = appCreateAsyncThunk(
+    "getMyVaultHomePageData",
+    async () => {
+        return await MyVaultServices.getMyVaultHomePageData();
+    }
+)
 export const myVaultSlice = createSlice({
     name: "myVault",
     initialState,
@@ -259,6 +316,18 @@ export const myVaultSlice = createSlice({
             state.loading = false;
         })
         builder.addCase(getOrderHistory.rejected, (state) => {
+            state.loading = false;
+        })
+        // my vault home page data
+        builder.addCase(getMyVaultHomePageData.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(getMyVaultHomePageData.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.myVaultHomePageData = responseData.data;
+            state.loading = false;
+        })
+        builder.addCase(getMyVaultHomePageData.rejected, (state) => {
             state.loading = false;
         })
     }

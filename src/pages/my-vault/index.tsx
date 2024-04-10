@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -37,6 +37,9 @@ import { Breadcrumb } from "@/components/common/Utils";
 
 // Assets
 import { ArrowRight, OrdersIcon, PrivateHoldingIcon, AllotedHldingIcon, SmartMetalsIcon, AccountsIcon, AddressesIcon, RewardPointsIcon, BuyBackOrderIcon, MyVaultIcon, MyGoldIcon, MySilverIcon } from "../../assets/icons/index";
+import useAPIoneTime from "@/hooks/useAPIoneTime";
+import { getMyVaultHomePageData } from "@/redux/reducers/myVaultReducer";
+import { useAppSelector } from "@/hooks";
 
 interface VaultProps {
   id: number;
@@ -52,6 +55,8 @@ interface VaultProps {
 
 function Vault() {
   const { data }: any = useApiRequest(ENDPOINTS.getSlider);
+  const { myVaultHomePageData} = useAppSelector((state) => state.myVault)
+  console.log("🚀 ~ Vault ~ myVaultHomePageData:", myVaultHomePageData)
   const isLargeScreen = useMediaQuery((theme: Theme) =>
     theme.breakpoints.up("lg")
   );
@@ -79,6 +84,8 @@ function Vault() {
       delay: 8000,
     },
   };
+  const [state, setState] = useState({ service: getMyVaultHomePageData, })
+  useAPIoneTime(state)
   return (
     <Layout>
       <Box className="VaultPage">
@@ -292,7 +299,7 @@ function Vault() {
                 <Typography variant="h4">Recent Orders</Typography>
                 <Button endIcon={<ArrowRight />}>View All</Button>
               </Stack>
-              <RecentOrderTable />
+              <RecentOrderTable recentOrders={myVaultHomePageData?.recentOrders!}/>
             </Box>
           </Container>
         </Box>
