@@ -263,7 +263,7 @@ function AboutProduct({ productId }: any) {
                     </Box>
                     {priceData?.data?.[0]?.discount !== 0 ? 
                       <TextFlipAnimation
-                        frontValue={`${priceData?.data?.[0]?.discount?.toFixed(2)} Off`}
+                        frontValue={`$${priceData?.data?.[0]?.discount?.toFixed(2)} Off`}
                         backValue={configDetailsState?.productboxdiscounttext?.value}
                       />
                     : null}
