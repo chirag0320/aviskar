@@ -80,9 +80,15 @@
 
                     .FileUploadWrapper {
                         @include media($xs) {
+                            .UploadButton {
+                                padding-left: 13px;
+                                padding-right: 13px;
+                            }
+
                             .MuiInputBase-input {
                                 font-size: 10px;
                             }
+
                         }
                     }
                 }
