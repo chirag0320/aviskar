@@ -238,6 +238,21 @@ export const PriceChangeReturn = React.memo(({ percentage }: { percentage: strin
   )
 })
 
+export const TextFlipAnimation = React.memo(({frontValue, backValue}: {frontValue: string, backValue: string}) => {
+  const containerWidth = Math.max(frontValue.length, backValue.length) * 8;
+  
+  return (
+    <Box className="TextFlipAnimation"
+      width={containerWidth}
+    >
+      <Typography className="Flipper">
+        <Typography variant="inherit" component="span" className="Value Front">{frontValue}</Typography>
+        <Typography variant="inherit" component="span" className="Value Back">{backValue}</Typography>
+      </Typography>
+    </Box>
+  )
+})
+
 export function isActionRejected(str: string): boolean {
   const parts = str.split("/");
   const state = parts[parts.length - 1];
