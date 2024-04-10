@@ -26,7 +26,7 @@ function OrderDetailsCard({ orderHistoryDetails }: { orderHistoryDetails: IOrder
                             <Stack className='OrderTotalButtonsWrapper'>
                                 <Box className='OrderTotalWrapper'>
                                     <Typography className='' variant="body1">Order Total</Typography>
-                                    <Typography className='' variant="body1">{'$ ' + roundOfThePrice(item.orderTotal)}</Typography>
+                                    <Typography className='' variant="body1">${roundOfThePrice(item.orderTotal)}</Typography>
                                 </Box>
                                 <Stack className='OrderButtonsWrapper'>
                                     <Button variant="contained" size="small" style={{ backgroundColor: item?.orderStatusColor ?? "" }}>{item?.orderStatus}</Button>
