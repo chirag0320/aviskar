@@ -8,6 +8,7 @@ export type RenderFieldType =
   | 'number'
   | 'date'
   | 'slider'
+  | 'file'
 
 export interface FieldOption {
   id: string

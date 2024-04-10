@@ -6,9 +6,6 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
-    Chip,
-    Box,
 } from "@mui/material";
 
 import { ENDPOINTS } from "@/utils/constants";
@@ -44,8 +41,6 @@ function RewardsPointsTable() {
         <>
             <TableContainer
                 className="RewardsPointsTableWrapper  RecentOrdersTable"
-                sx={{}}
-            // component={Paper}
             >
                 <Table className="RewardsPointsTable" sx={{ minWidth: 650 }} aria-label="Rewards Points table">
                     <TableHead>

@@ -116,6 +116,15 @@ export const convertMinutesToMilliseconds = (minutes: number | string): number =
   return milliseconds;
 };
 
+export const AccountTypeEnum: { [key: string]: number } = {
+  "Individual": 0,
+  "Joint": 1,
+  "Business": 3,
+  "Superfund": 4,
+  "Trust": 5,
+  "Wholesaler": 6
+}
+
 export const PhoneNumberCountryCode = [
   {
     "name": "Afghanistan",
@@ -1328,7 +1337,7 @@ export const PhoneNumberCountryCode = [
     "code": "ZW"
   }
 ]
-export const checkThePopUpDetails = async (paramsObj: IPopUpDetails, openPopup: any, dispatch:any, service:any) => {
+export const checkThePopUpDetails = async (paramsObj: IPopUpDetails, openPopup: any, dispatch: any, service: any) => {
   // const res = await ConfigServices.getPopUpDetails(paramsObj)
   const res = await dispatch(service(paramsObj))
   console.log("🚀 ~ checkThePopUpDetails ~ res:", res)
@@ -1339,6 +1348,24 @@ export const checkThePopUpDetails = async (paramsObj: IPopUpDetails, openPopup: 
 
   return false
 }
-export const calculationOfThePremiumaAndDiscount=()=>{
-  
+// export const calculationOfThePremiumAndDiscount = (premium: string | number, premiumDiscount: string | number) => {
+//   const numbre = Math.round((Number(premiumDiscount) / Number(premium)) * 100)
+//   return "SAVE " + numbre + "%"
+// }
+export const calculationOfThePremiumAndDiscount = (premium: string | number, premiumDiscount: string | number): string | null => {
+  const parsedPremium = Number(premium);
+  const parsedDiscount = Number(premiumDiscount);
+
+  // Check if parsedPremium and parsedDiscount are valid numbers
+  if (isNaN(parsedPremium) || isNaN(parsedDiscount) || parsedPremium === 0) {
+      return null;
+  }
+
+  const percentage = Math.round((parsedDiscount / parsedPremium) * 100);
+
+  if (isNaN(percentage)) {
+      return null;
+  }
+
+  return `SAVE ${percentage}%`;
 }

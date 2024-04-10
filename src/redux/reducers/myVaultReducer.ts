@@ -1,25 +1,85 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { appCreateAsyncThunk } from "../middleware/thunkMiddleware";
 import MyVaultServices from "@/apis/services/MyVaultServices";
-import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData } from "@/types/myVault";
+import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData, IConfigDropdown } from "@/types/myVault";
 
 interface MyVaultInitialState {
     loading: boolean,
+    configDropdowns: IConfigDropdown | null,
     accounts: Account[] | null,
     addresses: Address[] | null,
     buyBackOrderHistory: IOrderHistoryApiResponseData | null,
     rewardPointsHistory: rewardPointsHistoryData | null,
-    orderHistory: IOrderHistoryApiResponseData | null
+    orderHistory: IOrderHistoryApiResponseData | null,
+    myVaultHomePageData: DashboardData | null
+}
+export interface IRecentOrders{
+    orderId: number;
+    orderGuid: string;
+    customOrderNumber: string;
+    orderTotal: number;
+    billingAddressId: number;
+    shippingAddressId: number;
+    orderStatusId: number;
+    alertOrderStatusId: number;
+    shippingStatusId: number;
+    paymentStatusId: number;
+    paymentMethodSystemName: string;
+    customerId: number;
+    orderCustomerId: number;
+    shippingMethod: string;
+    accountType: string;
+    accountName: string;
+    createdOnUtc: string;
+    orderStatus: string;
+    orderStatusColor: string;
+    alertOrderStatus: any; // You may need to define a type for this
+    alertOrderStatusColor: any; // You may need to define a type for this
+}
+export interface DashboardData {
+    dashboards: {
+        title: string;
+        count: number;
+    }[];
+    sliders: {
+        myVaultEvaPeakSliderId: number;
+        storeCode: number;
+        displayOrder: number;
+        sliderTime: number;
+        cdnUrlLarge: string;
+        cdnUrlSmall: string;
+    }[];
+    customerInformation: {
+        customerId: number;
+        firstName: string;
+        lastName: string;
+        email: string;
+        phoneNumber: string;
+    };
+    recentOrders: IRecentOrders[];
+    newsLetterDescription: string;
+    availableRewardPoints: number;
+    isRecentlyOrdersExist: boolean;
 }
 
 const initialState: MyVaultInitialState = {
     loading: false,
+    configDropdowns: null,
     accounts: null,
     addresses: null,
     rewardPointsHistory: null,
     buyBackOrderHistory: null,
-    orderHistory: null
+    orderHistory: null,
+    myVaultHomePageData: null
 }
+
+// CONFIG DROPDOWNS
+export const getConfigDropdowns = appCreateAsyncThunk(
+    "getConfigDropdowns",
+    async ({ url }: { url: string }) => {
+        return await MyVaultServices.getConfigDropdowns(url);
+    }
+)
 
 // ACCOUNTS
 export const getAccounts = appCreateAsyncThunk(
@@ -31,7 +91,7 @@ export const getAccounts = appCreateAsyncThunk(
 
 export const addOrEditAccount = appCreateAsyncThunk(
     "addOrEditAccount",
-    async ({ url, body }: { url: string, body: AccountQuery }) => {
+    async ({ url, body }: { url: string, body: any }) => {
         return await MyVaultServices.addOrEditAccount(url, body);
     }
 )
@@ -82,6 +142,13 @@ export const getBuyBackOrderHistory = appCreateAsyncThunk(
     }
 )
 
+// My vault home page data
+export const getMyVaultHomePageData = appCreateAsyncThunk(
+    "getMyVaultHomePageData",
+    async () => {
+        return await MyVaultServices.getMyVaultHomePageData();
+    }
+)
 export const myVaultSlice = createSlice({
     name: "myVault",
     initialState,
@@ -127,6 +194,19 @@ export const myVaultSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
+        // get config dropdowns
+        builder.addCase(getConfigDropdowns.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(getConfigDropdowns.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.configDropdowns = responseData.data;
+            state.loading = false;
+        })
+        builder.addCase(getConfigDropdowns.rejected, (state) => {
+            state.loading = false;
+        })
+
         // get accounts
         builder.addCase(getAccounts.pending, (state) => {
             state.loading = true;
@@ -236,6 +316,18 @@ export const myVaultSlice = createSlice({
             state.loading = false;
         })
         builder.addCase(getOrderHistory.rejected, (state) => {
+            state.loading = false;
+        })
+        // my vault home page data
+        builder.addCase(getMyVaultHomePageData.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(getMyVaultHomePageData.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.myVaultHomePageData = responseData.data;
+            state.loading = false;
+        })
+        builder.addCase(getMyVaultHomePageData.rejected, (state) => {
             state.loading = false;
         })
     }

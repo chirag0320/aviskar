@@ -74,6 +74,9 @@ export const ENDPOINTS = {
     //send verification email
     sendVerificationEmail: 'account/Posb5zZpZUCS2QQEp6Fvjw/useEmail',
 
+    // my vault > dropdowns
+    getConfigDropdown: "myvault/topj10QyQkKhz89du2ssxw",
+
     // my vault > accounts
     getAccounts: "myvault/oFCrPGc21E6E9cIxEArX4g",
     addOrEditAccount: "myvault/d0axWq2BoUGRiP4GN0qHpg",
@@ -87,11 +90,12 @@ export const ENDPOINTS = {
     getRewardPointsHistory: "myvault/kSFuIpNrDUuygzsl4bE3Hw",
 
     // my vault > buy back order history
-    getBuyBackOrderHistory : "myvault/oz5pMSV4SUqP92QIId5KmQ",
+    getBuyBackOrderHistory: "myvault/oz5pMSV4SUqP92QIId5KmQ",
 
     // my vault -> orderHistory
     getOrderHistory: "myvault/tBryhxlMq0qgjzuUfbewkA",
-    
+    // my vault home page
+    getMyVaultHomePageData : "myvault/eOmP5LRTU0O902gE7mO67Q",
     //popup details
     getPopUpDetails: "utility/85WwxAopc7Rn",
     savePopUpData: "utility/CLWL6vMSSrzB"

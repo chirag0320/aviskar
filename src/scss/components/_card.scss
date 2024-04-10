@@ -1062,3 +1062,63 @@
 }
 
 // End :: orderdetailscard css
+
+// Start :: PrivateHoldingCard css
+.PrivateHoldingCard {
+  &.MuiCard-root {
+    display: flex;
+    align-items: center;
+    border-radius: 16px;
+    border: 1px solid rgba($dark, 0.1);
+    padding: 15px;
+    gap: 10px;
+
+    @include media($sm) {
+      justify-content: space-between;
+      align-items: normal;
+      flex-direction: column;
+    }
+
+    .MuiCardMedia-root {
+      max-height: 140px;
+      object-fit: contain;
+
+      @include media-min($sm) {
+        width: initial;
+      }
+    }
+
+    .MuiCardContent-root {
+      padding: 0;
+      flex-grow: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .ProductDetailWrapper {
+        .MuiTypography-root {
+          margin-bottom: 5px;
+        }
+
+        .ButtonsWrapper {
+          gap: 5px;
+          flex-wrap: wrap;
+        }
+      }
+
+      .ClickTooltipWrapper {
+        .OptionButton {
+          // margin-right: -16px;
+          height: 30px;
+          width: 30px;
+
+        }
+      }
+
+
+    }
+
+  }
+}
+
+// End :: PrivateHoldingCard css
