@@ -22,6 +22,7 @@ import { addOrEditAddresses as addOrEditAddressForMyVault, addAddress as addAddr
 import { Delete1Icon } from "@/assets/icons"
 import { IDropdownItem } from "@/types/myVault"
 import { BussinessAccountFormSchema, IndividualAccountFormSchema, JointAccountFormSchema, SuperFundAccountFormSchema, TrustAccountFormSchema } from "@/utils/accountFormSchemas.schema"
+import { AxiosError } from "axios"
 
 interface AddAccountProps {
   open: boolean
@@ -75,8 +76,8 @@ function AddAccount(props: AddAccountProps) {
   // console.log("🚀 ~ AddAccount ~ trusteeTypes:", trusteeTypes)
   const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
   const dispatch = useAppDispatch();
-  const countryList = useAppSelector(state => state.checkoutPage.countryList);
-  const stateListall = useAppSelector(state => state.checkoutPage.stateList);
+  // const countryList = useAppSelector(state => state.checkoutPage.countryList);
+  // const configDropdowns?.stateList = useAppSelector(state => state.checkoutPage.stateList);
   const [stateList, setStateList] = useState([])
   const [stateId, setStateId] = useState<number | null>(null);
   const { showToaster } = useShowToaster();
@@ -84,6 +85,7 @@ function AddAccount(props: AddAccountProps) {
   const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
   const [countryValue, setcountryValue] = useState<any>('-1')
   const [stateValue, setstateValue] = useState<any>('')
+  const [additionalFieldsCount, setAdditionalFieldsCount] = useState(0);
 
   const {
     register,
@@ -98,31 +100,36 @@ function AddAccount(props: AddAccountProps) {
   })
 
   const onAddressFormSubmitHandler = async (data: any) => {
-    console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
-    const commonAddress = {
-      firstName: data.FirstName,
-      lastName: data.LastName,
-      company: data.Company,
-      phoneNumber: data.Contact,
-      email: data.Email,
-      isVerified: true, // static
-      addressLine1: data.Address1,
-      addressLine2: data.Address2,
-      city: data.City,
-      stateId: stateId || 0,
-      stateName: data.State,
-      postcode: data.Code,
-      countryId: data.Country,
-    }
+    // console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
 
     const commonAddressQueryForPreparation = {
       // addressTypeId,
-      ...commonAddress,
+      firstName: data.FirstName,
+      lastName: data.LastName,
+      phoneNumber: data.Contact,
+      email: data.Email,
+      isVerified: true, // static
+      city: data.City,
+      state: stateId || 0,
+      country: data.Country,
       accountTypeId: AccountTypeEnum[alignment],
       additionalBeneficiary: [],
       address: {
         // "addressId": 0,
-        commonAddress
+        firstName: data.FirstName,
+        lastName: data.LastName,
+        phoneNumber: data.Contact,
+        email: data.Email,
+        isVerified: true, // static
+        addressLine1: data.Address1,
+        addressLine2: data.Address2,
+        city: data.City,
+        state: stateId || 0,
+        stateName: data.State,
+        postcode: data.Code,
+        countryId: data.Country,
+        accountTypeId: AccountTypeEnum[alignment],
+        additionalBeneficiary: [],
       }
     }
 
@@ -156,77 +163,9 @@ function AddAccount(props: AddAccountProps) {
       showToaster({ message: "Account saved successfully", severity: "success" })
     }
     else {
-      showToaster({ message: "Failed to save account. Please check the input fields", severity: "error" })
+
+      showToaster({ message: ((response.payload as AxiosError).response?.data as { message?: string }).message || "Failed to save address! Please try again", severity: "error" })
     }
-
-    // to show whether it is coming from my-vault or checkout
-    // if (!addressTypeId) {
-    //   addressQuery["addressTypeId"] = undefined;
-
-    //   const response = await dispatch(addOrEditAddressForMyVault(
-    //     {
-    //       url: ENDPOINTS.addOrEditAddressesInMyVault,
-    //       body: { ...addressQuery }Address Verified
-    //     }
-    //   ))
-
-    //   if (hasFulfilled(response.type)) {
-    //     onClose()
-    //     reset()
-    //     showToaster({ message: "Address saved successfully", severity: "success" })
-    //     const addressId = (response?.payload as any)?.data?.data;
-    //     dispatch(addAddressForMyVault({
-    //       addressId: addressId,
-    //       firstName: data.FirstName,
-    //       lastName: data.LastName,
-    //       company: data.Company,
-    //       phoneNumber: data.Contact,
-    //       email: data.Email,
-    //       addressLine1: data.Address1,
-    //       addressLine2: data.Address2,
-    //       city: data.City,
-    //       stateName: data.State,
-    //       postcode: data.Code,
-    //       countryId: data.Country,
-    //       stateId: stateId,
-    //     }))
-    //   } else {
-    //     showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
-    //   }
-    // }
-    // else {
-    //   const response = await dispatch(addOrEditAddressForCheckout({
-    //     url: ENDPOINTS.addOrEditAddress,
-    //     body: {
-    //       ...addressQuery
-    //     }
-    //   }))
-    //   let addressId;
-    //   if (hasFulfilled(response?.type)) {
-    //     addressId = (response?.payload as any)?.data?.data;
-    //   }
-
-    //   const needToadd = {
-    //     ...addressQuery,
-    //     addressId: addressId,
-    //     addressType: addressTypeId,
-    //     customerId: null,
-    //     state: addressQuery.stateId,
-    //     country: addressQuery.countryId,
-    //     phone1: addressQuery.phoneNumber,
-    //     isSource: null,
-    //     "countryName": "Australia"
-    //   }
-    //   if (hasFulfilled(response.type)) {
-    //     // dispatch(addAddress(needToadd))
-    //     handleAddressUpdate!(needToadd, addressTypeId == AddressType.Billing)
-    //     onClose()
-    //     reset()
-    //     showToaster({ message: "Address saved successfully", severity: "success" })
-    //   } else {
-    //     showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
-    //   }
-    // }
   }
 
   useEffect(() => {
@@ -240,7 +179,7 @@ function AddAccount(props: AddAccountProps) {
   useEffect(() => {
     if (googleAddressComponents) {
       setValue('Address1', googleAddressComponents.address)
-      countryList.forEach((country: StateOrCountry) => {
+      configDropdowns?.countryList.forEach((country) => {
         if (country.name === googleAddressComponents.country.trim()) {
           setValue('Country', country.id.toString())
           setcountryValue(country.id.toString())
@@ -258,11 +197,11 @@ function AddAccount(props: AddAccountProps) {
   }, [googleAddressComponents])
 
   useEffect(() => {
-    const data: any = stateListall?.filter((state: any) => {
+    const data: any = configDropdowns?.stateList.filter((state: any) => {
       return state.enumValue == countryValue || countryValue == -1
     })
     setStateList(data)
-  }, [stateListall, countryValue])
+  }, [configDropdowns?.stateList, countryValue])
 
   const OnChange = (value: any) => {
     setcountryValue(value)
@@ -454,8 +393,8 @@ function AddAccount(props: AddAccountProps) {
               />
               <Autocomplete
                 disablePortal
-                options={configDropdowns?.stateList ?? []}
-                getOptionLabel={option => {
+                options={stateList}
+                getOptionLabel={(option: any) => {
                   if (typeof option === 'string') {
                     return option;
                   }
@@ -516,55 +455,36 @@ function AddAccount(props: AddAccountProps) {
           {alignment === "Joint" && <Stack className="Fields JointFields">
             <Stack className="Header">
               <Typography>Additional Beneficiary / Account Holder</Typography>
-              <Button variant="contained" color="success">Add more</Button>
+              <Button variant="contained" color="success" onClick={() => setAdditionalFieldsCount(prev => prev + 1)}>Add more</Button>
             </Stack>
-            <Stack
-              className="FieldsWrapper"
-              divider={<Divider flexItem />}
-            >
-              <Stack className="Column">
-                <RenderFields
-                  register={register}
-                  error={errors.FirstName}
-                  name="FirstName"
-                  placeholder="Enter first name *"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                />
-                <RenderFields
-                  register={register}
-                  error={errors.LastName}
-                  name="LastName"
-                  placeholder="Enter last name *"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                />
-                <IconButton><Delete1Icon /></IconButton>
-              </Stack>
-              <Stack className="Column">
-                <RenderFields
-                  register={register}
-                  error={errors.FirstName}
-                  name="FirstName"
-                  placeholder="Enter first name"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                />
-                <RenderFields
-                  register={register}
-                  error={errors.LastName}
-                  name="LastName"
-                  placeholder="Enter last name"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                />
-                <IconButton><Delete1Icon /></IconButton>
-              </Stack>
-            </Stack>
+            {Array(additionalFieldsCount).map(() => {
+              return (<Stack
+                className="FieldsWrapper"
+                divider={<Divider flexItem />}
+              >
+                <Stack className="Column">
+                  <RenderFields
+                    register={register}
+                    error={errors.FirstName}
+                    name="FirstName"
+                    placeholder="Enter first name *"
+                    control={control}
+                    variant='outlined'
+                    margin='none'
+                  />
+                  <RenderFields
+                    register={register}
+                    error={errors.LastName}
+                    name="LastName"
+                    placeholder="Enter last name *"
+                    control={control}
+                    variant='outlined'
+                    margin='none'
+                  />
+                  <IconButton><Delete1Icon /></IconButton>
+                </Stack>
+              </Stack>)
+            })}
           </Stack>}
         </Stack>
         <Stack className="ActionWrapper">
