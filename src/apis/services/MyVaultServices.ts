@@ -1,9 +1,10 @@
 import axiosInstance from "@/axiosfolder";
 import { AccountQuery, AddressQuery, rewardPointsHistoryData, IOrderHistoryData } from "@/types/myVault";
+import { ENDPOINTS } from "@/utils/constants";
 
 class MyVaultServices {
     // CONFIG DROPDOWNS
-    static async getConfigDropdowns(url : string){
+    static async getConfigDropdowns(url: string) {
         return axiosInstance.get(url);
     }
     // ACCOUNTS
@@ -38,8 +39,12 @@ class MyVaultServices {
     }
 
     // ORDER HISTORY
-    static async getOrderHistory(url: string, orderHistoryData: IOrderHistoryData){
+    static async getOrderHistory(url: string, orderHistoryData: IOrderHistoryData) {
         return axiosInstance.post(url, orderHistoryData);
+    }
+    // GET MY VAULT HOMEPAGE DATA
+    static async getMyVaultHomePageData() {
+        return axiosInstance.get(ENDPOINTS.getMyVaultHomePageData);
     }
 }
 

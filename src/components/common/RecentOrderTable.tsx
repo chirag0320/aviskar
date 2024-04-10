@@ -10,6 +10,7 @@ import {
   Chip,
   Box,
 } from "@mui/material";
+import { IRecentOrders } from "@/redux/reducers/myVaultReducer";
 
 function createData(
   order: string,
@@ -57,7 +58,8 @@ const rows = [
   ),
 ];
 
-export default function RecentOrderTable() {
+const RecentOrderTable = ({ recentOrders }: { recentOrders: IRecentOrders[] }) => {
+  console.log("🚀 ~ RecentOrderTable ~ recentOrders:", recentOrders)
   return (
     <TableContainer
       className="RecentOrdersTable"
@@ -108,3 +110,4 @@ export default function RecentOrderTable() {
     </TableContainer>
   );
 }
+export default React.memo(RecentOrderTable);
