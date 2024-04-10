@@ -90,7 +90,7 @@ function SignInPage() {
   }
   useAPIoneTime({ service: configDetails, endPoint: ENDPOINTS.getConfigStore })
 
-   window.handleLinkClick = async () => {
+  window.handleLinkClick = async () => {
     setLoadingForNavigate(true)
     const email = getValues('email');
     const response = await ConfigServices.sendVerificationEmailAPI(ENDPOINTS.sendVerificationEmail.replace('useEmail', email));
@@ -101,10 +101,16 @@ function SignInPage() {
       severity: 'success'
     })
   };
-  
+
+  const handleEnterKeyPress = (e: any) => {
+    if (e.key === 'Enter') {
+      handleSubmit(onSubmit)()
+    }
+  }
+
   return (
     <>
-      { openToaster && <Toaster />}
+      {openToaster && <Toaster />}
       <Loader open={checkLoadingStatus || loadingForNavigate} />
       <Box id="SignInPage">
         <Container maxWidth="sm" >
@@ -115,7 +121,7 @@ function SignInPage() {
             __html: loginError
           }}></Typography>}
           <DialogContent>
-            <form id='login-form'>
+            <form id='login-form' onKeyDown={handleEnterKeyPress}>
               <Stack className="FieldWrapper">
                 <TextField
                   variant="standard"

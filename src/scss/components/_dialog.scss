@@ -207,6 +207,41 @@
               }
             }
 
+            .ContactField {
+              position: relative;
+              width: 100%;
+
+              .ContactSelect {
+                position: absolute;
+                width: 75px;
+                z-index: 1;
+
+                .MuiFormControl-root {
+                  .MuiOutlinedInput-root {
+                    .MuiOutlinedInput-notchedOutline {
+                      border-radius: 0;
+                      border: none;
+                      border-right: 1px solid rgba($dark, 0.2);
+                    }
+                  }
+                }
+
+                .MuiFormHelperText-root {
+                  display: none;
+                }
+              }
+
+              .ContactTextField {
+                .MuiFormControl-root {
+                  .MuiInputBase-root {
+                    .MuiInputBase-input {
+                      padding-left: 90px;
+                    }
+                  }
+                }
+              }
+            }
+
             .MuiAutocomplete-root {
               .MuiTextField-root {
                 .MuiAutocomplete-inputRoot {
@@ -218,6 +253,7 @@
 
                   .MuiAutocomplete-endAdornment {
                     position: static;
+                    transform: none;
                   }
                 }
               }
@@ -262,8 +298,17 @@
           padding: 20px;
 
           .MuiInputBase-root {
+            display: flex;
+            flex-direction: column;
+            align-items: initial;
+            padding: 2px;
+
             .MuiSelect-select {
+              flex: 1;
+              width: initial;
+              border-radius: 0;
               white-space: normal;
+              border-bottom: 1px solid rgba($dark, 0.2);
 
               .MuiTypography-root {
                 display: block;
@@ -272,17 +317,21 @@
           }
 
           .MuiMenu-root {
+            position: static;
+
             .MuiBackdrop-root {
               display: none;
             }
 
             .MuiMenu-paper {
-              @include media-min($sm) {
-                max-width: $sm;
-              }
+              position: static;
+              min-width: initial !important;
+              max-width: none;
+              box-shadow: none;
 
               .MuiList-root {
                 max-height: 300px;
+                overflow: auto;
 
                 .MuiMenuItem-root {
                   flex-direction: column;
@@ -424,6 +473,208 @@
             justify-content: center;
             gap: 20px;
             margin-top: 20px;
+          }
+        }
+      }
+    }
+  }
+}
+
+#SessionExpiredDialog {
+  &.MuiDialog-root {
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        padding: 60px 20px;
+
+        @include media($md) {
+          @include padding-vertical(50);
+        }
+
+        @include media($xxs) {
+          @include padding-horizontal(10);
+        }
+
+        .DialogHeader {
+          justify-content: space-between;
+          align-items: center;
+
+          .MuiDialogTitle-root {
+            flex: 1;
+          }
+
+          .CloseButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+          }
+        }
+
+        .MuiDialogContent-root {
+          color: $paleGrey;
+          text-align: center;
+
+          .Content {
+            flex-direction: column;
+            gap: 10px;
+          }
+        }
+
+        .MuiDialogActions-root {
+          justify-content: center;
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+}
+
+
+#AddAccountDialog {
+  &.MuiDialog-root {
+    .MuiDialog-container {
+      .MuiDialog-paper {
+        width: 100%;
+
+        .DialogHeader {
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px;
+
+          .CloseButton {
+            margin-right: -10px;
+          }
+        }
+
+        .MuiDialogContent-root {
+          padding: 1px 20px;
+
+          .AccountType {
+            color: rgba($dark, 0.7);
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba($dark, 0.5);
+            @include margin-vertical(5, 20);
+
+            .MuiTypography-inherit {
+              font-weight: 700;
+            }
+          }
+
+          .Column {
+            gap: 20px;
+
+            @include media($sm) {
+              flex-wrap: wrap;
+            }
+          }
+
+          .InputRow {
+            width: 100%;
+
+            .MuiInputBase-input {
+              padding: 14px;
+            }
+
+            .MuiMenu-root {
+              .MuiMenu-paper {
+                max-height: 190px;
+              }
+            }
+          }
+
+          .ContactField {
+            position: relative;
+            width: 100%;
+
+            .ContactSelect {
+              position: absolute;
+              width: 75px;
+              z-index: 1;
+
+              .MuiFormControl-root {
+                .MuiOutlinedInput-root {
+                  .MuiOutlinedInput-notchedOutline {
+                    border-radius: 0;
+                    border: none;
+                    border-right: 1px solid rgba($dark, 0.2);
+                  }
+                }
+              }
+
+              .MuiFormHelperText-root {
+                display: none;
+              }
+            }
+
+            .ContactTextField {
+              .MuiFormControl-root {
+                .MuiInputBase-root {
+                  .MuiInputBase-input {
+                    padding-left: 90px;
+                  }
+                }
+              }
+            }
+          }
+
+          .MuiAutocomplete-root {
+            width: 100%;
+
+            .MuiTextField-root {
+              .MuiAutocomplete-inputRoot {
+                padding: 0;
+
+                .MuiAutocomplete-input {
+                  padding: 14px;
+                }
+
+                .MuiAutocomplete-endAdornment {
+                  position: static;
+                  transform: none;
+                }
+              }
+            }
+          }
+
+          .FieldsWrapper {
+            flex-direction: column;
+            gap: 20px;
+
+            .Fields {
+              flex-direction: column;
+              gap: inherit;
+
+              &.JointFields {
+                .Header {
+                  justify-content: space-between;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  gap: 8px;
+                }
+
+                .FieldsWrapper {
+                  flex-direction: column;
+                  gap: 12px;
+
+                  .Column {
+                    @include media($sm) {
+                      gap: inherit;
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          .ActionWrapper {
+            justify-content: center;
+            gap: 20px;
+            @include padding-vertical(24);
+
+            .MuiButton-root {
+              @include media($xs) {
+                flex: 1;
+              }
+            }
           }
         }
       }

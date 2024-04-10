@@ -9,17 +9,18 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material"
-import { AddToCartIcon, PdfIcon } from '@/assets/icons';
+import { AddToCartIcon, CreditCard, CartIcon, GreenConfirmationIcon, PdfIcon, ShieldIcon } from '@/assets/icons';
 import StatusImage from '../assets/images/StatusImage.png';
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { ENDPOINTS } from "@/utils/constants";
 import { downloadOrderInvoice, getOrderDetailsData } from "@/redux/reducers/orderDetailsReducer";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import Toaster from "@/components/common/Toaster";
-import { hasFulfilled, roundOfThePrice } from "@/utils/common";
+import { hasFulfilled, paymentMethodType, roundOfThePrice } from "@/utils/common";
 import useShowToaster from "@/hooks/useShowToaster";
 import { AxiosError } from "axios";
 import Loader from "@/components/common/Loader";
+import useDownloadInvoiceHandler from "@/hooks/useDownloadInvoiceHandler";
 
 export function createData(
     Name: string,
@@ -37,39 +38,10 @@ function orderDetails({ location }: { location: any }) {
     useAPIoneTime({ service: getOrderDetailsData, endPoint: ENDPOINTS.getOrderDetailsData + searchParams.get("orderNo") ?? "" });
     const orderDetails = useAppSelector(state => state.orderDetails.orderDetailsData)
     const dispatch = useAppDispatch();
-    const { showToaster } = useShowToaster()
     const loading = useAppSelector(state => state.orderDetails.loading)
-    // console.log("🚀 ~ orderHistoryDetail:", orderDetails)
+    const isOrderFound = useAppSelector(state => state.orderDetails.isOrderFound)
 
-    const downloadInvoiceHandler = async () => {
-        const response = await dispatch(downloadOrderInvoice({ url: ENDPOINTS.downloadOrderInvoice + searchParams.get("orderNo") ?? "" }) as any)
-
-        if (!hasFulfilled(response.type)) {
-            showToaster({
-                message: ((response?.payload as AxiosError)?.response?.data as { message: string })?.message as string, severity: "error"
-            })
-        }
-        else {
-            const pdfData = response.payload?.data;
-            // const url = window.URL.createObjectURL(new Blob([pdfData]));
-            // const link = document.createElement('a');
-            // link.href = url;
-            // link.setAttribute('download', 'file.pdf'); //or any other extension
-            // document.body.appendChild(link);
-            // link.click();
-            // console.log("🚀 ~ downloadInvoiceHandler ~ response:", response.payload?.data)
-            const blob = new Blob([pdfData], { type: 'application/pdf' });
-
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = 'invoice-qmint.pdf';
-
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    }
-
+    const downloadInvoiceHandler = useDownloadInvoiceHandler()
     return (
         <Layout>
             <>
@@ -83,13 +55,16 @@ function orderDetails({ location }: { location: any }) {
                 <Box id="OrderDetailsPage" className='OrderDetailsPage' component="section">
                     <Container>
                         <Box className="OrderDetailsContent">
+                            {!orderDetails && isOrderFound === false && !loading && <Typography variant="body1" style={{ textAlign: "center" }}>Order not found</Typography>}
                             {orderDetails && <>
                                 <Box className="Ribbon" sx={{ backgroundColor: orderDetails?.orderStatusColor ?? "" }}>
                                     Status: {orderDetails?.orderStatus}
-                                </Box> 
+                                </Box>
                                 <Box className="OrderDetailsWrapper">
                                     <Box className='PDFBtnWrapper'>
-                                        <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained" onClick={downloadInvoiceHandler} disabled={loading}><Icon className='PdfIcon' ><PdfIcon /></Icon>PDF invoice</Button>
+                                        <Button sx={{ gap: "12px" }} className='PDFInvoiceBtn' size='large' variant="contained" onClick={() => {
+                                            downloadInvoiceHandler(searchParams.get("orderNo") ?? "")
+                                        }} disabled={loading}><Icon className='PdfIcon' ><PdfIcon /></Icon>PDF invoice</Button>
                                     </Box>
                                     <Typography variant="subtitle2" className="OrderID">Order : {orderDetails?.customOrderNumber}</Typography>
                                     <Stack className="OrderDetails">
@@ -118,7 +93,7 @@ function orderDetails({ location }: { location: any }) {
                                             <Typography variant="subtitle1" className="Font16">{orderDetails?.paymentMethod}</Typography>
                                         </Box>
                                         <Box className="DeliveryWrapper">
-                                            <Typography variant="body1">Delivery</Typography>
+                                            <Typography variant="body1">Shipping Method</Typography>
                                             <Typography variant="subtitle1" className="Font16">{orderDetails?.shippingMethod}</Typography>
                                         </Box>
                                     </Stack>
@@ -149,7 +124,7 @@ function orderDetails({ location }: { location: any }) {
                                             <Typography variant="body1">Phone </Typography><Typography variant="subtitle1" className='Font16'> : {orderDetails?.addresses[1]?.phoneNumber}</Typography>
                                         </Stack>
                                         <Typography variant="body1" className="CommonBottomMargin">{orderDetails?.addresses[1]?.addressLine1 + ", " + orderDetails?.addresses[1]?.addressLine2 + ", " + orderDetails?.addresses[1]?.city + " - " + orderDetails?.addresses[1]?.postcode + ", " + orderDetails?.addresses[1]?.stateName + ", " + orderDetails?.addresses[1]?.countryName}</Typography>
-                                        {orderDetails?.addresses[1]?.isVerified && <Typography variant="subtitle1" className='Font16'>Address Verified</Typography>}
+                                        {orderDetails?.addresses[1]?.isVerified && <Typography variant="subtitle1" className='Font16 AddressVerified'><GreenConfirmationIcon fontSize="small" /> Address Verified</Typography>}
                                     </Box>
                                 </Box>
 
@@ -162,10 +137,11 @@ function orderDetails({ location }: { location: any }) {
                                     <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell sx={{ minWidth: "600px" }}>Name</TableCell>
-                                                <TableCell sx={{ minWidth: "200px" }}>Price</TableCell>
-                                                <TableCell sx={{ minWidth: "156px" }}>Quantity</TableCell>
-                                                <TableCell sx={{ minWidth: "200px" }}>Total</TableCell>
+                                                <TableCell className="Name">Name</TableCell>
+                                                <TableCell>Shipping Method</TableCell>
+                                                <TableCell>Price</TableCell>
+                                                <TableCell>Quantity</TableCell>
+                                                <TableCell>Total</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -177,6 +153,7 @@ function orderDetails({ location }: { location: any }) {
                                                     <TableCell component="th" scope="row">
                                                         {row.productName}
                                                     </TableCell>
+                                                    <TableCell>{orderDetails.shippingMethod}</TableCell>
                                                     <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
                                                     <TableCell>{row.quantity}</TableCell>
                                                     <TableCell>${roundOfThePrice(row.totalPrice)}</TableCell>
@@ -195,8 +172,12 @@ function orderDetails({ location }: { location: any }) {
                                         </Box>
                                         <Box className="SecureShipping">
                                             <Typography variant="body1" sx={{ marginBottom: "2px" }}>Secure Shipping</Typography>
-                                            <Typography variant="subtitle1"   >{orderDetails?.shippingMethod}</Typography>
+                                            <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.orderShippingFee)}</Typography>
                                         </Box>
+                                        {orderDetails?.paymentMethod === paymentMethodType["CreditCard"] && <Box className="SecureShipping">
+                                            <Typography variant="body1" sx={{ marginBottom: "2px" }}>Credit Card Fee</Typography>
+                                            <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.paymentMethodFee)}</Typography>
+                                        </Box>}
                                     </Stack>
                                     <Box className="TotalWrapper">
                                         <Typography variant="body1">Total</Typography>
@@ -213,7 +194,7 @@ function orderDetails({ location }: { location: any }) {
                                 <Box className="CardsWrapper">
                                     <Box className="Card SecureShippingCard">
                                         <Stack className='IconTitleWrapper'>
-                                            <Icon className="AddToCartIcon"><AddToCartIcon /></Icon>
+                                            <Icon><ShieldIcon /></Icon>
                                             <Typography variant="subtitle2">{orderDetails?.shippingTextP1}</Typography>
                                         </Stack>
                                         <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.shippingTextP2}</Typography>
@@ -222,7 +203,7 @@ function orderDetails({ location }: { location: any }) {
                                     </Box>
                                     <Box className="Card PaymentCard">
                                         <Stack className='IconTitleWrapper'>
-                                            <Icon><AddToCartIcon /></Icon>
+                                            <Icon><CreditCard /></Icon>
                                             <Typography variant="subtitle2">{orderDetails?.paymentTextP1}</Typography>
                                         </Stack>
                                         <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.paymentTextP2}</Typography>
@@ -234,7 +215,7 @@ function orderDetails({ location }: { location: any }) {
                                     </Box>
                                     <Box className="Card SellingCard">
                                         <Stack className='IconTitleWrapper'>
-                                            <Icon><AddToCartIcon /></Icon>
+                                            <Icon><CartIcon /></Icon>
                                             <Typography variant="subtitle2">{orderDetails?.sellingTextP1}</Typography>
                                         </Stack>
                                         <Typography variant="overline" className="lineHeight25" sx={{ fontWeight: "400" }}>{orderDetails?.sellingTextP2}</Typography>
@@ -242,7 +223,6 @@ function orderDetails({ location }: { location: any }) {
                                     </Box>
                                 </Box>
                             </>}
-                            {!orderDetails && !loading && <Typography variant="body1" style={{ textAlign: "center" }}>Order not found</Typography>}
                         </Box>
                     </Container>
                 </Box >

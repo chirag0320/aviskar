@@ -107,7 +107,7 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
           data.map((item: any, index: number) => (
             <Fragment key={item.categoryId}>
               <ListItem>
-                <ListItemButton onClick={() => navigatePageHandler(item.categoryId, item.searchEngineFriendlyPageName)}>
+                <ListItemButton onClick={() => navigatePageHandler(item.categoryId, item.searchEngineFriendlyPageName)} selected={false}>
                   <ListItemText primary={item.name} primaryTypographyProps={{ variant: "body2" }} />
                 </ListItemButton>
               </ListItem>
@@ -121,7 +121,7 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
 
   return (
     // ensure that filtrs and price are not empty before hiding the all filters section
-    <Fragment>{(categoryItems.length > 0 || Object.keys(selectedFilters).length > 0 || isPriceChanged) ? (isSmallScreen ? (
+    <Fragment>{((categoryItems && categoryItems.length > 0) || Object.keys(selectedFilters).length > 0 || isPriceChanged) ? (isSmallScreen ? (
       <SmallScreenFilters renderList={renderList} setSelectedFiltersMobile={setSelectedFilters} setSelectedPriceMobile={setSelectedPrice} setIsPriceChanged={setIsPriceChanged} />
     ) : (
       <LargerScreenFilters renderList={renderList} setSelectedFilters={setSelectedFilters} setSelectedPrice={setSelectedPrice} selectedFilters={selectedFilters} setIsPriceChanged={setIsPriceChanged} />

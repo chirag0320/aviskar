@@ -7,11 +7,11 @@ import WishListServices from '@/apis/services/WishListServices'
 
 interface WishListState {
     loading: boolean,
-    wishListItems: CartItem[]
+    wishListItems: CartItem[] | null
 }
 const initialState: WishListState = {
     loading: false,
-    wishListItems: []
+    wishListItems: null
 }
 
 export const getWishListData = appCreateAsyncThunk(
@@ -59,8 +59,10 @@ export const wishListPageSlice = createSlice({
         setLoadingFalse: (state) => {
             state.loading = false
         },
-        removeItemFromWishlist:(state,action)=>{
-            state.wishListItems = state.wishListItems.filter((item:any)=> !action.payload.includes(item.id))
+        removeItemFromWishlist: (state, action) => {
+            if (state.wishListItems) {
+                state.wishListItems = state.wishListItems.filter((item: any) => !action.payload.includes(item.id))
+            }
         }
     },
 

@@ -14,7 +14,7 @@ import Badge from '@mui/material/Badge';
 
 // Utils
 import { chartMenuData, subMenuItems } from "../../utils/data"
-import { Link, navigate } from "gatsby"
+import { Link } from "gatsby"
 import { ProductUpdateCountdown } from "../common/Utils"
 import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
 import { ENDPOINTS } from "@/utils/constants"
@@ -35,7 +35,7 @@ export interface Icategory {
   subCategories: Icategory[],
   categoryImages: any[]
 }
-function Navigation() {
+function Navigation({ frontPage = false }: { frontPage?: boolean }) {
   const dispatch = useAppDispatch()
   const { configDetails: configDetailsState, categoriesList, needToShowProgressLoader, isLoggedIn } = useAppSelector((state) => state.homePage)
   const { cartItems } = useAppSelector((state) => state.shoppingCart)
@@ -66,49 +66,45 @@ function Navigation() {
                         className="PopoverMegaMenu"
                         placement="bottom-start"
                         renderComponent={
-                          <Button
+                          <Link
+                            to={`/${category.searchEngineFriendlyPageName}`}
                             aria-label={category?.searchEngineFriendlyPageName ?? category.name}
-                            color="secondary"
-                            onClick={() => navigate(`/${category.searchEngineFriendlyPageName}`)}
                             className={classNames("MenuLink", { "Active": category?.name?.toLocaleLowerCase()?.replace(/[\s/]/g, '') === currententlySelected })}
-                            disableRipple
-                            name={category?.searchEngineFriendlyPageName ?? category.name}
                           >
                             {category.name}
-                          </Button>
+                          </Link>
                         }
                         disablePortal
                         lightTheme
                       >
                         <MegaMenu subCategorys={category.subCategories} category={category} />
                       </HoverTooltip></Fragment>
-                      : <Fragment key={category.name}><Button
-                        onClick={() => navigate(`/${category.searchEngineFriendlyPageName}`)}
-                        color="secondary"
+                      : <Fragment key={category.name}><Link
+                        to={`/${category.searchEngineFriendlyPageName}`}
                         aria-label={category?.searchEngineFriendlyPageName ?? category.name}
-                        name={category?.searchEngineFriendlyPageName ?? category.name}
                         className={classNames("MenuLink", { "Active": category?.name?.toLocaleLowerCase()?.replace(/[\s/]/g, '') === currententlySelected })}
-                        disableRipple
                       >
                         {category.name}
-                      </Button></Fragment>
+                      </Link></Fragment>
                   )
                 })
                 : null
             }
           </Stack>
-          <Stack className="RightPart">
-            {needToShowProgressLoader && <ProductUpdateCountdown needToShowText={false} />}
-            {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
-            {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
-              <Link area-label="shopping-cart-link" to="/shopping-cart">
-                <Badge badgeContent={cartItems?.length?.toString()} color="primary">
-                  <CartMenu />
-                </Badge>
-              </Link>
-            </Suspense> : null}
-            <ActionMenu />
-          </Stack>
+          {!frontPage && (
+            <Stack className="RightPart">
+              {needToShowProgressLoader && <ProductUpdateCountdown needToShowText={false} />}
+              {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
+              {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
+                <Link area-label="shopping-cart-link" to="/shopping-cart">
+                  <Badge badgeContent={cartItems?.length?.toString()} color="primary" max={99}>
+                    <CartMenu />
+                  </Badge>
+                </Link>
+              </Suspense> : null}
+              <ActionMenu />
+            </Stack>
+          )}
         </Stack>
       </Container>
       <ConstantApiLoader />

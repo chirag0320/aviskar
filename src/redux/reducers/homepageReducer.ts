@@ -2,10 +2,31 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // Types
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
-import ConfigServices, { IloginUserBody } from '@/apis/services/ConfigServices'
+import ConfigServices, { IPopUpDetails, ISavePopUpDetails, IloginUserBody } from '@/apis/services/ConfigServices'
 import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 
 // Services
+interface IPopupDetails {
+  id: number;
+  name: string;
+  htmlCode: string;
+  reason: string;
+  displayPage: string;
+  displayCount: number;
+  startDate: string;
+  endDate: string;
+  active: boolean;
+  store: string;
+  positiveAnswer: any; // You may want to replace 'any' with a more specific type
+  negativeAnswer: any; // You may want to replace 'any' with a more specific type
+  updatedDate: string | null;
+  negativeAnswerUrl: string | null;
+  popupQueryId: number;
+  totalCustomer: number;
+  negativeRedirect: string | null;
+  issession: boolean;
+  classification: number;
+}
 
 interface CreateGuidelineState {
   configDetails: any,
@@ -27,7 +48,7 @@ interface CreateGuidelineState {
   isLoggedIn: boolean,
   loadingForSignIn: boolean,
   mebershipPlanDetailsData: any,
-  recentlyViewedProducts: any[],
+  recentlyViewedProducts: any[] | null,
   // toaster
   openToaster: boolean,
   buttonText: string,
@@ -47,7 +68,8 @@ interface CreateGuidelineState {
       linechartdata: number[],
       linechartdata2: number[]
     }
-  }
+  },
+  popUpdata: IPopupDetails | null
 }
 const initialState: CreateGuidelineState = {
   configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
@@ -58,7 +80,8 @@ const initialState: CreateGuidelineState = {
   isLoggedIn: isBrowser && JSON.parse(localStorageGetItem('isLoggedIn') || JSON.stringify(false)),
   loadingForSignIn: false,
   mebershipPlanDetailsData: isBrowser && JSON.parse(localStorageGetItem('mebershipPlanDetailsData') ?? JSON.stringify({})),
-  recentlyViewedProducts: isBrowser && JSON.parse(localStorageGetItem('recentlyViewedProducts') ?? JSON.stringify([])),
+  // recentlyViewedProducts: isBrowser && JSON.parse(localStorageGetItem('recentlyViewedProducts') ?? JSON.stringify([])),
+  recentlyViewedProducts: null,
   openToaster: false,
   buttonText: '',
   redirectButtonUrl: '',
@@ -66,7 +89,8 @@ const initialState: CreateGuidelineState = {
   scrollPosition: 0,
   severity: 'info',
   needToShowProgressLoader: false,
-  liveDashboardChartData: {}
+  liveDashboardChartData: {},
+  popUpdata: null
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -140,7 +164,18 @@ export const getLiveDashboardChartData = appCreateAsyncThunk(
 //     return await GuidelineService.deleteGuideline(data)
 //   }
 // )
-
+export const getPopUpDetailsAPI = appCreateAsyncThunk(
+  'getPopUpDetailsAPI/status',
+  async (params: IPopUpDetails) => {
+    return await ConfigServices.getPopUpDetails(params)
+  }
+)
+export const savePopUpDataAPI = appCreateAsyncThunk(
+  'savePopUpDataAPI/status',
+  async (body: ISavePopUpDetails) => {
+    return await ConfigServices.savePoPUpDetails(body)
+  }
+)
 export const createHomepageSlice = createSlice({
   name: 'homepage',
   initialState,
@@ -158,6 +193,7 @@ export const createHomepageSlice = createSlice({
       state.loading = false
     },
     setRecentlyViewedProduct: (state, action) => {
+      if (!state.recentlyViewedProducts) return;
       const newProductId = action.payload;
       // Check if the product already exists in the recently viewed list
       const existingIndex = state.recentlyViewedProducts.findIndex(productId => productId === newProductId);
@@ -197,6 +233,9 @@ export const createHomepageSlice = createSlice({
     },
     serProgressLoaderStatus: (state, action) => {
       state.needToShowProgressLoader = action.payload
+    },
+    setPopUpDetails: (state, action) => {
+      state.popUpdata = { ...state.popUpdata, htmlCode: action.payload ?? null } as any
     }
   },
 
@@ -332,9 +371,21 @@ export const createHomepageSlice = createSlice({
     builder.addCase(getLiveDashboardChartData.rejected, (state, action) => {
       state.loading = false
     })
+    // popup details data
+    builder.addCase(getPopUpDetailsAPI.pending, (state, action) => {
+      // state.loading = true
+    })
+    builder.addCase(getPopUpDetailsAPI.fulfilled, (state, action) => {
+      const responseData = action.payload.data.data;
+      state.popUpdata = responseData
+      // state.loading = false
+    })
+    builder.addCase(getPopUpDetailsAPI.rejected, (state, action) => {
+      // state.loading = false
+    })
   },
 })
 
-export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState, setScrollPosition, serProgressLoaderStatus } = createHomepageSlice.actions
+export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState, setScrollPosition, serProgressLoaderStatus, setPopUpDetails } = createHomepageSlice.actions
 
 export default createHomepageSlice.reducer

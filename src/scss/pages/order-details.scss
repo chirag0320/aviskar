@@ -123,7 +123,6 @@
 
         .AddressWrapper {
             display: flex;
-            align-items: center;
             border-bottom: 1px solid rgba($dark, 0.2);
 
             @include media($ssm) {
@@ -161,6 +160,10 @@
                     border-left: none;
                     padding-top: 20px;
                 }
+
+                .AddressVerified {
+                    color: $success;
+                }
             }
         }
 
@@ -182,6 +185,12 @@
                 thead {
                     // background-color: rgba($blueCyan, 0.15);
                     border-radius: 19px 19px 0 0;
+                    .MuiTableCell-head {
+                        white-space: nowrap;
+                        &.Name {
+                            min-width: 300px;
+                        }
+                    }
                 }
 
                 .MuiTableCell-root {

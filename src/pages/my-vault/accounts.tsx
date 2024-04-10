@@ -1,50 +1,74 @@
 import React, { useState } from "react"
-import { Box, Button, Container, Stack, Typography } from "@mui/material"
+import { Box, Button, Container } from "@mui/material"
 import { PageTitle } from "@/components/common/Utils"
 import Seo from "@/components/common/Seo"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { ENDPOINTS } from "@/utils/constants"
-import { getTopicDetails } from "@/redux/reducers/topicReducer"
 import { useAppSelector } from "@/hooks"
 import Layout from "@/components/common/Layout"
-import Loader from "@/components/common/Loader"
 import { AddressCard } from "@/components/common/Card"
 
-import UpdateAddress from "@/components/partials/checkout/UpdateAddress"
 import { PlusIcon } from "../../assets/icons/index"
 
 import AccountType from '../../components/partials/my-vault/accountType'
+import Loader from "@/components/common/Loader"
+import { getAccounts, getConfigDropdowns } from "@/redux/reducers/myVaultReducer"
+import AddAccount from "@/components/partials/my-vault/AddAccount"
+import { getStateAndCountryLists } from "@/redux/reducers/checkoutReducer"
+import Toaster from "@/components/common/Toaster"
 
-function Accounts(paramsData: any) {
-    const { topicDetails, loading } = useAppSelector(state => state.topic)
-    useAPIoneTime({ service: getTopicDetails, endPoint: ENDPOINTS.topicDetail?.replace('{{topic-name}}', paramsData?.params?.['topic-name']) })
-
-
+function Accounts() {
+    const openToaster = useAppSelector(state => state.homePage.openToaster)
+    const loading = useAppSelector(state => state.myVault.loading)
+    const accountsData = useAppSelector(state => state.myVault.accounts)
     const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
     const [updateAddress, setUpdateAddress] = useState<boolean>(false)
-    const [test] = useState<boolean>(false)
+    const [alignment, setAlignment] = React.useState('Individual');
+    // console.log("🚀 ~ Accounts ~ alignment:", alignment)
 
+    useAPIoneTime({
+        service: getAccounts,
+        endPoint: ENDPOINTS.getAccounts
+    })
+    useAPIoneTime({
+        service: getConfigDropdowns,
+        endPoint: ENDPOINTS.getConfigDropdown
+    })
+    // useAPIoneTime({ service: getStateAndCountryLists, endPoint: ENDPOINTS.getStateAndCountryLists });
 
     const handleAccountTypeDialog = () => {
         setAccountTypeDialog(true);
     }
-    const handleCloseAccountTypeDialog = () => {
-        setAccountTypeDialog(false);
-    }
-
-    const handleUpdateAddress = () => {
-        setUpdateAddress(true);
-    }
     const handleCloseUpdateAddress = () => {
         setUpdateAddress(false);
     }
+    const handleAccountTypeNextButton = () => {
+        setUpdateAddress(true);
+        setAccountTypeDialog(false);
+    }
+    const handleCloseAccountTypeDialog = () => {
+        setAccountTypeDialog(false);
+    }
+    const hadleAddAccountSecondaryAction = () => {
+        setUpdateAddress(false);
+        setAccountTypeDialog(true);
+    }
+
+    const handleChange = (
+        event: React.MouseEvent<HTMLElement>,
+        newAlignment: string,
+    ) => {
+        setAlignment(newAlignment);
+    };
+
     return (
         <>
-            {/* <Loader open={loading} /> */}
-            {!loading && <Layout>
+            <Loader open={loading} />
+            {openToaster && <Toaster />}
+            <Layout>
                 <Seo
                     keywords={[`QMint Accounts`]}
-                    title="Address"
+                    title="Accounts"
                     lang="en"
                 />
                 <PageTitle title="Accounts" backToDashboard={true} />
@@ -55,15 +79,27 @@ function Accounts(paramsData: any) {
                             <Box sx={{ textAlign: 'right' }}>
                                 <Button variant="outlined" onClick={handleAccountTypeDialog} startIcon={<PlusIcon />}>Add new</Button>
                             </Box>
-                            <Box className="AddressListWrapper">
-                                <AddressCard />
+                            <Box className="AddressListWrapper" >
+                                {accountsData?.map(account => (
+                                    <AddressCard
+                                        key={account.customerId}
+                                        accountName={account.accountName}
+                                        accountType={account.accountType}
+                                        address={account.address}
+                                        firstName={account.firstName}
+                                        lastName={account.lastName}
+                                        email={account.email}
+                                        phoneNumber={account.phoneNumber}
+                                        showDelete={false}
+                                    />
+                                ))}
                             </Box>
                         </Box>
-                        <UpdateAddress dialogTitle="Add new address" open={updateAddress} onClose={handleCloseUpdateAddress} />
-                        <AccountType dialogTitle="Add new Account" open={accountTypeDialog} onClose={handleCloseAccountTypeDialog} handleUpdateAddress={handleUpdateAddress} />
+                        <AddAccount dialogTitle="Add new account" open={updateAddress} alignment={alignment} onClose={handleCloseUpdateAddress} hadleSecondaryAction={hadleAddAccountSecondaryAction} />
+                        <AccountType dialogTitle="Select Account Type" open={accountTypeDialog} alignment={alignment} handleChange={handleChange} onClose={handleCloseAccountTypeDialog} handleAccountTypeNextButton={handleAccountTypeNextButton} />
                     </Container>
                 </Box>
-            </Layout>}
+            </Layout>
         </>
     )
 }

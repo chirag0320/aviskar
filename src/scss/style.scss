@@ -3,6 +3,7 @@
 @import "settings/variables";
 @import "settings/mixins";
 @import "settings/functions";
+@import "settings/bootstrap";
 
 // Components
 @import "components/scrollbar";
@@ -26,9 +27,11 @@
 // Common
 @import "common/header";
 @import "common/footer";
+@import "common/layout";
 
 // Pages
 @import "pages/signin.scss";
+@import "pages/frontPage.scss";
 @import "pages/home.scss";
 @import "pages/category.scss";
 @import "pages/memberships.scss";
