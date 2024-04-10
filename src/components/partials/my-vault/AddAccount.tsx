@@ -14,7 +14,7 @@ import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
 import { StateOrCountry, addAddress as addAddressForCheckout, addOrEditAddress as addOrEditAddressForCheckout } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
-import { PhoneNumberCountryCode, hasFulfilled } from "@/utils/common"
+import { AccountTypeEnum, PhoneNumberCountryCode, hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
 import { AddressType } from "@/types/enums"
@@ -31,7 +31,6 @@ interface AddAccountProps {
   addressTypeId?: number
   handleAddressUpdate?: (addressData: any, isbilling: any) => any
   hadleSecondaryAction: () => void
-  trusteeTypes?: IDropdownItem[]
 }
 
 interface Inputs {
@@ -39,6 +38,7 @@ interface Inputs {
   SuperfundName: string,
   TrustName: string,
   TrusteeName: string,
+  TrusteeType: string,
   FirstName: string,
   LastName: string,
   Company: string,
@@ -71,8 +71,9 @@ function getSchemaFromAlignment(alignment: string) {
 }
 
 function AddAccount(props: AddAccountProps) {
-  const { open, dialogTitle, alignment, onClose, addressTypeId, handleAddressUpdate, hadleSecondaryAction, trusteeTypes } = props
-  console.log("🚀 ~ AddAccount ~ trusteeTypes:", trusteeTypes)
+  const { open, dialogTitle, alignment, onClose, addressTypeId, handleAddressUpdate, hadleSecondaryAction } = props
+  // console.log("🚀 ~ AddAccount ~ trusteeTypes:", trusteeTypes)
+  const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
   const dispatch = useAppDispatch();
   const countryList = useAppSelector(state => state.checkoutPage.countryList);
   const stateListall = useAppSelector(state => state.checkoutPage.stateList);
@@ -97,6 +98,7 @@ function AddAccount(props: AddAccountProps) {
   })
 
   const onAddressFormSubmitHandler = async (data: any) => {
+    console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
     const commonAddress = {
       firstName: data.FirstName,
       lastName: data.LastName,
@@ -116,6 +118,7 @@ function AddAccount(props: AddAccountProps) {
     const commonAddressQueryForPreparation = {
       // addressTypeId,
       ...commonAddress,
+      accountTypeId: AccountTypeEnum[alignment],
       additionalBeneficiary: [],
       address: {
         // "addressId": 0,
@@ -163,7 +166,7 @@ function AddAccount(props: AddAccountProps) {
     //   const response = await dispatch(addOrEditAddressForMyVault(
     //     {
     //       url: ENDPOINTS.addOrEditAddressesInMyVault,
-    //       body: { ...addressQuery }
+    //       body: { ...addressQuery }Address Verified
     //     }
     //   ))
 
@@ -302,14 +305,14 @@ function AddAccount(props: AddAccountProps) {
                 register={register}
                 type="select"
                 control={control}
-                error={errors.Country}
+                error={errors.TrusteeType}
                 setValue={setValue}
                 name="TrusteeType"
                 variant='outlined'
                 margin='none'
               >
                 <MenuItem value="none">Select trustee</MenuItem>
-                {trusteeTypes && trusteeTypes.map((trustee) =>
+                {configDropdowns && configDropdowns.trusteeTypeList.map((trustee) =>
                   <MenuItem key={trustee.id} value={trustee.id}>{trustee.name}</MenuItem>
                 )}
               </RenderFields>
@@ -330,14 +333,14 @@ function AddAccount(props: AddAccountProps) {
                 register={register}
                 type="select"
                 control={control}
-                error={errors.Country}
+                error={errors.TrusteeType}
                 setValue={setValue}
-                name="Country"
+                name="TrusteeType"
                 variant='outlined'
                 margin='none'
               >
                 <MenuItem value="none">Select trustee</MenuItem>
-                {trusteeTypes && trusteeTypes.map((trustee) =>
+                {configDropdowns && configDropdowns.trusteeTypeList.map((trustee) =>
                   <MenuItem key={trustee.id} value={trustee.id}>{trustee.name}</MenuItem>
                 )}
               </RenderFields>
@@ -451,7 +454,7 @@ function AddAccount(props: AddAccountProps) {
               />
               <Autocomplete
                 disablePortal
-                options={stateList}
+                options={configDropdowns?.stateList ?? []}
                 getOptionLabel={option => {
                   if (typeof option === 'string') {
                     return option;
@@ -504,7 +507,7 @@ function AddAccount(props: AddAccountProps) {
                 onChange={OnChange}
               >
                 <MenuItem value="-1">Select country *</MenuItem>
-                {countryList.map((country: StateOrCountry) => (
+                {configDropdowns?.countryList.map((country) => (
                   <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
                 ))}
               </RenderFields>

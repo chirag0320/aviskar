@@ -116,6 +116,15 @@ export const convertMinutesToMilliseconds = (minutes: number | string): number =
   return milliseconds;
 };
 
+export const AccountTypeEnum: { [key: string]: number } = {
+  "Individual": 0,
+  "Joint": 1,
+  "Business": 3,
+  "Superfund": 4,
+  "Trust": 5,
+  "Wholesaler": 6
+}
+
 export const PhoneNumberCountryCode = [
   {
     "name": "Afghanistan",
@@ -1328,7 +1337,7 @@ export const PhoneNumberCountryCode = [
     "code": "ZW"
   }
 ]
-export const checkThePopUpDetails = async (paramsObj: IPopUpDetails, openPopup: any, dispatch:any, service:any) => {
+export const checkThePopUpDetails = async (paramsObj: IPopUpDetails, openPopup: any, dispatch: any, service: any) => {
   // const res = await ConfigServices.getPopUpDetails(paramsObj)
   const res = await dispatch(service(paramsObj))
   console.log("🚀 ~ checkThePopUpDetails ~ res:", res)
