@@ -468,8 +468,10 @@
             .NavigationHeader {
               .NavigationHeader__Wrapper {
                 .LeftPart {
-                  Button {
-                    color: $white;
+                  .MenuLink {
+                    &:not(:hover) {
+                      color: $white;
+                    }
                   }
                 }
               }
