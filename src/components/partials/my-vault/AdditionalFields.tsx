@@ -1,10 +1,25 @@
 import { Delete1Icon } from '@/assets/icons';
 import RenderFields from '@/components/common/RenderFields'
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Divider, IconButton, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
+import { useForm } from 'react-hook-form';
 
 const AdditionalFields = () => {
     const [fields, setFields] = useState<{ id: string, firstName: string, lastName: string }[]>([]);
+    const [additionalFieldSchema, setAdditionalFieldSchema] = useState<{ [key: string]: string }>()
+
+    const {
+        register,
+        reset,
+        handleSubmit,
+        control,
+        setValue,
+        getValues,
+        formState: { errors },
+    } = useForm<{ firstName: string, lastName: string }>({
+        resolver: yupResolver(additionalFieldSchema)
+    })
 
     const handleAddField = () => {
         const newField = {
@@ -12,6 +27,7 @@ const AdditionalFields = () => {
             firstName: '',
             lastName: ''
         };
+        additionalFieldSchema
         setFields(prevFields => [...prevFields, { ...newField }]);
     };
 

@@ -1,8 +1,7 @@
 
 import React, { useEffect, useState } from "react"
-import { Autocomplete, MenuItem, Button, Stack, TextField, Box, Typography, IconButton, Divider } from "@mui/material"
+import { Autocomplete, MenuItem, Button, Stack, TextField, Box, Typography } from "@mui/material"
 import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // Hooks
@@ -12,15 +11,11 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
-import { StateOrCountry, addAddress as addAddressForCheckout, addOrEditAddress as addOrEditAddressForCheckout } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
-import { AccountTypeEnum, PhoneNumberCountryCode, hasFulfilled } from "@/utils/common"
+import { PhoneNumberCountryCode, hasFulfilled, AccountTypeEnumReverse } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
-import { AddressType } from "@/types/enums"
-import { addOrEditAddresses as addOrEditAddressForMyVault, addAddress as addAddressForMyVault, addOrEditAccount } from "@/redux/reducers/myVaultReducer"
-import { Delete1Icon } from "@/assets/icons"
-import { IDropdownItem } from "@/types/myVault"
+import { addOrEditAccount } from "@/redux/reducers/myVaultReducer"
 import { BussinessAccountFormSchema, IndividualAccountFormSchema, JointAccountFormSchema, SuperFundAccountFormSchema, TrustAccountFormSchema } from "@/utils/accountFormSchemas.schema"
 import { AxiosError } from "axios"
 import AdditionalFields from "./AdditionalFields"
@@ -73,7 +68,7 @@ function getSchemaFromAlignment(alignment: string) {
 }
 
 function AddAccount(props: AddAccountProps) {
-  const { open, dialogTitle, alignment, onClose, addressTypeId, handleAddressUpdate, hadleSecondaryAction } = props
+  const { open, dialogTitle, alignment, onClose, hadleSecondaryAction } = props
   // console.log("🚀 ~ AddAccount ~ trusteeTypes:", trusteeTypes)
   const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
   const dispatch = useAppDispatch();
@@ -112,7 +107,7 @@ function AddAccount(props: AddAccountProps) {
       city: data.City,
       state: stateId || 0,
       country: data.Country,
-      accountTypeId: AccountTypeEnum[alignment],
+      accountTypeId: alignment,
       additionalBeneficiary: [],
       address: {
         // "addressId": 0,
@@ -128,7 +123,7 @@ function AddAccount(props: AddAccountProps) {
         stateName: data.State,
         postcode: data.Code,
         countryId: data.Country,
-        accountTypeId: AccountTypeEnum[alignment],
+        accountTypeId: alignment,
         additionalBeneficiary: [],
       }
     }
@@ -216,9 +211,9 @@ function AddAccount(props: AddAccountProps) {
       maxWidth="sm"
     >
       <form onSubmit={handleSubmit(onAddressFormSubmitHandler)}>
-        <Typography className="AccountType">Account Type : <Typography variant="inherit" component="span">{alignment}</Typography></Typography>
+        <Typography className="AccountType">Account Type : <Typography variant="inherit" component="span">{AccountTypeEnumReverse[alignment]}</Typography></Typography>
         <Stack className="FieldsWrapper">
-          {alignment === "Business" && <Stack className="Fields BusinessFields">
+          {AccountTypeEnumReverse[alignment] === "Business" && <Stack className="Fields BusinessFields">
             <RenderFields
               register={register}
               error={errors.BusinessName}
@@ -229,7 +224,7 @@ function AddAccount(props: AddAccountProps) {
               margin='none'
             />
           </Stack>}
-          {alignment === "SuperFund" && <Stack className="Fields SuperfundFields">
+          {AccountTypeEnumReverse[alignment] === "Superfund" && <Stack className="Fields SuperfundFields">
             <RenderFields
               register={register}
               error={errors.SuperfundName}
@@ -266,7 +261,7 @@ function AddAccount(props: AddAccountProps) {
               />
             </Stack>
           </Stack>}
-          {alignment === "Trust" && <Stack className="Fields TrustFields">
+          {AccountTypeEnumReverse[alignment] === "Trust" && <Stack className="Fields TrustFields">
             <Stack className="Column">
               <RenderFields
                 register={register}
@@ -452,7 +447,7 @@ function AddAccount(props: AddAccountProps) {
               </RenderFields>
             </Stack>
           </Stack>
-          {alignment === "Joint" && <AdditionalFields />}
+          {AccountTypeEnumReverse[alignment] === "Joint" && <AdditionalFields />}
         </Stack>
         <Stack className="ActionWrapper">
           <Button variant="outlined" onClick={hadleSecondaryAction}>

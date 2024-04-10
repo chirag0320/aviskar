@@ -8,6 +8,28 @@ import StyledDialog from "@/components/common/StyledDialog"
 import { IndividualUserIcon, JointAccountIcon, ShowcaseIcon, TrustIcon, SuperFundIcon } from "../../../assets/icons/index"
 import { useAppSelector } from '@/hooks';
 
+const getAccountTypeIcon = (alignment: string) => {
+    switch (alignment) {
+        case "Individual":
+            return IndividualUserIcon
+            break;
+        case "Joint":
+            return JointAccountIcon
+            break;
+        case "Trust":
+            return TrustIcon
+            break;
+        case "Superfund":
+            return SuperFundIcon
+            break;
+        case "Business":
+            return ShowcaseIcon
+            break;
+        default:
+            return IndividualUserIcon
+    }
+}
+
 interface AccountTypeProps {
     open: boolean
     dialogTitle: string
@@ -18,8 +40,8 @@ interface AccountTypeProps {
 }
 
 export default function AccountType(props: AccountTypeProps) {
+    const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
     const { open, dialogTitle, alignment, handleChange, onClose, handleAccountTypeNextButton } = props
-    // console.log("🚀 ~ AccountType ~ configDropdowns:", configDropdowns)
 
     return (
         <>
@@ -39,52 +61,17 @@ export default function AccountType(props: AccountTypeProps) {
                         aria-label="Platform"
                         className='AccountTypeWrapper'
                     >
-                        {/* {configDropdowns?.accountTypeList.map(accountType => {
+                        {configDropdowns?.accountTypeList.map(accountType => {
                             return (
                                 <ToggleButton className='AccountType' value={accountType.id} key={accountType.id}>
                                     <Stack className='AccountTypeName'>
-                                        <IndividualUserIcon />
+                                        {getAccountTypeIcon(accountType?.name)()}
                                         <Typography variant='body1'>{accountType.name}</Typography>
                                     </Stack>
-                                    <Typography variant='caption' className="description">For one person over the age of 18 . Only the account holder can act on the account. Invoices, valuation statements and vault records will be issued in a single name only</Typography>
+                                    <Typography variant='caption' className="description">{accountType?.extraProperty}</Typography>
                                 </ToggleButton>
                             )
-                        })} */}
-                        <ToggleButton className='AccountType' value="Individual">
-                            <Stack className='AccountTypeName'>
-                                <IndividualUserIcon />
-                                <Typography variant='body1'>Individual</Typography>
-                            </Stack>
-                            <Typography variant='caption' className="description">For one person over the age of 18 . Only the account holder can act on the account. Invoices, valuation statements and vault records will be issued in a single name only</Typography>
-                        </ToggleButton>
-                        <ToggleButton className='AccountType' value="Joint">
-                            <Stack className='AccountTypeName'>
-                                <JointAccountIcon />
-                                <Typography variant='body1'>Joint</Typography>
-                            </Stack>
-                            <Typography variant='caption' className="description">For one person over the age of 18 . Only the account holder can act on the account. Invoices, valuation statements and vault records will be issued in a single name only</Typography>
-                        </ToggleButton>
-                        <ToggleButton className='AccountType' value="Business">
-                            <Stack className='AccountTypeName'>
-                                <ShowcaseIcon />
-                                <Typography variant='body1'>Business</Typography>
-                            </Stack>
-                            <Typography variant='caption' className="description">For one person over the age of 18 . Only the account holder can act on the account. Invoices, valuation statements and vault records will be issued in a single name only</Typography>
-                        </ToggleButton>
-                        <ToggleButton className='AccountType' value="SuperFund">
-                            <Stack className='AccountTypeName'>
-                                <SuperFundIcon />
-                                <Typography variant='body1'>SuperFund</Typography>
-                            </Stack>
-                            <Typography variant='caption' className="description">For one person over the age of 18 . Only the account holder can act on the account. Invoices, valuation statements and vault records will be issued in a single name only</Typography>
-                        </ToggleButton>
-                        <ToggleButton className='AccountType' value="Trust">
-                            <Stack className='AccountTypeName'>
-                                <TrustIcon />
-                                <Typography variant='body1'>Trust</Typography>
-                            </Stack>
-                            <Typography variant='caption' className="description">For one person over the age of 18 . Only the account holder can act on the account. Invoices, valuation statements and vault records will be issued in a single name only</Typography>
-                        </ToggleButton>
+                        })}
                     </ToggleButtonGroup>
                 </Box>
                 <Stack className="DialogFooter">

@@ -116,13 +116,13 @@ export const convertMinutesToMilliseconds = (minutes: number | string): number =
   return milliseconds;
 };
 
-export const AccountTypeEnum: { [key: string]: number } = {
-  "Individual": 0,
-  "Joint": 1,
-  "Business": 3,
-  "Superfund": 4,
-  "Trust": 5,
-  "Wholesaler": 6
+export const AccountTypeEnumReverse: { [key: string]: string } = {
+  "1": "Individual",
+  "2": "Joint",
+  "3": "Business",
+  "4": "Superfund",
+  "5": "Trust",
+  "6": "Wholesaler"
 }
 
 export const PhoneNumberCountryCode = [
@@ -1348,6 +1348,6 @@ export const checkThePopUpDetails = async (paramsObj: IPopUpDetails, openPopup: 
 
   return false
 }
-export const calculationOfThePremiumaAndDiscount=()=>{
-  
+export const calculationOfThePremiumaAndDiscount = () => {
+
 }
