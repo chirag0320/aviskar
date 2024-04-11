@@ -82,23 +82,26 @@ function AddAccount(props: AddAccountProps) {
   const { showToaster } = useShowToaster();
   const loading = useAppSelector(state => state.checkoutPage.loading);
   const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
-  const [countryValue, setcountryValue] = useState<any>('-1')
+  const [countryValue, setcountryValue] = useState<any>('')
   const [stateValue, setstateValue] = useState<any>('')
   const [additionalFields, setAdditionalFields] = useState<IField[]>([
     { [Math.random().toString(36).substring(7)]: { firstName: "", lastName: "" } }
   ]);
+
+  // console.log("🚀 ~ useEffect ~ existingAccount:", countryValue)
+
 
   useEffect(() => {
     if (!existingAccount) return;
     setValue('State', existingAccount?.address.stateName);
     setStateId(existingAccount?.address.stateId);
     setValue('Country', existingAccount?.address.countryId?.toString())
-    setcountryValue(existingAccount?.address.countryId)
+    setcountryValue(existingAccount?.address.countryId?.toString())
     setstateValue(existingAccount?.address.stateName)
     return () => {
       reset()
     }
-  }, [])
+  }, [existingAccount])
 
   const {
     register,
@@ -122,7 +125,7 @@ function AddAccount(props: AddAccountProps) {
     const accountTypeId = existingAccount ? AccountTypeEnum[alignment] : alignment;
 
     const commonAddressQueryForPreparation = {
-      // customerId: existingAccount?.customerId || undefined,
+      customerId: existingAccount?.customerId || undefined,
       firstName: data.FirstName,
       lastName: data.LastName,
       phoneNumber: data.Contact,
@@ -189,6 +192,7 @@ function AddAccount(props: AddAccountProps) {
 
   useEffect(() => {
     return () => {
+      if(existingAccount) return;
       reset()
       setcountryValue(-1)
       setstateValue('')
@@ -224,6 +228,7 @@ function AddAccount(props: AddAccountProps) {
 
   const OnChange = (value: any) => {
     setcountryValue(value)
+    setValue('Country', value)
   }
   // console.log("🚀 ~ AddAccount ~ additionalFields:" , alignment)
   return (
@@ -475,7 +480,7 @@ function AddAccount(props: AddAccountProps) {
                 setValue={setValue}
                 onChange={OnChange}
               >
-                <MenuItem value="-1">Select country *</MenuItem>
+                <MenuItem value="none">Select country *</MenuItem>
                 {configDropdowns?.countryList.map((country) => (
                   <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
                 ))}
