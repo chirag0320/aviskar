@@ -20,7 +20,14 @@ export function formatDate(dateString: any) {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-US', options);
 }
+// function formatDate(timestamp) {
+//   const date = new Date(timestamp);
+//   const day = date.getDate().toString().padStart(2, '0');
+//   const month = (date.getMonth() + 1).toString().padStart(2, '0');
+//   const year = date.getFullYear();
 
+//   return `${day}/${month}/${year}`;
+// }
 export function progressBarLogic({ currentprice, min, max }: any) {
   return ((currentprice - min) / (max - min)) * 100
 }

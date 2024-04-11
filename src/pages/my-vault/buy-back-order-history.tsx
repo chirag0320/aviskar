@@ -51,32 +51,26 @@ function BuyBackOrderHistory() {
     return (
         <>
             <Loader open={loading} />
-            {
-                !loading && <Layout>
-                    <Seo
-                        keywords={[`QMint Topics`]}
-                        title="Buyback orders"
-                        lang="en"
-                    />
-                    <PageTitle title="Buyback orders" backToDashboard={true} />
-                    <Box id="BuybackOrderHistoryPage" className='BuybackOrderHistoryPage' component="section">
-                        <Container>
-                            <Box className="Content OrderHistoryContent">
-                                <Divider />
-                                <OrderDateStatusSelector orderHistoryType="buy-back" />
-                                <Divider />
-                                <Box className="OrderDetailsCardsWrapper">
-                                    No orders
-                                    {/* <OrderDetailsCard />
-                                    <OrderDetailsCard />
-                                    <OrderDetailsCard />
-                                    <OrderDetailsCard /> */}
-                                </Box>
+            <Layout>
+                <Seo
+                    keywords={[`QMint BuyBackOrderHistory`]}
+                    title="Buyback orders"
+                    lang="en"
+                />
+                <PageTitle title="Buyback orders" backToDashboard={true} />
+                <Box id="BuybackOrderHistoryPage" className='BuybackOrderHistoryPage' component="section">
+                    <Container>
+                        <Box className="Content OrderHistoryContent">
+                            <Divider />
+                            <OrderDateStatusSelector orderHistoryType="buy-back" />
+                            <Divider />
+                            <Box className="OrderDetailsCardsWrapper">
+                                <OrderDetailsCard orderHistoryDetails={orderBuypackHistoryDetails} needToShowDetails={false}/>
                             </Box>
-                        </Container>
-                    </Box>
-                </Layout>
-            }
+                        </Box>
+                    </Container>
+                </Box>
+            </Layout>
         </>
     )
 }
