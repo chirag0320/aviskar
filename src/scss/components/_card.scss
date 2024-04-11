@@ -1073,6 +1073,10 @@
     padding: 15px;
     gap: 10px;
 
+    @include media($mmd) {
+      gap: 30px;
+    }
+
     @include media($sm) {
       justify-content: space-between;
       align-items: normal;
