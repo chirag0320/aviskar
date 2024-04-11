@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // Types
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
-import ConfigServices, { IPopUpDetails, IloginUserBody } from '@/apis/services/ConfigServices'
+import ConfigServices, { IPopUpDetails, ISavePopUpDetails, IloginUserBody } from '@/apis/services/ConfigServices'
 import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 
 // Services
@@ -170,6 +170,12 @@ export const getPopUpDetailsAPI = appCreateAsyncThunk(
     return await ConfigServices.getPopUpDetails(params)
   }
 )
+export const savePopUpDataAPI = appCreateAsyncThunk(
+  'savePopUpDataAPI/status',
+  async (body: ISavePopUpDetails) => {
+    return await ConfigServices.savePoPUpDetails(body)
+  }
+)
 export const createHomepageSlice = createSlice({
   name: 'homepage',
   initialState,
@@ -227,6 +233,9 @@ export const createHomepageSlice = createSlice({
     },
     serProgressLoaderStatus: (state, action) => {
       state.needToShowProgressLoader = action.payload
+    },
+    setPopUpDetails: (state, action) => {
+      state.popUpdata = { ...state.popUpdata, htmlCode: action.payload ?? null } as any
     }
   },
 
@@ -364,19 +373,19 @@ export const createHomepageSlice = createSlice({
     })
     // popup details data
     builder.addCase(getPopUpDetailsAPI.pending, (state, action) => {
-      state.loading = true
+      // state.loading = true
     })
     builder.addCase(getPopUpDetailsAPI.fulfilled, (state, action) => {
       const responseData = action.payload.data.data;
       state.popUpdata = responseData
-      state.loading = false
+      // state.loading = false
     })
     builder.addCase(getPopUpDetailsAPI.rejected, (state, action) => {
-      state.loading = false
+      // state.loading = false
     })
   },
 })
 
-export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState, setScrollPosition, serProgressLoaderStatus } = createHomepageSlice.actions
+export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState, setScrollPosition, serProgressLoaderStatus, setPopUpDetails } = createHomepageSlice.actions
 
 export default createHomepageSlice.reducer

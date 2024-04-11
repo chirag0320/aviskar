@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Box, Button, Container, Stack, Typography } from "@mui/material"
+import { Box, Button, Container } from "@mui/material"
 import { PageTitle } from "@/components/common/Utils"
 import Seo from "@/components/common/Seo"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
@@ -8,23 +8,40 @@ import { useAppSelector } from "@/hooks"
 import Layout from "@/components/common/Layout"
 import { AddressCard } from "@/components/common/Card"
 
-import UpdateAddress from "@/components/partials/checkout/UpdateAddress"
 import { PlusIcon } from "../../assets/icons/index"
 
 import AccountType from '../../components/partials/my-vault/accountType'
 import Loader from "@/components/common/Loader"
-import { getAccounts } from "@/redux/reducers/myVaultReducer"
+import { getAccounts, getConfigDropdowns } from "@/redux/reducers/myVaultReducer"
+import AddAccount from "@/components/partials/my-vault/AddAccount"
+import { getStateAndCountryLists } from "@/redux/reducers/checkoutReducer"
+import Toaster from "@/components/common/Toaster"
+import { navigate } from "gatsby"
 
 function Accounts() {
+    const openToaster = useAppSelector(state => state.homePage.openToaster)
     const loading = useAppSelector(state => state.myVault.loading)
     const accountsData = useAppSelector(state => state.myVault.accounts)
     const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
     const [updateAddress, setUpdateAddress] = useState<boolean>(false)
+    const { isLoggedIn } = useAppSelector((state) => state.homePage)
+    const [alignment, setAlignment] = React.useState('Individual');
+    // console.log("🚀 ~ Accounts ~ alignment:", alignment)
+
+    if (!isLoggedIn) {
+        navigate('/login', { replace: true })
+        return;
+    }
 
     useAPIoneTime({
         service: getAccounts,
         endPoint: ENDPOINTS.getAccounts
     })
+    useAPIoneTime({
+        service: getConfigDropdowns,
+        endPoint: ENDPOINTS.getConfigDropdown
+    })
+    // useAPIoneTime({ service: getStateAndCountryLists, endPoint: ENDPOINTS.getStateAndCountryLists });
 
     const handleAccountTypeDialog = () => {
         setAccountTypeDialog(true);
@@ -39,10 +56,22 @@ function Accounts() {
     const handleCloseAccountTypeDialog = () => {
         setAccountTypeDialog(false);
     }
+    const hadleAddAccountSecondaryAction = () => {
+        setUpdateAddress(false);
+        setAccountTypeDialog(true);
+    }
+
+    const handleChange = (
+        event: React.MouseEvent<HTMLElement>,
+        newAlignment: string,
+    ) => {
+        setAlignment(newAlignment);
+    };
 
     return (
         <>
             <Loader open={loading} />
+            {openToaster && <Toaster />}
             <Layout>
                 <Seo
                     keywords={[`QMint Accounts`]}
@@ -73,8 +102,8 @@ function Accounts() {
                                 ))}
                             </Box>
                         </Box>
-                        <UpdateAddress dialogTitle="Add new address" open={updateAddress} onClose={handleCloseUpdateAddress} />
-                        <AccountType dialogTitle="Select Account Type" open={accountTypeDialog} onClose={handleCloseAccountTypeDialog} handleAccountTypeNextButton={handleAccountTypeNextButton} />
+                        <AddAccount dialogTitle="Add new account" open={updateAddress} alignment={alignment} onClose={handleCloseUpdateAddress} hadleSecondaryAction={hadleAddAccountSecondaryAction} />
+                        <AccountType dialogTitle="Select Account Type" open={accountTypeDialog} alignment={alignment} handleChange={handleChange} onClose={handleCloseAccountTypeDialog} handleAccountTypeNextButton={handleAccountTypeNextButton} />
                     </Container>
                 </Box>
             </Layout>

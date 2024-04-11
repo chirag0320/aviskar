@@ -1,3 +1,5 @@
+import { IPopUpDetails } from "@/apis/services/ConfigServices";
+
 export const stockUpdate: any = {
   availableStock: 'We only have few items left for some products as listed below. Kindly adjust your cart quantity(s) accordingly.',
   validationHeader: 'Your order is not placed due to some reason mentioned below.'
@@ -113,6 +115,15 @@ export const convertMinutesToMilliseconds = (minutes: number | string): number =
   const milliseconds = Number(minutes) * 60 * 1000;
   return milliseconds;
 };
+
+export const AccountTypeEnumReverse: { [key: string]: string } = {
+  "1": "Individual",
+  "2": "Joint",
+  "3": "Business",
+  "4": "Superfund",
+  "5": "Trust",
+  "6": "Wholesaler"
+}
 
 export const PhoneNumberCountryCode = [
   {
@@ -1326,3 +1337,17 @@ export const PhoneNumberCountryCode = [
     "code": "ZW"
   }
 ]
+export const checkThePopUpDetails = async (paramsObj: IPopUpDetails, openPopup: any, dispatch: any, service: any) => {
+  // const res = await ConfigServices.getPopUpDetails(paramsObj)
+  const res = await dispatch(service(paramsObj))
+  console.log("🚀 ~ checkThePopUpDetails ~ res:", res)
+  if (res?.payload?.data?.data?.htmlCode) {
+    openPopup(true)
+    return true
+  }
+
+  return false
+}
+export const calculationOfThePremiumaAndDiscount = () => {
+
+}
