@@ -6,7 +6,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import DateRangePicker from "./DateRangePicker"
 import { parseDate } from '@internationalized/date'
-import { useAppDispatch } from '@/hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks'
 import { getBuyBackOrderHistory, getOrderHistory } from '@/redux/reducers/myVaultReducer'
 import { ENDPOINTS } from '@/utils/constants'
 import { requestBodyOrderHistory } from '@/pages/my-vault/buy-back-order-history'
@@ -27,6 +27,7 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
     // console.log("🚀 ~ OrderDateStatusSelector ~ orderHistoryType:", orderHistoryType)
     const dispatch = useAppDispatch();
     const [dateRangeValue, setDateRangeValue] = useState(defaultDate);
+    const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
 
     const {
         register,
@@ -55,7 +56,10 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
     }
 
     const clearFiltersHandler = async () => {
-        const response = dispatch(getBuyBackOrderHistory({ url: ENDPOINTS.getBuyBackOrderHistory, body: requestBodyOrderHistory }));
+        const service = orderHistoryType === "buy-pack" ? getBuyBackOrderHistory : getOrderHistory;
+        const endPoint = orderHistoryType === "buy-pack" ? ENDPOINTS.getBuyBackOrderHistory : ENDPOINTS.getOrderHistory
+
+        const response = dispatch(service({ url: endPoint, body: requestBodyOrderHistory }));
         reset();
         setDateRangeValue(defaultDate)
     }
@@ -82,10 +86,7 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
                                 // required
                                 className='SelectOrderStatus'
                             >
-                                <MenuItem key="" value="none">Select Order Status</MenuItem>
-                                <MenuItem key="" value="1">pending</MenuItem>
-                                <MenuItem key="" value="2">processing</MenuItem>
-                                <MenuItem key="" value="3">completed</MenuItem>
+                                {orderHistoryType === "buy-pack" ? (configDropdowns?.buybackOrderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>)) : (configDropdowns?.orderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>))}
                             </RenderFields>
                         </Box>
                     </Stack>

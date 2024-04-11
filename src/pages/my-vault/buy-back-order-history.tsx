@@ -10,9 +10,37 @@ import { getTopicDetails } from "@/redux/reducers/topicReducer"
 import { useAppSelector } from "@/hooks"
 import Layout from "@/components/common/Layout"
 import Loader from "@/components/common/Loader"
-function buyBackOrderHistory(paramsData: any) {
-    const { topicDetails, loading } = useAppSelector(state => state.topic)
-    useAPIoneTime({ service: getTopicDetails, endPoint: ENDPOINTS.topicDetail?.replace('{{topic-name}}', paramsData?.params?.['topic-name']) })
+import { getBuyBackOrderHistory, getConfigDropdowns } from "@/redux/reducers/myVaultReducer"
+import { requestBodyDefault } from "../[category]"
+
+export const requestBodyOrderHistory = {
+    ...requestBodyDefault, filters: {
+        fromDate: "",
+        toDate: "",
+        orderStatusId: "",
+        orderCustomerId: ""
+    },
+    pageSize: -1
+}
+
+function BuyBackOrderHistory() {
+    const orderBuypackHistoryDetails = useAppSelector(state => state.myVault.buyBackOrderHistory)
+    const loading = useAppSelector(state => state.myVault.loading)
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(
+            getBuyBackOrderHistory({
+                url: ENDPOINTS.getBuyBackOrderHistory,
+                body: { ...requestBodyOrderHistory, filters: {} },
+            })
+        );
+    }, []);
+    useAPIoneTime({
+        service: getConfigDropdowns,
+        endPoint: ENDPOINTS.getConfigDropdown
+    })
+
     return (
         <>
             <Loader open={loading} />
