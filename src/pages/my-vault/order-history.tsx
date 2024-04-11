@@ -11,7 +11,7 @@ import { useAppSelector, useAppDispatch } from "@/hooks";
 import Layout from "@/components/common/Layout";
 import Loader from "@/components/common/Loader";
 import { useEffect } from "react";
-import { getOrderHistory } from "@/redux/reducers/myVaultReducer";
+import { getConfigDropdowns, getOrderHistory } from "@/redux/reducers/myVaultReducer";
 import { requestBodyOrderHistory } from "./buy-back-order-history";
 
 function OrderHistory() {
@@ -27,6 +27,10 @@ function OrderHistory() {
       })
     );
   }, []);
+  useAPIoneTime({
+    service: getConfigDropdowns,
+    endPoint: ENDPOINTS.getConfigDropdown
+  })
   // useAPIoneTime({service : getOrderHistory , endPoint : ENDPOINTS.getOrderHistory , body :{ ...requestBodyDefault, filters: {} } })
 
   return (

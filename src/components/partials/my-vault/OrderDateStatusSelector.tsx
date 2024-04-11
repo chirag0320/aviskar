@@ -27,7 +27,7 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
     // console.log("🚀 ~ OrderDateStatusSelector ~ orderHistoryType:", orderHistoryType)
     const dispatch = useAppDispatch();
     const [dateRangeValue, setDateRangeValue] = useState(defaultDate);
-    useAppSelector(state => state.myVault.)
+    const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
 
     const {
         register,
@@ -86,10 +86,7 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
                                 // required
                                 className='SelectOrderStatus'
                             >
-                                <MenuItem key="" value="none">Select Order Status</MenuItem>
-                                <MenuItem key="" value="1">pending</MenuItem>
-                                <MenuItem key="" value="2">processing</MenuItem>
-                                <MenuItem key="" value="3">completed</MenuItem>
+                                {orderHistoryType === "buy-pack" ? (configDropdowns?.buybackOrderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>)) : (configDropdowns?.orderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>))}
                             </RenderFields>
                         </Box>
                     </Stack>

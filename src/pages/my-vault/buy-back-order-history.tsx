@@ -9,7 +9,7 @@ import { ENDPOINTS } from "@/utils/constants"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import Layout from "@/components/common/Layout"
 import Loader from "@/components/common/Loader"
-import { getBuyBackOrderHistory } from "@/redux/reducers/myVaultReducer"
+import { getBuyBackOrderHistory, getConfigDropdowns } from "@/redux/reducers/myVaultReducer"
 import { requestBodyDefault } from "../[category]"
 
 export const requestBodyOrderHistory = {
@@ -19,7 +19,7 @@ export const requestBodyOrderHistory = {
         orderStatusId: "",
         orderCustomerId: ""
     },
-    pageSize : -1
+    pageSize: -1
 }
 
 function BuyBackOrderHistory() {
@@ -35,10 +35,10 @@ function BuyBackOrderHistory() {
             })
         );
     }, []);
-
-    // useAPIoneTime({
-    //     service: getBuyBackOrderHistory, endPoint: ENDPOINTS.getBuyBackOrderHistory, body: requestBodyOrderHistory
-    // })
+    useAPIoneTime({
+        service: getConfigDropdowns,
+        endPoint: ENDPOINTS.getConfigDropdown
+    })
 
     return (
         <>
