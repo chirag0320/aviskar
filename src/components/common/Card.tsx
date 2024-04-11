@@ -42,7 +42,7 @@ import noImage from '../../assets/images/noImage.png'
 import { ProductStockStatus, ProductUpdateCountdown } from "./Utils"
 import { IFeaturedProducts } from "../partials/home/FeaturedProducts"
 import { Link as NavigationLink, navigate } from "gatsby"
-import { bodyForGetShoppingCartData, deliveryMethodMessage, roundOfThePrice } from "@/utils/common"
+import { bodyForGetShoppingCartData, calculationOfThePremiumAndDiscount, deliveryMethodMessage, roundOfThePrice } from "@/utils/common"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import { productImages } from "@/utils/data"
 import { CartItem } from "@/types/shoppingCart";
@@ -153,12 +153,13 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                 </Typography>
                 : null}
             </Stack>
-            {product?.priceWithDetails?.discount &&
+            {/* this is commented due to new implementation of the save and off calculation */}
+            {/* {product?.priceWithDetails?.discount &&
               product?.priceWithDetails?.discount !== 0 ? (
               <Typography variant="overline" className="Discount">
                 ${product?.priceWithDetails?.discount?.toFixed(2)} Off
               </Typography>
-            ) : null}
+            ) : null} */}
           </Stack>
           <Stack className="Bottom">
             <Typography variant="overline" className="PriceMessage">
@@ -169,9 +170,9 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             </Typography>
             {/* @todo :- below will be static for now */}
             <Stack className="RightSide">
-              <Typography variant="overline" className="DiscountMessage">
-                {configDetailsState?.productboxdiscounttext?.value}
-              </Typography>
+              {(product?.premiumDiscount && product?.productPremium) ? <Typography variant="overline" className="DiscountMessage">
+                {calculationOfThePremiumAndDiscount(product?.productPremium, product?.premiumDiscount)!}
+              </Typography> : null}
               {/* <HoverTooltip
                 placement="top-end"
                 renderComponent={
@@ -562,7 +563,7 @@ export const AddressCard = (props: AddressCardProps) => {
         </Typography>}
       </Box>
 
-      <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={handleCloseUpdateAddress} existingAddress={address} isComingFromMyVault={true}/>
+      <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={handleCloseUpdateAddress} existingAddress={address} isComingFromMyVault={true} />
     </Box>
   );
 };

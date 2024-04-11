@@ -1367,5 +1367,5 @@ export const calculationOfThePremiumAndDiscount = (premium: string | number, pre
       return null;
   }
 
-  return `SAVE ${percentage}%`;
+  return `${percentage}% on premium`;
 }

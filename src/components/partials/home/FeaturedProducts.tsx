@@ -39,6 +39,7 @@ export interface IFeaturedProducts {
   tierpriceapply: boolean,
   priceWithDetails: null | IproductPrice,
   bulkProduct: any
+  productPremium: string | number
 }
 export interface Idata {
   data: {
