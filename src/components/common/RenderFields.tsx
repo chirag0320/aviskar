@@ -344,6 +344,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             disabled={disabled}
             variant={variant}
             onKeyDown={onKeyDown}
+            onChange={onChange}
             // label={label}
             InputProps={{ readOnly, onBlur, endAdornment }}
             {...register(name)}

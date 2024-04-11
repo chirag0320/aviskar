@@ -1,38 +1,39 @@
 import { Delete1Icon } from '@/assets/icons';
 import RenderFields from '@/components/common/RenderFields'
-import { yupResolver } from '@hookform/resolvers/yup';
+import useDebounce from '@/hooks/useDebounce';
 import { Button, Divider, IconButton, Stack, Typography } from '@mui/material'
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form';
+import React, { useDeferredValue, useEffect, useState } from 'react'
 
-const AdditionalFields = () => {
-    const [fields, setFields] = useState<{ id: string, firstName: string, lastName: string }[]>([]);
-    const [additionalFieldSchema, setAdditionalFieldSchema] = useState<{ [key: string]: string }>()
+export interface IField {
+    [key: string]: { firstName: string, lastName: string }
+}
 
-    const {
-        register,
-        reset,
-        handleSubmit,
-        control,
-        setValue,
-        getValues,
-        formState: { errors },
-    } = useForm<{ firstName: string, lastName: string }>({
-        resolver: yupResolver(additionalFieldSchema)
-    })
+interface IProps {
+    fields: IField[],
+    setFields: React.Dispatch<React.SetStateAction<IField[]>>
+}
+
+const AdditionalFields = ({ fields, setFields }: IProps) => {
+    const [tempFields, setTempFields] = useState<IField[]>(fields);
+    const defferedFields = useDebounce(tempFields, 600)
+
+    useEffect(() => {
+        setFields(defferedFields);
+    }, [defferedFields])
 
     const handleAddField = () => {
         const newField = {
-            id: Math.random().toString(36).substring(7), // Generate a random ID for the new field
-            firstName: '',
-            lastName: ''
+            [Math.random().toString(36).substring(7)]: {
+                firstName: '',
+                lastName: ''
+            }
         };
-        additionalFieldSchema
+        // additionalFieldSchema
         setFields(prevFields => [...prevFields, { ...newField }]);
     };
 
     const handleDeleteField = (id: string) => {
-        setFields(prevFields => prevFields.filter(field => field.id !== id));
+        setFields(prevFields => prevFields.filter(field => Object.keys(field)[0] !== id));
     };
 
     return (
@@ -41,9 +42,9 @@ const AdditionalFields = () => {
                 <Typography>Additional Beneficiary / Account Holder</Typography>
                 <Button variant="contained" color="success" onClick={handleAddField}>Add more</Button>
             </Stack>
-            {fields.map((field) => (
+            {fields.map((field, index) => (
                 <Stack
-                    key={field.id}
+                    key={Object.keys(field)[0]}
                     className="FieldsWrapper"
                     divider={<Divider flexItem />}
                 >
@@ -53,6 +54,12 @@ const AdditionalFields = () => {
                             // error={errors.FirstName}
                             name="FirstName"
                             placeholder="Enter first name *"
+                            value={field[Object.keys(field)[0]].firstName}
+                            onChange={(e) => {
+                                const newFields = [...tempFields];
+                                newFields[index][Object.keys(field)[0]].firstName = e.target.value;
+                                setTempFields(newFields);
+                            }}
                             // control={control}
                             variant='outlined'
                             margin='none'
@@ -61,12 +68,18 @@ const AdditionalFields = () => {
                             // register={register}
                             // error={errors.LastName}
                             name="LastName"
+                            value={field[Object.keys(field)[0]].lastName}
                             placeholder="Enter last name *"
+                            onChange={(e) => {
+                                const newFields = [...tempFields];
+                                newFields[index][Object.keys(field)[0]].lastName = e.target.value;
+                                setTempFields(newFields);
+                            }}
                             // control={control}
                             variant='outlined'
                             margin='none'
                         />
-                        <IconButton onClick={() => handleDeleteField(field.id)}><Delete1Icon /></IconButton>
+                        {index !== 0 && <IconButton onClick={() => handleDeleteField(Object.keys(field)[0])}><Delete1Icon /></IconButton>}
                     </Stack>
                 </Stack>
             ))}

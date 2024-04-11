@@ -18,7 +18,7 @@ import { AddressComponents } from "@/utils/parseAddressComponents"
 import { addOrEditAccount } from "@/redux/reducers/myVaultReducer"
 import { BussinessAccountFormSchema, IndividualAccountFormSchema, JointAccountFormSchema, SuperFundAccountFormSchema, TrustAccountFormSchema } from "@/utils/accountFormSchemas.schema"
 import { AxiosError } from "axios"
-import AdditionalFields from "./AdditionalFields"
+import AdditionalFields, { IField } from "./AdditionalFields"
 
 interface AddAccountProps {
   open: boolean
@@ -81,6 +81,10 @@ function AddAccount(props: AddAccountProps) {
   const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
   const [countryValue, setcountryValue] = useState<any>('-1')
   const [stateValue, setstateValue] = useState<any>('')
+  const [additionalFields, setAdditionalFields] = useState<IField[]>([
+    { [Math.random().toString(36).substring(7)]: { firstName: "", lastName: "" } }
+  ]);
+  console.log("🚀 ~ AddAccount ~ additionalFields:", additionalFields)
 
   const {
     register,
@@ -91,11 +95,15 @@ function AddAccount(props: AddAccountProps) {
     getValues,
     formState: { errors },
   } = useForm<Inputs>({
-    resolver: yupResolver(getSchemaFromAlignment(alignment))
+    resolver: yupResolver(getSchemaFromAlignment(AccountTypeEnumReverse[alignment]))
   })
 
   const onAddressFormSubmitHandler = async (data: any) => {
     // console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
+    const additionalBeneficiary = additionalFields.map((field) => {
+      // id static
+      return { ...field[Object.keys(field)[0]], customerAdditionalBeneficiaryId: 0 }
+    });
 
     const commonAddressQueryForPreparation = {
       // addressTypeId,
@@ -108,7 +116,7 @@ function AddAccount(props: AddAccountProps) {
       state: stateId || 0,
       country: data.Country,
       accountTypeId: alignment,
-      additionalBeneficiary: [],
+      additionalBeneficiary: additionalBeneficiary,
       address: {
         // "addressId": 0,
         firstName: data.FirstName,
@@ -124,7 +132,6 @@ function AddAccount(props: AddAccountProps) {
         postcode: data.Code,
         countryId: data.Country,
         accountTypeId: alignment,
-        additionalBeneficiary: [],
       }
     }
 
@@ -447,7 +454,7 @@ function AddAccount(props: AddAccountProps) {
               </RenderFields>
             </Stack>
           </Stack>
-          {AccountTypeEnumReverse[alignment] === "Joint" && <AdditionalFields />}
+          {AccountTypeEnumReverse[alignment] === "Joint" && <AdditionalFields fields={additionalFields} setFields={setAdditionalFields} />}
         </Stack>
         <Stack className="ActionWrapper">
           <Button variant="outlined" onClick={hadleSecondaryAction}>
