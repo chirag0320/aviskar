@@ -23,7 +23,7 @@ const defaultDate = { // need to change currently it set as random
     end: parseDate("2020-02-08")
 }
 
-const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-pack" | "normal" }) => {
+const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-back" | "normal" }) => {
     // console.log("🚀 ~ OrderDateStatusSelector ~ orderHistoryType:", orderHistoryType)
     const dispatch = useAppDispatch();
     const [dateRangeValue, setDateRangeValue] = useState(defaultDate);
@@ -41,8 +41,8 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
     })
 
     const onSubmit = async (data: any) => {
-        const service = orderHistoryType === "buy-pack" ? getBuyBackOrderHistory : getOrderHistory;
-        const endPoint = orderHistoryType === "buy-pack" ? ENDPOINTS.getBuyBackOrderHistory : ENDPOINTS.getOrderHistory
+        const service = orderHistoryType === "buy-back" ? getBuyBackOrderHistory : getOrderHistory;
+        const endPoint = orderHistoryType === "buy-back" ? ENDPOINTS.getBuyBackOrderHistory : ENDPOINTS.getOrderHistory
 
         const response = await dispatch(service({
             url: endPoint, body: {
@@ -56,8 +56,8 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
     }
 
     const clearFiltersHandler = async () => {
-        const service = orderHistoryType === "buy-pack" ? getBuyBackOrderHistory : getOrderHistory;
-        const endPoint = orderHistoryType === "buy-pack" ? ENDPOINTS.getBuyBackOrderHistory : ENDPOINTS.getOrderHistory
+        const service = orderHistoryType === "buy-back" ? getBuyBackOrderHistory : getOrderHistory;
+        const endPoint = orderHistoryType === "buy-back" ? ENDPOINTS.getBuyBackOrderHistory : ENDPOINTS.getOrderHistory
 
         const response = dispatch(service({ url: endPoint, body: requestBodyOrderHistory }));
         reset();
@@ -86,7 +86,7 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
                                 // required
                                 className='SelectOrderStatus'
                             >
-                                {orderHistoryType === "buy-pack" ? (configDropdowns?.buybackOrderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>)) : (configDropdowns?.orderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>))}
+                                {orderHistoryType === "buy-back" ? (configDropdowns?.buybackOrderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>)) : (configDropdowns?.orderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>))}
                             </RenderFields>
                         </Box>
                     </Stack>

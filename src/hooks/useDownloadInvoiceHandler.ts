@@ -12,10 +12,12 @@ const useDownloadInvoiceHandler = () => {
 
     const downloadInvoiceHandler = async (orderNumber:any) => {
         const response = await dispatch(downloadOrderInvoice({ url: ENDPOINTS.downloadOrderInvoice + orderNumber }) as any)
+        console.log("🚀 ~ downloadInvoiceHandler ~ response:", response)
 
         if (!hasFulfilled(response.type)) {
             showToaster({
-                message: ((response?.payload as AxiosError)?.response?.data as { message: string })?.message as string, severity: "error"
+                // message: ((response?.payload as AxiosError)?.response?.data as { message: string })?.message as string, severity: "error"
+                message: (response?.payload as AxiosError)?.message, severity: "error"
             })
         }
         else {

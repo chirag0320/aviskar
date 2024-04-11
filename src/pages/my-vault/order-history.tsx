@@ -13,11 +13,18 @@ import Loader from "@/components/common/Loader";
 import { useEffect } from "react";
 import { getConfigDropdowns, getOrderHistory } from "@/redux/reducers/myVaultReducer";
 import { requestBodyOrderHistory } from "./buy-back-order-history";
+import { navigate } from "gatsby";
 
 function OrderHistory() {
   const loading = useAppSelector(state => state.myVault.loading)
   const dispatch = useAppDispatch();
   const orderHistoryDetails = useAppSelector((state) => state.myVault.orderHistory);
+  const isLoggedIn = useAppSelector((state) => state.homePage.isLoggedIn)
+
+  if (!isLoggedIn) {
+    navigate('/login', { replace: true })
+    return;
+  }
 
   useEffect(() => {
     dispatch(

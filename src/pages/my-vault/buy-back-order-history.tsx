@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Box, Container, Divider } from "@mui/material"
 import { PageTitle } from "@/components/common/Utils"
 import OrderDateStatusSelector from "@/components/partials/my-vault/OrderDateStatusSelector"
@@ -7,11 +7,12 @@ import Seo from "@/components/common/Seo"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { ENDPOINTS } from "@/utils/constants"
 import { getTopicDetails } from "@/redux/reducers/topicReducer"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 import Layout from "@/components/common/Layout"
 import Loader from "@/components/common/Loader"
 import { getBuyBackOrderHistory, getConfigDropdowns } from "@/redux/reducers/myVaultReducer"
 import { requestBodyDefault } from "../[category]"
+import { navigate } from "gatsby"
 
 export const requestBodyOrderHistory = {
     ...requestBodyDefault, filters: {
@@ -27,6 +28,12 @@ function BuyBackOrderHistory() {
     const orderBuypackHistoryDetails = useAppSelector(state => state.myVault.buyBackOrderHistory)
     const loading = useAppSelector(state => state.myVault.loading)
     const dispatch = useAppDispatch()
+    const isLoggedIn = useAppSelector((state) => state.homePage.isLoggedIn)
+
+    if (!isLoggedIn) {
+        navigate('/login', { replace: true })
+        return;
+    }
 
     useEffect(() => {
         dispatch(
@@ -56,7 +63,7 @@ function BuyBackOrderHistory() {
                         <Container>
                             <Box className="Content OrderHistoryContent">
                                 <Divider />
-                                <OrderDateStatusSelector />
+                                <OrderDateStatusSelector orderHistoryType="buy-back" />
                                 <Divider />
                                 <Box className="OrderDetailsCardsWrapper">
                                     No orders
@@ -74,4 +81,4 @@ function BuyBackOrderHistory() {
     )
 }
 
-export default buyBackOrderHistory
+export default BuyBackOrderHistory

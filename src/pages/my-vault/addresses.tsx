@@ -16,6 +16,7 @@ import useShowToaster from "@/hooks/useShowToaster"
 import Toaster from "@/components/common/Toaster"
 import AddAddress from "@/components/partials/checkout/AddAddress"
 import { getStateAndCountryLists } from "@/redux/reducers/checkoutReducer"
+import { navigate } from "gatsby"
 
 function Addresses() {
   const openToaster = useAppSelector(state => state.homePage.openToaster)
@@ -24,6 +25,12 @@ function Addresses() {
   const { showToaster } = useShowToaster()
   const addressesData = useAppSelector(state => state.myVault.addresses)
   const [openAddAddress, setOpenAddAddress] = useState<boolean>(false)
+  const isLoggedIn = useAppSelector((state) => state.homePage.isLoggedIn)
+
+  if (!isLoggedIn) {
+    navigate('/login', { replace: true })
+    return;
+  }
 
   useAPIoneTime({ service: getStateAndCountryLists, endPoint: ENDPOINTS.getStateAndCountryLists });
   useAPIoneTime({
