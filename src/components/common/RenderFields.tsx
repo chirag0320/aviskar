@@ -2,6 +2,8 @@ import React from 'react'
 import { Box, FormControl, Select, RadioGroup, FormControlLabel, FormLabel, Radio, FormHelperText, Checkbox, FormGroup, Switch, TextField, IconButton, InputAdornment, Button, Stack } from '@mui/material'
 import { Controller } from 'react-hook-form'
 import classNames from 'classnames'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 // Hooks
 import { useToggle } from '../../hooks'
@@ -276,51 +278,24 @@ const RenderFields: React.FC<RenderFieldProps> = ({
       )
       break
 
-    case 'number':
+    case "phoneInput":
       fieldType = (
-        <FormControl
-          fullWidth={fullWidth}
-          margin={margin}
-          {...(error ? { error: true } : {})}
-        >
-          {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-          <Controller
-            name={name}
-            control={control}
-            defaultValue={value} // Set defaultValue instead of passing value prop
-            render={({ field: { value, onChange } }) => (
-              <>
-                <TextField
-                  id={name}
-                  type="number"
-                  fullWidth={fullWidth}
-                  error={!!error}
-                  placeholder={placeholder}
-                  value={value}
-                  defaultValue={defaultValue}
-                  disabled={disabled}
-                  autoComplete={autoComplete}
-                  variant={variant}
-                  InputProps={{ endAdornment }}
-                  onChange={(event) => {
-                    const numberRegex = /^-?\d*\.?\d*$/
-                    if (!numberRegex.test(event.target.value)) {
-                      return
-                    }
-                    onChange(event)
-                  }}
-                  onKeyDown={(e) => {
-                    ;['e', 'E', '+', '-', '.'].includes(e.key) &&
-                      e.preventDefault()
-                  }}
-                  {...register(name)}
-                  {...otherProps}
-                />
-              </>
-            )}
-          />
-
-        </FormControl>
+        <Controller
+          name={name}
+          control={control}
+          defaultValue=""
+          rules={{ required: 'Phone number is required' }}
+          render={({ field }) => (
+            <PhoneInput
+              country="au"
+              {...field}
+              onChange={(value) => field.onChange(value)}
+              onBlur={field.onBlur}
+              preferredCountries={['au']}
+              inputClass="form-control" // You might need to adjust this class based on your styling
+            />
+          )}
+        />
       )
       break
 
