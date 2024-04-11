@@ -2,7 +2,24 @@ import { createSlice } from "@reduxjs/toolkit";
 import { appCreateAsyncThunk } from "../middleware/thunkMiddleware";
 import MyVaultServices from "@/apis/services/MyVaultServices";
 import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData, IConfigDropdown } from "@/types/myVault";
-
+interface ValueFacturation {
+    low: number;
+    high: number;
+    current: number;
+    position: number;
+    move: number;
+    percentage: number;
+    linechartdata: number[];
+    linechartdata2: Array<[number, number, number]>;
+}
+interface ImyVaultHomePageChartData {
+    totalValueFacturation: ValueFacturation;
+    goldValueFacturation: ValueFacturation;
+    silverValueFacturation: ValueFacturation;
+    totalDayRangeValueFacturation: ValueFacturation;
+    goldDayRangeValueFacturation: ValueFacturation;
+    silverDayRangeValueFacturation: ValueFacturation;
+}
 interface MyVaultInitialState {
     loading: boolean,
     configDropdowns: IConfigDropdown | null,
@@ -11,9 +28,10 @@ interface MyVaultInitialState {
     buyBackOrderHistory: IOrderHistoryApiResponseData | null,
     rewardPointsHistory: rewardPointsHistoryData | null,
     orderHistory: IOrderHistoryApiResponseData | null,
-    myVaultHomePageData: DashboardData | null
+    myVaultHomePageData: DashboardData | null,
+    myVaultHomePageChartData: ImyVaultHomePageChartData | null;
 }
-export interface IRecentOrders{
+export interface IRecentOrders {
     orderId: number;
     orderGuid: string;
     customOrderNumber: string;
@@ -60,6 +78,11 @@ export interface DashboardData {
     newsLetterDescription: string;
     availableRewardPoints: number;
     isRecentlyOrdersExist: boolean;
+    Addresses: string ;
+    "Buyback Order": string ;
+    Customers:string ;
+    Order:string ;
+    "Reward Point":string ;
 }
 
 const initialState: MyVaultInitialState = {
@@ -70,7 +93,8 @@ const initialState: MyVaultInitialState = {
     rewardPointsHistory: null,
     buyBackOrderHistory: null,
     orderHistory: null,
-    myVaultHomePageData: null
+    myVaultHomePageData: null,
+    myVaultHomePageChartData: null
 }
 
 // CONFIG DROPDOWNS
@@ -147,6 +171,13 @@ export const getMyVaultHomePageData = appCreateAsyncThunk(
     "getMyVaultHomePageData",
     async () => {
         return await MyVaultServices.getMyVaultHomePageData();
+    }
+)
+// My vault home page data chart
+export const getMyVaultHomePageChartData = appCreateAsyncThunk(
+    "getMyVaultHomePageChartData",
+    async () => {
+        return await MyVaultServices.getMyVaultHomePageChartData();
     }
 )
 export const myVaultSlice = createSlice({
@@ -323,11 +354,30 @@ export const myVaultSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(getMyVaultHomePageData.fulfilled, (state, action) => {
-            const responseData = action.payload.data;
-            state.myVaultHomePageData = responseData.data;
+            const responseData = action.payload.data.data;
+            const dashboards = responseData?.dashboards?.reduce((acc: any, item: any) => {
+                acc[item.title] = item.count.toString();
+                return acc;
+            }, {});
+            state.myVaultHomePageData = {
+                ...responseData,
+                ...dashboards,
+            };
             state.loading = false;
         })
         builder.addCase(getMyVaultHomePageData.rejected, (state) => {
+            state.loading = false;
+        })
+        // my vault home page chart data
+        builder.addCase(getMyVaultHomePageChartData.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(getMyVaultHomePageChartData.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.myVaultHomePageChartData = responseData.data;
+            state.loading = false;
+        })
+        builder.addCase(getMyVaultHomePageChartData.rejected, (state) => {
             state.loading = false;
         })
     }

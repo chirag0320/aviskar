@@ -30,6 +30,7 @@ function createData(
 
 function RewardsPointsTable() {
     const rewardPointsData = useAppSelector(state => state.myVault.rewardPointsHistory);
+    console.log("🚀 ~ RewardsPointsTable ~ rewardPointsData:", rewardPointsData)
     const dispatch = useAppDispatch();
     // useAPIoneTime({service : getRewardPointsHistory, endPoint : ENDPOINTS.getRewardPointsHistory, body : { ...requestBodyDefault, filter : {} }})
 
@@ -54,7 +55,7 @@ function RewardsPointsTable() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {!!rewardPointsData?.items?.length ? rewardPointsData?.items?.map((item) => (
+                            {!!rewardPointsData?.pointsHistories?.items?.length ? rewardPointsData?.pointsHistories?.items?.map((item: { id: React.Key | null | undefined; createdOnUtc: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; points: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; pointsBalance: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; message: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }) => (
                                 <TableRow
                                     key={item.id}
                                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

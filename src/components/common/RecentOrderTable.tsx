@@ -11,6 +11,7 @@ import {
   Box,
 } from "@mui/material";
 import { IRecentOrders } from "@/redux/reducers/myVaultReducer";
+import { formatDate } from "@/utils/common";
 
 function createData(
   order: string,
@@ -59,7 +60,6 @@ const rows = [
 ];
 
 const RecentOrderTable = ({ recentOrders }: { recentOrders: IRecentOrders[] }) => {
-  console.log("🚀 ~ RecentOrderTable ~ recentOrders:", recentOrders)
   return (
     <Box className="CommonTableWrapper">
       <TableContainer
@@ -79,29 +79,31 @@ const RecentOrderTable = ({ recentOrders }: { recentOrders: IRecentOrders[] }) =
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {recentOrders?.map((row) => (
               <TableRow
-                key={row.order}
+                key={row.orderId}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.order}
+                  {row.orderId}
                 </TableCell>
-                <TableCell>{row.date}</TableCell>
-                <TableCell>{row.shipto}</TableCell>
-                <TableCell>{row.ordertotal}</TableCell>
+                <TableCell>{formatDate(row.createdOnUtc)}</TableCell>
+                <TableCell>{row.accountName}</TableCell>
+                <TableCell>{row.orderTotal}</TableCell>
                 <TableCell>
                   <Box className="ChipWrapper">
-                    {row.status.map((status, index) => (
-                      <Chip key={index} label={status} color="error" />
+                    {[1,3].map((status, index) => (
+                      <Chip key={index} label={"TODO"} color="error" />
                     ))}
+                    {/* {row?.orderStatus} */}
                   </Box>
                 </TableCell>
                 <TableCell>
                   <Box className="ChipWrapper">
-                    {row.details.map((details, index) => (
+                    {/* {row.details.map((details, index) => (
                       <Chip key={index} label={details} color="success" />
-                    ))}
+                    ))} */}
+                    <Chip key={row.orderGuid} label={"TODO"} color="success" />
                   </Box>
                 </TableCell>
               </TableRow>
