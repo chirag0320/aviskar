@@ -372,6 +372,8 @@ function AddAccount(props: AddAccountProps) {
                   preferredCountries={['au']}
                   onChange={setPhoneValue}
                 /> */}
+
+                {/* package link - https://www.npmjs.com/package/react-phone-input-2#style */}
                 <RenderFields
                   register={register}
                   type="phoneInput"
