@@ -100,7 +100,9 @@ export const ENDPOINTS = {
     getMyVaultHopePageDataChart: "myvault/c2srK54sfd5C4qjS",
     //popup details
     getPopUpDetails: "utility/85WwxAopc7Rn",
-    savePopUpData: "utility/CLWL6vMSSrzB"
+    savePopUpData: "utility/CLWL6vMSSrzB",
+    //"sitemap"
+    siteMapUrl: 'utility/fksBMEOGVoLiw'
 }
 export const StoreData = {
     storeCode: 12,

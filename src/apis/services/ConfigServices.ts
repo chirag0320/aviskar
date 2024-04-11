@@ -88,7 +88,6 @@ class ConfigServices {
   static async getLiveDashboardChartData(url: string) {
     return axiosInstance.get(url)
   }
-
   static async sendVerificationEmailAPI(url: any) {
     return await axiosInstance.post(url)
   }
@@ -97,6 +96,9 @@ class ConfigServices {
   }
   static async savePoPUpDetails(body: ISavePopUpDetails) {
     return await axiosInstance.post(ENDPOINTS.savePopUpData,body)
+  }
+  static async getSiteMapData() {
+    return axiosInstance.post(ENDPOINTS.siteMapUrl,{})
   }
 }
 export default ConfigServices

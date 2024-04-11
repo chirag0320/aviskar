@@ -30,7 +30,6 @@ function createData(
 
 function RewardsPointsTable() {
     const rewardPointsData = useAppSelector(state => state.myVault.rewardPointsHistory);
-    console.log("🚀 ~ RewardsPointsTable ~ rewardPointsData:", rewardPointsData)
     const dispatch = useAppDispatch();
     // useAPIoneTime({service : getRewardPointsHistory, endPoint : ENDPOINTS.getRewardPointsHistory, body : { ...requestBodyDefault, filter : {} }})
 

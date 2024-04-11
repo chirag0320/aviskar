@@ -69,8 +69,71 @@ interface CreateGuidelineState {
       linechartdata2: number[]
     }
   },
-  popUpdata: IPopupDetails | null
+  popUpdata: IPopupDetails | null,
+  siteMapData: IsiteMapData | null;
 }
+interface Settings {
+  TwoFactorAuthenticatorAdminlogin: string;
+  AdditionalOrderCancellationCharge: string;
+  LogRocket_Enable: string;
+  LogRocket_AppID: string;
+  ImageKitPublicKey: string;
+  ImageKitPrivateKey: string;
+  ImageKitUrlEndPoint: string;
+  LastUpdatedChartData: string;
+  xero_bmk_loans_bmk: string | null;
+  xero_bmk_loans_qmint: string;
+  xero_qmint_loans_bmk: string;
+  xero_qmint_loans_qmint: string | null;
+  xero_qmint_shipment_charge_ac: string;
+  xero_qmint_charge_ac: string;
+  xero_secure_ship_charge_itemcode: string;
+  xero_secure_ship_charge_description: string;
+  xero_credit_card_charge_itemcode: string;
+  xero_credit_card_charge_description: string;
+  xero_vault_charge_itemcode: string;
+  xero_vault_charge_description: string;
+  xero_buyback_settelment_itemcode: string;
+  xero_buyback_settelment_itemdescription: string;
+  Registration_Target: string;
+  xero_bmk_charge_ac: string;
+  xero_vault_charge_ac: string;
+  ProviderId: string;
+  SyncInXero: string;
+  AusPost_PARCEL_POST_SIGNATURE: string;
+  AusPost_EXPRESS_POST_SIGNATURE: string;
+  AusPost_EXPRESS_EPARCEL_POST_RETURNS: string;
+  AusPost_EPARCEL_POST_ZONAL_RETURNS: string;
+  AusPost_EPARCEL_POST_RETURNS: string;
+  StarTrack_PREMIUM: string;
+  StarTrack_1_3_5KG_FIXED_PRICE_PREMIUM: string;
+  shipments_and_Track_Key: string;
+  shipments_and_Track_Password: string;
+  shipments_and_Track_Authorization_Token: string;
+  Aus_Post_Account_Number: string;
+  Star_Track_Account_Number: string;
+  CheckWeightTolerance: string;
+  Aus_Post_api_Host_Url: string;
+  Aus_Post_api_Port: string;
+  Create_Shipment_Url: string;
+  Create_Shipment_Label_Url: string;
+  Market_Loss_Owing_is_Overdue_Days: string;
+  Order_Not_Paid_Days: string;
+  Vault_Storage_Invoice_Not_Paid_Days: string;
+  AvailableAgainAfterDays: string;
+  bundlediscountkey: string;
+  showbundlediscount: string;
+  deliverysignofftransfertext: string;
+  deliverysignofftransferheder: string;
+  Create_Shipment_Order: string;
+  Get_Order_Summary: string;
+}
+
+interface IsiteMapData {
+  storeCode: number;
+  settings: Settings;
+}
+
 const initialState: CreateGuidelineState = {
   configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
   loading: false,
@@ -90,7 +153,8 @@ const initialState: CreateGuidelineState = {
   severity: 'info',
   needToShowProgressLoader: false,
   liveDashboardChartData: {},
-  popUpdata: null
+  popUpdata: null,
+  siteMapData: null
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -143,7 +207,12 @@ export const getLiveDashboardChartData = appCreateAsyncThunk(
     return await ConfigServices.getLiveDashboardChartData(url)
   }
 )
-
+export const getSiteMapData = appCreateAsyncThunk(
+  'getSiteMapData/status',
+  async () => {
+    return await ConfigServices.getSiteMapData()
+  }
+)
 // export const add = appCreateAsyncThunk(
 //   'add/status',
 //   async (data: GuidelineTitleParams) => {
@@ -382,6 +451,18 @@ export const createHomepageSlice = createSlice({
     })
     builder.addCase(getPopUpDetailsAPI.rejected, (state, action) => {
       // state.loading = false
+    })
+    // sitemap data
+    builder.addCase(getSiteMapData.pending, (state, action) => {
+      state.loading = true
+    })
+    builder.addCase(getSiteMapData.fulfilled, (state, action) => {
+      const responseData = action.payload.data.data;
+      state.siteMapData = responseData
+      state.loading = false
+    })
+    builder.addCase(getSiteMapData.rejected, (state, action) => {
+      state.loading = false
     })
   },
 })
