@@ -67,6 +67,14 @@ export interface DashboardData {
         cdnUrlLarge: string;
         cdnUrlSmall: string;
     }[];
+    discoverSliders: {
+        myVaultEvaPeakSliderId: number;
+        storeCode: number;
+        displayOrder: number;
+        sliderTime: number;
+        cdnUrlLarge: string;
+        cdnUrlSmall: string;
+    }[];
     customerInformation: {
         customerId: number;
         firstName: string;
@@ -83,6 +91,7 @@ export interface DashboardData {
     Customers:string ;
     Order:string ;
     "Reward Point":string ;
+    customerGreeting: string;
 }
 
 const initialState: MyVaultInitialState = {
