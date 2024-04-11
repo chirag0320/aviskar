@@ -16,6 +16,7 @@ import { getAccounts, getConfigDropdowns } from "@/redux/reducers/myVaultReducer
 import AddAccount from "@/components/partials/my-vault/AddAccount"
 import { getStateAndCountryLists } from "@/redux/reducers/checkoutReducer"
 import Toaster from "@/components/common/Toaster"
+import { navigate } from "gatsby"
 
 function Accounts() {
     const openToaster = useAppSelector(state => state.homePage.openToaster)
@@ -23,8 +24,14 @@ function Accounts() {
     const accountsData = useAppSelector(state => state.myVault.accounts)
     const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
     const [updateAddress, setUpdateAddress] = useState<boolean>(false)
+    const { isLoggedIn } = useAppSelector((state) => state.homePage)
     const [alignment, setAlignment] = React.useState('Individual');
     // console.log("🚀 ~ Accounts ~ alignment:", alignment)
+
+    if (!isLoggedIn) {
+        navigate('/login', { replace: true })
+        return;
+    }
 
     useAPIoneTime({
         service: getAccounts,

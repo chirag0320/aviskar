@@ -11,7 +11,7 @@ import type { SelectChangeEvent } from "@mui/material"
 // Componenets
 import TabPanel from "@/components/common/TabPanel"
 import RenderFields from "@/components/common/RenderFields"
-import { PriceChangeReturn, ProductStockStatus, ProductUpdateCountdown } from "@/components/common/Utils"
+import { PriceChangeReturn, ProductStockStatus, ProductUpdateCountdown, TextFlipAnimation } from "@/components/common/Utils"
 import ProductImages from "./ProductImages"
 
 // Assets
@@ -262,13 +262,18 @@ function AboutProduct({ productId }: any) {
                       )}</Typography>}
                       <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
                     </Box>
-                    {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue">{calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount)}</Typography> : null}
-                    {/* {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null} */}
+                    {priceData?.data?.[0]?.discount !== 0 && calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount) ? 
+                    <>
+                      <Typography className="ProductValue">SAVE</Typography>
+                      <TextFlipAnimation
+                        frontValue={calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount)!}
+                        backValue={'$'+ roundOfThePrice(productDetailsData?.premiumDiscount)}
+                      /></>
+                    : null}
                     {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
                   </Stack>
                   <Stack className="Right">
                     <ProductUpdateCountdown />
-                    {/* <Typography className="DiscountMessage">{configDetailsState?.productboxdiscounttext?.value}</Typography> */}
                   </Stack>
                 </Stack>
                 <Stack className="Bottom">
@@ -314,13 +319,17 @@ function AboutProduct({ productId }: any) {
                         )}
                         </Typography>}
                       </Stack>
-                      {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue">${priceData?.data?.[0]?.discount?.toFixed(2)} Off</Typography> : null}
+                      {priceData?.data?.[0]?.discount !== 0 ? 
+                          <TextFlipAnimation
+                          frontValue={`$${priceData?.data?.[0]?.discount?.toFixed(2)} Off`}
+                          backValue={configDetailsState?.productboxdiscounttext?.value}
+                        />
+                       : null}
                       {/* <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} /> */}
                       {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
                     </Stack>
                     <Stack className="Right">
                       <ProductUpdateCountdown />
-                      <Typography className="DiscountMessage" variant="overline">{configDetailsState?.productboxdiscounttext?.value}</Typography>
                     </Stack>
                   </Stack>
                   <Stack className="Bottom">
