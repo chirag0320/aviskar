@@ -3,6 +3,8 @@ import React from 'react'
 import { IOrderHistoryApiResponseData } from '@/types/myVault'
 import { useAppSelector } from '@/hooks'
 import { Item } from '@adobe/react-spectrum';
+import { roundOfThePrice } from '@/utils/common';
+import { navigate } from 'gatsby';
 
 function OrderDetailsCard({ orderHistoryDetails }: { orderHistoryDetails: IOrderHistoryApiResponseData | null }) {
     const loading = useAppSelector(state => state.myVault.loading);
@@ -14,8 +16,8 @@ function OrderDetailsCard({ orderHistoryDetails }: { orderHistoryDetails: IOrder
                     return (
                         <Card className="OrderDetailsCard" key={item.orderId} >
                             <Stack className="TopWrapper">
-                                <Typography className='OrderNumber' variant="subtitle2" component="h3">{item.customOrderNumber}</Typography>
-                                <Button variant='contained' color='info'>Details</Button>
+                                <Typography className='OrderNumber' variant="subtitle2" component="h3">Order No: {item.customOrderNumber}</Typography>
+                                <Button variant='contained' color='info' onClick={() => navigate(`/order-details/?orderNo=${item.customOrderNumber}`)}>Details</Button>
                             </Stack>
                             <Divider />
                             <Box className="OderDateInfoWrapper">
@@ -25,7 +27,7 @@ function OrderDetailsCard({ orderHistoryDetails }: { orderHistoryDetails: IOrder
                             <Stack className='OrderTotalButtonsWrapper'>
                                 <Box className='OrderTotalWrapper'>
                                     <Typography className='' variant="body1">Order Total</Typography>
-                                    <Typography className='' variant="body1">{item.orderId}</Typography>
+                                    <Typography className='' variant="body1">${roundOfThePrice(item.orderTotal)}</Typography>
                                 </Box>
                                 <Stack className='OrderButtonsWrapper'>
                                     <Button variant="contained" size="small" style={{ backgroundColor: item?.orderStatusColor ?? "" }}>{item?.orderStatus}</Button>

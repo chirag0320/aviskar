@@ -1356,6 +1356,24 @@ export const checkThePopUpDetails = async (paramsObj: IPopUpDetails, openPopup: 
 
   return false
 }
-export const calculationOfThePremiumaAndDiscount = () => {
+// export const calculationOfThePremiumAndDiscount = (premium: string | number, premiumDiscount: string | number) => {
+//   const numbre = Math.round((Number(premiumDiscount) / Number(premium)) * 100)
+//   return "SAVE " + numbre + "%"
+// }
+export const calculationOfThePremiumAndDiscount = (premium: string | number, premiumDiscount: string | number): string | null => {
+  const parsedPremium = Number(premium);
+  const parsedDiscount = Number(premiumDiscount);
 
+  // Check if parsedPremium and parsedDiscount are valid numbers
+  if (isNaN(parsedPremium) || isNaN(parsedDiscount) || parsedPremium === 0) {
+      return null;
+  }
+
+  const percentage = Math.round((parsedDiscount / parsedPremium) * 100);
+
+  if (isNaN(percentage)) {
+      return null;
+  }
+
+  return `${percentage}% on premium`;
 }

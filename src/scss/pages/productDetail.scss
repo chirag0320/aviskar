@@ -315,8 +315,17 @@
                   }
                 }
 
-                .DiscountValue {
-                  color: $sinopia;
+                .TextFlipAnimation {
+                  .Flipper {
+                    .Value {
+                      &.Front {
+                        color: $sinopia;
+                      }
+                      &.Back {
+                        color: $blueCyan;
+                      }
+                    }
+                  }
                 }
 
                 .PriceChangeReturn {

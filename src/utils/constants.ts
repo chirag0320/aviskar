@@ -94,7 +94,8 @@ export const ENDPOINTS = {
 
     // my vault -> orderHistory
     getOrderHistory: "myvault/tBryhxlMq0qgjzuUfbewkA",
-
+    // my vault home page
+    getMyVaultHomePageData : "myvault/eOmP5LRTU0O902gE7mO67Q",
     //popup details
     getPopUpDetails: "utility/85WwxAopc7Rn",
     savePopUpData: "utility/CLWL6vMSSrzB"

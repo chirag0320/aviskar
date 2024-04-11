@@ -22,6 +22,7 @@
 @import "components/orderDateStatusSelector";
 @import "components/reactSpectrum";
 @import "components/tooltip";
+@import "components/quantityInputs";
 
 // Common
 @import "common/header";
@@ -54,3 +55,5 @@
 @import "pages/accountTypeWrapper.scss";
 @import "pages/Error404.scss";
 @import "pages/history.scss";
+@import "pages/privateHolding.scss";
+@import "pages/privateHoldingAdd.scss";

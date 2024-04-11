@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, FormControl, Select, RadioGroup, FormControlLabel, FormLabel, Radio, FormHelperText, Checkbox, FormGroup, Switch, TextField, IconButton, InputAdornment } from '@mui/material'
+import { Box, FormControl, Select, RadioGroup, FormControlLabel, FormLabel, Radio, FormHelperText, Checkbox, FormGroup, Switch, TextField, IconButton, InputAdornment, Button, Stack } from '@mui/material'
 import { Controller } from 'react-hook-form'
 import classNames from 'classnames'
 
@@ -320,6 +320,52 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             )}
           />
 
+        </FormControl>
+      )
+      break
+
+    case 'file':
+      fieldType = (
+        <FormControl
+          fullWidth={fullWidth}
+          margin={margin}
+          {...(error ? { error: true } : {})}
+        >
+          {label && <FormLabel htmlFor={name}>{label}{required && " *"}</FormLabel>}
+          <Stack className="FileUploadWrapper" sx={{
+            position: 'relative',
+            alignItems: 'center',
+          }}>
+            <TextField
+              type="file"
+              id={name}
+              fullWidth={fullWidth}
+              error={!!error}
+              placeholder={placeholder}
+              multiline={multiline}
+              value={value}
+              autoComplete={autoComplete}
+              defaultValue={defaultValue}
+              disabled={disabled}
+              variant={variant}
+              onKeyDown={onKeyDown}
+              // label={label}
+              sx={{
+                '& .MuiInputBase-input': {
+                  height: '100%',
+                },
+              }}
+              InputProps={{ readOnly, onBlur, endAdornment, }}
+              {...register(name)}
+              {...otherProps}
+            />
+            <Button className='UploadButton' variant="contained" size="large" sx={{
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              height: '100%',
+            }}>Upload</Button>
+          </Stack>
         </FormControl>
       )
       break

@@ -175,11 +175,13 @@ export interface IOrderHistoryItems {
     paymentMethodSystemName: string;
     customerId: number;
     orderCustomerId: number;
+    orderTotal : number;
     shippingMethod: string;
     accountType: string;
     accountName: string;
     createdOnUtc: string;
     orderStatus: string;
+    orderTotal: number;
     orderStatusColor: string;
     alertStatus: string | null;
     alertStatusColor: string | null;
