@@ -46,6 +46,9 @@ class MyVaultServices {
     static async getMyVaultHomePageData() {
         return axiosInstance.get(ENDPOINTS.getMyVaultHomePageData);
     }
+    static async getMyVaultHomePageChartData() {
+        return axiosInstance.get(ENDPOINTS.getMyVaultHopePageDataChart);
+    }
 }
 
 export default MyVaultServices;

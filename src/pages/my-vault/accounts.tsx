@@ -16,15 +16,22 @@ import { getAccounts, getConfigDropdowns } from "@/redux/reducers/myVaultReducer
 import AddAccount from "@/components/partials/my-vault/AddAccount"
 import { getStateAndCountryLists } from "@/redux/reducers/checkoutReducer"
 import Toaster from "@/components/common/Toaster"
+import { navigate } from "gatsby"
 
 function Accounts() {
     const openToaster = useAppSelector(state => state.homePage.openToaster)
     const loading = useAppSelector(state => state.myVault.loading)
     const accountsData = useAppSelector(state => state.myVault.accounts)
     const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
-    const [updateAddress, setUpdateAddress] = useState<boolean>(false)
+    const [addAccount, setAddAccount] = useState<boolean>(false)
+    const { isLoggedIn } = useAppSelector((state) => state.homePage)
     const [alignment, setAlignment] = React.useState('Individual');
     // console.log("🚀 ~ Accounts ~ alignment:", alignment)
+
+    if (!isLoggedIn) {
+        navigate('/login', { replace: true })
+        return;
+    }
 
     useAPIoneTime({
         service: getAccounts,
@@ -40,17 +47,17 @@ function Accounts() {
         setAccountTypeDialog(true);
     }
     const handleCloseUpdateAddress = () => {
-        setUpdateAddress(false);
+        setAddAccount(false);
     }
     const handleAccountTypeNextButton = () => {
-        setUpdateAddress(true);
+        setAddAccount(true);
         setAccountTypeDialog(false);
     }
     const handleCloseAccountTypeDialog = () => {
         setAccountTypeDialog(false);
     }
     const hadleAddAccountSecondaryAction = () => {
-        setUpdateAddress(false);
+        setAddAccount(false);
         setAccountTypeDialog(true);
     }
 
@@ -91,11 +98,12 @@ function Accounts() {
                                         email={account.email}
                                         phoneNumber={account.phoneNumber}
                                         showDelete={false}
+                                        accountData={account}
                                     />
                                 ))}
                             </Box>
                         </Box>
-                        <AddAccount dialogTitle="Add new account" open={updateAddress} alignment={alignment} onClose={handleCloseUpdateAddress} hadleSecondaryAction={hadleAddAccountSecondaryAction} />
+                        <AddAccount dialogTitle="Add new account" open={addAccount} alignment={alignment} onClose={handleCloseUpdateAddress} hadleSecondaryAction={hadleAddAccountSecondaryAction} />
                         <AccountType dialogTitle="Select Account Type" open={accountTypeDialog} alignment={alignment} handleChange={handleChange} onClose={handleCloseAccountTypeDialog} handleAccountTypeNextButton={handleAccountTypeNextButton} />
                     </Container>
                 </Box>

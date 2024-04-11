@@ -38,8 +38,9 @@ import { Breadcrumb } from "@/components/common/Utils";
 // Assets
 import { ArrowRight, OrdersIcon, PrivateHoldingIcon, AllotedHldingIcon, SmartMetalsIcon, AccountsIcon, AddressesIcon, RewardPointsIcon, BuyBackOrderIcon, MyVaultIcon, MyGoldIcon, MySilverIcon } from "../../assets/icons/index";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
-import { getMyVaultHomePageData } from "@/redux/reducers/myVaultReducer";
+import { getMyVaultHomePageChartData, getMyVaultHomePageData } from "@/redux/reducers/myVaultReducer";
 import { useAppSelector } from "@/hooks";
+import { navigate } from "gatsby";
 
 interface VaultProps {
   id: number;
@@ -55,8 +56,8 @@ interface VaultProps {
 
 function Vault() {
   const { data }: any = useApiRequest(ENDPOINTS.getSlider);
-  const { myVaultHomePageData} = useAppSelector((state) => state.myVault)
-  console.log("🚀 ~ Vault ~ myVaultHomePageData:", myVaultHomePageData)
+  const { myVaultHomePageData, myVaultHomePageChartData } = useAppSelector((state) => state.myVault)
+  console.log("🚀 ~ Vault ~ myVaultHomePageChartData:", myVaultHomePageData)
   const isLargeScreen = useMediaQuery((theme: Theme) =>
     theme.breakpoints.up("lg")
   );
@@ -84,8 +85,10 @@ function Vault() {
       delay: 8000,
     },
   };
-  const [state, setState] = useState({ service: getMyVaultHomePageData, })
+  const [state,] = useState({ service: getMyVaultHomePageData })
+  const [state2,] = useState({ service: getMyVaultHomePageChartData })
   useAPIoneTime(state)
+  useAPIoneTime(state2)
   return (
     <Layout>
       <Box className="VaultPage">
@@ -113,7 +116,7 @@ function Vault() {
                   Shop Now
                 </Button>
                 <Box className="VaultStats">
-                  <StatsCard title="View Orders" statsNumber="5" icon={<OrdersIcon />} bgColor="rgb(52 145 250 / 6%)" />
+                  <StatsCard title="View Orders" statsNumber={myVaultHomePageData?.Order} icon={<OrdersIcon />} bgColor="rgb(52 145 250 / 6%)" />
                   <StatsCard title="Private Holding" icon={<PrivateHoldingIcon />} statsNumber="35" bgColor="rgb(234 162 43 / 6%)" />
                   <StatsCard title="Allocated Holdings" statsNumber="8" icon={<AllotedHldingIcon />} bgColor="rgb(255 31 31 / 6%)" />
                   <StatsCard title="Smart Metals" statsNumber="460" icon={<SmartMetalsIcon />} bgColor="rgb(0 128 1 / 6%)" />
@@ -122,11 +125,10 @@ function Vault() {
               <Box className="Right">
                 <Box id="Banner" component="section" key={"banner"}>
                   <Box className="SwiperContainer">
-                    {data?.data?.length > 0 ? (
+                    {myVaultHomePageData?.sliders?.length ? (
                       <Swiper {...config}>
                         <>
-                          {data?.data?.map(
-                            (item: VaultProps, index: number) => {
+                          {myVaultHomePageData?.sliders?.map((item, index: number) => {
                               return (
                                 <SwiperSlide key={`BannerSlider-${index}`}>
                                   <Box
@@ -145,16 +147,10 @@ function Vault() {
                                           loading="eager"
                                           src={
                                             isLargeScreen
-                                              ? "https://picsum.photos/880/688"
+                                              ? item.cdnUrlLarge
                                               : item.cdnUrlSmall
                                           }
-                                          // src={
-                                          //   isLargeScreen
-                                          //     ? item.cdnUrlLarge
-                                          //     : item.cdnUrlSmall
-                                          // }
                                           alt="background"
-
                                         />
                                       </>
                                     }
@@ -214,10 +210,10 @@ function Vault() {
           <Container>
             <Box className="UserInfoWrapper">
               <Box className="Left">
-                <StatsCard title="Smart Metals" statsNumber="5" icon={<AccountsIcon />} bgColor="rgb(52 145 250 / 6%)" />
-                <StatsCard title="Addresses" statsNumber="2" icon={<AddressesIcon />} bgColor="rgb(234 162 43 / 6%)" />
-                <StatsCard title="Rewards Points" statsNumber="460" icon={<RewardPointsIcon />} bgColor="rgb(255 31 31 / 6%)" />
-                <StatsCard title="Buyback Orders" statsNumber="8" icon={<BuyBackOrderIcon />} bgColor="rgb(0 128 1 / 6%)" />
+                <StatsCard onClick={navigate('my-vault/smart-metals/')} title="Smart Metals" statsNumber="5" icon={<AccountsIcon />} bgColor="rgb(52 145 250 / 6%)" />
+                <StatsCard onClick={navigate('my-vault/addresses/')} title="Addresses" statsNumber={myVaultHomePageData?.Addresses} icon={<AddressesIcon />} bgColor="rgb(234 162 43 / 6%)" />
+                <StatsCard onClick={navigate('my-vault/rewards-poins/')} title="Rewards Points" statsNumber={myVaultHomePageData?.["Reward Point"]} icon={<RewardPointsIcon />} bgColor="rgb(255 31 31 / 6%)" />
+                <StatsCard onClick={navigate('my-vault/private-holding/')} title="Buyback Orders" statsNumber={myVaultHomePageData?.["Buyback Order"]} icon={<BuyBackOrderIcon />} bgColor="rgb(0 128 1 / 6%)" />
               </Box>
               <Box className="Right">
                 <Box id="Banner" component="section" key={"banner"}>
@@ -299,7 +295,7 @@ function Vault() {
                 <Typography variant="h4">Recent Orders</Typography>
                 <Button endIcon={<ArrowRight />}>View All</Button>
               </Stack>
-              <RecentOrderTable recentOrders={myVaultHomePageData?.recentOrders!}/>
+              <RecentOrderTable recentOrders={myVaultHomePageData?.recentOrders!} />
             </Box>
           </Container>
         </Box>
@@ -307,7 +303,7 @@ function Vault() {
           <Container>
             <Stack className="RewardWrapper">
               <Typography className="rewardText">Your Rewards Points: </Typography>
-              <Typography variant="h4" className="rewardPoints"> 460</Typography>
+              <Typography variant="h4" className="rewardPoints">{myVaultHomePageData?.availableRewardPoints}</Typography>
             </Stack>
 
           </Container>

@@ -11,22 +11,33 @@ import { useAppSelector, useAppDispatch } from "@/hooks";
 import Layout from "@/components/common/Layout";
 import Loader from "@/components/common/Loader";
 import { useEffect } from "react";
-import { getOrderHistory } from "@/redux/reducers/myVaultReducer";
+import { getConfigDropdowns, getOrderHistory } from "@/redux/reducers/myVaultReducer";
 import { requestBodyOrderHistory } from "./buy-back-order-history";
+import { navigate } from "gatsby";
 
 function OrderHistory() {
   const loading = useAppSelector(state => state.myVault.loading)
   const dispatch = useAppDispatch();
   const orderHistoryDetails = useAppSelector((state) => state.myVault.orderHistory);
+  const isLoggedIn = useAppSelector((state) => state.homePage.isLoggedIn)
+
+  if (!isLoggedIn) {
+    navigate('/login', { replace: true })
+    return;
+  }
 
   useEffect(() => {
     dispatch(
       getOrderHistory({
         url: ENDPOINTS.getOrderHistory,
-        body: { ...requestBodyOrderHistory },
+        body: { ...requestBodyOrderHistory, pageSize: -1 },
       })
     );
   }, []);
+  useAPIoneTime({
+    service: getConfigDropdowns,
+    endPoint: ENDPOINTS.getConfigDropdown
+  })
   // useAPIoneTime({service : getOrderHistory , endPoint : ENDPOINTS.getOrderHistory , body :{ ...requestBodyDefault, filters: {} } })
 
   return (

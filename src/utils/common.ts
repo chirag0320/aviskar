@@ -20,7 +20,14 @@ export function formatDate(dateString: any) {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-US', options);
 }
+// function formatDate(timestamp) {
+//   const date = new Date(timestamp);
+//   const day = date.getDate().toString().padStart(2, '0');
+//   const month = (date.getMonth() + 1).toString().padStart(2, '0');
+//   const year = date.getFullYear();
 
+//   return `${day}/${month}/${year}`;
+// }
 export function progressBarLogic({ currentprice, min, max }: any) {
   return ((currentprice - min) / (max - min)) * 100
 }
@@ -116,13 +123,21 @@ export const convertMinutesToMilliseconds = (minutes: number | string): number =
   return milliseconds;
 };
 
-export const AccountTypeEnum: { [key: string]: number } = {
-  "Individual": 0,
-  "Joint": 1,
-  "Business": 3,
-  "Superfund": 4,
-  "Trust": 5,
-  "Wholesaler": 6
+export const AccountTypeEnumReverse: { [key: string]: string } = {
+  "1": "Individual",
+  "2": "Joint",
+  "3": "Business",
+  "4": "Superfund",
+  "5": "Trust",
+  "6": "Wholesaler"
+}
+export const AccountTypeEnum: { [key: string]: string } = {
+  "Individual" :"1",
+  "Joint" :"2",
+  "Business" :"3",
+  "Superfund" :"4",
+  "Trust" :"5",
+  "Wholesaler" :"6"
 }
 
 export const PhoneNumberCountryCode = [

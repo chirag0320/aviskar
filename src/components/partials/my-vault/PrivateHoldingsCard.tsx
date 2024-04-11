@@ -41,8 +41,8 @@ function PrivateHoldingCard() {
                         <Typography variant="body1" className=""><strong>Purchase Price :</strong> $3610.56 ($300.88)</Typography>
                         <Typography variant="body1" className=""><strong>Sell to us value :</strong></Typography>
                         <Stack className='ButtonsWrapper'>
-                            <Button variant="contained" size="small" color="error">$0.00</Button>
-                            <Button variant="contained" size="small" color="success" startIcon={<ChevronDown />}>$-3610.56(-Infinity%)</Button>
+                            <Button variant="contained" size="small" onClick={toggleSellToUs} color="error">$0.00</Button>
+                            <Button variant="contained" size="small" onClick={toggleSellToUs} color="success" startIcon={<ChevronDown />}>$-3610.56(-Infinity%)</Button>
                             <Button variant='contained' size="small" onClick={toggleSellToUs}>selltoas</Button>
                         </Stack>
                         {/* <Box sx={{

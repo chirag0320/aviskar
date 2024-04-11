@@ -403,35 +403,36 @@ function privateHoldingAdd(paramsData: any) {
                                                 <MenuItem key='test' value='royal mint'>Certificate</MenuItem>
                                                 <MenuItem key='test' value='sunshine mint'>other</MenuItem>
                                             </RenderFields>
-
-                                            <TableContainer
-                                                className="DocumentsDetailTablewrapper  RecentOrdersTable"
-                                            >
-                                                <Table className="DocumentsDetailTable" sx={{ minWidth: 550 }} aria-label="Documents Details table">
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell sx={{ minWidth: "200px" }}>File Name</TableCell>
-                                                            <TableCell sx={{ minWidth: "200px" }}>Documents Type</TableCell>
-                                                            <TableCell sx={{ minWidth: "100px" }}>Remove</TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {documentsRows.map((row) => (
-                                                            <TableRow
-                                                                key={row.fileName}
-                                                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                            >
-                                                                <TableCell component="th" scope="row">{row.fileName}</TableCell>
-                                                                <TableCell>{row.documentType}</TableCell>
-                                                                <TableCell>
-                                                                    <IconButton className="DeleteButton"><Delete1Icon /></IconButton>
-                                                                </TableCell>
+                                            <Box className="CommonTableWrapper">
+                                                <TableContainer
+                                                    className="DocumentsDetailTablewrapper  CommonTableDesign"
+                                                >
+                                                    <Table className="DocumentsDetailTable" sx={{ minWidth: 550 }} aria-label="Documents Details table">
+                                                        <TableHead>
+                                                            <TableRow>
+                                                                <TableCell sx={{ minWidth: "200px" }}>File Name</TableCell>
+                                                                <TableCell sx={{ minWidth: "200px" }}>Documents Type</TableCell>
+                                                                <TableCell sx={{ minWidth: "100px" }}>Remove</TableCell>
                                                             </TableRow>
-                                                        ))}
+                                                        </TableHead>
+                                                        <TableBody>
+                                                            {documentsRows.map((row) => (
+                                                                <TableRow
+                                                                    key={row.fileName}
+                                                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                                >
+                                                                    <TableCell component="th" scope="row">{row.fileName}</TableCell>
+                                                                    <TableCell>{row.documentType}</TableCell>
+                                                                    <TableCell>
+                                                                        <IconButton className="DeleteButton"><Delete1Icon /></IconButton>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            ))}
 
-                                                    </TableBody>
-                                                </Table>
-                                            </TableContainer>
+                                                        </TableBody>
+                                                    </Table>
+                                                </TableContainer>
+                                            </Box>
                                         </Box>
                                         <Box className="PhotosContentwrapper">
                                             <RenderFields
@@ -446,32 +447,34 @@ function privateHoldingAdd(paramsData: any) {
                                                 required
                                             >
                                             </RenderFields>
-                                            <TableContainer
-                                                className="PhotosDetailTablewrapper  RecentOrdersTable"
-                                            >
-                                                <Table className="PhotosDetailTable" sx={{ minWidth: 400 }} aria-label="Photos Details table">
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell sx={{ minWidth: "300px" }}>File Name</TableCell>
-                                                            <TableCell sx={{ minWidth: "100px" }}>Remove</TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {photosRows.map((row) => (
-                                                            <TableRow
-                                                                key={row.fileName}
-                                                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                            >
-                                                                <TableCell component="th" scope="row">{row.fileName}</TableCell>
-                                                                <TableCell>
-                                                                    <IconButton className="DeleteButton"><Delete1Icon /></IconButton>
-                                                                </TableCell>
+                                            <Box className="CommonTableWrapper">
+                                                <TableContainer
+                                                    className="PhotosDetailTablewrapper  CommonTableDesign"
+                                                >
+                                                    <Table className="PhotosDetailTable" sx={{ minWidth: 400 }} aria-label="Photos Details table">
+                                                        <TableHead>
+                                                            <TableRow>
+                                                                <TableCell sx={{ minWidth: "300px" }}>File Name</TableCell>
+                                                                <TableCell sx={{ minWidth: "100px" }}>Remove</TableCell>
                                                             </TableRow>
-                                                        ))}
+                                                        </TableHead>
+                                                        <TableBody>
+                                                            {photosRows.map((row) => (
+                                                                <TableRow
+                                                                    key={row.fileName}
+                                                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                                >
+                                                                    <TableCell component="th" scope="row">{row.fileName}</TableCell>
+                                                                    <TableCell>
+                                                                        <IconButton className="DeleteButton"><Delete1Icon /></IconButton>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            ))}
 
-                                                    </TableBody>
-                                                </Table>
-                                            </TableContainer>
+                                                        </TableBody>
+                                                    </Table>
+                                                </TableContainer>
+                                            </Box>
                                         </Box>
                                     </Stack>
                                     <Stack sx={{ gap: "20px", justifyContent: "flex-end" }} className='BottomButtonsWrapper'>
