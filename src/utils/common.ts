@@ -124,6 +124,14 @@ export const AccountTypeEnumReverse: { [key: string]: string } = {
   "5": "Trust",
   "6": "Wholesaler"
 }
+export const AccountTypeEnum: { [key: string]: string } = {
+  "Individual" :"1",
+  "Joint" :"2",
+  "Business" :"3",
+  "Superfund" :"4",
+  "Trust" :"5",
+  "Wholesaler" :"6"
+}
 
 export const PhoneNumberCountryCode = [
   {

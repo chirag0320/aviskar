@@ -30,7 +30,7 @@ interface RenderFieldProps {
   id?: string
   className?: string
   name: string
-  defaultValue?: string
+  defaultValue?: string | number
   options?: FieldOption[]
   multiline?: boolean
   readOnly?: boolean

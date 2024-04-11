@@ -14,7 +14,7 @@ import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
 import { StateOrCountry, addOrEditAddress as addOrEditAddressForCheckout, updateAddress as updateAddressForCheckout } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
-import { hasFulfilled } from "@/utils/common"
+import { PhoneNumberCountryCode, hasFulfilled } from "@/utils/common"
 import { addressSchema } from "./AddAddress"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
@@ -249,8 +249,7 @@ function UpdateAddress(props: UpdateAddress) {
                 margin="none"
                 className="ContactSelect"
               >
-                <MenuItem value="91">+91</MenuItem>
-                <MenuItem value="11">+11</MenuItem>
+                {PhoneNumberCountryCode.map((phone) => <MenuItem key={phone.code} value={phone.dial_code}>{`${phone.name} (${phone.dial_code})`}</MenuItem>)}
               </RenderFields>
               <RenderFields
                 register={register}

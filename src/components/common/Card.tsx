@@ -15,7 +15,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import classNames from "classnames";
-
+import { Account } from "@/types/myVault"
 // Type
 import type { SelectChangeEvent } from "@mui/material"
 
@@ -54,6 +54,7 @@ import useShowToaster from "@/hooks/useShowToaster";
 import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer";
 import { Address } from "@/types/myVault";
 import UpdateAddress from "../partials/checkout/UpdateAddress";
+import AddAccount from "../partials/my-vault/AddAccount";
 
 interface Iproduct {
   product: IFeaturedProducts;
@@ -527,12 +528,14 @@ interface AddressCardProps {
   address: Address,
   showDelete: boolean,
   handleDelete?: any,
-  id?: number
+  id?: number,
+  accountData?: Account
 }
 
 export const AddressCard = (props: AddressCardProps) => {
-  const { id, accountType, accountName, firstName, lastName, email, phoneNumber, address, showDelete, handleDelete } = props;
+  const { id, accountType, accountName, firstName, lastName, email, phoneNumber, address, showDelete, handleDelete, accountData } = props;
   const [openUpdateAddress, setOpenUpdateAddress] = useState<boolean>(false)
+  const [openUpdateAccount, setOpenUpdateAccount] = useState(false);
 
   const handleUpdateAddress = () => {
     setOpenUpdateAddress(true);
@@ -541,13 +544,20 @@ export const AddressCard = (props: AddressCardProps) => {
   const handleCloseUpdateAddress = () => {
     setOpenUpdateAddress(false);
   }
+  const handleUpdateAccount = () => {
+    setOpenUpdateAccount(true);
+  }
+
+  const handleCloseUpdateAccount = () => {
+    setOpenUpdateAccount(false);
+  }
 
   return (
     <Box className="AddressCard">
       <Stack className="CardHeader">
         <Typography variant="subtitle2" className="AccountType">{accountType}</Typography>
         <Box className="ActionButton">
-          <Button variant="contained" size="small" color="success" onClick={handleUpdateAddress}>Edit</Button>
+          <Button variant="contained" size="small" color="success" onClick={accountData ? handleUpdateAccount : handleUpdateAddress}>Edit</Button>
           {showDelete && <Button variant="contained" size="small" color="error" onClick={() => handleDelete(id)}>Delete</Button>}
         </Box>
       </Stack>
@@ -562,7 +572,8 @@ export const AddressCard = (props: AddressCardProps) => {
         </Typography>}
       </Box>
 
-      <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={handleCloseUpdateAddress} existingAddress={address} isComingFromMyVault={true}/>
+      <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={handleCloseUpdateAddress} existingAddress={address} isComingFromMyVault={true} />
+      <AddAccount dialogTitle="Update account" open={openUpdateAccount} alignment={accountData?.accountType ?? "1"} onClose={handleCloseUpdateAccount} existingAccount={accountData} />
     </Box>
   );
 };
