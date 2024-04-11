@@ -15,7 +15,7 @@ import { ENDPOINTS } from "@/utils/constants";
 import { PhoneNumberCountryCode, hasFulfilled, AccountTypeEnumReverse } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
-import { addOrEditAccount } from "@/redux/reducers/myVaultReducer"
+import { addOrEditAccount, getAccounts } from "@/redux/reducers/myVaultReducer"
 import { BussinessAccountFormSchema, IndividualAccountFormSchema, JointAccountFormSchema, SuperFundAccountFormSchema, TrustAccountFormSchema } from "@/utils/accountFormSchemas.schema"
 import { AxiosError } from "axios"
 import AdditionalFields, { IField } from "./AdditionalFields"
@@ -163,6 +163,7 @@ function AddAccount(props: AddAccountProps) {
       onClose()
       reset()
       showToaster({ message: "Account saved successfully", severity: "success" })
+      await dispatch(getAccounts({ url: ENDPOINTS.getAccounts }))
     }
     else {
 

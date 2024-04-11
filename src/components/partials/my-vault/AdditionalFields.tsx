@@ -29,11 +29,11 @@ const AdditionalFields = ({ fields, setFields }: IProps) => {
             }
         };
         // additionalFieldSchema
-        setFields(prevFields => [...prevFields, { ...newField }]);
+        setTempFields(prevFields => [...prevFields, { ...newField }]);
     };
 
     const handleDeleteField = (id: string) => {
-        setFields(prevFields => prevFields.filter(field => Object.keys(field)[0] !== id));
+        setTempFields(prevFields => prevFields.filter(field => Object.keys(field)[0] !== id));
     };
 
     return (
