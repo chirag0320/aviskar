@@ -23,7 +23,7 @@ function OrderHistory() {
     dispatch(
       getOrderHistory({
         url: ENDPOINTS.getOrderHistory,
-        body: { ...requestBodyOrderHistory },
+        body: { ...requestBodyOrderHistory, pageSize: -1 },
       })
     );
   }, []);

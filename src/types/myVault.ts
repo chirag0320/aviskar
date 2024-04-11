@@ -155,6 +155,7 @@ export interface IOrderHistoryItems {
     paymentMethodSystemName: string;
     customerId: number;
     orderCustomerId: number;
+    orderTotal : number;
     shippingMethod: string;
     accountType: string;
     accountName: string;

@@ -18,7 +18,8 @@ export const requestBodyOrderHistory = {
         toDate: "",
         orderStatusId: "",
         orderCustomerId: ""
-    }
+    },
+    pageSize : -1
 }
 
 function BuyBackOrderHistory() {
