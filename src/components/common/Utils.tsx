@@ -239,7 +239,7 @@ export const PriceChangeReturn = React.memo(({ percentage }: { percentage: strin
 })
 
 export const TextFlipAnimation = React.memo(({frontValue, backValue}: {frontValue: string, backValue: string}) => {
-  const containerWidth = Math.max(frontValue.length, backValue.length) * 9;
+  const containerWidth = Math.max(frontValue.length, backValue.length) * 10;
   
   return (
     <Box className="TextFlipAnimation"

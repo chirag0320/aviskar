@@ -262,13 +262,14 @@ function AboutProduct({ productId }: any) {
                       )}</Typography>}
                       <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
                     </Box>
-                    {priceData?.data?.[0]?.discount !== 0 ? <Typography className="DiscountValue">{calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount)}</Typography> : null}
-                    {/* {priceData?.data?.[0]?.discount !== 0 ? 
+                    {priceData?.data?.[0]?.discount !== 0 && calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount) ? 
+                    <>
+                      <Typography className="ProductValue">SAVE</Typography>
                       <TextFlipAnimation
-                        frontValue={`$${priceData?.data?.[0]?.discount?.toFixed(2)} Off`}
-                        backValue={configDetailsState?.productboxdiscounttext?.value}
-                      />
-                    : null} */}
+                        frontValue={calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount)!}
+                        backValue={'$'+ roundOfThePrice(productDetailsData?.premiumDiscount)}
+                      /></>
+                    : null}
                     {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
                   </Stack>
                   <Stack className="Right">
