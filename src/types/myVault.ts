@@ -3,7 +3,7 @@ export interface IDropdownItem {
     id: number;
     name: string;
     enumValue: number;
-    type: any; 
+    type: any;
     colorCode: string | null;
     seqNo: number;
     extraProperty: any;
@@ -14,9 +14,9 @@ export interface IConfigDropdown {
     accountTypeList: IDropdownItem[];
     buybackOrderStatusList: IDropdownItem[];
     countryList: IDropdownItem[];
-    orderStatusList : IDropdownItem[];
-    stateList : IDropdownItem[];
-    trusteeTypeList : IDropdownItem[];
+    orderStatusList: IDropdownItem[];
+    stateList: IDropdownItem[];
+    trusteeTypeList: IDropdownItem[];
 }
 
 // ACCOUNTS
@@ -96,6 +96,12 @@ export interface Account {
     accountNumber: number | null;
     masterCustomerId: number | null;
     address: Address;
+    additionalBeneficiary: {
+        id: number;
+        customerId: number;
+        firstName: string;
+        lastName: string;
+    }[]
 }
 
 // REWARD POINTS HISTORY
@@ -175,7 +181,7 @@ export interface IOrderHistoryItems {
     paymentMethodSystemName: string;
     customerId: number;
     orderCustomerId: number;
-    orderTotal : number;
+    orderTotal: number;
     shippingMethod: string;
     accountType: string;
     accountName: string;

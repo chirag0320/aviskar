@@ -98,6 +98,16 @@ function AddAccount(props: AddAccountProps) {
     setValue('Country', existingAccount?.address.countryId?.toString())
     setcountryValue(existingAccount?.address.countryId?.toString())
     setstateValue(existingAccount?.address.stateName)
+
+    const additionalBeneficiary = existingAccount?.additionalBeneficiary.map((beneficiary) => {
+      return {
+        [beneficiary.id]: {
+          firstName: beneficiary.firstName,
+          lastName: beneficiary.lastName
+        }
+      }
+    });
+    setAdditionalFields(additionalBeneficiary)
     return () => {
       reset()
     }
@@ -192,7 +202,7 @@ function AddAccount(props: AddAccountProps) {
 
   useEffect(() => {
     return () => {
-      if(existingAccount) return;
+      if (existingAccount) return;
       reset()
       setcountryValue(-1)
       setstateValue('')
