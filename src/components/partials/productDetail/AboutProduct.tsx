@@ -324,7 +324,7 @@ function AboutProduct({ productId }: any) {
                           <Typography className="SaveMessage">SAVE</Typography>
                           <TextFlipAnimation
                             frontValue={calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount)!}
-                            backValue={'$' + roundOfThePrice(productDetailsData?.premiumDiscount)}
+                            backValue={'$' + roundOfThePrice(productDetailsData?.premiumDiscount) +'Off'}
                           /></Stack>
                         : null}
                       {/* <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} /> */}
