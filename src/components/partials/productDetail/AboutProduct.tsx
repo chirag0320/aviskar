@@ -263,12 +263,12 @@ function AboutProduct({ productId }: any) {
                       <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
                     </Box>
                     {priceData?.data?.[0]?.discount !== 0 && calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount) ? 
-                    <>
-                      <Typography className="ProductValue">SAVE</Typography>
+                    <Stack className="DiscountWrapper">
+                      <Typography className="SaveMessage">SAVE</Typography>
                       <TextFlipAnimation
                         frontValue={calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount)!}
                         backValue={'$'+ roundOfThePrice(productDetailsData?.premiumDiscount)}
-                      /></>
+                      /></Stack>
                     : null}
                     {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
                   </Stack>
@@ -319,12 +319,14 @@ function AboutProduct({ productId }: any) {
                         )}
                         </Typography>}
                       </Stack>
-                      {priceData?.data?.[0]?.discount !== 0 ? 
+                      {priceData?.data?.[0]?.discount !== 0 && calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount) ?
+                        <Stack className="DiscountWrapper">
+                          <Typography className="SaveMessage">SAVE</Typography>
                           <TextFlipAnimation
-                          frontValue={`$${priceData?.data?.[0]?.discount?.toFixed(2)} Off`}
-                          backValue={configDetailsState?.productboxdiscounttext?.value}
-                        />
-                       : null}
+                            frontValue={calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount)!}
+                            backValue={'$' + roundOfThePrice(productDetailsData?.premiumDiscount)}
+                          /></Stack>
+                        : null}
                       {/* <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} /> */}
                       {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
                     </Stack>

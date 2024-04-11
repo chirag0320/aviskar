@@ -315,14 +315,20 @@
                   }
                 }
 
+                .DiscountWrapper {
+                  gap: 6px;
+                  color: $sinopia;
+                }
+
                 .TextFlipAnimation {
                   .Flipper {
                     .Value {
+                      text-align: left;
                       &.Front {
                         color: $sinopia;
                       }
                       &.Back {
-                        color: $blueCyan;
+                        color: $sinopia;
                       }
                     }
                   }
