@@ -67,7 +67,6 @@ function Accounts() {
     ) => {
         setAlignment(newAlignment);
     };
-
     return (
         <>
             <Loader open={loading} />

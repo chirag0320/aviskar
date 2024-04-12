@@ -1,5 +1,5 @@
 import axiosInstance from "@/axiosfolder";
-import { AccountQuery, AddressQuery, rewardPointsHistoryData, IOrderHistoryData } from "@/types/myVault";
+import { AccountQuery, AddressQuery, rewardPointsHistoryData, IOrderHistoryData, SellData, ConversionData, IEnquiryData } from "@/types/myVault";
 import { ENDPOINTS } from "@/utils/constants";
 
 class MyVaultServices {
@@ -55,13 +55,20 @@ class MyVaultServices {
         return axiosInstance.get(ENDPOINTS.getPrivateHoldingsList);
     }
 
-    static async getPrivateHoldingsListLivePrice(url: string, holdingsIds: {
-        url: string, body: {
-            HoldingIds: number[],
-            IsStorePrice: boolean
-        }
+    static async getPrivateHoldingsListLivePrice(url: string, body: {
+        HoldingIds: number[],
+        IsStorePrice: boolean
     }) {
-        return axiosInstance.post(url, holdingsIds);
+        return axiosInstance.post(url, body);
+    }
+    static async sendForEnquiry(body: IEnquiryData) {
+        return axiosInstance.post(ENDPOINTS.enquiry,);
+    }
+    static async sellQty(body: SellData) {
+        return axiosInstance.post(ENDPOINTS.sellQty, body);
+    }
+    static async convertToMarketPlace(body: ConversionData) {
+        return axiosInstance.post(ENDPOINTS.convertToMarketPlace, body);
     }
 }
 

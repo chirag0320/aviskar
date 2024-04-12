@@ -1,3 +1,5 @@
+import { STORE_CODE } from "@/axiosfolder"
+
 export const ENDPOINTS = {
     getConfigStore: 'store/duMyjVf3k0KIi7Rq7CmHAA',
     getTicker: 'calculator/DMJqdS7VvR2VMk9R',
@@ -111,8 +113,20 @@ export const ENDPOINTS = {
     // my vault > private holdings
     getPrivateHoldingsList: 'myvault/y4vzhfrtjjTnwCFc71pMdI',
     getPrivateHoldingsListLivePrice: 'myvault/LlamWfOP1YkWQZEp74U',
+    // private holdings
+    privateHoldingList: 'myvault/j71euLEXRE6zhEOO9lVyIw',
+    // re-orderAPI
+    reOrder: 'myvault/RxcLCj5Rvlbs4OwCiSkaBg/Orderid',
+    // enquiry
+    enquiry: "myvault/NKtlZmWzax4PNlIWj",
+    // sell qty
+    sellQty: "myvault/EZLnvfaBlImG4dOHR",
+    // convert to market place
+    convertToMarketPlace: "myvault/q9QOiEdTtEkrm6EVOewM2F"
 }
 export const StoreData = {
     storeCode: 12,
     returnUrl: typeof window !== 'undefined' ? window.location.href : null
 }
+
+export const changePasswordURL = "https://register.qmint.com/passwordrecovery?id=" + STORE_CODE
