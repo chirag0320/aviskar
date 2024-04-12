@@ -93,6 +93,13 @@ function AddAccount(props: AddAccountProps) {
 
   // console.log("🚀 ~ useEffect ~ existingAccount:", countryValue)
 
+  useEffect(() => {
+    setValue('Country', "none")
+    if (accountTypeText === "Trust" || accountTypeText === "Superfund") {
+      setValue('TrusteeType', "none")
+    }
+  }, [])
+
 
   useEffect(() => {
     if (!existingAccount) return;
@@ -207,7 +214,7 @@ function AddAccount(props: AddAccountProps) {
     return () => {
       if (existingAccount) return;
       reset()
-      setcountryValue(-1)
+      setcountryValue("none")
       setstateValue('')
     }
   }, [open]);
@@ -284,6 +291,7 @@ function AddAccount(props: AddAccountProps) {
                 control={control}
                 error={errors.TrusteeType}
                 setValue={setValue}
+                getValues={getValues}
                 name="TrusteeType"
                 variant='outlined'
                 margin='none'
@@ -312,11 +320,12 @@ function AddAccount(props: AddAccountProps) {
                 control={control}
                 error={errors.TrusteeType}
                 setValue={setValue}
+                getValues={getValues}
                 name="TrusteeType"
                 variant='outlined'
                 margin='none'
               >
-                <MenuItem value="none">Select trustee</MenuItem>
+                <MenuItem value="none" selected>Select trustee</MenuItem>
                 {configDropdowns && configDropdowns.trusteeTypeList.map((trustee) =>
                   <MenuItem key={trustee.id} value={trustee.id}>{trustee.name}</MenuItem>
                 )}
@@ -503,16 +512,17 @@ function AddAccount(props: AddAccountProps) {
                 type="select"
                 control={control}
                 error={errors.Country}
-                defaultValue={existingAccount?.address.countryId ?? "-1"}
+                defaultValue={existingAccount?.address.countryId ?? "none"}
                 name="Country"
                 variant='outlined'
                 margin='none'
-                // defaultValue={"-1"}
+                // defaultValue={"-1
+                getValues={getValues}
                 value={countryValue}
                 setValue={setValue}
                 onChange={OnChange}
               >
-                <MenuItem value="none">Select country *</MenuItem>
+                <MenuItem value="none" selected>Select country *</MenuItem>
                 {configDropdowns?.countryList.map((country) => (
                   <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
                 ))}
