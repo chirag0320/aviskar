@@ -148,6 +148,7 @@ function SessionExpiredDialog(props: SessionExpiredDialog) {
         </IconButton>
       </Stack>}
       <DialogContent>
+        {/* @ts-ignore */}
         <Stack className="Content" dangerouslySetInnerHTML={{
           __html: popUpdata?.htmlCode,
         }}>

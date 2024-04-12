@@ -236,3 +236,8 @@ export interface ConversionData {
     StorePrice: number;
     MinimumPrice: number;
 }
+export interface IEnquiryData {
+    HoldingId: number;
+    Quantity: number;
+    ProductPrice: number;
+}
