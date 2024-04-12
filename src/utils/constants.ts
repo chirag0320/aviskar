@@ -108,7 +108,13 @@ export const ENDPOINTS = {
     // private holdings
     privateHoldingList: 'myvault/j71euLEXRE6zhEOO9lVyIw',
     // re-orderAPI
-    reOrder:'myvault/RxcLCj5Rvlbs4OwCiSkaBg/Orderid'
+    reOrder: 'myvault/RxcLCj5Rvlbs4OwCiSkaBg/Orderid',
+    // enquiry
+    enquiry: "myvault/NKtlZmWzax4PNlIWj",
+    // sell qty
+    sellQty: "myvault/EZLnvfaBlImG4dOHR",
+    // convert to market place
+    convertToMarketPlace: "myvault/q9QOiEdTtEkrm6EVOewM2F"
 }
 export const StoreData = {
     storeCode: 12,

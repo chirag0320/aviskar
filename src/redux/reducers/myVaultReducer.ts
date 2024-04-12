@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { appCreateAsyncThunk } from "../middleware/thunkMiddleware";
 import MyVaultServices from "@/apis/services/MyVaultServices";
-import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData, IConfigDropdown } from "@/types/myVault";
+import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData, IConfigDropdown, SellData, ConversionData } from "@/types/myVault";
 interface ValueFacturation {
     low: number;
     high: number;
@@ -189,6 +189,23 @@ export const getMyVaultHomePageChartData = appCreateAsyncThunk(
         return await MyVaultServices.getMyVaultHomePageChartData();
     }
 )
+// Enquiry
+export const sendForEnquiry = appCreateAsyncThunk(
+    "sendForEnquiry",
+    async (body:any) => {
+        return await MyVaultServices.sendForEnquiry(body);
+    }
+)
+// sell qty
+export const sellQty = appCreateAsyncThunk(
+    "sellQty",
+    async (body:SellData) => {
+        return await MyVaultServices.sellQty(body);
+    }
+)
+// convert to market place
+export const convertToMarketPlace = appCreateAsyncThunk('convertToMarketPlace',async(body:ConversionData)=>{return await MyVaultServices.convertToMarketPlace(body)})
+
 export const myVaultSlice = createSlice({
     name: "myVault",
     initialState,

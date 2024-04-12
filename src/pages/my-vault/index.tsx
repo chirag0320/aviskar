@@ -56,9 +56,9 @@ interface VaultProps {
 }
 
 function Vault() {
-  const { data }: any = useApiRequest(ENDPOINTS.getSlider);
+  // const { data }: any = useApiRequest(ENDPOINTS.getSlider);
   const { myVaultHomePageData, myVaultHomePageChartData } = useAppSelector((state) => state.myVault)
-  console.log("🚀 ~ Vault ~ myVaultHomePageChartData:", myVaultHomePageChartData)
+  console.log("🚀 ~ Vault ~ myVaultHomePageChartData:", myVaultHomePageData)
   const isLargeScreen = useMediaQuery((theme: Theme) =>
     theme.breakpoints.up("lg")
   );
@@ -90,12 +90,15 @@ function Vault() {
   const [state2,] = useState({ service: getMyVaultHomePageChartData })
   useAPIoneTime(state)
   useAPIoneTime(state2)
-  const reOrderFunction = useCallback(async(orderId:any) => {
-   const res = await ConfigServices.reOrderAPI(orderId)
-   console.log("🚀 ~ reOrderFunction ~ res:", res)
-   if('1'){
-    navigate('/shopping-cart')
-   }
+  const reOrderFunction = useCallback(async (orderId: any) => {
+    try {
+      const res = await ConfigServices.reOrderAPI(orderId)
+      if (res.data.data) {
+        navigate('/shopping-cart')
+      }
+    } catch (error) {
+      console.log("🚀 ~ reOrderFunction ~ res:", error)
+    }
   }, [])
   return (
     <Layout>
@@ -211,9 +214,9 @@ function Vault() {
               <UserStatsCard title="My Vault" icon={<MyVaultIcon />} bgColor="#3491fa14" currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} movevalue={myVaultHomePageChartData?.totalValueFacturation?.move} movePercentage={myVaultHomePageChartData?.totalValueFacturation?.percentage} />
               <UserStatsCard title="My Gold" icon={<MyGoldIcon />} bgColor="rgb(234 162 43 / 5%)" currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} movevalue={myVaultHomePageChartData?.goldValueFacturation?.move} movePercentage={myVaultHomePageChartData?.goldValueFacturation?.percentage} />
               <UserStatsCard title="My Silver" icon={<MySilverIcon />} bgColor="rgb(255 31 31 / 5%)" currentPrice={myVaultHomePageChartData?.silverValueFacturation?.percentage} movevalue={myVaultHomePageChartData?.silverValueFacturation?.move} movePercentage={myVaultHomePageChartData?.silverValueFacturation?.percentage} />
-              <LineChartCard currentPrice={myVaultHomePageChartData?.totalDayRangeValueFacturation?.current} low={myVaultHomePageChartData?.totalDayRangeValueFacturation?.low} high={myVaultHomePageChartData?.totalDayRangeValueFacturation?.high} valueForChart={myVaultHomePageChartData?.totalDayRangeValueFacturation?.linechartdata} />
-              <LineChartCard currentPrice={myVaultHomePageChartData?.goldDayRangeValueFacturation?.current} low={myVaultHomePageChartData?.goldDayRangeValueFacturation?.low} high={myVaultHomePageChartData?.goldDayRangeValueFacturation?.high} valueForChart={myVaultHomePageChartData?.goldDayRangeValueFacturation?.linechartdata} />
-              <LineChartCard currentPrice={myVaultHomePageChartData?.silverDayRangeValueFacturation?.current} low={myVaultHomePageChartData?.silverDayRangeValueFacturation?.low} high={myVaultHomePageChartData?.silverDayRangeValueFacturation?.high} valueForChart={myVaultHomePageChartData?.silverDayRangeValueFacturation?.linechartdata} />
+              <LineChartCard currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} low={myVaultHomePageChartData?.totalValueFacturation?.low} high={myVaultHomePageChartData?.totalValueFacturation?.high} valueForChart={myVaultHomePageChartData?.totalValueFacturation?.linechartdata} />
+              <LineChartCard currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} low={myVaultHomePageChartData?.goldValueFacturation?.low} high={myVaultHomePageChartData?.goldValueFacturation?.high} valueForChart={myVaultHomePageChartData?.goldValueFacturation?.linechartdata} />
+              <LineChartCard currentPrice={myVaultHomePageChartData?.silverValueFacturation?.current} low={myVaultHomePageChartData?.silverValueFacturation?.low} high={myVaultHomePageChartData?.silverValueFacturation?.high} valueForChart={myVaultHomePageChartData?.silverValueFacturation?.linechartdata} />
             </Box>
           </Container>
         </Box>
@@ -329,10 +332,13 @@ function Vault() {
               <Card className="AccountInformationCard">
                 <Typography variant="subtitle2">Contact Information</Typography>
                 <Typography variant="body2" sx={{ fontWeight: 500, mt: 1.5 }}>
-                  Steve Test
+                  {myVaultHomePageData?.customerInformation?.firstName + ' ' + myVaultHomePageData?.customerInformation?.lastName}
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 0.6 }}>
-                  stevetest@123.com
+                  {myVaultHomePageData?.customerInformation?.email}
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 0.6 }}>
+                  {myVaultHomePageData?.customerInformation?.phoneNumber}
                 </Typography>
                 <Button
                   variant="text"
@@ -346,8 +352,8 @@ function Vault() {
               </Card>
               <Card className="AccountInformationCard">
                 <Typography variant="subtitle2">Newsletters</Typography>
-                <Typography variant="body2" sx={{ mt: 1.5 }}>
-                  You are currently not subscribed to any newsletter.
+                {/* @ts-ignore */}
+                <Typography variant="body2" sx={{ mt: 1.5 }} dangerouslySetInnerHTML={{ __html: myVaultHomePageData?.newsLetterDescription }}>
                 </Typography>
               </Card>
             </Box>

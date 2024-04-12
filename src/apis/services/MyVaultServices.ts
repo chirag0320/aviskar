@@ -1,5 +1,5 @@
 import axiosInstance from "@/axiosfolder";
-import { AccountQuery, AddressQuery, rewardPointsHistoryData, IOrderHistoryData } from "@/types/myVault";
+import { AccountQuery, AddressQuery, rewardPointsHistoryData, IOrderHistoryData, SellData, ConversionData } from "@/types/myVault";
 import { ENDPOINTS } from "@/utils/constants";
 
 class MyVaultServices {
@@ -48,6 +48,15 @@ class MyVaultServices {
     }
     static async getMyVaultHomePageChartData() {
         return axiosInstance.get(ENDPOINTS.getMyVaultHopePageDataChart);
+    }
+    static async sendForEnquiry(body:any) {
+        return axiosInstance.post(ENDPOINTS.enquiry,);
+    }
+    static async sellQty(body:SellData) {
+        return axiosInstance.post(ENDPOINTS.sellQty,body);
+    }
+    static async convertToMarketPlace(body:ConversionData){
+        return axiosInstance.post(ENDPOINTS.convertToMarketPlace,body);
     }
 }
 
