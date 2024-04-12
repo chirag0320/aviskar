@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { appCreateAsyncThunk } from "../middleware/thunkMiddleware";
 import MyVaultServices from "@/apis/services/MyVaultServices";
-import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData, IConfigDropdown, SellData, ConversionData } from "@/types/myVault";
+import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData, IConfigDropdown, SellData, ConversionData, IEnquiryData } from "@/types/myVault";
 interface ValueFacturation {
     low: number;
     high: number;
@@ -192,7 +192,7 @@ export const getMyVaultHomePageChartData = appCreateAsyncThunk(
 // Enquiry
 export const sendForEnquiry = appCreateAsyncThunk(
     "sendForEnquiry",
-    async (body:any) => {
+    async (body:IEnquiryData) => {
         return await MyVaultServices.sendForEnquiry(body);
     }
 )
