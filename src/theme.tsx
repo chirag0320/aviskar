@@ -708,6 +708,18 @@ const theme: Theme = createTheme({
         },
       },
     },
+    MuiPaginationItem: {
+      styleOverrides: {
+        root: {
+          minWidth: 28,
+          height: 28,
+        },
+        ellipsis: {
+          minWidth: 20,
+          margin: 0,
+        },
+      },
+    },
   },
   shape: {
     borderRadius: 8,
