@@ -13,6 +13,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemButton,
 } from "@mui/material";
 import classNames from "classnames";
 import { Account } from "@/types/myVault"
@@ -221,6 +222,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
               </Button>
             }
             lightTheme
+            disablePortal={true}
             arrow
           >
             <Box className="Offers">
@@ -264,6 +266,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
               </IconButton>
             }
             lightTheme
+            disablePortal={true}
             arrow
           >
             <Stack className="Content">
@@ -330,6 +333,20 @@ export const StatsCard = (props: any) => {
 };
 export const UserStatsCard = (props: any) => {
   const { title, icon, bgColor, currentPrice, movevalue, movePercentage } = props;
+  const [liveHoldingsOptions, setLiveHoldingsOptions] = useState<boolean>(false)
+  const tooltipRef: any = useRef(null)
+
+  const handleTooltipClose = (event: any) => {
+    setLiveHoldingsOptions(false)
+  }
+  const handleTooltipOpen = (event: any) => {
+    setLiveHoldingsOptions(true)
+  }
+  const handleClickAway = (event: any) => {
+    setLiveHoldingsOptions(false)
+  }
+
+
   return (
     <Card className="UserStatsCard" style={{ borderColor: bgColor }}>
       <CardContent
@@ -351,9 +368,35 @@ export const UserStatsCard = (props: any) => {
               {roundOfThePrice(movevalue)} ({roundOfThePrice(movePercentage)}%)
             </Typography>
           </Box>
-          <IconButton>
-            <OptionsIcon />
-          </IconButton>
+          <ClickTooltip
+            name='liveholdings'
+            open={liveHoldingsOptions}
+            placement="bottom-end"
+            onClose={handleTooltipClose}
+            onClickAway={handleClickAway}
+            renderComponent={<IconButton name='liveholdings' ref={tooltipRef} className="OptionButton" onClick={handleTooltipOpen}><OptionsIcon /></IconButton>}
+            lightTheme
+            disablePortal={false}
+            arrow
+          >
+            <List>
+              <ListItem>
+                <ListItemButton>
+                  <ListItemText primary="View orders" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton>
+                  <ListItemText primary="Add private holding " />
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton>
+                  <ListItemText primary="View private holdings" />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </ClickTooltip>
         </Box>
         <Box className="BottomWrapper">
           <Box className="Left">
@@ -371,6 +414,20 @@ export const UserStatsCard = (props: any) => {
 
 export const LineChartCard = (props: any) => {
   const { place, description, bgColor, currentPrice, low, high, valueForChart } = props;
+  const [liveHoldingsOptions, setLiveHoldingsOptions] = useState<boolean>(false)
+  const tooltipRef: any = useRef(null)
+
+  const handleTooltipClose = (event: any) => {
+    setLiveHoldingsOptions(false)
+  }
+  const handleTooltipOpen = (event: any) => {
+    setLiveHoldingsOptions(true)
+  }
+  const handleClickAway = (event: any) => {
+    setLiveHoldingsOptions(false)
+  }
+
+
   return (
     <Card className="LineChartCard" style={{ borderColor: bgColor }}>
       <CardContent
@@ -395,15 +452,41 @@ export const LineChartCard = (props: any) => {
             </Typography>
           </Box>
           <Box className="Right">
-            <IconButton>
-              <OptionsIcon />
-            </IconButton>
+            <ClickTooltip
+              name='liveholdings'
+              open={liveHoldingsOptions}
+              placement="bottom-end"
+              onClose={handleTooltipClose}
+              onClickAway={handleClickAway}
+              renderComponent={<IconButton name='liveholdings' ref={tooltipRef} className="OptionButton" onClick={handleTooltipOpen}><OptionsIcon /></IconButton>}
+              lightTheme
+              disablePortal={true}
+              arrow
+            >
+              <List>
+                <ListItem>
+                  <ListItemButton>
+                    <ListItemText primary="View orders" />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem>
+                  <ListItemButton>
+                    <ListItemText primary="Add private holding " />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem>
+                  <ListItemButton>
+                    <ListItemText primary="View private holdings" />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            </ClickTooltip>
             <Typography variant="body1">3 Day Range</Typography>
           </Box>
         </Box>
         <Box className="BottomWrapper">
           <Box className="Chart">
-            <LineBarChart value={valueForChart?.map((val:number|string)=>({uv: val}))}/>
+            <LineBarChart value={valueForChart?.map((val: number | string) => ({ uv: val }))} />
           </Box>
           <Box className="RangeBar">
             <Box className="Price">
