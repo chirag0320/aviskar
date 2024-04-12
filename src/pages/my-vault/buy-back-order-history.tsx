@@ -13,6 +13,7 @@ import Loader from "@/components/common/Loader"
 import { getBuyBackOrderHistory, getConfigDropdowns } from "@/redux/reducers/myVaultReducer"
 import { requestBodyDefault } from "../[category]"
 import { navigate } from "gatsby"
+import Toaster from "@/components/common/Toaster"
 
 export const requestBodyOrderHistory = {
     ...requestBodyDefault, filters: {
@@ -28,6 +29,7 @@ function BuyBackOrderHistory() {
     const orderBuypackHistoryDetails = useAppSelector(state => state.myVault.buyBackOrderHistory)
     const loading = useAppSelector(state => state.myVault.loading)
     const dispatch = useAppDispatch()
+    const openToaster = useAppSelector(state => state.homePage.openToaster)
     const isLoggedIn = useAppSelector((state) => state.homePage.isLoggedIn)
 
     if (!isLoggedIn) {
@@ -51,6 +53,7 @@ function BuyBackOrderHistory() {
     return (
         <>
             <Loader open={loading} />
+            {openToaster && <Toaster />}
             <Layout>
                 <Seo
                     keywords={[`QMint BuyBackOrderHistory`]}
@@ -65,7 +68,7 @@ function BuyBackOrderHistory() {
                             <OrderDateStatusSelector orderHistoryType="buy-back" />
                             <Divider />
                             <Box className="OrderDetailsCardsWrapper">
-                                <OrderDetailsCard orderHistoryDetails={orderBuypackHistoryDetails} needToShowDetails={false}/>
+                                <OrderDetailsCard orderHistoryDetails={orderBuypackHistoryDetails} needToShowDetails={false} />
                             </Box>
                         </Box>
                     </Container>
