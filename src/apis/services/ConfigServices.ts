@@ -110,5 +110,8 @@ class ConfigServices {
   static async getPrivateHoldingList() {
     return axiosInstance.get(ENDPOINTS.privateHoldingList)
   }
+  static async reOrderAPI(orderId: string | number) {
+    return axiosInstance.get(ENDPOINTS.reOrder.replace('Orderid',orderId.toString()))
+  }
 }
 export default ConfigServices

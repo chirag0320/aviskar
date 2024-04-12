@@ -1,3 +1,5 @@
+import { STORE_CODE } from "@/axiosfolder"
+
 export const ENDPOINTS = {
     getConfigStore: 'store/duMyjVf3k0KIi7Rq7CmHAA',
     getTicker: 'calculator/DMJqdS7VvR2VMk9R',
@@ -95,7 +97,7 @@ export const ENDPOINTS = {
     // my vault -> orderHistory
     getOrderHistory: "myvault/tBryhxlMq0qgjzuUfbewkA",
     // my vault home page 
-    getMyVaultHomePageData : "myvault/eOmP5LRTU0O902gE7mO67Q",
+    getMyVaultHomePageData: "myvault/eOmP5LRTU0O902gE7mO67Q",
     // my vault home page chart data
     getMyVaultHopePageDataChart: "myvault/c2srK54sfd5C4qjS",
     //popup details
@@ -104,9 +106,13 @@ export const ENDPOINTS = {
     //"sitemap"
     siteMapUrl: 'utility/fksBMEOGVoLiw',
     // private holdings
-    privateHoldingList :'myvault/j71euLEXRE6zhEOO9lVyIw',
+    privateHoldingList: 'myvault/j71euLEXRE6zhEOO9lVyIw',
+    // re-orderAPI
+    reOrder:'myvault/RxcLCj5Rvlbs4OwCiSkaBg/Orderid'
 }
 export const StoreData = {
     storeCode: 12,
     returnUrl: typeof window !== 'undefined' ? window.location.href : null
 }
+
+export const changePasswordURL = "https://register.qmint.com/passwordrecovery?id=" + STORE_CODE

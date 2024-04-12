@@ -9,9 +9,11 @@ import {
   Paper,
   Chip,
   Box,
+  Button,
 } from "@mui/material";
 import { IRecentOrders } from "@/redux/reducers/myVaultReducer";
 import { formatDate } from "@/utils/common";
+import { navigate } from "gatsby";
 
 function createData(
   order: string,
@@ -59,7 +61,7 @@ const rows = [
   ),
 ];
 
-const RecentOrderTable = ({ recentOrders }: { recentOrders: IRecentOrders[] }) => {
+const RecentOrderTable = ({ recentOrders,reOrderFunction }: { recentOrders: IRecentOrders[],reOrderFunction:(orderId:any)=>void }) => {
   return (
     <Box className="CommonTableWrapper">
       <TableContainer
@@ -85,15 +87,15 @@ const RecentOrderTable = ({ recentOrders }: { recentOrders: IRecentOrders[] }) =
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.orderId}
+                  {row.customOrderNumber}
                 </TableCell>
                 <TableCell>{formatDate(row.createdOnUtc)}</TableCell>
                 <TableCell>{row.accountName}</TableCell>
                 <TableCell>{row.orderTotal}</TableCell>
                 <TableCell>
                   <Box className="ChipWrapper">
-                    {[1,3].map((status, index) => (
-                      <Chip key={index} label={"TODO"} color="error" />
+                    {[{label:row.orderStatus,color: row.orderStatusColor},{label:row.alertOrderStatus, color: row.alertOrderStatusColor}].map((status, index) => (
+                     status.label && <Chip key={index} label={status.label} sx={{backgroundColor: status.color, color: 'white'}} />
                     ))}
                     {/* {row?.orderStatus} */}
                   </Box>
@@ -103,7 +105,11 @@ const RecentOrderTable = ({ recentOrders }: { recentOrders: IRecentOrders[] }) =
                     {/* {row.details.map((details, index) => (
                       <Chip key={index} label={details} color="success" />
                     ))} */}
-                    <Chip key={row.orderGuid} label={"TODO"} color="success" />
+                      <Button variant="contained" color="secondary" onClick={()=>{
+                        navigate(`/order-details/?orderNo=${row.customOrderNumber}`)
+                      }}>Details</Button>
+                      <Button variant="contained" color="success" onClick={()=>{reOrderFunction(row.orderId)}}>Re-order</Button>
+                    {/* <Chip key={row.orderGuid} label={"TODO"}  /> */}
                   </Box>
                 </TableCell>
               </TableRow>
