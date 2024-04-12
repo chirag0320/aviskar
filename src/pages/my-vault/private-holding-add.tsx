@@ -109,6 +109,8 @@ function privateHoldingAdd(paramsData: any) {
         register,
         handleSubmit,
         control,
+        getValues,
+        setValue,
         formState: { errors },
     } = useForm<privateHoldingAddInputs>({
         resolver: yupResolver(schema)
@@ -142,6 +144,7 @@ function privateHoldingAdd(paramsData: any) {
                                             name="account"
                                             label="Account:"
                                             control={control}
+                                            getValues={getValues}
                                             variant='outlined'
                                             margin='none'
                                             className='SelectAccount'
@@ -169,6 +172,7 @@ function privateHoldingAdd(paramsData: any) {
                                             label="Mint/Brand"
                                             control={control}
                                             variant='outlined'
+                                            getValues={getValues}
                                             margin='none'
                                             className='SelectMint'
                                             required
@@ -184,6 +188,7 @@ function privateHoldingAdd(paramsData: any) {
                                             register={register}
                                             error={errors.metal}
                                             name="metal"
+                                            getValues={getValues}
                                             label="Metal"
                                             control={control}
                                             variant='outlined'
@@ -200,6 +205,7 @@ function privateHoldingAdd(paramsData: any) {
                                             register={register}
                                             error={errors.type}
                                             name="type"
+                                            getValues={getValues}
                                             label="Type"
                                             control={control}
                                             variant='outlined'
@@ -218,6 +224,7 @@ function privateHoldingAdd(paramsData: any) {
                                             register={register}
                                             error={errors.series}
                                             name="series"
+                                            getValues={getValues}
                                             label="Series"
                                             control={control}
                                             variant='outlined'
@@ -235,6 +242,7 @@ function privateHoldingAdd(paramsData: any) {
                                             error={errors.purity}
                                             name="purity"
                                             label="Purity"
+                                            getValues={getValues}
                                             control={control}
                                             variant='outlined'
                                             margin='none'
@@ -253,6 +261,7 @@ function privateHoldingAdd(paramsData: any) {
                                             error={errors.weight}
                                             name="weight"
                                             label="Weight"
+                                            getValues={getValues}
                                             control={control}
                                             variant='outlined'
                                             margin='none'
@@ -269,6 +278,7 @@ function privateHoldingAdd(paramsData: any) {
                                             error={errors.weightType}
                                             name="weightType"
                                             label="Weight Type"
+                                            getValues={getValues}
                                             control={control}
                                             variant='outlined'
                                             margin='none'
@@ -287,6 +297,7 @@ function privateHoldingAdd(paramsData: any) {
                                             error={errors.specification}
                                             name="specification"
                                             label="Specification"
+                                            getValues={getValues}
                                             control={control}
                                             variant='outlined'
                                             margin='none'
@@ -302,6 +313,7 @@ function privateHoldingAdd(paramsData: any) {
                                             register={register}
                                             error={errors.value}
                                             name="value"
+                                            getValues={getValues}
                                             label="Value"
                                             control={control}
                                             variant='outlined'
@@ -395,6 +407,7 @@ function privateHoldingAdd(paramsData: any) {
                                                 name="documentType"
                                                 control={control}
                                                 variant='outlined'
+                                                getValues={getValues}
                                                 margin='none'
                                                 className='SelectValue'
                                             // required

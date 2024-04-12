@@ -49,6 +49,20 @@ class MyVaultServices {
     static async getMyVaultHomePageChartData() {
         return axiosInstance.get(ENDPOINTS.getMyVaultHopePageDataChart);
     }
+
+    // PRIAVTE HOLDINGS 
+    static async getPrivateHoldingsList() {
+        return axiosInstance.get(ENDPOINTS.getPrivateHoldingsList);
+    }
+
+    static async getPrivateHoldingsListLivePrice(url: string, holdingsIds: {
+        url: string, body: {
+            HoldingIds: number[],
+            IsStorePrice: boolean
+        }
+    }) {
+        return axiosInstance.post(url, holdingsIds);
+    }
 }
 
 export default MyVaultServices;

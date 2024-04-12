@@ -94,17 +94,23 @@ export const ENDPOINTS = {
 
     // my vault -> orderHistory
     getOrderHistory: "myvault/tBryhxlMq0qgjzuUfbewkA",
+
     // my vault home page 
-    getMyVaultHomePageData : "myvault/eOmP5LRTU0O902gE7mO67Q",
+    getMyVaultHomePageData: "myvault/eOmP5LRTU0O902gE7mO67Q",
+
     // my vault home page chart data
     getMyVaultHopePageDataChart: "myvault/c2srK54sfd5C4qjS",
+
     //popup details
     getPopUpDetails: "utility/85WwxAopc7Rn",
     savePopUpData: "utility/CLWL6vMSSrzB",
+
     //"sitemap"
     siteMapUrl: 'utility/fksBMEOGVoLiw',
-    // private holdings
-    privateHoldingList :'myvault/j71euLEXRE6zhEOO9lVyIw',
+
+    // my vault > private holdings
+    getPrivateHoldingsList: 'myvault/y4vzhfrtjjTnwCFc71pMdI',
+    getPrivateHoldingsListLivePrice: 'myvault/LlamWfOP1YkWQZEp74U',
 }
 export const StoreData = {
     storeCode: 12,

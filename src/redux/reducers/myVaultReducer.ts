@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { appCreateAsyncThunk } from "../middleware/thunkMiddleware";
 import MyVaultServices from "@/apis/services/MyVaultServices";
-import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData, IConfigDropdown } from "@/types/myVault";
+import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData, IConfigDropdown, IPrivateHolding, IPrivateHoldingLivePrice } from "@/types/myVault";
 interface ValueFacturation {
     low: number;
     high: number;
@@ -30,6 +30,8 @@ interface MyVaultInitialState {
     orderHistory: IOrderHistoryApiResponseData | null,
     myVaultHomePageData: DashboardData | null,
     myVaultHomePageChartData: ImyVaultHomePageChartData | null;
+    privateHoldingsList: IPrivateHolding[] | null;
+    privateHoldingsListLivePrice: IPrivateHoldingLivePrice[] | null
 }
 export interface IRecentOrders {
     orderId: number;
@@ -86,11 +88,11 @@ export interface DashboardData {
     newsLetterDescription: string;
     availableRewardPoints: number;
     isRecentlyOrdersExist: boolean;
-    Addresses: string ;
-    "Buyback Order": string ;
-    Customers:string ;
-    Order:string ;
-    "Reward Point":string ;
+    Addresses: string;
+    "Buyback Order": string;
+    Customers: string;
+    Order: string;
+    "Reward Point": string;
     customerGreeting: string;
 }
 
@@ -103,7 +105,9 @@ const initialState: MyVaultInitialState = {
     buyBackOrderHistory: null,
     orderHistory: null,
     myVaultHomePageData: null,
-    myVaultHomePageChartData: null
+    myVaultHomePageChartData: null,
+    privateHoldingsList: null,
+    privateHoldingsListLivePrice: null
 }
 
 // CONFIG DROPDOWNS
@@ -189,6 +193,26 @@ export const getMyVaultHomePageChartData = appCreateAsyncThunk(
         return await MyVaultServices.getMyVaultHomePageChartData();
     }
 )
+
+// PRIVATE HOLDINGS 
+export const getPrivateHoldingsList = appCreateAsyncThunk(
+    "getPrivateHoldingsList",
+    async () => {
+        return await MyVaultServices.getPrivateHoldingsList();
+    }
+)
+export const getPrivateHoldingsListLivePrice = appCreateAsyncThunk(
+    "getPrivateHoldingsListLivePrice",
+    async ({ url, body }: {
+        url: string, body: {
+            HoldingIds: number[],
+            IsStorePrice: boolean
+        }
+    }) => {
+        return await MyVaultServices.getPrivateHoldingsListLivePrice(url, body)
+    }
+)
+
 export const myVaultSlice = createSlice({
     name: "myVault",
     initialState,
@@ -387,6 +411,32 @@ export const myVaultSlice = createSlice({
             state.loading = false;
         })
         builder.addCase(getMyVaultHomePageChartData.rejected, (state) => {
+            state.loading = false;
+        })
+
+
+        // get private holdings list
+        builder.addCase(getPrivateHoldingsList.pending, state => {
+            state.loading = true;
+        })
+        builder.addCase(getPrivateHoldingsList.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.privateHoldingsList = responseData.data;
+            state.loading = false;
+        })
+        builder.addCase(getPrivateHoldingsList.rejected, state => {
+            state.loading = false;
+        })
+        // get private holdings list live price
+        builder.addCase(getPrivateHoldingsListLivePrice.pending, state => {
+            state.loading = true;
+        })
+        builder.addCase(getPrivateHoldingsListLivePrice.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.privateHoldingsListLivePrice = responseData.data;
+            state.loading = false;
+        })
+        builder.addCase(getPrivateHoldingsListLivePrice.rejected, state => {
             state.loading = false;
         })
     }
