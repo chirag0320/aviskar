@@ -62,7 +62,7 @@ function getSchemaFromAlignment(alignment: string) {
       return BussinessAccountFormSchema;
     case "Joint":
       return JointAccountFormSchema;
-    case "SuperFund":
+    case "Superfund":
       return SuperFundAccountFormSchema;
     case "Trust":
       return TrustAccountFormSchema;

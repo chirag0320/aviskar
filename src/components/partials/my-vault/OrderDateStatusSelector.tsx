@@ -1,38 +1,48 @@
 import RenderFields from '@/components/common/RenderFields'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Button, MenuItem, Stack } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import DateRangePicker from "./DateRangePicker"
-import { parseDate } from '@internationalized/date'
+import { CalendarDate, parseDate } from '@internationalized/date'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { getBuyBackOrderHistory, getOrderHistory } from '@/redux/reducers/myVaultReducer'
 import { ENDPOINTS } from '@/utils/constants'
 import { requestBodyOrderHistory } from '@/pages/my-vault/buy-back-order-history'
+import useShowToaster from '@/hooks/useShowToaster'
 interface OrderDateInputs {
-    OrderStatus: string
+    OrderStatus: string,
+    DateRange: {
+        start: CalendarDate,
+        end: CalendarDate
+    } | undefined
 }
 
 const schema = yup.object().shape({
-    OrderStatus: yup.string().trim().required("Order Status is required field"),
+    OrderStatus: yup.string().trim().notOneOf(["none"], "Order Status is required field")
 });
-
-const defaultDate = { // need to change currently it set as random
-    start: parseDate("2020-02-08"),
-    end: parseDate("2020-02-08")
-}
 
 const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-back" | "normal" }) => {
     // console.log("🚀 ~ OrderDateStatusSelector ~ orderHistoryType:", orderHistoryType)
     const dispatch = useAppDispatch();
-    const [dateRangeValue, setDateRangeValue] = useState(defaultDate);
+    const [dateRangeValue, setDateRangeValue] = useState<{
+        start: CalendarDate,
+        end: CalendarDate
+    } | undefined>(undefined);
     const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
+    const { showToaster } = useShowToaster()
+
+    // show intially placeholder in select
+    useEffect(() => {
+        setValue("OrderStatus", "none")
+    }, [])
 
     const {
         register,
         handleSubmit,
         reset,
+        getValues,
         control,
         setValue,
         formState: { errors },
@@ -41,14 +51,21 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
     })
 
     const onSubmit = async (data: any) => {
+        console.log("Qmint", dateRangeValue)
+        if (dateRangeValue === undefined) {
+            showToaster({
+                message: "Please select date range"
+            })
+            return;
+        }
         const service = orderHistoryType === "buy-back" ? getBuyBackOrderHistory : getOrderHistory;
         const endPoint = orderHistoryType === "buy-back" ? ENDPOINTS.getBuyBackOrderHistory : ENDPOINTS.getOrderHistory
 
-        const response = await dispatch(service({
+        await dispatch(service({
             url: endPoint, body: {
                 ...requestBodyOrderHistory, filters: {
-                    fromDate: dateRangeValue.start.toString(),
-                    toDate: dateRangeValue.end.toString(),
+                    fromDate: dateRangeValue?.start.toString(),
+                    toDate: dateRangeValue?.end.toString(),
                     orderStatusId: data.OrderStatus
                 }
             }
@@ -59,9 +76,9 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
         const service = orderHistoryType === "buy-back" ? getBuyBackOrderHistory : getOrderHistory;
         const endPoint = orderHistoryType === "buy-back" ? ENDPOINTS.getBuyBackOrderHistory : ENDPOINTS.getOrderHistory
 
-        const response = dispatch(service({ url: endPoint, body: requestBodyOrderHistory }));
-        reset();
-        setDateRangeValue(defaultDate)
+        await dispatch(service({ url: endPoint, body: requestBodyOrderHistory }));
+        setValue("OrderStatus", "none")
+        setDateRangeValue(() => undefined)
     }
 
     return (
@@ -82,10 +99,12 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
                                 placeholder="Select Order Status"
                                 variant='outlined'
                                 setValue={setValue}
+                                getValues={getValues}
                                 margin='none'
                                 // required
                                 className='SelectOrderStatus'
                             >
+                                <MenuItem value="none" selected>Select Order Status</MenuItem>
                                 {orderHistoryType === "buy-back" ? (configDropdowns?.buybackOrderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>)) : (configDropdowns?.orderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>))}
                             </RenderFields>
                         </Box>

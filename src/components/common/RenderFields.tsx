@@ -130,7 +130,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 }
                 {...register(name)}
                 {...otherProps}
-                value={value}
+                value={getValues(name) || ""}
                 onChange={(e) => {
                   setValue(name, e.target.value)
                   if (onChange) {
