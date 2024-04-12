@@ -105,14 +105,34 @@ export interface Account {
 }
 
 // REWARD POINTS HISTORY
-export interface rewardPointsHistoryData {
+interface PointsHistoryItem {
+    id: number;
+    customerId: number;
+    points: number;
+    pointsBalance: number;
+    usedAmount: number;
+    message: string;
+    createdOnUtc: string;
+    endDateUtc: string;
+    validPoints: number;
+  }
+  
+  interface PointsHistories {
     extraProperty: any | null;
     count: number;
     page: number;
     pageSize: number;
-    items: rewardPointsHistoryDataItems[];
+    items: PointsHistoryItem[];
     additionalField: any | null;
-}
+  }
+  
+  export interface rewardPointsHistoryData {
+    pointsHistories: PointsHistories;
+    totalPoint: number;
+    totalPointAmount: number;
+    maxUsePoint: number;
+    maxUsePointAmount: number;
+  }
 
 export interface rewardPointsHistoryDataItems {
     id: number;
@@ -187,7 +207,6 @@ export interface IOrderHistoryItems {
     accountName: string;
     createdOnUtc: string;
     orderStatus: string;
-    orderTotal: number;
     orderStatusColor: string;
     alertStatus: string | null;
     alertStatusColor: string | null;

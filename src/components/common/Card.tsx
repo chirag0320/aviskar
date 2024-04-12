@@ -306,7 +306,7 @@ export const TravelCard = (props: any) => {
 };
 
 export const StatsCard = (props: any) => {
-  const { title, icon, statsNumber, bgColor } = props;
+  const { title, icon, statsNumber, bgColor,onClick } = props;
   return (
     <Card className="StatsCard" style={{ background: bgColor }}>
       <CardContent>
@@ -320,7 +320,7 @@ export const StatsCard = (props: any) => {
           <Typography className="StatNumber" variant="h4">
             {statsNumber}
           </Typography>
-          <IconButton>
+          <IconButton onClick={onClick}>
             <ArrowRight />
           </IconButton>
         </Stack>

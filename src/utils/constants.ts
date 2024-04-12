@@ -94,11 +94,15 @@ export const ENDPOINTS = {
 
     // my vault -> orderHistory
     getOrderHistory: "myvault/tBryhxlMq0qgjzuUfbewkA",
-    // my vault home page
+    // my vault home page 
     getMyVaultHomePageData : "myvault/eOmP5LRTU0O902gE7mO67Q",
+    // my vault home page chart data
+    getMyVaultHopePageDataChart: "myvault/c2srK54sfd5C4qjS",
     //popup details
     getPopUpDetails: "utility/85WwxAopc7Rn",
-    savePopUpData: "utility/CLWL6vMSSrzB"
+    savePopUpData: "utility/CLWL6vMSSrzB",
+    //"sitemap"
+    siteMapUrl: 'utility/fksBMEOGVoLiw'
 }
 export const StoreData = {
     storeCode: 12,
