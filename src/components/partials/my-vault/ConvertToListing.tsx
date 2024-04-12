@@ -1,5 +1,5 @@
 
-import React from "react"
+import React, { useState } from "react"
 import { Box, Button, IconButton, Stack, TextField, Typography } from "@mui/material"
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup'
@@ -27,6 +27,7 @@ const schema = yup.object().shape({
 
 function ConvertToListing(props: ConvertToListing) {
     const { open, onClose } = props
+    const [qty,setQty]= useState(1)
 
     const {
         register,
@@ -40,7 +41,9 @@ function ConvertToListing(props: ConvertToListing) {
     const onSubmit = (data: any) => {
         onClose()
     }
+    const onQuantityChange = () => {
 
+    }
     return (
         <StyledDialog
             id="ConvertToListing"
@@ -52,7 +55,7 @@ function ConvertToListing(props: ConvertToListing) {
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack className="AllFields">
-                    <QuantityInputs quantityLabel="Convert Quantity :" />
+                    <QuantityInputs quantityLabel="Convert Quantity :" onQuantityChange={onQuantityChange} />
                     <RenderFields
                         register={register}
                         error={errors.StorePrice}
