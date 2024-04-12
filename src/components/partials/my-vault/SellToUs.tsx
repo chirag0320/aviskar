@@ -43,19 +43,21 @@ function SellToUs(props: SellToUs) {
         <StyledDialog
             id="SellToUs"
             open={open}
-            dialogTitle="test holding product"
+            dialogTitle="Test holding product"
             onClose={onClose}
             maxWidth="sm"
             className="PrivateHoldingCommonPopup"
         >
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Stack className="AllFields">
+                <Box className="Imagewrapper">
                     <img src="https://qmintstoremedia.blob.core.windows.net/pictures/products/2023-1oz-lunar-series-year-of-the-rabbit-platinum-coin_120320242303026.png?sv=2018-03-28&sr=b&sig=5tD7n%2Bvm4%2BK%2BKE5ZHQfCaSdQBforI3BPxO1kNTNTOzI%3D&st=2024-03-11T13%3A50%3A02Z&se=3024-03-12T13%3A50%3A02Z&sp=r&c=638458482026612121" alt="Product image" />
-                    <QuantityInputs quantityLabel="$0.00" />
-                </Stack>
+                </Box>
                 <Stack className="ActionWrapper">
-                    <Button size="medium" variant="outlined" onClick={onClose}>Cancel</Button>
-                    <Button type="submit" size="medium" variant="contained">Request Formal Quote</Button>
+                    <QuantityInputs quantityLabel="$0.00" />
+                    <Stack className="ButtonsWrapper">
+                        <Button size="medium" variant="outlined" onClick={onClose}>Cancel</Button>
+                        <Button type="submit" size="medium" variant="contained">Request Formal Quote</Button>
+                    </Stack>
                 </Stack>
             </form>
         </StyledDialog>
