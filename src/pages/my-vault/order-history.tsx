@@ -14,8 +14,10 @@ import { useEffect } from "react";
 import { getConfigDropdowns, getOrderHistory } from "@/redux/reducers/myVaultReducer";
 import { requestBodyOrderHistory } from "./buy-back-order-history";
 import { navigate } from "gatsby";
+import Toaster from "@/components/common/Toaster";
 
 function OrderHistory() {
+  const openToaster = useAppSelector(state => state.homePage.openToaster)
   const loading = useAppSelector(state => state.myVault.loading)
   const dispatch = useAppDispatch();
   const orderHistoryDetails = useAppSelector((state) => state.myVault.orderHistory);
@@ -43,6 +45,7 @@ function OrderHistory() {
   return (
     <>
       <Loader open={loading} />
+      {openToaster && <Toaster/>}
       <Layout>
         <Seo
           keywords={[`QMint OrderHistory`]}
