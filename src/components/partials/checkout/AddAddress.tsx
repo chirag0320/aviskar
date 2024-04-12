@@ -18,7 +18,7 @@ import { PhoneNumberCountryCode, hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
 import { AddressType } from "@/types/enums"
-import { addOrEditAddresses as addOrEditAddressForMyVault, addAddress as addAddressForMyVault } from "@/redux/reducers/myVaultReducer"
+import { addOrEditAddresses as addOrEditAddressForMyVault, addAddress as addAddressForMyVault, getAddresses } from "@/redux/reducers/myVaultReducer"
 
 interface AddAddress {
     open: boolean
@@ -54,7 +54,7 @@ export const addressSchema = yup.object().shape({
     Address2: yup.string().trim(),
     City: yup.string().required().trim(),
     State: yup.string().required(),
-    Country: yup.string().required(),
+    Country: yup.string().notOneOf(["none"], "Country is required field"),
     Code: yup.string().required('Zip / Postal code is required').trim(),
 })
 
@@ -82,8 +82,12 @@ function AddAddress(props: AddAddress) {
         resolver: yupResolver(addressSchema)
     })
 
+    useEffect(() => {
+        setValue("Country", "none");
+    }, [])
+
     const onAddressFormSubmitHandler = async (data: any) => {
-        console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
+        // console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
         const addressQuery = {
             addressTypeId,
             firstName: data.FirstName,
@@ -116,22 +120,23 @@ function AddAddress(props: AddAddress) {
                 onClose()
                 reset()
                 showToaster({ message: "Address saved successfully", severity: "success" })
-                const addressId = (response?.payload as any)?.data?.data;
-                dispatch(addAddressForMyVault({
-                    addressId: addressId,
-                    firstName: data.FirstName,
-                    lastName: data.LastName,
-                    company: data.Company,
-                    phoneNumber: data.ContactCode + data.Contact,
-                    email: data.Email,
-                    addressLine1: data.Address1,
-                    addressLine2: data.Address2,
-                    city: data.City,
-                    stateName: data.State,
-                    postcode: data.Code,
-                    countryId: data.Country,
-                    stateId: stateId,
-                }))
+                // const addressId = (response?.payload as any)?.data?.data;
+                await dispatch(getAddresses({ url: ENDPOINTS.getAddresses }) as any);
+                // dispatch(addAddressForMyVault({
+                //     addressId: addressId,
+                //     firstName: data.FirstName,
+                //     lastName: data.LastName,
+                //     company: data.Company,
+                //     phoneNumber: data.ContactCode + data.Contact,
+                //     email: data.Email,
+                //     addressLine1: data.Address1,
+                //     addressLine2: data.Address2,
+                //     city: data.City,
+                //     stateName: data.State,
+                //     postcode: data.Code,
+                //     countryId: data.Country,
+                //     stateId: stateId,
+                // }))
             } else {
                 showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
             }
@@ -257,6 +262,7 @@ function AddAddress(props: AddAddress) {
                                 type="select"
                                 control={control}
                                 // error={errors.ContactCode}
+                                getValues={getValues}
                                 name="ContactCode"
                                 variant="outlined"
                                 setValue={setValue}
@@ -322,14 +328,14 @@ function AddAddress(props: AddAddress) {
                             control={control}
                             error={errors.Country}
                             name="Country"
+                            getValues={getValues}
                             variant='outlined'
                             margin='none'
-                            defaultValue={"-1"}
                             value={countryValue}
                             setValue={setValue}
                             onChange={OnChange}
                         >
-                            <MenuItem value="-1">Select country *</MenuItem>
+                            <MenuItem value="none">Select country *</MenuItem>
                             {countryList.map((country: StateOrCountry) => (
                                 <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
                             ))}

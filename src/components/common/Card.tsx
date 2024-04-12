@@ -306,7 +306,7 @@ export const TravelCard = (props: any) => {
 };
 
 export const StatsCard = (props: any) => {
-  const { title, icon, statsNumber, bgColor,onClick } = props;
+  const { title, icon, statsNumber, bgColor, onClick } = props;
   return (
     <Card className="StatsCard" style={{ background: bgColor }}>
       <CardContent>
@@ -329,7 +329,7 @@ export const StatsCard = (props: any) => {
   );
 };
 export const UserStatsCard = (props: any) => {
-  const { title, icon, bgColor } = props;
+  const { title, icon, bgColor, currentPrice, movevalue, movePercentage } = props;
   return (
     <Card className="UserStatsCard" style={{ borderColor: bgColor }}>
       <CardContent
@@ -345,10 +345,10 @@ export const UserStatsCard = (props: any) => {
         <Box className="TopWrapper">
           <Box className="Return Profit">
             {/* pass Profit and Loss class */}
-            <Typography variant="h4">$1030.80</Typography>
+            <Typography variant="h4">${roundOfThePrice(currentPrice)}</Typography>
             <Typography variant="body1">
               <FilledUpButton />
-              4.50 (0.44%)
+              {roundOfThePrice(movevalue)} ({roundOfThePrice(movePercentage)}%)
             </Typography>
           </Box>
           <IconButton>
@@ -370,7 +370,7 @@ export const UserStatsCard = (props: any) => {
 };
 
 export const LineChartCard = (props: any) => {
-  const { place, description, bgColor } = props;
+  const { place, description, bgColor, currentPrice, low, high, valueForChart } = props;
   return (
     <Card className="LineChartCard" style={{ borderColor: bgColor }}>
       <CardContent
@@ -391,7 +391,7 @@ export const LineChartCard = (props: any) => {
               Current
             </Typography>
             <Typography variant="h4" sx={{ mt: 0.5 }}>
-              1030.80
+              {roundOfThePrice(currentPrice)}
             </Typography>
           </Box>
           <Box className="Right">
@@ -403,12 +403,12 @@ export const LineChartCard = (props: any) => {
         </Box>
         <Box className="BottomWrapper">
           <Box className="Chart">
-            <LineBarChart />
+            <LineBarChart value={valueForChart?.map((val:number|string)=>({uv: val}))}/>
           </Box>
           <Box className="RangeBar">
             <Box className="Price">
-              <Typography variant="body1">907.5</Typography>
-              <Typography variant="body1">1040.3</Typography>
+              <Typography variant="body1">{roundOfThePrice(low)}</Typography>
+              <Typography variant="body1">{roundOfThePrice(high)}</Typography>
             </Box>
             <Box className="HLCircuit">
               <Typography variant="caption">LOW</Typography>
