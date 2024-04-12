@@ -28,7 +28,7 @@ interface RenderFieldProps {
   variant?: 'standard' | 'outlined' | 'filled'
   color?: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'
   value?: string
-  onChange?: (value: any) => void
+  onChange?: (value?: any) => void
   id?: string
   className?: string
   name: string
@@ -130,7 +130,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 }
                 {...register(name)}
                 {...otherProps}
-                value={getValues(name) ?? ""}
+                value={(getValues && getValues(name)) ?? ""}
                 onChange={(e) => {
                   setValue(name, e.target.value)
                   if (onChange) {

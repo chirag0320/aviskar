@@ -223,3 +223,21 @@ export interface IOrderHistoryApiResponseData {
 
 // ADDRESSES
 
+// Sell Qty
+export interface SellData {
+    HoldingId: number;
+    SoldQuantity: number;
+    SoldTo: string;
+}
+
+export interface ConversionData {
+    HoldingId: number;
+    ConvertQuantity: number;
+    StorePrice: number;
+    MinimumPrice: number;
+}
+export interface IEnquiryData {
+    HoldingId: number;
+    Quantity: number;
+    ProductPrice: number;
+}

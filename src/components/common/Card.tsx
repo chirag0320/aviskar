@@ -371,6 +371,7 @@ export const UserStatsCard = (props: any) => {
 
 export const LineChartCard = (props: any) => {
   const { place, description, bgColor, currentPrice, low, high, valueForChart } = props;
+  console.log("🚀 ~ LineChartCard ~ currentPrice:", currentPrice)
   return (
     <Card className="LineChartCard" style={{ borderColor: bgColor }}>
       <CardContent
@@ -403,7 +404,7 @@ export const LineChartCard = (props: any) => {
         </Box>
         <Box className="BottomWrapper">
           <Box className="Chart">
-            <LineBarChart value={valueForChart?.map((val:number|string)=>({uv: val}))}/>
+            <LineBarChart value={valueForChart?.map((val: number | string) => ({ uv: val }))} />
           </Box>
           <Box className="RangeBar">
             <Box className="Price">
@@ -413,7 +414,7 @@ export const LineChartCard = (props: any) => {
             <Box className="HLCircuit">
               <Typography variant="caption">LOW</Typography>
               <Box className="HLCircuitRange">
-                <Box className="UpArrow" sx={{ left: "20%" }}>
+                <Box className="UpArrow" sx={{ left: (high - low) == 0 ? '0%' : ((currentPrice / (high - low)) * 100) + "%" }}>
                   {/* add percentage in left to slide arrowAicon */}
                   <FilledUpButton />
                 </Box>
