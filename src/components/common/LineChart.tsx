@@ -32,10 +32,10 @@ const data = [
   },
 ];
 
-export default function LineBarChart() {
+export default function LineBarChart({value}:{value: any[]}) {
   return (
     <ResponsiveContainer width="100%" height={108}>
-      <AreaChart data={data}>
+      <AreaChart data={value}>
         <defs>
           <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#00800159" stopOpacity={0.35} />

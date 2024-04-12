@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -20,7 +20,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination, A11y } from "swiper/modules";
 import useApiRequest from "@/hooks/useAPIRequest";
 import { Url } from "url";
-import { ENDPOINTS } from "@/utils/constants";
+import { ENDPOINTS, changePasswordURL } from "@/utils/constants";
 import { SwiperNavigation } from "@/components/common/Utils";
 
 // Components
@@ -41,6 +41,7 @@ import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { getMyVaultHomePageChartData, getMyVaultHomePageData } from "@/redux/reducers/myVaultReducer";
 import { useAppSelector } from "@/hooks";
 import { navigate } from "gatsby";
+import ConfigServices from "@/apis/services/ConfigServices";
 
 interface VaultProps {
   id: number;
@@ -57,7 +58,7 @@ interface VaultProps {
 function Vault() {
   const { data }: any = useApiRequest(ENDPOINTS.getSlider);
   const { myVaultHomePageData, myVaultHomePageChartData } = useAppSelector((state) => state.myVault)
-  console.log("🚀 ~ Vault ~ myVaultHomePageChartData:", myVaultHomePageData)
+  console.log("🚀 ~ Vault ~ myVaultHomePageChartData:", myVaultHomePageChartData)
   const isLargeScreen = useMediaQuery((theme: Theme) =>
     theme.breakpoints.up("lg")
   );
@@ -89,6 +90,13 @@ function Vault() {
   const [state2,] = useState({ service: getMyVaultHomePageChartData })
   useAPIoneTime(state)
   useAPIoneTime(state2)
+  const reOrderFunction = useCallback(async(orderId:any) => {
+   const res = await ConfigServices.reOrderAPI(orderId)
+   console.log("🚀 ~ reOrderFunction ~ res:", res)
+   if('1'){
+    navigate('/shopping-cart')
+   }
+  }, [])
   return (
     <Layout>
       <Box className="VaultPage">
@@ -200,12 +208,12 @@ function Vault() {
         <Box className="UserStats" sx={{ mt: 9.625 }}>
           <Container>
             <Box className="UserStatsWrapper">
-              <UserStatsCard title="My Vault" icon={<MyVaultIcon />} bgColor="#3491fa14" />
-              <UserStatsCard title="My Gold" icon={<MyGoldIcon />} bgColor="rgb(234 162 43 / 5%)" />
-              <UserStatsCard title="My Silver" icon={<MySilverIcon />} bgColor="rgb(255 31 31 / 5%)" />
-              <LineChartCard />
-              <LineChartCard />
-              <LineChartCard />
+              <UserStatsCard title="My Vault" icon={<MyVaultIcon />} bgColor="#3491fa14" currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} movevalue={myVaultHomePageChartData?.totalValueFacturation?.move} movePercentage={myVaultHomePageChartData?.totalValueFacturation?.percentage} />
+              <UserStatsCard title="My Gold" icon={<MyGoldIcon />} bgColor="rgb(234 162 43 / 5%)" currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} movevalue={myVaultHomePageChartData?.goldValueFacturation?.move} movePercentage={myVaultHomePageChartData?.goldValueFacturation?.percentage} />
+              <UserStatsCard title="My Silver" icon={<MySilverIcon />} bgColor="rgb(255 31 31 / 5%)" currentPrice={myVaultHomePageChartData?.silverValueFacturation?.percentage} movevalue={myVaultHomePageChartData?.silverValueFacturation?.move} movePercentage={myVaultHomePageChartData?.silverValueFacturation?.percentage} />
+              <LineChartCard currentPrice={myVaultHomePageChartData?.totalDayRangeValueFacturation?.current} low={myVaultHomePageChartData?.totalDayRangeValueFacturation?.low} high={myVaultHomePageChartData?.totalDayRangeValueFacturation?.high} valueForChart={myVaultHomePageChartData?.totalDayRangeValueFacturation?.linechartdata} />
+              <LineChartCard currentPrice={myVaultHomePageChartData?.goldDayRangeValueFacturation?.current} low={myVaultHomePageChartData?.goldDayRangeValueFacturation?.low} high={myVaultHomePageChartData?.goldDayRangeValueFacturation?.high} valueForChart={myVaultHomePageChartData?.goldDayRangeValueFacturation?.linechartdata} />
+              <LineChartCard currentPrice={myVaultHomePageChartData?.silverDayRangeValueFacturation?.current} low={myVaultHomePageChartData?.silverDayRangeValueFacturation?.low} high={myVaultHomePageChartData?.silverDayRangeValueFacturation?.high} valueForChart={myVaultHomePageChartData?.silverDayRangeValueFacturation?.linechartdata} />
             </Box>
           </Container>
         </Box>
@@ -299,7 +307,7 @@ function Vault() {
                   navigate('/my-vault/order-history/')
                 }}>View All</Button>
               </Stack>
-              <RecentOrderTable recentOrders={myVaultHomePageData?.recentOrders!} />
+              <RecentOrderTable recentOrders={myVaultHomePageData?.recentOrders!} reOrderFunction={reOrderFunction} />
             </Box>
           </Container>
         </Box>
@@ -329,6 +337,9 @@ function Vault() {
                 <Button
                   variant="text"
                   sx={{ mt: 2, color: "#000", fontWeight: 600 }}
+                  onClick={() => {
+                    navigate(changePasswordURL)
+                  }}
                 >
                   Change password
                 </Button>
