@@ -39,6 +39,7 @@ function ActionMenu() {
       onClickAway={handleClickAway}
       renderComponent={<IconButton ref={tooltipRef} aria-label='MenuButton' className={classNames("MenuButton", { "Active": open })} onClick={handleTooltipOpen}><MenuIcon /></IconButton>}
       lightTheme
+      disablePortal={true}
       arrow
     >
       <Box className="Wrapper" key={'Wrapper'}>

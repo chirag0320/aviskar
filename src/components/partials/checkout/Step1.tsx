@@ -155,6 +155,7 @@ function Step1() {
             onClickAway={handleClickAway}
             renderComponent={<IconButton name='billingAddress' ref={tooltipRef} className="OptionButton" onClick={handleTooltipOpen}><OptionsIcon /></IconButton>}
             lightTheme
+            disablePortal={true}
             arrow
           >
             <List>
@@ -210,6 +211,7 @@ function Step1() {
             onClickAway={handleClickAway}
             renderComponent={<IconButton name='shippingAddress' ref={shipingtooltipRef} className="OptionButton" onClick={handleTooltipOpen}><OptionsIcon /></IconButton>}
             lightTheme
+            disablePortal={true}
             arrow
           >
             <List>
@@ -242,7 +244,7 @@ function Step1() {
         </Stack>
       </Box>
       {openUpdateAddress && <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={toggleUpdateAddress} existingAddress={isBillingAddress ? billingAddress : shippingAddress} />}
-      <AddAddress open={openAddAddress} dialogTitle="Add Address" onClose={toggleAddAddress} addressTypeId={isBillingAddress ? AddressType.Billing : AddressType.Shipping} handleAddressUpdate={handleAddressUpdate}/>
+      <AddAddress open={openAddAddress} dialogTitle="Add Address" onClose={toggleAddAddress} addressTypeId={isBillingAddress ? AddressType.Billing : AddressType.Shipping} handleAddressUpdate={handleAddressUpdate} />
       <AlertDialog open={openAlertDialog} onClose={toggleAlertDialog} />
       {openSelectAddress && <SelectAddress isbillingAddress={isBillingAddress} open={openSelectAddress} onClose={toggleSelectAddress} listOfAddress={isBillingAddress ? checkoutPageData?.billingAddressDetails : checkoutPageData?.shippingAddressDetails} handleAddressUpdate={handleAddressUpdate} />}
     </StepWrapper>

@@ -64,6 +64,7 @@ function ChartMenu() {
       onClickAway={handleClickAway}
       renderComponent={<IconButton ref={tooltipRef} aria-label='chartIcon' className={classNames("MenuButton", { "Active": false })} onClick={handleTooltipOpen}><ActivityIcon /></IconButton>}
       lightTheme
+      disablePortal={true}
       arrow
     >
       <Stack className="Content">
