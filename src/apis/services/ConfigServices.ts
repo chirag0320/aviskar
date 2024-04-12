@@ -98,7 +98,14 @@ class ConfigServices {
     return await axiosInstance.post(ENDPOINTS.savePopUpData,body)
   }
   static async getSiteMapData() {
-    return axiosInstance.post(ENDPOINTS.siteMapUrl,{})
+    return axiosInstance.post(ENDPOINTS.siteMapUrl,{
+      "search": "",
+      "pageNo": 0,
+      "pageSize": 12,
+      "sortBy": "",
+      "sortOrder": "",
+      "filters": {}
+  })
   }
 }
 export default ConfigServices
