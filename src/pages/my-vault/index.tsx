@@ -100,6 +100,7 @@ function Vault() {
                 {/* <Typography variant="subtitle2" component="h2">
                   Good Morning Steve!
                 </Typography> */}
+                {/* @ts-ignore */}
                 <Typography variant="body1" sx={{ mt: 3.25 }} dangerouslySetInnerHTML={{
                   __html: myVaultHomePageData?.customerGreeting
                 }}>
@@ -294,7 +295,9 @@ function Vault() {
             <Box className="RecentOrdersWrapper">
               <Stack className="RecentOrdersTitleWrapper">
                 <Typography variant="h4">Recent Orders</Typography>
-                <Button endIcon={<ArrowRight />}>View All</Button>
+                <Button endIcon={<ArrowRight />} onClick={() => {
+                  navigate('/my-vault/order-history/')
+                }}>View All</Button>
               </Stack>
               <RecentOrderTable recentOrders={myVaultHomePageData?.recentOrders!} />
             </Box>

@@ -102,7 +102,9 @@ export const ENDPOINTS = {
     getPopUpDetails: "utility/85WwxAopc7Rn",
     savePopUpData: "utility/CLWL6vMSSrzB",
     //"sitemap"
-    siteMapUrl: 'utility/fksBMEOGVoLiw'
+    siteMapUrl: 'utility/fksBMEOGVoLiw',
+    // private holdings
+    privateHoldingList :'myvault/j71euLEXRE6zhEOO9lVyIw',
 }
 export const StoreData = {
     storeCode: 12,

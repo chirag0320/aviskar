@@ -107,5 +107,8 @@ class ConfigServices {
       "filters": {}
   })
   }
+  static async getPrivateHoldingList() {
+    return axiosInstance.get(ENDPOINTS.privateHoldingList)
+  }
 }
 export default ConfigServices

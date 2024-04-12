@@ -1355,7 +1355,6 @@ export const PhoneNumberCountryCode = [
 export const checkThePopUpDetails = async (paramsObj: IPopUpDetails, openPopup: any, dispatch: any, service: any) => {
   // const res = await ConfigServices.getPopUpDetails(paramsObj)
   const res = await dispatch(service(paramsObj))
-  console.log("🚀 ~ checkThePopUpDetails ~ res:", res)
   if (res?.payload?.data?.data?.htmlCode) {
     openPopup(true)
     return true
