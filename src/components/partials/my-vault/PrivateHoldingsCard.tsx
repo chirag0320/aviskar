@@ -10,6 +10,7 @@ import { PriceFacturationEnum, roundOfThePrice } from '@/utils/common';
 import { getPrivateHoldingsListLivePrice } from '@/redux/reducers/myVaultReducer';
 import { ENDPOINTS } from '@/utils/constants';
 import { IPrivateHolding, IPrivateHoldingLivePrice } from '@/types/myVault';
+import { navigate } from 'gatsby';
 
 const getColorForPosition = (position: number) => {
     return PriceFacturationEnum[position.toString() as keyof typeof PriceFacturationEnum];
@@ -117,7 +118,7 @@ function PrivateHoldingCards() {
                                     </ListItem>
                                     <ListItem>
                                         <ListItemButton>
-                                            <ListItemText primary="Edit" />
+                                            <ListItemText primary="Edit" onClick={() => navigate(`/my-vault/private-holding-add/?holdingId=${item.holdingId}`)} />
                                         </ListItemButton>
                                     </ListItem>
                                     <ListItem>

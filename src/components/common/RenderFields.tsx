@@ -130,9 +130,11 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 }
                 {...register(name)}
                 {...otherProps}
-                value={(getValues && getValues(name)) ?? ""}
+                value={(getValues && getValues(name)) ?? value}
                 onChange={(e) => {
-                  setValue(name, e.target.value)
+                  if (setValue) {
+                    setValue(name, e.target.value)
+                  }
                   if (onChange) {
                     onChange(e.target.value)
                   }
@@ -339,7 +341,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
               right: 0,
               top: 0,
               height: '100%',
-            }}>Upload</Button>
+            }} >Upload</Button>
           </Stack>
         </FormControl>
       )
