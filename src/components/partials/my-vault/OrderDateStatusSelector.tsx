@@ -43,6 +43,7 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
         handleSubmit,
         reset,
         getValues,
+        clearErrors,
         control,
         setValue,
         formState: { errors },
@@ -92,6 +93,7 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
                         <Box className="SelectStatusWrapper">
                             <RenderFields
                                 type="select"
+                                clearErrors={clearErrors}
                                 register={register}
                                 error={errors.OrderStatus}
                                 name="OrderStatus"

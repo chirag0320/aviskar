@@ -127,6 +127,7 @@ function AddAccount(props: AddAccountProps) {
     register,
     reset,
     handleSubmit,
+    clearErrors,
     control,
     setValue,
     getValues,
@@ -288,6 +289,7 @@ function AddAccount(props: AddAccountProps) {
               <RenderFields
                 register={register}
                 type="select"
+                clearErrors={clearErrors}
                 control={control}
                 error={errors.TrusteeType}
                 setValue={setValue}
@@ -317,6 +319,7 @@ function AddAccount(props: AddAccountProps) {
               <RenderFields
                 register={register}
                 type="select"
+                clearErrors={clearErrors}
                 control={control}
                 error={errors.TrusteeType}
                 setValue={setValue}
@@ -398,6 +401,7 @@ function AddAccount(props: AddAccountProps) {
                   register={register}
                   type="select"
                   control={control}
+                                clearErrors={clearErrors}
                   setValue={setValue}
                   name="ContactCode"
                   variant="outlined"
@@ -514,6 +518,7 @@ function AddAccount(props: AddAccountProps) {
                 error={errors.Country}
                 defaultValue={existingAccount?.address.countryId ?? "none"}
                 name="Country"
+                clearErrors={clearErrors}
                 variant='outlined'
                 margin='none'
                 // defaultValue={"-1

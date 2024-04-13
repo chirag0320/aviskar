@@ -322,7 +322,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                     />
                                 </Stack>
                                 <Stack className="RowWrapper DocumentPhotosContentWrapper">
-                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} />
+                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors}/>
                                     <Box className="PhotosContentwrapper">
                                         <RenderFields
                                             type="file"

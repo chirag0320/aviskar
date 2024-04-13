@@ -25,6 +25,7 @@ const DynamicFields = () => {
         register,
         handleSubmit,
         control,
+        clearErrors,
         getValues,
         setValue,
         formState: { errors },
@@ -81,6 +82,7 @@ const DynamicFields = () => {
                     control={control}
                     variant='outlined'
                     margin='none'
+                    clearErrors={clearErrors}
                     className='SelectSpecification'
                 // required
                 >
@@ -102,6 +104,7 @@ const DynamicFields = () => {
                     }}
                     label="Value"
                     control={control}
+                    clearErrors={clearErrors}
                     variant='outlined'
                     margin='none'
                     className='SelectValue'

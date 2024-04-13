@@ -73,6 +73,7 @@ function AddAddress(props: AddAddress) {
     const {
         register,
         reset,
+        clearErrors,
         handleSubmit,
         control,
         setValue,
@@ -261,6 +262,7 @@ function AddAddress(props: AddAddress) {
                                 register={register}
                                 type="select"
                                 control={control}
+                                clearErrors={clearErrors}
                                 // error={errors.ContactCode}
                                 getValues={getValues}
                                 name="ContactCode"
@@ -326,6 +328,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             type="select"
                             control={control}
+                            clearErrors={clearErrors}
                             error={errors.Country}
                             name="Country"
                             getValues={getValues}

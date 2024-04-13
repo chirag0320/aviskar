@@ -32,7 +32,7 @@ const documentsRows = [
     ),
 ];
 
-const ProvenanceDocuments = ({ register, errors, control, getValues }: any) => {
+const ProvenanceDocuments = ({ register, errors, control, getValues,clearErrors }: any) => {
     const [files, setFile] = useState<{
         id: string,
         fileName: string,
@@ -62,6 +62,7 @@ const ProvenanceDocuments = ({ register, errors, control, getValues }: any) => {
                 type="select"
                 register={register}
                 error={errors.DocumentType}
+                clearErrors={clearErrors}
                 name="DocumentType"
                 control={control}
                 variant='outlined'
