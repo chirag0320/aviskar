@@ -33,7 +33,7 @@ interface MyVaultInitialState {
     privateHoldingsList: IPrivateHolding[] | null;
     privateHoldingsListLivePrice: IPrivateHoldingLivePrice[] | null
     currentPrivateHolding: ISpecificPrivateHolding | null;
-    privateHoldingFormDropdowns: IPrivateHoldingFormDropdown[] | null
+    privateHoldingFormDropdowns: IPrivateHoldingFormDropdown | null
 }
 export interface IRecentOrders {
     orderId: number;
@@ -491,24 +491,22 @@ export const myVaultSlice = createSlice({
             const responseData = action.payload.data.data;
             console.log("🚀 ~ builder.addCase ~ responseData:", responseData)
 
-            const privateHoldingFormDropdowns: IPrivateHoldingFormDropdown[] = [];
+            const privateHoldingFormDropdowns: IPrivateHoldingFormDropdown = {};
             responseData.forEach((element: any) => {
-                privateHoldingFormDropdowns.push({
-                    [element.specificationAttribute]: element.specificationAttributeOptions
-                })
+                privateHoldingFormDropdowns[element.specificationAttribute] = element.specificationAttributeOptions;
             });
+
             state.privateHoldingFormDropdowns = privateHoldingFormDropdowns;
             state.loading = false;
         })
         builder.addCase(getPrivateHoldingFormDropdowns.rejected, (state, action) => {
-            const responseData = action.payload.response.data.data;
+            const responseData = action?.payload?.response?.data?.data;
             // console.log("🚀 ~ builder.addCase ~ responseData: ", responseData)
-            const privateHoldingFormDropdowns: IPrivateHoldingFormDropdown[] = [];
+            const privateHoldingFormDropdowns: IPrivateHoldingFormDropdown = {};
             responseData.forEach((element: any) => {
-                privateHoldingFormDropdowns.push({
-                    [element.specificationAttribute]: element.specificationAttributeOptions
-                })
+                privateHoldingFormDropdowns[element.specificationAttribute] = element.specificationAttributeOptions;
             });
+
             state.privateHoldingFormDropdowns = privateHoldingFormDropdowns;
             state.loading = false;
         })

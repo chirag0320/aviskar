@@ -248,7 +248,7 @@ export interface IPrivateHoldingAddInputs {
     Type: string
     Series: string
     Purity: string
-    Weight: string
+    Weight: number
     WeightType: string
     Specification: string
     Value: string

@@ -18,6 +18,7 @@ import {
   EyeOnIcon,
   EyeOffIcon,
 } from '../../assets/icons/index'
+import { clear } from 'console'
 
 interface RenderFieldProps {
   type?: RenderFieldType
@@ -40,6 +41,7 @@ interface RenderFieldProps {
   control?: any
   autoComplete?: string
   disabled?: boolean,
+  clearErrors?: any,
   getValues?: any,
   margin?: 'dense' | 'normal' | 'none'
   row?: boolean
@@ -75,6 +77,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   options,
   defaultValue,
   multiline,
+  clearErrors,
   disabled,
   autoComplete = 'on',
   margin = 'dense',
@@ -137,6 +140,9 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                   }
                   if (onChange) {
                     onChange(e.target.value)
+                  }
+                  if (clearErrors && getValues(name) !== "none") {
+                    clearErrors(name)
                   }
                 }
                 }
@@ -343,6 +349,54 @@ const RenderFields: React.FC<RenderFieldProps> = ({
               height: '100%',
             }} >Upload</Button>
           </Stack>
+        </FormControl>
+      )
+      break
+
+    case 'number':
+      fieldType = (
+        <FormControl
+          fullWidth={fullWidth}
+          margin={margin}
+          {...(error ? { error: true } : {})}
+        >
+          {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+          <Controller
+            name={name}
+            control={control}
+            defaultValue={value} // Set defaultValue instead of passing value prop
+            render={({ field: { value, onChange } }) => (
+              <>
+                <TextField
+                  id={name}
+                  type="number"
+                  fullWidth={fullWidth}
+                  error={!!error}
+                  placeholder={placeholder}
+                  value={value}
+                  defaultValue={defaultValue}
+                  disabled={disabled}
+                  autoComplete={autoComplete}
+                  variant={variant}
+                  InputProps={{ endAdornment }}
+                  onChange={(event) => {
+                    const numberRegex = /^-?\d*\.?\d*$/
+                    if (!numberRegex.test(event.target.value)) {
+                      return
+                    }
+                    onChange(event)
+                  }}
+                  onKeyDown={(e) => {
+                    ;['e', 'E', '+', '-', '.'].includes(e.key) &&
+                      e.preventDefault()
+                  }}
+                  {...register(name)}
+                  {...otherProps}
+                />
+              </>
+            )}
+          />
+
         </FormControl>
       )
       break

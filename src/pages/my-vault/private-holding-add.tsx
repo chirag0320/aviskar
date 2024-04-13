@@ -25,16 +25,17 @@ import { IPrivateHoldingAddInputs } from "@/types/myVault";
 import { getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
 import DynamicFields from "@/components/partials/my-vault/private-holding-form/DynamicFields";
 import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
+import RenderDropdownItems from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
 
 const schema = yup.object().shape({
-    Account: yup.string().trim().notOneOf(['none', "Account is required field"]),
+    Account: yup.string().notOneOf(["none"], "Account is required field"),
     ProductName: yup.string().trim().required("productName is required field"),
     MintOrBrand: yup.string().trim(),
     Metal: yup.string().trim().required("metal is required field"),
     Type: yup.string().trim().required("type is required field"),
     Series: yup.string().trim(),
     Purity: yup.string().trim().required("purity is required field"),
-    Weight: yup.string().trim().required("weight is required field"),
+    Weight: yup.string().required("weight is required field"),
     WeightType: yup.string().trim().required("weightType is required field"),
     // Specification: yup.string().trim(),
     // Value: yup.string().trim(),
@@ -42,7 +43,7 @@ const schema = yup.object().shape({
     // CustomValue: yup.string().trim(),
     PurchasePrice: yup.string().trim().required("purchasePrice is required field"),
     PurchaseFrom: yup.string().trim().required("purchasePrice is required field"),
-    Qty: yup.string().trim().required("Quentity is required field"),
+    Qty: yup.string().required("Quentity is required field"),
     ProvenanceDocuments: yup.string().trim(),
     ProductPhotos: yup.string().trim().required("productPhotos is required field"),
     DocumentType: yup.string().trim().required("documentType is required field"),
@@ -78,6 +79,7 @@ function privateHoldingAdd({ location }: { location: any }) {
         register,
         handleSubmit,
         control,
+        clearErrors,
         getValues,
         setValue,
         formState: { errors },
@@ -85,7 +87,7 @@ function privateHoldingAdd({ location }: { location: any }) {
         resolver: yupResolver(schema)
     })
 
-    // console.log("🚀 ~ privateHoldingAdd ~ getValues:", getValues("Account"))
+    console.log("🚀 ~ privateHoldingAdd ~ getValues:", getValues("Account"))
     // to show intial placeholder
     useEffect(() => {
         setValue("Account", "none")
@@ -145,6 +147,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         getValues={getValues}
                                         setValue={setValue}
                                         variant='outlined'
+                                        clearErrors={clearErrors}
                                         margin='none'
                                         className='SelectAccount'
                                         required
@@ -173,13 +176,12 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         control={control}
                                         variant='outlined'
                                         getValues={getValues}
+                                        clearErrors={clearErrors}
                                         margin='none'
                                         className='SelectMint'
                                         required
                                     >
-                                        <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                        <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                        <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
+                                        {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Mint"]} />}
                                     </RenderFields>
                                 </Stack>
                                 <Stack className="RowWrapper">
@@ -191,19 +193,13 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         getValues={getValues}
                                         label="Metal"
                                         control={control}
+                                        clearErrors={clearErrors}
                                         variant='outlined'
                                         margin='none'
                                         className='SelectMetal'
                                         required
                                     >
-                                        {formDropdowns?.map((dropdown) => {
-                                            return (
-                                                <MenuItem key={dropdown.}></MenuItem>
-                                            )
-                                        })}
-                                        {/* <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                        <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                        <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem> */}
+                                        {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Metal"]} />}
                                     </RenderFields>
                                     <RenderFields
                                         type="select"
@@ -214,13 +210,12 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         label="Type"
                                         control={control}
                                         variant='outlined'
+                                        clearErrors={clearErrors}
                                         margin='none'
                                         className='SelectType'
                                         required
                                     >
-                                        <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                        <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                        <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
+                                        {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Type"]} />}
                                     </RenderFields>
                                 </Stack>
                                 <Stack className="RowWrapper">
@@ -232,14 +227,13 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         getValues={getValues}
                                         label="Series"
                                         control={control}
+                                        clearErrors={clearErrors}
                                         variant='outlined'
                                         margin='none'
                                         className='SelectSeries'
                                     // required
                                     >
-                                        <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                        <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                        <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
+                                        {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Series"]} />}
                                     </RenderFields>
                                     <RenderFields
                                         type="select"
@@ -249,39 +243,35 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         label="Purity"
                                         getValues={getValues}
                                         control={control}
+                                        clearErrors={clearErrors}
                                         variant='outlined'
                                         margin='none'
                                         className='SelectPurity'
                                         required
                                     >
-                                        <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                        <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                        <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
+                                        {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Purity"]} />}
                                     </RenderFields>
                                 </Stack>
                                 <Stack className="RowWrapper">
                                     <RenderFields
-                                        type="select"
                                         register={register}
                                         error={errors.Weight}
                                         name="Weight"
                                         label="Weight"
-                                        getValues={getValues}
+                                        type="number"
+                                        placeholder="Enter Weight"
                                         control={control}
                                         variant='outlined'
                                         margin='none'
-                                        className='SelectWeight'
-                                        required
-                                    >
-                                        <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                        <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                        <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
-                                    </RenderFields>
+                                        className='Weight'
+                                        setValue={setValue}
+                                    />
                                     <RenderFields
                                         type="select"
                                         register={register}
                                         error={errors.WeightType}
                                         name="WeightType"
+                                        clearErrors={clearErrors}
                                         label="Weight Type"
                                         getValues={getValues}
                                         control={control}
@@ -290,9 +280,9 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         className='SelectWeightType'
                                         required
                                     >
-                                        <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                        <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                        <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
+                                        <MenuItem value='0'>ounces</MenuItem>
+                                        <MenuItem value='1'>grams</MenuItem>
+                                        <MenuItem value='2'>kilograms</MenuItem>
                                     </RenderFields>
                                 </Stack>
                                 <DynamicFields />
@@ -377,7 +367,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                     </Box>
                                 </Stack>
                                 <Stack sx={{ gap: "20px", justifyContent: "flex-end" }} className='BottomButtonsWrapper'>
-                                    <Button variant="contained" size="large">Save</Button>
+                                    <Button variant="contained" size="large" type="submit">Save</Button>
                                     <Button variant="outlined" size="large">Cancel</Button>
                                 </Stack>
                             </form>
