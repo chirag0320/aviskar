@@ -1,16 +1,19 @@
 import { Box, Card, CardContent, CardMedia, Stack, Typography, Button, IconButton, List, ListItem, ListItemButton, ListItemText } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
-import { ChevronDown, OptionsIcon } from "../../../assets/icons/index"
+import { ChevronDown, ChevronUp, OptionsIcon } from "../../../assets/icons/index"
 import SellEntry from "@/components/partials/my-vault/SellEntry";
 import ConvertToListing from "@/components/partials/my-vault/ConvertToListing";
 import SellToUs from "@/components/partials/my-vault/SellToUs";
 import { ClickTooltip } from '@/components/common/CustomTooltip';
 import { useAppDispatch, useAppSelector, useToggle } from "@/hooks";
-import { roundOfThePrice } from '@/utils/common';
+import { PriceFacturationEnum, roundOfThePrice } from '@/utils/common';
 import { getPrivateHoldingsListLivePrice } from '@/redux/reducers/myVaultReducer';
 import { ENDPOINTS } from '@/utils/constants';
 import { IPrivateHolding, IPrivateHoldingLivePrice } from '@/types/myVault';
 
+const getColorForPosition = (position: number) => {
+    return PriceFacturationEnum[position.toString() as keyof typeof PriceFacturationEnum];
+};
 
 function PrivateHoldingCards() {
     const privateHoldingsList = useAppSelector(state => state.myVault.privateHoldingsList)
@@ -24,7 +27,6 @@ function PrivateHoldingCards() {
     const [openSellToUs, toggleSellToUs] = useToggle(false);
     const tooltipRef: any = useRef(null)
     const [privateHoldingsData, setPrivateHoldingsData] = useState<(IPrivateHolding & IPrivateHoldingLivePrice)[]>([]);
-    console.log("🚀 ~ PrivateHoldingCards ~ privateHoldingsData:", privateHoldingsData)
 
     useEffect(() => {
         if (!privateHoldingsList) return;
@@ -67,7 +69,7 @@ function PrivateHoldingCards() {
     const handleClickAway = (event: any) => {
         setHoldingProductOptions(false)
     }
-    console.log("🚀 ~ {privateHoldingsData.length>0&&privateHoldingsData?.map ~ privateHoldingsData:", privateHoldingsData)
+
     return (
         <>
             {privateHoldingsData.length > 0 && privateHoldingsData?.map((item) => {
@@ -85,8 +87,8 @@ function PrivateHoldingCards() {
                                 <Typography variant="body1" className=""><strong>Purchase Price :</strong> ${roundOfThePrice(item.purchasePrice * item.quantity)} (${roundOfThePrice(item.purchasePrice)})</Typography>
                                 <Typography variant="body1" className=""><strong>Sell to us value :</strong></Typography>
                                 <Stack className='ButtonsWrapper'>
-                                    <Button variant="contained" size="small" onClick={toggleSellToUs} color="error">${roundOfThePrice(item.price)}</Button>
-                                    <Button variant="contained" size="small" onClick={toggleSellToUs} color="success" startIcon={<ChevronDown />}>${item.move} ({item.percentage}%)</Button>
+                                    <Button variant="contained" size="small" onClick={toggleSellToUs} color={getColorForPosition(item.position)}>${roundOfThePrice(item.price)}</Button>
+                                    <Button variant="contained" size="small" onClick={toggleSellToUs} color={getColorForPosition(item.position)} startIcon={item.position === 2 ? <ChevronDown /> : <ChevronUp />}>${item.move} ({item.percentage}%)</Button>
                                     <Button variant='contained' size="small" onClick={toggleSellToUs}>selltoas</Button>
                                 </Stack>
                                 {/* <Box sx={{
