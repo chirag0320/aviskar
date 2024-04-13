@@ -61,7 +61,7 @@ const rows = [
   ),
 ];
 
-const RecentOrderTable = ({ recentOrders,reOrderFunction }: { recentOrders: IRecentOrders[],reOrderFunction:(orderId:any)=>void }) => {
+const RecentOrderTable = ({ recentOrders, reOrderFunction }: { recentOrders: IRecentOrders[], reOrderFunction: (orderId: any) => void }) => {
   return (
     <Box className="CommonTableWrapper">
       <TableContainer
@@ -73,11 +73,11 @@ const RecentOrderTable = ({ recentOrders,reOrderFunction }: { recentOrders: IRec
           <TableHead>
             <TableRow>
               <TableCell>Order#</TableCell>
-              <TableCell sx={{ minWidth: "300px" }}>Date</TableCell>
+              <TableCell sx={{ minWidth: "180px" }}>Date</TableCell>
               <TableCell sx={{ minWidth: "185px" }}>Ship to</TableCell>
-              <TableCell sx={{ minWidth: "240px" }}>Order Total</TableCell>
-              <TableCell sx={{ minWidth: "370px" }}>Status</TableCell>
-              <TableCell sx={{ minWidth: "228px" }}></TableCell>
+              <TableCell sx={{ minWidth: "200px" }}>Order Total</TableCell>
+              <TableCell sx={{ minWidth: "150px" }}>Status</TableCell>
+              <TableCell sx={{ minWidth: "270px" }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -94,8 +94,8 @@ const RecentOrderTable = ({ recentOrders,reOrderFunction }: { recentOrders: IRec
                 <TableCell>{row.orderTotal}</TableCell>
                 <TableCell>
                   <Box className="ChipWrapper">
-                    {[{label:row.orderStatus,color: row.orderStatusColor},{label:row.alertOrderStatus, color: row.alertOrderStatusColor}].map((status, index) => (
-                     status.label && <Chip key={index} label={status.label} sx={{backgroundColor: status.color, color: 'white'}} />
+                    {[{ label: row.orderStatus, color: row.orderStatusColor }, { label: row.alertOrderStatus, color: row.alertOrderStatusColor }].map((status, index) => (
+                      status.label && <Chip key={index} label={status.label} sx={{ backgroundColor: status.color, color: 'white' }} />
                     ))}
                     {/* {row?.orderStatus} */}
                   </Box>
@@ -105,10 +105,10 @@ const RecentOrderTable = ({ recentOrders,reOrderFunction }: { recentOrders: IRec
                     {/* {row.details.map((details, index) => (
                       <Chip key={index} label={details} color="success" />
                     ))} */}
-                      <Button variant="contained" color="secondary" onClick={()=>{
-                        navigate(`/order-details/?orderNo=${row.customOrderNumber}`)
-                      }}>Details</Button>
-                      <Button variant="contained" color="success" onClick={()=>{reOrderFunction(row.orderId)}}>Re-order</Button>
+                    <Button variant="contained" color="info" onClick={() => {
+                      navigate(`/order-details/?orderNo=${row.customOrderNumber}`)
+                    }}>Details</Button>
+                    <Button variant="contained" color="success" onClick={() => { reOrderFunction(row.orderId) }}>Re-order</Button>
                     {/* <Chip key={row.orderGuid} label={"TODO"}  /> */}
                   </Box>
                 </TableCell>

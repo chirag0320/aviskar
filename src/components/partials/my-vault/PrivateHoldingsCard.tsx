@@ -99,12 +99,12 @@ function PrivateHoldingCards() {
                             <ClickTooltip
                                 name='holdingproduct'
                                 open={holdingProductOptions}
-                                className="AddressTooltip"
                                 placement="bottom-end"
                                 onClose={handleTooltipClose}
                                 onClickAway={handleClickAway}
                                 renderComponent={<IconButton name='holdingproduct' ref={tooltipRef} className="OptionButton" onClick={handleTooltipOpen}><OptionsIcon /></IconButton>}
                                 lightTheme
+                                disablePortal={true}
                                 arrow
                             >
                                 <List>
@@ -136,9 +136,9 @@ function PrivateHoldingCards() {
                         <SellToUs open={openSellToUs} onClose={toggleSellToUs} />
                     </Card >
                 )
-            })}
+            }
+            )}
         </>
     )
 }
-
 export default PrivateHoldingCards

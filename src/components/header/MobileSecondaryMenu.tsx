@@ -1,5 +1,5 @@
-import React, { useState, useEffect ,useRef } from "react"
-import {  useScrollTrigger,Stack, Container, Box, IconButton, AppBar } from "@mui/material"
+import React, { useState, useEffect, useRef } from "react"
+import { useScrollTrigger, Stack, Container, Box, IconButton, AppBar } from "@mui/material"
 import classNames from "classnames"
 
 // Assets
@@ -44,9 +44,9 @@ function MobileSecondaryMenu() {
   return (
     <Box id="MobileSecondaryMenu">
       <AppBar
-      position="static"
-      component="div"
-      sx={{top: headerHeight}}
+        position="static"
+        component="div"
+        sx={{ top: headerHeight }}
       >
         <Container>
           <Stack className="Wrapper">
@@ -60,6 +60,7 @@ function MobileSecondaryMenu() {
                 configDetailsState?.enablesearch?.value && <IconButton aria-label='SearchButton' ref={searchButtonRef} className={classNames("MenuButton", { "Active": false })} onClick={toggleOpenSearch}><Search /></IconButton>
               }
               lightTheme
+              disablePortal={true}
               arrow
             >
               <Container>
@@ -69,10 +70,10 @@ function MobileSecondaryMenu() {
             <IconButton color="secondary" title='Call us' className={classNames("MenuButton", { "Active": false })} href={"tel:" + configDetailsState?.companyphonenumber?.value}><Call /></IconButton>
             {configDetailsState?.enablechart?.value ?
               <ChartMenu />
-            : null}
+              : null}
             {configDetailsState?.enablecart?.value ?
               <CartMenu onClick={handleCartMenu} />
-            : null}
+              : null}
             <ActionMenu />
           </Stack>
         </Container>
