@@ -115,24 +115,24 @@ interface PointsHistoryItem {
     createdOnUtc: string;
     endDateUtc: string;
     validPoints: number;
-  }
-  
-  interface PointsHistories {
+}
+
+interface PointsHistories {
     extraProperty: any | null;
     count: number;
     page: number;
     pageSize: number;
     items: PointsHistoryItem[];
     additionalField: any | null;
-  }
-  
-  export interface rewardPointsHistoryData {
+}
+
+export interface rewardPointsHistoryData {
     pointsHistories: PointsHistories;
     totalPoint: number;
     totalPointAmount: number;
     maxUsePoint: number;
     maxUsePointAmount: number;
-  }
+}
 
 export interface rewardPointsHistoryDataItems {
     id: number;
@@ -221,8 +221,25 @@ export interface IOrderHistoryApiResponseData {
     pageSize: number;
 }
 
-// ADDRESSES
+// PRIVATE HOLDINGS
 
+export interface IPrivateHolding {
+    id: number,
+    subCustomerID: number,
+    productId: number,
+    producName: string,
+    quantity: number,
+    purchasePrice: number,
+    filepath: string
+}
+export interface IPrivateHoldingLivePrice {
+    holdingId: number,
+    unitPrice: number,
+    price: number,
+    move: number,
+    percentage: number,
+    position: number
+}
 // Sell Qty
 export interface SellData {
     HoldingId: number;

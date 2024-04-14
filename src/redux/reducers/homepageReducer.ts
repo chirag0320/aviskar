@@ -71,7 +71,6 @@ interface CreateGuidelineState {
   },
   popUpdata: IPopupDetails | null,
   siteMapData: IsiteMapData | null;
-  privateHoldingListData: any
 }
 interface Settings {
   TwoFactorAuthenticatorAdminlogin: string;
@@ -156,7 +155,6 @@ const initialState: CreateGuidelineState = {
   liveDashboardChartData: {},
   popUpdata: null,
   siteMapData: null,
-  privateHoldingListData: null
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -213,12 +211,6 @@ export const getSiteMapData = appCreateAsyncThunk(
   'getSiteMapData/status',
   async () => {
     return await ConfigServices.getSiteMapData()
-  }
-)
-export const getPrivateHoldingList = appCreateAsyncThunk(
-  'getPrivateHoldingList/status',
-  async () => {
-    return await ConfigServices.getPrivateHoldingList()
   }
 )
 // export const add = appCreateAsyncThunk(
@@ -470,18 +462,6 @@ export const createHomepageSlice = createSlice({
       state.loading = false
     })
     builder.addCase(getSiteMapData.rejected, (state, action) => {
-      state.loading = false
-    })
-    // private holding list
-    builder.addCase(getPrivateHoldingList.pending, (state, action) => {
-      state.loading = true
-    })
-    builder.addCase(getPrivateHoldingList.fulfilled, (state, action) => {
-      const responseData = action.payload.data.data;
-      state.privateHoldingListData = responseData
-      state.loading = false
-    })
-    builder.addCase(getPrivateHoldingList.rejected, (state, action) => {
       state.loading = false
     })
   },

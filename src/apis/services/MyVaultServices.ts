@@ -49,14 +49,26 @@ class MyVaultServices {
     static async getMyVaultHomePageChartData() {
         return axiosInstance.get(ENDPOINTS.getMyVaultHopePageDataChart);
     }
-    static async sendForEnquiry(body:IEnquiryData) {
+
+    // PRIAVTE HOLDINGS 
+    static async getPrivateHoldingsList() {
+        return axiosInstance.get(ENDPOINTS.getPrivateHoldingsList);
+    }
+
+    static async getPrivateHoldingsListLivePrice(url: string, body: {
+        HoldingIds: number[],
+        IsStorePrice: boolean
+    }) {
+        return axiosInstance.post(url, body);
+    }
+    static async sendForEnquiry(body: IEnquiryData) {
         return axiosInstance.post(ENDPOINTS.enquiry,);
     }
-    static async sellQty(body:SellData) {
-        return axiosInstance.post(ENDPOINTS.sellQty,body);
+    static async sellQty(body: SellData) {
+        return axiosInstance.post(ENDPOINTS.sellQty, body);
     }
-    static async convertToMarketPlace(body:ConversionData){
-        return axiosInstance.post(ENDPOINTS.convertToMarketPlace,body);
+    static async convertToMarketPlace(body: ConversionData) {
+        return axiosInstance.post(ENDPOINTS.convertToMarketPlace, body);
     }
 }
 

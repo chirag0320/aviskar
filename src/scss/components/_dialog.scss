@@ -686,11 +686,7 @@
   &.MuiDialog-root {
     .MuiDialog-container {
       .MuiDialog-paper {
-        width: 30%;
-
-        @include media($llg) {
-          width: 100%;
-        }
+        width: 100%;
 
         .DialogHeader {
           justify-content: space-between;
@@ -730,30 +726,73 @@
   }
 
   &#SellToUs {
-    .AllFields {
-      flex-direction: row;
-      gap: 50px;
+    .MuiDialogContent-root {
+      padding: 40px 20px;
 
-      @include media($md) {
+      form {
+        display: flex;
         gap: 30px;
-      }
 
-      @include media($xs) {
-        gap: 20px;
-        flex-direction: column;
-      }
+        @include media($sm) {
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .Imagewrapper {
+          // flex-direction: row;
+          // gap: 50px;
+          align-self: center;
 
 
-      img {
-        max-width: 140px;
-        object-fit: contain;
+          // @include media($md) {
+          //   gap: 30px;
+          // }
+
+          // @include media($xs) {
+          //   gap: 20px;
+          //   flex-direction: column;
+          // }
+
+
+          img {
+            max-width: 140px;
+            object-fit: contain;
+          }
+        }
+
+        .ActionWrapper {
+          flex-direction: column;
+          justify-content: space-between;
+          flex-grow: 1;
+          margin-top: 0;
+
+          .QuantityInputs {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+
+            .QuantityLabel {
+              font-size: 25px;
+              line-height: 30px;
+              margin-bottom: 0;
+            }
+          }
+
+          .ButtonsWrapper {
+            gap: 20px;
+
+            @include media($xs) {
+              flex-direction: column;
+            }
+
+            .MuiButtonBase-root {
+              flex-grow: 1;
+            }
+          }
+        }
       }
     }
 
-    .ActionWrapper {
-      @include media($xs) {
-        flex-direction: column;
-      }
-    }
   }
 }
