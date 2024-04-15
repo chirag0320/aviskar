@@ -25,30 +25,30 @@ import { IPrivateHoldingAddInputs } from "@/types/myVault";
 import { getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
 import DynamicFields from "@/components/partials/my-vault/private-holding-form/DynamicFields";
 import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
-import RenderDropdownItems from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
+// import { RenderDropdownItems } from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
+// import RenderDropdownItems from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
 
 const schema = yup.object().shape({
     Account: yup.string().notOneOf(["none"], "Account is required field"),
-    ProductName: yup.string().trim().required("productName is required field"),
-    MintOrBrand: yup.string().trim(),
-    Metal: yup.string().trim().required("metal is required field"),
-    Type: yup.string().trim().required("type is required field"),
-    Series: yup.string().trim(),
-    Purity: yup.string().trim().required("purity is required field"),
-    Weight: yup.string().required("weight is required field"),
-    WeightType: yup.string().trim().required("weightType is required field"),
+    ProductName: yup.string().trim().required("Product Name is required field"),
+    MintOrBrand: yup.string().notOneOf(["none"], "Mint or Brand is required field"),
+    Metal: yup.string().notOneOf(["none"], "Metal is required field"),
+    Type: yup.string().notOneOf(["none"], "Type is required field"),
+    Series: yup.string().notOneOf(["none"], "Series is required field"),
+    Purity: yup.string().notOneOf(["none"], "Purity is required field"),
+    Weight: yup.string().trim().required("Weight is required field"),
+    WeightType: yup.string().notOneOf(["none"], "Weight Type is required field"),
     // Specification: yup.string().trim(),
     // Value: yup.string().trim(),
     // CustomSpecification: yup.string().trim(),
     // CustomValue: yup.string().trim(),
-    PurchasePrice: yup.string().trim().required("purchasePrice is required field"),
-    PurchaseFrom: yup.string().trim().required("purchasePrice is required field"),
-    Qty: yup.string().required("Quentity is required field"),
+    PurchasePrice: yup.string().trim().required("Purchase Price is required field"),
+    PurchaseFrom: yup.string().trim().required("Purchase From is required field"),
+    Qty: yup.string().required("Quantity is required field"),
     ProvenanceDocuments: yup.string().trim(),
-    ProductPhotos: yup.string().trim().required("productPhotos is required field"),
-    DocumentType: yup.string().trim().required("documentType is required field"),
+    ProductPhotos: yup.string().trim().required("Product Photos is required field"),
+    DocumentType: yup.string().notOneOf(["none"], "Document Type is required field"),
 });
-
 
 function createDataPhotos(
     fileName: string,
@@ -91,6 +91,12 @@ function privateHoldingAdd({ location }: { location: any }) {
     // to show intial placeholder
     useEffect(() => {
         setValue("Account", "none")
+        setValue("MintOrBrand", "none")
+        setValue("Metal", "none")
+        setValue("Type", "none")
+        setValue("Series", "none")
+        setValue("Purity", "none")
+        setValue("WeightType", "none")
     }, [])
 
     useLayoutEffect(() => {
@@ -122,6 +128,8 @@ function privateHoldingAdd({ location }: { location: any }) {
         console.log(data);
     }
 
+    const renderDropdownItems = (dropdowns: any) => dropdowns?.map((option: any) => <MenuItem key={option.specificationAttributeOptionsId} value={option.specificationAttributeOptionsId}>{option.specificationOption}</MenuItem>);
+
     return (
         <>
             <Loader open={loading} />
@@ -144,6 +152,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         name="Account"
                                         label="Account:"
                                         control={control}
+                                        defaultValue="none"
                                         getValues={getValues}
                                         setValue={setValue}
                                         variant='outlined'
@@ -175,13 +184,16 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         label="Mint/Brand"
                                         control={control}
                                         variant='outlined'
+                                        defaultValue="none"
+                                        setValue={setValue}
                                         getValues={getValues}
                                         clearErrors={clearErrors}
                                         margin='none'
                                         className='SelectMint'
                                         required
                                     >
-                                        {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Mint"]} />}
+                                        <MenuItem value="none">Select Mint</MenuItem>
+                                        {formDropdowns && renderDropdownItems(formDropdowns["Mint"])}
                                     </RenderFields>
                                 </Stack>
                                 <Stack className="RowWrapper">
@@ -193,21 +205,27 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         getValues={getValues}
                                         label="Metal"
                                         control={control}
+                                        setValue={setValue}
+                                        defaultValue="none"
                                         clearErrors={clearErrors}
                                         variant='outlined'
                                         margin='none'
                                         className='SelectMetal'
                                         required
                                     >
-                                        {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Metal"]} />}
+                                        <MenuItem value="none">Select Metal</MenuItem>
+                                        {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Metal"]} />} */}
+                                        {formDropdowns && renderDropdownItems(formDropdowns["Metal"])}
                                     </RenderFields>
                                     <RenderFields
                                         type="select"
                                         register={register}
                                         error={errors.Type}
                                         name="Type"
+                                        setValue={setValue}
                                         getValues={getValues}
                                         label="Type"
+                                        defaultValue="none"
                                         control={control}
                                         variant='outlined'
                                         clearErrors={clearErrors}
@@ -215,7 +233,9 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         className='SelectType'
                                         required
                                     >
-                                        {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Type"]} />}
+                                        <MenuItem value="none">Select Type</MenuItem>
+                                        {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Type"]} />} */}
+                                        {formDropdowns && renderDropdownItems(formDropdowns["Type"])}
                                     </RenderFields>
                                 </Stack>
                                 <Stack className="RowWrapper">
@@ -226,14 +246,18 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         name="Series"
                                         getValues={getValues}
                                         label="Series"
+                                        defaultValue="none"
                                         control={control}
+                                        setValue={setValue}
                                         clearErrors={clearErrors}
                                         variant='outlined'
                                         margin='none'
                                         className='SelectSeries'
                                     // required
                                     >
-                                        {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Series"]} />}
+                                        <MenuItem value="none">Select Series</MenuItem>
+                                        {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Series"]} />} */}
+                                        {formDropdowns && renderDropdownItems(formDropdowns["Series"])}
                                     </RenderFields>
                                     <RenderFields
                                         type="select"
@@ -242,6 +266,8 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         name="Purity"
                                         label="Purity"
                                         getValues={getValues}
+                                        setValue={setValue}
+                                        defaultValue="none"
                                         control={control}
                                         clearErrors={clearErrors}
                                         variant='outlined'
@@ -249,7 +275,9 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         className='SelectPurity'
                                         required
                                     >
-                                        {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Purity"]} />}
+                                        <MenuItem value="none">Select Purity</MenuItem>
+                                        {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Purity"]} />} */}
+                                        {formDropdowns && renderDropdownItems(formDropdowns["Purity"])}
                                     </RenderFields>
                                 </Stack>
                                 <Stack className="RowWrapper">
@@ -275,11 +303,14 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         label="Weight Type"
                                         getValues={getValues}
                                         control={control}
+                                        defaultValue="none"
                                         variant='outlined'
+                                        setValue={setValue}
                                         margin='none'
                                         className='SelectWeightType'
                                         required
                                     >
+                                        <MenuItem value="none">Select Weight Type</MenuItem>
                                         <MenuItem value='0'>ounces</MenuItem>
                                         <MenuItem value='1'>grams</MenuItem>
                                         <MenuItem value='2'>kilograms</MenuItem>
@@ -322,7 +353,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                     />
                                 </Stack>
                                 <Stack className="RowWrapper DocumentPhotosContentWrapper">
-                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors}/>
+                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} />
                                     <Box className="PhotosContentwrapper">
                                         <RenderFields
                                             type="file"

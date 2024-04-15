@@ -8,7 +8,7 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 function createDataDocuments(
     fileName: string,
@@ -32,13 +32,17 @@ const documentsRows = [
     ),
 ];
 
-const ProvenanceDocuments = ({ register, errors, control, getValues,clearErrors }: any) => {
+const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, clearErrors }: any) => {
     const [files, setFile] = useState<{
         id: string,
         fileName: string,
         type: number,
         fileByte: string
     }[]>([]);
+
+    useEffect(() => {
+        setValue("DocumentType", "none");
+    }, [])
 
     const handleDeleteFile = (id: string) => {
         setFile(files.filter(file => file.id !== id));
@@ -68,8 +72,11 @@ const ProvenanceDocuments = ({ register, errors, control, getValues,clearErrors 
                 variant='outlined'
                 getValues={getValues}
                 margin='none'
+                setValue={setValue}
+                defaultValue="none"
                 className='SelectValue'
             >
+                <MenuItem value='none'>Select Document Type</MenuItem>
                 <MenuItem key='test' value='0'>Invoice</MenuItem>
                 <MenuItem key='test' value='1'>Certificate</MenuItem>
                 <MenuItem key='test' value='2'>other</MenuItem>

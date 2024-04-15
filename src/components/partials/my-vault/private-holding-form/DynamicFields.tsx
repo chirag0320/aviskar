@@ -21,6 +21,7 @@ const DynamicFields = () => {
     console.log("🚀 ~ DynamicFields ~ specificationFields:", specificationFields)
     const [customSpecificationFields, setCustomSpecificationField] = useState<ISpecificationField[]>([]);
 
+    // Just an dummy react hook form
     const {
         register,
         handleSubmit,
@@ -81,11 +82,13 @@ const DynamicFields = () => {
                     }}
                     control={control}
                     variant='outlined'
+                    defaultValue="none"
                     margin='none'
                     clearErrors={clearErrors}
                     className='SelectSpecification'
                 // required
                 >
+                    <MenuItem key='test' value='none'>Select Specfication</MenuItem>
                     <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
                     <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
                     <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
@@ -124,6 +127,7 @@ const DynamicFields = () => {
                     label="Custom Specification"
                     // placeholder="Enter custom specification."
                     value={field[Object.keys(field)[0]].specificationName}
+                    placeholder='Enter Custom Specification'
                     onChange={(e) => {
                         const newFields = [...customSpecificationFields];
                         newFields[index][Object.keys(field)[0]].specificationName = e.target.value;
@@ -139,7 +143,7 @@ const DynamicFields = () => {
                     name="CustomValue"
                     label="Custom Value"
                     value={field[Object.keys(field)[0]].value}
-                    placeholder="Enter last name *"
+                    placeholder="Enter Custome Specfication Value"
                     onChange={(e) => {
                         const newFields = [...customSpecificationFields];
                         newFields[index][Object.keys(field)[0]].value = e.target.value;
