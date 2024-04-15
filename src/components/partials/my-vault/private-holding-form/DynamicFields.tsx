@@ -22,10 +22,10 @@ const DynamicFields = ({ existingFields }: {
     }[] | null
 }) => {
     const [specificationFields, setSpecificationField] = useState<ISpecificationField[]>([]);
+    // console.log("🚀 ~ specificationFields:", specificationFields)
     const formDropdownsKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsKeys);
     const formDropdownsReverseKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsReverseKeys);
     const formDropdowns = useAppSelector(state => state.myVault.privateHoldingFormDropdowns);
-    const [dynamicSpecifications, setDynamicSpecifications] = useState();
     // console.log("🚀 ~ DynamicFields ~ specificationFields:", specificationFields)
     const [customSpecificationFields, setCustomSpecificationField] = useState<ISpecificationField[]>([]);
 
@@ -36,10 +36,10 @@ const DynamicFields = ({ existingFields }: {
         existingFields.forEach((field) => {
             const curField = formDropdownsKeys[field.specificationAttributeOptionId.toString()];
             if (!fixedFields.has(curField)) {
-                console.log("🚀 ~ DynamicFields ~ specificationFields:", curField)
+                // console.log("🚀 ~ DynamicFields ~ specificationFields:", curField)
                 currentFields.push({
                     [field.specificationAttributeOptionId]: {
-                        specificationName: formDropdownsKeys[field.specificationAttributeOptionId],
+                        specificationName: field.specificationAttributeOptionId.toString(),
                         value: field.specificationAttributeId.toString()
                     }
                 })
@@ -105,6 +105,7 @@ const DynamicFields = ({ existingFields }: {
                     onChange={(value) => {
                         const newFields = [...specificationFields];
                         newFields[index][Object.keys(field)[0]].specificationName = value;
+                        // newFields[index][Object.keys(field)[0]].value = "none";
                         setSpecificationField(newFields);
                     }}
                     control={control}
@@ -143,9 +144,9 @@ const DynamicFields = ({ existingFields }: {
                     className='SelectValue'
                 // required
                 >
-                    <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                    <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                    <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
+                    {formDropdowns && formDropdownsKeys && formDropdowns[formDropdownsKeys[field[Object.keys(field)[0]]?.specificationName]]?.map((dropdown: any) => {
+                        return (<MenuItem value={dropdown.specificationAttributeOptionsId}>{dropdown.specificationOption}</MenuItem>)
+                    })}
                 </RenderFields>
                 <IconButton className="DeleteButton" onClick={() => handleDeleteSpecificationField(Object.keys(field)[0])}><Delete1Icon /></IconButton>
             </Stack>)}

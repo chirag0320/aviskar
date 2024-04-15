@@ -27,8 +27,6 @@ import DynamicFields from "@/components/partials/my-vault/private-holding-form/D
 import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
 import ProductPhotos from "@/components/partials/my-vault/private-holding-form/ProductPhotos";
 import useRequireLogin from "@/hooks/useRequireLogin";
-// import { RenderDropdownItems } from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
-// import RenderDropdownItems from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
 
 const schema = yup.object().shape({
     Account: yup.string().notOneOf(["none"], "Account is required field"),
@@ -41,32 +39,13 @@ const schema = yup.object().shape({
     Weight: yup.string().trim().required("Weight is required field"),
     WeightType: yup.string().notOneOf(["none"], "Weight Type is required field"),
     Date: yup.string().required("Date is required field"),
-    // Specification: yup.string().trim(),
-    // Value: yup.string().trim(),
-    // CustomSpecification: yup.string().trim(),
-    // CustomValue: yup.string().trim(),
     PurchasePrice: yup.string().trim().required("Purchase Price is required field"),
     PurchaseFrom: yup.string().trim().required("Purchase From is required field"),
     Qty: yup.string().required("Quantity is required field"),
-    ProvenanceDocuments: yup.string().trim(),
-    ProductPhotos: yup.string().trim().required("Product Photos is required field"),
-    DocumentType: yup.string().notOneOf(["none"], "Document Type is required field"),
+    // ProvenanceDocuments: yup.string().trim(),
+    // ProductPhotos: yup.string().trim().required("Product Photos is required field"),
+    // DocumentType: yup.string().notOneOf(["none"], "Document Type is required field"),
 });
-
-function createDataPhotos(
-    fileName: string,
-) {
-    return { fileName };
-}
-
-const photosRows = [
-    createDataPhotos(
-        "test.png",
-    ),
-    createDataPhotos(
-        "abc.gif",
-    ),
-];
 
 function dropdownStateReducer(state: any, action: any) {
     switch (action.type) {
@@ -134,10 +113,11 @@ function privateHoldingAdd({ location }: { location: any }) {
         fetchHolding()
     }, [])
 
+
+
     // set intial form values if user wants to edit
     useEffect(() => {
         if (!currentPrivateHolding) return;
-        // console.log("🚀 ~ useEffect ~ currentPrivateHolding:", currentPrivateHolding)
 
         setValue("ProductName", currentPrivateHolding.productName)
         setValue("PurchaseFrom", currentPrivateHolding.purchasedFrom);
@@ -146,26 +126,78 @@ function privateHoldingAdd({ location }: { location: any }) {
         setValue("PurchasePrice", currentPrivateHolding.price.toString())
 
         if (!formDropdownsKeys) return;
-        // console.log("🚀 ~ useEffect ~ formDropdownsKeys:", formDropdownsKeys, formDropdownsKeys["15"])
-        // console.log("🚀 ~ useEffect ~ formDropdownsKeys:", formDropdownsKeys, "=>", currentPrivateHolding, "=>", currentPrivateHolding.productattribute.find((option) => formDropdownsKeys[option["specificationAttributeOptionId"].toString()] === "Mint"))
+
+        function getNextSpecificationItem(specificationName: string) {
+            return currentPrivateHolding!.productattribute.find((option: any) => formDropdownsKeys![option["specificationAttributeOptionId"].toString()] === specificationName)
+        }
+
+        const nextMint = getNextSpecificationItem("Mint");
+        const nextMetal = getNextSpecificationItem("Metal");
+        const nextType = getNextSpecificationItem("Type");
+        const nextSeries = getNextSpecificationItem("Series");
+        const nextPurity = getNextSpecificationItem("Purity");
 
         dropdownDispatch({
             type: "APPLY_VALUES",
             nextAccount: "test",
             // NOTE : static
-            nextMint: currentPrivateHolding.productattribute.find((option: any) => formDropdownsKeys[option["specificationAttributeOptionId"].toString()] === "Mint")!["specificationAttributeId"] ?? "0",
-            nextMetal: currentPrivateHolding.productattribute.find((option: any) => formDropdownsKeys[option["specificationAttributeOptionId"].toString()] === "Metal")!["specificationAttributeId"] ?? "0",
-            nextType: currentPrivateHolding.productattribute.find((option: any) => formDropdownsKeys[option["specificationAttributeOptionId"].toString()] === "Type")!["specificationAttributeId"] ?? "0",
-            nextSeries: currentPrivateHolding.productattribute.find((option: any) => formDropdownsKeys[option["specificationAttributeOptionId"].toString()] === "Series")!["specificationAttributeId"] ?? "0",
-            nextPurity: currentPrivateHolding.productattribute.find((option: any) => formDropdownsKeys[option["specificationAttributeOptionId"].toString()] === "Purity")!["specificationAttributeId"] ?? "0",
+            nextMint: nextMint ? nextMint["specificationAttributeId"] : "0",
+            nextMetal: nextMetal ? nextMetal["specificationAttributeId"] : "0",
+            nextType: nextType ? nextType["specificationAttributeId"] : "0",
+            nextSeries: nextSeries ? nextSeries["specificationAttributeId"] : "0",
+            nextPurity: nextPurity ? nextPurity["specificationAttributeId"] : "0",
             nextWeightType: "0"
         })
     }, [currentPrivateHolding, formDropdownsKeys])
 
 
-    const onSubmit = (data: any) => {
-        console.log("🚀 ~ onSubmit ~ data:", data)
-        // console.log(data);
+    const onSubmit = (data: IPrivateHoldingAddInputs) => {
+        // console.log("🚀 ~ onSubmit ~ data:", data)
+
+        const prepareData = {
+            // "Id": 0,
+            CustomerID: data.Account,
+            // "SubCustomerID": 74038,
+            // "ProductId": 0,
+            ProductName: data.ProductName,
+            PurchaseDate: data.Date,
+            Price: data.PurchasePrice,
+            Qty: data.Qty,
+            // "RunningQty": 12,
+            PurchasedFrom: data.PurchaseFrom,
+            Weight: data.Weight,
+            WeightType: data.WeightType,
+            Attribute: [
+                {
+                    "SpecificationAttributeOptionId": data.MintOrBrand,
+                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Mint"] : "0",
+                    "SpecificationAttributeOptionOther": ""
+                },
+                {
+                    "SpecificationAttributeOptionId": data.Metal,
+                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Metal"] : "0",
+                    "SpecificationAttributeOptionOther": ""
+                },
+                {
+                    "SpecificationAttributeOptionId": data.Series,
+                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Series"] : "0",
+                    "SpecificationAttributeOptionOther": ""
+                },
+                {
+                    "SpecificationAttributeOptionId": data.Type,
+                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Type"] : "0",
+                    "SpecificationAttributeOptionOther": ""
+                },
+                {
+                    "SpecificationAttributeOptionId": data.Purity,
+                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Purity"] : "0",
+                    "SpecificationAttributeOptionOther": ""
+                },
+            ],
+            CustomAttribute: [],
+            Attachments: []
+        }
+        console.log("🚀 ~ onSubmit ~ prepareData:", prepareData)
     }
 
     const renderDropdownItems = (dropdowns: any) => dropdowns?.map((option: any) => <MenuItem key={option.specificationAttributeOptionsId} value={option.specificationAttributeOptionsId}>{option.specificationOption}</MenuItem>);
