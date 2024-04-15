@@ -215,19 +215,19 @@ export const getPrivateHoldingsListLivePrice = appCreateAsyncThunk(
 // Enquiry
 export const sendForEnquiry = appCreateAsyncThunk(
     "sendForEnquiry",
-    async (body:IEnquiryData) => {
+    async (body: IEnquiryData) => {
         return await MyVaultServices.sendForEnquiry(body);
     }
 )
 // sell qty
 export const sellQty = appCreateAsyncThunk(
     "sellQty",
-    async (body:SellData) => {
+    async (body: SellData) => {
         return await MyVaultServices.sellQty(body);
     }
 )
 // convert to market place
-export const convertToMarketPlace = appCreateAsyncThunk('convertToMarketPlace',async(body:ConversionData)=>{return await MyVaultServices.convertToMarketPlace(body)})
+export const convertToMarketPlace = appCreateAsyncThunk('convertToMarketPlace', async (body: ConversionData) => { return await MyVaultServices.convertToMarketPlace(body) })
 
 export const myVaultSlice = createSlice({
     name: "myVault",
@@ -453,6 +453,17 @@ export const myVaultSlice = createSlice({
             state.loading = false;
         })
         builder.addCase(getPrivateHoldingsListLivePrice.rejected, state => {
+            state.loading = false;
+        })
+        // send for equiry
+        builder.addCase(sendForEnquiry.pending, state => {
+            state.loading = true;
+        })
+        builder.addCase(sendForEnquiry.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.loading = false;
+        })
+        builder.addCase(sendForEnquiry.rejected, state => {
             state.loading = false;
         })
     }

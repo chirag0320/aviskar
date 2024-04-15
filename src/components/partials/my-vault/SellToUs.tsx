@@ -9,10 +9,16 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from '@/components/common/RenderFields';
 import QuantityInputs from '@/components/partials/my-vault/QuantityInputs';
+import noImage from '../../../assets/images/noImage.png'
+import { useAppDispatch } from "@/hooks";
+import { sendForEnquiry } from "@/redux/reducers/myVaultReducer";
+import { IEnquiryData } from "@/types/myVault";
 
 interface SellToUs {
     open: boolean
     onClose: () => void
+    valueOfTheSellToUs: any
+    setValue: (key: any, value: any) => void
 }
 
 interface Inputs {
@@ -24,8 +30,8 @@ const schema = yup.object().shape({
 });
 
 function SellToUs(props: SellToUs) {
-    const { open, onClose } = props
-
+    const { open, onClose, valueOfTheSellToUs, setValue } = props
+    const dispatch = useAppDispatch()
     const {
         register,
         handleSubmit,
@@ -36,26 +42,36 @@ function SellToUs(props: SellToUs) {
     })
 
     const onSubmit = (data: any) => {
+        const body: IEnquiryData = {
+            HoldingId: valueOfTheSellToUs?.holdingId,
+            Quantity: valueOfTheSellToUs?.quantity,
+            ProductPrice: valueOfTheSellToUs?.price,
+        }
+        dispatch(sendForEnquiry(body))
         onClose()
     }
-
+    const onQuantityChange = (qty: any) => {
+        setValue('sellToUs', { ...valueOfTheSellToUs, quantity: qty })
+    }
     return (
         <StyledDialog
             id="SellToUs"
             open={open}
-            dialogTitle="Test holding product"
-            onClose={onClose}
+            dialogTitle={valueOfTheSellToUs?.producName}
+            onClose={() => { onClose() }}
             maxWidth="sm"
             className="PrivateHoldingCommonPopup"
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Box className="Imagewrapper">
-                    <img src="https://qmintstoremedia.blob.core.windows.net/pictures/products/2023-1oz-lunar-series-year-of-the-rabbit-platinum-coin_120320242303026.png?sv=2018-03-28&sr=b&sig=5tD7n%2Bvm4%2BK%2BKE5ZHQfCaSdQBforI3BPxO1kNTNTOzI%3D&st=2024-03-11T13%3A50%3A02Z&se=3024-03-12T13%3A50%3A02Z&sp=r&c=638458482026612121" alt="Product image" />
+                    <img src={valueOfTheSellToUs?.filepath ?? noImage} alt="Product image" />
                 </Box>
                 <Stack className="ActionWrapper">
-                    <QuantityInputs quantityLabel="$0.00" />
+                    <QuantityInputs quantityLabel={valueOfTheSellToUs?.price} onQuantityChange={onQuantityChange} qty={valueOfTheSellToUs?.quantity} />
                     <Stack className="ButtonsWrapper">
-                        <Button size="medium" variant="outlined" onClick={onClose}>Cancel</Button>
+                        <Button size="medium" variant="outlined" onClick={() => {
+                            onClose()
+                        }}>Cancel</Button>
                         <Button type="submit" size="medium" variant="contained">Request Formal Quote</Button>
                     </Stack>
                 </Stack>
@@ -64,4 +80,4 @@ function SellToUs(props: SellToUs) {
     )
 }
 
-export default SellToUs
+export default React.memo(SellToUs)
