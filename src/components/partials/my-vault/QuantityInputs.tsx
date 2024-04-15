@@ -5,22 +5,23 @@ import { MinusIcon, PlusIcon } from '@/assets/icons'
 interface QuantityInputsProps {
     quantityLabel: string
     onQuantityChange: (quantity: number) => void
+    qty: number
 }
 
 export default function QuantityInputs(props: QuantityInputsProps) {
-    const { quantityLabel, onQuantityChange } = props
-    const [quantity, setQuantity] = useState<number>(1)
+    const { quantityLabel, onQuantityChange, qty } = props
+    const [quantity, setQuantity] = useState<number>(props?.qty)
 
     const increaseQuantity = () => {
         const newQuantity = quantity + 1
         setQuantity(newQuantity)
-        // onQuantityChange(newQuantity)
+        onQuantityChange(newQuantity)
     }
 
     const decrementQuantity = () => {
         const newQuantity = quantity > 1 ? quantity - 1 : 1
         setQuantity(newQuantity)
-        // onQuantityChange(newQuantity)
+        onQuantityChange(newQuantity)
     }
     return (
         <Box className="QuantityInputs">

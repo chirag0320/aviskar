@@ -9,10 +9,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from '@/components/common/RenderFields';
 import QuantityInputs from '@/components/partials/my-vault/QuantityInputs';
+import { ConversionData } from "@/types/myVault";
+import { convertToMarketPlace } from "@/redux/reducers/myVaultReducer";
+import { useAppDispatch } from "@/hooks";
 
 interface ConvertToListing {
     open: boolean
     onClose: () => void
+    valueOfConvertToListing: any
+    setValue: any
 }
 
 interface Inputs {
@@ -26,8 +31,8 @@ const schema = yup.object().shape({
 });
 
 function ConvertToListing(props: ConvertToListing) {
-    const { open, onClose } = props
-    const [qty,setQty]= useState(1)
+    const dispatch = useAppDispatch()
+    const { open, onClose, valueOfConvertToListing, setValue } = props
 
     const {
         register,
@@ -39,10 +44,17 @@ function ConvertToListing(props: ConvertToListing) {
     })
 
     const onSubmit = (data: any) => {
+        const body: ConversionData = {
+            ConvertQuantity: valueOfConvertToListing?.quantity,
+            StorePrice: valueOfConvertToListing?.price,
+            MinimumPrice: valueOfConvertToListing?.price,
+            HoldingId: valueOfConvertToListing?.holdingId,
+        }
+        dispatch(convertToMarketPlace(body))
         onClose()
     }
-    const onQuantityChange = () => {
-
+    const onQuantityChange = (qty: any) => {
+        setValue('convertToListing', { ...valueOfConvertToListing, quantity: qty })
     }
     return (
         <StyledDialog
@@ -55,7 +67,7 @@ function ConvertToListing(props: ConvertToListing) {
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack className="AllFields">
-                    <QuantityInputs quantityLabel="Convert Quantity :" onQuantityChange={onQuantityChange} />
+                    <QuantityInputs quantityLabel="Convert Quantity :" onQuantityChange={onQuantityChange} qty={valueOfConvertToListing?.quantity} />
                     <RenderFields
                         register={register}
                         error={errors.StorePrice}
@@ -65,6 +77,7 @@ function ConvertToListing(props: ConvertToListing) {
                         variant='outlined'
                         margin='none'
                         fullWidth
+                        type="number"
                     />
                     <RenderFields
                         register={register}
@@ -75,10 +88,13 @@ function ConvertToListing(props: ConvertToListing) {
                         variant='outlined'
                         margin='none'
                         fullWidth
+                        type="number"
                     />
                 </Stack>
                 <Stack className="ActionWrapper">
-                    <Button size="medium" variant="outlined" onClick={onClose}>Cancel</Button>
+                    <Button size="medium" variant="outlined" onClick={() => {
+                        onClose()
+                    }}>Cancel</Button>
                     <Button type="submit" size="medium" variant="contained">Save</Button>
                 </Stack>
             </form>

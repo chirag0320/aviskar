@@ -62,7 +62,7 @@ class MyVaultServices {
         return axiosInstance.post(url, body);
     }
     static async sendForEnquiry(body: IEnquiryData) {
-        return axiosInstance.post(ENDPOINTS.enquiry,);
+        return axiosInstance.post(ENDPOINTS.enquiry,body);
     }
     static async sellQty(body: SellData) {
         return axiosInstance.post(ENDPOINTS.sellQty, body);
