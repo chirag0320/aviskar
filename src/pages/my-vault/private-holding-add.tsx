@@ -25,6 +25,7 @@ import { IPrivateHoldingAddInputs } from "@/types/myVault";
 import { getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
 import DynamicFields from "@/components/partials/my-vault/private-holding-form/DynamicFields";
 import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
+import ProductPhotos from "@/components/partials/my-vault/private-holding-form/ProductPhotos";
 // import { RenderDropdownItems } from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
 // import RenderDropdownItems from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
 
@@ -324,7 +325,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         error={errors.Weight}
                                         name="Weight"
                                         label="Weight"
-                                        type="number"
+                                        // type="number"
                                         placeholder="Enter Weight"
                                         control={control}
                                         variant='outlined'
@@ -391,53 +392,12 @@ function privateHoldingAdd({ location }: { location: any }) {
                                     />
                                 </Stack>
                                 <Stack className="RowWrapper DocumentPhotosContentWrapper">
-                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} />
-                                    <Box className="PhotosContentwrapper">
-                                        <RenderFields
-                                            type="file"
-                                            register={register}
-                                            error={errors.ProductPhotos}
-                                            name="ProductPhotos"
-                                            label="Product Photos:"
-                                            control={control}
-                                            variant='outlined'
-                                            margin='none'
-                                            required
-                                        >
-                                        </RenderFields>
-                                        <Box className="CommonTableWrapper">
-                                            <TableContainer
-                                                className="PhotosDetailTablewrapper  CommonTableDesign"
-                                            >
-                                                <Table className="PhotosDetailTable" sx={{ minWidth: 400 }} aria-label="Photos Details table">
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell sx={{ minWidth: "300px" }}>File Name</TableCell>
-                                                            <TableCell sx={{ minWidth: "100px" }}>Remove</TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {photosRows.map((row) => (
-                                                            <TableRow
-                                                                key={row.fileName}
-                                                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                            >
-                                                                <TableCell component="th" scope="row">{row.fileName}</TableCell>
-                                                                <TableCell>
-                                                                    <IconButton className="DeleteButton"><Delete1Icon /></IconButton>
-                                                                </TableCell>
-                                                            </TableRow>
-                                                        ))}
-
-                                                    </TableBody>
-                                                </Table>
-                                            </TableContainer>
-                                        </Box>
-                                    </Box>
+                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type !== "ProductPhotos") : null} />
+                                    <ProductPhotos register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type === "ProductPhotos") : null} />
                                 </Stack>
                                 <Stack sx={{ gap: "20px", justifyContent: "flex-end" }} className='BottomButtonsWrapper'>
+                                    <Button variant="outlined" size="large">Clear</Button>
                                     <Button variant="contained" size="large" type="submit">Save</Button>
-                                    <Button variant="outlined" size="large">Cancel</Button>
                                 </Stack>
                             </form>
                         </Box>

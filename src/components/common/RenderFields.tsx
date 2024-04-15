@@ -4,6 +4,7 @@ import { Controller } from 'react-hook-form'
 import classNames from 'classnames'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 // Hooks
 import { useToggle } from '../../hooks'
@@ -449,6 +450,31 @@ const RenderFields: React.FC<RenderFieldProps> = ({
         </FormControl>
       )
       break
+
+    // case "date":
+    //   fieldType = (
+    //     <FormControl
+    //       fullWidth={fullWidth}
+    //       margin={margin}
+    //       {...(error ? { error: true } : {})}
+    //     >
+    //       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+    //       <Controller
+    //         name={name}
+    //         control={control}
+    //         defaultValue={value} // Set defaultValue instead of passing value prop
+    //         render={({ field: { value, onChange } }) => (
+    //           <DatePicker className="DatePicker"
+    //             sx={{ width: 260 }}
+    //             name={name}
+    //             value={dateValue}
+    //             onChange={(newValue) => setDateValue(newValue)}
+    //           />
+    //         )}
+    //       />
+
+    //     </FormControl>
+    //   )
 
     default:
       fieldType = (

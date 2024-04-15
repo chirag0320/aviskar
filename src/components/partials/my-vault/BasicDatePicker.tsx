@@ -36,6 +36,7 @@ function BasicDatePicker({ setValue, existingDate }: { setValue: UseFormSetValue
                 <DemoItem label="DatePicker">
                     <DatePicker className="DatePicker"
                         sx={{ width: 260 }}
+                        name="Date"
                         value={dateValue}
                         onChange={(newValue) => setDateValue(newValue)}
                     />
