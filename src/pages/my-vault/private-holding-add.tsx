@@ -25,6 +25,7 @@ import { IPrivateHoldingAddInputs } from "@/types/myVault";
 import { getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
 import DynamicFields from "@/components/partials/my-vault/private-holding-form/DynamicFields";
 import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
+import useRequireLogin from "@/hooks/useRequireLogin";
 // import { RenderDropdownItems } from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
 // import RenderDropdownItems from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
 
@@ -63,15 +64,13 @@ const photosRows = [
     createDataPhotos(
         "abc.gif",
     ),
-
 ];
 
 function privateHoldingAdd({ location }: { location: any }) {
+    const { loadingForCheckingLogin } = useRequireLogin()
     const loading = useAppSelector(state => state.myVault.loading);
     const currentPrivateHolding = useAppSelector(state => state.myVault.currentPrivateHolding)
     const formDropdowns = useAppSelector(state => state.myVault.privateHoldingFormDropdowns);
-    console.log("🚀 ~ privateHoldingAdd ~ formDropdowns:", formDropdowns)
-    // console.log("🚀 ~ privateHoldingAdd ~ currentPrivateHolding:", currentPrivateHolding)
     const dispatch = useAppDispatch()
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
 
@@ -87,7 +86,6 @@ function privateHoldingAdd({ location }: { location: any }) {
         resolver: yupResolver(schema)
     })
 
-    console.log("🚀 ~ privateHoldingAdd ~ getValues:", getValues("Account"))
     // to show intial placeholder
     useEffect(() => {
         setValue("Account", "none")
@@ -129,7 +127,9 @@ function privateHoldingAdd({ location }: { location: any }) {
     }
 
     const renderDropdownItems = (dropdowns: any) => dropdowns?.map((option: any) => <MenuItem key={option.specificationAttributeOptionsId} value={option.specificationAttributeOptionsId}>{option.specificationOption}</MenuItem>);
-
+    if (loadingForCheckingLogin) {
+        return
+    }
     return (
         <>
             <Loader open={loading} />

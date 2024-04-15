@@ -242,9 +242,16 @@ export const sellQty = appCreateAsyncThunk(
         return await MyVaultServices.sellQty(body);
     }
 )
+
 // convert to market place
 export const convertToMarketPlace = appCreateAsyncThunk('convertToMarketPlace', async (body: ConversionData) => { return await MyVaultServices.convertToMarketPlace(body) })
-
+// delete privateHoldings
+export const deletePrivateHoldings = appCreateAsyncThunk(
+    "deletePrivateHoldings",
+    async ({ id }: { id: string }) => {
+        return await MyVaultServices.deletePrivateHoldings(id);
+    }
+)
 export const myVaultSlice = createSlice({
     name: "myVault",
     initialState,
@@ -518,6 +525,17 @@ export const myVaultSlice = createSlice({
             state.loading = false;
         })
         builder.addCase(sendForEnquiry.rejected, state => {
+            state.loading = false;
+        })
+        // delete privatehOldings
+        // add or edit addresses
+        builder.addCase(deletePrivateHoldings.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(deletePrivateHoldings.fulfilled, (state, action) => {
+            state.loading = false;
+        })
+        builder.addCase(deletePrivateHoldings.rejected, (state) => {
             state.loading = false;
         })
     }

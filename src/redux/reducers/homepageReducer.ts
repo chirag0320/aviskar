@@ -457,8 +457,17 @@ export const createHomepageSlice = createSlice({
       state.loading = true
     })
     builder.addCase(getSiteMapData.fulfilled, (state, action) => {
+      // Group the data by groupTitle
       const responseData = action.payload.data.data;
-      state.siteMapData = responseData
+      const groupedData = responseData?.items?.reduce((acc: { [x: string]: any[]; }, currentItem: { groupTitle: any; }) => {
+        const { groupTitle } = currentItem;
+        if (!acc[groupTitle]) {
+          acc[groupTitle] = [];
+        }
+        acc[groupTitle].push(currentItem);
+        return acc;
+      }, {});
+      state.siteMapData = groupedData
       state.loading = false
     })
     builder.addCase(getSiteMapData.rejected, (state, action) => {

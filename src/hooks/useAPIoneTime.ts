@@ -18,7 +18,7 @@ const useAPIoneTime = ({ service, endPoint, body, params, conditionalCall = true
         }
         timeoutId = setTimeout(() => {
             apiCall()
-        }, 1000);
+        }, 500);
         return () => {
             timeoutId && clearTimeout(timeoutId)
         }

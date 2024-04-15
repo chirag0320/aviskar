@@ -7,7 +7,7 @@ import SellToUs from "@/components/partials/my-vault/SellToUs";
 import { ClickTooltip } from '@/components/common/CustomTooltip';
 import { useAppDispatch, useAppSelector, useToggle } from "@/hooks";
 import { PriceFacturationEnum, roundOfThePrice } from '@/utils/common';
-import { getPrivateHoldingsListLivePrice } from '@/redux/reducers/myVaultReducer';
+import { deletePrivateHoldings, getPrivateHoldingsListLivePrice } from '@/redux/reducers/myVaultReducer';
 import { ENDPOINTS } from '@/utils/constants';
 import { IPrivateHolding, IPrivateHoldingLivePrice } from '@/types/myVault';
 import { navigate } from 'gatsby';
@@ -19,8 +19,6 @@ const getColorForPosition = (position: number) => {
 function PrivateHoldingCards() {
     const privateHoldingsList = useAppSelector(state => state.myVault.privateHoldingsList)
     const privateHoldingsListLivePrice = useAppSelector(state => state.myVault.privateHoldingsListLivePrice)
-    // console.log("🚀 ~ PrivateHoldingCards ~ privateHoldingsListLivePrice:", privateHoldingsListLivePrice)
-    // console.log("🚀 ~ PrivateHoldingCard ~ privateHoldingsList:", privateHoldingsList)
     const dispatch = useAppDispatch()
     const [holdingProductOptions, setHoldingProductOptions] = useState<boolean>(false)
     const [currentValueOfPopUp, setCurrentValueOfPopUp] = useState<any>({})
@@ -95,6 +93,9 @@ function PrivateHoldingCards() {
             return ({ ...prev, [key]: { ...prev[key], ...value } })
         })
     }
+    const deleteHoldings=(item:any)=>{
+        dispatch(deletePrivateHoldings({id:item?.id}))
+    }
     return (
         <>
             {privateHoldingsData.length > 0 && privateHoldingsData?.map((item) => {
@@ -151,7 +152,7 @@ function PrivateHoldingCards() {
                                         </ListItemButton>
                                     </ListItem>
                                     <ListItem>
-                                        <ListItemButton>
+                                        <ListItemButton onClick={()=>{deleteHoldings(item)}}>
                                             <ListItemText primary="Delete" />
                                         </ListItemButton>
                                     </ListItem>
