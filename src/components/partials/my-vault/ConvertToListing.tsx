@@ -46,8 +46,8 @@ function ConvertToListing(props: ConvertToListing) {
     const onSubmit = (data: any) => {
         const body: ConversionData = {
             ConvertQuantity: valueOfConvertToListing?.quantity,
-            StorePrice: valueOfConvertToListing?.price,
-            MinimumPrice: valueOfConvertToListing?.price,
+            StorePrice: valueOfConvertToListing?.StorePrice,
+            MinimumPrice: valueOfConvertToListing?.MinimumPrice,
             HoldingId: valueOfConvertToListing?.holdingId,
         }
         dispatch(convertToMarketPlace(body))
@@ -61,7 +61,9 @@ function ConvertToListing(props: ConvertToListing) {
             id="ConvertToListing"
             open={open}
             dialogTitle="Convert To Listing title"
-            onClose={onClose}
+            onClose={()=>{
+                onClose()
+            }}
             maxWidth="sm"
             className="PrivateHoldingCommonPopup"
         >
@@ -78,17 +80,25 @@ function ConvertToListing(props: ConvertToListing) {
                         margin='none'
                         fullWidth
                         type="number"
+                        onChange={(e) => {
+                            setValue('convertToListing', { ...valueOfConvertToListing, 'StorePrice': e.target.value })
+                        }}
+                        value={valueOfConvertToListing?.StorePrice ?? 0}
                     />
                     <RenderFields
                         register={register}
                         error={errors.MinimumPrice}
                         name="MinimumPrice"
                         label="Minimum Price :"
+                        onChange={(e) => {
+                            setValue('convertToListing', { ...valueOfConvertToListing, 'MinimumPrice': e.target.value })
+                        }}
                         control={control}
                         variant='outlined'
                         margin='none'
                         fullWidth
                         type="number"
+                        value={valueOfConvertToListing?.MinimumPrice ?? 0}
                     />
                 </Stack>
                 <Stack className="ActionWrapper">

@@ -42,6 +42,7 @@ import { getMyVaultHomePageChartData, getMyVaultHomePageData } from "@/redux/red
 import { useAppSelector } from "@/hooks";
 import { navigate } from "gatsby";
 import ConfigServices from "@/apis/services/ConfigServices";
+import useRequireLogin from "@/hooks/useRequireLogin";
 
 interface VaultProps {
   id: number;
@@ -56,9 +57,8 @@ interface VaultProps {
 }
 
 function Vault() {
-  // const { data }: any = useApiRequest(ENDPOINTS.getSlider);
+  const { loadingForCheckingLogin } = useRequireLogin()
   const { myVaultHomePageData, myVaultHomePageChartData } = useAppSelector((state) => state.myVault)
-  console.log("🚀 ~ Vault ~ myVaultHomePageChartData:", myVaultHomePageData)
   const isLargeScreen = useMediaQuery((theme: Theme) =>
     theme.breakpoints.up("lg")
   );
@@ -100,6 +100,9 @@ function Vault() {
       console.log("🚀 ~ reOrderFunction ~ res:", error)
     }
   }, [])
+  if (loadingForCheckingLogin) {
+    return
+  }
   return (
     <Layout>
       <Box className="VaultPage">

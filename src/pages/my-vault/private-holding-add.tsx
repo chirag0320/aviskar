@@ -26,6 +26,7 @@ import { getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux
 import DynamicFields from "@/components/partials/my-vault/private-holding-form/DynamicFields";
 import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
 import ProductPhotos from "@/components/partials/my-vault/private-holding-form/ProductPhotos";
+import useRequireLogin from "@/hooks/useRequireLogin";
 // import { RenderDropdownItems } from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
 // import RenderDropdownItems from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
 
@@ -65,7 +66,6 @@ const photosRows = [
     createDataPhotos(
         "abc.gif",
     ),
-
 ];
 
 function dropdownStateReducer(state: any, action: any) {
@@ -86,6 +86,7 @@ function dropdownStateReducer(state: any, action: any) {
 }
 
 function privateHoldingAdd({ location }: { location: any }) {
+    const { loadingForCheckingLogin } = useRequireLogin()
     const loading = useAppSelector(state => state.myVault.loading);
     const currentPrivateHolding = useAppSelector(state => state.myVault.currentPrivateHolding)
     const formDropdowns = useAppSelector(state => state.myVault.privateHoldingFormDropdowns);
@@ -168,7 +169,9 @@ function privateHoldingAdd({ location }: { location: any }) {
     }
 
     const renderDropdownItems = (dropdowns: any) => dropdowns?.map((option: any) => <MenuItem key={option.specificationAttributeOptionsId} value={option.specificationAttributeOptionsId}>{option.specificationOption}</MenuItem>);
-
+    if (loadingForCheckingLogin) {
+        return
+    }
     return (
         <>
             <Loader open={loading} />
