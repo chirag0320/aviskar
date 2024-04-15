@@ -1,6 +1,7 @@
 div {
   &.react-tel-input {
     font: inherit;
+    height: inherit;
     .form-control {
       font: inherit;
       height: initial;
@@ -22,7 +23,7 @@ div {
     }
     .flag-dropdown {
       top: 2px;
-      bottom: 2px;
+      bottom: 4px;
       left: 2px;
       border: none;
       border-radius: 10px 0 0 10px;
