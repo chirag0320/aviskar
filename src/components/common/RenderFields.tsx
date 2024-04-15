@@ -147,7 +147,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                   if (onChange) {
                     onChange(e.target.value)
                   }
-                  if (clearErrors && getValues() && getValues(name) !== "none") {
+                  if (clearErrors && getValues && getValues(name) !== "none") {
                     clearErrors(name)
                   }
                 }
