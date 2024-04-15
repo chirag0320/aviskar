@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, FormControl, Select, RadioGroup, FormControlLabel, FormLabel, Radio, FormHelperText, Checkbox, FormGroup, Switch, TextField, IconButton, InputAdornment, Button, Stack } from '@mui/material'
 import { Controller } from 'react-hook-form'
 import classNames from 'classnames'
@@ -99,6 +99,11 @@ const RenderFields: React.FC<RenderFieldProps> = ({
 }) => {
   const [passwordVisibility, togglePasswordVisibility] = useToggle(false)
 
+  useEffect(() => {
+    if (setValue)
+      setValue(name, value)
+  }, [value])
+
   let fieldType = null
   switch (type) {
     case 'select':
@@ -154,6 +159,50 @@ const RenderFields: React.FC<RenderFieldProps> = ({
         </FormControl>
       );
       break;
+    // case 'select':
+    //   fieldType = (
+    //     <FormControl fullWidth={fullWidth} margin={margin} color={color}>
+    //       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+    //       <Controller
+    //         control={control}
+    //         render={({ field }) => (
+    //           <Select
+    //             inputProps={{ id: name }}
+    //             value={field.value}
+    //             defaultValue={defaultValue}
+    //             error={!!error}
+    //             disabled={disabled}
+    //             variant={variant}
+    //             MenuProps={MenuProps}
+    //             sx={
+    //               field.value === 'none' || field.value === ''
+    //                 ? {
+    //                   color: "#1d21296b",
+    //                 }
+    //                 : {
+    //                   color: "#1D2129",
+    //                 }
+    //             }
+    //             {...register(name)}
+    //             {...otherProps}
+    //             onChange={(event) => {
+    //               // Call the provided onChange function
+    //               field.onChange(event)
+    //               if (onChange) {
+    //                 onChange()
+    //               }
+    //               // You can also perform additional actions here if needed
+    //             }}
+    //           >
+    //             {children}
+    //           </Select>
+    //         )}
+    //         name={name}
+    //         {...otherProps}
+    //       />
+    //     </FormControl>
+    //   )
+    //   break
 
     case 'radio':
       if (!options) return null

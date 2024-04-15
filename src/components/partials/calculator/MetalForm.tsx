@@ -93,6 +93,7 @@ const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
                         getValues={getValues}
                         control={control}
                         clearErrors={clearErrors}
+                        defaultValue="none"
                         variant='outlined'
                         margin='none'
                         className='SelectMetal'

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useReducer } from "react";
 import {
     Box, Button, Container, IconButton, MenuItem, Stack, Table,
     TableBody,
@@ -38,6 +38,7 @@ const schema = yup.object().shape({
     Purity: yup.string().notOneOf(["none"], "Purity is required field"),
     Weight: yup.string().trim().required("Weight is required field"),
     WeightType: yup.string().notOneOf(["none"], "Weight Type is required field"),
+    Date: yup.string().required("Date is required field"),
     // Specification: yup.string().trim(),
     // Value: yup.string().trim(),
     // CustomSpecification: yup.string().trim(),
@@ -66,14 +67,40 @@ const photosRows = [
 
 ];
 
+function dropdownStateReducer(state: any, action: any) {
+    switch (action.type) {
+        case "APPLY_VALUES":
+            return {
+                Account: action.nextAccount,
+                Mint: action.nextMint,
+                Metal: action.nextMetal,
+                Type: action.nextType,
+                Series: action.nextSeries,
+                Purity: action.nextPurity,
+                WeightType: action.nextWeightType
+            }
+        default:
+            return state;
+    }
+}
+
 function privateHoldingAdd({ location }: { location: any }) {
     const loading = useAppSelector(state => state.myVault.loading);
     const currentPrivateHolding = useAppSelector(state => state.myVault.currentPrivateHolding)
     const formDropdowns = useAppSelector(state => state.myVault.privateHoldingFormDropdowns);
-    console.log("🚀 ~ privateHoldingAdd ~ formDropdowns:", formDropdowns)
-    // console.log("🚀 ~ privateHoldingAdd ~ currentPrivateHolding:", currentPrivateHolding)
+    const formDropdownsKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsKeys);
+    const formDropdownsReverseKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsReverseKeys);
     const dispatch = useAppDispatch()
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+    const [dropdownState, dropdownDispatch] = useReducer(dropdownStateReducer, {
+        Mint: "none",
+        Metal: "none",
+        Type: "none",
+        Series: "none",
+        Purity: "none",
+        WeightType: "none",
+        Account: "none"
+    });
 
     const {
         register,
@@ -86,18 +113,6 @@ function privateHoldingAdd({ location }: { location: any }) {
     } = useForm<IPrivateHoldingAddInputs>({
         resolver: yupResolver(schema)
     })
-
-    console.log("🚀 ~ privateHoldingAdd ~ getValues:", getValues("Account"))
-    // to show intial placeholder
-    useEffect(() => {
-        setValue("Account", "none")
-        setValue("MintOrBrand", "none")
-        setValue("Metal", "none")
-        setValue("Type", "none")
-        setValue("Series", "none")
-        setValue("Purity", "none")
-        setValue("WeightType", "none")
-    }, [])
 
     useLayoutEffect(() => {
         const fetchFormDropdowns = async () => {
@@ -120,12 +135,35 @@ function privateHoldingAdd({ location }: { location: any }) {
     // set intial form values if user wants to edit
     useEffect(() => {
         if (!currentPrivateHolding) return;
+        // console.log("🚀 ~ useEffect ~ currentPrivateHolding:", currentPrivateHolding)
+
         setValue("ProductName", currentPrivateHolding.productName)
-    }, [currentPrivateHolding])
+        setValue("PurchaseFrom", currentPrivateHolding.purchasedFrom);
+        setValue("Weight", currentPrivateHolding.weight);
+        setValue("Qty", currentPrivateHolding.qty.toString());
+        setValue("PurchasePrice", currentPrivateHolding.price.toString())
+
+        if (!formDropdownsKeys) return;
+        // console.log("🚀 ~ useEffect ~ formDropdownsKeys:", formDropdownsKeys, formDropdownsKeys["15"])
+        // console.log("🚀 ~ useEffect ~ formDropdownsKeys:", formDropdownsKeys, "=>", currentPrivateHolding, "=>", currentPrivateHolding.productattribute.find((option) => formDropdownsKeys[option["specificationAttributeOptionId"].toString()] === "Mint"))
+
+        dropdownDispatch({
+            type: "APPLY_VALUES",
+            nextAccount: "test",
+            // NOTE : static
+            nextMint: currentPrivateHolding.productattribute.find((option: any) => formDropdownsKeys[option["specificationAttributeOptionId"].toString()] === "Mint")!["specificationAttributeId"] ?? "0",
+            nextMetal: currentPrivateHolding.productattribute.find((option: any) => formDropdownsKeys[option["specificationAttributeOptionId"].toString()] === "Metal")!["specificationAttributeId"] ?? "0",
+            nextType: currentPrivateHolding.productattribute.find((option: any) => formDropdownsKeys[option["specificationAttributeOptionId"].toString()] === "Type")!["specificationAttributeId"] ?? "0",
+            nextSeries: currentPrivateHolding.productattribute.find((option: any) => formDropdownsKeys[option["specificationAttributeOptionId"].toString()] === "Series")!["specificationAttributeId"] ?? "0",
+            nextPurity: currentPrivateHolding.productattribute.find((option: any) => formDropdownsKeys[option["specificationAttributeOptionId"].toString()] === "Purity")!["specificationAttributeId"] ?? "0",
+            nextWeightType: "0"
+        })
+    }, [currentPrivateHolding, formDropdownsKeys])
 
 
     const onSubmit = (data: any) => {
-        console.log(data);
+        console.log("🚀 ~ onSubmit ~ data:", data)
+        // console.log(data);
     }
 
     const renderDropdownItems = (dropdowns: any) => dropdowns?.map((option: any) => <MenuItem key={option.specificationAttributeOptionsId} value={option.specificationAttributeOptionsId}>{option.specificationOption}</MenuItem>);
@@ -139,7 +177,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                     title="Add New Private Holding"
                     lang="en"
                 />
-                <PageTitle title="Add New Private Holding" backToDashboard={true} />
+                <PageTitle title={searchParams.has("holdingId") ? "Update Private Holding" : "Add New Private Holding"} backToDashboard={true} />
                 <Box id="PrivateHoldingAddPage" className='PrivateHoldingAddPage' component="section">
                     <Container>
                         <Box className="Content PrivateHoldingAddContent">
@@ -152,7 +190,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         name="Account"
                                         label="Account:"
                                         control={control}
-                                        defaultValue="none"
+                                        value={dropdownState.Account}
                                         getValues={getValues}
                                         setValue={setValue}
                                         variant='outlined'
@@ -182,9 +220,9 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         error={errors.MintOrBrand}
                                         name="MintOrBrand"
                                         label="Mint/Brand"
+                                        value={dropdownState.Mint}
                                         control={control}
                                         variant='outlined'
-                                        defaultValue="none"
                                         setValue={setValue}
                                         getValues={getValues}
                                         clearErrors={clearErrors}
@@ -204,9 +242,9 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         name="Metal"
                                         getValues={getValues}
                                         label="Metal"
+                                        value={dropdownState.Metal}
                                         control={control}
                                         setValue={setValue}
-                                        defaultValue="none"
                                         clearErrors={clearErrors}
                                         variant='outlined'
                                         margin='none'
@@ -225,7 +263,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         setValue={setValue}
                                         getValues={getValues}
                                         label="Type"
-                                        defaultValue="none"
+                                        value={dropdownState.Type}
                                         control={control}
                                         variant='outlined'
                                         clearErrors={clearErrors}
@@ -246,7 +284,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         name="Series"
                                         getValues={getValues}
                                         label="Series"
-                                        defaultValue="none"
+                                        value={dropdownState.Series}
                                         control={control}
                                         setValue={setValue}
                                         clearErrors={clearErrors}
@@ -267,7 +305,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         label="Purity"
                                         getValues={getValues}
                                         setValue={setValue}
-                                        defaultValue="none"
+                                        value={dropdownState.Purity}
                                         control={control}
                                         clearErrors={clearErrors}
                                         variant='outlined'
@@ -300,10 +338,10 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         error={errors.WeightType}
                                         name="WeightType"
                                         clearErrors={clearErrors}
+                                        value={dropdownState.WeightType}
                                         label="Weight Type"
                                         getValues={getValues}
                                         control={control}
-                                        defaultValue="none"
                                         variant='outlined'
                                         setValue={setValue}
                                         margin='none'
@@ -318,7 +356,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                 </Stack>
                                 <DynamicFields />
                                 <Stack className="RowWrapper">
-                                    <BasicDatePicker />
+                                    <BasicDatePicker setValue={setValue} existingDate={currentPrivateHolding ? currentPrivateHolding?.purchaseDate : null} />
                                     <RenderFields
                                         register={register}
                                         error={errors.PurchasePrice}

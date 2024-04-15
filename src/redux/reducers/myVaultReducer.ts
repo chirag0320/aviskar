@@ -33,7 +33,9 @@ interface MyVaultInitialState {
     privateHoldingsList: IPrivateHolding[] | null;
     privateHoldingsListLivePrice: IPrivateHoldingLivePrice[] | null
     currentPrivateHolding: ISpecificPrivateHolding | null;
-    privateHoldingFormDropdowns: IPrivateHoldingFormDropdown | null
+    privateHoldingFormDropdowns: IPrivateHoldingFormDropdown | null;
+    privateHoldingFormDropdownsKeys: { [key: string]: string } | null;
+    privateHoldingFormDropdownsReverseKeys: { [key: string]: string } | null
 }
 export interface IRecentOrders {
     orderId: number;
@@ -57,7 +59,7 @@ export interface IRecentOrders {
     orderStatusColor: string;
     alertOrderStatus: any; // You may need to define a type for this
     alertOrderStatusColor: any; // You may need to define a type for this
-}
+};
 export interface DashboardData {
     dashboards: {
         title: string;
@@ -111,7 +113,9 @@ const initialState: MyVaultInitialState = {
     privateHoldingsList: null,
     privateHoldingsListLivePrice: null,
     currentPrivateHolding: null,
-    privateHoldingFormDropdowns: null
+    privateHoldingFormDropdowns: null,
+    privateHoldingFormDropdownsKeys: null,
+    privateHoldingFormDropdownsReverseKeys: null
 }
 
 // CONFIG DROPDOWNS
@@ -492,22 +496,37 @@ export const myVaultSlice = createSlice({
             console.log("🚀 ~ builder.addCase ~ responseData:", responseData)
 
             const privateHoldingFormDropdowns: IPrivateHoldingFormDropdown = {};
-            responseData.forEach((element: any) => {
+            const privateHoldingFormDropdownsKeys: { [key: string]: string } = {}
+            const privateHoldingFormDropdownsReverseKeys: { [key: string]: string } = {}
+
+            responseData?.forEach((element: any) => {
+                privateHoldingFormDropdownsKeys[element.specificationAttributeId] = element.specificationAttribute;
+                privateHoldingFormDropdownsReverseKeys[element.specificationAttribute] = element.specificationAttributeId;
                 privateHoldingFormDropdowns[element.specificationAttribute] = element.specificationAttributeOptions;
             });
 
             state.privateHoldingFormDropdowns = privateHoldingFormDropdowns;
+            state.privateHoldingFormDropdownsKeys = privateHoldingFormDropdownsKeys;
+            state.privateHoldingFormDropdownsReverseKeys = privateHoldingFormDropdownsReverseKeys;
             state.loading = false;
         })
         builder.addCase(getPrivateHoldingFormDropdowns.rejected, (state, action) => {
             const responseData = action?.payload?.response?.data?.data;
             // console.log("🚀 ~ builder.addCase ~ responseData: ", responseData)
             const privateHoldingFormDropdowns: IPrivateHoldingFormDropdown = {};
-            responseData.forEach((element: any) => {
+            const privateHoldingFormDropdownsKeys: { [key: string]: string } = {}
+            const privateHoldingFormDropdownsReverseKeys: { [key: string]: string } = {}
+
+            responseData?.forEach((element: any) => {
+                privateHoldingFormDropdownsKeys[element.specificationAttributeId] = element.specificationAttribute;
+                privateHoldingFormDropdownsReverseKeys[element.specificationAttribute] = element.specificationAttributeId;
                 privateHoldingFormDropdowns[element.specificationAttribute] = element.specificationAttributeOptions;
             });
 
             state.privateHoldingFormDropdowns = privateHoldingFormDropdowns;
+            state.privateHoldingFormDropdownsKeys = privateHoldingFormDropdownsKeys;
+            state.privateHoldingFormDropdownsReverseKeys = privateHoldingFormDropdownsReverseKeys;
+            state.loading = false;
         })
         // send for equiry
         builder.addCase(sendForEnquiry.pending, state => {
