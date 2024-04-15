@@ -11,9 +11,15 @@ export interface ISpecificationField {
     [key: string]: { specificationName: string, value: string }
 }
 
-const DynamicFields = ({existingFields} : {existingFields : }) => {
+const DynamicFields = ({ existingFields }: {
+    existingFields: {
+        specificationAttributeId: number;
+        specificationAttributeOptionId: number;
+        specificationAttributeOptionOther: string | null;
+    }[] | null
+}) => {
     const [specificationFields, setSpecificationField] = useState<ISpecificationField[]>([]);
-    console.log("🚀 ~ DynamicFields ~ specificationFields:", specificationFields)
+    // console.log("🚀 ~ DynamicFields ~ specificationFields:", specificationFields)
     const [customSpecificationFields, setCustomSpecificationField] = useState<ISpecificationField[]>([]);
 
     // Just an dummy react hook form
