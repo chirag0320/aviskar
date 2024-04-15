@@ -508,6 +508,15 @@ export const myVaultSlice = createSlice({
             });
 
             state.privateHoldingFormDropdowns = privateHoldingFormDropdowns;
+        // send for equiry
+        builder.addCase(sendForEnquiry.pending, state => {
+            state.loading = true;
+        })
+        builder.addCase(sendForEnquiry.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.loading = false;
+        })
+        builder.addCase(sendForEnquiry.rejected, state => {
             state.loading = false;
         })
     }

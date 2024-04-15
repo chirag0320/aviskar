@@ -23,6 +23,7 @@ function PrivateHoldingCards() {
     // console.log("🚀 ~ PrivateHoldingCard ~ privateHoldingsList:", privateHoldingsList)
     const dispatch = useAppDispatch()
     const [holdingProductOptions, setHoldingProductOptions] = useState<boolean>(false)
+    const [currentValueOfPopUp, setCurrentValueOfPopUp] = useState<any>({})
     const [openSellEntry, toggleSellEntry] = useToggle(false);
     const [openConvertToListing, toggleConvertToListing] = useToggle(false);
     const [openSellToUs, toggleSellToUs] = useToggle(false);
@@ -71,6 +72,17 @@ function PrivateHoldingCards() {
         setHoldingProductOptions(false)
     }
 
+    const openSellToUsPopUP = (item: any) => {
+        setCurrentValueOfPopUp((prev: any) => {
+            return ({ ...prev, sellToUs: item })
+        })
+        toggleSellToUs(true)
+    }
+    const setValueForTheSellToUsPopUp = (key:any,value: any) => {
+        setCurrentValueOfPopUp((prev: any) => {
+            return ({ ...prev, [key]: { ...prev[key], ...value } })
+        })
+    }
     return (
         <>
             {privateHoldingsData.length > 0 && privateHoldingsData?.map((item) => {
@@ -90,7 +102,7 @@ function PrivateHoldingCards() {
                                 <Stack className='ButtonsWrapper'>
                                     <Button variant="contained" size="small" onClick={toggleSellToUs} color={getColorForPosition(item.position)}>${roundOfThePrice(item.price)}</Button>
                                     <Button variant="contained" size="small" onClick={toggleSellToUs} color={getColorForPosition(item.position)} startIcon={item.position === 2 ? <ChevronDown /> : <ChevronUp />}>${item.move} ({item.percentage}%)</Button>
-                                    <Button variant='contained' size="small" onClick={toggleSellToUs}>selltoas</Button>
+                                    <Button variant='contained' size="small" onClick={() => { openSellToUsPopUP(item) }}>selltoas</Button>
                                 </Stack>
                                 {/* <Box sx={{
                             textAlign: 'right',
@@ -102,12 +114,12 @@ function PrivateHoldingCards() {
                             <ClickTooltip
                                 name='holdingproduct'
                                 open={holdingProductOptions}
-                                className="AddressTooltip"
                                 placement="bottom-end"
                                 onClose={handleTooltipClose}
                                 onClickAway={handleClickAway}
                                 renderComponent={<IconButton name='holdingproduct' ref={tooltipRef} className="OptionButton" onClick={handleTooltipOpen}><OptionsIcon /></IconButton>}
                                 lightTheme
+                                disablePortal={true}
                                 arrow
                             >
                                 <List>
@@ -135,13 +147,13 @@ function PrivateHoldingCards() {
                             </ClickTooltip>
                         </CardContent>
                         <SellEntry open={openSellEntry} onClose={toggleSellEntry} />
-                        <ConvertToListing open={openConvertToListing} onClose={toggleConvertToListing} />
-                        <SellToUs open={openSellToUs} onClose={toggleSellToUs} />
+                        <ConvertToListing open={openConvertToListing} onClose={toggleConvertToListing} valueOfConvertToListing={currentValueOfPopUp?.convertToListing} setValue={setValueForTheSellToUsPopUp}/>
+                        <SellToUs open={openSellToUs} onClose={toggleSellToUs} valueOfTheSellToUs={currentValueOfPopUp?.sellToUs} setValue={setValueForTheSellToUsPopUp} />
                     </Card >
                 )
-            })}
+            }
+            )}
         </>
     )
 }
-
 export default PrivateHoldingCards

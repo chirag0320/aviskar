@@ -38,7 +38,9 @@ function SellEntry(props: SellEntry) {
     const onSubmit = (data: any) => {
         onClose()
     }
+    const onQuantityChange = () => {
 
+    }
     return (
         <StyledDialog
             id="SellEntry"
@@ -50,7 +52,7 @@ function SellEntry(props: SellEntry) {
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack className="AllFields">
-                    <QuantityInputs quantityLabel="Quantity sold :" />
+                    <QuantityInputs quantityLabel="Quantity sold :" onQuantityChange={onQuantityChange}/>
                     <RenderFields
                         register={register}
                         error={errors.SoldTo}

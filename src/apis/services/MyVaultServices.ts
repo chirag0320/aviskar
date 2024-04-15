@@ -69,7 +69,7 @@ class MyVaultServices {
 
     // POPUPS
     static async sendForEnquiry(body: IEnquiryData) {
-        return axiosInstance.post(ENDPOINTS.enquiry,);
+        return axiosInstance.post(ENDPOINTS.enquiry,body);
     }
     static async sellQty(body: SellData) {
         return axiosInstance.post(ENDPOINTS.sellQty, body);
