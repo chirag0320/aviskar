@@ -1,22 +1,17 @@
 import { Delete1Icon } from '@/assets/icons';
 import RenderFields from '@/components/common/RenderFields'
-import useDebounce from '@/hooks/useDebounce';
 import { IPrivateHoldingAddInputs } from '@/types/myVault';
 import { IndividualAccountFormSchema } from '@/utils/accountFormSchemas.schema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Divider, IconButton, MenuItem, Stack, Typography } from '@mui/material'
-import React, { useDeferredValue, useEffect, useState } from 'react'
+import { Button, IconButton, MenuItem, Stack } from '@mui/material'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 
 export interface ISpecificationField {
     [key: string]: { specificationName: string, value: string }
 }
-// export interface ICustomeSpecificationField {
-//     [key: string]: { specificationName: string, value: string }
-// }
 
-
-const DynamicFields = () => {
+const DynamicFields = ({existingFields} : {existingFields : }) => {
     const [specificationFields, setSpecificationField] = useState<ISpecificationField[]>([]);
     console.log("🚀 ~ DynamicFields ~ specificationFields:", specificationFields)
     const [customSpecificationFields, setCustomSpecificationField] = useState<ISpecificationField[]>([]);
