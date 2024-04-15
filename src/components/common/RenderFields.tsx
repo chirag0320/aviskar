@@ -365,7 +365,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             name={name}
             control={control}
             defaultValue={value} // Set defaultValue instead of passing value prop
-            render={({ field: { value, onChange } }) => (
+            render={({ field: { } }) => (
               <>
                 <TextField
                   id={name}
@@ -373,25 +373,29 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                   fullWidth={fullWidth}
                   error={!!error}
                   placeholder={placeholder}
-                  value={value}
                   defaultValue={defaultValue}
                   disabled={disabled}
                   autoComplete={autoComplete}
                   variant={variant}
                   InputProps={{ endAdornment }}
+                  {...register(name)}
+                  {...otherProps}
                   onChange={(event) => {
+                    console.log("swdesfrgtfhy")
                     const numberRegex = /^-?\d*\.?\d*$/
                     if (!numberRegex.test(event.target.value)) {
                       return
                     }
-                    onChange(event)
+                    if(onChange){
+                      console.log("swdesfrgtfhy")
+                      onChange(event)
+                    }
                   }}
                   onKeyDown={(e) => {
                     ;['e', 'E', '+', '-', '.'].includes(e.key) &&
                       e.preventDefault()
                   }}
-                  {...register(name)}
-                  {...otherProps}
+                  value={value}
                 />
               </>
             )}
@@ -421,11 +425,11 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             disabled={disabled}
             variant={variant}
             onKeyDown={onKeyDown}
-            onChange={onChange}
             // label={label}
             InputProps={{ readOnly, onBlur, endAdornment }}
             {...register(name)}
             {...otherProps}
+            onChange={onChange}
           />
         </FormControl>
       )

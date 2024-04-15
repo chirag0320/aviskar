@@ -78,6 +78,18 @@ function PrivateHoldingCards() {
         })
         toggleSellToUs(true)
     }
+    const openConvertToListingPopUp = (item: any) => {
+        setCurrentValueOfPopUp((prev: any) => {
+            return ({ ...prev, convertToListing: item })
+        })
+        toggleConvertToListing(true)
+    }
+    const openSellEntryPopUP = (item: any) => {
+        setCurrentValueOfPopUp((prev: any) => {
+            return ({ ...prev, sellEntry: item })
+        })
+        toggleSellEntry(true)
+    }
     const setValueForTheSellToUsPopUp = (key:any,value: any) => {
         setCurrentValueOfPopUp((prev: any) => {
             return ({ ...prev, [key]: { ...prev[key], ...value } })
@@ -124,7 +136,7 @@ function PrivateHoldingCards() {
                             >
                                 <List>
                                     <ListItem>
-                                        <ListItemButton onClick={toggleConvertToListing}>
+                                        <ListItemButton onClick={()=>{openConvertToListingPopUp(item)}}>
                                             <ListItemText primary="Convert To Listing" />
                                         </ListItemButton>
                                     </ListItem>
@@ -134,7 +146,7 @@ function PrivateHoldingCards() {
                                         </ListItemButton>
                                     </ListItem>
                                     <ListItem>
-                                        <ListItemButton onClick={toggleSellEntry}>
+                                        <ListItemButton onClick={()=>{openSellEntryPopUP(item)}}>
                                             <ListItemText primary="sellentry" />
                                         </ListItemButton>
                                     </ListItem>
@@ -146,9 +158,9 @@ function PrivateHoldingCards() {
                                 </List>
                             </ClickTooltip>
                         </CardContent>
-                        <SellEntry open={openSellEntry} onClose={toggleSellEntry} />
-                        <ConvertToListing open={openConvertToListing} onClose={toggleConvertToListing} valueOfConvertToListing={currentValueOfPopUp?.convertToListing} setValue={setValueForTheSellToUsPopUp}/>
-                        <SellToUs open={openSellToUs} onClose={toggleSellToUs} valueOfTheSellToUs={currentValueOfPopUp?.sellToUs} setValue={setValueForTheSellToUsPopUp} />
+                        {openSellEntry && <SellEntry open={openSellEntry} onClose={toggleSellEntry} valueOfSellEntry={currentValueOfPopUp?.sellEntry} setValue={setValueForTheSellToUsPopUp} />}
+                        {openConvertToListing && <ConvertToListing open={openConvertToListing} onClose={toggleConvertToListing} valueOfConvertToListing={currentValueOfPopUp?.convertToListing} setValue={setValueForTheSellToUsPopUp}/>}
+                        {openSellToUs &&<SellToUs open={openSellToUs} onClose={toggleSellToUs} valueOfTheSellToUs={currentValueOfPopUp?.sellToUs} setValue={setValueForTheSellToUsPopUp} />}
                     </Card >
                 )
             }
