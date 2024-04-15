@@ -54,13 +54,20 @@ class MyVaultServices {
     static async getPrivateHoldingsList() {
         return axiosInstance.get(ENDPOINTS.getPrivateHoldingsList);
     }
-
     static async getPrivateHoldingsListLivePrice(url: string, body: {
         HoldingIds: number[],
         IsStorePrice: boolean
     }) {
         return axiosInstance.post(url, body);
     }
+    static async getPrivateHoldingWithId(url: string) {
+        return axiosInstance.get(url);
+    }
+    static async getPrivateHoldingFormDropdowns(url: string) {
+        return axiosInstance.get(url);
+    }
+
+    // POPUPS
     static async sendForEnquiry(body: IEnquiryData) {
         return axiosInstance.post(ENDPOINTS.enquiry,body);
     }

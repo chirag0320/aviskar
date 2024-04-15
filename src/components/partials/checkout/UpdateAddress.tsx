@@ -60,6 +60,7 @@ function UpdateAddress(props: UpdateAddress) {
     reset,
     handleSubmit,
     control,
+    clearErrors,
     setValue,
     formState: { errors },
   } = useForm<Inputs>({
@@ -241,6 +242,7 @@ function UpdateAddress(props: UpdateAddress) {
               <RenderFields
                 register={register}
                 type="select"
+                clearErrors={clearErrors}
                 control={control}
                 // error={errors.ContactCode}
                 name="ContactCode"
@@ -311,6 +313,7 @@ function UpdateAddress(props: UpdateAddress) {
               register={register}
               type="select"
               control={control}
+              clearErrors={clearErrors}
               error={errors.Country}
               name="Country *"
               defaultValue={existingAddress?.country || existingAddress?.countryId}

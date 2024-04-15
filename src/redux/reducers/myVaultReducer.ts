@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { appCreateAsyncThunk } from "../middleware/thunkMiddleware";
 import MyVaultServices from "@/apis/services/MyVaultServices";
-import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData, IConfigDropdown, IPrivateHolding, IPrivateHoldingLivePrice, SellData, ConversionData, IEnquiryData } from "@/types/myVault";
+import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData, IConfigDropdown, IPrivateHolding, IPrivateHoldingLivePrice, SellData, ConversionData, IEnquiryData, ISpecificPrivateHolding, IPrivateHoldingFormDropdown } from "@/types/myVault";
 interface ValueFacturation {
     low: number;
     high: number;
@@ -32,6 +32,8 @@ interface MyVaultInitialState {
     myVaultHomePageChartData: ImyVaultHomePageChartData | null;
     privateHoldingsList: IPrivateHolding[] | null;
     privateHoldingsListLivePrice: IPrivateHoldingLivePrice[] | null
+    currentPrivateHolding: ISpecificPrivateHolding | null;
+    privateHoldingFormDropdowns: IPrivateHoldingFormDropdown | null
 }
 export interface IRecentOrders {
     orderId: number;
@@ -107,7 +109,9 @@ const initialState: MyVaultInitialState = {
     myVaultHomePageData: null,
     myVaultHomePageChartData: null,
     privateHoldingsList: null,
-    privateHoldingsListLivePrice: null
+    privateHoldingsListLivePrice: null,
+    currentPrivateHolding: null,
+    privateHoldingFormDropdowns: null
 }
 
 // CONFIG DROPDOWNS
@@ -210,6 +214,18 @@ export const getPrivateHoldingsListLivePrice = appCreateAsyncThunk(
         }
     }) => {
         return await MyVaultServices.getPrivateHoldingsListLivePrice(url, body)
+    }
+)
+export const getPrivateHoldingWithId = appCreateAsyncThunk(
+    "getPrivateHoldingWithId",
+    async ({ url }: { url: string }) => {
+        return await MyVaultServices.getPrivateHoldingWithId(url);
+    }
+)
+export const getPrivateHoldingFormDropdowns = appCreateAsyncThunk(
+    "getPrivateHoldingsFormDropdowns",
+    async ({ url }: { url: string }) => {
+        return await MyVaultServices.getPrivateHoldingFormDropdowns(url);
     }
 )
 // Enquiry
@@ -454,6 +470,44 @@ export const myVaultSlice = createSlice({
         })
         builder.addCase(getPrivateHoldingsListLivePrice.rejected, state => {
             state.loading = false;
+        })
+        // get specific private holding
+        builder.addCase(getPrivateHoldingWithId.pending, state => {
+            state.loading = true;
+        })
+        builder.addCase(getPrivateHoldingWithId.fulfilled, (state, action) => {
+            const responseData = action.payload.data;
+            state.currentPrivateHolding = responseData.data;
+            state.loading = false;
+        })
+        builder.addCase(getPrivateHoldingWithId.rejected, state => {
+            state.loading = false;
+        })
+        // get private holding form dropdown
+        builder.addCase(getPrivateHoldingFormDropdowns.pending, state => {
+            state.loading = true;
+        })
+        builder.addCase(getPrivateHoldingFormDropdowns.fulfilled, (state, action) => {
+            const responseData = action.payload.data.data;
+            console.log("🚀 ~ builder.addCase ~ responseData:", responseData)
+
+            const privateHoldingFormDropdowns: IPrivateHoldingFormDropdown = {};
+            responseData.forEach((element: any) => {
+                privateHoldingFormDropdowns[element.specificationAttribute] = element.specificationAttributeOptions;
+            });
+
+            state.privateHoldingFormDropdowns = privateHoldingFormDropdowns;
+            state.loading = false;
+        })
+        builder.addCase(getPrivateHoldingFormDropdowns.rejected, (state, action) => {
+            const responseData = action?.payload?.response?.data?.data;
+            // console.log("🚀 ~ builder.addCase ~ responseData: ", responseData)
+            const privateHoldingFormDropdowns: IPrivateHoldingFormDropdown = {};
+            responseData.forEach((element: any) => {
+                privateHoldingFormDropdowns[element.specificationAttribute] = element.specificationAttributeOptions;
+            });
+
+            state.privateHoldingFormDropdowns = privateHoldingFormDropdowns;
         })
         // send for equiry
         builder.addCase(sendForEnquiry.pending, state => {

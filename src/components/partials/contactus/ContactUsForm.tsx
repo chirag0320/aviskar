@@ -36,6 +36,7 @@ const ContactUsForm = () => {
     const {
         register,
         handleSubmit,
+        clearErrors,
         reset,
         control,
         setValue,
@@ -73,6 +74,7 @@ const ContactUsForm = () => {
                     register={register}
                     error={errors.reason}
                     name="reason"
+                    clearErrors={clearErrors}
                     label="Reason* :"
                     control={control}
                     variant='outlined'

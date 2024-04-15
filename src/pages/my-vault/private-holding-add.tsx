@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useLayoutEffect, useMemo } from "react";
 import {
     Box, Button, Container, IconButton, MenuItem, Stack, Table,
     TableBody,
@@ -12,7 +12,7 @@ import Seo from "@/components/common/Seo"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { ENDPOINTS } from "@/utils/constants"
 import { getTopicDetails } from "@/redux/reducers/topicReducer"
-import { useAppSelector } from "@/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks"
 import Layout from "@/components/common/Layout"
 import Loader from "@/components/common/Loader"
 import { useForm } from 'react-hook-form';
@@ -21,76 +21,41 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import RenderFields from "@/components/common/RenderFields"
 import { Delete1Icon } from "@/assets/icons"
 import BasicDatePicker from "@/components/partials/my-vault/BasicDatePicker"
-
-interface privateHoldingAddInputs {
-    account: string
-    productName: string
-    mintOrBrand: string
-    metal: string
-    type: string
-    series: string
-    purity: string
-    weight: string
-    weightType: string
-    specification: string
-    value: string
-    customSpecification: string
-    customValue: string
-    purchasePrice: string
-    purchaseFrom: string
-    qty: string
-    provenanceDocuments: string
-    productPhotos: string
-    documentType: string
-}
+import { IPrivateHoldingAddInputs } from "@/types/myVault";
+import { getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
+import DynamicFields from "@/components/partials/my-vault/private-holding-form/DynamicFields";
+import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
+// import { RenderDropdownItems } from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
+// import RenderDropdownItems from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
 
 const schema = yup.object().shape({
-    account: yup.string().trim().required("account is required field"),
-    productName: yup.string().trim().required("productName is required field"),
-    mintOrBrand: yup.string().trim(),
-    metal: yup.string().trim().required("metal is required field"),
-    type: yup.string().trim().required("type is required field"),
-    series: yup.string().trim(),
-    purity: yup.string().trim().required("purity is required field"),
-    weight: yup.string().trim().required("weight is required field"),
-    weightType: yup.string().trim().required("weightType is required field"),
-    specification: yup.string().trim(),
-    varalue: yup.string().trim(),
-    customSpecification: yup.string().trim(),
-    customValue: yup.string().trim(),
-    purchasePrice: yup.string().trim().required("purchasePrice is required field"),
-    purchaseFrom: yup.string().trim().required("purchasePrice is required field"),
-    qty: yup.string().trim().required("Quentity is required field"),
-    provenanceDocuments: yup.string().trim(),
-    productPhotos: yup.string().trim().required("productPhotos is required field"),
-    documentType: yup.string().trim().required("documentType is required field"),
+    Account: yup.string().notOneOf(["none"], "Account is required field"),
+    ProductName: yup.string().trim().required("Product Name is required field"),
+    MintOrBrand: yup.string().notOneOf(["none"], "Mint or Brand is required field"),
+    Metal: yup.string().notOneOf(["none"], "Metal is required field"),
+    Type: yup.string().notOneOf(["none"], "Type is required field"),
+    Series: yup.string().notOneOf(["none"], "Series is required field"),
+    Purity: yup.string().notOneOf(["none"], "Purity is required field"),
+    Weight: yup.string().trim().required("Weight is required field"),
+    WeightType: yup.string().notOneOf(["none"], "Weight Type is required field"),
+    // Specification: yup.string().trim(),
+    // Value: yup.string().trim(),
+    // CustomSpecification: yup.string().trim(),
+    // CustomValue: yup.string().trim(),
+    PurchasePrice: yup.string().trim().required("Purchase Price is required field"),
+    PurchaseFrom: yup.string().trim().required("Purchase From is required field"),
+    Qty: yup.string().required("Quantity is required field"),
+    ProvenanceDocuments: yup.string().trim(),
+    ProductPhotos: yup.string().trim().required("Product Photos is required field"),
+    DocumentType: yup.string().notOneOf(["none"], "Document Type is required field"),
 });
 
-function createDataDocuments(
-    fileName: string,
-    documentType: string,
-) {
-    return { fileName, documentType };
-}
 function createDataPhotos(
     fileName: string,
 ) {
     return { fileName };
 }
-const documentsRows = [
-    createDataDocuments(
-        "test.mp4",
-        "Invoice",
-    ),
-    createDataDocuments(
-        "new.gif",
-        "Certifacate",
-    ),
-    createDataDocuments(
-        "newvideo.gif",
-        "Valuation",
-    ),
-];
+
 const photosRows = [
     createDataPhotos(
         "test.png",
@@ -101,405 +66,346 @@ const photosRows = [
 
 ];
 
-function privateHoldingAdd(paramsData: any) {
-    const { topicDetails, loading } = useAppSelector(state => state.topic)
-    useAPIoneTime({ service: getTopicDetails, endPoint: ENDPOINTS.topicDetail?.replace('{{topic-name}}', paramsData?.params?.['topic-name']) })
+function privateHoldingAdd({ location }: { location: any }) {
+    const loading = useAppSelector(state => state.myVault.loading);
+    const currentPrivateHolding = useAppSelector(state => state.myVault.currentPrivateHolding)
+    const formDropdowns = useAppSelector(state => state.myVault.privateHoldingFormDropdowns);
+    console.log("🚀 ~ privateHoldingAdd ~ formDropdowns:", formDropdowns)
+    // console.log("🚀 ~ privateHoldingAdd ~ currentPrivateHolding:", currentPrivateHolding)
+    const dispatch = useAppDispatch()
+    const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
 
     const {
         register,
         handleSubmit,
         control,
+        clearErrors,
         getValues,
         setValue,
         formState: { errors },
-    } = useForm<privateHoldingAddInputs>({
+    } = useForm<IPrivateHoldingAddInputs>({
         resolver: yupResolver(schema)
     })
+
+    console.log("🚀 ~ privateHoldingAdd ~ getValues:", getValues("Account"))
+    // to show intial placeholder
+    useEffect(() => {
+        setValue("Account", "none")
+        setValue("MintOrBrand", "none")
+        setValue("Metal", "none")
+        setValue("Type", "none")
+        setValue("Series", "none")
+        setValue("Purity", "none")
+        setValue("WeightType", "none")
+    }, [])
+
+    useLayoutEffect(() => {
+        const fetchFormDropdowns = async () => {
+            await dispatch(getPrivateHoldingFormDropdowns({ url: ENDPOINTS.getPrivateHoldingAddFormDropdowns }))
+        }
+        fetchFormDropdowns();
+    }, [])
+
+    // get the inputs data if user wants to edit
+    useEffect(() => {
+        if (!searchParams.has("holdingId")) return;
+        const holdingId = searchParams.get("holdingId");
+
+        const fetchHolding = async () => {
+            await dispatch(getPrivateHoldingWithId({ url: ENDPOINTS.getPrivateHoldingWithId + holdingId }))
+        }
+        fetchHolding()
+    }, [])
+
+    // set intial form values if user wants to edit
+    useEffect(() => {
+        if (!currentPrivateHolding) return;
+        setValue("ProductName", currentPrivateHolding.productName)
+    }, [currentPrivateHolding])
+
 
     const onSubmit = (data: any) => {
         console.log(data);
     }
 
+    const renderDropdownItems = (dropdowns: any) => dropdowns?.map((option: any) => <MenuItem key={option.specificationAttributeOptionsId} value={option.specificationAttributeOptionsId}>{option.specificationOption}</MenuItem>);
 
     return (
         <>
             <Loader open={loading} />
-            {
-                !loading && <Layout>
-                    <Seo
-                        keywords={[`QMint Topics`]}
-                        title="Add New Private Holding"
-                        lang="en"
-                    />
-                    <PageTitle title="Add New Private Holding" backToDashboard={true} />
-                    <Box id="PrivateHoldingAddPage" className='PrivateHoldingAddPage' component="section">
-                        <Container>
-                            <Box className="Content PrivateHoldingAddContent">
-                                <form onSubmit={handleSubmit(onSubmit)} id="AddPrivateHolding">
-                                    <Stack className="RowWrapper">
+            <Layout>
+                <Seo
+                    keywords={[`QMint Topics`]}
+                    title="Add New Private Holding"
+                    lang="en"
+                />
+                <PageTitle title="Add New Private Holding" backToDashboard={true} />
+                <Box id="PrivateHoldingAddPage" className='PrivateHoldingAddPage' component="section">
+                    <Container>
+                        <Box className="Content PrivateHoldingAddContent">
+                            <form onSubmit={handleSubmit(onSubmit)} id="AddPrivateHolding">
+                                <Stack className="RowWrapper">
+                                    <RenderFields
+                                        type="select"
+                                        register={register}
+                                        error={errors.Account}
+                                        name="Account"
+                                        label="Account:"
+                                        control={control}
+                                        defaultValue="none"
+                                        getValues={getValues}
+                                        setValue={setValue}
+                                        variant='outlined'
+                                        clearErrors={clearErrors}
+                                        margin='none'
+                                        className='SelectAccount'
+                                        required
+                                    >
+                                        <MenuItem value="none">Select Account</MenuItem>
+                                        <MenuItem key='test' value='test'>test</MenuItem>
+                                        <MenuItem key='test' value='test1'>test1</MenuItem>
+                                        <MenuItem key='test' value='test2'>test2</MenuItem>
+                                    </RenderFields>
+                                    <RenderFields
+                                        register={register}
+                                        error={errors.ProductName}
+                                        name="ProductName"
+                                        label="Product Name:"
+                                        placeholder="Enter your product name."
+                                        variant='outlined'
+                                        margin='none'
+                                        required
+                                    />
+                                    <RenderFields
+                                        type="select"
+                                        register={register}
+                                        error={errors.MintOrBrand}
+                                        name="MintOrBrand"
+                                        label="Mint/Brand"
+                                        control={control}
+                                        variant='outlined'
+                                        defaultValue="none"
+                                        setValue={setValue}
+                                        getValues={getValues}
+                                        clearErrors={clearErrors}
+                                        margin='none'
+                                        className='SelectMint'
+                                        required
+                                    >
+                                        <MenuItem value="none">Select Mint</MenuItem>
+                                        {formDropdowns && renderDropdownItems(formDropdowns["Mint"])}
+                                    </RenderFields>
+                                </Stack>
+                                <Stack className="RowWrapper">
+                                    <RenderFields
+                                        type="select"
+                                        register={register}
+                                        error={errors.Metal}
+                                        name="Metal"
+                                        getValues={getValues}
+                                        label="Metal"
+                                        control={control}
+                                        setValue={setValue}
+                                        defaultValue="none"
+                                        clearErrors={clearErrors}
+                                        variant='outlined'
+                                        margin='none'
+                                        className='SelectMetal'
+                                        required
+                                    >
+                                        <MenuItem value="none">Select Metal</MenuItem>
+                                        {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Metal"]} />} */}
+                                        {formDropdowns && renderDropdownItems(formDropdowns["Metal"])}
+                                    </RenderFields>
+                                    <RenderFields
+                                        type="select"
+                                        register={register}
+                                        error={errors.Type}
+                                        name="Type"
+                                        setValue={setValue}
+                                        getValues={getValues}
+                                        label="Type"
+                                        defaultValue="none"
+                                        control={control}
+                                        variant='outlined'
+                                        clearErrors={clearErrors}
+                                        margin='none'
+                                        className='SelectType'
+                                        required
+                                    >
+                                        <MenuItem value="none">Select Type</MenuItem>
+                                        {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Type"]} />} */}
+                                        {formDropdowns && renderDropdownItems(formDropdowns["Type"])}
+                                    </RenderFields>
+                                </Stack>
+                                <Stack className="RowWrapper">
+                                    <RenderFields
+                                        type="select"
+                                        register={register}
+                                        error={errors.Series}
+                                        name="Series"
+                                        getValues={getValues}
+                                        label="Series"
+                                        defaultValue="none"
+                                        control={control}
+                                        setValue={setValue}
+                                        clearErrors={clearErrors}
+                                        variant='outlined'
+                                        margin='none'
+                                        className='SelectSeries'
+                                    // required
+                                    >
+                                        <MenuItem value="none">Select Series</MenuItem>
+                                        {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Series"]} />} */}
+                                        {formDropdowns && renderDropdownItems(formDropdowns["Series"])}
+                                    </RenderFields>
+                                    <RenderFields
+                                        type="select"
+                                        register={register}
+                                        error={errors.Purity}
+                                        name="Purity"
+                                        label="Purity"
+                                        getValues={getValues}
+                                        setValue={setValue}
+                                        defaultValue="none"
+                                        control={control}
+                                        clearErrors={clearErrors}
+                                        variant='outlined'
+                                        margin='none'
+                                        className='SelectPurity'
+                                        required
+                                    >
+                                        <MenuItem value="none">Select Purity</MenuItem>
+                                        {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Purity"]} />} */}
+                                        {formDropdowns && renderDropdownItems(formDropdowns["Purity"])}
+                                    </RenderFields>
+                                </Stack>
+                                <Stack className="RowWrapper">
+                                    <RenderFields
+                                        register={register}
+                                        error={errors.Weight}
+                                        name="Weight"
+                                        label="Weight"
+                                        type="number"
+                                        placeholder="Enter Weight"
+                                        control={control}
+                                        variant='outlined'
+                                        margin='none'
+                                        className='Weight'
+                                        setValue={setValue}
+                                    />
+                                    <RenderFields
+                                        type="select"
+                                        register={register}
+                                        error={errors.WeightType}
+                                        name="WeightType"
+                                        clearErrors={clearErrors}
+                                        label="Weight Type"
+                                        getValues={getValues}
+                                        control={control}
+                                        defaultValue="none"
+                                        variant='outlined'
+                                        setValue={setValue}
+                                        margin='none'
+                                        className='SelectWeightType'
+                                        required
+                                    >
+                                        <MenuItem value="none">Select Weight Type</MenuItem>
+                                        <MenuItem value='0'>ounces</MenuItem>
+                                        <MenuItem value='1'>grams</MenuItem>
+                                        <MenuItem value='2'>kilograms</MenuItem>
+                                    </RenderFields>
+                                </Stack>
+                                <DynamicFields />
+                                <Stack className="RowWrapper">
+                                    <BasicDatePicker />
+                                    <RenderFields
+                                        register={register}
+                                        error={errors.PurchasePrice}
+                                        name="PurchasePrice"
+                                        label="Purchase price (per unit):"
+                                        placeholder="Enter Purchase price"
+                                        variant='outlined'
+                                        margin='none'
+                                        required
+                                    />
+                                    <RenderFields
+                                        register={register}
+                                        error={errors.PurchaseFrom}
+                                        name="PurchaseFrom"
+                                        placeholder="Enter Purchase from"
+                                        label="Purchase From: "
+                                        variant='outlined'
+                                        margin='none'
+                                        required
+                                    />
+                                    <RenderFields
+                                        type="number"
+                                        register={register}
+                                        error={errors.Qty}
+                                        control={control}
+                                        name="Qty"
+                                        placeholder="Enter available quantity"
+                                        label="Qty:"
+                                        variant='outlined'
+                                        margin='none'
+                                        required
+                                    />
+                                </Stack>
+                                <Stack className="RowWrapper DocumentPhotosContentWrapper">
+                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} />
+                                    <Box className="PhotosContentwrapper">
                                         <RenderFields
-                                            type="select"
+                                            type="file"
                                             register={register}
-                                            error={errors.account}
-                                            name="account"
-                                            label="Account:"
+                                            error={errors.ProductPhotos}
+                                            name="ProductPhotos"
+                                            label="Product Photos:"
                                             control={control}
-                                            getValues={getValues}
                                             variant='outlined'
                                             margin='none'
-                                            className='SelectAccount'
                                             required
                                         >
-                                            <MenuItem key='test' value='test'>test</MenuItem>
-                                            <MenuItem key='test' value='test1'>test1</MenuItem>
-                                            <MenuItem key='test' value='test2'>test2</MenuItem>
                                         </RenderFields>
-                                        <RenderFields
-                                            register={register}
-                                            error={errors.productName}
-                                            name="productName"
-                                            label="Product Name:"
-                                            // placeholder="Enter your product name."
-                                            variant='outlined'
-                                            margin='none'
-                                            required
-                                        />
-                                        <RenderFields
-                                            type="select"
-                                            register={register}
-                                            error={errors.mintOrBrand}
-                                            name="mintOrBrand"
-                                            label="Mint/Brand"
-                                            control={control}
-                                            variant='outlined'
-                                            getValues={getValues}
-                                            margin='none'
-                                            className='SelectMint'
-                                            required
-                                        >
-                                            <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                            <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                            <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
-                                        </RenderFields>
-                                    </Stack>
-                                    <Stack className="RowWrapper">
-                                        <RenderFields
-                                            type="select"
-                                            register={register}
-                                            error={errors.metal}
-                                            name="metal"
-                                            getValues={getValues}
-                                            label="Metal"
-                                            control={control}
-                                            variant='outlined'
-                                            margin='none'
-                                            className='SelectMetal'
-                                            required
-                                        >
-                                            <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                            <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                            <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
-                                        </RenderFields>
-                                        <RenderFields
-                                            type="select"
-                                            register={register}
-                                            error={errors.type}
-                                            name="type"
-                                            getValues={getValues}
-                                            label="Type"
-                                            control={control}
-                                            variant='outlined'
-                                            margin='none'
-                                            className='SelectType'
-                                            required
-                                        >
-                                            <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                            <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                            <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
-                                        </RenderFields>
-                                    </Stack>
-                                    <Stack className="RowWrapper">
-                                        <RenderFields
-                                            type="select"
-                                            register={register}
-                                            error={errors.series}
-                                            name="series"
-                                            getValues={getValues}
-                                            label="Series"
-                                            control={control}
-                                            variant='outlined'
-                                            margin='none'
-                                            className='SelectSeries'
-                                        // required
-                                        >
-                                            <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                            <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                            <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
-                                        </RenderFields>
-                                        <RenderFields
-                                            type="select"
-                                            register={register}
-                                            error={errors.purity}
-                                            name="purity"
-                                            label="Purity"
-                                            getValues={getValues}
-                                            control={control}
-                                            variant='outlined'
-                                            margin='none'
-                                            className='SelectPurity'
-                                            required
-                                        >
-                                            <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                            <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                            <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
-                                        </RenderFields>
-                                    </Stack>
-                                    <Stack className="RowWrapper">
-                                        <RenderFields
-                                            type="select"
-                                            register={register}
-                                            error={errors.weight}
-                                            name="weight"
-                                            label="Weight"
-                                            getValues={getValues}
-                                            control={control}
-                                            variant='outlined'
-                                            margin='none'
-                                            className='SelectWeight'
-                                            required
-                                        >
-                                            <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                            <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                            <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
-                                        </RenderFields>
-                                        <RenderFields
-                                            type="select"
-                                            register={register}
-                                            error={errors.weightType}
-                                            name="weightType"
-                                            label="Weight Type"
-                                            getValues={getValues}
-                                            control={control}
-                                            variant='outlined'
-                                            margin='none'
-                                            className='SelectWeightType'
-                                            required
-                                        >
-                                            <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                            <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                            <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
-                                        </RenderFields>
-                                    </Stack>
-                                    <Stack className="RowWrapper SpecificationWrapper">
-                                        <RenderFields
-                                            type="select"
-                                            register={register}
-                                            error={errors.specification}
-                                            name="specification"
-                                            label="Specification"
-                                            getValues={getValues}
-                                            control={control}
-                                            variant='outlined'
-                                            margin='none'
-                                            className='SelectSpecification'
-                                        // required
-                                        >
-                                            <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                            <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                            <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
-                                        </RenderFields>
-                                        <RenderFields
-                                            type="select"
-                                            register={register}
-                                            error={errors.value}
-                                            name="value"
-                                            getValues={getValues}
-                                            label="Value"
-                                            control={control}
-                                            variant='outlined'
-                                            margin='none'
-                                            className='SelectValue'
-                                        // required
-                                        >
-                                            <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                                            <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                                            <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
-                                        </RenderFields>
-                                        <IconButton className="DeleteButton"><Delete1Icon /></IconButton>
-                                    </Stack>
-                                    <Stack className="RowWrapper CustomSpecificationWrapper">
-                                        <RenderFields
-                                            register={register}
-                                            error={errors.customSpecification}
-                                            name="customSpecification"
-                                            label="Custom Specification"
-                                            // placeholder="Enter custom specification."
-                                            variant='outlined'
-                                            margin='none'
-                                        // required
-                                        />
-                                        <RenderFields
-                                            register={register}
-                                            error={errors.customValue}
-                                            name="customValue"
-                                            label="Custom Value"
-                                            // placeholder="Enter custom value."
-                                            variant='outlined'
-                                            margin='none'
-                                        // required
-                                        />
-                                        <IconButton className="DeleteButton"><Delete1Icon /></IconButton>
-                                    </Stack>
-                                    <Stack className='RowWrapper ButtonsWrapper'>
-                                        <Button variant="contained" size="large">Add Specification</Button>
-                                        <Button variant="contained" size="large">Add Custom Specification</Button>
-                                    </Stack>
-                                    <Stack className="RowWrapper">
-                                        <BasicDatePicker />
-                                        <RenderFields
-                                            register={register}
-                                            error={errors.purchasePrice}
-                                            name="purchasePrice"
-                                            label="Purchase price (per unit):"
-                                            variant='outlined'
-                                            margin='none'
-                                            required
-                                        />
-                                        <RenderFields
-                                            register={register}
-                                            error={errors.purchaseFrom}
-                                            name="purchaseFrom"
-                                            label="Purchase From: "
-                                            variant='outlined'
-                                            margin='none'
-                                            required
-                                        />
-                                        <RenderFields
-                                            type="number"
-                                            register={register}
-                                            error={errors.qty}
-                                            control={control}
-                                            name="qty"
-                                            label="Qty:"
-                                            variant='outlined'
-                                            margin='none'
-                                            required
-                                        />
-                                    </Stack>
-                                    <Stack className="RowWrapper DocumentPhotosContentWrapper">
-                                        <Box className="DocumentsContentwrapper">
-                                            <RenderFields
-                                                type="file"
-                                                register={register}
-                                                error={errors.provenanceDocuments}
-                                                name="provenanceDocuments"
-                                                label="Provenance Documents:"
-                                                control={control}
-                                                variant='outlined'
-                                                margin='none'
-                                                required
+                                        <Box className="CommonTableWrapper">
+                                            <TableContainer
+                                                className="PhotosDetailTablewrapper  CommonTableDesign"
                                             >
-                                            </RenderFields>
-                                            <RenderFields
-                                                type="select"
-                                                register={register}
-                                                error={errors.documentType}
-                                                name="documentType"
-                                                control={control}
-                                                variant='outlined'
-                                                getValues={getValues}
-                                                margin='none'
-                                                className='SelectValue'
-                                            // required
-                                            >
-                                                <MenuItem key='test' value='perth mint'>Invoice</MenuItem>
-                                                <MenuItem key='test' value='royal mint'>Certificate</MenuItem>
-                                                <MenuItem key='test' value='sunshine mint'>other</MenuItem>
-                                            </RenderFields>
-                                            <Box className="CommonTableWrapper">
-                                                <TableContainer
-                                                    className="DocumentsDetailTablewrapper  CommonTableDesign"
-                                                >
-                                                    <Table className="DocumentsDetailTable" sx={{ minWidth: 550 }} aria-label="Documents Details table">
-                                                        <TableHead>
-                                                            <TableRow>
-                                                                <TableCell sx={{ minWidth: "200px" }}>File Name</TableCell>
-                                                                <TableCell sx={{ minWidth: "200px" }}>Documents Type</TableCell>
-                                                                <TableCell sx={{ minWidth: "100px" }}>Remove</TableCell>
+                                                <Table className="PhotosDetailTable" sx={{ minWidth: 400 }} aria-label="Photos Details table">
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell sx={{ minWidth: "300px" }}>File Name</TableCell>
+                                                            <TableCell sx={{ minWidth: "100px" }}>Remove</TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {photosRows.map((row) => (
+                                                            <TableRow
+                                                                key={row.fileName}
+                                                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                            >
+                                                                <TableCell component="th" scope="row">{row.fileName}</TableCell>
+                                                                <TableCell>
+                                                                    <IconButton className="DeleteButton"><Delete1Icon /></IconButton>
+                                                                </TableCell>
                                                             </TableRow>
-                                                        </TableHead>
-                                                        <TableBody>
-                                                            {documentsRows.map((row) => (
-                                                                <TableRow
-                                                                    key={row.fileName}
-                                                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                                >
-                                                                    <TableCell component="th" scope="row">{row.fileName}</TableCell>
-                                                                    <TableCell>{row.documentType}</TableCell>
-                                                                    <TableCell>
-                                                                        <IconButton className="DeleteButton"><Delete1Icon /></IconButton>
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                            ))}
+                                                        ))}
 
-                                                        </TableBody>
-                                                    </Table>
-                                                </TableContainer>
-                                            </Box>
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
                                         </Box>
-                                        <Box className="PhotosContentwrapper">
-                                            <RenderFields
-                                                type="file"
-                                                register={register}
-                                                error={errors.productPhotos}
-                                                name="productPhotos"
-                                                label="Product Photos:"
-                                                control={control}
-                                                variant='outlined'
-                                                margin='none'
-                                                required
-                                            >
-                                            </RenderFields>
-                                            <Box className="CommonTableWrapper">
-                                                <TableContainer
-                                                    className="PhotosDetailTablewrapper  CommonTableDesign"
-                                                >
-                                                    <Table className="PhotosDetailTable" sx={{ minWidth: 400 }} aria-label="Photos Details table">
-                                                        <TableHead>
-                                                            <TableRow>
-                                                                <TableCell sx={{ minWidth: "300px" }}>File Name</TableCell>
-                                                                <TableCell sx={{ minWidth: "100px" }}>Remove</TableCell>
-                                                            </TableRow>
-                                                        </TableHead>
-                                                        <TableBody>
-                                                            {photosRows.map((row) => (
-                                                                <TableRow
-                                                                    key={row.fileName}
-                                                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                                >
-                                                                    <TableCell component="th" scope="row">{row.fileName}</TableCell>
-                                                                    <TableCell>
-                                                                        <IconButton className="DeleteButton"><Delete1Icon /></IconButton>
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                            ))}
-
-                                                        </TableBody>
-                                                    </Table>
-                                                </TableContainer>
-                                            </Box>
-                                        </Box>
-                                    </Stack>
-                                    <Stack sx={{ gap: "20px", justifyContent: "flex-end" }} className='BottomButtonsWrapper'>
-                                        <Button variant="contained" size="large">Save</Button>
-                                        <Button variant="outlined" size="large">Cancel</Button>
-                                    </Stack>
-                                </form>
-                            </Box>
-                        </Container>
-                    </Box >
-                </Layout >
-            }
+                                    </Box>
+                                </Stack>
+                                <Stack sx={{ gap: "20px", justifyContent: "flex-end" }} className='BottomButtonsWrapper'>
+                                    <Button variant="contained" size="large" type="submit">Save</Button>
+                                    <Button variant="outlined" size="large">Cancel</Button>
+                                </Stack>
+                            </form>
+                        </Box>
+                    </Container>
+                </Box >
+            </Layout >
         </>
     )
 }
