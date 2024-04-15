@@ -508,6 +508,7 @@ export const myVaultSlice = createSlice({
             });
 
             state.privateHoldingFormDropdowns = privateHoldingFormDropdowns;
+        })
         // send for equiry
         builder.addCase(sendForEnquiry.pending, state => {
             state.loading = true;
