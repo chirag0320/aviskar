@@ -22,7 +22,7 @@ import RenderFields from "@/components/common/RenderFields"
 import { Delete1Icon } from "@/assets/icons"
 import BasicDatePicker from "@/components/partials/my-vault/BasicDatePicker"
 import { IPrivateHoldingAddInputs } from "@/types/myVault";
-import { getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
+import { getConfigDropdowns, getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
 import DynamicFields from "@/components/partials/my-vault/private-holding-form/DynamicFields";
 import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
 import ProductPhotos from "@/components/partials/my-vault/private-holding-form/ProductPhotos";
@@ -69,7 +69,9 @@ function privateHoldingAdd({ location }: { location: any }) {
     const loading = useAppSelector(state => state.myVault.loading);
     const currentPrivateHolding = useAppSelector(state => state.myVault.currentPrivateHolding)
     const formDropdowns = useAppSelector(state => state.myVault.privateHoldingFormDropdowns);
+    console.log("🚀 ~ privateHoldingAdd ~ formDropdowns:", formDropdowns)
     const formDropdownsKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsKeys);
+    const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
     const formDropdownsReverseKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsReverseKeys);
     const dispatch = useAppDispatch()
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
@@ -126,6 +128,8 @@ function privateHoldingAdd({ location }: { location: any }) {
         setValue("PurchasePrice", currentPrivateHolding.price.toString())
 
         if (!formDropdownsKeys) return;
+        console.log("🚀 ~ useEffect ~ formDropdownsKeys:", formDropdownsKeys)
+
 
         function getNextSpecificationItem(specificationName: string) {
             return currentPrivateHolding!.productattribute.find((option: any) => formDropdownsKeys![option["specificationAttributeOptionId"].toString()] === specificationName)
@@ -139,7 +143,7 @@ function privateHoldingAdd({ location }: { location: any }) {
 
         dropdownDispatch({
             type: "APPLY_VALUES",
-            nextAccount: "test",
+            nextAccount: currentPrivateHolding?.subCustomerId,
             // NOTE : static
             nextMint: nextMint ? nextMint["specificationAttributeId"] : "0",
             nextMetal: nextMetal ? nextMetal["specificationAttributeId"] : "0",
@@ -150,6 +154,11 @@ function privateHoldingAdd({ location }: { location: any }) {
         })
     }, [currentPrivateHolding, formDropdownsKeys])
 
+    useAPIoneTime({
+        service: getConfigDropdowns,
+        endPoint: ENDPOINTS.getConfigDropdown
+    })
+
 
     const onSubmit = (data: IPrivateHoldingAddInputs) => {
         // console.log("🚀 ~ onSubmit ~ data:", data)
@@ -157,7 +166,7 @@ function privateHoldingAdd({ location }: { location: any }) {
         const prepareData = {
             // "Id": 0,
             CustomerID: data.Account,
-            // "SubCustomerID": 74038,
+            SubCustomerID: data.Account,
             // "ProductId": 0,
             ProductName: data.ProductName,
             PurchaseDate: data.Date,
@@ -193,11 +202,12 @@ function privateHoldingAdd({ location }: { location: any }) {
                     "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Purity"] : "0",
                     "SpecificationAttributeOptionOther": ""
                 },
+                // add specification attribute
             ],
             CustomAttribute: [],
             Attachments: []
         }
-        console.log("🚀 ~ onSubmit ~ prepareData:", prepareData)
+        // console.log("🚀 ~ onSubmit ~ prepareData:", prepareData)
     }
 
     const renderDropdownItems = (dropdowns: any) => dropdowns?.map((option: any) => <MenuItem key={option.specificationAttributeOptionsId} value={option.specificationAttributeOptionsId}>{option.specificationOption}</MenuItem>);
@@ -236,9 +246,9 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         required
                                     >
                                         <MenuItem value="none">Select Account</MenuItem>
-                                        <MenuItem key='test' value='test'>test</MenuItem>
-                                        <MenuItem key='test' value='test1'>test1</MenuItem>
-                                        <MenuItem key='test' value='test2'>test2</MenuItem>
+                                        {configDropdowns && configDropdowns.accountList.map((account) => {
+                                            return (<MenuItem key={account.id} value={account.id}>{account.name}</MenuItem>)
+                                        })}
                                     </RenderFields>
                                     <RenderFields
                                         register={register}
