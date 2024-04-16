@@ -27,7 +27,7 @@ function Sitemap() {
   const [state, setState] = useState({ service: getSiteMapData, body: bodyForSiteMap })
   useAPIoneTime(state)
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setState((prev) => ({ ...prev, body: { ...prev.body, pageNo: value } }))
+    setState((prev) => ({ ...prev, body: { ...prev.body, pageNo: value-1 } }))
   }
   return (
     <Layout>

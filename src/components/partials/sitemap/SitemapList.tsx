@@ -13,7 +13,6 @@ interface SiteMapData {
 function SitemapList(props: any) {
   const { handlePageChange } = props
   const { siteMapData } = useAppSelector(state => state.homePage)
-  console.log("🚀 ~ Sitemap ~ siteMapData:", siteMapData)
   const renderTitleWithList = (title: string, list: any[]) => {
     return (
       <Box className="TitleWithList" key={title}>
@@ -43,7 +42,7 @@ function SitemapList(props: any) {
         {renderTitleWithList("Categories", ["Home", "Search", "News", "Blog", "Contact", "My account"])} */}
       </Stack>
       <Stack className="Pagination">
-        <Pagination count={Math.ceil(((siteMapData?.totalCount || 0) / 50)-1)} onChange={handlePageChange} />
+        <Pagination count={Math.ceil(((siteMapData?.totalCount || 0) / 50))} onChange={handlePageChange} />
       </Stack>
     </Box>
   )
