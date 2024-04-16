@@ -134,10 +134,10 @@ function Vault() {
                   Shop Now
                 </Button>
                 <Box className="VaultStats">
-                  <StatsCard onClick={() => { navigate('/my-vault/smart-metals/') }} title="Accounts" statsNumber={myVaultHomePageData?.Customers} icon={<AccountsIcon />} bgColor="rgb(52 145 250 / 6%)" />
+                  <StatsCard onClick={() => { navigate('/my-vault/accounts/') }} title="Accounts" statsNumber={myVaultHomePageData?.Customers} icon={<AccountsIcon />} bgColor="rgb(52 145 250 / 6%)" />
                   <StatsCard onClick={() => { navigate('/my-vault/addresses/') }} title="Addresses" statsNumber={myVaultHomePageData?.Addresses} icon={<AddressesIcon />} bgColor="rgb(234 162 43 / 6%)" />
-                  <StatsCard onClick={() => { navigate('/my-vault/ordres/') }} title="View Orders" statsNumber={myVaultHomePageData?.Order} icon={<OrdersIcon />} bgColor="rgb(52 145 250 / 6%)" />
-                  <StatsCard onClick={() => { navigate('/my-vault/private-holding') }} title="Buyback Orders" statsNumber={myVaultHomePageData?.["Buyback Order"]} icon={<BuyBackOrderIcon />} bgColor="rgb(0 128 1 / 6%)" />
+                  <StatsCard onClick={() => { navigate('/my-vault/order-history/') }} title="View Orders" statsNumber={myVaultHomePageData?.Order} icon={<OrdersIcon />} bgColor="rgb(52 145 250 / 6%)" />
+                  <StatsCard onClick={() => { navigate('/my-vault/buy-back-order-history/') }} title="Buyback Orders" statsNumber={myVaultHomePageData?.["Buyback Order"]} icon={<BuyBackOrderIcon />} bgColor="rgb(0 128 1 / 6%)" />
 
                 </Box>
               </Box>
@@ -232,7 +232,7 @@ function Vault() {
                 <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Allocated Holdings" statsNumber="todo" icon={<AllotedHldingIcon />} bgColor="rgb(255 31 31 / 6%)" />
                 <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Private Holding" icon={<PrivateHoldingIcon />} statsNumber={"todo"} bgColor="rgb(234 162 43 / 6%)" />
                 <StatsCard onClick={() => { navigate('/my-vault/smart-metals/') }} title="Smart Metals" statsNumber="todo" icon={<SmartMetalsIcon />} bgColor="rgb(0 128 1 / 6%)" />
-                <StatsCard onClick={() => { navigate('/my-vault/rewards-poins/') }} title="Rewards Points" statsNumber={myVaultHomePageData?.["Reward Point"]} icon={<RewardPointsIcon />} bgColor="rgb(255 31 31 / 6%)" />
+                <StatsCard onClick={() => { navigate('/rewardpoints/history') }} title="Rewards Points" statsNumber={myVaultHomePageData?.["Reward Point"]} icon={<RewardPointsIcon />} bgColor="rgb(255 31 31 / 6%)" />
               </Box>
               <Box className="Right">
                 <Box id="Banner" component="section" key={"banner"}>

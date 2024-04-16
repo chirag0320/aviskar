@@ -99,7 +99,6 @@ function PrivateHoldingCards({fetchPrivateHoldingsList}:any) {
     }
     const deleteHoldings = async (item: any) => {
         const res = await dispatch(deletePrivateHoldings({ id: item?.id }))
-        console.log("🚀 ~ deleteHoldings ~ res:", res)
         if (res.payload.data.data == false) {
             showToaster({
                 message: res.payload.data.message,
