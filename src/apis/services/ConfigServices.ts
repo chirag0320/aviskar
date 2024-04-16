@@ -97,18 +97,11 @@ class ConfigServices {
   static async savePoPUpDetails(body: ISavePopUpDetails) {
     return await axiosInstance.post(ENDPOINTS.savePopUpData,body)
   }
-  static async getSiteMapData() {
-    return axiosInstance.post(ENDPOINTS.siteMapUrl,{
-      "search": "",
-      "pageNo": 0,
-      "pageSize": 12,
-      "sortBy": "",
-      "sortOrder": "",
-      "filters": {}
-  })
+  static async getSiteMapData(body:any) {
+    return axiosInstance.post(ENDPOINTS.siteMapUrl,body)
   }
   static async getPrivateHoldingList() {
-    return axiosInstance.get(ENDPOINTS.privateHoldingList)
+    return axiosInstance.get(ENDPOINTS.getPrivateHoldingsList)
   }
   static async reOrderAPI(orderId: string | number) {
     return axiosInstance.get(ENDPOINTS.reOrder.replace('Orderid',orderId.toString()))

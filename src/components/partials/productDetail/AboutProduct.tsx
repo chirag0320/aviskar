@@ -82,7 +82,6 @@ function AboutProduct({ productId }: any) {
     },
   });
   const { productDetailsData } = useAppSelector((state) => state.category)
-  console.log("🚀 ~ AboutProduct ~ productDetailsData:", productDetailsData)
   const { configDetails: configDetailsState, isLoggedIn, openToaster } = useAppSelector((state) => state.homePage)
   const [quantityCount, setQuantityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
   const [productIds, setProductIds] = useState({ productIds: [Number(productId)] })

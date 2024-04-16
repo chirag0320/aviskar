@@ -336,21 +336,30 @@ const RenderFields: React.FC<RenderFieldProps> = ({
 
     case "phoneInput":
       fieldType = (
-        <Controller
-          name={name}
-          control={control}
-          defaultValue=""
-          rules={{ required: 'Phone number is required' }}
-          render={({ field }) => (
-            <PhoneInput
-              country="au"
-              {...field}
-              onChange={(value) => field.onChange(value)}
-              onBlur={field.onBlur}
-              preferredCountries={['au']}
-            />
-          )}
-        />
+        <FormControl
+          fullWidth={fullWidth}
+          margin={margin}
+          {...(error ? { error: true } : {})}
+        >
+          {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+          <Controller
+            name={name}
+            control={control}
+            defaultValue=""
+            rules={{ required: 'Phone number is required' }}
+            render={({ field }) => (
+              <PhoneInput
+                country="au"
+                onChange={(value) => field.onChange(value)}
+                onBlur={field.onBlur}
+                preferredCountries={['au']}
+                // {...field}
+              />
+            )}
+            {...register(name)}
+            {...otherProps}
+          />
+        </FormControl>
       )
       break
 

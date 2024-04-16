@@ -72,7 +72,6 @@ function getSchemaFromAlignment(alignment: string) {
 
 function AddAccount(props: AddAccountProps) {
   const { open, dialogTitle, alignment, onClose, hadleSecondaryAction, existingAccount } = props
-  // console.log("🚀 ~ AddAccount ~ trusteeTypes:", trusteeTypes)
   const accountTypeText = existingAccount ? alignment : AccountTypeEnumReverse[alignment];
   const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
   const dispatch = useAppDispatch();
@@ -133,10 +132,8 @@ function AddAccount(props: AddAccountProps) {
   } = useForm<Inputs>({
     resolver: yupResolver(getSchemaFromAlignment(accountTypeText))
   })
-  console.log("🚀 ~ useEffect ~ existingAccount:", getValues("Contact"))
 
   const onAddressFormSubmitHandler = async (data: any) => {
-    // console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
     const additionalBeneficiary = additionalFields.map((field) => {
       // id static
       return { ...field[Object.keys(field)[0]], customerAdditionalBeneficiaryId: 0 }
@@ -205,7 +202,6 @@ function AddAccount(props: AddAccountProps) {
       await dispatch(getAccounts({ url: ENDPOINTS.getAccounts }))
     }
     else {
-
       showToaster({ message: ((response.payload as AxiosError).response?.data as { message?: string }).message || "Failed to save address! Please try again", severity: "error" })
     }
   }
