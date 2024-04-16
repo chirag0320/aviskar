@@ -431,7 +431,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                     if (!numberRegex.test(event.target.value)) {
                       return
                     }
-                    if(onChange){
+                    if (onChange) {
                       console.log("swdesfrgtfhy")
                       onChange(event)
                     }
