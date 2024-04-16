@@ -99,7 +99,7 @@ function Accounts() {
                                 ))}
                             </Box>
                         </Box>
-                        <AddAccount dialogTitle="Add new account" open={addAccount} alignment={alignment} onClose={handleCloseUpdateAddress} hadleSecondaryAction={hadleAddAccountSecondaryAction} />
+                        {addAccount && <AddAccount dialogTitle="Add new account" open={addAccount} alignment={alignment} onClose={handleCloseUpdateAddress} hadleSecondaryAction={hadleAddAccountSecondaryAction} />}
                         <AccountType dialogTitle="Select Account Type" open={accountTypeDialog} alignment={alignment} handleChange={handleChange} onClose={handleCloseAccountTypeDialog} handleAccountTypeNextButton={handleAccountTypeNextButton} />
                     </Container>
                 </Box>
