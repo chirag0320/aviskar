@@ -55,6 +55,7 @@ function UpdateAddress(props: UpdateAddress) {
   const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
   const [countryValue, setcountryValue] = useState<any>('')
   const [stateValue, setstateValue] = useState<any>('')
+  const [phoneInputValue, setPhoneInputValue] = useState("")
   const {
     register,
     reset,
@@ -175,9 +176,10 @@ function UpdateAddress(props: UpdateAddress) {
     setValue('State', existingAddress?.stateName);
     setStateId(existingAddress?.state);
     setValue('Country', existingAddress?.country || existingAddress?.countryId)
-    setValue("Contact" ,existingAddress?.phoneNumber)
+    setValue("Contact", existingAddress?.phoneNumber)
     setcountryValue(existingAddress?.country || existingAddress?.countryId)
     setstateValue(existingAddress?.stateName)
+    setPhoneInputValue(existingAddress?.phoneNumber)
     return () => {
       reset()
     }
@@ -248,6 +250,8 @@ function UpdateAddress(props: UpdateAddress) {
               variant="outlined"
               margin="none"
               className="ContactSelect"
+              error={errors.Contact}
+              value={phoneInputValue}
             ></RenderFields>
             <RenderFields
               register={register}
