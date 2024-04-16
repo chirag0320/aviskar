@@ -23,6 +23,9 @@ const theme: Theme = createTheme({
     success: {
       main: variable.success,
     },
+    error: {
+      main: variable.error,
+    },
     divider: "#1d212933",
     tonalOffset: 0.1,
     text: {

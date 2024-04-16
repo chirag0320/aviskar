@@ -3,6 +3,7 @@ import { Box, FormControl, Select, RadioGroup, FormControlLabel, FormLabel, Radi
 import { Controller } from 'react-hook-form'
 import classNames from 'classnames'
 import PhoneInput from 'react-phone-input-2'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 // Hooks
 import { useToggle } from '../../hooks'
@@ -358,6 +359,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 onBlur={field.onBlur}
                 preferredCountries={['au']}
                 // {...field}
+                inputClass={classNames("form-control", { "error": !!error })}
               />
             )}
             {...register(name)}

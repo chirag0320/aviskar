@@ -179,6 +179,7 @@
         }
 
         .MuiDialogContent-root {
+          padding-top: 2px;
           @include padding-horizontal(20);
 
           .AllFields {
@@ -266,6 +267,9 @@
                   .MuiAutocomplete-endAdornment {
                     position: static;
                     transform: none;
+                    .MuiAutocomplete-clearIndicator {
+                      margin-right: initial;
+                    }
                   }
                 }
               }
@@ -596,24 +600,6 @@
           .ContactField {
             position: relative;
             width: 100%;
-
-            .ContactSelect {
-              height: 100%;
-
-              .MuiFormHelperText-root {
-                display: none;
-              }
-            }
-
-            .ContactTextField {
-              .MuiFormControl-root {
-                .MuiInputBase-root {
-                  .MuiInputBase-input {
-                    padding-left: 90px;
-                  }
-                }
-              }
-            }
           }
 
           .MuiAutocomplete-root {
@@ -630,6 +616,9 @@
                 .MuiAutocomplete-endAdornment {
                   position: static;
                   transform: none;
+                  .MuiAutocomplete-clearIndicator {
+                    margin-right: initial;
+                  }
                 }
               }
             }
