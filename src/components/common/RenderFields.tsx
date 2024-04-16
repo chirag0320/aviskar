@@ -428,8 +428,6 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                   autoComplete={autoComplete}
                   variant={variant}
                   InputProps={{ endAdornment }}
-                  {...register(name)}
-                  {...otherProps}
                   onChange={(event) => {
                     console.log("swdesfrgtfhy")
                     const numberRegex = /^-?\d*\.?\d*$/
@@ -446,6 +444,8 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                       e.preventDefault()
                   }}
                   value={value}
+                  {...register(name)}
+                  {...otherProps}
                 />
               </>
             )}
@@ -502,9 +502,9 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             onKeyDown={onKeyDown}
             // label={label}
             InputProps={{ readOnly, onBlur, endAdornment }}
+            onChange={onChange}
             {...register(name)}
             {...otherProps}
-            onChange={onChange}
           />
         </FormControl>
       )
