@@ -12,24 +12,10 @@ import {
 } from "@mui/material"
 import React, { useEffect, useState } from 'react'
 
-const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, clearErrors, existingDocuments = null, provenanceDocuments, setProvenanceDocuments }: any) => {
+const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, clearErrors, provenanceDocuments, setProvenanceDocuments }: any) => {
     const { showToaster } = useShowToaster()
     const [selectedFile, setSelectedFile] = useState<any>(null);
-    const [docTypeValue, setDocTypeValue] = useState<string>("none");
-
-    useEffect(() => {
-        if (!existingDocuments) return;
-
-        setProvenanceDocuments(existingDocuments.map((doc: any) => {
-            return {
-                id: doc.id,
-                fileName: doc.fileName,
-                type: doc.type,
-                filePath: doc.filepath,
-                // documentType: doc.documentType
-            }
-        }))
-    }, [existingDocuments])
+    // const [docTypeValue, setDocTypeValue] = useState<string>("none");
 
     const handleDeleteFile = (id: string) => {
         setProvenanceDocuments(provenanceDocuments.filter((file: any) => file.id !== id));
@@ -89,7 +75,7 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                 getValues={getValues}
                 margin='none'
                 setValue={setValue}
-                value={docTypeValue}
+                value="none"
                 className='SelectValue'
             >
                 <MenuItem value='none'>Select Document Type</MenuItem>

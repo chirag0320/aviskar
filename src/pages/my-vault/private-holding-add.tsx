@@ -98,9 +98,13 @@ function privateHoldingAdd({ location }: { location: any }) {
         WeightType: "none",
         Account: "none"
     });
+    // documents and image state
     const [provenanceDocuments, setProvenanceDocuments] = useState<IFile[]>([]);
     const [productPhotos, setProductPhotos] = useState<IFile[]>([]);
+
+    // dynamic fields state
     const [dynamicSpecificationFields, setDynamicSpecificationFields] = useState<ISpecificationField[] | null>(null);
+    const [dynamicCustomSpecificationFields, setDynamicCustomSpecificationFields] = useState<ISpecificationField[] | null>(null);
 
     const {
         register,
@@ -141,6 +145,23 @@ function privateHoldingAdd({ location }: { location: any }) {
         setValue("Weight", currentPrivateHolding.weight);
         setValue("Qty", currentPrivateHolding.qty.toString());
         setValue("PurchasePrice", currentPrivateHolding.price.toString())
+        setProvenanceDocuments(currentPrivateHolding.attachments.filter(doc => doc.type !== "ProductPhotos").map((doc: any) => {
+            return {
+                id: doc.id,
+                fileName: doc.fileName,
+                type: doc.type,
+                filePath: doc.filepath,
+                // documentType: doc.documentType
+            }
+        }))
+        setProductPhotos(currentPrivateHolding.attachments.filter(doc => doc.type === "ProductPhotos").map((doc: any) => {
+            return {
+                id: doc.id,
+                fileName: doc.fileName,
+                type: doc.type,
+                filePath: doc.filepath
+            }
+        }))
 
         if (!formDropdownsKeys) return;
 
@@ -173,6 +194,16 @@ function privateHoldingAdd({ location }: { location: any }) {
     })
 
     const onSubmit = async (data: IPrivateHoldingAddInputs) => {
+        if (!formDropdownsKeys) return;
+
+        const prepareDynamicSpecificationFields = dynamicSpecificationFields?.filter(field => field[Object.keys(field)[0]].specificationName !== "none" && field[Object.keys(field)[0]].value !== "none").map((field) => {
+            return {
+                "SpecificationAttributeOptionId": field[Object.keys(field)[0]].value,
+                "SpecificationAttributeId": field[Object.keys(field)[0]].specificationName,
+                "SpecificationAttributeOptionOther": ""
+            }
+        })
+        console.log("🚀 ~ prepareDynamicSpecificationFields", prepareDynamicSpecificationFields)
         let prepareData: IPrivateHoldingAddorEditQuery = {
             // "Id": 0,
             CustomerID: data.Account,
@@ -213,7 +244,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                     "SpecificationAttributeOptionOther": ""
                 },
                 // add specification attribute
-            ],
+            ].concat(prepareDynamicSpecificationFields ? prepareDynamicSpecificationFields : []),
             CustomeAttribute: [],
             Attachments: provenanceDocuments.map((file) => {
                 return {
@@ -440,7 +471,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         <MenuItem value='2'>kilograms</MenuItem>
                                     </RenderFields>
                                 </Stack>
-                                <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} getAppliedSpecificationFields={getAppliedSpecificationFields} />
+                                <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} setDynamicSpecificationFields={setDynamicSpecificationFields} setDynamicCustomSpecificationFields={setDynamicCustomSpecificationFields} />
                                 <Stack className="RowWrapper">
                                     <BasicDatePicker setValue={setValue} existingDate={currentPrivateHolding ? currentPrivateHolding?.purchaseDate : null} />
                                     <RenderFields
@@ -477,8 +508,8 @@ function privateHoldingAdd({ location }: { location: any }) {
                                     />
                                 </Stack>
                                 <Stack className="RowWrapper DocumentPhotosContentWrapper">
-                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type !== "ProductPhotos") : null} provenanceDocuments={provenanceDocuments} setProvenanceDocuments={setProvenanceDocuments} />
-                                    <ProductPhotos register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type === "ProductPhotos") : null} productPhotos={productPhotos} setProductPhotos={setProductPhotos} />
+                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} provenanceDocuments={provenanceDocuments} setProvenanceDocuments={setProvenanceDocuments} />
+                                    <ProductPhotos register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} productPhotos={productPhotos} setProductPhotos={setProductPhotos} />
                                 </Stack>
                                 <Stack sx={{ gap: "20px", justifyContent: "flex-end" }} className='BottomButtonsWrapper'>
                                     <Button variant="outlined" size="large">Clear</Button>
