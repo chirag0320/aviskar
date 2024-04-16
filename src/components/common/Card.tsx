@@ -636,7 +636,6 @@ export const AddressCard = (props: AddressCardProps) => {
   const handleCloseUpdateAccount = () => {
     setOpenUpdateAccount(false);
   }
-
   return (
     <Box className="AddressCard">
       <Stack className="CardHeader">
@@ -658,7 +657,7 @@ export const AddressCard = (props: AddressCardProps) => {
       </Box>
 
       <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={handleCloseUpdateAddress} existingAddress={address} isComingFromMyVault={true} />
-      <AddAccount dialogTitle="Update account" open={openUpdateAccount} alignment={accountData?.accountType ?? "1"} onClose={handleCloseUpdateAccount} existingAccount={accountData} />
+      {openUpdateAccount && <AddAccount dialogTitle="Update account" open={openUpdateAccount} alignment={accountData?.accountType ?? "1"} onClose={handleCloseUpdateAccount} existingAccount={accountData} hadleSecondaryAction={handleCloseUpdateAccount}/>}
     </Box>
   );
 };
