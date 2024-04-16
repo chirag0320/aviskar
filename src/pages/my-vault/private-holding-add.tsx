@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useReducer } from "react";
 import {
     Box, Button, Container, IconButton, MenuItem, Stack, Table,
     TableBody,
@@ -25,8 +25,8 @@ import { IPrivateHoldingAddInputs } from "@/types/myVault";
 import { getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
 import DynamicFields from "@/components/partials/my-vault/private-holding-form/DynamicFields";
 import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
-// import { RenderDropdownItems } from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
-// import RenderDropdownItems from "@/components/partials/my-vault/private-holding-form/RenderDropdownItems";
+import ProductPhotos from "@/components/partials/my-vault/private-holding-form/ProductPhotos";
+import useRequireLogin from "@/hooks/useRequireLogin";
 
 const schema = yup.object().shape({
     Account: yup.string().notOneOf(["none"], "Account is required field"),
@@ -38,42 +38,50 @@ const schema = yup.object().shape({
     Purity: yup.string().notOneOf(["none"], "Purity is required field"),
     Weight: yup.string().trim().required("Weight is required field"),
     WeightType: yup.string().notOneOf(["none"], "Weight Type is required field"),
-    // Specification: yup.string().trim(),
-    // Value: yup.string().trim(),
-    // CustomSpecification: yup.string().trim(),
-    // CustomValue: yup.string().trim(),
+    Date: yup.string().required("Date is required field"),
     PurchasePrice: yup.string().trim().required("Purchase Price is required field"),
     PurchaseFrom: yup.string().trim().required("Purchase From is required field"),
     Qty: yup.string().required("Quantity is required field"),
-    ProvenanceDocuments: yup.string().trim(),
-    ProductPhotos: yup.string().trim().required("Product Photos is required field"),
-    DocumentType: yup.string().notOneOf(["none"], "Document Type is required field"),
+    // ProvenanceDocuments: yup.string().trim(),
+    // ProductPhotos: yup.string().trim().required("Product Photos is required field"),
+    // DocumentType: yup.string().notOneOf(["none"], "Document Type is required field"),
 });
 
-function createDataPhotos(
-    fileName: string,
-) {
-    return { fileName };
+function dropdownStateReducer(state: any, action: any) {
+    switch (action.type) {
+        case "APPLY_VALUES":
+            return {
+                Account: action.nextAccount,
+                Mint: action.nextMint,
+                Metal: action.nextMetal,
+                Type: action.nextType,
+                Series: action.nextSeries,
+                Purity: action.nextPurity,
+                WeightType: action.nextWeightType
+            }
+        default:
+            return state;
+    }
 }
 
-const photosRows = [
-    createDataPhotos(
-        "test.png",
-    ),
-    createDataPhotos(
-        "abc.gif",
-    ),
-
-];
-
 function privateHoldingAdd({ location }: { location: any }) {
+    const { loadingForCheckingLogin } = useRequireLogin()
     const loading = useAppSelector(state => state.myVault.loading);
     const currentPrivateHolding = useAppSelector(state => state.myVault.currentPrivateHolding)
     const formDropdowns = useAppSelector(state => state.myVault.privateHoldingFormDropdowns);
-    console.log("🚀 ~ privateHoldingAdd ~ formDropdowns:", formDropdowns)
-    // console.log("🚀 ~ privateHoldingAdd ~ currentPrivateHolding:", currentPrivateHolding)
+    const formDropdownsKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsKeys);
+    const formDropdownsReverseKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsReverseKeys);
     const dispatch = useAppDispatch()
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+    const [dropdownState, dropdownDispatch] = useReducer(dropdownStateReducer, {
+        Mint: "none",
+        Metal: "none",
+        Type: "none",
+        Series: "none",
+        Purity: "none",
+        WeightType: "none",
+        Account: "none"
+    });
 
     const {
         register,
@@ -86,18 +94,6 @@ function privateHoldingAdd({ location }: { location: any }) {
     } = useForm<IPrivateHoldingAddInputs>({
         resolver: yupResolver(schema)
     })
-
-    console.log("🚀 ~ privateHoldingAdd ~ getValues:", getValues("Account"))
-    // to show intial placeholder
-    useEffect(() => {
-        setValue("Account", "none")
-        setValue("MintOrBrand", "none")
-        setValue("Metal", "none")
-        setValue("Type", "none")
-        setValue("Series", "none")
-        setValue("Purity", "none")
-        setValue("WeightType", "none")
-    }, [])
 
     useLayoutEffect(() => {
         const fetchFormDropdowns = async () => {
@@ -117,19 +113,97 @@ function privateHoldingAdd({ location }: { location: any }) {
         fetchHolding()
     }, [])
 
+
+
     // set intial form values if user wants to edit
     useEffect(() => {
         if (!currentPrivateHolding) return;
+
         setValue("ProductName", currentPrivateHolding.productName)
-    }, [currentPrivateHolding])
+        setValue("PurchaseFrom", currentPrivateHolding.purchasedFrom);
+        setValue("Weight", currentPrivateHolding.weight);
+        setValue("Qty", currentPrivateHolding.qty.toString());
+        setValue("PurchasePrice", currentPrivateHolding.price.toString())
+
+        if (!formDropdownsKeys) return;
+
+        function getNextSpecificationItem(specificationName: string) {
+            return currentPrivateHolding!.productattribute.find((option: any) => formDropdownsKeys![option["specificationAttributeOptionId"].toString()] === specificationName)
+        }
+
+        const nextMint = getNextSpecificationItem("Mint");
+        const nextMetal = getNextSpecificationItem("Metal");
+        const nextType = getNextSpecificationItem("Type");
+        const nextSeries = getNextSpecificationItem("Series");
+        const nextPurity = getNextSpecificationItem("Purity");
+
+        dropdownDispatch({
+            type: "APPLY_VALUES",
+            nextAccount: "test",
+            // NOTE : static
+            nextMint: nextMint ? nextMint["specificationAttributeId"] : "0",
+            nextMetal: nextMetal ? nextMetal["specificationAttributeId"] : "0",
+            nextType: nextType ? nextType["specificationAttributeId"] : "0",
+            nextSeries: nextSeries ? nextSeries["specificationAttributeId"] : "0",
+            nextPurity: nextPurity ? nextPurity["specificationAttributeId"] : "0",
+            nextWeightType: "0"
+        })
+    }, [currentPrivateHolding, formDropdownsKeys])
 
 
-    const onSubmit = (data: any) => {
-        console.log(data);
+    const onSubmit = (data: IPrivateHoldingAddInputs) => {
+        // console.log("🚀 ~ onSubmit ~ data:", data)
+
+        const prepareData = {
+            // "Id": 0,
+            CustomerID: data.Account,
+            // "SubCustomerID": 74038,
+            // "ProductId": 0,
+            ProductName: data.ProductName,
+            PurchaseDate: data.Date,
+            Price: data.PurchasePrice,
+            Qty: data.Qty,
+            // "RunningQty": 12,
+            PurchasedFrom: data.PurchaseFrom,
+            Weight: data.Weight,
+            WeightType: data.WeightType,
+            Attribute: [
+                {
+                    "SpecificationAttributeOptionId": data.MintOrBrand,
+                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Mint"] : "0",
+                    "SpecificationAttributeOptionOther": ""
+                },
+                {
+                    "SpecificationAttributeOptionId": data.Metal,
+                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Metal"] : "0",
+                    "SpecificationAttributeOptionOther": ""
+                },
+                {
+                    "SpecificationAttributeOptionId": data.Series,
+                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Series"] : "0",
+                    "SpecificationAttributeOptionOther": ""
+                },
+                {
+                    "SpecificationAttributeOptionId": data.Type,
+                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Type"] : "0",
+                    "SpecificationAttributeOptionOther": ""
+                },
+                {
+                    "SpecificationAttributeOptionId": data.Purity,
+                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Purity"] : "0",
+                    "SpecificationAttributeOptionOther": ""
+                },
+            ],
+            CustomAttribute: [],
+            Attachments: []
+        }
+        console.log("🚀 ~ onSubmit ~ prepareData:", prepareData)
     }
 
     const renderDropdownItems = (dropdowns: any) => dropdowns?.map((option: any) => <MenuItem key={option.specificationAttributeOptionsId} value={option.specificationAttributeOptionsId}>{option.specificationOption}</MenuItem>);
-
+    if (loadingForCheckingLogin) {
+        return
+    }
     return (
         <>
             <Loader open={loading} />
@@ -139,7 +213,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                     title="Add New Private Holding"
                     lang="en"
                 />
-                <PageTitle title="Add New Private Holding" backToDashboard={true} />
+                <PageTitle title={searchParams.has("holdingId") ? "Update Private Holding" : "Add New Private Holding"} backToDashboard={true} />
                 <Box id="PrivateHoldingAddPage" className='PrivateHoldingAddPage' component="section">
                     <Container>
                         <Box className="Content PrivateHoldingAddContent">
@@ -152,7 +226,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         name="Account"
                                         label="Account:"
                                         control={control}
-                                        defaultValue="none"
+                                        value={dropdownState.Account}
                                         getValues={getValues}
                                         setValue={setValue}
                                         variant='outlined'
@@ -182,9 +256,9 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         error={errors.MintOrBrand}
                                         name="MintOrBrand"
                                         label="Mint/Brand"
+                                        value={dropdownState.Mint}
                                         control={control}
                                         variant='outlined'
-                                        defaultValue="none"
                                         setValue={setValue}
                                         getValues={getValues}
                                         clearErrors={clearErrors}
@@ -204,9 +278,9 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         name="Metal"
                                         getValues={getValues}
                                         label="Metal"
+                                        value={dropdownState.Metal}
                                         control={control}
                                         setValue={setValue}
-                                        defaultValue="none"
                                         clearErrors={clearErrors}
                                         variant='outlined'
                                         margin='none'
@@ -225,7 +299,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         setValue={setValue}
                                         getValues={getValues}
                                         label="Type"
-                                        defaultValue="none"
+                                        value={dropdownState.Type}
                                         control={control}
                                         variant='outlined'
                                         clearErrors={clearErrors}
@@ -246,7 +320,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         name="Series"
                                         getValues={getValues}
                                         label="Series"
-                                        defaultValue="none"
+                                        value={dropdownState.Series}
                                         control={control}
                                         setValue={setValue}
                                         clearErrors={clearErrors}
@@ -267,7 +341,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         label="Purity"
                                         getValues={getValues}
                                         setValue={setValue}
-                                        defaultValue="none"
+                                        value={dropdownState.Purity}
                                         control={control}
                                         clearErrors={clearErrors}
                                         variant='outlined'
@@ -286,7 +360,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         error={errors.Weight}
                                         name="Weight"
                                         label="Weight"
-                                        type="number"
+                                        // type="number"
                                         placeholder="Enter Weight"
                                         control={control}
                                         variant='outlined'
@@ -300,10 +374,10 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         error={errors.WeightType}
                                         name="WeightType"
                                         clearErrors={clearErrors}
+                                        value={dropdownState.WeightType}
                                         label="Weight Type"
                                         getValues={getValues}
                                         control={control}
-                                        defaultValue="none"
                                         variant='outlined'
                                         setValue={setValue}
                                         margin='none'
@@ -316,9 +390,9 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         <MenuItem value='2'>kilograms</MenuItem>
                                     </RenderFields>
                                 </Stack>
-                                <DynamicFields />
+                                <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} />
                                 <Stack className="RowWrapper">
-                                    <BasicDatePicker />
+                                    <BasicDatePicker setValue={setValue} existingDate={currentPrivateHolding ? currentPrivateHolding?.purchaseDate : null} />
                                     <RenderFields
                                         register={register}
                                         error={errors.PurchasePrice}
@@ -353,53 +427,12 @@ function privateHoldingAdd({ location }: { location: any }) {
                                     />
                                 </Stack>
                                 <Stack className="RowWrapper DocumentPhotosContentWrapper">
-                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} />
-                                    <Box className="PhotosContentwrapper">
-                                        <RenderFields
-                                            type="file"
-                                            register={register}
-                                            error={errors.ProductPhotos}
-                                            name="ProductPhotos"
-                                            label="Product Photos:"
-                                            control={control}
-                                            variant='outlined'
-                                            margin='none'
-                                            required
-                                        >
-                                        </RenderFields>
-                                        <Box className="CommonTableWrapper">
-                                            <TableContainer
-                                                className="PhotosDetailTablewrapper  CommonTableDesign"
-                                            >
-                                                <Table className="PhotosDetailTable" sx={{ minWidth: 400 }} aria-label="Photos Details table">
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell sx={{ minWidth: "300px" }}>File Name</TableCell>
-                                                            <TableCell sx={{ minWidth: "100px" }}>Remove</TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {photosRows.map((row) => (
-                                                            <TableRow
-                                                                key={row.fileName}
-                                                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                            >
-                                                                <TableCell component="th" scope="row">{row.fileName}</TableCell>
-                                                                <TableCell>
-                                                                    <IconButton className="DeleteButton"><Delete1Icon /></IconButton>
-                                                                </TableCell>
-                                                            </TableRow>
-                                                        ))}
-
-                                                    </TableBody>
-                                                </Table>
-                                            </TableContainer>
-                                        </Box>
-                                    </Box>
+                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type !== "ProductPhotos") : null} />
+                                    <ProductPhotos register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type === "ProductPhotos") : null} />
                                 </Stack>
                                 <Stack sx={{ gap: "20px", justifyContent: "flex-end" }} className='BottomButtonsWrapper'>
+                                    <Button variant="outlined" size="large">Clear</Button>
                                     <Button variant="contained" size="large" type="submit">Save</Button>
-                                    <Button variant="outlined" size="large">Cancel</Button>
                                 </Stack>
                             </form>
                         </Box>

@@ -77,6 +77,11 @@ class MyVaultServices {
     static async convertToMarketPlace(body: ConversionData) {
         return axiosInstance.post(ENDPOINTS.convertToMarketPlace, body);
     }
+    // delete PrivateHoldings
+    static async deletePrivateHoldings(id: string) {
+        return axiosInstance.delete(ENDPOINTS.deletePrivateHoldings.replace('id',id));
+    }
+
 }
 
 export default MyVaultServices;

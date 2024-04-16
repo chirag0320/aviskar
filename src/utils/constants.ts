@@ -122,7 +122,10 @@ export const ENDPOINTS = {
     // sell qty
     sellQty: "myvault/EZLnvfaBlImG4dOHR",
     // convert to market place
-    convertToMarketPlace: "myvault/q9QOiEdTtEkrm6EVOewM2F"
+    convertToMarketPlace: "myvault/q9QOiEdTtEkrm6EVOewM2F",
+    //delete private holdings
+    deletePrivateHoldings: "myvault/q9QOiEdTtEkrm6EVOewM2F/id"
+    
 }
 export const StoreData = {
     storeCode: 12,

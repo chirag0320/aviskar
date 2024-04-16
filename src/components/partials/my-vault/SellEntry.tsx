@@ -9,10 +9,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from '@/components/common/RenderFields';
 import QuantityInputs from '@/components/partials/my-vault/QuantityInputs';
+import { SellData } from "@/types/myVault";
+import { sellQty } from "@/redux/reducers/myVaultReducer";
+import { useAppDispatch } from "@/hooks";
 
 interface SellEntry {
     open: boolean
     onClose: () => void
+    valueOfSellEntry: any
+    setValue: any
 }
 
 interface Inputs {
@@ -24,7 +29,8 @@ const schema = yup.object().shape({
 });
 
 function SellEntry(props: SellEntry) {
-    const { open, onClose } = props
+    const dispatch = useAppDispatch()
+    const { open, onClose, valueOfSellEntry, setValue } = props
 
     const {
         register,
@@ -36,23 +42,31 @@ function SellEntry(props: SellEntry) {
     })
 
     const onSubmit = (data: any) => {
+        const body: SellData = {
+            HoldingId: valueOfSellEntry?.holdingId,
+            SoldQuantity: valueOfSellEntry?.quantity,
+            SoldTo: valueOfSellEntry?.SoldTo,
+        }
+        dispatch(sellQty(body))
         onClose()
     }
-    const onQuantityChange = () => {
-
+    const onQuantityChange = (qty: any) => {
+        setValue('sellEntry', { ...valueOfSellEntry, quantity: qty })
     }
     return (
         <StyledDialog
             id="SellEntry"
             open={open}
             dialogTitle="SellEntry title"
-            onClose={onClose}
+            onClose={()=>{
+                onClose()
+            }}
             maxWidth="sm"
             className="PrivateHoldingCommonPopup"
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack className="AllFields">
-                    <QuantityInputs quantityLabel="Quantity sold :" onQuantityChange={onQuantityChange}/>
+                    <QuantityInputs quantityLabel="Quantity sold :" onQuantityChange={onQuantityChange} qty={valueOfSellEntry?.quantity}/>
                     <RenderFields
                         register={register}
                         error={errors.SoldTo}
@@ -62,6 +76,10 @@ function SellEntry(props: SellEntry) {
                         variant='outlined'
                         margin='none'
                         fullWidth
+                        onChange={(e) => {
+                            setValue('sellEntry', { ...valueOfSellEntry, 'SoldTo': e.target.value })
+                        }}
+                        value={valueOfSellEntry?.SoldTo}
                     />
                 </Stack>
                 <Stack className="ActionWrapper">

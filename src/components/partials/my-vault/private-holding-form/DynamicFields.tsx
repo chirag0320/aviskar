@@ -1,25 +1,52 @@
 import { Delete1Icon } from '@/assets/icons';
 import RenderFields from '@/components/common/RenderFields'
-import useDebounce from '@/hooks/useDebounce';
+import { useAppSelector } from '@/hooks';
 import { IPrivateHoldingAddInputs } from '@/types/myVault';
 import { IndividualAccountFormSchema } from '@/utils/accountFormSchemas.schema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Divider, IconButton, MenuItem, Stack, Typography } from '@mui/material'
-import React, { useDeferredValue, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form';
+import { Button, IconButton, MenuItem, Stack } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { set, useForm } from 'react-hook-form';
+
+const fixedFields = new Set<string>(["Mint", "Metal", "Type", "Series", "Purity"]);
 
 export interface ISpecificationField {
     [key: string]: { specificationName: string, value: string }
 }
-// export interface ICustomeSpecificationField {
-//     [key: string]: { specificationName: string, value: string }
-// }
 
-
-const DynamicFields = () => {
+const DynamicFields = ({ existingFields }: {
+    existingFields: {
+        specificationAttributeId: number;
+        specificationAttributeOptionId: number;
+        specificationAttributeOptionOther: string | null;
+    }[] | null
+}) => {
     const [specificationFields, setSpecificationField] = useState<ISpecificationField[]>([]);
-    console.log("🚀 ~ DynamicFields ~ specificationFields:", specificationFields)
+    // console.log("🚀 ~ specificationFields:", specificationFields)
+    const formDropdownsKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsKeys);
+    const formDropdownsReverseKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsReverseKeys);
+    const formDropdowns = useAppSelector(state => state.myVault.privateHoldingFormDropdowns);
+    // console.log("🚀 ~ DynamicFields ~ specificationFields:", specificationFields)
     const [customSpecificationFields, setCustomSpecificationField] = useState<ISpecificationField[]>([]);
+
+    useEffect(() => {
+        if (!existingFields || !formDropdownsKeys) return;
+
+        const currentFields: ISpecificationField[] = [];
+        existingFields.forEach((field) => {
+            const curField = formDropdownsKeys[field.specificationAttributeOptionId.toString()];
+            if (!fixedFields.has(curField)) {
+                // console.log("🚀 ~ DynamicFields ~ specificationFields:", curField)
+                currentFields.push({
+                    [field.specificationAttributeOptionId]: {
+                        specificationName: field.specificationAttributeOptionId.toString(),
+                        value: field.specificationAttributeId.toString()
+                    }
+                })
+            }
+        })
+        setSpecificationField(currentFields);
+    }, [existingFields, formDropdownsKeys])
 
     // Just an dummy react hook form
     const {
@@ -78,6 +105,7 @@ const DynamicFields = () => {
                     onChange={(value) => {
                         const newFields = [...specificationFields];
                         newFields[index][Object.keys(field)[0]].specificationName = value;
+                        // newFields[index][Object.keys(field)[0]].value = "none";
                         setSpecificationField(newFields);
                     }}
                     control={control}
@@ -89,9 +117,12 @@ const DynamicFields = () => {
                 // required
                 >
                     <MenuItem key='test' value='none'>Select Specfication</MenuItem>
-                    <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
+                    {/* <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
                     <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                    <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
+                    <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem> */}
+                    {formDropdowns && formDropdownsReverseKeys && Object.keys(formDropdowns).map((option: string) => {
+                        return !fixedFields.has(option) ? <MenuItem key={option} value={formDropdownsReverseKeys[option]}>{option}</MenuItem> : null;
+                    })}
                 </RenderFields>
                 <RenderFields
                     type="select"
@@ -113,9 +144,9 @@ const DynamicFields = () => {
                     className='SelectValue'
                 // required
                 >
-                    <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                    <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                    <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem>
+                    {formDropdowns && formDropdownsKeys && formDropdowns[formDropdownsKeys[field[Object.keys(field)[0]]?.specificationName]]?.map((dropdown: any) => {
+                        return (<MenuItem value={dropdown.specificationAttributeOptionsId}>{dropdown.specificationOption}</MenuItem>)
+                    })}
                 </RenderFields>
                 <IconButton className="DeleteButton" onClick={() => handleDeleteSpecificationField(Object.keys(field)[0])}><Delete1Icon /></IconButton>
             </Stack>)}

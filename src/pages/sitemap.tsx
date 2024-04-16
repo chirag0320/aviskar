@@ -17,8 +17,6 @@ import SitemapList from "@/components/partials/sitemap/SitemapList"
 import Services from "@/components/partials/sitemap/Services"
 
 function Sitemap() {
-  const { siteMapData } = useAppSelector(state => state.homePage)
-  console.log("🚀 ~ Sitemap ~ siteMapData:", siteMapData)
   const [state] = useState({ service: getSiteMapData })
   useAPIoneTime(state)
 

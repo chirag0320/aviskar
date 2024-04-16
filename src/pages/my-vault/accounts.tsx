@@ -17,22 +17,19 @@ import AddAccount from "@/components/partials/my-vault/AddAccount"
 import { getStateAndCountryLists } from "@/redux/reducers/checkoutReducer"
 import Toaster from "@/components/common/Toaster"
 import { navigate } from "gatsby"
+import useRequireLogin from "@/hooks/useRequireLogin"
 
 function Accounts() {
+    const { loadingForCheckingLogin } = useRequireLogin()
+    if (loadingForCheckingLogin) {
+      return
+    }
     const openToaster = useAppSelector(state => state.homePage.openToaster)
     const loading = useAppSelector(state => state.myVault.loading)
     const accountsData = useAppSelector(state => state.myVault.accounts)
     const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
     const [addAccount, setAddAccount] = useState<boolean>(false)
-    const { isLoggedIn } = useAppSelector((state) => state.homePage)
     const [alignment, setAlignment] = React.useState('Individual');
-    // console.log("🚀 ~ Accounts ~ alignment:", alignment)
-
-    if (!isLoggedIn) {
-        navigate('/login', { replace: true })
-        return;
-    }
-
     useAPIoneTime({
         service: getAccounts,
         endPoint: ENDPOINTS.getAccounts

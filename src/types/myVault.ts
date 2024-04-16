@@ -255,6 +255,7 @@ export interface IPrivateHoldingAddInputs {
     CustomSpecification: string
     CustomValue: string
     PurchasePrice: string
+    Date: string
     PurchaseFrom: string
     Qty: string
     ProvenanceDocuments: string

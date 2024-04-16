@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, FormControl, Select, RadioGroup, FormControlLabel, FormLabel, Radio, FormHelperText, Checkbox, FormGroup, Switch, TextField, IconButton, InputAdornment, Button, Stack } from '@mui/material'
 import { Controller } from 'react-hook-form'
 import classNames from 'classnames'
 import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 // Hooks
 import { useToggle } from '../../hooks'
@@ -98,6 +100,11 @@ const RenderFields: React.FC<RenderFieldProps> = ({
 }) => {
   const [passwordVisibility, togglePasswordVisibility] = useToggle(false)
 
+  useEffect(() => {
+    if (setValue)
+      setValue(name, value)
+  }, [value])
+
   let fieldType = null
   switch (type) {
     case 'select':
@@ -140,7 +147,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                   if (onChange) {
                     onChange(e.target.value)
                   }
-                  if (clearErrors && getValues() && getValues(name) !== "none") {
+                  if (clearErrors && getValues && getValues(name) !== "none") {
                     clearErrors(name)
                   }
                 }
@@ -153,6 +160,50 @@ const RenderFields: React.FC<RenderFieldProps> = ({
         </FormControl>
       );
       break;
+    // case 'select':
+    //   fieldType = (
+    //     <FormControl fullWidth={fullWidth} margin={margin} color={color}>
+    //       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+    //       <Controller
+    //         control={control}
+    //         render={({ field }) => (
+    //           <Select
+    //             inputProps={{ id: name }}
+    //             value={field.value}
+    //             defaultValue={defaultValue}
+    //             error={!!error}
+    //             disabled={disabled}
+    //             variant={variant}
+    //             MenuProps={MenuProps}
+    //             sx={
+    //               field.value === 'none' || field.value === ''
+    //                 ? {
+    //                   color: "#1d21296b",
+    //                 }
+    //                 : {
+    //                   color: "#1D2129",
+    //                 }
+    //             }
+    //             {...register(name)}
+    //             {...otherProps}
+    //             onChange={(event) => {
+    //               // Call the provided onChange function
+    //               field.onChange(event)
+    //               if (onChange) {
+    //                 onChange()
+    //               }
+    //               // You can also perform additional actions here if needed
+    //             }}
+    //           >
+    //             {children}
+    //           </Select>
+    //         )}
+    //         name={name}
+    //         {...otherProps}
+    //       />
+    //     </FormControl>
+    //   )
+    //   break
 
     case 'radio':
       if (!options) return null
@@ -363,7 +414,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             name={name}
             control={control}
             defaultValue={value} // Set defaultValue instead of passing value prop
-            render={({ field: { value, onChange } }) => (
+            render={({ field: { } }) => (
               <>
                 <TextField
                   id={name}
@@ -371,25 +422,29 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                   fullWidth={fullWidth}
                   error={!!error}
                   placeholder={placeholder}
-                  value={value}
                   defaultValue={defaultValue}
                   disabled={disabled}
                   autoComplete={autoComplete}
                   variant={variant}
                   InputProps={{ endAdornment }}
+                  {...register(name)}
+                  {...otherProps}
                   onChange={(event) => {
+                    console.log("swdesfrgtfhy")
                     const numberRegex = /^-?\d*\.?\d*$/
                     if (!numberRegex.test(event.target.value)) {
                       return
                     }
-                    onChange(event)
+                    if (onChange) {
+                      console.log("swdesfrgtfhy")
+                      onChange(event)
+                    }
                   }}
                   onKeyDown={(e) => {
                     ;['e', 'E', '+', '-', '.'].includes(e.key) &&
                       e.preventDefault()
                   }}
-                  {...register(name)}
-                  {...otherProps}
+                  value={value}
                 />
               </>
             )}
@@ -398,6 +453,31 @@ const RenderFields: React.FC<RenderFieldProps> = ({
         </FormControl>
       )
       break
+
+    // case "date":
+    //   fieldType = (
+    //     <FormControl
+    //       fullWidth={fullWidth}
+    //       margin={margin}
+    //       {...(error ? { error: true } : {})}
+    //     >
+    //       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+    //       <Controller
+    //         name={name}
+    //         control={control}
+    //         defaultValue={value} // Set defaultValue instead of passing value prop
+    //         render={({ field: { value, onChange } }) => (
+    //           <DatePicker className="DatePicker"
+    //             sx={{ width: 260 }}
+    //             name={name}
+    //             value={dateValue}
+    //             onChange={(newValue) => setDateValue(newValue)}
+    //           />
+    //         )}
+    //       />
+
+    //     </FormControl>
+    //   )
 
     default:
       fieldType = (
@@ -419,11 +499,11 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             disabled={disabled}
             variant={variant}
             onKeyDown={onKeyDown}
-            onChange={onChange}
             // label={label}
             InputProps={{ readOnly, onBlur, endAdornment }}
             {...register(name)}
             {...otherProps}
+            onChange={onChange}
           />
         </FormControl>
       )

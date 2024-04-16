@@ -12,8 +12,10 @@ import { PlusIcon } from "@/assets/icons"
 import PrivateHoldingCards from "@/components/partials/my-vault/PrivateHoldingsCard"
 import { getPrivateHoldingsList } from "@/redux/reducers/myVaultReducer"
 import { navigate } from "gatsby"
+import useRequireLogin from "@/hooks/useRequireLogin"
 
 function privateHolding(paramsData: any) {
+    const { loadingForCheckingLogin } = useRequireLogin()
     const loading = useAppSelector(state => state.myVault.loading)
     const dispatch = useAppDispatch()
 
@@ -23,7 +25,9 @@ function privateHolding(paramsData: any) {
         }
         fetchPrivateHoldingsList()
     }, [])
-
+    if (loadingForCheckingLogin) {
+        return
+    }
     return (
         <>
             <Loader open={loading} />
