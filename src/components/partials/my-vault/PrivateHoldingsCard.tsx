@@ -11,12 +11,16 @@ import { deletePrivateHoldings, getPrivateHoldingsListLivePrice } from '@/redux/
 import { ENDPOINTS } from '@/utils/constants';
 import { IPrivateHolding, IPrivateHoldingLivePrice } from '@/types/myVault';
 import { navigate } from 'gatsby';
+import Toaster from '@/components/common/Toaster';
+import useShowToaster from '@/hooks/useShowToaster';
 
 const getColorForPosition = (position: number) => {
     return PriceFacturationEnum[position.toString() as keyof typeof PriceFacturationEnum];
 };
 
-function PrivateHoldingCards() {
+function PrivateHoldingCards({fetchPrivateHoldingsList}:any) {
+    const openToaster = useAppSelector(state => state.homePage.openToaster)
+    const { showToaster } = useShowToaster();
     const privateHoldingsList = useAppSelector(state => state.myVault.privateHoldingsList)
     const privateHoldingsListLivePrice = useAppSelector(state => state.myVault.privateHoldingsListLivePrice)
     const dispatch = useAppDispatch()
@@ -88,16 +92,25 @@ function PrivateHoldingCards() {
         })
         toggleSellEntry(true)
     }
-    const setValueForTheSellToUsPopUp = (key:any,value: any) => {
+    const setValueForTheSellToUsPopUp = (key: any, value: any) => {
         setCurrentValueOfPopUp((prev: any) => {
             return ({ ...prev, [key]: { ...prev[key], ...value } })
         })
     }
-    const deleteHoldings=(item:any)=>{
-        dispatch(deletePrivateHoldings({id:item?.id}))
+    const deleteHoldings = async (item: any) => {
+        const res = await dispatch(deletePrivateHoldings({ id: item?.id }))
+        if (res.payload.data.data == false) {
+            showToaster({
+                message: res.payload.data.message,
+                severity: 'error'
+            })
+            return
+        }
+        fetchPrivateHoldingsList()
     }
     return (
         <>
+            {openToaster && <Toaster />}
             {privateHoldingsData.length > 0 && privateHoldingsData?.map((item) => {
                 return (
                     <Card className="PrivateHoldingCard">
@@ -137,7 +150,7 @@ function PrivateHoldingCards() {
                             >
                                 <List>
                                     <ListItem>
-                                        <ListItemButton onClick={()=>{openConvertToListingPopUp(item)}}>
+                                        <ListItemButton onClick={() => { openConvertToListingPopUp(item) }}>
                                             <ListItemText primary="Convert To Listing" />
                                         </ListItemButton>
                                     </ListItem>
@@ -147,12 +160,12 @@ function PrivateHoldingCards() {
                                         </ListItemButton>
                                     </ListItem>
                                     <ListItem>
-                                        <ListItemButton onClick={()=>{openSellEntryPopUP(item)}}>
+                                        <ListItemButton onClick={() => { openSellEntryPopUP(item) }}>
                                             <ListItemText primary="sellentry" />
                                         </ListItemButton>
                                     </ListItem>
                                     <ListItem>
-                                        <ListItemButton onClick={()=>{deleteHoldings(item)}}>
+                                        <ListItemButton onClick={() => { deleteHoldings(item) }}>
                                             <ListItemText primary="Delete" />
                                         </ListItemButton>
                                     </ListItem>
@@ -160,8 +173,8 @@ function PrivateHoldingCards() {
                             </ClickTooltip>
                         </CardContent>
                         {openSellEntry && <SellEntry open={openSellEntry} onClose={toggleSellEntry} valueOfSellEntry={currentValueOfPopUp?.sellEntry} setValue={setValueForTheSellToUsPopUp} />}
-                        {openConvertToListing && <ConvertToListing open={openConvertToListing} onClose={toggleConvertToListing} valueOfConvertToListing={currentValueOfPopUp?.convertToListing} setValue={setValueForTheSellToUsPopUp}/>}
-                        {openSellToUs &&<SellToUs open={openSellToUs} onClose={toggleSellToUs} valueOfTheSellToUs={currentValueOfPopUp?.sellToUs} setValue={setValueForTheSellToUsPopUp} />}
+                        {openConvertToListing && <ConvertToListing open={openConvertToListing} onClose={toggleConvertToListing} valueOfConvertToListing={currentValueOfPopUp?.convertToListing} setValue={setValueForTheSellToUsPopUp} />}
+                        {openSellToUs && <SellToUs open={openSellToUs} onClose={toggleSellToUs} valueOfTheSellToUs={currentValueOfPopUp?.sellToUs} setValue={setValueForTheSellToUsPopUp} />}
                     </Card >
                 )
             }

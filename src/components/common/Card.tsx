@@ -381,17 +381,21 @@ export const UserStatsCard = (props: any) => {
           >
             <List>
               <ListItem>
-                <ListItemButton>
+                <ListItemButton onClick={()=>{navigate('/my-vault/order-history') }}>
                   <ListItemText primary="View orders" />
                 </ListItemButton>
               </ListItem>
               <ListItem>
-                <ListItemButton>
+                <ListItemButton onClick={()=>{
+                  navigate('/my-vault/private-holding-add')
+                }}>
                   <ListItemText primary="Add private holding " />
                 </ListItemButton>
               </ListItem>
               <ListItem>
-                <ListItemButton>
+                <ListItemButton onClick={()=>{
+                  navigate('/my-vault/private-holding')
+                }}>
                   <ListItemText primary="View private holdings" />
                 </ListItemButton>
               </ListItem>
@@ -414,7 +418,6 @@ export const UserStatsCard = (props: any) => {
 
 export const LineChartCard = (props: any) => {
   const { place, description, bgColor, currentPrice, low, high, valueForChart } = props;
-  console.log("🚀 ~ LineChartCard ~ currentPrice:", currentPrice)
   const [liveHoldingsOptions, setLiveHoldingsOptions] = useState<boolean>(false)
   const tooltipRef: any = useRef(null)
 
@@ -636,7 +639,6 @@ export const AddressCard = (props: AddressCardProps) => {
   const handleCloseUpdateAccount = () => {
     setOpenUpdateAccount(false);
   }
-
   return (
     <Box className="AddressCard">
       <Stack className="CardHeader">
@@ -658,7 +660,7 @@ export const AddressCard = (props: AddressCardProps) => {
       </Box>
 
       <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={handleCloseUpdateAddress} existingAddress={address} isComingFromMyVault={true} />
-      <AddAccount dialogTitle="Update account" open={openUpdateAccount} alignment={accountData?.accountType ?? "1"} onClose={handleCloseUpdateAccount} existingAccount={accountData} />
+      {openUpdateAccount && <AddAccount dialogTitle="Update account" open={openUpdateAccount} alignment={accountData?.accountType ?? "1"} onClose={handleCloseUpdateAccount} existingAccount={accountData} hadleSecondaryAction={handleCloseUpdateAccount}/>}
     </Box>
   );
 };

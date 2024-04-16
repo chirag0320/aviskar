@@ -15,11 +15,20 @@ import Seo from "@/components/common/Seo"
 import { PageTitle } from "@/components/common/Utils"
 import SitemapList from "@/components/partials/sitemap/SitemapList"
 import Services from "@/components/partials/sitemap/Services"
-
+const bodyForSiteMap = {
+  "search": "",
+  "pageNo": 0,
+  "pageSize": 50,
+  "sortBy": "",
+  "sortOrder": "",
+  "filters": {}
+}
 function Sitemap() {
-  const [state] = useState({ service: getSiteMapData })
+  const [state, setState] = useState({ service: getSiteMapData, body: bodyForSiteMap })
   useAPIoneTime(state)
-
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setState((prev) => ({ ...prev, body: { ...prev.body, pageNo: value-1 } }))
+  }
   return (
     <Layout>
       <Loader open={false} />
@@ -30,7 +39,7 @@ function Sitemap() {
       />
       <PageTitle title="Sitemap" />
       <Container id="PageSitemap">
-        <SitemapList />
+        <SitemapList handlePageChange={handlePageChange} />
         <Services />
       </Container>
     </Layout>
