@@ -3,8 +3,6 @@ import { Box, FormControl, Select, RadioGroup, FormControlLabel, FormLabel, Radi
 import { Controller } from 'react-hook-form'
 import classNames from 'classnames'
 import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 // Hooks
 import { useToggle } from '../../hooks'
