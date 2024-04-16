@@ -6,8 +6,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 // Hooks
 import { useAppDispatch, useAppSelector } from "@/hooks"
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
 
 // Componenets
 import StyledDialog from "@/components/common/StyledDialog"
@@ -395,6 +393,7 @@ function AddAccount(props: AddAccountProps) {
                   variant="outlined"
                   margin="none"
                   className="ContactSelect"
+                  error={errors.LastName}
                 ></RenderFields>
 
                 {/* <RenderFields
