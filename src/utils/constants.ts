@@ -115,6 +115,7 @@ export const ENDPOINTS = {
     getPrivateHoldingsListLivePrice: 'myvault/LlamWfOP1YkWQZEp74U',
     getPrivateHoldingWithId: "myvault/AymK5sLJJtY1Gq/", // dynamic
     getPrivateHoldingAddFormDropdowns: "myvault/PEiK9YP7bHBux2w9fxe",
+    addOrEditPrivateHolding: "myvault/nWHfULZySYaaROO",
     // re-orderAPI
     reOrder: 'myvault/RxcLCj5Rvlbs4OwCiSkaBg/Orderid',
     // enquiry
@@ -125,7 +126,7 @@ export const ENDPOINTS = {
     convertToMarketPlace: "myvault/q9QOiEdTtEkrm6EVOewM2F",
     //delete private holdings
     deletePrivateHoldings: "myvault/q9QOiEdTtEkrm6EVOewM2F/id"
-    
+
 }
 export const StoreData = {
     storeCode: 12,

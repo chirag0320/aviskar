@@ -21,13 +21,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import RenderFields from "@/components/common/RenderFields"
 import { Delete1Icon } from "@/assets/icons"
 import BasicDatePicker from "@/components/partials/my-vault/BasicDatePicker"
-import { IPrivateHoldingAddInputs } from "@/types/myVault";
-import { getConfigDropdowns, getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
-import DynamicFields from "@/components/partials/my-vault/private-holding-form/DynamicFields";
+import { IPrivateHoldingAddInputs, IPrivateHoldingAddorEditQuery } from "@/types/myVault";
+import { addOrEditPrivateHolding, getConfigDropdowns, getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
+import DynamicFields, { ISpecificationField } from "@/components/partials/my-vault/private-holding-form/DynamicFields";
 import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
 import ProductPhotos from "@/components/partials/my-vault/private-holding-form/ProductPhotos";
 import useRequireLogin from "@/hooks/useRequireLogin";
 import Toaster from "@/components/common/Toaster";
+import useShowToaster from "@/hooks/useShowToaster";
+import { hasFulfilled } from "@/utils/common";
 
 const schema = yup.object().shape({
     Account: yup.string().notOneOf(["none"], "Account is required field"),
@@ -84,6 +86,7 @@ function privateHoldingAdd({ location }: { location: any }) {
     const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
     const formDropdownsReverseKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsReverseKeys);
     const dispatch = useAppDispatch()
+    const { showToaster } = useShowToaster()
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
 
     const [dropdownState, dropdownDispatch] = useReducer(dropdownStateReducer, {
@@ -96,8 +99,8 @@ function privateHoldingAdd({ location }: { location: any }) {
         Account: "none"
     });
     const [provenanceDocuments, setProvenanceDocuments] = useState<IFile[]>([]);
-    // console.log("🚀 ~ privateHoldingAdd ~ provenanceDocuments:", provenanceDocuments)
     const [productPhotos, setProductPhotos] = useState<IFile[]>([]);
+    const [dynamicSpecificationFields, setDynamicSpecificationFields] = useState<ISpecificationField[] | null>(null);
 
     const {
         register,
@@ -169,8 +172,8 @@ function privateHoldingAdd({ location }: { location: any }) {
         endPoint: ENDPOINTS.getConfigDropdown
     })
 
-    const onSubmit = (data: IPrivateHoldingAddInputs) => {
-        const prepareData = {
+    const onSubmit = async (data: IPrivateHoldingAddInputs) => {
+        let prepareData: IPrivateHoldingAddorEditQuery = {
             // "Id": 0,
             CustomerID: data.Account,
             SubCustomerID: data.Account,
@@ -211,25 +214,39 @@ function privateHoldingAdd({ location }: { location: any }) {
                 },
                 // add specification attribute
             ],
-            CustomAttribute: [],
+            CustomeAttribute: [],
             Attachments: provenanceDocuments.map((file) => {
                 return {
                     "FileName": file.fileName,
                     "Type": "0",
                     "FileByte": currentPrivateHolding ? "" : file.fileByte,
-                    "Filepath": currentPrivateHolding ? file.filePath : ""
+                    "Filepath": currentPrivateHolding ? file.filePath : "",
+                    "ProvenanceDocType": file.documentType
                 }
             }).concat(productPhotos.map((file) => {
                 return {
                     "FileName": file.fileName,
                     "Type": "1",
                     "FileByte": currentPrivateHolding ? "" : file.fileByte,
-                    "Filepath": currentPrivateHolding ? file.filePath : ""
+                    "Filepath": currentPrivateHolding ? file.filePath : "",
+                    "ProvenanceDocType": file.documentType // Add the "ProvenanceDocType" property
                 }
             }))
         }
 
-        console.log("🚀 ~ onSubmit ~ prepareData:", prepareData)
+        if (currentPrivateHolding) {
+            prepareData = { ...prepareData, Id: currentPrivateHolding.id };
+        }
+
+        const response = await dispatch(addOrEditPrivateHolding({ url: ENDPOINTS.addOrEditPrivateHolding, body: prepareData }))
+
+        if (hasFulfilled(response.type)) {
+            showToaster({ message: "Private Holding saved successfully", severity: "success" })
+        }
+    }
+
+    const getAppliedSpecificationFields = (fields: ISpecificationField[]) => {
+        setDynamicSpecificationFields(fields)
     }
 
     const renderDropdownItems = (dropdowns: any) => dropdowns?.map((option: any) => <MenuItem key={option.specificationAttributeOptionsId} value={option.specificationAttributeOptionsId}>{option.specificationOption}</MenuItem>);
@@ -423,7 +440,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         <MenuItem value='2'>kilograms</MenuItem>
                                     </RenderFields>
                                 </Stack>
-                                <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} />
+                                <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} getAppliedSpecificationFields={getAppliedSpecificationFields} />
                                 <Stack className="RowWrapper">
                                     <BasicDatePicker setValue={setValue} existingDate={currentPrivateHolding ? currentPrivateHolding?.purchaseDate : null} />
                                     <RenderFields
