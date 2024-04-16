@@ -1,0 +1,48 @@
+div {
+  &.react-tel-input {
+    font: inherit;
+    height: inherit;
+    .form-control {
+      font: inherit;
+      height: initial;
+      width: 100%;
+      border-radius: 10px;
+      border-color: rgba($dark, 0.2);
+      @include padding-vertical(11);
+      @include media($sm) {
+        @include padding-vertical(14);
+      }
+      &:focus {
+        box-shadow: none;
+        border-width: 2px;
+        border-color: $yellowFuel;
+        &:hover {
+          border-color: rgba($dark, 0.2);
+        }
+      }
+    }
+    .flag-dropdown {
+      top: 2px;
+      bottom: 4px;
+      left: 2px;
+      border: none;
+      border-radius: 10px 0 0 10px;
+      &.open {
+        border-radius: 10px 0 0 10px;
+      } 
+      .selected-flag {
+        border-radius: inherit;
+        &.open {
+          border-radius: inherit;
+        }
+      }
+      .country-list {
+        width: 270px;
+        max-width: calc($sm - 40px);
+        @include media($sm) {
+          width: calc(100vw - 64px - 20px - 30px);
+        }
+      }
+    }
+  }
+}

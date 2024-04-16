@@ -226,6 +226,18 @@
                   }
                 }
 
+                // @Todo: this style is for contact field with new library
+                // height: 100%;
+                // .react-tel-input {
+                //   .flag-dropdown {
+                //     .country-list {
+                //       @include media-min($sm) {
+                //         width: calc(800px - 20px - 10px - 400px);
+                //       }
+                //     }
+                //   }
+                // }
+
                 .MuiFormHelperText-root {
                   display: none;
                 }
@@ -586,19 +598,7 @@
             width: 100%;
 
             .ContactSelect {
-              position: absolute;
-              width: 75px;
-              z-index: 1;
-
-              .MuiFormControl-root {
-                .MuiOutlinedInput-root {
-                  .MuiOutlinedInput-notchedOutline {
-                    border-radius: 0;
-                    border: none;
-                    border-right: 1px solid rgba($dark, 0.2);
-                  }
-                }
-              }
+              height: 100%;
 
               .MuiFormHelperText-root {
                 display: none;
