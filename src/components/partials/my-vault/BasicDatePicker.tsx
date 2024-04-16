@@ -12,7 +12,7 @@ import classNames from 'classnames';
 // Type
 import type { FieldError } from 'react-hook-form/dist/types'
 
-function BasicDatePicker({ setValue, existingDate, name, label, required, error }: { setValue: UseFormSetValue<IPrivateHoldingAddInputs>, existingDate: string | null, name: string, label: string, required?: boolean, error?: FieldError | boolean }) {
+function BasicDatePicker({ setValue, existingDate, name, label, required, error, clearErrors }: { setValue: UseFormSetValue<IPrivateHoldingAddInputs>, existingDate: string | null, name: string, label: string, required?: boolean, error?: FieldError | boolean, clearErrors: any }) {
     const [dateValue, setDateValue] = useState<Dayjs | null>(null);
 
     useEffect(() => {
@@ -24,6 +24,7 @@ function BasicDatePicker({ setValue, existingDate, name, label, required, error 
     useEffect(() => {
         if (!dateValue) return;
         setValue("Date", dateValue.format('YYYY-MM-DD'))
+        clearErrors("Date")
     }, [dateValue])
 
     return (
