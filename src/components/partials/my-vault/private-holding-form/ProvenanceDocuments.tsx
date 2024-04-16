@@ -26,8 +26,7 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
         fileByte?: string,
         filePath?: string
     }[]>([]);
-    console.log("🚀 ~ ProvenanceDocuments ~ files:", files)
-
+    // console.log("🚀 ~ ProvenanceDocuments ~ files:", files)
 
     useEffect(() => {
         if (!existingDocuments) return;

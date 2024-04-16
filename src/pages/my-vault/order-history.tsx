@@ -19,9 +19,6 @@ import useRequireLogin from "@/hooks/useRequireLogin";
 
 function OrderHistory() {
   const { loadingForCheckingLogin } = useRequireLogin()
-  // if (loadingForCheckingLogin) {
-  //   return
-  // }
   const openToaster = useAppSelector(state => state.homePage.openToaster)
   const loading = useAppSelector(state => state.myVault.loading)
   const dispatch = useAppDispatch();
@@ -40,7 +37,9 @@ function OrderHistory() {
     endPoint: ENDPOINTS.getConfigDropdown
   })
   // useAPIoneTime({service : getOrderHistory , endPoint : ENDPOINTS.getOrderHistory , body :{ ...requestBodyDefault, filters: {} } })
-
+  if (loadingForCheckingLogin) {
+    return
+  }
   return (
     <>
       <Loader open={loading} />
