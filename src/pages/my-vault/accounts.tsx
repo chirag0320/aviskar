@@ -21,9 +21,9 @@ import useRequireLogin from "@/hooks/useRequireLogin"
 
 function Accounts() {
     const { loadingForCheckingLogin } = useRequireLogin()
-    if (loadingForCheckingLogin) {
-      return
-    }
+    // if (loadingForCheckingLogin) {
+    //   return
+    // }
     const openToaster = useAppSelector(state => state.homePage.openToaster)
     const loading = useAppSelector(state => state.myVault.loading)
     const accountsData = useAppSelector(state => state.myVault.accounts)

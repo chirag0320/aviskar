@@ -19,9 +19,9 @@ import useRequireLogin from "@/hooks/useRequireLogin";
 
 function OrderHistory() {
   const { loadingForCheckingLogin } = useRequireLogin()
-  if (loadingForCheckingLogin) {
-    return
-  }
+  // if (loadingForCheckingLogin) {
+  //   return
+  // }
   const openToaster = useAppSelector(state => state.homePage.openToaster)
   const loading = useAppSelector(state => state.myVault.loading)
   const dispatch = useAppDispatch();

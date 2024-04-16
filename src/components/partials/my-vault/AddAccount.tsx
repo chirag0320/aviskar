@@ -44,7 +44,6 @@ interface Inputs {
   LastName: string,
   Company: string,
   Contact: string,
-  ContactCode: string,
   Email: string,
   Address1: string,
   Address2: string,
@@ -91,8 +90,6 @@ function AddAccount(props: AddAccountProps) {
   ]);
   const [phoneValue, setPhoneValue] = useState();
 
-  // console.log("🚀 ~ useEffect ~ existingAccount:", countryValue)
-
   useEffect(() => {
     setValue('Country', "none")
     if (accountTypeText === "Trust" || accountTypeText === "Superfund") {
@@ -135,9 +132,10 @@ function AddAccount(props: AddAccountProps) {
   } = useForm<Inputs>({
     resolver: yupResolver(getSchemaFromAlignment(accountTypeText))
   })
+  // console.log("🚀 ~ useEffect ~ existingAccount:", getValues("FirstName"))
 
   const onAddressFormSubmitHandler = async (data: any) => {
-    console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
+    // console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
     const additionalBeneficiary = additionalFields.map((field) => {
       // id static
       return { ...field[Object.keys(field)[0]], customerAdditionalBeneficiaryId: 0 }
@@ -237,6 +235,11 @@ function AddAccount(props: AddAccountProps) {
       if (googleAddressComponents?.postalCode) {
         setValue("Code", Number(googleAddressComponents?.postalCode));
       }
+      clearErrors('Country')
+      clearErrors('State')
+      clearErrors('City')
+      clearErrors('Address1')
+      clearErrors('Code')
     }
   }, [googleAddressComponents])
 
@@ -391,7 +394,7 @@ function AddAccount(props: AddAccountProps) {
                   type="phoneInput"
                   control={control}
                   setValue={setValue}
-                  name="ContactCode"
+                  name="Contact"
                   variant="outlined"
                   margin="none"
                   className="ContactSelect"
