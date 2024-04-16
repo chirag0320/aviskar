@@ -10,7 +10,8 @@ interface SiteMapItem {
 interface SiteMapData {
   [groupTitle: string]: SiteMapItem[];
 }
-function SitemapList() {
+function SitemapList(props: any) {
+  const { handlePageChange } = props
   const { siteMapData } = useAppSelector(state => state.homePage)
   console.log("🚀 ~ Sitemap ~ siteMapData:", siteMapData)
   const renderTitleWithList = (title: string, list: any[]) => {
@@ -30,7 +31,7 @@ function SitemapList() {
     <Box className="SitemapList" component="section">
       <Stack className="ListWrapper">
         {
-          Object.entries(siteMapData || {}).map(([groupTitle, dataObj]) => {
+          Object.entries(siteMapData?.items || {}).map(([groupTitle, dataObj]:any) => {
             return (
               <div key={groupTitle}>
                 {renderTitleWithList(groupTitle, dataObj)}
@@ -42,7 +43,7 @@ function SitemapList() {
         {renderTitleWithList("Categories", ["Home", "Search", "News", "Blog", "Contact", "My account"])} */}
       </Stack>
       <Stack className="Pagination">
-        <Pagination count={10} />
+        <Pagination count={Math.ceil(((siteMapData?.totalCount || 0) / 50)-1)} onChange={handlePageChange} />
       </Stack>
     </Box>
   )
