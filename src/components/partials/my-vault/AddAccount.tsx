@@ -246,7 +246,7 @@ function AddAccount(props: AddAccountProps) {
 
   useEffect(() => {
     const data: any = configDropdowns?.stateList.filter((state: any) => {
-      return state.enumValue == countryValue || countryValue == -1
+      return state.enumValue == countryValue || countryValue == "none"
     })
     setStateList(data)
   }, [configDropdowns?.stateList, countryValue])

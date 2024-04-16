@@ -185,7 +185,7 @@ function UpdateAddress(props: UpdateAddress) {
 
   useEffect(() => {
     const data: any = stateListall?.filter((state) => {
-      return state.enumValue == countryValue || countryValue == -1
+      return state.enumValue == countryValue || countryValue == "none"
     })
     setStateList(data)
   }, [stateListall, countryValue])

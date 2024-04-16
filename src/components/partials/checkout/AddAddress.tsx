@@ -62,6 +62,7 @@ function AddAddress(props: AddAddress) {
     const countryList = useAppSelector(state => state.checkoutPage.countryList);
     const stateListall = useAppSelector(state => state.checkoutPage.stateList);
     const [stateList, setStateList] = useState([])
+    console.log("🚀 ~ AddAddress ~ stateList:", stateList)
     const [stateId, setStateId] = useState<number | null>(null);
     const { showToaster } = useShowToaster();
     const loading = useAppSelector(state => state.checkoutPage.loading);
@@ -188,7 +189,7 @@ function AddAddress(props: AddAddress) {
 
     useEffect(() => {
         const data: any = stateListall?.filter((state: any) => {
-            return state.enumValue == countryValue || countryValue == -1
+            return state.enumValue == countryValue || countryValue == "none"
         })
         setStateList(data)
     }, [stateListall, countryValue])
