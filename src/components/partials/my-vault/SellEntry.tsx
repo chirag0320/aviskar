@@ -34,6 +34,7 @@ function SellEntry(props: SellEntry) {
 
     const {
         register,
+        getValues,
         handleSubmit,
         control,
         formState: { errors },
@@ -45,7 +46,7 @@ function SellEntry(props: SellEntry) {
         const body: SellData = {
             HoldingId: valueOfSellEntry?.holdingId,
             SoldQuantity: valueOfSellEntry?.quantity,
-            SoldTo: valueOfSellEntry?.SoldTo,
+            SoldTo: data?.SoldTo ?? valueOfSellEntry?.SoldTo,
         }
         dispatch(sellQty(body))
         onClose()
@@ -76,10 +77,11 @@ function SellEntry(props: SellEntry) {
                         variant='outlined'
                         margin='none'
                         fullWidth
-                        onChange={(e) => {
-                            setValue('sellEntry', { ...valueOfSellEntry, 'SoldTo': e.target.value })
-                        }}
-                        value={valueOfSellEntry?.SoldTo}
+                        // onChange={(e) => {
+                        //     console.log(e.target.value,"e.target.value")
+                        //     setValue('sellEntry', { ...valueOfSellEntry, 'SoldTo': e.target.value })
+                        // }}
+                        // value={valueOfSellEntry?.SoldTo}
                     />
                 </Stack>
                 <Stack className="ActionWrapper">
