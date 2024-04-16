@@ -9,12 +9,12 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material"
-import { string } from 'prop-types';
 import React, { useEffect, useState } from 'react'
 
 const ProductPhotos = ({ register, errors, control, setValue, getValues, clearErrors, existingDocuments = null, productPhotos, setProductPhotos }: any) => {
     const { showToaster } = useShowToaster()
     const [selectedImage, setSelectedImage] = useState<any>(null);
+    console.log("🚀 ~ ProductPhotos ~ selectedImage:", selectedImage)
     // const [productPhotos, setProductPhotos] = useState<{
     //     id: string,
     //     fileName: string,

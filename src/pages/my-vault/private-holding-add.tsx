@@ -96,6 +96,7 @@ function privateHoldingAdd({ location }: { location: any }) {
         Account: "none"
     });
     const [provenanceDocuments, setProvenanceDocuments] = useState<IFile[]>([]);
+    // console.log("🚀 ~ privateHoldingAdd ~ provenanceDocuments:", provenanceDocuments)
     const [productPhotos, setProductPhotos] = useState<IFile[]>([]);
 
     const {
@@ -215,13 +216,15 @@ function privateHoldingAdd({ location }: { location: any }) {
                 return {
                     "FileName": file.fileName,
                     "Type": "0",
-                    "FileByte": file.fileByte
+                    "FileByte": currentPrivateHolding ? "" : file.fileByte,
+                    "Filepath": currentPrivateHolding ? file.filePath : ""
                 }
             }).concat(productPhotos.map((file) => {
                 return {
                     "FileName": file.fileName,
                     "Type": "1",
-                    "FileByte": file.fileByte
+                    "FileByte": currentPrivateHolding ? "" : file.fileByte,
+                    "Filepath": currentPrivateHolding ? file.filePath : ""
                 }
             }))
         }

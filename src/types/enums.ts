@@ -60,3 +60,18 @@ export const AddressType = {
     Shipping: 2,
     Billing: 1
 }
+
+export enum PrivateHoldingAttachment {
+    Receipt = 0,
+    ProductPhotos = 1
+}
+
+export const PrivateHoldingDocumentTypeEnum: { [key: string]: string } = {
+    "1": "Invoice",
+    "2": "Certificate",
+    "3": "Trading Statement",
+    "4": "Vault Receipt",
+    "5": "Valuation",
+    "6": "Sale Contract",
+    "7": "Other"
+}

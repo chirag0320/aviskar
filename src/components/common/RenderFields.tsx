@@ -389,11 +389,11 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 },
               }}
               InputProps={{ readOnly, onBlur, endAdornment, }}
+              {...register(name)}
+              {...otherProps}
               onChange={(e: any) => {
                 if (setSelectedFile) setSelectedFile(e.target?.files[0])
               }}
-              {...register(name)}
-              {...otherProps}
             />
             <Button className='UploadButton' variant="contained" size="large" sx={{
               position: 'absolute',

@@ -1,6 +1,7 @@
 import { Delete1Icon } from '@/assets/icons';
 import RenderFields from '@/components/common/RenderFields'
 import useShowToaster from '@/hooks/useShowToaster';
+import { PrivateHoldingDocumentTypeEnum } from '@/types/enums';
 import {
     Box, IconButton, Link, MenuItem, Table,
     TableBody,
@@ -10,12 +11,6 @@ import {
     TableRow,
 } from "@mui/material"
 import React, { useEffect, useState } from 'react'
-
-const documentTypeEnum: { [key: string]: string } = {
-    "0": "Invoice",
-    "1": "Certificate",
-    "2": "Other"
-}
 
 const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, clearErrors, existingDocuments = null, provenanceDocuments, setProvenanceDocuments }: any) => {
     const { showToaster } = useShowToaster()
@@ -30,7 +25,8 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                 id: doc.id,
                 fileName: doc.fileName,
                 type: doc.type,
-                filePath: doc.filepath
+                filePath: doc.filepath,
+                // documentType: doc.documentType
             }
         }))
     }, [existingDocuments])
@@ -53,7 +49,8 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                     id: new Date().getTime().toString(),
                     fileName: selectedFile.name,
                     type: getValues("DocumentType"),
-                    fileByte: fileData
+                    fileByte: fileData,
+                    documentType: PrivateHoldingDocumentTypeEnum[getValues("DocumentType")]
                 }]);
             };
             reader.readAsArrayBuffer(selectedFile);
@@ -96,9 +93,9 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                 className='SelectValue'
             >
                 <MenuItem value='none'>Select Document Type</MenuItem>
-                <MenuItem key='test' value='0'>Invoice</MenuItem>
-                <MenuItem key='test' value='1'>Certificate</MenuItem>
-                <MenuItem key='test' value='2'>other</MenuItem>
+                {Object.entries(PrivateHoldingDocumentTypeEnum).map(([key, value]) => (
+                    <MenuItem key={key} value={key}>{value}</MenuItem>
+                ))}
             </RenderFields>
             <Box className="CommonTableWrapper">
                 <TableContainer
@@ -121,7 +118,7 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                                     <TableCell component="th" scope="document">
                                         <Link href={file.filePath} target="_blank">{file.fileName}</Link>
                                     </TableCell>
-                                    <TableCell>{documentTypeEnum[file.type.toString()]}</TableCell>
+                                    <TableCell>{PrivateHoldingDocumentTypeEnum[file.type.toString()]}</TableCell>
                                     <TableCell>
                                         <IconButton className="DeleteButton" onClick={() => handleDeleteFile(file.id)}><Delete1Icon /></IconButton>
                                     </TableCell>
