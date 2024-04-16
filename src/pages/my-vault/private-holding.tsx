@@ -18,11 +18,10 @@ function privateHolding(paramsData: any) {
     const { loadingForCheckingLogin } = useRequireLogin()
     const loading = useAppSelector(state => state.myVault.loading)
     const dispatch = useAppDispatch()
-
+    const fetchPrivateHoldingsList = async () => {
+        await dispatch(getPrivateHoldingsList());
+    }
     useEffect(() => {
-        const fetchPrivateHoldingsList = async () => {
-            await dispatch(getPrivateHoldingsList());
-        }
         fetchPrivateHoldingsList()
     }, [])
     if (loadingForCheckingLogin) {
@@ -45,7 +44,7 @@ function privateHolding(paramsData: any) {
                                 <Button variant="outlined" startIcon={<PlusIcon />} onClick={() => navigate("/my-vault/private-holding-add")}>Add new</Button>
                             </Box>
                             <Box className="PrivateHoldingCardsWrapper">
-                                <PrivateHoldingCards />
+                                <PrivateHoldingCards fetchPrivateHoldingsList={fetchPrivateHoldingsList}/>
                             </Box>
                         </Box>
                     </Container>

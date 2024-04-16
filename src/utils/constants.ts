@@ -124,7 +124,7 @@ export const ENDPOINTS = {
     // convert to market place
     convertToMarketPlace: "myvault/q9QOiEdTtEkrm6EVOewM2F",
     //delete private holdings
-    deletePrivateHoldings: "myvault/q9QOiEdTtEkrm6EVOewM2F/id"
+    deletePrivateHoldings: "myvault/puk8elMtXJIwa4NCP/id"
     
 }
 export const StoreData = {
