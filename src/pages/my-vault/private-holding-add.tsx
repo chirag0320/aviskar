@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useReducer } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useReducer, useState } from "react";
 import {
     Box, Button, Container, IconButton, MenuItem, Stack, Table,
     TableBody,
@@ -27,6 +27,7 @@ import DynamicFields from "@/components/partials/my-vault/private-holding-form/D
 import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
 import ProductPhotos from "@/components/partials/my-vault/private-holding-form/ProductPhotos";
 import useRequireLogin from "@/hooks/useRequireLogin";
+import Toaster from "@/components/common/Toaster";
 
 const schema = yup.object().shape({
     Account: yup.string().notOneOf(["none"], "Account is required field"),
@@ -64,17 +65,27 @@ function dropdownStateReducer(state: any, action: any) {
     }
 }
 
+export interface IFile {
+    id: string,
+    fileName: string,
+    type: number,
+    fileByte?: string,
+    filePath?: string,
+    documentType?: string
+}
+
 function privateHoldingAdd({ location }: { location: any }) {
+    const openToaster = useAppSelector(state => state.homePage.openToaster)
     const { loadingForCheckingLogin } = useRequireLogin()
     const loading = useAppSelector(state => state.myVault.loading);
     const currentPrivateHolding = useAppSelector(state => state.myVault.currentPrivateHolding)
     const formDropdowns = useAppSelector(state => state.myVault.privateHoldingFormDropdowns);
-    console.log("🚀 ~ privateHoldingAdd ~ formDropdowns:", formDropdowns)
     const formDropdownsKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsKeys);
     const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
     const formDropdownsReverseKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsReverseKeys);
     const dispatch = useAppDispatch()
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+
     const [dropdownState, dropdownDispatch] = useReducer(dropdownStateReducer, {
         Mint: "none",
         Metal: "none",
@@ -84,6 +95,8 @@ function privateHoldingAdd({ location }: { location: any }) {
         WeightType: "none",
         Account: "none"
     });
+    const [provenanceDocuments, setProvenanceDocuments] = useState<IFile[]>([]);
+    const [productPhotos, setProductPhotos] = useState<IFile[]>([]);
 
     const {
         register,
@@ -115,8 +128,6 @@ function privateHoldingAdd({ location }: { location: any }) {
         fetchHolding()
     }, [])
 
-
-
     // set intial form values if user wants to edit
     useEffect(() => {
         if (!currentPrivateHolding) return;
@@ -128,8 +139,6 @@ function privateHoldingAdd({ location }: { location: any }) {
         setValue("PurchasePrice", currentPrivateHolding.price.toString())
 
         if (!formDropdownsKeys) return;
-        console.log("🚀 ~ useEffect ~ formDropdownsKeys:", formDropdownsKeys)
-
 
         function getNextSpecificationItem(specificationName: string) {
             return currentPrivateHolding!.productattribute.find((option: any) => formDropdownsKeys![option["specificationAttributeOptionId"].toString()] === specificationName)
@@ -159,10 +168,7 @@ function privateHoldingAdd({ location }: { location: any }) {
         endPoint: ENDPOINTS.getConfigDropdown
     })
 
-
     const onSubmit = (data: IPrivateHoldingAddInputs) => {
-        // console.log("🚀 ~ onSubmit ~ data:", data)
-
         const prepareData = {
             // "Id": 0,
             CustomerID: data.Account,
@@ -205,9 +211,22 @@ function privateHoldingAdd({ location }: { location: any }) {
                 // add specification attribute
             ],
             CustomAttribute: [],
-            Attachments: []
+            Attachments: provenanceDocuments.map((file) => {
+                return {
+                    "FileName": file.fileName,
+                    "Type": "0",
+                    "FileByte": file.fileByte
+                }
+            }).concat(productPhotos.map((file) => {
+                return {
+                    "FileName": file.fileName,
+                    "Type": "1",
+                    "FileByte": file.fileByte
+                }
+            }))
         }
-        // console.log("🚀 ~ onSubmit ~ prepareData:", prepareData)
+
+        console.log("🚀 ~ onSubmit ~ prepareData:", prepareData)
     }
 
     const renderDropdownItems = (dropdowns: any) => dropdowns?.map((option: any) => <MenuItem key={option.specificationAttributeOptionsId} value={option.specificationAttributeOptionsId}>{option.specificationOption}</MenuItem>);
@@ -217,6 +236,7 @@ function privateHoldingAdd({ location }: { location: any }) {
     return (
         <>
             <Loader open={loading} />
+            {openToaster && <Toaster />}
             <Layout>
                 <Seo
                     keywords={[`QMint Topics`]}
@@ -437,8 +457,8 @@ function privateHoldingAdd({ location }: { location: any }) {
                                     />
                                 </Stack>
                                 <Stack className="RowWrapper DocumentPhotosContentWrapper">
-                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type !== "ProductPhotos") : null} />
-                                    <ProductPhotos register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type === "ProductPhotos") : null} />
+                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type !== "ProductPhotos") : null} provenanceDocuments={provenanceDocuments} setProvenanceDocuments={setProvenanceDocuments} />
+                                    <ProductPhotos register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type === "ProductPhotos") : null} productPhotos={productPhotos} setProductPhotos={setProductPhotos} />
                                 </Stack>
                                 <Stack sx={{ gap: "20px", justifyContent: "flex-end" }} className='BottomButtonsWrapper'>
                                     <Button variant="outlined" size="large">Clear</Button>

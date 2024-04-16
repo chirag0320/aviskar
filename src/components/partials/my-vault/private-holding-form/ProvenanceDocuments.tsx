@@ -1,37 +1,31 @@
 import { Delete1Icon } from '@/assets/icons';
 import RenderFields from '@/components/common/RenderFields'
+import useShowToaster from '@/hooks/useShowToaster';
 import {
-    Box, Button, Container, IconButton, Link, MenuItem, Stack, Table,
+    Box, IconButton, Link, MenuItem, Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
 } from "@mui/material"
-import { string } from 'prop-types';
 import React, { useEffect, useState } from 'react'
 
-function createDataDocuments(
-    fileName: string,
-    documentType: string,
-) {
-    return { fileName, documentType };
+const documentTypeEnum: { [key: string]: string } = {
+    "0": "Invoice",
+    "1": "Certificate",
+    "2": "Other"
 }
 
-const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, clearErrors, existingDocuments = null }: any) => {
-    const [files, setFile] = useState<{
-        id: string,
-        fileName: string,
-        type: number,
-        fileByte?: string,
-        filePath?: string
-    }[]>([]);
-    // console.log("🚀 ~ ProvenanceDocuments ~ files:", files)
+const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, clearErrors, existingDocuments = null, provenanceDocuments, setProvenanceDocuments }: any) => {
+    const { showToaster } = useShowToaster()
+    const [selectedFile, setSelectedFile] = useState<any>(null);
+    const [docTypeValue, setDocTypeValue] = useState<string>("none");
 
     useEffect(() => {
         if (!existingDocuments) return;
 
-        setFile(existingDocuments.map((doc: any) => {
+        setProvenanceDocuments(existingDocuments.map((doc: any) => {
             return {
                 id: doc.id,
                 fileName: doc.fileName,
@@ -41,12 +35,34 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
         }))
     }, [existingDocuments])
 
-    useEffect(() => {
-        setValue("DocumentType", "none");
-    }, [])
-
     const handleDeleteFile = (id: string) => {
-        setFile(files.filter(file => file.id !== id));
+        setProvenanceDocuments(provenanceDocuments.filter((file: any) => file.id !== id));
+    }
+
+    const uploadHandler = () => {
+        if (getValues("DocumentType") === "none") {
+            showToaster({ message: "Select the document type", severity: "error" })
+            return;
+        }
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = (event: any) => {
+                const fileData = event?.target?.result;
+
+                setProvenanceDocuments([...provenanceDocuments, {
+                    id: new Date().getTime().toString(),
+                    fileName: selectedFile.name,
+                    type: getValues("DocumentType"),
+                    fileByte: fileData
+                }]);
+            };
+            reader.readAsArrayBuffer(selectedFile);
+            setValue("ProvenanceDocuments", selectedFile);
+            setSelectedFile(null);
+        }
+        else {
+            showToaster({ message: "Please select a file", severity: "error" })
+        }
     }
 
     return (
@@ -59,6 +75,8 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                 label="Provenance Documents:"
                 control={control}
                 variant='outlined'
+                setSelectedFile={setSelectedFile}
+                uploadFileHandler={uploadHandler}
                 margin='none'
                 required
             >
@@ -74,7 +92,7 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                 getValues={getValues}
                 margin='none'
                 setValue={setValue}
-                defaultValue="none"
+                value={docTypeValue}
                 className='SelectValue'
             >
                 <MenuItem value='none'>Select Document Type</MenuItem>
@@ -95,7 +113,7 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {files.map((file) => (
+                            {provenanceDocuments.map((file: any) => (
                                 <TableRow
                                     key={file.id}
                                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -103,7 +121,7 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                                     <TableCell component="th" scope="document">
                                         <Link href={file.filePath} target="_blank">{file.fileName}</Link>
                                     </TableCell>
-                                    <TableCell>{file.type}</TableCell>
+                                    <TableCell>{documentTypeEnum[file.type.toString()]}</TableCell>
                                     <TableCell>
                                         <IconButton className="DeleteButton" onClick={() => handleDeleteFile(file.id)}><Delete1Icon /></IconButton>
                                     </TableCell>
