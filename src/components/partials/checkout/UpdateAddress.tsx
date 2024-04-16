@@ -175,6 +175,7 @@ function UpdateAddress(props: UpdateAddress) {
     setValue('State', existingAddress?.stateName);
     setStateId(existingAddress?.state);
     setValue('Country', existingAddress?.country || existingAddress?.countryId)
+    setValue("Contact" ,existingAddress?.phoneNumber)
     setcountryValue(existingAddress?.country || existingAddress?.countryId)
     setstateValue(existingAddress?.stateName)
     return () => {
@@ -238,34 +239,16 @@ function UpdateAddress(props: UpdateAddress) {
             margin='none'
           />
           <Stack className="Column">
-            <Box className="ContactField">
-              <RenderFields
-                register={register}
-                type="select"
-                clearErrors={clearErrors}
-                control={control}
-                // error={errors.ContactCode}
-                name="ContactCode"
-                variant="outlined"
-                setValue={setValue}
-                margin="none"
-                className="ContactSelect"
-              >
-                {PhoneNumberCountryCode.map((phone) => <MenuItem key={phone.code} value={phone.dial_code}>{`${phone.name} (${phone.dial_code})`}</MenuItem>)}
-              </RenderFields>
-              <RenderFields
-                register={register}
-                error={errors.Contact || errors.ContactCode}
-                name="Contact"
-                defaultValue={existingAddress?.phone1 || existingAddress?.phoneNumber}
-                type="number"
-                placeholder="Enter contact *"
-                control={control}
-                variant='outlined'
-                margin='none'
-                className="ContactTextField"
-              />
-            </Box>
+            <RenderFields
+              register={register}
+              type="phoneInput"
+              control={control}
+              setValue={setValue}
+              name="Contact"
+              variant="outlined"
+              margin="none"
+              className="ContactSelect"
+            ></RenderFields>
             <RenderFields
               register={register}
               error={errors.Email}

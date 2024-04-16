@@ -103,6 +103,7 @@ function AddAccount(props: AddAccountProps) {
     setValue('State', existingAccount?.address.stateName);
     setStateId(existingAccount?.address.stateId);
     setValue('Country', existingAccount?.address.countryId?.toString())
+    setValue("Contact", existingAccount?.phoneNumber)
     setcountryValue(existingAccount?.address.countryId?.toString())
     setstateValue(existingAccount?.address.stateName)
 
@@ -132,7 +133,7 @@ function AddAccount(props: AddAccountProps) {
   } = useForm<Inputs>({
     resolver: yupResolver(getSchemaFromAlignment(accountTypeText))
   })
-  // console.log("🚀 ~ useEffect ~ existingAccount:", getValues("FirstName"))
+  console.log("🚀 ~ useEffect ~ existingAccount:", getValues("Contact"))
 
   const onAddressFormSubmitHandler = async (data: any) => {
     // console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
@@ -381,50 +382,17 @@ function AddAccount(props: AddAccountProps) {
             </Stack>
             <Stack className="Column">
               <Box className="ContactField">
-                {/* <PhoneInput
-                  country="au"
-                  value={phoneValue}
-                  preferredCountries={['au']}
-                  onChange={setPhoneValue}
-                /> */}
-
-                {/* package link - https://www.npmjs.com/package/react-phone-input-2#style */}
                 <RenderFields
                   register={register}
                   type="phoneInput"
                   control={control}
+                  defaultValue={existingAccount?.phoneNumber}
                   setValue={setValue}
                   name="Contact"
                   variant="outlined"
                   margin="none"
                   className="ContactSelect"
                 ></RenderFields>
-
-                {/* <RenderFields
-                  register={register}
-                  type="select"
-                  control={control}
-                                clearErrors={clearErrors}
-                  setValue={setValue}
-                  name="ContactCode"
-                  variant="outlined"
-                  margin="none"
-                  className="ContactSelect"
-                >
-                  {PhoneNumberCountryCode.map((phone) => <MenuItem key={phone.code} value={phone.dial_code}>{`${phone.name} (${phone.dial_code})`}</MenuItem>)}
-                </RenderFields> */}
-                {/* <RenderFields
-                  register={register}
-                  error={errors.Contact || errors.ContactCode}
-                  defaultValue={Number(existingAccount?.phoneNumber)}
-                  name="Contact"
-                  type="number"
-                  placeholder="Enter contact *"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                  className="ContactTextField"
-                /> */}
               </Box>
               <RenderFields
                 register={register}

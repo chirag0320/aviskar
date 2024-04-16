@@ -33,7 +33,6 @@ interface Inputs {
     LastName: string,
     Company: string,
     Contact: string,
-    ContactCode: string,
     Email: string,
     Address1: string,
     Address2: string,
@@ -48,7 +47,6 @@ export const addressSchema = yup.object().shape({
     LastName: yup.string().trim().required('Last name is a required field'),
     Company: yup.string().trim(),
     Contact: yup.string().trim().required(),
-    ContactCode: yup.string().required("Country code is required field"),
     Email: yup.string().email().required(),
     Address1: yup.string().trim().required("Address 1 in required field"),
     Address2: yup.string().trim(),
@@ -68,7 +66,7 @@ function AddAddress(props: AddAddress) {
     const { showToaster } = useShowToaster();
     const loading = useAppSelector(state => state.checkoutPage.loading);
     const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
-    const [countryValue, setcountryValue] = useState<any>('-1')
+    const [countryValue, setcountryValue] = useState<any>('none')
     const [stateValue, setstateValue] = useState<any>('')
     const {
         register,
@@ -88,13 +86,12 @@ function AddAddress(props: AddAddress) {
     }, [])
 
     const onAddressFormSubmitHandler = async (data: any) => {
-        // console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
         const addressQuery = {
             addressTypeId,
             firstName: data.FirstName,
             lastName: data.LastName,
             company: data.Company,
-            phoneNumber: data.ContactCode + data.Contact,
+            phoneNumber: data.Contact,
             email: data.Email,
             isVerified: true, // static
             addressLine1: data.Address1,
@@ -121,23 +118,7 @@ function AddAddress(props: AddAddress) {
                 onClose()
                 reset()
                 showToaster({ message: "Address saved successfully", severity: "success" })
-                // const addressId = (response?.payload as any)?.data?.data;
                 await dispatch(getAddresses({ url: ENDPOINTS.getAddresses }) as any);
-                // dispatch(addAddressForMyVault({
-                //     addressId: addressId,
-                //     firstName: data.FirstName,
-                //     lastName: data.LastName,
-                //     company: data.Company,
-                //     phoneNumber: data.ContactCode + data.Contact,
-                //     email: data.Email,
-                //     addressLine1: data.Address1,
-                //     addressLine2: data.Address2,
-                //     city: data.City,
-                //     stateName: data.State,
-                //     postcode: data.Code,
-                //     countryId: data.Country,
-                //     stateId: stateId,
-                // }))
             } else {
                 showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
             }
@@ -180,7 +161,7 @@ function AddAddress(props: AddAddress) {
     useEffect(() => {
         return () => {
             reset()
-            setcountryValue(-1)
+            setcountryValue("none")
             setstateValue('')
         }
     }, [open]);
@@ -212,9 +193,9 @@ function AddAddress(props: AddAddress) {
         setStateList(data)
     }, [stateListall, countryValue])
 
-    const OnChange = (value: any) => {
-        setcountryValue(value)
-    }
+    // const OnChange = (value: any) => {
+    //     setcountryValue(value)
+    // }
     return (
         <StyledDialog
             id="UpdateAddress"
@@ -246,6 +227,7 @@ function AddAddress(props: AddAddress) {
                             variant='outlined'
                             margin='none'
                         />
+
                     </Stack>
                     <RenderFields
                         register={register}
@@ -257,34 +239,18 @@ function AddAddress(props: AddAddress) {
                         margin='none'
                     />
                     <Stack className="Column">
-                        <Box className="ContactField">
-                            <RenderFields
-                                register={register}
-                                type="select"
-                                control={control}
-                                clearErrors={clearErrors}
-                                // error={errors.ContactCode}
-                                getValues={getValues}
-                                name="ContactCode"
-                                variant="outlined"
-                                setValue={setValue}
-                                margin="none"
-                                className="ContactSelect"
-                            >
-                                {PhoneNumberCountryCode.map((phone) => <MenuItem key={phone.code} value={phone.dial_code}>{`${phone.name} (${phone.dial_code})`}</MenuItem>)}
-                            </RenderFields>
-                            <RenderFields
-                                register={register}
-                                error={errors.Contact || errors.ContactCode}
-                                name="Contact"
-                                type="number"
-                                placeholder="Enter contact *"
-                                control={control}
-                                variant='outlined'
-                                margin='none'
-                                className="ContactTextField"
-                            />
-                        </Box>
+                        {/* <Box className="ContactField"> */}
+                        <RenderFields
+                            register={register}
+                            type="phoneInput"
+                            control={control}
+                            setValue={setValue}
+                            name="Contact"
+                            variant="outlined"
+                            margin="none"
+                            className="ContactSelect"
+                        ></RenderFields>
+                        {/* </Box> */}
                         <RenderFields
                             register={register}
                             error={errors.Email}
@@ -336,7 +302,7 @@ function AddAddress(props: AddAddress) {
                             margin='none'
                             value={countryValue}
                             setValue={setValue}
-                            onChange={OnChange}
+                            // onChange={OnChange}
                         >
                             <MenuItem value="none">Select country *</MenuItem>
                             {countryList.map((country: StateOrCountry) => (
