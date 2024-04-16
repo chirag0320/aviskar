@@ -500,7 +500,7 @@ export const myVaultSlice = createSlice({
         })
         builder.addCase(getPrivateHoldingFormDropdowns.fulfilled, (state, action) => {
             const responseData = action.payload.data.data;
-            console.log("🚀 ~ builder.addCase ~ responseData:", responseData)
+            // console.log("🚀 ~ builder.addCase ~ responseData:", responseData)
 
             const privateHoldingFormDropdowns: IPrivateHoldingFormDropdown = {};
             const privateHoldingFormDropdownsKeys: { [key: string]: string } = {}

@@ -59,6 +59,7 @@ interface VaultProps {
 function Vault() {
   const { loadingForCheckingLogin } = useRequireLogin()
   const { myVaultHomePageData, myVaultHomePageChartData } = useAppSelector((state) => state.myVault)
+  console.log("🚀 ~ Vault ~ myVaultHomePageData:", myVaultHomePageData)
   const isLargeScreen = useMediaQuery((theme: Theme) =>
     theme.breakpoints.up("lg")
   );
@@ -133,10 +134,11 @@ function Vault() {
                   Shop Now
                 </Button>
                 <Box className="VaultStats">
+                  <StatsCard onClick={() => { navigate('/my-vault/smart-metals/') }} title="Accounts" statsNumber={myVaultHomePageData?.Customers} icon={<AccountsIcon />} bgColor="rgb(52 145 250 / 6%)" />
+                  <StatsCard onClick={() => { navigate('/my-vault/addresses/') }} title="Addresses" statsNumber={myVaultHomePageData?.Addresses} icon={<AddressesIcon />} bgColor="rgb(234 162 43 / 6%)" />
                   <StatsCard onClick={() => { navigate('/my-vault/ordres/') }} title="View Orders" statsNumber={myVaultHomePageData?.Order} icon={<OrdersIcon />} bgColor="rgb(52 145 250 / 6%)" />
-                  <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Private Holding" icon={<PrivateHoldingIcon />} statsNumber="35" bgColor="rgb(234 162 43 / 6%)" />
-                  <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Allocated Holdings" statsNumber="8" icon={<AllotedHldingIcon />} bgColor="rgb(255 31 31 / 6%)" />
-                  <StatsCard onClick={() => { navigate('/my-vault/smart-metals/') }} title="Smart Metals" statsNumber="460" icon={<SmartMetalsIcon />} bgColor="rgb(0 128 1 / 6%)" />
+                  <StatsCard onClick={() => { navigate('/my-vault/private-holding') }} title="Buyback Orders" statsNumber={myVaultHomePageData?.["Buyback Order"]} icon={<BuyBackOrderIcon />} bgColor="rgb(0 128 1 / 6%)" />
+
                 </Box>
               </Box>
               <Box className="Right">
@@ -227,10 +229,10 @@ function Vault() {
           <Container>
             <Box className="UserInfoWrapper">
               <Box className="Left">
-                <StatsCard onClick={() => { navigate('/my-vault/smart-metals/') }} title="Smart Metals" statsNumber="5" icon={<AccountsIcon />} bgColor="rgb(52 145 250 / 6%)" />
-                <StatsCard onClick={() => { navigate('/my-vault/addresses/') }} title="Addresses" statsNumber={myVaultHomePageData?.Addresses} icon={<AddressesIcon />} bgColor="rgb(234 162 43 / 6%)" />
+                <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Allocated Holdings" statsNumber="todo" icon={<AllotedHldingIcon />} bgColor="rgb(255 31 31 / 6%)" />
+                <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Private Holding" icon={<PrivateHoldingIcon />} statsNumber={"todo"} bgColor="rgb(234 162 43 / 6%)" />
+                <StatsCard onClick={() => { navigate('/my-vault/smart-metals/') }} title="Smart Metals" statsNumber="todo" icon={<SmartMetalsIcon />} bgColor="rgb(0 128 1 / 6%)" />
                 <StatsCard onClick={() => { navigate('/my-vault/rewards-poins/') }} title="Rewards Points" statsNumber={myVaultHomePageData?.["Reward Point"]} icon={<RewardPointsIcon />} bgColor="rgb(255 31 31 / 6%)" />
-                <StatsCard onClick={() => { navigate('/my-vault/private-holding') }} title="Buyback Orders" statsNumber={myVaultHomePageData?.["Buyback Order"]} icon={<BuyBackOrderIcon />} bgColor="rgb(0 128 1 / 6%)" />
               </Box>
               <Box className="Right">
                 <Box id="Banner" component="section" key={"banner"}>
@@ -353,12 +355,13 @@ function Vault() {
                   Change password
                 </Button>
               </Card>
-              <Card className="AccountInformationCard">
-                <Typography variant="subtitle2">Newsletters</Typography>
+              {/* below newsletter is commneted it will be use in future */}
+              {/* <Card className="AccountInformationCard">
+                <Typography variant="subtitle2">Newsletters</Typography> */}
                 {/* @ts-ignore */}
-                <Typography variant="body2" sx={{ mt: 1.5 }} dangerouslySetInnerHTML={{ __html: myVaultHomePageData?.newsLetterDescription }}>
+                {/* <Typography variant="body2" sx={{ mt: 1.5 }} dangerouslySetInnerHTML={{ __html: myVaultHomePageData?.newsLetterDescription }}>
                 </Typography>
-              </Card>
+              </Card> */}
             </Box>
           </Container>
         </Box>
