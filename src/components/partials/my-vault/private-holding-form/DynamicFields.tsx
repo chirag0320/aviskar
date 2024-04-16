@@ -14,19 +14,18 @@ export interface ISpecificationField {
     [key: string]: { specificationName: string, value: string }
 }
 
-const DynamicFields = ({ existingFields }: {
+const DynamicFields = ({ existingFields, getAppliedSpecificationFields }: {
     existingFields: {
         specificationAttributeId: number;
         specificationAttributeOptionId: number;
         specificationAttributeOptionOther: string | null;
-    }[] | null
+    }[] | null,
+    getAppliedSpecificationFields: (fields: ISpecificationField[]) => void
 }) => {
     const [specificationFields, setSpecificationField] = useState<ISpecificationField[]>([]);
-    // console.log("🚀 ~ specificationFields:", specificationFields)
     const formDropdownsKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsKeys);
     const formDropdownsReverseKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsReverseKeys);
     const formDropdowns = useAppSelector(state => state.myVault.privateHoldingFormDropdowns);
-    // console.log("🚀 ~ DynamicFields ~ specificationFields:", specificationFields)
     const [customSpecificationFields, setCustomSpecificationField] = useState<ISpecificationField[]>([]);
 
     useEffect(() => {

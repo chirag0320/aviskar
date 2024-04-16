@@ -1,5 +1,6 @@
 import { Delete1Icon } from '@/assets/icons';
 import RenderFields from '@/components/common/RenderFields'
+import useShowToaster from '@/hooks/useShowToaster';
 import {
     Box, IconButton, Link, Table,
     TableBody,
@@ -8,22 +9,24 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material"
-import { string } from 'prop-types';
 import React, { useEffect, useState } from 'react'
 
-const ProductPhotos = ({ register, errors, control, setValue, getValues, clearErrors, existingDocuments = null }: any) => {
-    const [files, setFile] = useState<{
-        id: string,
-        fileName: string,
-        type: number,
-        fileByte?: string,
-        filePath?: string
-    }[]>([]);
+const ProductPhotos = ({ register, errors, control, setValue, getValues, clearErrors, existingDocuments = null, productPhotos, setProductPhotos }: any) => {
+    const { showToaster } = useShowToaster()
+    const [selectedImage, setSelectedImage] = useState<any>(null);
+    console.log("🚀 ~ ProductPhotos ~ selectedImage:", selectedImage)
+    // const [productPhotos, setProductPhotos] = useState<{
+    //     id: string,
+    //     fileName: string,
+    //     type: number,
+    //     fileByte?: string,
+    //     filePath?: string
+    // }[]>([]);
 
     useEffect(() => {
         if (!existingDocuments) return;
 
-        setFile(existingDocuments.map((doc: any) => {
+        setProductPhotos(existingDocuments.map((doc: any) => {
             return {
                 id: doc.id,
                 fileName: doc.fileName,
@@ -33,12 +36,34 @@ const ProductPhotos = ({ register, errors, control, setValue, getValues, clearEr
         }))
     }, [existingDocuments])
 
-    useEffect(() => {
-        setValue("DocumentType", "none");
-    }, [])
-
     const handleDeleteFile = (id: string) => {
-        setFile(files.filter(file => file.id !== id));
+        setProductPhotos(productPhotos.filter((file: any) => file.id !== id));
+    }
+
+    const uploadHandler = () => {
+        if (selectedImage) {
+            if (selectedImage.type !== "image/jpeg" && selectedImage.type !== "image/png" && selectedImage.type !== "image/jpg") {
+                showToaster({ message: "Please select a jpeg, jpg or png image", severity: "error" })
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (event: any) => {
+                const fileData = event?.target?.result;
+
+                setProductPhotos([...productPhotos, {
+                    id: new Date().getTime().toString(),
+                    fileName: selectedImage.name,
+                    type: getValues("DocumentType"),
+                    fileByte: fileData
+                }]);
+            };
+            reader.readAsArrayBuffer(selectedImage);
+            setValue("ProductPhotos", selectedImage);
+            setSelectedImage(null);
+        }
+        else {
+            showToaster({ message: "Please select a image", severity: "error" })
+        }
     }
 
     return (
@@ -52,6 +77,8 @@ const ProductPhotos = ({ register, errors, control, setValue, getValues, clearEr
                 control={control}
                 variant='outlined'
                 margin='none'
+                setSelectedFile={setSelectedImage}
+                uploadFileHandler={uploadHandler}
                 required
             >
             </RenderFields>
@@ -67,7 +94,7 @@ const ProductPhotos = ({ register, errors, control, setValue, getValues, clearEr
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {files.map((file) => (
+                            {productPhotos.map((file: any) => (
                                 <TableRow
                                     key={file.id}
                                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
