@@ -28,9 +28,6 @@ export const requestBodyOrderHistory = {
 
 function BuyBackOrderHistory() {
     const { loadingForCheckingLogin } = useRequireLogin()
-    if (loadingForCheckingLogin) {
-      return
-    }
     const orderBuypackHistoryDetails = useAppSelector(state => state.myVault.buyBackOrderHistory)
     const loading = useAppSelector(state => state.myVault.loading)
     const dispatch = useAppDispatch()
@@ -48,7 +45,9 @@ function BuyBackOrderHistory() {
         service: getConfigDropdowns,
         endPoint: ENDPOINTS.getConfigDropdown
     })
-
+    if (loadingForCheckingLogin) {
+        return
+      }
     return (
         <>
             <Loader open={loading} />
