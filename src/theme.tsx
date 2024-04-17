@@ -470,6 +470,13 @@ const theme: Theme = createTheme({
         },
       },
     },
+    MuiMenu: {
+      styleOverrides: {
+        list: {
+          maxHeight: 300,
+        },
+      },
+    },
     MuiMenuItem: {
       styleOverrides: {
         root: {
