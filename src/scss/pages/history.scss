@@ -1,9 +1,9 @@
 .RewardPointsHistoryPage {
     .RewardPointsHistoryContent {
-        padding: 20px 0 50px;
+        padding: 0 0 50px;
 
         @include media($sm) {
-            padding: 10px 0 40px;
+            padding: 0 0 40px;
         }
 
         .RewardPointsTableTitle {

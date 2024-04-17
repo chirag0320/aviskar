@@ -56,14 +56,17 @@ function privateHolding(paramsData: any) {
             })
         })
     }, [privateHoldingsList])
-    const checkCondition = useMemo(()=>{
+    const checkCondition = useMemo(() => {
         return BodyForThePrivateHoldingPriceList && Object.keys(BodyForThePrivateHoldingPriceList)?.length > 0 && BodyForThePrivateHoldingPriceList["HoldingIds"]?.length > 0
-    },[BodyForThePrivateHoldingPriceList])
+    }, [BodyForThePrivateHoldingPriceList])
     useAPIRequestWithService({
         service: getPrivateHoldingsListLivePrice, endPoint: ENDPOINTS.getPrivateHoldingsListLivePrice, body: BodyForThePrivateHoldingPriceList, pollInterval: 60, conditionalCall: checkCondition
     })
     if (loadingForCheckingLogin) {
         return
+    }
+    const onClickAction = () => {
+        navigate("/my-vault/private-holding-add")
     }
     return (
         <>
@@ -74,13 +77,10 @@ function privateHolding(paramsData: any) {
                     title="Private Holdings"
                     lang="en"
                 />
-                <PageTitle title="Private Holdings" backToDashboard={true} />
+                <PageTitle title="Private Holdings" backToDashboard={true} redirectOnClick={onClickAction} />
                 <Box id="PrivateHoldingPage" className='PrivateHoldingPage' component="section">
                     <Container>
                         <Box className="Content PrivateHoldingContent">
-                            <Box sx={{ textAlign: 'right' }}>
-                                <Button variant="outlined" startIcon={<PlusIcon />} onClick={() => navigate("/my-vault/private-holding-add")}>Add new</Button>
-                            </Box>
                             <Box className="PrivateHoldingCardsWrapper">
                                 {(privateHoldingsData && privateHoldingsData.length > 0) ? privateHoldingsData?.map((item) => {
                                     return (
