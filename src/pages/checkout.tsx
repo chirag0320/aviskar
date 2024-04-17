@@ -56,15 +56,18 @@ function Checkout() {
       />
       {openToaster && <Toaster />}
       <PageTitle title="Checkout" />
-     { finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 ? <Container id="PageCheckout">
-        <Stack className="AllSteps">
-          <Step1 />
-          <Step2 />
-          <Step3 />
-          <TermsServices />
-        </Stack>
-        <OrderSummary />
-      </Container> : <RecordNotFound message="No Items are available" />}
+      <Container id="PageCheckout">
+        {finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 ?
+          <>
+            <Stack className="AllSteps">
+              <Step1 />
+              <Step2 />
+              <Step3 />
+              <TermsServices />
+            </Stack>
+            <OrderSummary />
+          </> : <RecordNotFound message="No Items are available" />}
+      </Container>
       {openSessionExpireDialog && <SessionExpiredDialog
         open={openSessionExpireDialog}
         onClose={toggleSessionExpireDialog}

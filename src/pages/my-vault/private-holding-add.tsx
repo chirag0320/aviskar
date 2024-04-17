@@ -489,7 +489,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                 </Stack>
                                 <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} setDynamicSpecificationFields={setDynamicSpecificationFields} setDynamicCustomSpecificationFields={setDynamicCustomSpecificationFields} />
                                 <Stack className="RowWrapper">
-                                    <BasicDatePicker setValue={setValue} existingDate={currentPrivateHolding ? currentPrivateHolding?.purchaseDate : null} />
+                                    <BasicDatePicker name="Date" label="Purchase Date" setValue={setValue} existingDate={currentPrivateHolding ? currentPrivateHolding?.purchaseDate : null} error={errors.Date} clearErrors={clearErrors}/>
                                     <RenderFields
                                         register={register}
                                         error={errors.PurchasePrice}
