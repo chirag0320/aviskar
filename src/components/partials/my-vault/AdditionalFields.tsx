@@ -13,14 +13,7 @@ interface IProps {
     setFields: React.Dispatch<React.SetStateAction<IField[]>>
 }
 
-const AdditionalFields = ({ fields, setFields }: IProps) => {
-    const [tempFields, setTempFields] = useState<IField[]>(fields);
-    const defferedFields = useDebounce(tempFields, 600)
-
-    useEffect(() => {
-        setFields(defferedFields);
-    }, [defferedFields])
-
+const AdditionalFields = ({ fields:tempFields, setFields:setTempFields }: IProps) => {
     const handleAddField = () => {
         const newField = {
             [Math.random().toString(36).substring(7)]: {

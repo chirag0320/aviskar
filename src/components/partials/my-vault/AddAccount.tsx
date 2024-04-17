@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { Autocomplete, MenuItem, Button, Stack, TextField, Box, Typography } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -70,7 +70,9 @@ function getSchemaFromAlignment(alignment: string) {
 
 function AddAccount(props: AddAccountProps) {
   const { open, dialogTitle, alignment, onClose, hadleSecondaryAction, existingAccount } = props
-  const accountTypeText = existingAccount ? alignment : AccountTypeEnumReverse[alignment];
+  const accountTypeText = useMemo(() => {
+     return existingAccount ? alignment : AccountTypeEnumReverse[alignment];
+  }, [existingAccount, AccountTypeEnumReverse, alignment])
   const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
   const dispatch = useAppDispatch();
   const [stateList, setStateList] = useState([])
@@ -80,9 +82,7 @@ function AddAccount(props: AddAccountProps) {
   const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
   const [countryValue, setcountryValue] = useState<any>('')
   const [stateValue, setstateValue] = useState<any>('')
-  const [additionalFields, setAdditionalFields] = useState<IField[]>([
-    { [Math.random().toString(36).substring(7)]: { firstName: "", lastName: "" } }
-  ]);
+  const [additionalFields, setAdditionalFields] = useState<IField[]>([{ [Math.random().toString(36).substring(7)]: { firstName: "", lastName: "" } }]);
   const [phoneValue, setPhoneValue] = useState("");
 
   useEffect(() => {
@@ -109,7 +109,9 @@ function AddAccount(props: AddAccountProps) {
         }
       }
     })
-    setAdditionalFields(additionalBeneficiary)
+    additionalBeneficiary.splice(1,1)
+    console.log("🚀 ~ additionalBeneficiary ~ additionalBeneficiary:", additionalBeneficiary)
+    setAdditionalFields(()=>additionalBeneficiary)
     return () => {
       reset()
     }
@@ -364,7 +366,7 @@ function AddAccount(props: AddAccountProps) {
                 register={register}
                 error={errors.LastName}
                 name="LastName"
-                defaultValue={existingAccount?.firstName}
+                defaultValue={existingAccount?.lastName}
                 placeholder="Enter last name *"
                 control={control}
                 variant='outlined'
