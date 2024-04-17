@@ -17,20 +17,16 @@ import Toaster from "@/components/common/Toaster"
 import AddAddress from "@/components/partials/checkout/AddAddress"
 import { getStateAndCountryLists } from "@/redux/reducers/checkoutReducer"
 import { navigate } from "gatsby"
+import useRequireLogin from "@/hooks/useRequireLogin"
 
 function Addresses() {
+  const { loadingForCheckingLogin } = useRequireLogin()
   const openToaster = useAppSelector(state => state.homePage.openToaster)
   const loading = useAppSelector(state => state.myVault.loading)
   const dispatch = useAppDispatch()
   const { showToaster } = useShowToaster()
   const addressesData = useAppSelector(state => state.myVault.addresses)
   const [openAddAddress, setOpenAddAddress] = useState<boolean>(false)
-  const isLoggedIn = useAppSelector((state) => state.homePage.isLoggedIn)
-
-  if (!isLoggedIn) {
-    navigate('/login', { replace: true })
-    return;
-  }
 
   useAPIoneTime({ service: getStateAndCountryLists, endPoint: ENDPOINTS.getStateAndCountryLists });
   useAPIoneTime({
@@ -60,7 +56,9 @@ function Addresses() {
       showToaster({ message: "Address remove failed! Please Try again", severity: "error" })
     }
   }
-
+  if (loadingForCheckingLogin) {
+    return
+  }
   return (
     <>
       <Loader open={loading} />

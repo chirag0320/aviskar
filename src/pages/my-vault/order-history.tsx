@@ -15,18 +15,14 @@ import { getConfigDropdowns, getOrderHistory } from "@/redux/reducers/myVaultRed
 import { requestBodyOrderHistory } from "./buy-back-order-history";
 import { navigate } from "gatsby";
 import Toaster from "@/components/common/Toaster";
+import useRequireLogin from "@/hooks/useRequireLogin";
 
 function OrderHistory() {
+  const { loadingForCheckingLogin } = useRequireLogin()
   const openToaster = useAppSelector(state => state.homePage.openToaster)
   const loading = useAppSelector(state => state.myVault.loading)
   const dispatch = useAppDispatch();
   const orderHistoryDetails = useAppSelector((state) => state.myVault.orderHistory);
-  const isLoggedIn = useAppSelector((state) => state.homePage.isLoggedIn)
-
-  if (!isLoggedIn) {
-    navigate('/login', { replace: true })
-    return;
-  }
 
   useEffect(() => {
     dispatch(
@@ -41,7 +37,9 @@ function OrderHistory() {
     endPoint: ENDPOINTS.getConfigDropdown
   })
   // useAPIoneTime({service : getOrderHistory , endPoint : ENDPOINTS.getOrderHistory , body :{ ...requestBodyDefault, filters: {} } })
-
+  if (loadingForCheckingLogin) {
+    return
+  }
   return (
     <>
       <Loader open={loading} />

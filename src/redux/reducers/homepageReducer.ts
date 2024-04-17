@@ -70,7 +70,7 @@ interface CreateGuidelineState {
     }
   },
   popUpdata: IPopupDetails | null,
-  siteMapData: IsiteMapData | null;
+  siteMapData: {items: IsiteMapData[],totalCount: number} | null;
 }
 interface Settings {
   TwoFactorAuthenticatorAdminlogin: string;
@@ -209,8 +209,8 @@ export const getLiveDashboardChartData = appCreateAsyncThunk(
 )
 export const getSiteMapData = appCreateAsyncThunk(
   'getSiteMapData/status',
-  async () => {
-    return await ConfigServices.getSiteMapData()
+  async ({body}:any) => {
+    return await ConfigServices.getSiteMapData(body)
   }
 )
 // export const add = appCreateAsyncThunk(
@@ -457,8 +457,18 @@ export const createHomepageSlice = createSlice({
       state.loading = true
     })
     builder.addCase(getSiteMapData.fulfilled, (state, action) => {
+      // Group the data by groupTitle
       const responseData = action.payload.data.data;
-      state.siteMapData = responseData
+      console.log("🚀 ~ builder.addCase ~ responseData:", responseData)
+      const groupedData = responseData?.items?.reduce((acc: { [x: string]: any[]; }, currentItem: { groupTitle: any; }) => {
+        const { groupTitle } = currentItem;
+        if (!acc[groupTitle]) {
+          acc[groupTitle] = [];
+        }
+        acc[groupTitle].push(currentItem);
+        return acc;
+      }, {});
+      state.siteMapData = {items:groupedData, totalCount: responseData?.count}
       state.loading = false
     })
     builder.addCase(getSiteMapData.rejected, (state, action) => {

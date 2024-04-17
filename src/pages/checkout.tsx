@@ -22,21 +22,18 @@ import Toaster from "@/components/common/Toaster"
 import Loader from "@/components/common/Loader"
 import useAlertPopUp from "@/hooks/useAlertPopUp"
 import SessionExpiredDialog from "@/components/header/SessionExpiredDialog"
+import useRequireLogin from "@/hooks/useRequireLogin"
+import RecordNotFound from "@/components/common/RecordNotFound"
 
 function Checkout() {
+  const { loadingForCheckingLogin } = useRequireLogin()
   const dispatch = useAppDispatch()
   const checkLoadingStatus = useAppSelector(state => state.checkoutPage.loading);
+  const finalDataForTheCheckout = useAppSelector(state => state.checkoutPage.finalDataForTheCheckout);
   const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
   const openToaster = useAppSelector(state => state.homePage.openToaster)
   const [state, setState] = useState({ service: getCheckoutPageData, endPoint: ENDPOINTS.checkoutDetails })
-  const { isLoggedIn } = useAppSelector((state) => state.homePage)
   const [openSessionExpireDialog, toggleSessionExpireDialog] = useToggle(false)
-
-
-  if (!isLoggedIn) {
-    navigate('/login', { replace: true })
-    return;
-  }
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -44,8 +41,12 @@ function Checkout() {
     setState((prev: any) => ({ ...prev, params: { isInstantBuy: isInstantBuy ?? false } }))
   }, [window.location.search, cartItems?.length])
   useAPIoneTime(state)
-  useAlertPopUp({pageName: 'Checkout',openPopup:toggleSessionExpireDialog})
+  useAlertPopUp({ pageName: 'Checkout', openPopup: toggleSessionExpireDialog })
+  if (loadingForCheckingLogin) {
+    return
+  }
   return (
+
     <Layout>
       <Loader open={checkLoadingStatus} />
       <Seo
@@ -55,7 +56,7 @@ function Checkout() {
       />
       {openToaster && <Toaster />}
       <PageTitle title="Checkout" />
-      <Container id="PageCheckout">
+     { finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 ? <Container id="PageCheckout">
         <Stack className="AllSteps">
           <Step1 />
           <Step2 />
@@ -63,7 +64,7 @@ function Checkout() {
           <TermsServices />
         </Stack>
         <OrderSummary />
-      </Container>
+      </Container> : <RecordNotFound message="No Items are available" />}
       {openSessionExpireDialog && <SessionExpiredDialog
         open={openSessionExpireDialog}
         onClose={toggleSessionExpireDialog}

@@ -42,6 +42,7 @@ import { getMyVaultHomePageChartData, getMyVaultHomePageData } from "@/redux/red
 import { useAppSelector } from "@/hooks";
 import { navigate } from "gatsby";
 import ConfigServices from "@/apis/services/ConfigServices";
+import useRequireLogin from "@/hooks/useRequireLogin";
 
 interface VaultProps {
   id: number;
@@ -56,9 +57,9 @@ interface VaultProps {
 }
 
 function Vault() {
-  // const { data }: any = useApiRequest(ENDPOINTS.getSlider);
+  const { loadingForCheckingLogin } = useRequireLogin()
   const { myVaultHomePageData, myVaultHomePageChartData } = useAppSelector((state) => state.myVault)
-  console.log("🚀 ~ Vault ~ myVaultHomePageChartData:", myVaultHomePageData)
+  console.log("🚀 ~ Vault ~ myVaultHomePageData:", myVaultHomePageData)
   const isLargeScreen = useMediaQuery((theme: Theme) =>
     theme.breakpoints.up("lg")
   );
@@ -100,6 +101,9 @@ function Vault() {
       console.log("🚀 ~ reOrderFunction ~ res:", error)
     }
   }, [])
+  if (loadingForCheckingLogin) {
+    return
+  }
   return (
     <Layout>
       <Box className="VaultPage">
@@ -126,14 +130,17 @@ function Vault() {
                   Allocated Vault Storage clients can request holding statements
                   by calling our office during business hours. */}
                 </Typography>
-                <Button size="large" variant="contained" sx={{ mt: 5 }}>
+                <Button size="large" variant="contained" sx={{ mt: 5 }} onClick={()=>{
+                  navigate('/shop')
+                }}>
                   Shop Now
                 </Button>
                 <Box className="VaultStats">
-                  <StatsCard onClick={() => { navigate('/my-vault/ordres/') }} title="View Orders" statsNumber={myVaultHomePageData?.Order} icon={<OrdersIcon />} bgColor="rgb(52 145 250 / 6%)" />
-                  <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Private Holding" icon={<PrivateHoldingIcon />} statsNumber="35" bgColor="rgb(234 162 43 / 6%)" />
-                  <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Allocated Holdings" statsNumber="8" icon={<AllotedHldingIcon />} bgColor="rgb(255 31 31 / 6%)" />
-                  <StatsCard onClick={() => { navigate('/my-vault/smart-metals/') }} title="Smart Metals" statsNumber="460" icon={<SmartMetalsIcon />} bgColor="rgb(0 128 1 / 6%)" />
+                  <StatsCard onClick={() => { navigate('/my-vault/accounts/') }} title="Accounts" statsNumber={myVaultHomePageData?.Customers} icon={<AccountsIcon />} bgColor="rgb(52 145 250 / 6%)" />
+                  <StatsCard onClick={() => { navigate('/my-vault/addresses/') }} title="Addresses" statsNumber={myVaultHomePageData?.Addresses} icon={<AddressesIcon />} bgColor="rgb(234 162 43 / 6%)" />
+                  <StatsCard onClick={() => { navigate('/my-vault/order-history/') }} title="View Orders" statsNumber={myVaultHomePageData?.Order} icon={<OrdersIcon />} bgColor="rgb(52 145 250 / 6%)" />
+                  <StatsCard onClick={() => { navigate('/my-vault/buy-back-order-history/') }} title="Buyback Orders" statsNumber={myVaultHomePageData?.["Buyback Order"]} icon={<BuyBackOrderIcon />} bgColor="rgb(0 128 1 / 6%)" />
+
                 </Box>
               </Box>
               <Box className="Right">
@@ -214,9 +221,9 @@ function Vault() {
               <UserStatsCard title="My Vault" icon={<MyVaultIcon />} bgColor="#3491fa14" currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} movevalue={myVaultHomePageChartData?.totalValueFacturation?.move} movePercentage={myVaultHomePageChartData?.totalValueFacturation?.percentage} />
               <UserStatsCard title="My Gold" icon={<MyGoldIcon />} bgColor="rgb(234 162 43 / 5%)" currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} movevalue={myVaultHomePageChartData?.goldValueFacturation?.move} movePercentage={myVaultHomePageChartData?.goldValueFacturation?.percentage} />
               <UserStatsCard title="My Silver" icon={<MySilverIcon />} bgColor="rgb(255 31 31 / 5%)" currentPrice={myVaultHomePageChartData?.silverValueFacturation?.percentage} movevalue={myVaultHomePageChartData?.silverValueFacturation?.move} movePercentage={myVaultHomePageChartData?.silverValueFacturation?.percentage} />
-              <LineChartCard currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} low={myVaultHomePageChartData?.totalValueFacturation?.low} high={myVaultHomePageChartData?.totalValueFacturation?.high} valueForChart={myVaultHomePageChartData?.totalValueFacturation?.linechartdata} />
-              <LineChartCard currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} low={myVaultHomePageChartData?.goldValueFacturation?.low} high={myVaultHomePageChartData?.goldValueFacturation?.high} valueForChart={myVaultHomePageChartData?.goldValueFacturation?.linechartdata} />
-              <LineChartCard currentPrice={myVaultHomePageChartData?.silverValueFacturation?.current} low={myVaultHomePageChartData?.silverValueFacturation?.low} high={myVaultHomePageChartData?.silverValueFacturation?.high} valueForChart={myVaultHomePageChartData?.silverValueFacturation?.linechartdata} />
+              <LineChartCard title="My Vault" currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} low={myVaultHomePageChartData?.totalValueFacturation?.low} high={myVaultHomePageChartData?.totalValueFacturation?.high} valueForChart={myVaultHomePageChartData?.totalValueFacturation?.linechartdata} />
+              <LineChartCard title="My Gold" currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} low={myVaultHomePageChartData?.goldValueFacturation?.low} high={myVaultHomePageChartData?.goldValueFacturation?.high} valueForChart={myVaultHomePageChartData?.goldValueFacturation?.linechartdata} />
+              <LineChartCard title="My Silver" currentPrice={myVaultHomePageChartData?.silverValueFacturation?.current} low={myVaultHomePageChartData?.silverValueFacturation?.low} high={myVaultHomePageChartData?.silverValueFacturation?.high} valueForChart={myVaultHomePageChartData?.silverValueFacturation?.linechartdata} />
             </Box>
           </Container>
         </Box>
@@ -224,10 +231,10 @@ function Vault() {
           <Container>
             <Box className="UserInfoWrapper">
               <Box className="Left">
-                <StatsCard onClick={() => { navigate('/my-vault/smart-metals/') }} title="Smart Metals" statsNumber="5" icon={<AccountsIcon />} bgColor="rgb(52 145 250 / 6%)" />
-                <StatsCard onClick={() => { navigate('/my-vault/addresses/') }} title="Addresses" statsNumber={myVaultHomePageData?.Addresses} icon={<AddressesIcon />} bgColor="rgb(234 162 43 / 6%)" />
-                <StatsCard onClick={() => { navigate('/my-vault/rewards-poins/') }} title="Rewards Points" statsNumber={myVaultHomePageData?.["Reward Point"]} icon={<RewardPointsIcon />} bgColor="rgb(255 31 31 / 6%)" />
-                <StatsCard onClick={() => { navigate('/my-vault/private-holding') }} title="Buyback Orders" statsNumber={myVaultHomePageData?.["Buyback Order"]} icon={<BuyBackOrderIcon />} bgColor="rgb(0 128 1 / 6%)" />
+                <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Allocated Holdings" statsNumber="todo" icon={<AllotedHldingIcon />} bgColor="rgb(255 31 31 / 6%)" />
+                <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Private Holding" icon={<PrivateHoldingIcon />} statsNumber={"todo"} bgColor="rgb(234 162 43 / 6%)" />
+                <StatsCard onClick={() => { navigate('/my-vault/smart-metals/') }} title="Smart Metals" statsNumber="todo" icon={<SmartMetalsIcon />} bgColor="rgb(0 128 1 / 6%)" />
+                <StatsCard onClick={() => { navigate('/rewardpoints/history') }} title="Rewards Points" statsNumber={myVaultHomePageData?.["Reward Point"]} icon={<RewardPointsIcon />} bgColor="rgb(255 31 31 / 6%)" />
               </Box>
               <Box className="Right">
                 <Box id="Banner" component="section" key={"banner"}>
@@ -350,12 +357,13 @@ function Vault() {
                   Change password
                 </Button>
               </Card>
-              <Card className="AccountInformationCard">
-                <Typography variant="subtitle2">Newsletters</Typography>
+              {/* below newsletter is commneted it will be use in future */}
+              {/* <Card className="AccountInformationCard">
+                <Typography variant="subtitle2">Newsletters</Typography> */}
                 {/* @ts-ignore */}
-                <Typography variant="body2" sx={{ mt: 1.5 }} dangerouslySetInnerHTML={{ __html: myVaultHomePageData?.newsLetterDescription }}>
+                {/* <Typography variant="body2" sx={{ mt: 1.5 }} dangerouslySetInnerHTML={{ __html: myVaultHomePageData?.newsLetterDescription }}>
                 </Typography>
-              </Card>
+              </Card> */}
             </Box>
           </Container>
         </Box>

@@ -1,5 +1,5 @@
 import RenderFields from '@/components/common/RenderFields'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -19,7 +19,7 @@ interface GetInTouchInputs {
 }
 
 const schema = yup.object().shape({
-    reason: yup.string().trim().required("Reason is required field"),
+    reason: yup.string().notOneOf(['none'], "Reason is required field"),
     name: yup.string().trim().required("Name is required field"),
     email: yup.string().email("Email must be valid").required("Email is required field"), // Email field is required and must be in email format
     phone: yup.string().trim().required("Phone number is required field"),
@@ -30,13 +30,16 @@ const schema = yup.object().shape({
 const ContactUsForm = () => {
     const reasonsForContact = useAppSelector(state => state.contactUs.reasonsForContact);
     const loading = useAppSelector(state => state.contactUs.loading);
+    const [reasonValue, setReasonValue] = useState("none")
     const dispatch = useAppDispatch();
     const { showToaster } = useShowToaster()
 
     const {
         register,
         handleSubmit,
+        clearErrors,
         reset,
+        getValues,
         control,
         setValue,
         formState: { errors },
@@ -73,14 +76,18 @@ const ContactUsForm = () => {
                     register={register}
                     error={errors.reason}
                     name="reason"
+                    clearErrors={clearErrors}
                     label="Reason* :"
                     control={control}
+                    value={reasonValue}
                     variant='outlined'
+                    getValues={getValues}
                     margin='none'
                     setValue={setValue}
                     // required
                     className='SelectReason'
                 >
+                    <MenuItem value="none">Select Reason</MenuItem>
                     {reasonsForContact.length > 0 && reasonsForContact.map((reason) => (
                         <MenuItem key={reason.id} value={reason.id}>{reason.reason}</MenuItem>
                     ))}
@@ -93,7 +100,7 @@ const ContactUsForm = () => {
                     placeholder="Enter your name."
                     variant='outlined'
                     margin='none'
-                    // required
+                // required
                 />
                 <RenderFields
                     register={register}
@@ -103,7 +110,7 @@ const ContactUsForm = () => {
                     placeholder="Enter your email address."
                     variant='outlined'
                     margin='none'
-                    // required
+                // required
                 />
                 <RenderFields
                     register={register}
@@ -115,7 +122,7 @@ const ContactUsForm = () => {
                     placeholder="Enter your phone number."
                     variant='outlined'
                     margin='none'
-                    // required
+                // required
                 />
                 <RenderFields
                     register={register}
@@ -128,7 +135,7 @@ const ContactUsForm = () => {
                     rows={7}
                     className='EnquiryTexaea'
                     margin='none'
-                    // required
+                // required
                 />
                 <Box className="FormAction">
                     <Button className='GetInTouchSubmitBtn' variant="contained" type="submit" disabled={loading}>Submit</Button>

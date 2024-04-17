@@ -240,6 +240,105 @@ export interface IPrivateHoldingLivePrice {
     percentage: number,
     position: number
 }
+export interface IPrivateHoldingAddInputs {
+    Account: string
+    ProductName: string
+    MintOrBrand: string
+    Metal: string
+    Type: string
+    Series: string
+    Purity: string
+    Weight: number
+    WeightType: string
+    Specification: string
+    Value: string
+    CustomSpecification: string
+    CustomValue: string
+    PurchasePrice: string
+    Date: string
+    PurchaseFrom: string
+    Qty: string
+    ProvenanceDocuments: string
+    ProductPhotos: string
+    DocumentType: string
+}
+
+export interface IPrivateHoldingAddorEditQuery {
+    Id?: number;
+    CustomerID?: number | string;
+    SubCustomerID?: number | string;
+    ProductId?: number | string;
+    ProductName?: string;
+    PurchaseDate?: string;
+    Price?: number | string;
+    Qty?: number | string;
+    RunningQty?: number;
+    PurchasedFrom?: string;
+    Weight?: number | string;
+    WeightType?: number | string;
+    Attribute?: {
+        SpecificationAttributeOptionId: number | string;
+        SpecificationAttributeId: number | string;
+        SpecificationAttributeOptionOther: string;
+    }[];
+    CustomeAttribute?: any[]; // You might want to replace 'any' with a specific type/interface if you know the structure
+    Attachments?: {
+        Id?: number | string;
+        FileName?: string;
+        Type?: number | string;
+        Filepath?: string;
+        Filebyte?: string;
+        PrivateHoldingsID?: number | string;
+        ProvenanceDocType?: number | string;
+        ProvenanceOtherDocType?: string;
+    }[];
+}
+
+export interface ISpecificPrivateHolding {
+    id: number;
+    customerId: number;
+    subCustomerId: number;
+    productId: number;
+    productName: string;
+    purchaseDate: string;
+    price: number;
+    qty: number;
+    runningQty: number;
+    purchasedFrom: string;
+    weight: number;
+    weightType: string;
+    productattribute: {
+        specificationAttributeId: number;
+        specificationAttributeOptionId: number;
+        specificationAttributeOptionOther: null | string;
+    }[];
+    customeAttribute: any[]; // Assuming custom attribute can be of any type
+    attachments: {
+        id: number;
+        fileName: string;
+        type: string;
+        filepath: string;
+        provenanceDocType: string;
+        provenanceOtherDocType: null | string;
+    }[];
+}
+
+export interface IPrivateHoldingFormDropdown {
+    // "specificationAttributeId": number,
+    // "specificationAttribute": string,
+    // "specificationAttributeOptions": {
+    //     "specificationAttributeOptionsId": number,
+    //     "specificationAttributeId": number,
+    //     "specificationOption": string
+    // }[]
+    [key: string]: {
+        "specificationAttributeOptionsId": number,
+        "specificationAttributeId": number,
+        "specificationOption": string
+    }[]
+}
+
+
 // Sell Qty
 export interface SellData {
     HoldingId: number;

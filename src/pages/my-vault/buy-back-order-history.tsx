@@ -14,6 +14,7 @@ import { getBuyBackOrderHistory, getConfigDropdowns } from "@/redux/reducers/myV
 import { requestBodyDefault } from "../[category]"
 import { navigate } from "gatsby"
 import Toaster from "@/components/common/Toaster"
+import useRequireLogin from "@/hooks/useRequireLogin"
 
 export const requestBodyOrderHistory = {
     ...requestBodyDefault, filters: {
@@ -26,16 +27,11 @@ export const requestBodyOrderHistory = {
 }
 
 function BuyBackOrderHistory() {
+    const { loadingForCheckingLogin } = useRequireLogin()
     const orderBuypackHistoryDetails = useAppSelector(state => state.myVault.buyBackOrderHistory)
     const loading = useAppSelector(state => state.myVault.loading)
     const dispatch = useAppDispatch()
     const openToaster = useAppSelector(state => state.homePage.openToaster)
-    const isLoggedIn = useAppSelector((state) => state.homePage.isLoggedIn)
-
-    if (!isLoggedIn) {
-        navigate('/login', { replace: true })
-        return;
-    }
 
     useEffect(() => {
         dispatch(
@@ -49,7 +45,9 @@ function BuyBackOrderHistory() {
         service: getConfigDropdowns,
         endPoint: ENDPOINTS.getConfigDropdown
     })
-
+    if (loadingForCheckingLogin) {
+        return
+      }
     return (
         <>
             <Loader open={loading} />

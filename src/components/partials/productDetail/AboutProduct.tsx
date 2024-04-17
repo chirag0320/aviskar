@@ -82,7 +82,6 @@ function AboutProduct({ productId }: any) {
     },
   });
   const { productDetailsData } = useAppSelector((state) => state.category)
-  console.log("🚀 ~ AboutProduct ~ productDetailsData:", productDetailsData)
   const { configDetails: configDetailsState, isLoggedIn, openToaster } = useAppSelector((state) => state.homePage)
   const [quantityCount, setQuantityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
   const [productIds, setProductIds] = useState({ productIds: [Number(productId)] })
@@ -267,7 +266,7 @@ function AboutProduct({ productId }: any) {
                       <Typography className="SaveMessage">SAVE</Typography>
                       <TextFlipAnimation
                         frontValue={calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount)!}
-                        backValue={'$'+ roundOfThePrice(productDetailsData?.premiumDiscount)}
+                        backValue={'$'+ roundOfThePrice(productDetailsData?.premiumDiscount) + ' Off'}
                       /></Stack>
                     : null}
                     {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
@@ -324,7 +323,7 @@ function AboutProduct({ productId }: any) {
                           <Typography className="SaveMessage">SAVE</Typography>
                           <TextFlipAnimation
                             frontValue={calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount)!}
-                            backValue={'$' + roundOfThePrice(productDetailsData?.premiumDiscount) +'Off'}
+                            backValue={'$' + roundOfThePrice(productDetailsData?.premiumDiscount) +' Off'}
                           /></Stack>
                         : null}
                       {/* <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} /> */}

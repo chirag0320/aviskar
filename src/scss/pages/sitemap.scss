@@ -1,0 +1,77 @@
+#PageSitemap {
+  padding-bottom: 34px;
+  @include media($xs) {
+    padding-bottom: 20px;
+  }
+  .SitemapList {
+    .ListWrapper {
+      flex-direction: column;
+      gap: 30px;
+      @include media($sm) {
+        gap: 20px;
+      }
+      .TitleWithList {
+        .List {
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 10px 20px;
+          margin-top: 20px;
+          @include media($xxl) {
+            grid-template-columns: repeat(4, 1fr);
+          }
+          @include media($lg) {
+            grid-template-columns: repeat(3, 1fr);
+          }
+          @include media($md) {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          @include media($ssm) {
+            grid-template-columns: repeat(1, 1fr);
+            gap: 0px 10px;
+            margin-top: 10px;
+          }
+          a {
+            text-decoration: none;
+            @include padding-vertical(5);
+          }
+        }
+      }
+    }
+    .Pagination {
+      justify-content: center;
+      @include padding-vertical(30);
+    }
+  }
+  .Services {
+    padding-top: 30px;
+    border-top: 1px solid rgba($dark, 0.2); 
+    .ServicesWrapper {
+      gap: 20px;
+      @include media-min($md) {
+        gap: 4vw;
+      }
+      @include media($md) {
+        flex-direction: column;
+      }
+      .RenderService {
+        align-items: center;
+        gap: 20px;
+        .MuiSvgIcon-root {
+          color: $greyRegent;
+        }
+        .Content {
+          .Title {
+            font-weight: 600;
+          }
+          .Description {
+            color: $greyRegent;
+            font-weight: 500;
+            a {
+              text-decoration: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}

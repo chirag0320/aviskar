@@ -31,18 +31,15 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
         end: CalendarDate
     } | undefined>(undefined);
     const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
+    const [statusValue, setStatusValue] = useState<string>("none");
     const { showToaster } = useShowToaster()
-
-    // show intially placeholder in select
-    useEffect(() => {
-        setValue("OrderStatus", "none")
-    }, [])
 
     const {
         register,
         handleSubmit,
         reset,
         getValues,
+        clearErrors,
         control,
         setValue,
         formState: { errors },
@@ -51,7 +48,7 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
     })
 
     const onSubmit = async (data: any) => {
-        console.log("Qmint", dateRangeValue)
+        // console.log("Qmint", dateRangeValue)
         if (dateRangeValue === undefined) {
             showToaster({
                 message: "Please select date range"
@@ -92,19 +89,21 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
                         <Box className="SelectStatusWrapper">
                             <RenderFields
                                 type="select"
+                                clearErrors={clearErrors}
                                 register={register}
                                 error={errors.OrderStatus}
                                 name="OrderStatus"
                                 control={control}
                                 placeholder="Select Order Status"
                                 variant='outlined'
+                                value={statusValue}
                                 setValue={setValue}
                                 getValues={getValues}
                                 margin='none'
                                 // required
                                 className='SelectOrderStatus'
                             >
-                                <MenuItem value="none" selected>Select Order Status</MenuItem>
+                                <MenuItem value="none">Select Order Status</MenuItem>
                                 {orderHistoryType === "buy-back" ? (configDropdowns?.buybackOrderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>)) : (configDropdowns?.orderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>))}
                             </RenderFields>
                         </Box>

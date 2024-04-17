@@ -239,18 +239,6 @@
       .Pagination {
         justify-content: center;
         margin-top: 60px;
-        .MuiPagination-root {
-          .MuiPagination-ul {
-            .MuiPaginationItem-root {
-              min-width: 28px;
-              height: 28px;
-              &.MuiPaginationItem-ellipsis {
-                min-width: 20px;
-                margin: 0;
-              }
-            }
-          }
-        }
       }
     }
   }

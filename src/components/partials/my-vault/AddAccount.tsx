@@ -44,7 +44,6 @@ interface Inputs {
   LastName: string,
   Company: string,
   Contact: string,
-  ContactCode: string,
   Email: string,
   Address1: string,
   Address2: string,
@@ -73,7 +72,6 @@ function getSchemaFromAlignment(alignment: string) {
 
 function AddAccount(props: AddAccountProps) {
   const { open, dialogTitle, alignment, onClose, hadleSecondaryAction, existingAccount } = props
-  // console.log("🚀 ~ AddAccount ~ trusteeTypes:", trusteeTypes)
   const accountTypeText = existingAccount ? alignment : AccountTypeEnumReverse[alignment];
   const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
   const dispatch = useAppDispatch();
@@ -91,8 +89,6 @@ function AddAccount(props: AddAccountProps) {
   ]);
   const [phoneValue, setPhoneValue] = useState();
 
-  // console.log("🚀 ~ useEffect ~ existingAccount:", countryValue)
-
   useEffect(() => {
     setValue('Country', "none")
     if (accountTypeText === "Trust" || accountTypeText === "Superfund") {
@@ -106,6 +102,7 @@ function AddAccount(props: AddAccountProps) {
     setValue('State', existingAccount?.address.stateName);
     setStateId(existingAccount?.address.stateId);
     setValue('Country', existingAccount?.address.countryId?.toString())
+    setValue("Contact", existingAccount?.phoneNumber)
     setcountryValue(existingAccount?.address.countryId?.toString())
     setstateValue(existingAccount?.address.stateName)
 
@@ -127,6 +124,7 @@ function AddAccount(props: AddAccountProps) {
     register,
     reset,
     handleSubmit,
+    clearErrors,
     control,
     setValue,
     getValues,
@@ -136,7 +134,6 @@ function AddAccount(props: AddAccountProps) {
   })
 
   const onAddressFormSubmitHandler = async (data: any) => {
-    console.log("🚀 ~ onAddressFormSubmitHandler ~ data:", data)
     const additionalBeneficiary = additionalFields.map((field) => {
       // id static
       return { ...field[Object.keys(field)[0]], customerAdditionalBeneficiaryId: 0 }
@@ -205,7 +202,6 @@ function AddAccount(props: AddAccountProps) {
       await dispatch(getAccounts({ url: ENDPOINTS.getAccounts }))
     }
     else {
-
       showToaster({ message: ((response.payload as AxiosError).response?.data as { message?: string }).message || "Failed to save address! Please try again", severity: "error" })
     }
   }
@@ -236,12 +232,17 @@ function AddAccount(props: AddAccountProps) {
       if (googleAddressComponents?.postalCode) {
         setValue("Code", Number(googleAddressComponents?.postalCode));
       }
+      clearErrors('Country')
+      clearErrors('State')
+      clearErrors('City')
+      clearErrors('Address1')
+      clearErrors('Code')
     }
   }, [googleAddressComponents])
 
   useEffect(() => {
     const data: any = configDropdowns?.stateList.filter((state: any) => {
-      return state.enumValue == countryValue || countryValue == -1
+      return state.enumValue == countryValue || countryValue == "none"
     })
     setStateList(data)
   }, [configDropdowns?.stateList, countryValue])
@@ -288,6 +289,7 @@ function AddAccount(props: AddAccountProps) {
               <RenderFields
                 register={register}
                 type="select"
+                clearErrors={clearErrors}
                 control={control}
                 error={errors.TrusteeType}
                 setValue={setValue}
@@ -317,6 +319,7 @@ function AddAccount(props: AddAccountProps) {
               <RenderFields
                 register={register}
                 type="select"
+                clearErrors={clearErrors}
                 control={control}
                 error={errors.TrusteeType}
                 setValue={setValue}
@@ -375,49 +378,17 @@ function AddAccount(props: AddAccountProps) {
             </Stack>
             <Stack className="Column">
               <Box className="ContactField">
-                {/* <PhoneInput
-                  country="au"
-                  value={phoneValue}
-                  preferredCountries={['au']}
-                  onChange={setPhoneValue}
-                /> */}
-
-                {/* package link - https://www.npmjs.com/package/react-phone-input-2#style */}
                 <RenderFields
                   register={register}
                   type="phoneInput"
                   control={control}
+                  defaultValue={existingAccount?.phoneNumber}
                   setValue={setValue}
-                  name="ContactCode"
+                  name="Contact"
                   variant="outlined"
                   margin="none"
                   className="ContactSelect"
                 ></RenderFields>
-
-                {/* <RenderFields
-                  register={register}
-                  type="select"
-                  control={control}
-                  setValue={setValue}
-                  name="ContactCode"
-                  variant="outlined"
-                  margin="none"
-                  className="ContactSelect"
-                >
-                  {PhoneNumberCountryCode.map((phone) => <MenuItem key={phone.code} value={phone.dial_code}>{`${phone.name} (${phone.dial_code})`}</MenuItem>)}
-                </RenderFields> */}
-                {/* <RenderFields
-                  register={register}
-                  error={errors.Contact || errors.ContactCode}
-                  defaultValue={Number(existingAccount?.phoneNumber)}
-                  name="Contact"
-                  type="number"
-                  placeholder="Enter contact *"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                  className="ContactTextField"
-                /> */}
               </Box>
               <RenderFields
                 register={register}
@@ -514,6 +485,7 @@ function AddAccount(props: AddAccountProps) {
                 error={errors.Country}
                 defaultValue={existingAccount?.address.countryId ?? "none"}
                 name="Country"
+                clearErrors={clearErrors}
                 variant='outlined'
                 margin='none'
                 // defaultValue={"-1

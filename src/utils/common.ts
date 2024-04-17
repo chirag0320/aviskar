@@ -75,6 +75,12 @@ export const storeLastPage = (pageUrl: string) => {
 export const getLastPage = () => {
   return sessionStorage.getItem('lastPage');
 };
+
+export const PriceFacturationEnum: { [key: string]: "error" | "success" } = {
+  "0": "success",
+  "1": "success",
+  "2": "error"
+}
 export const bodyForGetShoppingCartData = {
   "search": "",
   "pageNo": 0,
@@ -132,12 +138,12 @@ export const AccountTypeEnumReverse: { [key: string]: string } = {
   "6": "Wholesaler"
 }
 export const AccountTypeEnum: { [key: string]: string } = {
-  "Individual" :"1",
-  "Joint" :"2",
-  "Business" :"3",
-  "Superfund" :"4",
-  "Trust" :"5",
-  "Wholesaler" :"6"
+  "Individual": "1",
+  "Joint": "2",
+  "Business": "3",
+  "Superfund": "4",
+  "Trust": "5",
+  "Wholesaler": "6"
 }
 
 export const PhoneNumberCountryCode = [
@@ -1372,13 +1378,13 @@ export const calculationOfThePremiumAndDiscount = (premium: string | number, pre
 
   // Check if parsedPremium and parsedDiscount are valid numbers
   if (isNaN(parsedPremium) || isNaN(parsedDiscount) || parsedPremium === 0) {
-      return null;
+    return null;
   }
 
   const percentage = Math.round((parsedDiscount / parsedPremium) * 100);
 
   if (isNaN(percentage)) {
-      return null;
+    return null;
   }
 
   return `${percentage}% Off on premium`;
