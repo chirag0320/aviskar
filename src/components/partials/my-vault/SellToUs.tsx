@@ -19,6 +19,8 @@ interface SellToUs {
     onClose: () => void
     valueOfTheSellToUs: any
     setValue: (key: any, value: any) => void
+    maxQty: number
+    unitPrice: number
 }
 
 interface Inputs {
@@ -30,7 +32,7 @@ const schema = yup.object().shape({
 });
 
 function SellToUs(props: SellToUs) {
-    const { open, onClose, valueOfTheSellToUs, setValue } = props
+    const { open, onClose, valueOfTheSellToUs, setValue, maxQty, unitPrice } = props
     const dispatch = useAppDispatch()
     const {
         register,
@@ -67,7 +69,7 @@ function SellToUs(props: SellToUs) {
                     <img src={valueOfTheSellToUs?.filepath ?? noImage} alt="Product image" />
                 </Box>
                 <Stack className="ActionWrapper">
-                    <QuantityInputs quantityLabel={valueOfTheSellToUs?.price} onQuantityChange={onQuantityChange} qty={valueOfTheSellToUs?.quantity} />
+                    <QuantityInputs quantityLabel={unitPrice as any} onQuantityChange={onQuantityChange} qty={valueOfTheSellToUs?.quantity} maxQty={maxQty} />
                     <Stack className="ButtonsWrapper">
                         <Button size="medium" variant="outlined" onClick={() => {
                             onClose()
