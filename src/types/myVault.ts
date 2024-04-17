@@ -265,31 +265,31 @@ export interface IPrivateHoldingAddInputs {
 
 export interface IPrivateHoldingAddorEditQuery {
     Id?: number;
-    CustomerID?: number | string;
-    SubCustomerID?: number | string;
-    ProductId?: number | string;
+    CustomerID?: number;
+    SubCustomerID?: number;
+    ProductId?: number;
     ProductName?: string;
     PurchaseDate?: string;
-    Price?: number | string;
-    Qty?: number | string;
+    Price?: number;
+    Qty?: number;
     RunningQty?: number;
     PurchasedFrom?: string;
-    Weight?: number | string;
-    WeightType?: number | string;
+    Weight?: number;
+    WeightType?: number;
     Attribute?: {
-        SpecificationAttributeOptionId: number | string;
-        SpecificationAttributeId: number | string;
+        SpecificationAttributeOptionId: number;
+        SpecificationAttributeId: number;
         SpecificationAttributeOptionOther: string;
     }[];
     CustomeAttribute?: any[]; // You might want to replace 'any' with a specific type/interface if you know the structure
     Attachments?: {
-        Id?: number | string;
+        Id?: number;
         FileName?: string;
-        Type?: number | string;
-        Filepath?: string;
-        Filebyte?: string;
-        PrivateHoldingsID?: number | string;
-        ProvenanceDocType?: number | string;
+        Type?: number;
+        Filepath?: string | undefined;
+        Filebyte?: string | undefined;
+        PrivateHoldingsID?: number;
+        ProvenanceDocType?: number | undefined;
         ProvenanceOtherDocType?: string;
     }[];
 }

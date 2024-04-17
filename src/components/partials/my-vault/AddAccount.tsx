@@ -73,8 +73,6 @@ function AddAccount(props: AddAccountProps) {
   const accountTypeText = existingAccount ? alignment : AccountTypeEnumReverse[alignment];
   const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
   const dispatch = useAppDispatch();
-  // const countryList = useAppSelector(state => state.checkoutPage.countryList);
-  // const configDropdowns?.stateList = useAppSelector(state => state.checkoutPage.stateList);
   const [stateList, setStateList] = useState([])
   const [stateId, setStateId] = useState<number | null>(null);
   const { showToaster } = useShowToaster();
@@ -85,7 +83,7 @@ function AddAccount(props: AddAccountProps) {
   const [additionalFields, setAdditionalFields] = useState<IField[]>([
     { [Math.random().toString(36).substring(7)]: { firstName: "", lastName: "" } }
   ]);
-  const [phoneValue, setPhoneValue] = useState();
+  const [phoneValue, setPhoneValue] = useState("");
 
   useEffect(() => {
     setValue('Country', "none")
@@ -93,7 +91,6 @@ function AddAccount(props: AddAccountProps) {
       setValue('TrusteeType', "none")
     }
   }, [])
-
 
   useEffect(() => {
     if (!existingAccount) return;
@@ -103,7 +100,7 @@ function AddAccount(props: AddAccountProps) {
     setValue("Contact", existingAccount?.phoneNumber)
     setcountryValue(existingAccount?.address.countryId?.toString())
     setstateValue(existingAccount?.address.stateName)
-
+    setPhoneValue(existingAccount?.phoneNumber)
     const additionalBeneficiary = existingAccount?.additionalBeneficiary.map((beneficiary) => {
       return {
         [beneficiary.id]: {
@@ -111,7 +108,7 @@ function AddAccount(props: AddAccountProps) {
           lastName: beneficiary.lastName
         }
       }
-    });
+    })
     setAdditionalFields(additionalBeneficiary)
     return () => {
       reset()
@@ -152,7 +149,7 @@ function AddAccount(props: AddAccountProps) {
       accountTypeId: accountTypeId,
       additionalBeneficiary: additionalBeneficiary,
       address: {
-        // "addressId": 0,
+        addressId: existingAccount?.address.addressId || undefined,
         firstName: data.FirstName,
         lastName: data.LastName,
         phoneNumber: data.Contact,
@@ -380,13 +377,14 @@ function AddAccount(props: AddAccountProps) {
                   register={register}
                   type="phoneInput"
                   control={control}
-                  defaultValue={existingAccount?.phoneNumber}
+                  // defaultValue={existingAccount?.phoneNumber}
                   setValue={setValue}
                   name="Contact"
+                  value={phoneValue}
                   variant="outlined"
                   margin="none"
                   className="ContactSelect"
-                  error={errors.LastName}
+                  error={errors.Contact}
                 ></RenderFields>
               </Box>
               <RenderFields

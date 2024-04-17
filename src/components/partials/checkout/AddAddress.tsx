@@ -250,6 +250,7 @@ function AddAddress(props: AddAddress) {
                             variant="outlined"
                             margin="none"
                             className="ContactSelect"
+                            error={errors.Contact}
                         ></RenderFields>
                         {/* </Box> */}
                         <RenderFields
@@ -303,7 +304,7 @@ function AddAddress(props: AddAddress) {
                             margin='none'
                             value={countryValue}
                             setValue={setValue}
-                            // onChange={OnChange}
+                        // onChange={OnChange}
                         >
                             <MenuItem value="none">Select country *</MenuItem>
                             {countryList.map((country: StateOrCountry) => (
