@@ -36,7 +36,7 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                     fileName: selectedFile.name,
                     type: getValues("DocumentType"),
                     fileByte: fileData,
-                    documentType: PrivateHoldingDocumentTypeEnum[getValues("DocumentType")]
+                    documentType: getValues("DocumentType")
                 }]);
             };
             reader.readAsArrayBuffer(selectedFile);

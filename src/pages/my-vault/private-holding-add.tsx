@@ -30,6 +30,7 @@ import useRequireLogin from "@/hooks/useRequireLogin";
 import Toaster from "@/components/common/Toaster";
 import useShowToaster from "@/hooks/useShowToaster";
 import { hasFulfilled } from "@/utils/common";
+import { WeightTypes } from "@/types/enums";
 
 const schema = yup.object().shape({
     Account: yup.string().notOneOf(["none"], "Account is required field"),
@@ -66,6 +67,15 @@ function dropdownStateReducer(state: any, action: any) {
             return state;
     }
 }
+function arrayBufferToBase64(buffer: any) {
+    var binary = '';
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+}
 
 export interface IFile {
     id: string,
@@ -100,6 +110,7 @@ function privateHoldingAdd({ location }: { location: any }) {
     });
     // documents and image state
     const [provenanceDocuments, setProvenanceDocuments] = useState<IFile[]>([]);
+    console.log("🚀 ~ privateHoldingAdd ~ provenanceDocuments:", provenanceDocuments)
     const [productPhotos, setProductPhotos] = useState<IFile[]>([]);
 
     // dynamic fields state
@@ -198,69 +209,74 @@ function privateHoldingAdd({ location }: { location: any }) {
 
         const prepareDynamicSpecificationFields = dynamicSpecificationFields?.filter(field => field[Object.keys(field)[0]].specificationName !== "none" && field[Object.keys(field)[0]].value !== "none").map((field) => {
             return {
-                "SpecificationAttributeOptionId": field[Object.keys(field)[0]].value,
-                "SpecificationAttributeId": field[Object.keys(field)[0]].specificationName,
+                "SpecificationAttributeOptionId": Number(field[Object.keys(field)[0]].value),
+                "SpecificationAttributeId": Number(field[Object.keys(field)[0]].specificationName),
                 "SpecificationAttributeOptionOther": ""
             }
         })
         console.log("🚀 ~ prepareDynamicSpecificationFields", prepareDynamicSpecificationFields)
         let prepareData: IPrivateHoldingAddorEditQuery = {
             // "Id": 0,
-            CustomerID: data.Account,
-            SubCustomerID: data.Account,
+            CustomerID: Number(data.Account),
+            SubCustomerID: Number(data.Account),
             // "ProductId": 0,
             ProductName: data.ProductName,
             PurchaseDate: data.Date,
-            Price: data.PurchasePrice,
-            Qty: data.Qty,
+            Price: Number(data.PurchasePrice),
+            Qty: Number(data.Qty),
             // "RunningQty": 12,
             PurchasedFrom: data.PurchaseFrom,
             Weight: data.Weight,
-            WeightType: data.WeightType,
+            WeightType: Number(data.WeightType),
             Attribute: [
                 {
-                    "SpecificationAttributeOptionId": data.MintOrBrand,
-                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Mint"] : "0",
+                    "SpecificationAttributeOptionId": Number(data.MintOrBrand),
+                    "SpecificationAttributeId": Number(formDropdownsReverseKeys ? formDropdownsReverseKeys["Mint"] : "0"),
                     "SpecificationAttributeOptionOther": ""
                 },
                 {
-                    "SpecificationAttributeOptionId": data.Metal,
-                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Metal"] : "0",
+                    "SpecificationAttributeOptionId": Number(data.Metal),
+                    "SpecificationAttributeId": Number(formDropdownsReverseKeys ? formDropdownsReverseKeys["Metal"] : "0"),
                     "SpecificationAttributeOptionOther": ""
                 },
                 {
-                    "SpecificationAttributeOptionId": data.Series,
-                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Series"] : "0",
+                    "SpecificationAttributeOptionId": Number(data.Series),
+                    "SpecificationAttributeId": Number(formDropdownsReverseKeys ? formDropdownsReverseKeys["Series"] : "0"),
                     "SpecificationAttributeOptionOther": ""
                 },
                 {
-                    "SpecificationAttributeOptionId": data.Type,
-                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Type"] : "0",
+                    "SpecificationAttributeOptionId": Number(data.Type),
+                    "SpecificationAttributeId": Number(formDropdownsReverseKeys ? formDropdownsReverseKeys["Type"] : "0"),
                     "SpecificationAttributeOptionOther": ""
                 },
                 {
-                    "SpecificationAttributeOptionId": data.Purity,
-                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Purity"] : "0",
+                    "SpecificationAttributeOptionId": Number(data.Purity),
+                    "SpecificationAttributeId": Number(formDropdownsReverseKeys ? formDropdownsReverseKeys["Purity"] : "0"),
                     "SpecificationAttributeOptionOther": ""
                 },
                 // add specification attribute
             ].concat(prepareDynamicSpecificationFields ? prepareDynamicSpecificationFields : []),
             CustomeAttribute: [],
             Attachments: provenanceDocuments.map((file) => {
+                // const fileByteAsString = new TextDecoder().decode(file.fileByte);
+                const fileByteAsString = arrayBufferToBase64(file.fileByte);
+                // console.log("🚀 ~ Attachments:provenanceDocuments.map ~ file:", file)
                 return {
                     "FileName": file.fileName,
-                    "Type": "0",
-                    "FileByte": currentPrivateHolding ? "" : file.fileByte,
-                    "Filepath": currentPrivateHolding ? file.filePath : "",
-                    "ProvenanceDocType": file.documentType
+                    "Type": 0,
+                    "FileByte": fileByteAsString,
+                    "Filepath": file.filePath,
+                    "ProvenanceDocType": file.documentType ? Number(file.documentType) : undefined
                 }
             }).concat(productPhotos.map((file) => {
+                const fileByteAsString = arrayBufferToBase64(file.fileByte);
+
                 return {
                     "FileName": file.fileName,
-                    "Type": "1",
-                    "FileByte": currentPrivateHolding ? "" : file.fileByte,
-                    "Filepath": currentPrivateHolding ? file.filePath : "",
-                    "ProvenanceDocType": file.documentType // Add the "ProvenanceDocType" property
+                    "Type": 1,
+                    "FileByte": fileByteAsString,
+                    "Filepath": file.filePath,
+                    "ProvenanceDocType": undefined
                 }
             }))
         }
