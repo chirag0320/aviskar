@@ -43,7 +43,7 @@ const schema = yup.object().shape({
     Purity: yup.string().notOneOf(["none"], "Purity is required field"),
     Weight: yup.string().trim().required("Weight is required field"),
     WeightType: yup.string().notOneOf(["none"], "Weight Type is required field"),
-    Date: yup.string().required("Date is required field"),
+    Date: yup.string().required("Purchase Date is required field"),
     PurchasePrice: yup.string().trim().required("Purchase Price is required field"),
     PurchaseFrom: yup.string().trim().required("Purchase From is required field"),
     Qty: yup.string().required("Quantity is required field"),
@@ -472,7 +472,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         error={errors.Weight}
                                         name="Weight"
                                         label="Weight"
-                                        // type="number"
+                                        type="number"
                                         placeholder="Enter Weight"
                                         control={control}
                                         variant='outlined'
