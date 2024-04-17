@@ -31,6 +31,7 @@ import Toaster from "@/components/common/Toaster";
 import useShowToaster from "@/hooks/useShowToaster";
 import { hasFulfilled } from "@/utils/common";
 import { PrivateHoldingDocumentTypeEnum, PrivateHoldingDocumentTypeReverseEnum, WeightTypes } from "@/types/enums";
+import { navigate } from "gatsby";
 
 const schema = yup.object().shape({
     Account: yup.string().notOneOf(["none"], "Account is required field"),
@@ -294,11 +295,13 @@ function privateHoldingAdd({ location }: { location: any }) {
         if (currentPrivateHolding) {
             prepareData = { ...prepareData, Id: currentPrivateHolding.id };
         }
+        console.log("🚀 ~ onSubmit ~ prepareData:", prepareData)
 
         const response = await dispatch(addOrEditPrivateHolding({ url: ENDPOINTS.addOrEditPrivateHolding, body: prepareData }))
 
         if (hasFulfilled(response.type)) {
             showToaster({ message: "Private Holding saved successfully", severity: "success" })
+            navigate("/my-vault/private-holding")
         }
     }
 
@@ -532,7 +535,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                     <ProductPhotos register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} productPhotos={productPhotos} setProductPhotos={setProductPhotos} />
                                 </Stack>
                                 <Stack sx={{ gap: "20px", justifyContent: "flex-end" }} className='BottomButtonsWrapper'>
-                                    <Button variant="outlined" size="large">Clear</Button>
+                                    <Button variant="outlined" size="large" onClick={() => navigate("/my-vault/private-holding")}>Cancel</Button>
                                     <Button variant="contained" size="large" type="submit">Save</Button>
                                 </Stack>
                             </form>
