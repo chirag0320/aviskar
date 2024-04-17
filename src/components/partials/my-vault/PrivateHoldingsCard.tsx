@@ -7,9 +7,7 @@ import SellToUs from "@/components/partials/my-vault/SellToUs";
 import { ClickTooltip } from '@/components/common/CustomTooltip';
 import { useAppDispatch, useAppSelector, useToggle } from "@/hooks";
 import { PriceFacturationEnum, roundOfThePrice } from '@/utils/common';
-import { deletePrivateHoldings, getPrivateHoldingsListLivePrice } from '@/redux/reducers/myVaultReducer';
-import { ENDPOINTS } from '@/utils/constants';
-import { IPrivateHolding, IPrivateHoldingLivePrice } from '@/types/myVault';
+import { deletePrivateHoldings } from '@/redux/reducers/myVaultReducer';
 import { navigate } from 'gatsby';
 import Toaster from '@/components/common/Toaster';
 import useShowToaster from '@/hooks/useShowToaster';
@@ -18,11 +16,10 @@ const getColorForPosition = (position: number) => {
     return PriceFacturationEnum[position.toString() as keyof typeof PriceFacturationEnum];
 };
 
-function PrivateHoldingCards({fetchPrivateHoldingsList}:any) {
+function PrivateHoldingCards({fetchPrivateHoldingsList, item}:any) {
+    console.log("🚀 ~ PrivateHoldingCards ~ item:", item)
     const openToaster = useAppSelector(state => state.homePage.openToaster)
     const { showToaster } = useShowToaster();
-    const privateHoldingsList = useAppSelector(state => state.myVault.privateHoldingsList)
-    const privateHoldingsListLivePrice = useAppSelector(state => state.myVault.privateHoldingsListLivePrice)
     const dispatch = useAppDispatch()
     const [holdingProductOptions, setHoldingProductOptions] = useState<boolean>(false)
     const [currentValueOfPopUp, setCurrentValueOfPopUp] = useState<any>({})
@@ -30,39 +27,6 @@ function PrivateHoldingCards({fetchPrivateHoldingsList}:any) {
     const [openConvertToListing, toggleConvertToListing] = useToggle(false);
     const [openSellToUs, toggleSellToUs] = useToggle(false);
     const tooltipRef: any = useRef(null)
-    const [privateHoldingsData, setPrivateHoldingsData] = useState<(IPrivateHolding & IPrivateHoldingLivePrice)[]>([]);
-
-    useEffect(() => {
-        if (!privateHoldingsList) return;
-
-        const fetchPrivateHoldingsListLivePrice = async () => {
-            await dispatch(getPrivateHoldingsListLivePrice({
-                url: ENDPOINTS.getPrivateHoldingsListLivePrice, body: {
-                    IsStorePrice: true,
-                    HoldingIds: privateHoldingsList.map(item => {
-                        return item.id;
-                    })
-                }
-            }))
-        }
-        fetchPrivateHoldingsListLivePrice()
-    }, [privateHoldingsList])
-
-    useEffect(() => {
-        if (!privateHoldingsListLivePrice) return;
-        // console.log("🚀 ~ useEffect ~ privateHoldingsListLivePrice:", privateHoldingsListLivePrice, privateHoldingsList)
-
-        const preparePrivateHoldingData: (IPrivateHolding & IPrivateHoldingLivePrice)[] = [];
-
-        privateHoldingsList?.forEach((item) => {
-            privateHoldingsListLivePrice.forEach((livePriceItem) => {
-                if (item.id === livePriceItem.holdingId) {
-                    preparePrivateHoldingData.push({ ...livePriceItem, ...item });
-                }
-            });
-        });
-        setPrivateHoldingsData(preparePrivateHoldingData);
-    }, [privateHoldingsListLivePrice])
 
     const handleTooltipClose = (event: any) => {
         setHoldingProductOptions(false)
@@ -111,8 +75,6 @@ function PrivateHoldingCards({fetchPrivateHoldingsList}:any) {
     return (
         <>
             {openToaster && <Toaster />}
-            {privateHoldingsData.length > 0 && privateHoldingsData?.map((item) => {
-                return (
                     <Card className="PrivateHoldingCard">
                         <CardMedia
                             component="img"
@@ -176,10 +138,7 @@ function PrivateHoldingCards({fetchPrivateHoldingsList}:any) {
                         {openConvertToListing && <ConvertToListing open={openConvertToListing} onClose={toggleConvertToListing} valueOfConvertToListing={currentValueOfPopUp?.convertToListing} setValue={setValueForTheSellToUsPopUp} />}
                         {openSellToUs && <SellToUs open={openSellToUs} onClose={toggleSellToUs} valueOfTheSellToUs={currentValueOfPopUp?.sellToUs} setValue={setValueForTheSellToUsPopUp} />}
                     </Card >
-                )
-            }
-            )}
         </>
     )
 }
-export default PrivateHoldingCards
+export default React.memo(PrivateHoldingCards)

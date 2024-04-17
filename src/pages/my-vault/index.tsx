@@ -130,7 +130,9 @@ function Vault() {
                   Allocated Vault Storage clients can request holding statements
                   by calling our office during business hours. */}
                 </Typography>
-                <Button size="large" variant="contained" sx={{ mt: 5 }}>
+                <Button size="large" variant="contained" sx={{ mt: 5 }} onClick={()=>{
+                  navigate('/shop')
+                }}>
                   Shop Now
                 </Button>
                 <Box className="VaultStats">
@@ -219,9 +221,9 @@ function Vault() {
               <UserStatsCard title="My Vault" icon={<MyVaultIcon />} bgColor="#3491fa14" currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} movevalue={myVaultHomePageChartData?.totalValueFacturation?.move} movePercentage={myVaultHomePageChartData?.totalValueFacturation?.percentage} />
               <UserStatsCard title="My Gold" icon={<MyGoldIcon />} bgColor="rgb(234 162 43 / 5%)" currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} movevalue={myVaultHomePageChartData?.goldValueFacturation?.move} movePercentage={myVaultHomePageChartData?.goldValueFacturation?.percentage} />
               <UserStatsCard title="My Silver" icon={<MySilverIcon />} bgColor="rgb(255 31 31 / 5%)" currentPrice={myVaultHomePageChartData?.silverValueFacturation?.percentage} movevalue={myVaultHomePageChartData?.silverValueFacturation?.move} movePercentage={myVaultHomePageChartData?.silverValueFacturation?.percentage} />
-              <LineChartCard currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} low={myVaultHomePageChartData?.totalValueFacturation?.low} high={myVaultHomePageChartData?.totalValueFacturation?.high} valueForChart={myVaultHomePageChartData?.totalValueFacturation?.linechartdata} />
-              <LineChartCard currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} low={myVaultHomePageChartData?.goldValueFacturation?.low} high={myVaultHomePageChartData?.goldValueFacturation?.high} valueForChart={myVaultHomePageChartData?.goldValueFacturation?.linechartdata} />
-              <LineChartCard currentPrice={myVaultHomePageChartData?.silverValueFacturation?.current} low={myVaultHomePageChartData?.silverValueFacturation?.low} high={myVaultHomePageChartData?.silverValueFacturation?.high} valueForChart={myVaultHomePageChartData?.silverValueFacturation?.linechartdata} />
+              <LineChartCard title="My Vault" currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} low={myVaultHomePageChartData?.totalValueFacturation?.low} high={myVaultHomePageChartData?.totalValueFacturation?.high} valueForChart={myVaultHomePageChartData?.totalValueFacturation?.linechartdata} />
+              <LineChartCard title="My Gold" currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} low={myVaultHomePageChartData?.goldValueFacturation?.low} high={myVaultHomePageChartData?.goldValueFacturation?.high} valueForChart={myVaultHomePageChartData?.goldValueFacturation?.linechartdata} />
+              <LineChartCard title="My Silver" currentPrice={myVaultHomePageChartData?.silverValueFacturation?.current} low={myVaultHomePageChartData?.silverValueFacturation?.low} high={myVaultHomePageChartData?.silverValueFacturation?.high} valueForChart={myVaultHomePageChartData?.silverValueFacturation?.linechartdata} />
             </Box>
           </Container>
         </Box>
