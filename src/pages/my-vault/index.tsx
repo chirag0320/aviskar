@@ -43,6 +43,7 @@ import { useAppSelector } from "@/hooks";
 import { navigate } from "gatsby";
 import ConfigServices from "@/apis/services/ConfigServices";
 import useRequireLogin from "@/hooks/useRequireLogin";
+import RecordNotFound from "@/components/common/RecordNotFound";
 
 interface VaultProps {
   id: number;
@@ -317,7 +318,7 @@ function Vault() {
                   navigate('/my-vault/order-history/')
                 }}>View All</Button>
               </Stack>
-              <RecentOrderTable recentOrders={myVaultHomePageData?.recentOrders!} reOrderFunction={reOrderFunction} />
+              {(myVaultHomePageData?.recentOrders?.length && myVaultHomePageData?.recentOrders?.length > 0) ?<RecentOrderTable recentOrders={myVaultHomePageData?.recentOrders!} reOrderFunction={reOrderFunction} /> : <RecordNotFound message="No orders are available" />}
             </Box>
           </Container>
         </Box>

@@ -29,7 +29,7 @@ function Checkout() {
   const { loadingForCheckingLogin } = useRequireLogin()
   const dispatch = useAppDispatch()
   const checkLoadingStatus = useAppSelector(state => state.checkoutPage.loading);
-  const finalDataForTheCheckout = useAppSelector(state => state.checkoutPage.finalDataForTheCheckout);
+  const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
   const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
   const openToaster = useAppSelector(state => state.homePage.openToaster)
   const [state, setState] = useState({ service: getCheckoutPageData, endPoint: ENDPOINTS.checkoutDetails })
@@ -57,7 +57,7 @@ function Checkout() {
       {openToaster && <Toaster />}
       <PageTitle title="Checkout" />
       <Container id="PageCheckout">
-        {finalDataForTheCheckout?.cartItemsWithLivePrice?.length > 0 ?
+        {(checkoutPageData?.shoppingCartItems?.length && checkoutPageData?.shoppingCartItems?.length > 0) ?
           <>
             <Stack className="AllSteps">
               <Step1 />
