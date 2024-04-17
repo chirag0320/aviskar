@@ -1,4 +1,8 @@
 .VaultPage {
+  padding-bottom: 50px;
+  @include media($md) {
+    padding-bottom: 30px;
+  }
   .HeroSection {
 
     .HeroSectionWrapper {
@@ -175,6 +179,9 @@
           font-weight: 600;
           color: $dark;
         }
+      }
+      .RecordNotFound {
+        padding-top: 30px;
       }
     }
   }
