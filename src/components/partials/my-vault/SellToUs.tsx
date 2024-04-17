@@ -47,7 +47,8 @@ function SellToUs(props: SellToUs) {
         const body: IEnquiryData = {
             HoldingId: valueOfTheSellToUs?.holdingId,
             Quantity: valueOfTheSellToUs?.quantity,
-            ProductPrice: valueOfTheSellToUs?.price,
+            // ProductPrice: valueOfTheSellToUs?.price,
+            ProductPrice: unitPrice
         }
         dispatch(sendForEnquiry(body))
         onClose()
