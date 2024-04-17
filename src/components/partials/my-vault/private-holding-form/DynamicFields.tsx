@@ -43,13 +43,13 @@ const DynamicFields = ({ existingFields, setDynamicSpecificationFields, setDynam
 
         const currentFields: ISpecificationField[] = [];
         existingFields.forEach((field) => {
-            const curField = formDropdownsKeys[field.specificationAttributeOptionId.toString()];
+            const curField = formDropdownsKeys[field.specificationAttributeId.toString()];
             if (!fixedFields.has(curField)) {
                 // console.log("🚀 ~ DynamicFields ~ specificationFields:", curField)
                 currentFields.push({
-                    [field.specificationAttributeOptionId]: {
-                        specificationName: field.specificationAttributeOptionId.toString(),
-                        value: field.specificationAttributeId.toString()
+                    [field.specificationAttributeId]: {
+                        specificationName: field.specificationAttributeId.toString(),
+                        value: field.specificationAttributeOptionId.toString()
                     }
                 })
             }

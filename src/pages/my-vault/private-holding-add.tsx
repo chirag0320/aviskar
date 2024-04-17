@@ -177,7 +177,7 @@ function privateHoldingAdd({ location }: { location: any }) {
         if (!formDropdownsKeys) return;
 
         function getNextSpecificationItem(specificationName: string) {
-            return currentPrivateHolding!.productattribute.find((option: any) => formDropdownsKeys![option["specificationAttributeOptionId"].toString()] === specificationName)
+            return currentPrivateHolding!.productattribute.find((option: any) => formDropdownsKeys![option["specificationAttributeId"].toString()] === specificationName)
         }
 
         const nextMint = getNextSpecificationItem("Mint");
@@ -190,11 +190,11 @@ function privateHoldingAdd({ location }: { location: any }) {
             type: "APPLY_VALUES",
             nextAccount: currentPrivateHolding?.subCustomerId,
             // NOTE : static
-            nextMint: nextMint ? nextMint["specificationAttributeId"] : "0",
-            nextMetal: nextMetal ? nextMetal["specificationAttributeId"] : "0",
-            nextType: nextType ? nextType["specificationAttributeId"] : "0",
-            nextSeries: nextSeries ? nextSeries["specificationAttributeId"] : "0",
-            nextPurity: nextPurity ? nextPurity["specificationAttributeId"] : "0",
+            nextMint: nextMint ? nextMint["specificationAttributeOptionId"] : "0",
+            nextMetal: nextMetal ? nextMetal["specificationAttributeOptionId"] : "0",
+            nextType: nextType ? nextType["specificationAttributeOptionId"] : "0",
+            nextSeries: nextSeries ? nextSeries["specificationAttributeOptionId"] : "0",
+            nextPurity: nextPurity ? nextPurity["specificationAttributeOptionId"] : "0",
             nextWeightType: "0"
         })
     }, [currentPrivateHolding, formDropdownsKeys])
@@ -203,6 +203,10 @@ function privateHoldingAdd({ location }: { location: any }) {
         service: getConfigDropdowns,
         endPoint: ENDPOINTS.getConfigDropdown
     })
+
+    if (loadingForCheckingLogin) {
+        return
+    }
 
     const onSubmit = async (data: IPrivateHoldingAddInputs) => {
         if (!formDropdownsKeys) return;
@@ -214,7 +218,13 @@ function privateHoldingAdd({ location }: { location: any }) {
                 "SpecificationAttributeOptionOther": ""
             }
         })
-        console.log("🚀 ~ prepareDynamicSpecificationFields", prepareDynamicSpecificationFields)
+        const prepareDynamicCustomeSpecificationFields = dynamicCustomSpecificationFields?.filter(field => field[Object.keys(field)[0]].specificationName !== "" && field[Object.keys(field)[0]].value !== "").map(field => {
+            return {
+                key: field[Object.keys(field)[0]].specificationName,
+                value: field[Object.keys(field)[0]].value
+            }
+        })
+
         let prepareData: IPrivateHoldingAddorEditQuery = {
             // "Id": 0,
             CustomerID: Number(data.Account),
@@ -256,7 +266,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                 },
                 // add specification attribute
             ].concat(prepareDynamicSpecificationFields ? prepareDynamicSpecificationFields : []),
-            CustomeAttribute: [],
+            CustomeAttribute: prepareDynamicCustomeSpecificationFields,
             Attachments: provenanceDocuments.map((file) => {
                 // const fileByteAsString = new TextDecoder().decode(file.fileByte);
                 const fileByteAsString = arrayBufferToBase64(file.fileByte);
@@ -292,14 +302,8 @@ function privateHoldingAdd({ location }: { location: any }) {
         }
     }
 
-    const getAppliedSpecificationFields = (fields: ISpecificationField[]) => {
-        setDynamicSpecificationFields(fields)
-    }
-
     const renderDropdownItems = (dropdowns: any) => dropdowns?.map((option: any) => <MenuItem key={option.specificationAttributeOptionsId} value={option.specificationAttributeOptionsId}>{option.specificationOption}</MenuItem>);
-    if (loadingForCheckingLogin) {
-        return
-    }
+
     return (
         <>
             <Loader open={loading} />
@@ -489,7 +493,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                 </Stack>
                                 <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} setDynamicSpecificationFields={setDynamicSpecificationFields} setDynamicCustomSpecificationFields={setDynamicCustomSpecificationFields} />
                                 <Stack className="RowWrapper">
-                                    <BasicDatePicker name="Date" label="Purchase Date" setValue={setValue} existingDate={currentPrivateHolding ? currentPrivateHolding?.purchaseDate : null} error={errors.Date} clearErrors={clearErrors}/>
+                                    <BasicDatePicker name="Date" label="Purchase Date" setValue={setValue} existingDate={currentPrivateHolding ? currentPrivateHolding?.purchaseDate : null} error={errors.Date} clearErrors={clearErrors} />
                                     <RenderFields
                                         register={register}
                                         error={errors.PurchasePrice}
