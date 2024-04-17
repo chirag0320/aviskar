@@ -40,7 +40,9 @@ interface RenderFieldProps {
   rows?: number
   control?: any
   autoComplete?: string
+  uploadFileHandler?: any
   disabled?: boolean,
+  setSelectedFile?: any,
   clearErrors?: any,
   getValues?: any,
   margin?: 'dense' | 'normal' | 'none'
@@ -79,6 +81,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   multiline,
   clearErrors,
   disabled,
+  uploadFileHandler,
   autoComplete = 'on',
   margin = 'dense',
   fullWidth = true,
@@ -91,6 +94,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   icon,
   checkedIcon,
   endAdornment,
+  setSelectedFile,
   control,
   labelPlacement,
   required,
@@ -390,7 +394,6 @@ const RenderFields: React.FC<RenderFieldProps> = ({
               disabled={disabled}
               variant={variant}
               onKeyDown={onKeyDown}
-              // label={label}
               sx={{
                 '& .MuiInputBase-input': {
                   height: '100%',
@@ -399,13 +402,16 @@ const RenderFields: React.FC<RenderFieldProps> = ({
               InputProps={{ readOnly, onBlur, endAdornment, }}
               {...register(name)}
               {...otherProps}
+              onChange={(e: any) => {
+                if (setSelectedFile) setSelectedFile(e.target?.files[0])
+              }}
             />
             <Button className='UploadButton' variant="contained" size="large" sx={{
               position: 'absolute',
               right: 0,
               top: 0,
               height: '100%',
-            }} >Upload</Button>
+            }} onClick={uploadFileHandler}>Upload</Button>
           </Stack>
         </FormControl>
       )
@@ -462,31 +468,6 @@ const RenderFields: React.FC<RenderFieldProps> = ({
         </FormControl>
       )
       break
-
-    // case "date":
-    //   fieldType = (
-    //     <FormControl
-    //       fullWidth={fullWidth}
-    //       margin={margin}
-    //       {...(error ? { error: true } : {})}
-    //     >
-    //       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-    //       <Controller
-    //         name={name}
-    //         control={control}
-    //         defaultValue={value} // Set defaultValue instead of passing value prop
-    //         render={({ field: { value, onChange } }) => (
-    //           <DatePicker className="DatePicker"
-    //             sx={{ width: 260 }}
-    //             name={name}
-    //             value={dateValue}
-    //             onChange={(newValue) => setDateValue(newValue)}
-    //           />
-    //         )}
-    //       />
-
-    //     </FormControl>
-    //   )
 
     default:
       fieldType = (

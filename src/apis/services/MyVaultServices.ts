@@ -1,5 +1,5 @@
 import axiosInstance from "@/axiosfolder";
-import { AccountQuery, AddressQuery, rewardPointsHistoryData, IOrderHistoryData, SellData, ConversionData, IEnquiryData } from "@/types/myVault";
+import { AccountQuery, AddressQuery, rewardPointsHistoryData, IOrderHistoryData, SellData, ConversionData, IEnquiryData, IPrivateHoldingAddorEditQuery } from "@/types/myVault";
 import { ENDPOINTS } from "@/utils/constants";
 
 class MyVaultServices {
@@ -66,10 +66,13 @@ class MyVaultServices {
     static async getPrivateHoldingFormDropdowns(url: string) {
         return axiosInstance.get(url);
     }
+    static async addOrEditPrivateHolding(url: string, body: IPrivateHoldingAddorEditQuery) {
+        return axiosInstance.post(url, body);
+    }
 
     // POPUPS
     static async sendForEnquiry(body: IEnquiryData) {
-        return axiosInstance.post(ENDPOINTS.enquiry,body);
+        return axiosInstance.post(ENDPOINTS.enquiry, body);
     }
     static async sellQty(body: SellData) {
         return axiosInstance.post(ENDPOINTS.sellQty, body);
@@ -79,7 +82,7 @@ class MyVaultServices {
     }
     // delete PrivateHoldings
     static async deletePrivateHoldings(id: string) {
-        return axiosInstance.delete(ENDPOINTS.deletePrivateHoldings.replace('id',id));
+        return axiosInstance.delete(ENDPOINTS.deletePrivateHoldings.replace('id', id));
     }
 
 }

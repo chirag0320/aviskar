@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useReducer } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useReducer, useState } from "react";
 import {
     Box, Button, Container, IconButton, MenuItem, Stack, Table,
     TableBody,
@@ -21,12 +21,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import RenderFields from "@/components/common/RenderFields"
 import { Delete1Icon } from "@/assets/icons"
 import BasicDatePicker from "@/components/partials/my-vault/BasicDatePicker"
-import { IPrivateHoldingAddInputs } from "@/types/myVault";
-import { getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
-import DynamicFields from "@/components/partials/my-vault/private-holding-form/DynamicFields";
+import { IPrivateHoldingAddInputs, IPrivateHoldingAddorEditQuery } from "@/types/myVault";
+import { addOrEditPrivateHolding, getConfigDropdowns, getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
+import DynamicFields, { ISpecificationField } from "@/components/partials/my-vault/private-holding-form/DynamicFields";
 import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
 import ProductPhotos from "@/components/partials/my-vault/private-holding-form/ProductPhotos";
 import useRequireLogin from "@/hooks/useRequireLogin";
+import Toaster from "@/components/common/Toaster";
+import useShowToaster from "@/hooks/useShowToaster";
+import { hasFulfilled } from "@/utils/common";
 
 const schema = yup.object().shape({
     Account: yup.string().notOneOf(["none"], "Account is required field"),
@@ -64,15 +67,28 @@ function dropdownStateReducer(state: any, action: any) {
     }
 }
 
+export interface IFile {
+    id: string,
+    fileName: string,
+    type: number,
+    fileByte?: string,
+    filePath?: string,
+    documentType?: string
+}
+
 function privateHoldingAdd({ location }: { location: any }) {
+    const openToaster = useAppSelector(state => state.homePage.openToaster)
     const { loadingForCheckingLogin } = useRequireLogin()
     const loading = useAppSelector(state => state.myVault.loading);
     const currentPrivateHolding = useAppSelector(state => state.myVault.currentPrivateHolding)
     const formDropdowns = useAppSelector(state => state.myVault.privateHoldingFormDropdowns);
     const formDropdownsKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsKeys);
+    const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
     const formDropdownsReverseKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsReverseKeys);
     const dispatch = useAppDispatch()
+    const { showToaster } = useShowToaster()
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+
     const [dropdownState, dropdownDispatch] = useReducer(dropdownStateReducer, {
         Mint: "none",
         Metal: "none",
@@ -82,6 +98,9 @@ function privateHoldingAdd({ location }: { location: any }) {
         WeightType: "none",
         Account: "none"
     });
+    const [provenanceDocuments, setProvenanceDocuments] = useState<IFile[]>([]);
+    const [productPhotos, setProductPhotos] = useState<IFile[]>([]);
+    const [dynamicSpecificationFields, setDynamicSpecificationFields] = useState<ISpecificationField[] | null>(null);
 
     const {
         register,
@@ -113,8 +132,6 @@ function privateHoldingAdd({ location }: { location: any }) {
         fetchHolding()
     }, [])
 
-
-
     // set intial form values if user wants to edit
     useEffect(() => {
         if (!currentPrivateHolding) return;
@@ -139,7 +156,7 @@ function privateHoldingAdd({ location }: { location: any }) {
 
         dropdownDispatch({
             type: "APPLY_VALUES",
-            nextAccount: "test",
+            nextAccount: currentPrivateHolding?.subCustomerId,
             // NOTE : static
             nextMint: nextMint ? nextMint["specificationAttributeId"] : "0",
             nextMetal: nextMetal ? nextMetal["specificationAttributeId"] : "0",
@@ -150,14 +167,16 @@ function privateHoldingAdd({ location }: { location: any }) {
         })
     }, [currentPrivateHolding, formDropdownsKeys])
 
+    useAPIoneTime({
+        service: getConfigDropdowns,
+        endPoint: ENDPOINTS.getConfigDropdown
+    })
 
-    const onSubmit = (data: IPrivateHoldingAddInputs) => {
-        // console.log("🚀 ~ onSubmit ~ data:", data)
-
-        const prepareData = {
+    const onSubmit = async (data: IPrivateHoldingAddInputs) => {
+        let prepareData: IPrivateHoldingAddorEditQuery = {
             // "Id": 0,
             CustomerID: data.Account,
-            // "SubCustomerID": 74038,
+            SubCustomerID: data.Account,
             // "ProductId": 0,
             ProductName: data.ProductName,
             PurchaseDate: data.Date,
@@ -193,11 +212,41 @@ function privateHoldingAdd({ location }: { location: any }) {
                     "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Purity"] : "0",
                     "SpecificationAttributeOptionOther": ""
                 },
+                // add specification attribute
             ],
-            CustomAttribute: [],
-            Attachments: []
+            CustomeAttribute: [],
+            Attachments: provenanceDocuments.map((file) => {
+                return {
+                    "FileName": file.fileName,
+                    "Type": "0",
+                    "FileByte": currentPrivateHolding ? "" : file.fileByte,
+                    "Filepath": currentPrivateHolding ? file.filePath : "",
+                    "ProvenanceDocType": file.documentType
+                }
+            }).concat(productPhotos.map((file) => {
+                return {
+                    "FileName": file.fileName,
+                    "Type": "1",
+                    "FileByte": currentPrivateHolding ? "" : file.fileByte,
+                    "Filepath": currentPrivateHolding ? file.filePath : "",
+                    "ProvenanceDocType": file.documentType // Add the "ProvenanceDocType" property
+                }
+            }))
         }
-        console.log("🚀 ~ onSubmit ~ prepareData:", prepareData)
+
+        if (currentPrivateHolding) {
+            prepareData = { ...prepareData, Id: currentPrivateHolding.id };
+        }
+
+        const response = await dispatch(addOrEditPrivateHolding({ url: ENDPOINTS.addOrEditPrivateHolding, body: prepareData }))
+
+        if (hasFulfilled(response.type)) {
+            showToaster({ message: "Private Holding saved successfully", severity: "success" })
+        }
+    }
+
+    const getAppliedSpecificationFields = (fields: ISpecificationField[]) => {
+        setDynamicSpecificationFields(fields)
     }
 
     const renderDropdownItems = (dropdowns: any) => dropdowns?.map((option: any) => <MenuItem key={option.specificationAttributeOptionsId} value={option.specificationAttributeOptionsId}>{option.specificationOption}</MenuItem>);
@@ -207,6 +256,7 @@ function privateHoldingAdd({ location }: { location: any }) {
     return (
         <>
             <Loader open={loading} />
+            {openToaster && <Toaster />}
             <Layout>
                 <Seo
                     keywords={[`QMint Topics`]}
@@ -236,9 +286,9 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         required
                                     >
                                         <MenuItem value="none">Select Account</MenuItem>
-                                        <MenuItem key='test' value='test'>test</MenuItem>
-                                        <MenuItem key='test' value='test1'>test1</MenuItem>
-                                        <MenuItem key='test' value='test2'>test2</MenuItem>
+                                        {configDropdowns && configDropdowns.accountList.map((account) => {
+                                            return (<MenuItem key={account.id} value={account.id}>{account.name}</MenuItem>)
+                                        })}
                                     </RenderFields>
                                     <RenderFields
                                         register={register}
@@ -390,7 +440,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         <MenuItem value='2'>kilograms</MenuItem>
                                     </RenderFields>
                                 </Stack>
-                                <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} />
+                                <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} getAppliedSpecificationFields={getAppliedSpecificationFields} />
                                 <Stack className="RowWrapper">
                                     <BasicDatePicker name="Date" label="Purchase Date" setValue={setValue} existingDate={currentPrivateHolding ? currentPrivateHolding?.purchaseDate : null} error={errors.Date} />
                                     <RenderFields
@@ -427,8 +477,8 @@ function privateHoldingAdd({ location }: { location: any }) {
                                     />
                                 </Stack>
                                 <Stack className="RowWrapper DocumentPhotosContentWrapper">
-                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type !== "ProductPhotos") : null} />
-                                    <ProductPhotos register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type === "ProductPhotos") : null} />
+                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type !== "ProductPhotos") : null} provenanceDocuments={provenanceDocuments} setProvenanceDocuments={setProvenanceDocuments} />
+                                    <ProductPhotos register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type === "ProductPhotos") : null} productPhotos={productPhotos} setProductPhotos={setProductPhotos} />
                                 </Stack>
                                 <Stack sx={{ gap: "20px", justifyContent: "flex-end" }} className='BottomButtonsWrapper'>
                                     <Button variant="outlined" size="large">Clear</Button>

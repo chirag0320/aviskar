@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { appCreateAsyncThunk } from "../middleware/thunkMiddleware";
 import MyVaultServices from "@/apis/services/MyVaultServices";
-import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData, IConfigDropdown, IPrivateHolding, IPrivateHoldingLivePrice, SellData, ConversionData, IEnquiryData, ISpecificPrivateHolding, IPrivateHoldingFormDropdown } from "@/types/myVault";
+import { Account, AccountQuery, Address, AddressQuery, rewardPointsHistoryData, rewardPointsHistoryDataItems, IOrderHistoryApiResponseData, IConfigDropdown, IPrivateHolding, IPrivateHoldingLivePrice, SellData, ConversionData, IEnquiryData, ISpecificPrivateHolding, IPrivateHoldingFormDropdown, IPrivateHoldingAddorEditQuery } from "@/types/myVault";
 interface ValueFacturation {
     low: number;
     high: number;
@@ -232,6 +232,13 @@ export const getPrivateHoldingFormDropdowns = appCreateAsyncThunk(
         return await MyVaultServices.getPrivateHoldingFormDropdowns(url);
     }
 )
+export const addOrEditPrivateHolding = appCreateAsyncThunk(
+    "addOrEditPrivateHolding",
+    async ({ url, body }: { url: string, body: IPrivateHoldingAddorEditQuery }) => {
+        return await MyVaultServices.addOrEditPrivateHolding(url, body);
+    }
+)
+
 // Enquiry
 export const sendForEnquiry = appCreateAsyncThunk(
     "sendForEnquiry",
@@ -472,15 +479,15 @@ export const myVaultSlice = createSlice({
         })
         // get private holdings list live price
         builder.addCase(getPrivateHoldingsListLivePrice.pending, state => {
-            state.loading = true;
+            // state.loading = true;
         })
         builder.addCase(getPrivateHoldingsListLivePrice.fulfilled, (state, action) => {
             const responseData = action.payload.data;
             state.privateHoldingsListLivePrice = responseData.data;
-            state.loading = false;
+            // state.loading = false;
         })
         builder.addCase(getPrivateHoldingsListLivePrice.rejected, state => {
-            state.loading = false;
+            // state.loading = false;
         })
         // get specific private holding
         builder.addCase(getPrivateHoldingWithId.pending, state => {
@@ -535,6 +542,17 @@ export const myVaultSlice = createSlice({
             state.privateHoldingFormDropdownsReverseKeys = privateHoldingFormDropdownsReverseKeys;
             state.loading = false;
         })
+        // private holding add or edit
+        builder.addCase(addOrEditPrivateHolding.pending, state => {
+            state.loading = true;
+        })
+        builder.addCase(addOrEditPrivateHolding.fulfilled, (state, action) => {
+            state.loading = false;
+        })
+        builder.addCase(addOrEditPrivateHolding.rejected, state => {
+            state.loading = false;
+        })
+
         // send for equiry
         builder.addCase(sendForEnquiry.pending, state => {
             state.loading = true;
