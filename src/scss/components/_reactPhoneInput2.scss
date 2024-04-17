@@ -2,6 +2,8 @@
 
 div {
   &.react-tel-input {
+    $flagWidth: 70px;
+    $flagWidthSmall: 50px;
     font: inherit;
     height: inherit;
     .form-control {
@@ -13,7 +15,11 @@ div {
       outline-style: solid;
       outline-width: 1px;
       outline-color: rgba($dark, 0.2);
+      padding-left: calc($flagWidth + 10px);
       @include padding-vertical(12);
+      @include media($ssm) {
+        padding-left: calc($flagWidthSmall + 10px);
+      }
       &:focus {
         box-shadow: none;
         outline-width: 2px;
@@ -34,14 +40,33 @@ div {
       bottom: 0;
       left: 0;
       border: none;
+      border-right: 1px solid rgba($dark, 0.2);
       border-radius: 10px 0 0 10px;
+      background-color: transparent;
       &.open {
         border-radius: 10px 0 0 10px;
       }
       .selected-flag {
+        width: $flagWidth;
+        display: flex;
+        justify-content: center;
         border-radius: inherit;
+        @include padding-horizontal(0, 10);
+        @include media($ssm) {
+          width: $flagWidthSmall;
+        }
         &.open {
           border-radius: inherit;
+        }
+        .flag {
+          @include media-min($ssm) {
+            transform: scale(1.25);
+          }
+        }
+        .arrow {
+          @include media-min($ssm) {
+            left: 24px;
+          }
         }
       }
       .country-list {
