@@ -325,7 +325,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                     title="Add New Private Holding"
                     lang="en"
                 />
-                <PageTitle title={searchParams.has("holdingId") ? "Update Private Holding" : "Add New Private Holding"} backToDashboard={true} />
+                <PageTitle title={searchParams.has("holdingId") ? "Update Private Holding" : "Add New Private Holding"} isMyVaultSubpage={true} backToDashboard={true} />
                 <Box id="PrivateHoldingAddPage" className='PrivateHoldingAddPage' component="section">
                     <Container>
                         <Box className="Content PrivateHoldingAddContent">
