@@ -16,8 +16,7 @@ const getColorForPosition = (position: number) => {
     return PriceFacturationEnum[position.toString() as keyof typeof PriceFacturationEnum];
 };
 
-function PrivateHoldingCards({fetchPrivateHoldingsList, item}:any) {
-    console.log("🚀 ~ PrivateHoldingCards ~ item:", item)
+function PrivateHoldingCards({ fetchPrivateHoldingsList, item }: any) {
     const openToaster = useAppSelector(state => state.homePage.openToaster)
     const { showToaster } = useShowToaster();
     const dispatch = useAppDispatch()
@@ -40,19 +39,19 @@ function PrivateHoldingCards({fetchPrivateHoldingsList, item}:any) {
 
     const openSellToUsPopUP = (item: any) => {
         setCurrentValueOfPopUp((prev: any) => {
-            return ({ ...prev, sellToUs: item })
+            return ({ ...prev, sellToUs: item, maxQty: item?.quantity })
         })
         toggleSellToUs(true)
     }
     const openConvertToListingPopUp = (item: any) => {
         setCurrentValueOfPopUp((prev: any) => {
-            return ({ ...prev, convertToListing: item })
+            return ({ ...prev, convertToListing: item, maxQty: item?.quantity })
         })
         toggleConvertToListing(true)
     }
     const openSellEntryPopUP = (item: any) => {
         setCurrentValueOfPopUp((prev: any) => {
-            return ({ ...prev, sellEntry: item })
+            return ({ ...prev, sellEntry: item, maxQty: item?.quantity })
         })
         toggleSellEntry(true)
     }
@@ -75,69 +74,69 @@ function PrivateHoldingCards({fetchPrivateHoldingsList, item}:any) {
     return (
         <>
             {openToaster && <Toaster />}
-                    <Card className="PrivateHoldingCard">
-                        <CardMedia
-                            component="img"
-                            image={item.filepath}
-                            alt="Product image"
-                        />
-                        <CardContent>
-                            <Box className="ProductDetailWrapper">
-                                <Typography variant="subtitle2" className="">{item.producName}</Typography>
-                                <Typography variant="body1" className=""><strong>Qty :</strong> {item.quantity}</Typography>
-                                <Typography variant="body1" className=""><strong>Purchase Price :</strong> ${roundOfThePrice(item.purchasePrice * item.quantity)} (${roundOfThePrice(item.purchasePrice)})</Typography>
-                                <Typography variant="body1" className=""><strong>Sell to us value :</strong></Typography>
-                                <Stack className='ButtonsWrapper'>
-                                    <Button variant="contained" size="small" onClick={toggleSellToUs} color={getColorForPosition(item.position)}>${roundOfThePrice(item.price)}</Button>
-                                    <Button variant="contained" size="small" onClick={toggleSellToUs} color={getColorForPosition(item.position)} startIcon={item.position === 2 ? <ChevronDown /> : <ChevronUp />}>${item.move} ({item.percentage}%)</Button>
-                                    <Button variant='contained' size="small" onClick={() => { openSellToUsPopUP(item) }}>selltoas</Button>
-                                </Stack>
-                                {/* <Box sx={{
+            <Card className="PrivateHoldingCard">
+                <CardMedia
+                    component="img"
+                    image={item.filepath}
+                    alt="Product image"
+                />
+                <CardContent>
+                    <Box className="ProductDetailWrapper">
+                        <Typography variant="subtitle2" className="">{item.producName}</Typography>
+                        <Typography variant="body1" className=""><strong>Qty :</strong> {item.quantity}</Typography>
+                        <Typography variant="body1" className=""><strong>Purchase Price :</strong> ${roundOfThePrice(item.purchasePrice * item.quantity)} (${roundOfThePrice(item.purchasePrice)})</Typography>
+                        <Typography variant="body1" className=""><strong>Sell to us value :</strong></Typography>
+                        <Stack className='ButtonsWrapper'>
+                            <Button variant="contained" size="small" onClick={toggleSellToUs} color={getColorForPosition(item.position)}>${roundOfThePrice(item.price)}</Button>
+                            <Button variant="contained" size="small" onClick={toggleSellToUs} color={getColorForPosition(item.position)} startIcon={item.position === 2 ? <ChevronDown /> : <ChevronUp />}>${item.move} ({item.percentage}%)</Button>
+                            <Button variant='contained' size="small" onClick={() => { openSellToUsPopUP(item) }}>selltoas</Button>
+                        </Stack>
+                        {/* <Box sx={{
                             textAlign: 'right',
                             marginTop: '5px',
                         }}>
                             <Button variant='contained' size="small" color='info'>selltoas</Button>
                         </Box> */}
-                            </Box>
-                            <ClickTooltip
-                                name='holdingproduct'
-                                open={holdingProductOptions}
-                                placement="bottom-end"
-                                onClose={handleTooltipClose}
-                                onClickAway={handleClickAway}
-                                renderComponent={<IconButton name='holdingproduct' ref={tooltipRef} className="OptionButton" onClick={handleTooltipOpen}><OptionsIcon /></IconButton>}
-                                lightTheme
-                                disablePortal={true}
-                                arrow
-                            >
-                                <List>
-                                    <ListItem>
-                                        <ListItemButton onClick={() => { openConvertToListingPopUp(item) }}>
-                                            <ListItemText primary="Convert To Listing" />
-                                        </ListItemButton>
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemButton>
-                                            <ListItemText primary="Edit" onClick={() => navigate(`/my-vault/private-holding-add/?holdingId=${item.holdingId}`)} />
-                                        </ListItemButton>
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemButton onClick={() => { openSellEntryPopUP(item) }}>
-                                            <ListItemText primary="sellentry" />
-                                        </ListItemButton>
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemButton onClick={() => { deleteHoldings(item) }}>
-                                            <ListItemText primary="Delete" />
-                                        </ListItemButton>
-                                    </ListItem>
-                                </List>
-                            </ClickTooltip>
-                        </CardContent>
-                        {openSellEntry && <SellEntry open={openSellEntry} onClose={toggleSellEntry} valueOfSellEntry={currentValueOfPopUp?.sellEntry} setValue={setValueForTheSellToUsPopUp} />}
-                        {openConvertToListing && <ConvertToListing open={openConvertToListing} onClose={toggleConvertToListing} valueOfConvertToListing={currentValueOfPopUp?.convertToListing} setValue={setValueForTheSellToUsPopUp} />}
-                        {openSellToUs && <SellToUs open={openSellToUs} onClose={toggleSellToUs} valueOfTheSellToUs={currentValueOfPopUp?.sellToUs} setValue={setValueForTheSellToUsPopUp} />}
-                    </Card >
+                    </Box>
+                    <ClickTooltip
+                        name='holdingproduct'
+                        open={holdingProductOptions}
+                        placement="bottom-end"
+                        onClose={handleTooltipClose}
+                        onClickAway={handleClickAway}
+                        renderComponent={<IconButton name='holdingproduct' ref={tooltipRef} className="OptionButton" onClick={handleTooltipOpen}><OptionsIcon /></IconButton>}
+                        lightTheme
+                        disablePortal={true}
+                        arrow
+                    >
+                        <List>
+                            <ListItem>
+                                <ListItemButton onClick={() => { openConvertToListingPopUp(item) }}>
+                                    <ListItemText primary="Convert To Listing" />
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemButton>
+                                    <ListItemText primary="Edit" onClick={() => navigate(`/my-vault/private-holding-add/?holdingId=${item.holdingId}`)} />
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemButton onClick={() => { openSellEntryPopUP(item) }}>
+                                    <ListItemText primary="sellentry" />
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemButton onClick={() => { deleteHoldings(item) }}>
+                                    <ListItemText primary="Delete" />
+                                </ListItemButton>
+                            </ListItem>
+                        </List>
+                    </ClickTooltip>
+                </CardContent>
+                {openSellEntry && <SellEntry maxQty={currentValueOfPopUp?.maxQty} open={openSellEntry} onClose={toggleSellEntry} valueOfSellEntry={currentValueOfPopUp?.sellEntry} setValue={setValueForTheSellToUsPopUp} />}
+                {openConvertToListing && <ConvertToListing maxQty={currentValueOfPopUp?.maxQty} open={openConvertToListing} onClose={toggleConvertToListing} valueOfConvertToListing={currentValueOfPopUp?.convertToListing} setValue={setValueForTheSellToUsPopUp} />}
+                {openSellToUs && <SellToUs maxQty={currentValueOfPopUp?.maxQty} open={openSellToUs} onClose={toggleSellToUs} valueOfTheSellToUs={currentValueOfPopUp?.sellToUs} setValue={setValueForTheSellToUsPopUp} />}
+            </Card >
         </>
     )
 }

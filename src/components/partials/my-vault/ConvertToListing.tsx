@@ -18,6 +18,7 @@ interface ConvertToListing {
     onClose: () => void
     valueOfConvertToListing: any
     setValue: any
+    maxQty: number
 }
 
 interface Inputs {
@@ -32,7 +33,7 @@ const schema = yup.object().shape({
 
 function ConvertToListing(props: ConvertToListing) {
     const dispatch = useAppDispatch()
-    const { open, onClose, valueOfConvertToListing, setValue } = props
+    const { open, onClose, valueOfConvertToListing, setValue, maxQty } = props
 
     const {
         register,
@@ -69,7 +70,7 @@ function ConvertToListing(props: ConvertToListing) {
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack className="AllFields">
-                    <QuantityInputs quantityLabel="Convert Quantity :" onQuantityChange={onQuantityChange} qty={valueOfConvertToListing?.quantity} />
+                    <QuantityInputs quantityLabel="Convert Quantity :" onQuantityChange={onQuantityChange} qty={valueOfConvertToListing?.quantity} maxQty={maxQty}/>
                     <RenderFields
                         register={register}
                         error={errors.StorePrice}

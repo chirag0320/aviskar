@@ -18,6 +18,7 @@ interface SellEntry {
     onClose: () => void
     valueOfSellEntry: any
     setValue: any
+    maxQty: number
 }
 
 interface Inputs {
@@ -30,7 +31,7 @@ const schema = yup.object().shape({
 
 function SellEntry(props: SellEntry) {
     const dispatch = useAppDispatch()
-    const { open, onClose, valueOfSellEntry, setValue } = props
+    const { open, onClose, valueOfSellEntry, setValue, maxQty } = props
 
     const {
         register,
@@ -67,7 +68,7 @@ function SellEntry(props: SellEntry) {
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack className="AllFields">
-                    <QuantityInputs quantityLabel="Quantity sold :" onQuantityChange={onQuantityChange} qty={valueOfSellEntry?.quantity}/>
+                    <QuantityInputs quantityLabel="Quantity sold :" onQuantityChange={onQuantityChange} qty={valueOfSellEntry?.quantity} maxQty={maxQty}/>
                     <RenderFields
                         register={register}
                         error={errors.SoldTo}
