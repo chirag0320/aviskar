@@ -171,8 +171,8 @@ export const HomePageSectionDetails = appCreateAsyncThunk(
 )
 export const CategoriesListDetails = appCreateAsyncThunk(
   'CategoriesListDetails/status',
-  async ({ url, body }: { url: string, body: any }) => {
-    return await ConfigServices.categoriesList(url, body)
+  async ({ url, params }: { url: string, params: any }) => {
+    return await ConfigServices.categoriesList(url, params)
   }
 )
 
@@ -371,9 +371,8 @@ export const createHomepageSlice = createSlice({
       state.loading = true
     })
     builder.addCase(CategoriesListDetails.fulfilled, (state, action) => {
-      const data = { ...action?.payload?.data?.data, items: action?.payload?.data?.data?.items?.sort((a: any, b: any) => a?.categoryId - b?.categoryId) }
+      const data = { ...action?.payload?.data?.data, items: action?.payload?.data?.data?.sort((a: any, b: any) => a?.categoryId - b?.categoryId) }
       state.categoriesList = data
-      localStorageSetItem('categoriesList', JSON.stringify(data))
       state.loading = false
     })
     builder.addCase(CategoriesListDetails.rejected, (state, action) => {
