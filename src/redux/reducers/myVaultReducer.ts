@@ -305,6 +305,9 @@ export const myVaultSlice = createSlice({
         },
         addAddress: (state, action) => {
             state.addresses = [...state.addresses!, action.payload]
+        },
+        clearPrivateHoldingCurrentData : (state) => {
+            state.currentPrivateHolding = null;
         }
     },
     extraReducers: (builder) => {
@@ -578,6 +581,6 @@ export const myVaultSlice = createSlice({
     }
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateAddress, addAddress } = myVaultSlice.actions;
+export const { setLoadingTrue, setLoadingFalse, updateAddress, addAddress,clearPrivateHoldingCurrentData } = myVaultSlice.actions;
 
 export default myVaultSlice.reducer;

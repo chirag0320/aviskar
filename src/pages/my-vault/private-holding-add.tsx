@@ -22,7 +22,7 @@ import RenderFields from "@/components/common/RenderFields"
 import { Delete1Icon } from "@/assets/icons"
 import BasicDatePicker from "@/components/partials/my-vault/BasicDatePicker"
 import { IPrivateHoldingAddInputs, IPrivateHoldingAddorEditQuery } from "@/types/myVault";
-import { addOrEditPrivateHolding, getConfigDropdowns, getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
+import { addOrEditPrivateHolding, clearPrivateHoldingCurrentData, getConfigDropdowns, getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
 import DynamicFields, { ISpecificationField } from "@/components/partials/my-vault/private-holding-form/DynamicFields";
 import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
 import ProductPhotos from "@/components/partials/my-vault/private-holding-form/ProductPhotos";
@@ -111,7 +111,6 @@ function privateHoldingAdd({ location }: { location: any }) {
     });
     // documents and image state
     const [provenanceDocuments, setProvenanceDocuments] = useState<IFile[]>([]);
-    console.log("🚀 ~ privateHoldingAdd ~ provenanceDocuments:", provenanceDocuments)
     const [productPhotos, setProductPhotos] = useState<IFile[]>([]);
 
     // dynamic fields state
@@ -129,6 +128,12 @@ function privateHoldingAdd({ location }: { location: any }) {
     } = useForm<IPrivateHoldingAddInputs>({
         resolver: yupResolver(schema)
     })
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearPrivateHoldingCurrentData());
+        }
+    },[])
 
     useLayoutEffect(() => {
         const fetchFormDropdowns = async () => {
@@ -273,7 +278,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                 return {
                     "FileName": file.fileName,
                     "Type": 0,
-                    "FileByte": fileByteAsString,
+                    "FileByte": fileByteAsString === "" ? undefined : fileByteAsString,
                     "Filepath": file.filePath,
                     "ProvenanceDocType": file.documentType ? Number(file.documentType) : undefined,
                     "ProvenanceOtherDocType": ""
@@ -284,7 +289,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                 return {
                     "FileName": file.fileName,
                     "Type": 1,
-                    "FileByte": fileByteAsString,
+                    "FileByte": fileByteAsString === "" ? undefined : fileByteAsString,
                     "Filepath": file.filePath,
                     "ProvenanceDocType": undefined,
                     "ProvenanceOtherDocType": ""
