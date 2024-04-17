@@ -356,6 +356,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
               <PhoneInput
                 country="au"
                 onChange={(value) => field.onChange(value)}
+                value={value}
                 onBlur={field.onBlur}
                 preferredCountries={['au']}
                 // {...field}

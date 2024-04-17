@@ -42,7 +42,7 @@ const AdditionalFields = ({ fields, setFields }: IProps) => {
                 <Typography>Additional Beneficiary / Account Holder</Typography>
                 <Button variant="contained" color="success" onClick={handleAddField}>Add more</Button>
             </Stack>
-            {fields.map((field, index) => (
+            {tempFields.map((field, index) => (
                 <Stack
                     key={Object.keys(field)[0]}
                     className="FieldsWrapper"
