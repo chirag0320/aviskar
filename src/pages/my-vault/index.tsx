@@ -112,11 +112,11 @@ function Vault() {
           <Container>
             <Box className="HeroSectionWrapper">
               <Box className="Left">
-                {/* <Typography variant="subtitle2" component="h2">
+                {/* <Typography variant="subtitle2" component="h2"  sx={{ mb: 3.25 }}>
                   Good Morning Steve!
                 </Typography> */}
                 {/* @ts-ignore */}
-                <Typography variant="body1" sx={{ mt: 3.25 }} dangerouslySetInnerHTML={{
+                <Typography variant="body1" dangerouslySetInnerHTML={{
                   __html: myVaultHomePageData?.customerGreeting
                 }}>
                   {/* Monitor real time performance and valuations of your
@@ -321,7 +321,8 @@ function Vault() {
             </Box>
           </Container>
         </Box>
-        <Box className="RewardSection" sx={{ mt: 7.5 }}>
+        {/* @info:: below newsletter is commneted it will be use in future */}
+        {/* <Box className="RewardSection" sx={{ mt: 7.5 }}>
           <Container>
             <Stack className="RewardWrapper">
               <Typography className="rewardText">Your Rewards Points: </Typography>
@@ -357,16 +358,14 @@ function Vault() {
                   Change password
                 </Button>
               </Card>
-              {/* below newsletter is commneted it will be use in future */}
-              {/* <Card className="AccountInformationCard">
-                <Typography variant="subtitle2">Newsletters</Typography> */}
-              {/* @ts-ignore */}
-              {/* <Typography variant="body2" sx={{ mt: 1.5 }} dangerouslySetInnerHTML={{ __html: myVaultHomePageData?.newsLetterDescription }}>
+              <Card className="AccountInformationCard">
+                <Typography variant="subtitle2">Newsletters</Typography>
+                <Typography variant="body2" sx={{ mt: 1.5 }} dangerouslySetInnerHTML={{ __html: myVaultHomePageData?.newsLetterDescription ?? "" }}>
                 </Typography>
-              </Card> */}
+              </Card>
             </Box>
           </Container>
-        </Box>
+        </Box> */}
       </Box>
     </Layout>
   );
