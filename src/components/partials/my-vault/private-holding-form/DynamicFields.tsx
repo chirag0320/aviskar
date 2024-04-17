@@ -15,11 +15,15 @@ export interface ISpecificationField {
     [key: string]: { specificationName: string, value: string }
 }
 
-const DynamicFields = ({ existingFields, setDynamicSpecificationFields, setDynamicCustomSpecificationFields }: {
+const DynamicFields = ({ existingFields, existingCustomFields, setDynamicSpecificationFields, setDynamicCustomSpecificationFields }: {
     existingFields: {
         specificationAttributeId: number;
         specificationAttributeOptionId: number;
         specificationAttributeOptionOther: string | null;
+    }[] | null,
+    existingCustomFields: {
+        key: string;
+        value: string;
     }[] | null,
     setDynamicSpecificationFields: React.Dispatch<React.SetStateAction<ISpecificationField[] | null>>,
     setDynamicCustomSpecificationFields: React.Dispatch<React.SetStateAction<ISpecificationField[] | null>>,
@@ -39,7 +43,7 @@ const DynamicFields = ({ existingFields, setDynamicSpecificationFields, setDynam
     }, [debouncedSpecficationFields, debouncedCustomSpecficationFields])
 
     useEffect(() => {
-        if (!existingFields || !formDropdownsKeys) return;
+        if (!existingFields || !formDropdownsKeys || !existingCustomFields) return;
 
         const currentFields: ISpecificationField[] = [];
         existingFields.forEach((field) => {
@@ -55,7 +59,18 @@ const DynamicFields = ({ existingFields, setDynamicSpecificationFields, setDynam
             }
         })
         setSpecificationField(currentFields);
-    }, [existingFields, formDropdownsKeys])
+
+        const currentCustomFields: ISpecificationField[] = [];
+        existingCustomFields.forEach((field) => {
+            currentCustomFields.push({
+                [field.key]: {
+                    specificationName: field.key,
+                    value: field.value
+                }
+            })
+        })
+        setCustomSpecificationField(currentCustomFields);
+    }, [existingFields, formDropdownsKeys, existingCustomFields])
 
     // Just an dummy react hook form
     const {

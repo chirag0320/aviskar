@@ -96,6 +96,7 @@ function privateHoldingAdd({ location }: { location: any }) {
     const formDropdownsKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsKeys);
     const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
     const formDropdownsReverseKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsReverseKeys);
+    const [preparingDataLoading, setPreparingDataLoading] = useState(false)
     const dispatch = useAppDispatch()
     const { showToaster } = useShowToaster()
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
@@ -133,7 +134,7 @@ function privateHoldingAdd({ location }: { location: any }) {
         return () => {
             dispatch(clearPrivateHoldingCurrentData());
         }
-    },[])
+    }, [])
 
     useLayoutEffect(() => {
         const fetchFormDropdowns = async () => {
@@ -217,6 +218,7 @@ function privateHoldingAdd({ location }: { location: any }) {
     const onSubmit = async (data: IPrivateHoldingAddInputs) => {
         if (!formDropdownsKeys) return;
 
+        setPreparingDataLoading(() => true)
         const prepareDynamicSpecificationFields = dynamicSpecificationFields?.filter(field => field[Object.keys(field)[0]].specificationName !== "none" && field[Object.keys(field)[0]].value !== "none").map((field) => {
             return {
                 "SpecificationAttributeOptionId": Number(field[Object.keys(field)[0]].value),
@@ -300,7 +302,8 @@ function privateHoldingAdd({ location }: { location: any }) {
         if (currentPrivateHolding) {
             prepareData = { ...prepareData, Id: currentPrivateHolding.id };
         }
-        console.log("🚀 ~ onSubmit ~ prepareData:", prepareData)
+        // console.log("🚀 ~ onSubmit ~ prepareData:", prepareData)
+        setPreparingDataLoading(() => false)
 
         const response = await dispatch(addOrEditPrivateHolding({ url: ENDPOINTS.addOrEditPrivateHolding, body: prepareData }))
 
@@ -314,7 +317,7 @@ function privateHoldingAdd({ location }: { location: any }) {
 
     return (
         <>
-            <Loader open={loading} />
+            <Loader open={loading || preparingDataLoading} />
             {openToaster && <Toaster />}
             <Layout>
                 <Seo
@@ -499,7 +502,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         <MenuItem value='2'>kilograms</MenuItem>
                                     </RenderFields>
                                 </Stack>
-                                <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} setDynamicSpecificationFields={setDynamicSpecificationFields} setDynamicCustomSpecificationFields={setDynamicCustomSpecificationFields} />
+                                <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} setDynamicSpecificationFields={setDynamicSpecificationFields} setDynamicCustomSpecificationFields={setDynamicCustomSpecificationFields} existingCustomFields={currentPrivateHolding ? currentPrivateHolding.customeAttribute : null} />
                                 <Stack className="RowWrapper">
                                     <BasicDatePicker name="Date" label="Purchase Date" setValue={setValue} existingDate={currentPrivateHolding ? currentPrivateHolding?.purchaseDate : null} error={errors.Date} clearErrors={clearErrors} />
                                     <RenderFields
