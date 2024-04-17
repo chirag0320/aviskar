@@ -19,6 +19,7 @@ interface SellEntry {
     valueOfSellEntry: any
     setValue: any
     maxQty: number
+    unitPrice: number
 }
 
 interface Inputs {
@@ -31,7 +32,7 @@ const schema = yup.object().shape({
 
 function SellEntry(props: SellEntry) {
     const dispatch = useAppDispatch()
-    const { open, onClose, valueOfSellEntry, setValue, maxQty } = props
+    const { open, onClose, valueOfSellEntry, setValue, maxQty, unitPrice } = props
 
     const {
         register,
@@ -60,7 +61,7 @@ function SellEntry(props: SellEntry) {
             id="SellEntry"
             open={open}
             dialogTitle="SellEntry title"
-            onClose={()=>{
+            onClose={() => {
                 onClose()
             }}
             maxWidth="sm"
@@ -68,7 +69,7 @@ function SellEntry(props: SellEntry) {
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack className="AllFields">
-                    <QuantityInputs quantityLabel="Quantity sold :" onQuantityChange={onQuantityChange} qty={valueOfSellEntry?.quantity} maxQty={maxQty}/>
+                    <QuantityInputs quantityLabel="Quantity sold :" onQuantityChange={onQuantityChange} qty={valueOfSellEntry?.quantity} maxQty={maxQty} />
                     <RenderFields
                         register={register}
                         error={errors.SoldTo}
@@ -78,11 +79,11 @@ function SellEntry(props: SellEntry) {
                         variant='outlined'
                         margin='none'
                         fullWidth
-                        // onChange={(e) => {
-                        //     console.log(e.target.value,"e.target.value")
-                        //     setValue('sellEntry', { ...valueOfSellEntry, 'SoldTo': e.target.value })
-                        // }}
-                        // value={valueOfSellEntry?.SoldTo}
+                    // onChange={(e) => {
+                    //     console.log(e.target.value,"e.target.value")
+                    //     setValue('sellEntry', { ...valueOfSellEntry, 'SoldTo': e.target.value })
+                    // }}
+                    // value={valueOfSellEntry?.SoldTo}
                     />
                 </Stack>
                 <Stack className="ActionWrapper">

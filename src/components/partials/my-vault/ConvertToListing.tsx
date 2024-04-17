@@ -19,6 +19,7 @@ interface ConvertToListing {
     valueOfConvertToListing: any
     setValue: any
     maxQty: number
+    unitPrice: number
 }
 
 interface Inputs {
@@ -33,7 +34,7 @@ const schema = yup.object().shape({
 
 function ConvertToListing(props: ConvertToListing) {
     const dispatch = useAppDispatch()
-    const { open, onClose, valueOfConvertToListing, setValue, maxQty } = props
+    const { open, onClose, valueOfConvertToListing, setValue, maxQty, unitPrice } = props
 
     const {
         register,
@@ -70,7 +71,7 @@ function ConvertToListing(props: ConvertToListing) {
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack className="AllFields">
-                    <QuantityInputs quantityLabel="Convert Quantity :" onQuantityChange={onQuantityChange} qty={valueOfConvertToListing?.quantity} maxQty={maxQty}/>
+                    <QuantityInputs quantityLabel="Convert Quantity :" onQuantityChange={onQuantityChange} qty={valueOfConvertToListing?.quantity} maxQty={maxQty} />
                     <RenderFields
                         register={register}
                         error={errors.StorePrice}
@@ -81,6 +82,8 @@ function ConvertToListing(props: ConvertToListing) {
                         margin='none'
                         fullWidth
                         type="number"
+                        disabled={true}
+                        value={unitPrice as any}
                     // onChange={(e) => {
                     //     setValue('convertToListing', { ...valueOfConvertToListing, 'StorePrice': e.target.value })
                     // }}
@@ -113,4 +116,4 @@ function ConvertToListing(props: ConvertToListing) {
     )
 }
 
-export default ConvertToListing
+export default React.memo(ConvertToListing)

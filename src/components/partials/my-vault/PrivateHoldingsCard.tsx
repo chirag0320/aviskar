@@ -11,6 +11,8 @@ import { deletePrivateHoldings } from '@/redux/reducers/myVaultReducer';
 import { navigate } from 'gatsby';
 import Toaster from '@/components/common/Toaster';
 import useShowToaster from '@/hooks/useShowToaster';
+import MyVaultServices from '@/apis/services/MyVaultServices';
+import { ENDPOINTS } from '@/utils/constants';
 
 const getColorForPosition = (position: number) => {
     return PriceFacturationEnum[position.toString() as keyof typeof PriceFacturationEnum];
@@ -26,7 +28,7 @@ function PrivateHoldingCards({ fetchPrivateHoldingsList, item }: any) {
     const [openConvertToListing, toggleConvertToListing] = useToggle(false);
     const [openSellToUs, toggleSellToUs] = useToggle(false);
     const tooltipRef: any = useRef(null)
-
+    const [priceData, setPriceData] = useState<any>(null)
     const handleTooltipClose = (event: any) => {
         setHoldingProductOptions(false)
     }
@@ -37,19 +39,25 @@ function PrivateHoldingCards({ fetchPrivateHoldingsList, item }: any) {
         setHoldingProductOptions(false)
     }
 
-    const openSellToUsPopUP = (item: any) => {
+    const openSellToUsPopUP = async (item: any) => {
+        const res = await MyVaultServices.getPrivateHoldingsListLivePrice(ENDPOINTS.getPrivateHoldingsListLivePrice, { HoldingIds: [item?.id], IsStorePrice: false })
+        setPriceData({ sellTous: res.data.data[0]?.unitPrice })
         setCurrentValueOfPopUp((prev: any) => {
             return ({ ...prev, sellToUs: item, maxQty: item?.quantity })
         })
         toggleSellToUs(true)
     }
-    const openConvertToListingPopUp = (item: any) => {
+    const openConvertToListingPopUp = async (item: any) => {
+        const res = await MyVaultServices.getPrivateHoldingsListLivePrice(ENDPOINTS.getPrivateHoldingsListLivePrice, { HoldingIds: [item?.id], IsStorePrice: true })
+        setPriceData({ convertToListing: res.data.data[0]?.unitPrice })
         setCurrentValueOfPopUp((prev: any) => {
             return ({ ...prev, convertToListing: item, maxQty: item?.quantity })
         })
         toggleConvertToListing(true)
     }
-    const openSellEntryPopUP = (item: any) => {
+    const openSellEntryPopUP = async (item: any) => {
+        const res = await MyVaultServices.getPrivateHoldingsListLivePrice(ENDPOINTS.getPrivateHoldingsListLivePrice, { HoldingIds: [item?.id], IsStorePrice: true })
+        setPriceData({ sellEntry: res.data.data[0]?.unitPrice })
         setCurrentValueOfPopUp((prev: any) => {
             return ({ ...prev, sellEntry: item, maxQty: item?.quantity })
         })
@@ -133,9 +141,9 @@ function PrivateHoldingCards({ fetchPrivateHoldingsList, item }: any) {
                         </List>
                     </ClickTooltip>
                 </CardContent>
-                {openSellEntry && <SellEntry maxQty={currentValueOfPopUp?.maxQty} open={openSellEntry} onClose={toggleSellEntry} valueOfSellEntry={currentValueOfPopUp?.sellEntry} setValue={setValueForTheSellToUsPopUp} />}
-                {openConvertToListing && <ConvertToListing maxQty={currentValueOfPopUp?.maxQty} open={openConvertToListing} onClose={toggleConvertToListing} valueOfConvertToListing={currentValueOfPopUp?.convertToListing} setValue={setValueForTheSellToUsPopUp} />}
-                {openSellToUs && <SellToUs maxQty={currentValueOfPopUp?.maxQty} open={openSellToUs} onClose={toggleSellToUs} valueOfTheSellToUs={currentValueOfPopUp?.sellToUs} setValue={setValueForTheSellToUsPopUp} />}
+                {openSellEntry && <SellEntry  unitPrice={priceData?.sellEntry} maxQty={currentValueOfPopUp?.maxQty} open={openSellEntry} onClose={toggleSellEntry} valueOfSellEntry={currentValueOfPopUp?.sellEntry} setValue={setValueForTheSellToUsPopUp} />}
+                {openConvertToListing && <ConvertToListing unitPrice={priceData?.convertToListing}  maxQty={currentValueOfPopUp?.maxQty} open={openConvertToListing} onClose={toggleConvertToListing} valueOfConvertToListing={currentValueOfPopUp?.convertToListing} setValue={setValueForTheSellToUsPopUp} />}
+                {openSellToUs && <SellToUs unitPrice={priceData?.sellTous} maxQty={currentValueOfPopUp?.maxQty} open={openSellToUs} onClose={toggleSellToUs} valueOfTheSellToUs={currentValueOfPopUp?.sellToUs} setValue={setValueForTheSellToUsPopUp} />}
             </Card >
         </>
     )

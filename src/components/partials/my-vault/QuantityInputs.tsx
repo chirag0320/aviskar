@@ -11,7 +11,6 @@ interface QuantityInputsProps {
 
 export default function QuantityInputs(props: QuantityInputsProps) {
     const { quantityLabel, onQuantityChange, qty, maxQty } = props
-    console.log("🚀 ~ QuantityInputs ~ maxQty:", maxQty)
     const [quantity, setQuantity] = useState<number>(qty)
 
     const increaseQuantity = () => {
