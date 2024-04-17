@@ -73,8 +73,6 @@ function AddAccount(props: AddAccountProps) {
   const accountTypeText = existingAccount ? alignment : AccountTypeEnumReverse[alignment];
   const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
   const dispatch = useAppDispatch();
-  // const countryList = useAppSelector(state => state.checkoutPage.countryList);
-  // const configDropdowns?.stateList = useAppSelector(state => state.checkoutPage.stateList);
   const [stateList, setStateList] = useState([])
   const [stateId, setStateId] = useState<number | null>(null);
   const { showToaster } = useShowToaster();
@@ -94,7 +92,6 @@ function AddAccount(props: AddAccountProps) {
     }
   }, [])
 
-
   useEffect(() => {
     if (!existingAccount) return;
     setValue('State', existingAccount?.address.stateName);
@@ -104,7 +101,6 @@ function AddAccount(props: AddAccountProps) {
     setcountryValue(existingAccount?.address.countryId?.toString())
     setstateValue(existingAccount?.address.stateName)
     setPhoneValue(existingAccount?.phoneNumber)
-
     const additionalBeneficiary = existingAccount?.additionalBeneficiary.map((beneficiary) => {
       return {
         [beneficiary.id]: {
@@ -112,7 +108,7 @@ function AddAccount(props: AddAccountProps) {
           lastName: beneficiary.lastName
         }
       }
-    });
+    })
     setAdditionalFields(additionalBeneficiary)
     return () => {
       reset()
