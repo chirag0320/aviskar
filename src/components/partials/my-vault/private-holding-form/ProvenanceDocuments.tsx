@@ -13,6 +13,7 @@ import {
 import React, { useEffect, useState } from 'react'
 
 const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, clearErrors, provenanceDocuments, setProvenanceDocuments }: any) => {
+    // console.log("🚀 ~ ProvenanceDocuments ~ provenanceDocuments:", provenanceDocuments)
     const { showToaster } = useShowToaster()
     const [selectedFile, setSelectedFile] = useState<any>(null);
     // const [docTypeValue, setDocTypeValue] = useState<string>("none");
@@ -35,6 +36,7 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                     id: new Date().getTime().toString(),
                     fileName: selectedFile.name,
                     type: getValues("DocumentType"),
+                    filePath : "",
                     fileByte: fileData,
                     documentType: getValues("DocumentType")
                 }]);
@@ -104,7 +106,7 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                                     <TableCell component="th" scope="document">
                                         <Link href={file.filePath} target="_blank">{file.fileName}</Link>
                                     </TableCell>
-                                    <TableCell>{PrivateHoldingDocumentTypeEnum[file.type.toString()]}</TableCell>
+                                    <TableCell>{PrivateHoldingDocumentTypeEnum[file.documentType]}</TableCell>
                                     <TableCell>
                                         <IconButton className="DeleteButton" onClick={() => handleDeleteFile(file.id)}><Delete1Icon /></IconButton>
                                     </TableCell>

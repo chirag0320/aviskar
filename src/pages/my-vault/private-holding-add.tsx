@@ -30,7 +30,7 @@ import useRequireLogin from "@/hooks/useRequireLogin";
 import Toaster from "@/components/common/Toaster";
 import useShowToaster from "@/hooks/useShowToaster";
 import { hasFulfilled } from "@/utils/common";
-import { WeightTypes } from "@/types/enums";
+import { PrivateHoldingDocumentTypeEnum, PrivateHoldingDocumentTypeReverseEnum, WeightTypes } from "@/types/enums";
 
 const schema = yup.object().shape({
     Account: yup.string().notOneOf(["none"], "Account is required field"),
@@ -162,7 +162,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                 fileName: doc.fileName,
                 type: doc.type,
                 filePath: doc.filepath,
-                // documentType: doc.documentType
+                documentType: PrivateHoldingDocumentTypeReverseEnum[doc.provenanceDocType]
             }
         }))
         setProductPhotos(currentPrivateHolding.attachments.filter(doc => doc.type === "ProductPhotos").map((doc: any) => {
@@ -268,15 +268,14 @@ function privateHoldingAdd({ location }: { location: any }) {
             ].concat(prepareDynamicSpecificationFields ? prepareDynamicSpecificationFields : []),
             CustomeAttribute: prepareDynamicCustomeSpecificationFields,
             Attachments: provenanceDocuments.map((file) => {
-                // const fileByteAsString = new TextDecoder().decode(file.fileByte);
                 const fileByteAsString = arrayBufferToBase64(file.fileByte);
-                // console.log("🚀 ~ Attachments:provenanceDocuments.map ~ file:", file)
                 return {
                     "FileName": file.fileName,
                     "Type": 0,
                     "FileByte": fileByteAsString,
                     "Filepath": file.filePath,
-                    "ProvenanceDocType": file.documentType ? Number(file.documentType) : undefined
+                    "ProvenanceDocType": file.documentType ? Number(file.documentType) : undefined,
+                    "ProvenanceOtherDocType": ""
                 }
             }).concat(productPhotos.map((file) => {
                 const fileByteAsString = arrayBufferToBase64(file.fileByte);
@@ -286,7 +285,8 @@ function privateHoldingAdd({ location }: { location: any }) {
                     "Type": 1,
                     "FileByte": fileByteAsString,
                     "Filepath": file.filePath,
-                    "ProvenanceDocType": undefined
+                    "ProvenanceDocType": undefined,
+                    "ProvenanceOtherDocType": ""
                 }
             }))
         }
