@@ -107,7 +107,7 @@ function Vault() {
   return (
     <Layout>
       <Box className="VaultPage">
-        <Breadcrumb arr={[{ navigate: '/vault', name: 'vault' }]} />
+        <Breadcrumb arr={[{ navigate: '/my-vault', name: 'My Vault' }]} />
         <Box className="HeroSection">
           <Container>
             <Box className="HeroSectionWrapper">
@@ -130,7 +130,7 @@ function Vault() {
                   Allocated Vault Storage clients can request holding statements
                   by calling our office during business hours. */}
                 </Typography>
-                <Button size="large" variant="contained" sx={{ mt: 5 }} onClick={()=>{
+                <Button size="large" variant="contained" sx={{ mt: 5 }} onClick={() => {
                   navigate('/shop')
                 }}>
                   Shop Now
@@ -360,8 +360,8 @@ function Vault() {
               {/* below newsletter is commneted it will be use in future */}
               {/* <Card className="AccountInformationCard">
                 <Typography variant="subtitle2">Newsletters</Typography> */}
-                {/* @ts-ignore */}
-                {/* <Typography variant="body2" sx={{ mt: 1.5 }} dangerouslySetInnerHTML={{ __html: myVaultHomePageData?.newsLetterDescription }}>
+              {/* @ts-ignore */}
+              {/* <Typography variant="body2" sx={{ mt: 1.5 }} dangerouslySetInnerHTML={{ __html: myVaultHomePageData?.newsLetterDescription }}>
                 </Typography>
               </Card> */}
             </Box>
