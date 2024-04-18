@@ -7,93 +7,103 @@ import { SwiperNavigation } from "@/components/common/Utils"
 // Utills
 import { SectionHeading } from "../../common/Utils"
 import { PlayIcon } from "../../../assets/icons/index"
+import { useAppSelector } from '@/hooks'
+import noImage from '../../../assets/images/noImage.png'
 
 function Experience() {
+    const { mainHomePageData } = useAppSelector((state) => state.homePage)
     return (
-        <Box id="Experience">
-            <Container maxWidth="lg">
-                <Box className="ExperienceWrapper">
-                    <SectionHeading title="Travel Experience" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
-                    <Box className="ExperienceSlideWrapper" component="section" key={'Experience'}>
-                        <Box className="SwiperContainer">
-                            <Swiper
-                                effect={'coverflow'}
-                                grabCursor={true}
-                                centeredSlides={true}
-                                slidesPerView={'auto'}
-                                initialSlide={2}
-                                coverflowEffect={{
-                                    rotate: 40,
-                                    stretch: 0,
-                                    depth: 970,
-                                    modifier: 1,
-                                    slideShadows: false,
-                                }}
+        (mainHomePageData && mainHomePageData?.experience?.length > 0) ?
+            <Box id="Experience">
+                <Container maxWidth="lg">
+                    <Box className="ExperienceWrapper">
+                        <SectionHeading title="Travel Experience" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
+                        <Box className="ExperienceSlideWrapper" component="section" key={'Experience'}>
+                            <Box className="SwiperContainer">
+                                <Swiper
+                                    effect={'coverflow'}
+                                    grabCursor={true}
+                                    centeredSlides={true}
+                                    slidesPerView={'auto'}
+                                    initialSlide={2}
+                                    coverflowEffect={{
+                                        rotate: 40,
+                                        stretch: 0,
+                                        depth: 970,
+                                        modifier: 1,
+                                        slideShadows: false,
+                                    }}
 
-                                navigation={{
-                                    nextEl: ".SwiperButtonNext",
-                                    prevEl: ".SwiperButtonPrev",
-                                    disabledClass: "SwiperButtonDisabled"
-                                }}
-                                pagination={false}
-                                modules={[EffectCoverflow, Navigation]}
-                                breakpoints={{
+                                    navigation={{
+                                        nextEl: ".SwiperButtonNext",
+                                        prevEl: ".SwiperButtonPrev",
+                                        disabledClass: "SwiperButtonDisabled"
+                                    }}
+                                    pagination={false}
+                                    modules={[EffectCoverflow, Navigation]}
+                                    breakpoints={{
 
-                                    260: {
-                                        slidesPerView: 1.4,
-                                    },
-                                    1024: {
-                                        slidesPerView: "auto"
-                                    },
-                                }}
-                            >
-                                {<SwiperNavigation />}
-                                <SwiperSlide>
-                                    <Box className="ExperienceSlide">
-                                        <img src="https://picsum.photos/876/600" alt="https://picsum.photos/876/600" />
-                                        <IconButton className="PlayIcon">
-                                            <PlayIcon />
-                                        </IconButton>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="ExperienceSlide">
-                                        <img src="https://picsum.photos/1276/600" alt="https://picsum.photos/1276/600" />
-                                        <IconButton className="PlayIcon">
-                                            <PlayIcon />
-                                        </IconButton>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="ExperienceSlide">
-                                        <img src="https://picsum.photos/1276/600" alt="https://picsum.photos/1276/600" />
-                                        <IconButton className="PlayIcon">
-                                            <PlayIcon />
-                                        </IconButton>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="ExperienceSlide">
-                                        <img src="https://picsum.photos/1276/600" alt="https://picsum.photos/1276/600" />
-                                        <IconButton className="PlayIcon">
-                                            <PlayIcon />
-                                        </IconButton>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="ExperienceSlide">
-                                        <img src="https://picsum.photos/1276/600" alt="https://picsum.photos/1276/600" />
-                                        <IconButton className="PlayIcon">
-                                            <PlayIcon />
-                                        </IconButton>
-                                    </Box>
-                                </SwiperSlide>
-                            </Swiper>
+                                        260: {
+                                            slidesPerView: 1.4,
+                                        },
+                                        1024: {
+                                            slidesPerView: "auto"
+                                        },
+                                    }}
+                                >
+                                    {<SwiperNavigation />}
+                                    {(mainHomePageData && mainHomePageData?.experience?.length > 0) ?
+                                        mainHomePageData?.experience?.map((item) => {
+                                            return (
+                                                <SwiperSlide>
+                                                    <Box className="ExperienceSlide">
+                                                        {item?.mediaType ? <video src={item.imageUrl}/> :<img src={item.imageUrl ?? noImage} alt={item.title} />}
+                                                        <IconButton className="PlayIcon">
+                                                            <PlayIcon />
+                                                        </IconButton>
+                                                    </Box>
+                                                </SwiperSlide>
+                                            )
+                                        })
+                                        : null}
+                                    {/* <SwiperSlide>
+                                        <Box className="ExperienceSlide">
+                                            <img src="https://picsum.photos/1276/600" alt="https://picsum.photos/1276/600" />
+                                            <IconButton className="PlayIcon">
+                                                <PlayIcon />
+                                            </IconButton>
+                                        </Box>
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <Box className="ExperienceSlide">
+                                            <img src="https://picsum.photos/1276/600" alt="https://picsum.photos/1276/600" />
+                                            <IconButton className="PlayIcon">
+                                                <PlayIcon />
+                                            </IconButton>
+                                        </Box>
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <Box className="ExperienceSlide">
+                                            <img src="https://picsum.photos/1276/600" alt="https://picsum.photos/1276/600" />
+                                            <IconButton className="PlayIcon">
+                                                <PlayIcon />
+                                            </IconButton>
+                                        </Box>
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <Box className="ExperienceSlide">
+                                            <img src="https://picsum.photos/1276/600" alt="https://picsum.photos/1276/600" />
+                                            <IconButton className="PlayIcon">
+                                                <PlayIcon />
+                                            </IconButton>
+                                        </Box>
+                                    </SwiperSlide> */}
+                                </Swiper>
+                            </Box>
                         </Box>
                     </Box>
-                </Box>
-            </Container >
-        </Box >
+                </Container >
+            </Box > : null
     )
 }
 
