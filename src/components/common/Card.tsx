@@ -420,6 +420,7 @@ export const ToolTipOptionsForTheChartCards = () => {
 }
 export const LineChartCard = (props: any) => {
   const { place, description, bgColor, currentPrice, low, high, valueForChart, title } = props;
+  console.log("🚀 ~ LineChartCard ~ low:", low)
   const [liveHoldingsOptions, setLiveHoldingsOptions] = useState<boolean>(false)
   const tooltipRef: any = useRef(null)
 
@@ -486,7 +487,7 @@ export const LineChartCard = (props: any) => {
             <Box className="HLCircuit">
               <Typography variant="caption">LOW</Typography>
               <Box className="HLCircuitRange">
-                <Box className="UpArrow" sx={{ left: (high - low) == 0 ? '0%' : ((currentPrice / (high - low)) * 100) + "%" }}>
+                <Box className="UpArrow" sx={{ left: (high - low) == 0 ? '0%' : ((high-currentPrice) * 100 / (high - low)) + "%" }}>
                   {/* add percentage in left to slide arrowAicon */}
                   <FilledUpButton />
                 </Box>
