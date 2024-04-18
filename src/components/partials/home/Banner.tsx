@@ -23,7 +23,7 @@ interface IbannerData {
   cdnUrlSmall: any
 }
 function Banner() {
-  const { data }: any = useApiRequest(ENDPOINTS.getSlider);
+  const { data }: any = useApiRequest(ENDPOINTS.getSlider.replace('typeEnum','1'));
   const isLargeScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('sm'))
   const [tempImgHide, setTempImgHide] = useState(true)

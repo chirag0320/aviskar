@@ -1,6 +1,7 @@
 import { Delete1Icon } from '@/assets/icons';
 import RenderFields from '@/components/common/RenderFields'
 import { useAppSelector } from '@/hooks';
+import useDebounce from '@/hooks/useDebounce';
 import { IPrivateHoldingAddInputs } from '@/types/myVault';
 import { IndividualAccountFormSchema } from '@/utils/accountFormSchemas.schema';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,38 +15,62 @@ export interface ISpecificationField {
     [key: string]: { specificationName: string, value: string }
 }
 
-const DynamicFields = ({ existingFields, getAppliedSpecificationFields }: {
+const DynamicFields = ({ existingFields, existingCustomFields, setDynamicSpecificationFields, setDynamicCustomSpecificationFields }: {
     existingFields: {
         specificationAttributeId: number;
         specificationAttributeOptionId: number;
         specificationAttributeOptionOther: string | null;
     }[] | null,
-    getAppliedSpecificationFields: (fields: ISpecificationField[]) => void
+    existingCustomFields: {
+        key: string;
+        value: string;
+    }[] | null,
+    setDynamicSpecificationFields: React.Dispatch<React.SetStateAction<ISpecificationField[] | null>>,
+    setDynamicCustomSpecificationFields: React.Dispatch<React.SetStateAction<ISpecificationField[] | null>>,
 }) => {
-    const [specificationFields, setSpecificationField] = useState<ISpecificationField[]>([]);
     const formDropdownsKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsKeys);
     const formDropdownsReverseKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsReverseKeys);
     const formDropdowns = useAppSelector(state => state.myVault.privateHoldingFormDropdowns);
+    const [specificationFields, setSpecificationField] = useState<ISpecificationField[]>([]);
     const [customSpecificationFields, setCustomSpecificationField] = useState<ISpecificationField[]>([]);
 
+    const debouncedSpecficationFields = useDebounce(specificationFields, 500);
+    const debouncedCustomSpecficationFields = useDebounce(customSpecificationFields, 1000);
+
     useEffect(() => {
-        if (!existingFields || !formDropdownsKeys) return;
+        setDynamicSpecificationFields(debouncedSpecficationFields);
+        setDynamicCustomSpecificationFields(debouncedCustomSpecficationFields);
+    }, [debouncedSpecficationFields, debouncedCustomSpecficationFields])
+
+    useEffect(() => {
+        if (!existingFields || !formDropdownsKeys || !existingCustomFields) return;
 
         const currentFields: ISpecificationField[] = [];
         existingFields.forEach((field) => {
-            const curField = formDropdownsKeys[field.specificationAttributeOptionId.toString()];
+            const curField = formDropdownsKeys[field.specificationAttributeId.toString()];
             if (!fixedFields.has(curField)) {
                 // console.log("🚀 ~ DynamicFields ~ specificationFields:", curField)
                 currentFields.push({
-                    [field.specificationAttributeOptionId]: {
-                        specificationName: field.specificationAttributeOptionId.toString(),
-                        value: field.specificationAttributeId.toString()
+                    [field.specificationAttributeId]: {
+                        specificationName: field.specificationAttributeId.toString(),
+                        value: field.specificationAttributeOptionId.toString()
                     }
                 })
             }
         })
         setSpecificationField(currentFields);
-    }, [existingFields, formDropdownsKeys])
+
+        const currentCustomFields: ISpecificationField[] = [];
+        existingCustomFields.forEach((field) => {
+            currentCustomFields.push({
+                [field.key]: {
+                    specificationName: field.key,
+                    value: field.value
+                }
+            })
+        })
+        setCustomSpecificationField(currentCustomFields);
+    }, [existingFields, formDropdownsKeys, existingCustomFields])
 
     // Just an dummy react hook form
     const {

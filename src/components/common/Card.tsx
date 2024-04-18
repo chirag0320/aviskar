@@ -379,27 +379,7 @@ export const UserStatsCard = (props: any) => {
             disablePortal={false}
             arrow
           >
-            <List>
-              <ListItem>
-                <ListItemButton onClick={()=>{navigate('/my-vault/order-history') }}>
-                  <ListItemText primary="View orders" />
-                </ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton onClick={()=>{
-                  navigate('/my-vault/private-holding-add')
-                }}>
-                  <ListItemText primary="Add private holding " />
-                </ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton onClick={()=>{
-                  navigate('/my-vault/private-holding')
-                }}>
-                  <ListItemText primary="View private holdings" />
-                </ListItemButton>
-              </ListItem>
-            </List>
+            <ToolTipOptionsForTheChartCards />
           </ClickTooltip>
         </Box>
         <Box className="BottomWrapper">
@@ -415,9 +395,31 @@ export const UserStatsCard = (props: any) => {
     </Card>
   );
 };
-
+export const ToolTipOptionsForTheChartCards = () => {
+  return (<List>
+    <ListItem>
+      <ListItemButton onClick={() => { navigate('/my-vault/order-history') }}>
+        <ListItemText primary="View orders" />
+      </ListItemButton>
+    </ListItem>
+    <ListItem>
+      <ListItemButton onClick={() => {
+        navigate('/my-vault/private-holding-add')
+      }}>
+        <ListItemText primary="Add private holding " />
+      </ListItemButton>
+    </ListItem>
+    <ListItem>
+      <ListItemButton onClick={() => {
+        navigate('/my-vault/private-holding')
+      }}>
+        <ListItemText primary="View private holdings" />
+      </ListItemButton>
+    </ListItem>
+  </List>)
+}
 export const LineChartCard = (props: any) => {
-  const { place, description, bgColor, currentPrice, low, high, valueForChart } = props;
+  const { place, description, bgColor, currentPrice, low, high, valueForChart, title } = props;
   const [liveHoldingsOptions, setLiveHoldingsOptions] = useState<boolean>(false)
   const tooltipRef: any = useRef(null)
 
@@ -447,7 +449,7 @@ export const LineChartCard = (props: any) => {
         <Box className="TopWrapper">
           <Box className="Left">
             {/* pass Profit and Loss class */}
-            <Typography variant="subtitle2">My Vault</Typography>
+            <Typography variant="subtitle2">{title}</Typography>
             <Typography variant="body1" sx={{ mt: 0.75 }}>
               Current
             </Typography>
@@ -467,23 +469,7 @@ export const LineChartCard = (props: any) => {
               disablePortal={true}
               arrow
             >
-              <List>
-                <ListItem>
-                  <ListItemButton>
-                    <ListItemText primary="View orders" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>
-                    <ListItemText primary="Add private holding " />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>
-                    <ListItemText primary="View private holdings" />
-                  </ListItemButton>
-                </ListItem>
-              </List>
+              <ToolTipOptionsForTheChartCards />
             </ClickTooltip>
             <Typography variant="body1">3 Day Range</Typography>
           </Box>
@@ -660,7 +646,7 @@ export const AddressCard = (props: AddressCardProps) => {
       </Box>
 
       <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={handleCloseUpdateAddress} existingAddress={address} isComingFromMyVault={true} />
-      {openUpdateAccount && <AddAccount dialogTitle="Update account" open={openUpdateAccount} alignment={accountData?.accountType ?? "1"} onClose={handleCloseUpdateAccount} existingAccount={accountData} hadleSecondaryAction={handleCloseUpdateAccount}/>}
+      {openUpdateAccount && <AddAccount dialogTitle="Update account" open={openUpdateAccount} alignment={accountData?.accountType ?? "1"} onClose={handleCloseUpdateAccount} existingAccount={accountData} hadleSecondaryAction={handleCloseUpdateAccount} />}
     </Box>
   );
 };

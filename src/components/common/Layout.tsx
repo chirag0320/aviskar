@@ -36,16 +36,7 @@ function Layout({ children }: any) {
   useEffect(() => {
     const fetchCategories = async () => {
       await dispatch(CategoriesListDetails({
-        url: ENDPOINTS.topCategoriesListWithSubCategories, body: {
-          "search": "",
-          "pageNo": 0,
-          "pageSize": -1,
-          "sortBy": "",
-          "sortOrder": "",
-          "filters": {
-            "includeInTopMenu": true
-          }
-        }
+        url: ENDPOINTS.topCategoriesListWithSubCategories, params: {page: 1}
       }))
     }
     fetchCategories();

@@ -59,6 +59,9 @@ function Addresses() {
   if (loadingForCheckingLogin) {
     return
   }
+  const onClickAction = () => {
+    handleAddAddress()
+  }
   return (
     <>
       <Loader open={loading} />
@@ -69,14 +72,11 @@ function Addresses() {
           title="Address"
           lang="en"
         />
-        <PageTitle title="Addresses" backToDashboard={true} />
+        <PageTitle title="Addresses" backToDashboard={true} redirectOnClick={onClickAction} />
 
         <Box className="AddressesPage">
           <Container>
             <Box className="AddressList">
-              <Box sx={{ textAlign: 'right' }}>
-                <Button onClick={handleAddAddress} variant="outlined" startIcon={<PlusIcon />}>Add new</Button>
-              </Box>
               <Box className="AddressListWrapper">
                 {addressesData?.map(address => (
                   <AddressCard

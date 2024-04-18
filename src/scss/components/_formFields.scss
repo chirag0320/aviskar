@@ -12,6 +12,15 @@ input[type=search] {
   }
 }
 
+input {
+  &[type=file] {
+    cursor: pointer;
+    &::-webkit-file-upload-button {
+      cursor: pointer;
+    }
+  }
+}
+
 .primary-text-btn {
   @include btn;
   @include btn-text-color($yellowFuel, $dark);

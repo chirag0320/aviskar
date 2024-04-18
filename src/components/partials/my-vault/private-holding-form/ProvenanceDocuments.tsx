@@ -12,24 +12,11 @@ import {
 } from "@mui/material"
 import React, { useEffect, useState } from 'react'
 
-const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, clearErrors, existingDocuments = null, provenanceDocuments, setProvenanceDocuments }: any) => {
+const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, clearErrors, provenanceDocuments, setProvenanceDocuments }: any) => {
+    // console.log("🚀 ~ ProvenanceDocuments ~ provenanceDocuments:", provenanceDocuments)
     const { showToaster } = useShowToaster()
     const [selectedFile, setSelectedFile] = useState<any>(null);
-    const [docTypeValue, setDocTypeValue] = useState<string>("none");
-
-    useEffect(() => {
-        if (!existingDocuments) return;
-
-        setProvenanceDocuments(existingDocuments.map((doc: any) => {
-            return {
-                id: doc.id,
-                fileName: doc.fileName,
-                type: doc.type,
-                filePath: doc.filepath,
-                // documentType: doc.documentType
-            }
-        }))
-    }, [existingDocuments])
+    // const [docTypeValue, setDocTypeValue] = useState<string>("none");
 
     const handleDeleteFile = (id: string) => {
         setProvenanceDocuments(provenanceDocuments.filter((file: any) => file.id !== id));
@@ -49,8 +36,9 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                     id: new Date().getTime().toString(),
                     fileName: selectedFile.name,
                     type: getValues("DocumentType"),
+                    filePath : "",
                     fileByte: fileData,
-                    documentType: PrivateHoldingDocumentTypeEnum[getValues("DocumentType")]
+                    documentType: getValues("DocumentType")
                 }]);
             };
             reader.readAsArrayBuffer(selectedFile);
@@ -89,7 +77,7 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                 getValues={getValues}
                 margin='none'
                 setValue={setValue}
-                value={docTypeValue}
+                value="none"
                 className='SelectValue'
             >
                 <MenuItem value='none'>Select Document Type</MenuItem>
@@ -118,7 +106,7 @@ const ProvenanceDocuments = ({ register, errors, control, setValue, getValues, c
                                     <TableCell component="th" scope="document">
                                         <Link href={file.filePath} target="_blank">{file.fileName}</Link>
                                     </TableCell>
-                                    <TableCell>{PrivateHoldingDocumentTypeEnum[file.type.toString()]}</TableCell>
+                                    <TableCell>{PrivateHoldingDocumentTypeEnum[file.documentType]}</TableCell>
                                     <TableCell>
                                         <IconButton className="DeleteButton" onClick={() => handleDeleteFile(file.id)}><Delete1Icon /></IconButton>
                                     </TableCell>

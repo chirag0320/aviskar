@@ -305,6 +305,9 @@ export const myVaultSlice = createSlice({
         },
         addAddress: (state, action) => {
             state.addresses = [...state.addresses!, action.payload]
+        },
+        clearPrivateHoldingCurrentData : (state) => {
+            state.currentPrivateHolding = null;
         }
     },
     extraReducers: (builder) => {
@@ -479,15 +482,15 @@ export const myVaultSlice = createSlice({
         })
         // get private holdings list live price
         builder.addCase(getPrivateHoldingsListLivePrice.pending, state => {
-            state.loading = true;
+            // state.loading = true;
         })
         builder.addCase(getPrivateHoldingsListLivePrice.fulfilled, (state, action) => {
             const responseData = action.payload.data;
             state.privateHoldingsListLivePrice = responseData.data;
-            state.loading = false;
+            // state.loading = false;
         })
         builder.addCase(getPrivateHoldingsListLivePrice.rejected, state => {
-            state.loading = false;
+            // state.loading = false;
         })
         // get specific private holding
         builder.addCase(getPrivateHoldingWithId.pending, state => {
@@ -578,6 +581,6 @@ export const myVaultSlice = createSlice({
     }
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateAddress, addAddress } = myVaultSlice.actions;
+export const { setLoadingTrue, setLoadingFalse, updateAddress, addAddress,clearPrivateHoldingCurrentData } = myVaultSlice.actions;
 
 export default myVaultSlice.reducer;

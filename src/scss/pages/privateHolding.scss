@@ -1,9 +1,9 @@
 .PrivateHoldingPage {
     .PrivateHoldingContent {
-        padding: 20px 0 50px;
+        padding: 0 0 50px;
 
         @include media($mmd) {
-            padding: 10px 0 30px;
+            padding: 0 0 30px;
         }
 
         .PrivateHoldingCardsWrapper {

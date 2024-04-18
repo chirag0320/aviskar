@@ -34,8 +34,8 @@ class ConfigServices {
     //   throw new Error(error)
     // })
   }
-  static async categoriesList(url: string, data: any) {
-    return axiosInstance.post(url, data)
+  static async categoriesList(url: string, params: any) {
+    return axiosInstance.post(url, {},{params:params})
 
   }
   static async loginUser(url: string, data: IloginUserBody) {

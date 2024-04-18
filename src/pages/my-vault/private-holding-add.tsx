@@ -22,7 +22,7 @@ import RenderFields from "@/components/common/RenderFields"
 import { Delete1Icon } from "@/assets/icons"
 import BasicDatePicker from "@/components/partials/my-vault/BasicDatePicker"
 import { IPrivateHoldingAddInputs, IPrivateHoldingAddorEditQuery } from "@/types/myVault";
-import { addOrEditPrivateHolding, getConfigDropdowns, getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
+import { addOrEditPrivateHolding, clearPrivateHoldingCurrentData, getConfigDropdowns, getPrivateHoldingFormDropdowns, getPrivateHoldingWithId } from "@/redux/reducers/myVaultReducer";
 import DynamicFields, { ISpecificationField } from "@/components/partials/my-vault/private-holding-form/DynamicFields";
 import ProvenanceDocuments from "@/components/partials/my-vault/private-holding-form/ProvenanceDocuments";
 import ProductPhotos from "@/components/partials/my-vault/private-holding-form/ProductPhotos";
@@ -30,6 +30,8 @@ import useRequireLogin from "@/hooks/useRequireLogin";
 import Toaster from "@/components/common/Toaster";
 import useShowToaster from "@/hooks/useShowToaster";
 import { hasFulfilled } from "@/utils/common";
+import { PrivateHoldingDocumentTypeEnum, PrivateHoldingDocumentTypeReverseEnum, WeightTypes } from "@/types/enums";
+import { navigate } from "gatsby";
 
 const schema = yup.object().shape({
     Account: yup.string().notOneOf(["none"], "Account is required field"),
@@ -66,6 +68,15 @@ function dropdownStateReducer(state: any, action: any) {
             return state;
     }
 }
+function arrayBufferToBase64(buffer: any) {
+    var binary = '';
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+}
 
 export interface IFile {
     id: string,
@@ -85,6 +96,7 @@ function privateHoldingAdd({ location }: { location: any }) {
     const formDropdownsKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsKeys);
     const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
     const formDropdownsReverseKeys = useAppSelector(state => state.myVault.privateHoldingFormDropdownsReverseKeys);
+    const [preparingDataLoading, setPreparingDataLoading] = useState(false)
     const dispatch = useAppDispatch()
     const { showToaster } = useShowToaster()
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
@@ -98,9 +110,13 @@ function privateHoldingAdd({ location }: { location: any }) {
         WeightType: "none",
         Account: "none"
     });
+    // documents and image state
     const [provenanceDocuments, setProvenanceDocuments] = useState<IFile[]>([]);
     const [productPhotos, setProductPhotos] = useState<IFile[]>([]);
+
+    // dynamic fields state
     const [dynamicSpecificationFields, setDynamicSpecificationFields] = useState<ISpecificationField[] | null>(null);
+    const [dynamicCustomSpecificationFields, setDynamicCustomSpecificationFields] = useState<ISpecificationField[] | null>(null);
 
     const {
         register,
@@ -113,6 +129,12 @@ function privateHoldingAdd({ location }: { location: any }) {
     } = useForm<IPrivateHoldingAddInputs>({
         resolver: yupResolver(schema)
     })
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearPrivateHoldingCurrentData());
+        }
+    }, [])
 
     useLayoutEffect(() => {
         const fetchFormDropdowns = async () => {
@@ -141,11 +163,28 @@ function privateHoldingAdd({ location }: { location: any }) {
         setValue("Weight", currentPrivateHolding.weight);
         setValue("Qty", currentPrivateHolding.qty.toString());
         setValue("PurchasePrice", currentPrivateHolding.price.toString())
+        setProvenanceDocuments(currentPrivateHolding.attachments.filter(doc => doc.type !== "ProductPhotos").map((doc: any) => {
+            return {
+                id: doc.id,
+                fileName: doc.fileName,
+                type: doc.type,
+                filePath: doc.filepath,
+                documentType: PrivateHoldingDocumentTypeReverseEnum[doc.provenanceDocType]
+            }
+        }))
+        setProductPhotos(currentPrivateHolding.attachments.filter(doc => doc.type === "ProductPhotos").map((doc: any) => {
+            return {
+                id: doc.id,
+                fileName: doc.fileName,
+                type: doc.type,
+                filePath: doc.filepath
+            }
+        }))
 
         if (!formDropdownsKeys) return;
 
         function getNextSpecificationItem(specificationName: string) {
-            return currentPrivateHolding!.productattribute.find((option: any) => formDropdownsKeys![option["specificationAttributeOptionId"].toString()] === specificationName)
+            return currentPrivateHolding!.productattribute.find((option: any) => formDropdownsKeys![option["specificationAttributeId"].toString()] === specificationName)
         }
 
         const nextMint = getNextSpecificationItem("Mint");
@@ -158,11 +197,11 @@ function privateHoldingAdd({ location }: { location: any }) {
             type: "APPLY_VALUES",
             nextAccount: currentPrivateHolding?.subCustomerId,
             // NOTE : static
-            nextMint: nextMint ? nextMint["specificationAttributeId"] : "0",
-            nextMetal: nextMetal ? nextMetal["specificationAttributeId"] : "0",
-            nextType: nextType ? nextType["specificationAttributeId"] : "0",
-            nextSeries: nextSeries ? nextSeries["specificationAttributeId"] : "0",
-            nextPurity: nextPurity ? nextPurity["specificationAttributeId"] : "0",
+            nextMint: nextMint ? nextMint["specificationAttributeOptionId"] : "0",
+            nextMetal: nextMetal ? nextMetal["specificationAttributeOptionId"] : "0",
+            nextType: nextType ? nextType["specificationAttributeOptionId"] : "0",
+            nextSeries: nextSeries ? nextSeries["specificationAttributeOptionId"] : "0",
+            nextPurity: nextPurity ? nextPurity["specificationAttributeOptionId"] : "0",
             nextWeightType: "0"
         })
     }, [currentPrivateHolding, formDropdownsKeys])
@@ -172,64 +211,90 @@ function privateHoldingAdd({ location }: { location: any }) {
         endPoint: ENDPOINTS.getConfigDropdown
     })
 
+    if (loadingForCheckingLogin) {
+        return
+    }
+
     const onSubmit = async (data: IPrivateHoldingAddInputs) => {
+        if (!formDropdownsKeys) return;
+
+        setPreparingDataLoading(() => true)
+        const prepareDynamicSpecificationFields = dynamicSpecificationFields?.filter(field => field[Object.keys(field)[0]].specificationName !== "none" && field[Object.keys(field)[0]].value !== "none").map((field) => {
+            return {
+                "SpecificationAttributeOptionId": Number(field[Object.keys(field)[0]].value),
+                "SpecificationAttributeId": Number(field[Object.keys(field)[0]].specificationName),
+                "SpecificationAttributeOptionOther": ""
+            }
+        })
+        const prepareDynamicCustomeSpecificationFields = dynamicCustomSpecificationFields?.filter(field => field[Object.keys(field)[0]].specificationName !== "" && field[Object.keys(field)[0]].value !== "").map(field => {
+            return {
+                key: field[Object.keys(field)[0]].specificationName,
+                value: field[Object.keys(field)[0]].value
+            }
+        })
+
         let prepareData: IPrivateHoldingAddorEditQuery = {
             // "Id": 0,
-            CustomerID: data.Account,
-            SubCustomerID: data.Account,
+            CustomerID: Number(data.Account),
+            SubCustomerID: Number(data.Account),
             // "ProductId": 0,
             ProductName: data.ProductName,
             PurchaseDate: data.Date,
-            Price: data.PurchasePrice,
-            Qty: data.Qty,
+            Price: Number(data.PurchasePrice),
+            Qty: Number(data.Qty),
             // "RunningQty": 12,
             PurchasedFrom: data.PurchaseFrom,
             Weight: data.Weight,
-            WeightType: data.WeightType,
+            WeightType: Number(data.WeightType),
             Attribute: [
                 {
-                    "SpecificationAttributeOptionId": data.MintOrBrand,
-                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Mint"] : "0",
+                    "SpecificationAttributeOptionId": Number(data.MintOrBrand),
+                    "SpecificationAttributeId": Number(formDropdownsReverseKeys ? formDropdownsReverseKeys["Mint"] : "0"),
                     "SpecificationAttributeOptionOther": ""
                 },
                 {
-                    "SpecificationAttributeOptionId": data.Metal,
-                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Metal"] : "0",
+                    "SpecificationAttributeOptionId": Number(data.Metal),
+                    "SpecificationAttributeId": Number(formDropdownsReverseKeys ? formDropdownsReverseKeys["Metal"] : "0"),
                     "SpecificationAttributeOptionOther": ""
                 },
                 {
-                    "SpecificationAttributeOptionId": data.Series,
-                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Series"] : "0",
+                    "SpecificationAttributeOptionId": Number(data.Series),
+                    "SpecificationAttributeId": Number(formDropdownsReverseKeys ? formDropdownsReverseKeys["Series"] : "0"),
                     "SpecificationAttributeOptionOther": ""
                 },
                 {
-                    "SpecificationAttributeOptionId": data.Type,
-                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Type"] : "0",
+                    "SpecificationAttributeOptionId": Number(data.Type),
+                    "SpecificationAttributeId": Number(formDropdownsReverseKeys ? formDropdownsReverseKeys["Type"] : "0"),
                     "SpecificationAttributeOptionOther": ""
                 },
                 {
-                    "SpecificationAttributeOptionId": data.Purity,
-                    "SpecificationAttributeId": formDropdownsReverseKeys ? formDropdownsReverseKeys["Purity"] : "0",
+                    "SpecificationAttributeOptionId": Number(data.Purity),
+                    "SpecificationAttributeId": Number(formDropdownsReverseKeys ? formDropdownsReverseKeys["Purity"] : "0"),
                     "SpecificationAttributeOptionOther": ""
                 },
                 // add specification attribute
-            ],
-            CustomeAttribute: [],
+            ].concat(prepareDynamicSpecificationFields ? prepareDynamicSpecificationFields : []),
+            CustomeAttribute: prepareDynamicCustomeSpecificationFields,
             Attachments: provenanceDocuments.map((file) => {
+                const fileByteAsString = arrayBufferToBase64(file.fileByte);
                 return {
                     "FileName": file.fileName,
-                    "Type": "0",
-                    "FileByte": currentPrivateHolding ? "" : file.fileByte,
-                    "Filepath": currentPrivateHolding ? file.filePath : "",
-                    "ProvenanceDocType": file.documentType
+                    "Type": 0,
+                    "FileByte": fileByteAsString === "" ? undefined : fileByteAsString,
+                    "Filepath": file.filePath,
+                    "ProvenanceDocType": file.documentType ? Number(file.documentType) : undefined,
+                    "ProvenanceOtherDocType": ""
                 }
             }).concat(productPhotos.map((file) => {
+                const fileByteAsString = arrayBufferToBase64(file.fileByte);
+
                 return {
                     "FileName": file.fileName,
-                    "Type": "1",
-                    "FileByte": currentPrivateHolding ? "" : file.fileByte,
-                    "Filepath": currentPrivateHolding ? file.filePath : "",
-                    "ProvenanceDocType": file.documentType // Add the "ProvenanceDocType" property
+                    "Type": 1,
+                    "FileByte": fileByteAsString === "" ? undefined : fileByteAsString,
+                    "Filepath": file.filePath,
+                    "ProvenanceDocType": undefined,
+                    "ProvenanceOtherDocType": ""
                 }
             }))
         }
@@ -237,25 +302,22 @@ function privateHoldingAdd({ location }: { location: any }) {
         if (currentPrivateHolding) {
             prepareData = { ...prepareData, Id: currentPrivateHolding.id };
         }
+        // console.log("🚀 ~ onSubmit ~ prepareData:", prepareData)
+        setPreparingDataLoading(() => false)
 
         const response = await dispatch(addOrEditPrivateHolding({ url: ENDPOINTS.addOrEditPrivateHolding, body: prepareData }))
 
         if (hasFulfilled(response.type)) {
             showToaster({ message: "Private Holding saved successfully", severity: "success" })
+            navigate("/my-vault/private-holding")
         }
     }
 
-    const getAppliedSpecificationFields = (fields: ISpecificationField[]) => {
-        setDynamicSpecificationFields(fields)
-    }
-
     const renderDropdownItems = (dropdowns: any) => dropdowns?.map((option: any) => <MenuItem key={option.specificationAttributeOptionsId} value={option.specificationAttributeOptionsId}>{option.specificationOption}</MenuItem>);
-    if (loadingForCheckingLogin) {
-        return
-    }
+
     return (
         <>
-            <Loader open={loading} />
+            <Loader open={loading || preparingDataLoading} />
             {openToaster && <Toaster />}
             <Layout>
                 <Seo
@@ -263,7 +325,7 @@ function privateHoldingAdd({ location }: { location: any }) {
                     title="Add New Private Holding"
                     lang="en"
                 />
-                <PageTitle title={searchParams.has("holdingId") ? "Update Private Holding" : "Add New Private Holding"} backToDashboard={true} />
+                <PageTitle title={searchParams.has("holdingId") ? "Update Private Holding" : "Add New Private Holding"} isMyVaultSubpage={true} backToDashboard={true} />
                 <Box id="PrivateHoldingAddPage" className='PrivateHoldingAddPage' component="section">
                     <Container>
                         <Box className="Content PrivateHoldingAddContent">
@@ -440,9 +502,9 @@ function privateHoldingAdd({ location }: { location: any }) {
                                         <MenuItem value='2'>kilograms</MenuItem>
                                     </RenderFields>
                                 </Stack>
-                                <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} getAppliedSpecificationFields={getAppliedSpecificationFields} />
+                                <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} setDynamicSpecificationFields={setDynamicSpecificationFields} setDynamicCustomSpecificationFields={setDynamicCustomSpecificationFields} existingCustomFields={currentPrivateHolding ? currentPrivateHolding.customeAttribute : null} />
                                 <Stack className="RowWrapper">
-                                    <BasicDatePicker name="Date" label="Purchase Date" setValue={setValue} existingDate={currentPrivateHolding ? currentPrivateHolding?.purchaseDate : null} error={errors.Date} clearErrors={clearErrors}/>
+                                    <BasicDatePicker name="Date" label="Purchase Date" setValue={setValue} existingDate={currentPrivateHolding ? currentPrivateHolding?.purchaseDate : null} error={errors.Date} clearErrors={clearErrors} />
                                     <RenderFields
                                         register={register}
                                         error={errors.PurchasePrice}
@@ -477,11 +539,11 @@ function privateHoldingAdd({ location }: { location: any }) {
                                     />
                                 </Stack>
                                 <Stack className="RowWrapper DocumentPhotosContentWrapper">
-                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type !== "ProductPhotos") : null} provenanceDocuments={provenanceDocuments} setProvenanceDocuments={setProvenanceDocuments} />
-                                    <ProductPhotos register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} existingDocuments={currentPrivateHolding ? currentPrivateHolding.attachments.filter(doc => doc.type === "ProductPhotos") : null} productPhotos={productPhotos} setProductPhotos={setProductPhotos} />
+                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} provenanceDocuments={provenanceDocuments} setProvenanceDocuments={setProvenanceDocuments} />
+                                    <ProductPhotos register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} productPhotos={productPhotos} setProductPhotos={setProductPhotos} />
                                 </Stack>
                                 <Stack sx={{ gap: "20px", justifyContent: "flex-end" }} className='BottomButtonsWrapper'>
-                                    <Button variant="outlined" size="large">Clear</Button>
+                                    <Button variant="outlined" size="large" onClick={() => navigate("/my-vault/private-holding")}>Cancel</Button>
                                     <Button variant="contained" size="large" type="submit">Save</Button>
                                 </Stack>
                             </form>

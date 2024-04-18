@@ -13,14 +13,7 @@ interface IProps {
     setFields: React.Dispatch<React.SetStateAction<IField[]>>
 }
 
-const AdditionalFields = ({ fields, setFields }: IProps) => {
-    const [tempFields, setTempFields] = useState<IField[]>(fields);
-    const defferedFields = useDebounce(tempFields, 600)
-
-    useEffect(() => {
-        setFields(defferedFields);
-    }, [defferedFields])
-
+const AdditionalFields = ({ fields:tempFields, setFields:setTempFields }: IProps) => {
     const handleAddField = () => {
         const newField = {
             [Math.random().toString(36).substring(7)]: {
@@ -42,7 +35,7 @@ const AdditionalFields = ({ fields, setFields }: IProps) => {
                 <Typography>Additional Beneficiary / Account Holder</Typography>
                 <Button variant="contained" color="success" onClick={handleAddField}>Add more</Button>
             </Stack>
-            {fields.map((field, index) => (
+            {tempFields.map((field, index) => (
                 <Stack
                     key={Object.keys(field)[0]}
                     className="FieldsWrapper"

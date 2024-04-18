@@ -43,6 +43,7 @@ import { useAppSelector } from "@/hooks";
 import { navigate } from "gatsby";
 import ConfigServices from "@/apis/services/ConfigServices";
 import useRequireLogin from "@/hooks/useRequireLogin";
+import RecordNotFound from "@/components/common/RecordNotFound";
 
 interface VaultProps {
   id: number;
@@ -107,16 +108,16 @@ function Vault() {
   return (
     <Layout>
       <Box className="VaultPage">
-        <Breadcrumb arr={[{ navigate: '/vault', name: 'vault' }]} />
+        <Breadcrumb arr={[{ navigate: '/my-vault', name: 'My Vault' }]} />
         <Box className="HeroSection">
           <Container>
             <Box className="HeroSectionWrapper">
               <Box className="Left">
-                {/* <Typography variant="subtitle2" component="h2">
+                {/* <Typography variant="subtitle2" component="h2"  sx={{ mb: 3.25 }}>
                   Good Morning Steve!
                 </Typography> */}
                 {/* @ts-ignore */}
-                <Typography variant="body1" sx={{ mt: 3.25 }} dangerouslySetInnerHTML={{
+                <Typography variant="body1" dangerouslySetInnerHTML={{
                   __html: myVaultHomePageData?.customerGreeting
                 }}>
                   {/* Monitor real time performance and valuations of your
@@ -130,7 +131,9 @@ function Vault() {
                   Allocated Vault Storage clients can request holding statements
                   by calling our office during business hours. */}
                 </Typography>
-                <Button size="large" variant="contained" sx={{ mt: 5 }}>
+                <Button size="large" variant="contained" sx={{ mt: 5 }} onClick={() => {
+                  navigate('/shop')
+                }}>
                   Shop Now
                 </Button>
                 <Box className="VaultStats">
@@ -219,9 +222,9 @@ function Vault() {
               <UserStatsCard title="My Vault" icon={<MyVaultIcon />} bgColor="#3491fa14" currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} movevalue={myVaultHomePageChartData?.totalValueFacturation?.move} movePercentage={myVaultHomePageChartData?.totalValueFacturation?.percentage} />
               <UserStatsCard title="My Gold" icon={<MyGoldIcon />} bgColor="rgb(234 162 43 / 5%)" currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} movevalue={myVaultHomePageChartData?.goldValueFacturation?.move} movePercentage={myVaultHomePageChartData?.goldValueFacturation?.percentage} />
               <UserStatsCard title="My Silver" icon={<MySilverIcon />} bgColor="rgb(255 31 31 / 5%)" currentPrice={myVaultHomePageChartData?.silverValueFacturation?.percentage} movevalue={myVaultHomePageChartData?.silverValueFacturation?.move} movePercentage={myVaultHomePageChartData?.silverValueFacturation?.percentage} />
-              <LineChartCard currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} low={myVaultHomePageChartData?.totalValueFacturation?.low} high={myVaultHomePageChartData?.totalValueFacturation?.high} valueForChart={myVaultHomePageChartData?.totalValueFacturation?.linechartdata} />
-              <LineChartCard currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} low={myVaultHomePageChartData?.goldValueFacturation?.low} high={myVaultHomePageChartData?.goldValueFacturation?.high} valueForChart={myVaultHomePageChartData?.goldValueFacturation?.linechartdata} />
-              <LineChartCard currentPrice={myVaultHomePageChartData?.silverValueFacturation?.current} low={myVaultHomePageChartData?.silverValueFacturation?.low} high={myVaultHomePageChartData?.silverValueFacturation?.high} valueForChart={myVaultHomePageChartData?.silverValueFacturation?.linechartdata} />
+              <LineChartCard title="My Vault" currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} low={myVaultHomePageChartData?.totalValueFacturation?.low} high={myVaultHomePageChartData?.totalValueFacturation?.high} valueForChart={myVaultHomePageChartData?.totalValueFacturation?.linechartdata} />
+              <LineChartCard title="My Gold" currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} low={myVaultHomePageChartData?.goldValueFacturation?.low} high={myVaultHomePageChartData?.goldValueFacturation?.high} valueForChart={myVaultHomePageChartData?.goldValueFacturation?.linechartdata} />
+              <LineChartCard title="My Silver" currentPrice={myVaultHomePageChartData?.silverValueFacturation?.current} low={myVaultHomePageChartData?.silverValueFacturation?.low} high={myVaultHomePageChartData?.silverValueFacturation?.high} valueForChart={myVaultHomePageChartData?.silverValueFacturation?.linechartdata} />
             </Box>
           </Container>
         </Box>
@@ -315,11 +318,12 @@ function Vault() {
                   navigate('/my-vault/order-history/')
                 }}>View All</Button>
               </Stack>
-              <RecentOrderTable recentOrders={myVaultHomePageData?.recentOrders!} reOrderFunction={reOrderFunction} />
+              {(myVaultHomePageData?.recentOrders?.length && myVaultHomePageData?.recentOrders?.length > 0) ? <RecentOrderTable recentOrders={myVaultHomePageData?.recentOrders!} reOrderFunction={reOrderFunction} /> : <RecordNotFound message="No orders are available" />}
             </Box>
           </Container>
         </Box>
-        <Box className="RewardSection" sx={{ mt: 7.5 }}>
+        {/* @info:: below newsletter is commneted it will be use in future */}
+        {/* <Box className="RewardSection" sx={{ mt: 7.5 }}>
           <Container>
             <Stack className="RewardWrapper">
               <Typography className="rewardText">Your Rewards Points: </Typography>
@@ -355,16 +359,14 @@ function Vault() {
                   Change password
                 </Button>
               </Card>
-              {/* below newsletter is commneted it will be use in future */}
-              {/* <Card className="AccountInformationCard">
-                <Typography variant="subtitle2">Newsletters</Typography> */}
-                {/* @ts-ignore */}
-                {/* <Typography variant="body2" sx={{ mt: 1.5 }} dangerouslySetInnerHTML={{ __html: myVaultHomePageData?.newsLetterDescription }}>
+              <Card className="AccountInformationCard">
+                <Typography variant="subtitle2">Newsletters</Typography>
+                <Typography variant="body2" sx={{ mt: 1.5 }} dangerouslySetInnerHTML={{ __html: myVaultHomePageData?.newsLetterDescription ?? "" }}>
                 </Typography>
-              </Card> */}
+              </Card>
             </Box>
           </Container>
-        </Box>
+        </Box> */}
       </Box>
     </Layout>
   );
