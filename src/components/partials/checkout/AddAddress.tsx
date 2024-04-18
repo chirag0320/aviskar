@@ -62,13 +62,15 @@ function AddAddress(props: AddAddress) {
     const countryList = useAppSelector(state => state.checkoutPage.countryList);
     const stateListall = useAppSelector(state => state.checkoutPage.stateList);
     const [stateList, setStateList] = useState([])
-    console.log("🚀 ~ AddAddress ~ stateList:", stateList)
     const [stateId, setStateId] = useState<number | null>(null);
     const { showToaster } = useShowToaster();
     const loading = useAppSelector(state => state.checkoutPage.loading);
     const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
     const [countryValue, setcountryValue] = useState<any>('none')
+    const [isAddressGoogleVerified, setIsAddressGoogleVerified] = useState<boolean>(false)
+    // console.log("🚀 ~ AddAddress ~ isAddressGoogleVerified:", isAddressGoogleVerified)
     const [stateValue, setstateValue] = useState<any>('')
+
     const {
         register,
         reset,
@@ -87,6 +89,13 @@ function AddAddress(props: AddAddress) {
     }, [])
 
     const onAddressFormSubmitHandler = async (data: any) => {
+        // set is verified false if different from google account address not matches with current address
+        let isAddressVerified = isAddressGoogleVerified;
+        if (googleAddressComponents && (data.Address1.trim() !== googleAddressComponents?.address.trim() || data.Address2.trim() !== googleAddressComponents?.address2.trim() || data.City.trim() !== googleAddressComponents?.city.trim() || data.State.trim() !== googleAddressComponents?.state.trim() || (googleAddressComponents?.postalCode && data.Code.trim() !== googleAddressComponents?.postalCode?.trim()))) {
+            isAddressVerified = false
+        }
+
+
         const addressQuery = {
             addressTypeId,
             firstName: data.FirstName,
@@ -94,7 +103,7 @@ function AddAddress(props: AddAddress) {
             company: data.Company,
             phoneNumber: data.Contact,
             email: data.Email,
-            isVerified: true, // static
+            isVerified: isAddressVerified,
             addressLine1: data.Address1,
             addressLine2: data.Address2,
             city: data.City,
@@ -164,6 +173,7 @@ function AddAddress(props: AddAddress) {
             reset()
             setcountryValue("none")
             setstateValue('')
+            setIsAddressGoogleVerified(false)
         }
     }, [open]);
 
@@ -184,6 +194,12 @@ function AddAddress(props: AddAddress) {
             if (googleAddressComponents?.postalCode) {
                 setValue("Code", Number(googleAddressComponents?.postalCode));
             }
+            setIsAddressGoogleVerified(true);
+            clearErrors('Country')
+            clearErrors('State')
+            clearErrors('City')
+            clearErrors('Address1')
+            clearErrors('Code')
         }
     }, [googleAddressComponents])
 
@@ -304,6 +320,9 @@ function AddAddress(props: AddAddress) {
                             margin='none'
                             value={countryValue}
                             setValue={setValue}
+                            onChange={() => {
+                                setIsAddressGoogleVerified(false)
+                            }}
                         // onChange={OnChange}
                         >
                             <MenuItem value="none">Select country *</MenuItem>

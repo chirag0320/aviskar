@@ -18,7 +18,7 @@ import { PhoneNumberCountryCode, hasFulfilled } from "@/utils/common"
 import { addressSchema } from "./AddAddress"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
-import { addOrEditAddresses as addOrEditAddressForMyVault, updateAddress as updateAddressForMyVault } from "@/redux/reducers/myVaultReducer"
+import { addOrEditAddresses as addOrEditAddressForMyVault, getAddresses, updateAddress as updateAddressForMyVault } from "@/redux/reducers/myVaultReducer"
 
 interface UpdateAddress {
   open: boolean
@@ -45,6 +45,7 @@ interface Inputs {
 
 function UpdateAddress(props: UpdateAddress) {
   const { open, dialogTitle, onClose, existingAddress, isComingFromMyVault } = props
+  // console.log("🚀 ~ UpdateAddress ~ existingAddress:", existingAddress)
   const loading = useAppSelector(state => state.checkoutPage.loading);
   const countryList = useAppSelector(state => state.checkoutPage.countryList);
   const stateListall = useAppSelector(state => state.checkoutPage.stateList);
@@ -55,7 +56,9 @@ function UpdateAddress(props: UpdateAddress) {
   const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
   const [countryValue, setcountryValue] = useState<any>('')
   const [stateValue, setstateValue] = useState<any>('')
+  const [isAddressGoogleVerified, setIsAddressGoogleVerified] = useState<boolean>(false)
   const [phoneInputValue, setPhoneInputValue] = useState("")
+
   const {
     register,
     reset,
@@ -69,13 +72,24 @@ function UpdateAddress(props: UpdateAddress) {
   })
 
   const onAddressFormSubmitHandler = async (data: any) => {
+    let isAddressVerified = isAddressGoogleVerified;
+
+    const checkingWithGoogleAddress = googleAddressComponents && (data.Address1.trim() !== googleAddressComponents?.address.trim() || data.Address2.trim() !== googleAddressComponents?.address2.trim() || data.City.trim() !== googleAddressComponents?.city.trim() || data.State.trim() !== googleAddressComponents?.state.trim() || (googleAddressComponents?.postalCode && data.Code.trim() !== googleAddressComponents?.postalCode?.trim()))
+
+    // NOTE - need to check with existing also later on
+    const checkingWithExistingAddress = !googleAddressComponents && (existingAddress?.addressLine1.trim() !== data.Address1.trim() || existingAddress?.addressLine2.trim() !== data.Address2.trim() || data.City.trim() !== existingAddress.city.trim() || data.State.trim() !== existingAddress?.stateName.trim())
+
+    if (checkingWithGoogleAddress || checkingWithExistingAddress) {
+      isAddressVerified = false
+    }
+
     const addressQuery = {
       firstName: data.FirstName,
       lastName: data.LastName,
       company: data.Company,
       phoneNumber: data.Contact,
       email: data.Email,
-      isVerified: false, // static
+      isVerified: isAddressVerified,
       addressLine1: data.Address1,
       addressLine2: data.Address2,
       city: data.City,
@@ -98,21 +112,7 @@ function UpdateAddress(props: UpdateAddress) {
         onClose()
         reset()
         showToaster({ message: "Address saved successfully", severity: 'success' })
-        dispatch(updateAddressForMyVault({
-          ...existingAddress,
-          firstName: data.FirstName,
-          lastName: data.LastName,
-          company: data.Company,
-          phoneNumber: data.Contact,
-          email: data.Email,
-          addressLine1: data.Address1,
-          addressLine2: data.Address2,
-          city: data.City,
-          stateName: data.State,
-          postcode: data.Code,
-          countryId: data.Country,
-          stateId: stateId,
-        }))
+        await dispatch(getAddresses({ url: ENDPOINTS.getAddresses }) as any);
       } else {
         showToaster({ message: "Failed to save address", severity: 'error' })
       }
@@ -169,6 +169,12 @@ function UpdateAddress(props: UpdateAddress) {
       if (googleAddressComponents?.postalCode) {
         setValue("Code", Number(googleAddressComponents?.postalCode));
       }
+      setIsAddressGoogleVerified(true);
+      clearErrors('Country')
+      clearErrors('State')
+      clearErrors('City')
+      clearErrors('Address1')
+      clearErrors('Code')
     }
   }, [googleAddressComponents])
 
@@ -180,8 +186,11 @@ function UpdateAddress(props: UpdateAddress) {
     setcountryValue(existingAddress?.country || existingAddress?.countryId)
     setstateValue(existingAddress?.stateName)
     setPhoneInputValue(existingAddress?.phoneNumber)
+    setIsAddressGoogleVerified(existingAddress?.isVerified)
     return () => {
       reset()
+      setIsAddressGoogleVerified(false)
+      setGoogleAddressComponents(null)
     }
   }, [existingAddress])
 
@@ -195,7 +204,9 @@ function UpdateAddress(props: UpdateAddress) {
   const OnChange = (value: any) => {
     setcountryValue(value)
     setValue('Country', value)
+    setIsAddressGoogleVerified(false)
   }
+
   return (
     <StyledDialog
       id="UpdateAddress"
@@ -375,4 +386,4 @@ function UpdateAddress(props: UpdateAddress) {
   )
 }
 
-export default UpdateAddress
+export default React.memo(UpdateAddress);
