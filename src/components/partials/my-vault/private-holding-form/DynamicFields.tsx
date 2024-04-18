@@ -136,24 +136,18 @@ const DynamicFields = ({ existingFields, existingCustomFields, setDynamicSpecifi
                     variant='outlined'
                     defaultValue="none"
                     margin='none'
+                    disabled={existingFields ? true : false}
                     clearErrors={clearErrors}
                     className='SelectSpecification'
-                // required
                 >
                     <MenuItem key='test' value='none'>Select Specfication</MenuItem>
-                    {/* <MenuItem key='test' value='perth mint'>perth mint</MenuItem>
-                    <MenuItem key='test' value='royal mint'>royal mint</MenuItem>
-                    <MenuItem key='test' value='sunshine mint'>sunshine mint</MenuItem> */}
                     {formDropdowns && formDropdownsReverseKeys && Object.keys(formDropdowns).map((option: string) => {
                         return !fixedFields.has(option) ? <MenuItem key={option} value={formDropdownsReverseKeys[option]}>{option}</MenuItem> : null;
                     })}
                 </RenderFields>
                 <RenderFields
                     type="select"
-                    // register={register}
-                    // error={errors.Value}
                     name="Value"
-                    // getValues={getValues}
                     value={field[Object.keys(field)[0]].value}
                     onChange={(value) => {
                         const newFields = [...specificationFields];
@@ -161,6 +155,7 @@ const DynamicFields = ({ existingFields, existingCustomFields, setDynamicSpecifi
                         setSpecificationField(newFields);
                     }}
                     label="Value"
+                    disabled={existingFields ? true : false}
                     control={control}
                     clearErrors={clearErrors}
                     variant='outlined'
@@ -172,15 +167,12 @@ const DynamicFields = ({ existingFields, existingCustomFields, setDynamicSpecifi
                         return (<MenuItem value={dropdown.specificationAttributeOptionsId}>{dropdown.specificationOption}</MenuItem>)
                     })}
                 </RenderFields>
-                <IconButton className="DeleteButton" onClick={() => handleDeleteSpecificationField(Object.keys(field)[0])}><Delete1Icon /></IconButton>
+                <IconButton className="DeleteButton" onClick={() => handleDeleteSpecificationField(Object.keys(field)[0])}  disabled={existingFields ? true : false}><Delete1Icon /></IconButton>
             </Stack>)}
             {customSpecificationFields.map((field, index) => <Stack className="RowWrapper CustomSpecificationWrapper" key={Object.keys(customSpecificationFields)[0]}>
                 <RenderFields
-                    // register={register}
-                    // error={errors.CustomSpecification}
                     name="CustomSpecification"
                     label="Custom Specification"
-                    // placeholder="Enter custom specification."
                     value={field[Object.keys(field)[0]].specificationName}
                     placeholder='Enter Custom Specification'
                     onChange={(e) => {
@@ -188,13 +180,11 @@ const DynamicFields = ({ existingFields, existingCustomFields, setDynamicSpecifi
                         newFields[index][Object.keys(field)[0]].specificationName = e.target.value;
                         setCustomSpecificationField(newFields);
                     }}
+                    disabled={existingCustomFields ? true : false}
                     variant='outlined'
                     margin='none'
-                // required
                 />
                 <RenderFields
-                    // register={register}
-                    // error={errors.CustomValue}
                     name="CustomValue"
                     label="Custom Value"
                     value={field[Object.keys(field)[0]].value}
@@ -204,16 +194,15 @@ const DynamicFields = ({ existingFields, existingCustomFields, setDynamicSpecifi
                         newFields[index][Object.keys(field)[0]].value = e.target.value;
                         setCustomSpecificationField(newFields);
                     }}
-                    // placeholder="Enter custom value."
                     variant='outlined'
                     margin='none'
-                // required
+                    disabled={existingCustomFields ? true : false}
                 />
-                <IconButton className="DeleteButton" onClick={() => handleDeleteCustomeSpecificationField(Object.keys(field)[0])}><Delete1Icon /></IconButton>
+                <IconButton className="DeleteButton" onClick={() => handleDeleteCustomeSpecificationField(Object.keys(field)[0])} disabled={existingCustomFields ? true : false} ><Delete1Icon /></IconButton>
             </Stack>)}
             <Stack className='RowWrapper ButtonsWrapper'>
-                <Button variant="contained" size="large" onClick={handleAddSpecificationField}>Add Specification</Button>
-                <Button variant="contained" size="large" onClick={handleAddCustomSpecificationField}>Add Custom Specification</Button>
+                <Button variant="contained" size="large" onClick={handleAddSpecificationField} disabled={existingFields ? true : false}>Add Specification</Button>
+                <Button variant="contained" size="large" onClick={handleAddCustomSpecificationField} disabled={existingCustomFields ? true : false}>Add Custom Specification</Button>
             </Stack>
         </>
     )

@@ -444,7 +444,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                   variant={variant}
                   InputProps={{ endAdornment }}
                   onChange={(event) => {
-                    console.log("swdesfrgtfhy")
+                    // console.log("swdesfrgtfhy")
                     const numberRegex = /^-?\d*\.?\d*$/
                     if (!numberRegex.test(event.target.value)) {
                       return
