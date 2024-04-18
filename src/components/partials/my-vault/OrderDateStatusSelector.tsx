@@ -24,14 +24,12 @@ const schema = yup.object().shape({
 });
 
 const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-back" | "normal" }) => {
-    // console.log("🚀 ~ OrderDateStatusSelector ~ orderHistoryType:", orderHistoryType)
     const dispatch = useAppDispatch();
     const [dateRangeValue, setDateRangeValue] = useState<{
         start: CalendarDate,
         end: CalendarDate
-    } | undefined>(undefined);
+    } | null>(null);
     const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
-    const [statusValue, setStatusValue] = useState<string>("none");
     const { showToaster } = useShowToaster()
 
     const {
@@ -75,46 +73,44 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
 
         await dispatch(service({ url: endPoint, body: requestBodyOrderHistory }));
         setValue("OrderStatus", "none")
-        setDateRangeValue(() => undefined)
+        setDateRangeValue(() => null)
     }
 
     return (
-        <>
-            <form onSubmit={handleSubmit(onSubmit)} id="OrderDateStatusSelector" className='OrderDateStatusSelector'>
-                <Stack className='OrderDateStatusSelectorWrapper'>
-                    <Stack className='OrderDateStatusWrapper'>
-                        <Box className="DateCalenderWrapper">
-                            <DateRangePicker dateRangeValue={dateRangeValue} setDateRangeValue={setDateRangeValue} />
-                        </Box>
-                        <Box className="SelectStatusWrapper">
-                            <RenderFields
-                                type="select"
-                                clearErrors={clearErrors}
-                                register={register}
-                                error={errors.OrderStatus}
-                                name="OrderStatus"
-                                control={control}
-                                placeholder="Select Order Status"
-                                variant='outlined'
-                                value={statusValue}
-                                setValue={setValue}
-                                getValues={getValues}
-                                margin='none'
-                                // required
-                                className='SelectOrderStatus'
-                            >
-                                <MenuItem value="none">Select Order Status</MenuItem>
-                                {orderHistoryType === "buy-back" ? (configDropdowns?.buybackOrderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>)) : (configDropdowns?.orderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>))}
-                            </RenderFields>
-                        </Box>
-                    </Stack>
-                    <Stack className="ButtonsWrapper">
-                        <Button variant="contained" type="submit" size="large" color='primary' className="SearchButton">Search</Button>
-                        <Button variant="contained" size="large" color='info' onClick={clearFiltersHandler}>Clear</Button>
-                    </Stack>
+        <form onSubmit={handleSubmit(onSubmit)} id="OrderDateStatusSelector" className='OrderDateStatusSelector'>
+            <Stack className='OrderDateStatusSelectorWrapper'>
+                <Stack className='OrderDateStatusWrapper'>
+                    <Box className="DateCalenderWrapper">
+                        <DateRangePicker dateRangeValue={dateRangeValue} setDateRangeValue={setDateRangeValue} />
+                    </Box>
+                    <Box className="SelectStatusWrapper">
+                        <RenderFields
+                            type="select"
+                            clearErrors={clearErrors}
+                            register={register}
+                            error={errors.OrderStatus}
+                            name="OrderStatus"
+                            control={control}
+                            placeholder="Select Order Status"
+                            variant='outlined'
+                            value="none"
+                            setValue={setValue}
+                            getValues={getValues}
+                            margin='none'
+                            // required
+                            className='SelectOrderStatus'
+                        >
+                            <MenuItem value="none">Select Order Status</MenuItem>
+                            {orderHistoryType === "buy-back" ? (configDropdowns?.buybackOrderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>)) : (configDropdowns?.orderStatusList.map(status => <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>))}
+                        </RenderFields>
+                    </Box>
                 </Stack>
-            </form>
-        </>
+                <Stack className="ButtonsWrapper">
+                    <Button variant="contained" type="submit" size="large" color='primary' className="SearchButton">Search</Button>
+                    <Button variant="contained" size="large" color='info' onClick={clearFiltersHandler}>Clear</Button>
+                </Stack>
+            </Stack>
+        </form>
     )
 }
 

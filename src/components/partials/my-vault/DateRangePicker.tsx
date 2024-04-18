@@ -13,6 +13,7 @@ interface Props {
 }
 
 export default function App({ dateRangeValue, setDateRangeValue }: Props) {
+    // console.log("🚀 ~ OrderDateStatusSelector ~ dateRangeValue:", dateRangeValue)
     return (
         <Box className="DateRangePickerWrapper">
             <Provider theme={lightTheme} height="100%" colorScheme="light">

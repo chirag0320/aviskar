@@ -6,8 +6,12 @@ import { SwiperNavigation } from "@/components/common/Utils"
 
 // Utills
 import { SectionHeading } from "../../common/Utils"
+import { useAppSelector } from '@/hooks'
+import { navigate } from 'gatsby'
+import noImage from '../../../assets/images/noImage.png'
 
 function Adventure() {
+    const { mainHomePageData } = useAppSelector((state) => state.homePage)
     const config = {
         slidesPerView: 1.5,
         centeredSlides: true,
@@ -28,15 +32,44 @@ function Adventure() {
     };
 
     return (
-        <Box id="Adventure">
-            <Box className="AdventureWrapper">
-                <SectionHeading title="The Best Of Adventure" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
-                <Box className="AdventureSlideWrapper" component="section" key={'Adventure'}>
-                    <Box className="SwiperContainer">
-                        <Swiper {...config}>
+        (mainHomePageData && mainHomePageData?.adventure?.length > 0) ?
+            <Box id="Adventure">
+                <Box className="AdventureWrapper">
+                    <SectionHeading title="The Best Of Adventure" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
+                    <Box className="AdventureSlideWrapper" component="section" key={'Adventure'}>
+                        <Box className="SwiperContainer">
+                            <Swiper {...config}>
+                                {(mainHomePageData && mainHomePageData?.adventure?.length > 0) ?
+                                    mainHomePageData?.adventure?.map((item) => {
+                                        return (
+                                            <SwiperSlide>
+                                                <Box className="AdventureSlide">
+                                                    <img src={item?.imageUrl ?? noImage} alt={noImage} />
+                                                    <Box className="AdventureSlideContentBox">
+                                                        <Typography className="SlideTitle">{item?.title}</Typography>
+                                                        <Typography className="SlideSubTitle">{item?.overview}</Typography>
+                                                        <Button variant='contained' className="Button" onClick={() => {
+                                                            navigate('/blog/' + item.friendlyName)
+                                                        }}>Discover More</Button>
+                                                    </Box>
+                                                </Box>
+                                            </SwiperSlide>
+                                        )
+                                    })
+                                    : null}
+                                {/* <SwiperSlide>
+                                <Box className="AdventureSlide">
+                                    <img src="https://picsum.photos/1276/600" alt="https://picsum.photos/1276/600" />
+                                    <Box className="AdventureSlideContentBox">
+                                        <Typography className="SlideTitle">The best day trips from brisbane</Typography>
+                                        <Typography className="SlideSubTitle">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Typography>
+                                        <Button variant='contained' className="Button">Discover More</Button>
+                                    </Box>
+                                </Box>
+                            </SwiperSlide>
                             <SwiperSlide>
                                 <Box className="AdventureSlide">
-                                    <img src="https://picsum.photos/876/600" alt="https://picsum.photos/876/600" />
+                                    <img src="https://picsum.photos/1276/600" alt="https://picsum.photos/1276/600" />
                                     <Box className="AdventureSlideContentBox">
                                         <Typography className="SlideTitle">The best day trips from brisbane</Typography>
                                         <Typography className="SlideSubTitle">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Typography>
@@ -63,32 +96,12 @@ function Adventure() {
                                         <Button variant='contained' className="Button">Discover More</Button>
                                     </Box>
                                 </Box>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <Box className="AdventureSlide">
-                                    <img src="https://picsum.photos/1276/600" alt="https://picsum.photos/1276/600" />
-                                    <Box className="AdventureSlideContentBox">
-                                        <Typography className="SlideTitle">The best day trips from brisbane</Typography>
-                                        <Typography className="SlideSubTitle">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Typography>
-                                        <Button variant='contained' className="Button">Discover More</Button>
-                                    </Box>
-                                </Box>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <Box className="AdventureSlide">
-                                    <img src="https://picsum.photos/1276/600" alt="https://picsum.photos/1276/600" />
-                                    <Box className="AdventureSlideContentBox">
-                                        <Typography className="SlideTitle">The best day trips from brisbane</Typography>
-                                        <Typography className="SlideSubTitle">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Typography>
-                                        <Button variant='contained' className="Button">Discover More</Button>
-                                    </Box>
-                                </Box>
-                            </SwiperSlide>
-                        </Swiper>
+                            </SwiperSlide> */}
+                            </Swiper>
+                        </Box>
                     </Box>
                 </Box>
-            </Box>
-        </Box>
+            </Box> : null
     )
 }
 

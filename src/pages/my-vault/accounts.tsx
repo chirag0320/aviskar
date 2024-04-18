@@ -79,7 +79,6 @@ function Accounts() {
                     lang="en"
                 />
                 <PageTitle title="Accounts" backToDashboard={true} redirectOnClick={onClickAction} />
-
                 <Box className="AddressesPage">
                     <Container>
                         <Box className="AddressList">

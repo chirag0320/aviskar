@@ -19,7 +19,7 @@ const LazyFooter = lazy(() => import('../components/footer/FrontFooter'));
 import FeaturedProducts from "../components/partials/home/FeaturedProducts"
 import { ENDPOINTS } from "@/utils/constants"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
-import { CategoriesListDetails, HomePageSectionDetails, configDetails, serProgressLoaderStatus, setScrollPosition } from "@/redux/reducers/homepageReducer"
+import { CategoriesListDetails, HomePageSectionDetails, configDetails, getMainHomePageData, serProgressLoaderStatus, setScrollPosition } from "@/redux/reducers/homepageReducer"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import { Box, useMediaQuery } from "@mui/material";
 import Layout from "@/components/common/Layout";
@@ -29,20 +29,9 @@ import Loader from "@/components/common/Loader";
 
 function MainHomePage() {
     const dispatch = useAppDispatch()
-    const { configDetails: configDetailsState, openToaster, scrollPosition, loading } = useAppSelector((state) => state.homePage)
-    const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
-
-    const [body] = useState({
-        "search": "",
-        "pageNo": 0,
-        "pageSize": -1,
-        "sortBy": "",
-        "sortOrder": "",
-        "filters": {
-            "includeInTopMenu": true
-        }
-    })
-
+    const { configDetails: configDetailsState, openToaster, scrollPosition, loading, mainHomePageData } = useAppSelector((state) => state.homePage)
+    console.log("🚀 ~ MainHomePage ~ mainHomePageData:", mainHomePageData)
+    // const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
     useEffect(() => {
         return () => {
             dispatch(setScrollPosition(window.scrollY));
@@ -50,27 +39,12 @@ function MainHomePage() {
     }, [])
 
     useAPIoneTime({ service: HomePageSectionDetails, endPoint: ENDPOINTS.homePageSection })
-    // useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, body })
+    useAPIoneTime({ service: getMainHomePageData})
     useUserDetailsFromToken()
-    const [wait1, setWait1] = useState(false)
-    const [wait2, setWait2] = useState(false)
-    const [wait3, setWait3] = useState(false)
     useEffect(() => {
         dispatch(serProgressLoaderStatus(true))
-        const timeout1 = setTimeout(() => {
-            setWait1(true);
-        }, 400); // Wait for 300ms before rendering the first component
-        const timeout2 = setTimeout(() => {
-            setWait2(true);
-        }, 900);
-        const timeout3 = setTimeout(() => {
-            setWait3(true)
-        }, 1100);
         return () => {
             dispatch(serProgressLoaderStatus(false))
-            clearTimeout(timeout1)
-            clearTimeout(timeout2)
-            clearTimeout(timeout3)
         }
     }, [])
 
