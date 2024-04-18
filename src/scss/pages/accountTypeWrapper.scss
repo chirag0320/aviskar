@@ -1,50 +1,52 @@
-.AccountTypeWrapper {
-    display: flex;
-    flex-direction: column;
-    border-radius: 0;
-    border: none;
-
-    .AccountType {
+.MuiToggleButtonGroup-root{
+    &.AccountTypeWrapper {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
-        border: 1px solid #E5E6EB;
-        border-radius: 6px;
-        margin-top: 14px;
-        transition: .2s;
-
-        &:first-of-type {
-            margin: 0;
-        }
-
-        &.Mui-selected:hover {
-            background-color: rgba(29, 33, 41, 0.04);
-        }
-
-        &.Mui-selected {
-            border-color: $dark;
-            background-color: rgba(29, 33, 41, 0.04);
-            letter-spacing: 0;
-        }
-
-        .AccountTypeName {
-            gap: 6px;
-
-            svg {
-                color: $yellowFuel;
+        border-radius: 0;
+        border: none;
+    
+        .AccountType {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            border: 1px solid #E5E6EB;
+            border-radius: 6px;
+            margin-top: 14px;
+            transition: .2s;
+    
+            &:first-of-type {
+                margin: 0;
             }
-
-            .MuiTypography-root {
-                color: $dark;
-                font-weight: 600;
+    
+            &.Mui-selected:hover {
+                background-color: rgba(29, 33, 41, 0.04);
             }
-        }
-
-        .description {
-            text-align: left;
-            margin-top: 6px;
-            color: $elephant;
-            font-weight: 500;
+    
+            &.Mui-selected {
+                border-color: $dark;
+                background-color: rgba(29, 33, 41, 0.04);
+                letter-spacing: 0;
+            }
+    
+            .AccountTypeName {
+                gap: 6px;
+    
+                svg {
+                    color: $yellowFuel;
+                }
+    
+                .MuiTypography-root {
+                    color: $dark;
+                    font-weight: 600;
+                }
+            }
+    
+            .description {
+                text-align: left;
+                margin-top: 6px;
+                color: $elephant;
+                font-weight: 500;
+            }
         }
     }
 }

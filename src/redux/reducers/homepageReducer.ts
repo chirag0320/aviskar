@@ -27,6 +27,24 @@ interface IPopupDetails {
   issession: boolean;
   classification: number;
 }
+interface Item {
+  title: string;
+  overview: string;
+  imageUrl: string;
+  friendlyName: string;
+  mediaType: string | null;
+}
+
+interface IMainHomePage {
+  beyond: Item[]; // You can replace 'any' with a more specific type if needed
+  adventure: Item[]; // You can replace 'any' with a more specific type if needed
+  experience: Item[]; // You can replace 'any' with a more specific type if needed
+  knowMore: Item[]; // You can replace 'any' with a more specific type if needed
+  stories: Item[]; // You can replace 'any' with a more specific type if needed
+  gallery: Item[]; // You can replace 'any' with a more specific type if needed
+  closerLook: Item[];
+  bestAdventure: Item[]; // You can replace 'any' with a more specific type if needed
+}
 
 interface CreateGuidelineState {
   configDetails: any,
@@ -70,7 +88,8 @@ interface CreateGuidelineState {
     }
   },
   popUpdata: IPopupDetails | null,
-  siteMapData: {items: IsiteMapData[],totalCount: number} | null;
+  siteMapData: { items: IsiteMapData[], totalCount: number } | null;
+  mainHomePageData: IMainHomePage | null
 }
 interface Settings {
   TwoFactorAuthenticatorAdminlogin: string;
@@ -155,6 +174,7 @@ const initialState: CreateGuidelineState = {
   liveDashboardChartData: {},
   popUpdata: null,
   siteMapData: null,
+  mainHomePageData: null
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -209,7 +229,7 @@ export const getLiveDashboardChartData = appCreateAsyncThunk(
 )
 export const getSiteMapData = appCreateAsyncThunk(
   'getSiteMapData/status',
-  async ({body}:any) => {
+  async ({ body }: any) => {
     return await ConfigServices.getSiteMapData(body)
   }
 )
@@ -245,6 +265,13 @@ export const savePopUpDataAPI = appCreateAsyncThunk(
     return await ConfigServices.savePoPUpDetails(body)
   }
 )
+export const getMainHomePageData = appCreateAsyncThunk(
+  'getMainHomePageData',
+  async () => {
+    return await ConfigServices.getMainHomePageAPI()
+  }
+)
+
 export const createHomepageSlice = createSlice({
   name: 'homepage',
   initialState,
@@ -467,11 +494,23 @@ export const createHomepageSlice = createSlice({
         acc[groupTitle].push(currentItem);
         return acc;
       }, {});
-      state.siteMapData = {items:groupedData, totalCount: responseData?.count}
+      state.siteMapData = { items: groupedData, totalCount: responseData?.count }
       state.loading = false
     })
     builder.addCase(getSiteMapData.rejected, (state, action) => {
       state.loading = false
+    })
+    builder.addCase(getMainHomePageData.pending,(state, action)=>{
+      state.loading=true
+    })
+    builder.addCase(getMainHomePageData.fulfilled,(state, action)=>{
+      const res = action.payload.data.data
+      console.log("🚀 ~ builder.addCase ~ res:", res)
+      state.mainHomePageData = res
+      state.loading=false
+    })
+    builder.addCase(getMainHomePageData.rejected,(state, action)=>{
+      state.loading=false
     })
   },
 })
