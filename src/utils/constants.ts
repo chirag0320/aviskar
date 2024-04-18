@@ -4,7 +4,7 @@ export const ENDPOINTS = {
     getConfigStore: 'store/duMyjVf3k0KIi7Rq7CmHAA',
     getTicker: 'calculator/DMJqdS7VvR2VMk9R',
     getProduct: 'product/m9XieCcNOUOxk5ODsP6FXQ/0',
-    getSlider: 'home/Y9w8nK5PhEyKFBZQNbV2Ow',
+    getSlider: 'home/Y9w8nK5PhEyKFBZQNbV2Ow/?SliderType=typeEnum',
     getFooterLink: 'home/N2KdtXS5z0W3EbgvHaDCGw',
     homePageSection: 'home/sMwXo8EJm8Pad',
     getBlog: 'Blog/jk9mPhOPvkiq6luNZrwanA',
@@ -125,7 +125,9 @@ export const ENDPOINTS = {
     // convert to market place
     convertToMarketPlace: "myvault/q9QOiEdTtEkrm6EVOewM2F",
     //delete private holdings
-    deletePrivateHoldings: "myvault/puk8elMtXJIwa4NCP/id"    
+    deletePrivateHoldings: "myvault/puk8elMtXJIwa4NCP/id",
+    // new homepage
+   mainHomePage: "home/HOb6OH12P5xFHos4DC1L3Q"
 }
 export const StoreData = {
     storeCode: 12,

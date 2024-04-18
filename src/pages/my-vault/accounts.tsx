@@ -63,7 +63,11 @@ function Accounts() {
     };
     if (loadingForCheckingLogin) {
         return
-      }
+    }
+
+    const onClickAction = () => {
+        handleAccountTypeDialog()
+    }
     return (
         <>
             <Loader open={loading} />
@@ -74,14 +78,11 @@ function Accounts() {
                     title="Accounts"
                     lang="en"
                 />
-                <PageTitle title="Accounts" backToDashboard={true} />
+                <PageTitle title="Accounts" backToDashboard={true} redirectOnClick={onClickAction} />
 
                 <Box className="AddressesPage">
                     <Container>
                         <Box className="AddressList">
-                            <Box sx={{ textAlign: 'right' }}>
-                                <Button variant="outlined" onClick={handleAccountTypeDialog} startIcon={<PlusIcon />}>Add new</Button>
-                            </Box>
                             <Box className="AddressListWrapper" >
                                 {accountsData?.map(account => (
                                     <AddressCard

@@ -27,14 +27,12 @@
 
             .DateCalenderWrapper,
             .SelectStatusWrapper {
-                width: 50%;
-
-                @include media($md) {
-                    width: 100%;
-                }
+                flex: 1;
             }
 
             .DateCalenderWrapper {
+                max-height: 58.56px;
+
                 .DateRangePickerWrapper {
                     height: 100%;
 

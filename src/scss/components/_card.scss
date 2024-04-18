@@ -1103,11 +1103,8 @@
 
     .MuiCardMedia-root {
       max-height: 140px;
+      max-width: 140px;
       object-fit: contain;
-
-      @include media-min($sm) {
-        width: initial;
-      }
     }
 
     .MuiCardContent-root {
