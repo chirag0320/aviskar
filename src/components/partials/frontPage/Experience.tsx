@@ -11,13 +11,13 @@ import { useAppSelector } from '@/hooks'
 import noImage from '../../../assets/images/noImage.png'
 
 function Experience() {
-    const { mainHomePageData } = useAppSelector((state) => state.homePage)
+    const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
     return (
         (mainHomePageData && mainHomePageData?.experience?.length > 0) ?
             <Box id="Experience">
                 <Container maxWidth="lg">
                     <Box className="ExperienceWrapper">
-                        <SectionHeading title="Travel Experience" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
+                        <SectionHeading title={configDetails?.["mainhomepage.experiencetital"]?.value} description={configDetails?.["mainhomepage.experiencesubtital"]?.value} />
                         <Box className="ExperienceSlideWrapper" component="section" key={'Experience'}>
                             <Box className="SwiperContainer">
                                 <Swiper

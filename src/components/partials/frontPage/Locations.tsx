@@ -10,7 +10,7 @@ import { useAppSelector } from '@/hooks'
 import noImage from '../../../assets/images/noImage.png'
 
 function Locations() {
-    const { mainHomePageData } = useAppSelector((state) => state.homePage)
+    const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
     const config = {
         slidesPerView: 4,
         slidesPerColumn: 2,
@@ -52,12 +52,12 @@ function Locations() {
         <Box id="Location">
             <Container maxWidth="lg">
                 <Box className="LocationsWrapper">
-                    <SectionHeading title="Beyond Queensland" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
+                    <SectionHeading title={configDetails?.["mainhomepage.beyondtital"]?.value} description={configDetails?.["mainhomepage.beyondsubtital"]?.value} />
                     <Box component="section" key={'Locations'}>
                         <Box className="SwiperContainer">
                             <Swiper {...config} >
                                 {(mainHomePageData && mainHomePageData?.beyond?.length > 0) ?
-                                    mainHomePageData?.experience?.map((item) => {
+                                    mainHomePageData?.beyond?.map((item) => {
                                         return (
                                             <SwiperSlide>
                                                 <Box className="LocationsSlide">

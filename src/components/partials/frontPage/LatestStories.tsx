@@ -12,8 +12,8 @@ import { navigate } from 'gatsby'
 import noImage from '../../../assets/images/noImage.png'
 
 function LatestStories() {
-    const { mainHomePageData } = useAppSelector((state) => state.homePage)
-
+    const { mainHomePageData,configDetails } = useAppSelector((state) => state.homePage)
+    console.log("🚀 ~ LatestStories ~ configDetails:", configDetails)
     return (
         (mainHomePageData && mainHomePageData?.stories?.length > 0) ?
             <Box id="LatestStories">
@@ -21,8 +21,8 @@ function LatestStories() {
                     <Box className="LatestStoriesMainWrapper">
                         <Stack className='SectionHeadingWrapper'>
                             <Box className="SectionHeading">
-                                <Typography variant="h2" component="h2" className="Title">Latest Stories</Typography>
-                                <Typography className="Description">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Typography>
+                                <Typography variant="h2" component="h2" className="Title">{configDetails?.["mainhomepage.lateststoriesdtital"]?.value}</Typography>
+                                <Typography className="Description">{configDetails?.["mainhomepage.lateststoriesdsubtital"]?.value}</Typography>
                             </Box>
                             <Button className='SectionButton' variant="contained" endIcon={<ArrowRight />} onClick={() => {
                                 navigate('/blog')
@@ -34,14 +34,18 @@ function LatestStories() {
                                     <img src={mainHomePageData?.stories?.[0]?.imageUrl ?? noImage} alt={mainHomePageData?.stories?.[0]?.title ?? "Image"} />
                                     <Stack className='StoryContentBox'>
                                         <Typography variant='subtitle2' className='StorieTitle'>Whitsunday Island: Vivid experiences on and under the water</Typography>
-                                        <Button variant='text' className='StorieButton' endIcon={<ArrowRight />}>Read more</Button>
+                                        <Button variant='text' className='StorieButton' endIcon={<ArrowRight />} onClick={() => {
+                                            navigate('/blog/' + mainHomePageData?.stories?.[0]?.friendlyName)
+                                        }}>Read more</Button>
                                     </Stack>
                                 </Box>
                                 <Box className="TopStoriePost">
                                     <img src={mainHomePageData?.stories?.[1]?.imageUrl ?? noImage} alt={mainHomePageData?.stories?.[0]?.title ?? "Image"} />
                                     <Stack className='StoryContentBox'>
                                         <Typography variant='subtitle2' className='StorieTitle'>Whitsunday Island: Vivid experiences on and under the water</Typography>
-                                        <Button variant='text' className='StorieButton' endIcon={<ArrowRight />}>Read more</Button>
+                                        <Button variant='text' className='StorieButton' endIcon={<ArrowRight />} onClick={() => {
+                                            navigate('/blog/' + mainHomePageData?.stories?.[1]?.friendlyName)
+                                        }}>Read more</Button>
                                     </Stack>
                                 </Box>
                             </Box>
