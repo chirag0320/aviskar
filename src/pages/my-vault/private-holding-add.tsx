@@ -6,6 +6,7 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    Typography,
 } from "@mui/material"
 import { PageTitle } from "@/components/common/Utils"
 import Seo from "@/components/common/Seo"
@@ -32,6 +33,7 @@ import useShowToaster from "@/hooks/useShowToaster";
 import { hasFulfilled } from "@/utils/common";
 import { PrivateHoldingDocumentTypeEnum, PrivateHoldingDocumentTypeReverseEnum, WeightTypes } from "@/types/enums";
 import { navigate } from "gatsby";
+import RecordNotFound from "@/components/common/RecordNotFound";
 
 const schema = yup.object().shape({
     Account: yup.string().notOneOf(["none"], "Account is required field"),
@@ -156,7 +158,7 @@ function privateHoldingAdd({ location }: { location: any }) {
 
     // set intial form values if user wants to edit
     useEffect(() => {
-        if (!currentPrivateHolding) return;
+        if (!currentPrivateHolding || currentPrivateHolding === "rejected") return;
 
         setValue("ProductName", currentPrivateHolding.productName)
         setValue("PurchaseFrom", currentPrivateHolding.purchasedFrom);
@@ -184,7 +186,7 @@ function privateHoldingAdd({ location }: { location: any }) {
         if (!formDropdownsKeys) return;
 
         function getNextSpecificationItem(specificationName: string) {
-            return currentPrivateHolding!.productattribute.find((option: any) => formDropdownsKeys![option["specificationAttributeId"].toString()] === specificationName)
+            return currentPrivateHolding !== "rejected" && currentPrivateHolding!.productattribute.find((option: any) => formDropdownsKeys![option["specificationAttributeId"].toString()] === specificationName)
         }
 
         const nextMint = getNextSpecificationItem("Mint");
@@ -299,7 +301,7 @@ function privateHoldingAdd({ location }: { location: any }) {
             }))
         }
 
-        if (currentPrivateHolding) {
+        if (currentPrivateHolding && currentPrivateHolding !== "rejected") {
             prepareData = { ...prepareData, Id: currentPrivateHolding.id };
         }
         // console.log("🚀 ~ onSubmit ~ prepareData:", prepareData)
@@ -326,230 +328,243 @@ function privateHoldingAdd({ location }: { location: any }) {
                     lang="en"
                 />
                 <PageTitle title={searchParams.has("holdingId") ? "Update Private Holding" : "Add New Private Holding"} isMyVaultSubpage={true} backToDashboard={true} />
-                <Box id="PrivateHoldingAddPage" className='PrivateHoldingAddPage' component="section">
-                    <Container>
-                        <Box className="Content PrivateHoldingAddContent">
-                            <form onSubmit={handleSubmit(onSubmit)} id="AddPrivateHolding">
-                                <Stack className="RowWrapper">
-                                    <RenderFields
-                                        type="select"
-                                        register={register}
-                                        error={errors.Account}
-                                        name="Account"
-                                        label="Account:"
-                                        control={control}
-                                        value={dropdownState.Account}
-                                        getValues={getValues}
-                                        setValue={setValue}
-                                        variant='outlined'
-                                        clearErrors={clearErrors}
-                                        margin='none'
-                                        className='SelectAccount'
-                                        required
-                                    >
-                                        <MenuItem value="none">Select Account</MenuItem>
-                                        {configDropdowns && configDropdowns.accountList.map((account) => {
-                                            return (<MenuItem key={account.id} value={account.id}>{account.name}</MenuItem>)
-                                        })}
-                                    </RenderFields>
-                                    <RenderFields
-                                        register={register}
-                                        error={errors.ProductName}
-                                        name="ProductName"
-                                        label="Product Name:"
-                                        placeholder="Enter your product name."
-                                        variant='outlined'
-                                        margin='none'
-                                        required
-                                    />
-                                    <RenderFields
-                                        type="select"
-                                        register={register}
-                                        error={errors.MintOrBrand}
-                                        name="MintOrBrand"
-                                        label="Mint/Brand"
-                                        value={dropdownState.Mint}
-                                        control={control}
-                                        variant='outlined'
-                                        setValue={setValue}
-                                        getValues={getValues}
-                                        clearErrors={clearErrors}
-                                        margin='none'
-                                        className='SelectMint'
-                                        required
-                                    >
-                                        <MenuItem value="none">Select Mint</MenuItem>
-                                        {formDropdowns && renderDropdownItems(formDropdowns["Mint"])}
-                                    </RenderFields>
-                                </Stack>
-                                <Stack className="RowWrapper">
-                                    <RenderFields
-                                        type="select"
-                                        register={register}
-                                        error={errors.Metal}
-                                        name="Metal"
-                                        getValues={getValues}
-                                        label="Metal"
-                                        value={dropdownState.Metal}
-                                        control={control}
-                                        setValue={setValue}
-                                        clearErrors={clearErrors}
-                                        variant='outlined'
-                                        margin='none'
-                                        className='SelectMetal'
-                                        required
-                                    >
-                                        <MenuItem value="none">Select Metal</MenuItem>
-                                        {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Metal"]} />} */}
-                                        {formDropdowns && renderDropdownItems(formDropdowns["Metal"])}
-                                    </RenderFields>
-                                    <RenderFields
-                                        type="select"
-                                        register={register}
-                                        error={errors.Type}
-                                        name="Type"
-                                        setValue={setValue}
-                                        getValues={getValues}
-                                        label="Type"
-                                        value={dropdownState.Type}
-                                        control={control}
-                                        variant='outlined'
-                                        clearErrors={clearErrors}
-                                        margin='none'
-                                        className='SelectType'
-                                        required
-                                    >
-                                        <MenuItem value="none">Select Type</MenuItem>
-                                        {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Type"]} />} */}
-                                        {formDropdowns && renderDropdownItems(formDropdowns["Type"])}
-                                    </RenderFields>
-                                </Stack>
-                                <Stack className="RowWrapper">
-                                    <RenderFields
-                                        type="select"
-                                        register={register}
-                                        error={errors.Series}
-                                        name="Series"
-                                        getValues={getValues}
-                                        label="Series"
-                                        value={dropdownState.Series}
-                                        control={control}
-                                        setValue={setValue}
-                                        clearErrors={clearErrors}
-                                        variant='outlined'
-                                        margin='none'
-                                        className='SelectSeries'
-                                    // required
-                                    >
-                                        <MenuItem value="none">Select Series</MenuItem>
-                                        {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Series"]} />} */}
-                                        {formDropdowns && renderDropdownItems(formDropdowns["Series"])}
-                                    </RenderFields>
-                                    <RenderFields
-                                        type="select"
-                                        register={register}
-                                        error={errors.Purity}
-                                        name="Purity"
-                                        label="Purity"
-                                        getValues={getValues}
-                                        setValue={setValue}
-                                        value={dropdownState.Purity}
-                                        control={control}
-                                        clearErrors={clearErrors}
-                                        variant='outlined'
-                                        margin='none'
-                                        className='SelectPurity'
-                                        required
-                                    >
-                                        <MenuItem value="none">Select Purity</MenuItem>
-                                        {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Purity"]} />} */}
-                                        {formDropdowns && renderDropdownItems(formDropdowns["Purity"])}
-                                    </RenderFields>
-                                </Stack>
-                                <Stack className="RowWrapper">
-                                    <RenderFields
-                                        register={register}
-                                        error={errors.Weight}
-                                        name="Weight"
-                                        label="Weight"
-                                        type="number"
-                                        placeholder="Enter Weight"
-                                        control={control}
-                                        variant='outlined'
-                                        margin='none'
-                                        className='Weight'
-                                        setValue={setValue}
-                                    />
-                                    <RenderFields
-                                        type="select"
-                                        register={register}
-                                        error={errors.WeightType}
-                                        name="WeightType"
-                                        clearErrors={clearErrors}
-                                        value={dropdownState.WeightType}
-                                        label="Weight Type"
-                                        getValues={getValues}
-                                        control={control}
-                                        variant='outlined'
-                                        setValue={setValue}
-                                        margin='none'
-                                        className='SelectWeightType'
-                                        required
-                                    >
-                                        <MenuItem value="none">Select Weight Type</MenuItem>
-                                        <MenuItem value='0'>ounces</MenuItem>
-                                        <MenuItem value='1'>grams</MenuItem>
-                                        <MenuItem value='2'>kilograms</MenuItem>
-                                    </RenderFields>
-                                </Stack>
-                                <DynamicFields existingFields={currentPrivateHolding ? currentPrivateHolding.productattribute : null} setDynamicSpecificationFields={setDynamicSpecificationFields} setDynamicCustomSpecificationFields={setDynamicCustomSpecificationFields} existingCustomFields={currentPrivateHolding ? currentPrivateHolding.customeAttribute : null} />
-                                <Stack className="RowWrapper">
-                                    <BasicDatePicker name="Date" label="Purchase Date" setValue={setValue} existingDate={currentPrivateHolding ? currentPrivateHolding?.purchaseDate : null} error={errors.Date} clearErrors={clearErrors} />
-                                    <RenderFields
-                                        register={register}
-                                        error={errors.PurchasePrice}
-                                        name="PurchasePrice"
-                                        label="Purchase price (per unit):"
-                                        placeholder="Enter Purchase price"
-                                        variant='outlined'
-                                        margin='none'
-                                        required
-                                    />
-                                    <RenderFields
-                                        register={register}
-                                        error={errors.PurchaseFrom}
-                                        name="PurchaseFrom"
-                                        placeholder="Enter Purchase from"
-                                        label="Purchase From: "
-                                        variant='outlined'
-                                        margin='none'
-                                        required
-                                    />
-                                    <RenderFields
-                                        type="number"
-                                        register={register}
-                                        error={errors.Qty}
-                                        control={control}
-                                        name="Qty"
-                                        placeholder="Enter available quantity"
-                                        label="Qty:"
-                                        variant='outlined'
-                                        margin='none'
-                                        required
-                                    />
-                                </Stack>
-                                <Stack className="RowWrapper DocumentPhotosContentWrapper">
-                                    <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} provenanceDocuments={provenanceDocuments} setProvenanceDocuments={setProvenanceDocuments} />
-                                    <ProductPhotos register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} productPhotos={productPhotos} setProductPhotos={setProductPhotos} />
-                                </Stack>
-                                <Stack sx={{ gap: "20px", justifyContent: "flex-end" }} className='BottomButtonsWrapper'>
-                                    <Button variant="outlined" size="large" onClick={() => navigate("/my-vault/private-holding")}>Cancel</Button>
-                                    <Button variant="contained" size="large" type="submit">Save</Button>
-                                </Stack>
-                            </form>
-                        </Box>
-                    </Container>
-                </Box >
+                {searchParams.has("holdingId") && currentPrivateHolding === "rejected" ? <Typography style={{ textAlign: "center" }}>Private holding not found!</Typography>
+                    : (<Box id="PrivateHoldingAddPage" className='PrivateHoldingAddPage' component="section">
+                        <Container>
+                            <Box className="Content PrivateHoldingAddContent">
+                                <form onSubmit={handleSubmit(onSubmit)} id="AddPrivateHolding">
+                                    <Stack className="RowWrapper">
+                                        <RenderFields
+                                            type="select"
+                                            register={register}
+                                            error={errors.Account}
+                                            name="Account"
+                                            label="Account:"
+                                            control={control}
+                                            value={dropdownState.Account}
+                                            getValues={getValues}
+                                            setValue={setValue}
+                                            variant='outlined'
+                                            clearErrors={clearErrors}
+                                            disabled={searchParams.has("holdingId")}
+                                            margin='none'
+                                            className='SelectAccount'
+                                            required
+                                        >
+                                            <MenuItem value="none">Select Account</MenuItem>
+                                            {configDropdowns && configDropdowns.accountList.map((account) => {
+                                                return (<MenuItem key={account.id} value={account.id}>{account.name}</MenuItem>)
+                                            })}
+                                        </RenderFields>
+                                        <RenderFields
+                                            register={register}
+                                            error={errors.ProductName}
+                                            name="ProductName"
+                                            label="Product Name:"
+                                            disabled={searchParams.has("holdingId")}
+                                            placeholder="Enter your product name."
+                                            variant='outlined'
+                                            margin='none'
+                                            required
+                                        />
+                                        <RenderFields
+                                            type="select"
+                                            register={register}
+                                            error={errors.MintOrBrand}
+                                            name="MintOrBrand"
+                                            label="Mint/Brand"
+                                            value={dropdownState.Mint}
+                                            control={control}
+                                            variant='outlined'
+                                            setValue={setValue}
+                                            disabled={searchParams.has("holdingId")}
+                                            getValues={getValues}
+                                            clearErrors={clearErrors}
+                                            margin='none'
+                                            className='SelectMint'
+                                            required
+                                        >
+                                            <MenuItem value="none">Select Mint</MenuItem>
+                                            {formDropdowns && renderDropdownItems(formDropdowns["Mint"])}
+                                        </RenderFields>
+                                    </Stack>
+                                    <Stack className="RowWrapper">
+                                        <RenderFields
+                                            type="select"
+                                            register={register}
+                                            error={errors.Metal}
+                                            name="Metal"
+                                            getValues={getValues}
+                                            label="Metal"
+                                            value={dropdownState.Metal}
+                                            control={control}
+                                            setValue={setValue}
+                                            disabled={searchParams.has("holdingId")}
+                                            clearErrors={clearErrors}
+                                            variant='outlined'
+                                            margin='none'
+                                            className='SelectMetal'
+                                            required
+                                        >
+                                            <MenuItem value="none">Select Metal</MenuItem>
+                                            {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Metal"]} />} */}
+                                            {formDropdowns && renderDropdownItems(formDropdowns["Metal"])}
+                                        </RenderFields>
+                                        <RenderFields
+                                            type="select"
+                                            register={register}
+                                            error={errors.Type}
+                                            name="Type"
+                                            setValue={setValue}
+                                            getValues={getValues}
+                                            label="Type"
+                                            disabled={searchParams.has("holdingId")}
+                                            value={dropdownState.Type}
+                                            control={control}
+                                            variant='outlined'
+                                            clearErrors={clearErrors}
+                                            margin='none'
+                                            className='SelectType'
+                                            required
+                                        >
+                                            <MenuItem value="none">Select Type</MenuItem>
+                                            {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Type"]} />} */}
+                                            {formDropdowns && renderDropdownItems(formDropdowns["Type"])}
+                                        </RenderFields>
+                                    </Stack>
+                                    <Stack className="RowWrapper">
+                                        <RenderFields
+                                            type="select"
+                                            register={register}
+                                            error={errors.Series}
+                                            name="Series"
+                                            getValues={getValues}
+                                            label="Series"
+                                            value={dropdownState.Series}
+                                            control={control}
+                                            setValue={setValue}
+                                            clearErrors={clearErrors}
+                                            disabled={searchParams.has("holdingId")}
+                                            variant='outlined'
+                                            margin='none'
+                                            className='SelectSeries'
+                                        // required
+                                        >
+                                            <MenuItem value="none">Select Series</MenuItem>
+                                            {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Series"]} />} */}
+                                            {formDropdowns && renderDropdownItems(formDropdowns["Series"])}
+                                        </RenderFields>
+                                        <RenderFields
+                                            type="select"
+                                            register={register}
+                                            error={errors.Purity}
+                                            name="Purity"
+                                            label="Purity"
+                                            getValues={getValues}
+                                            setValue={setValue}
+                                            disabled={searchParams.has("holdingId")}
+                                            value={dropdownState.Purity}
+                                            control={control}
+                                            clearErrors={clearErrors}
+                                            variant='outlined'
+                                            margin='none'
+                                            className='SelectPurity'
+                                            required
+                                        >
+                                            <MenuItem value="none">Select Purity</MenuItem>
+                                            {/* {formDropdowns && <RenderDropdownItems dropdowns={formDropdowns["Purity"]} />} */}
+                                            {formDropdowns && renderDropdownItems(formDropdowns["Purity"])}
+                                        </RenderFields>
+                                    </Stack>
+                                    <Stack className="RowWrapper">
+                                        <RenderFields
+                                            register={register}
+                                            error={errors.Weight}
+                                            name="Weight"
+                                            label="Weight"
+                                            type="number"
+                                            disabled={searchParams.has("holdingId")}
+                                            placeholder="Enter Weight"
+                                            control={control}
+                                            variant='outlined'
+                                            margin='none'
+                                            className='Weight'
+                                            setValue={setValue}
+                                        />
+                                        <RenderFields
+                                            type="select"
+                                            register={register}
+                                            error={errors.WeightType}
+                                            name="WeightType"
+                                            clearErrors={clearErrors}
+                                            value={dropdownState.WeightType}
+                                            label="Weight Type"
+                                            disabled={searchParams.has("holdingId")}
+                                            getValues={getValues}
+                                            control={control}
+                                            variant='outlined'
+                                            setValue={setValue}
+                                            margin='none'
+                                            className='SelectWeightType'
+                                            required
+                                        >
+                                            <MenuItem value="none">Select Weight Type</MenuItem>
+                                            <MenuItem value='0'>ounces</MenuItem>
+                                            <MenuItem value='1'>grams</MenuItem>
+                                            <MenuItem value='2'>kilograms</MenuItem>
+                                        </RenderFields>
+                                    </Stack>
+                                    <DynamicFields existingFields={currentPrivateHolding && currentPrivateHolding !== "rejected" ? currentPrivateHolding.productattribute : null} setDynamicSpecificationFields={setDynamicSpecificationFields} setDynamicCustomSpecificationFields={setDynamicCustomSpecificationFields} existingCustomFields={currentPrivateHolding && currentPrivateHolding !== "rejected" ? currentPrivateHolding.customeAttribute : null} />
+                                    <Stack className="RowWrapper">
+                                        <BasicDatePicker name="Date" label="Purchase Date" setValue={setValue} existingDate={currentPrivateHolding && currentPrivateHolding !== "rejected" ? currentPrivateHolding?.purchaseDate : null} error={errors.Date} clearErrors={clearErrors} />
+                                        <RenderFields
+                                            register={register}
+                                            error={errors.PurchasePrice}
+                                            name="PurchasePrice"
+                                            label="Purchase price (per unit):"
+                                            disabled={searchParams.has("holdingId")}
+                                            placeholder="Enter Purchase price"
+                                            variant='outlined'
+                                            margin='none'
+                                            required
+                                        />
+                                        <RenderFields
+                                            register={register}
+                                            error={errors.PurchaseFrom}
+                                            name="PurchaseFrom"
+                                            placeholder="Enter Purchase from"
+                                            label="Purchase From: "
+                                            variant='outlined'
+                                            margin='none'
+                                            disabled={searchParams.has("holdingId")}
+                                            required
+                                        />
+                                        <RenderFields
+                                            type="number"
+                                            register={register}
+                                            error={errors.Qty}
+                                            disabled={searchParams.has("holdingId")}
+                                            control={control}
+                                            name="Qty"
+                                            placeholder="Enter available quantity"
+                                            label="Qty:"
+                                            variant='outlined'
+                                            margin='none'
+                                            required
+                                        />
+                                    </Stack>
+                                    <Stack className="RowWrapper DocumentPhotosContentWrapper">
+                                        <ProvenanceDocuments register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} provenanceDocuments={provenanceDocuments} setProvenanceDocuments={setProvenanceDocuments} />
+                                        <ProductPhotos register={register} errors={errors} control={control} getValues={getValues} clearErrors={clearErrors} setValue={setValue} productPhotos={productPhotos} setProductPhotos={setProductPhotos} />
+                                    </Stack>
+                                    <Stack sx={{ gap: "20px", justifyContent: "flex-end" }} className='BottomButtonsWrapper'>
+                                        <Button variant="outlined" size="large" onClick={() => navigate("/my-vault/private-holding")}>Cancel</Button>
+                                        <Button variant="contained" size="large" type="submit">Save</Button>
+                                    </Stack>
+                                </form>
+                            </Box>
+                        </Container>
+                    </Box>)}
             </Layout >
         </>
     )

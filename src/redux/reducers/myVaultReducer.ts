@@ -32,7 +32,7 @@ interface MyVaultInitialState {
     myVaultHomePageChartData: ImyVaultHomePageChartData | null;
     privateHoldingsList: IPrivateHolding[] | null;
     privateHoldingsListLivePrice: IPrivateHoldingLivePrice[] | null
-    currentPrivateHolding: ISpecificPrivateHolding | null;
+    currentPrivateHolding: ISpecificPrivateHolding | null | "rejected";
     privateHoldingFormDropdowns: IPrivateHoldingFormDropdown | null;
     privateHoldingFormDropdownsKeys: { [key: string]: string } | null;
     privateHoldingFormDropdownsReverseKeys: { [key: string]: string } | null
@@ -306,7 +306,7 @@ export const myVaultSlice = createSlice({
         addAddress: (state, action) => {
             state.addresses = [...state.addresses!, action.payload]
         },
-        clearPrivateHoldingCurrentData : (state) => {
+        clearPrivateHoldingCurrentData: (state) => {
             state.currentPrivateHolding = null;
         }
     },
@@ -502,6 +502,7 @@ export const myVaultSlice = createSlice({
             state.loading = false;
         })
         builder.addCase(getPrivateHoldingWithId.rejected, state => {
+            state.currentPrivateHolding = "rejected";
             state.loading = false;
         })
         // get private holding form dropdown
@@ -528,21 +529,6 @@ export const myVaultSlice = createSlice({
             state.loading = false;
         })
         builder.addCase(getPrivateHoldingFormDropdowns.rejected, (state, action) => {
-            const responseData = action?.payload?.response?.data?.data;
-            // console.log("🚀 ~ builder.addCase ~ responseData: ", responseData)
-            const privateHoldingFormDropdowns: IPrivateHoldingFormDropdown = {};
-            const privateHoldingFormDropdownsKeys: { [key: string]: string } = {}
-            const privateHoldingFormDropdownsReverseKeys: { [key: string]: string } = {}
-
-            responseData?.forEach((element: any) => {
-                privateHoldingFormDropdownsKeys[element.specificationAttributeId] = element.specificationAttribute;
-                privateHoldingFormDropdownsReverseKeys[element.specificationAttribute] = element.specificationAttributeId;
-                privateHoldingFormDropdowns[element.specificationAttribute] = element.specificationAttributeOptions;
-            });
-
-            state.privateHoldingFormDropdowns = privateHoldingFormDropdowns;
-            state.privateHoldingFormDropdownsKeys = privateHoldingFormDropdownsKeys;
-            state.privateHoldingFormDropdownsReverseKeys = privateHoldingFormDropdownsReverseKeys;
             state.loading = false;
         })
         // private holding add or edit
@@ -581,6 +567,6 @@ export const myVaultSlice = createSlice({
     }
 })
 
-export const { setLoadingTrue, setLoadingFalse, updateAddress, addAddress,clearPrivateHoldingCurrentData } = myVaultSlice.actions;
+export const { setLoadingTrue, setLoadingFalse, updateAddress, addAddress, clearPrivateHoldingCurrentData } = myVaultSlice.actions;
 
 export default myVaultSlice.reducer;

@@ -42,6 +42,7 @@ function BasicDatePicker({ setValue, existingDate, name, label, required, error,
                             fullWidth: true,
                         },
                     }}
+                    disabled={existingDate ? true : false}
                 />
                 {error && typeof error === 'object' && (
                     <FormHelperText className={error && 'Mui-error'}>
