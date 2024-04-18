@@ -71,8 +71,8 @@ function getSchemaFromAlignment(alignment: string) {
 function AddAccount(props: AddAccountProps) {
   const { open, dialogTitle, alignment, onClose, hadleSecondaryAction, existingAccount } = props
   const accountTypeText = useMemo(() => {
-     if(!alignment) return ""
-     return existingAccount ? alignment : AccountTypeEnumReverse[alignment];
+    if (!alignment) return ""
+    return existingAccount ? alignment : AccountTypeEnumReverse[alignment];
   }, [existingAccount, AccountTypeEnumReverse, alignment])
   const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
   const dispatch = useAppDispatch();
@@ -84,6 +84,7 @@ function AddAccount(props: AddAccountProps) {
   const [countryValue, setcountryValue] = useState<any>('')
   const [stateValue, setstateValue] = useState<any>('')
   const [additionalFields, setAdditionalFields] = useState<IField[]>([{ [Math.random().toString(36).substring(7)]: { firstName: "", lastName: "" } }]);
+  const [isAddressGoogleVerified, setIsAddressGoogleVerified] = useState<boolean>(false)
   const [phoneValue, setPhoneValue] = useState("");
 
   useEffect(() => {
@@ -102,6 +103,7 @@ function AddAccount(props: AddAccountProps) {
     setcountryValue(existingAccount?.address.countryId?.toString())
     setstateValue(existingAccount?.address.stateName)
     setPhoneValue(existingAccount?.phoneNumber)
+    setIsAddressGoogleVerified(true)
     const additionalBeneficiary = existingAccount?.additionalBeneficiary.map((beneficiary) => {
       return {
         [beneficiary.id]: {
@@ -110,9 +112,9 @@ function AddAccount(props: AddAccountProps) {
         }
       }
     })
-    additionalBeneficiary.splice(1,1)
+    additionalBeneficiary.splice(1, 1)
     console.log("🚀 ~ additionalBeneficiary ~ additionalBeneficiary:", additionalBeneficiary)
-    setAdditionalFields(()=>additionalBeneficiary)
+    setAdditionalFields(() => additionalBeneficiary)
     return () => {
       reset()
     }
@@ -138,6 +140,10 @@ function AddAccount(props: AddAccountProps) {
     });
 
     const accountTypeId = existingAccount && alignment ? AccountTypeEnum[alignment] : alignment;
+    let isAddressVerified = isAddressGoogleVerified;
+    if (googleAddressComponents && (data.Address1.trim() !== googleAddressComponents?.address.trim() || data.Address2.trim() !== googleAddressComponents?.address2.trim() || data.City.trim() !== googleAddressComponents?.city.trim() || data.State.trim() !== googleAddressComponents?.state.trim() || (googleAddressComponents?.postalCode && data.Code.trim() !== googleAddressComponents?.postalCode?.trim()))) {
+      isAddressVerified = false
+    }
 
     const commonAddressQueryForPreparation = {
       customerId: existingAccount?.customerId || undefined,
@@ -145,7 +151,7 @@ function AddAccount(props: AddAccountProps) {
       lastName: data.LastName,
       phoneNumber: data.Contact,
       email: data.Email,
-      isVerified: true, // static
+      isVerified: isAddressVerified, // static
       city: data.City,
       state: stateId || 0,
       country: data.Country,
@@ -157,7 +163,7 @@ function AddAccount(props: AddAccountProps) {
         lastName: data.LastName,
         phoneNumber: data.Contact,
         email: data.Email,
-        isVerified: true, // static
+        isVerified: isAddressVerified, // static
         addressLine1: data.Address1,
         addressLine2: data.Address2,
         city: data.City,
@@ -230,6 +236,7 @@ function AddAccount(props: AddAccountProps) {
       if (googleAddressComponents?.postalCode) {
         setValue("Code", Number(googleAddressComponents?.postalCode));
       }
+      setIsAddressGoogleVerified(true)
       clearErrors('Country')
       clearErrors('State')
       clearErrors('City')
@@ -248,6 +255,7 @@ function AddAccount(props: AddAccountProps) {
   const OnChange = (value: any) => {
     setcountryValue(value)
     setValue('Country', value)
+    setIsAddressGoogleVerified(false)
   }
   // console.log("🚀 ~ AddAccount ~ additionalFields:" , alignment)
   return (
@@ -493,6 +501,7 @@ function AddAccount(props: AddAccountProps) {
                 value={countryValue}
                 setValue={setValue}
                 onChange={OnChange}
+
               >
                 <MenuItem value="none" selected>Select country *</MenuItem>
                 {configDropdowns?.countryList.map((country) => (
