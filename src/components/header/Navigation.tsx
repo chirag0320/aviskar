@@ -82,7 +82,7 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
                       : <Fragment key={category.name}><Link
                         to={`/${category.searchEngineFriendlyPageName}`}
                         aria-label={category?.searchEngineFriendlyPageName ?? category.name}
-                        className={classNames("MenuLink", { "Active": category?.name?.toLocaleLowerCase()?.replace(/[\s/]/g, '') === currententlySelected })}
+                        className={classNames("MenuLink", { "Active": category?.searchEngineFriendlyPageName?.toLocaleLowerCase()?.replace(/[\s/]/g, '') === currententlySelected })}
                       >
                         {category.name}
                       </Link></Fragment>
