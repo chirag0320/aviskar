@@ -68,7 +68,7 @@ export default function AccountType(props: AccountTypeProps) {
                                         {getAccountTypeIcon(accountType?.name)()}
                                         <Typography variant='body1'>{accountType.name}</Typography>
                                     </Stack>
-                                    <Typography variant='caption' className="description">{accountType?.extraProperty}</Typography>
+                                    <Typography variant='body2' className="description">{accountType?.extraProperty}</Typography>
                                 </ToggleButton>
                             )
                         })}
