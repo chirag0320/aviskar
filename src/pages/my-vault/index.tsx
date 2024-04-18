@@ -44,6 +44,8 @@ import { navigate } from "gatsby";
 import ConfigServices from "@/apis/services/ConfigServices";
 import useRequireLogin from "@/hooks/useRequireLogin";
 import RecordNotFound from "@/components/common/RecordNotFound";
+import Toaster from "@/components/common/Toaster";
+import useShowToaster from "@/hooks/useShowToaster";
 
 interface VaultProps {
   id: number;
@@ -58,9 +60,11 @@ interface VaultProps {
 }
 
 function Vault() {
+  const openToaster = useAppSelector(state => state.homePage.openToaster)
+  const { showToaster } = useShowToaster()
   const { loadingForCheckingLogin } = useRequireLogin()
   const { myVaultHomePageData, myVaultHomePageChartData } = useAppSelector((state) => state.myVault)
-  console.log("🚀 ~ Vault ~ myVaultHomePageData:", myVaultHomePageData)
+  console.log("🚀 ~ Vault ~ myVaultHomePageData:", myVaultHomePageChartData)
   const isLargeScreen = useMediaQuery((theme: Theme) =>
     theme.breakpoints.up("lg")
   );
@@ -97,6 +101,9 @@ function Vault() {
       const res = await ConfigServices.reOrderAPI(orderId)
       if (res.data.data) {
         navigate('/shopping-cart')
+        return;
+      }else{
+        showToaster({ message: res.data.message, severity: "error" })
       }
     } catch (error) {
       console.log("🚀 ~ reOrderFunction ~ res:", error)
@@ -107,6 +114,7 @@ function Vault() {
   }
   return (
     <Layout>
+      {openToaster && <Toaster />}
       <Box className="VaultPage">
         <Breadcrumb arr={[{ navigate: '/my-vault', name: 'My Vault' }]} />
         <Box className="HeroSection">

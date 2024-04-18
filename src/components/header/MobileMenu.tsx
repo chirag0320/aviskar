@@ -9,6 +9,9 @@ import { ArrowDown, ArrowUp } from '../../assets/icons/index'
 // Utils
 import { useAppSelector } from "@/hooks"
 import { navigate } from "gatsby";
+import useAPIoneTime from "@/hooks/useAPIoneTime";
+import { CategoriesListDetails } from "@/redux/reducers/homepageReducer";
+import { ENDPOINTS } from "@/utils/constants";
 function FrontMobileMenu(props: any) {
   const { open, toggleMobileMenu, trigger, isFrontPage } = props
   const location = useLocation();
@@ -16,7 +19,8 @@ function FrontMobileMenu(props: any) {
   const [openSubMenu, setOpenSubMenu] = useState<any>({})
   const [isHomePage, setIsHomePage] = useState<boolean>(false)
   const { categoriesList } = useAppSelector((state) => state.homePage)
-
+  const [params] = useState({ page: 1 })
+  useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, params })
   const handleClickMainMenu = (menuId: any) => {
     setOpenMenu((prevOpenMenus: any) => ({
       [menuId]: !prevOpenMenus[menuId]
@@ -34,7 +38,6 @@ function FrontMobileMenu(props: any) {
       setIsHomePage(true)
     }
   }, [])
-
   return (
     <Drawer
       id="MobileMenu"

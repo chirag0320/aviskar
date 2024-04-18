@@ -30,7 +30,6 @@ import Loader from "@/components/common/Loader";
 function MainHomePage() {
     const dispatch = useAppDispatch()
     const { configDetails: configDetailsState, openToaster, scrollPosition, loading, mainHomePageData } = useAppSelector((state) => state.homePage)
-    console.log("🚀 ~ MainHomePage ~ mainHomePageData:", mainHomePageData)
     // const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
     useEffect(() => {
         return () => {

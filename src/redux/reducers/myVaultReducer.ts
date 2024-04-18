@@ -459,8 +459,13 @@ export const myVaultSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(getMyVaultHomePageChartData.fulfilled, (state, action) => {
-            const responseData = action.payload.data;
-            state.myVaultHomePageChartData = responseData.data;
+            const responseData: ImyVaultHomePageChartData = action.payload.data.data;
+            state.myVaultHomePageChartData = {
+                ...responseData,
+                totalValueFacturation: { ...responseData.totalValueFacturation, low: Math.min(...responseData.totalValueFacturation.linechartdata) ?? 0, high: Math.max(...responseData.totalValueFacturation.linechartdata) ?? 0 },
+                goldValueFacturation: { ...responseData.goldValueFacturation, low: Math.min(...responseData.goldValueFacturation.linechartdata) ?? 0, high: Math.max(...responseData.goldValueFacturation.linechartdata) ?? 0 },
+                silverValueFacturation: { ...responseData.silverValueFacturation, low: Math.min(...responseData.silverValueFacturation.linechartdata) ?? 0, high: Math.max(...responseData.silverValueFacturation.linechartdata) ?? 0 },
+            };
             state.loading = false;
         })
         builder.addCase(getMyVaultHomePageChartData.rejected, (state) => {

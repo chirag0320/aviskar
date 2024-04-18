@@ -23,6 +23,8 @@ interface IbannerData {
     cdnUrlSmall: any
 }
 function Banner() {
+    const { data }: any = useApiRequest(ENDPOINTS.getSlider.replace('typeEnum', '0'));
+    const isLargeScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
     const config = {
         slidesPerView: 1,
         spaceBetween: 0,
@@ -50,17 +52,22 @@ function Banner() {
         <Box id="Banner" component="section" key={'banner'}>
             <Box className="SwiperContainer">
                 <Swiper {...config}>
-                    <SwiperSlide>
-                        <Box className="HeroBannerSliderWrapper" style={{ backgroundImage: 'url("https://fastly.picsum.photos/id/124/3504/2336.jpg?hmac=B1Avp6or9Df8vpnN4kQsGNfD66j8hH3gLtootCoTw4M")' }}>
-                            <Box className="HeroBannerTopWrapper">
-                                <Typography className="BgText">QUEENSLAND</Typography>
-                                <Typography className="SlideTitle">Explore Queensland</Typography>
-                            </Box>
-                            <Typography variant="body1" className="SlideDescription">Sed ut perspiciatis unde omnis iste natus error sit voluptatem</Typography>
-                            <Button sx={{ mt: 3.75 }} variant="contained">Discover More</Button>
-                        </Box>
-                    </SwiperSlide>
-                    <SwiperSlide>
+                    {
+                        data?.data?.map((item: IbannerData, index: number) => {
+                            return (
+                                <SwiperSlide>
+                                    <Box className="HeroBannerSliderWrapper" style={{ backgroundImage: `url(${isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall})` }}>
+                                        <Box className="HeroBannerTopWrapper">
+                                            <Typography className="BgText">QUEENSLAND</Typography>
+                                            <Typography className="SlideTitle">Explore Queensland</Typography>
+                                        </Box>
+                                        <Typography variant="body1" className="SlideDescription">Sed ut perspiciatis unde omnis iste natus error sit voluptatem</Typography>
+                                        <Button sx={{ mt: 3.75 }} variant="contained">Discover More</Button>
+                                    </Box>
+                                </SwiperSlide>
+                            )
+                        })}
+                    {/* <SwiperSlide>
                         <Box className="HeroBannerSliderWrapper" style={{ backgroundImage: 'url("https://fastly.picsum.photos/id/124/3504/2336.jpg?hmac=B1Avp6or9Df8vpnN4kQsGNfD66j8hH3gLtootCoTw4M")' }}>
 
                             <Box className="HeroBannerTopWrapper">
@@ -70,7 +77,7 @@ function Banner() {
                             <Typography variant="body1" className="SlideDescription">Sed ut perspiciatis unde omnis iste natus error sit voluptatem</Typography>
                             <Button sx={{ mt: 3.75 }} variant="contained">Discover More</Button>
                         </Box>
-                    </SwiperSlide>
+                    </SwiperSlide> */}
                 </Swiper>
                 {<SwiperNavigation />}
             </Box>
