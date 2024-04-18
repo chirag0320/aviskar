@@ -13,7 +13,6 @@ import noImage from '../../../assets/images/noImage.png'
 
 function LatestStories() {
     const { mainHomePageData,configDetails } = useAppSelector((state) => state.homePage)
-    console.log("🚀 ~ LatestStories ~ configDetails:", configDetails)
     return (
         (mainHomePageData && mainHomePageData?.stories?.length > 0) ?
             <Box id="LatestStories">

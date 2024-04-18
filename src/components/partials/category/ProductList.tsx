@@ -5,7 +5,7 @@ import { Box, Skeleton, Card, Pagination, Stack, Typography } from "@mui/materia
 import { ProductCard } from "@/components/common/Card"
 // Hooks
 import { useAppDispatch, useAppSelector } from "@/hooks"
-import { pageSize } from "@/pages/[category]"
+import { pageSize } from "@/pages/category/[category]"
 import Toaster from "@/components/common/Toaster"
 import { navigate } from "gatsby"
 import { SortingOption } from "@/types/enums"

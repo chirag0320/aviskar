@@ -1389,3 +1389,11 @@ export const calculationOfThePremiumAndDiscount = (premium: string | number, pre
 
   return `${percentage}% Off on premium`;
 }
+export const getlastPartOfPath = (path: any) => {
+  const parts = path.split('/').filter((part: string) => part !== '');
+  console.log("🚀 ~ getlastPartOfPath ~ parts:", parts)
+
+  // Get the last part of the path
+  const lastPartOfPath = parts[parts.length - 1];
+  return lastPartOfPath
+}

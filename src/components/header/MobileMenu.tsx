@@ -19,7 +19,7 @@ function FrontMobileMenu(props: any) {
   const [openSubMenu, setOpenSubMenu] = useState<any>({})
   const [isHomePage, setIsHomePage] = useState<boolean>(false)
   const { categoriesList } = useAppSelector((state) => state.homePage)
-  const [params] = useState({ page: 1 })
+  const [params] = useState({ page: location.pathname === "/" ? 0 : 1 })
   useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, params })
   const handleClickMainMenu = (menuId: any) => {
     setOpenMenu((prevOpenMenus: any) => ({
