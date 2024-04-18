@@ -9,12 +9,13 @@ import { SectionHeading } from "../../common/Utils"
 import { ArrowRight } from "../../../assets/icons/index"
 import { useAppSelector } from '@/hooks'
 import { navigate } from 'gatsby'
+import noImage from '../../../assets/images/noImage.png'
 
 function LatestStories() {
     const { mainHomePageData } = useAppSelector((state) => state.homePage)
 
     return (
-        (mainHomePageData && mainHomePageData?.knowMore?.length > 0) ?
+        (mainHomePageData && mainHomePageData?.stories?.length > 0) ?
             <Box id="LatestStories">
                 <Container maxWidth="lg" className='LatestStoriesContainer'>
                     <Box className="LatestStoriesMainWrapper">
@@ -30,14 +31,14 @@ function LatestStories() {
                         <Box className="LatestStoriesWrapper" component="section" key={'LatestStories'}>
                             <Box className="TopStoriesWrapper">
                                 <Box className="TopStoriePost">
-                                    <img src="https://picsum.photos/600/520" alt="https://picsum.photos/600/520" />
+                                    <img src={mainHomePageData?.stories?.[0]?.imageUrl ?? noImage} alt={mainHomePageData?.stories?.[0]?.title ?? "Image"} />
                                     <Stack className='StoryContentBox'>
                                         <Typography variant='subtitle2' className='StorieTitle'>Whitsunday Island: Vivid experiences on and under the water</Typography>
                                         <Button variant='text' className='StorieButton' endIcon={<ArrowRight />}>Read more</Button>
                                     </Stack>
                                 </Box>
                                 <Box className="TopStoriePost">
-                                    <img src="https://picsum.photos/600/520" alt="https://picsum.photos/600/520" />
+                                    <img src={mainHomePageData?.stories?.[1]?.imageUrl ?? noImage} alt={mainHomePageData?.stories?.[0]?.title ?? "Image"} />
                                     <Stack className='StoryContentBox'>
                                         <Typography variant='subtitle2' className='StorieTitle'>Whitsunday Island: Vivid experiences on and under the water</Typography>
                                         <Button variant='text' className='StorieButton' endIcon={<ArrowRight />}>Read more</Button>
@@ -45,35 +46,43 @@ function LatestStories() {
                                 </Box>
                             </Box>
                             <Box className="BottomStoriesWrapper">
-                                <Box className="BottomStoriePost">
-                                    <img src="https://picsum.photos/600/520" alt="https://picsum.photos/600/520" />
-                                    <Stack className='StoryContentBox'>
-                                        <Typography variant='subtitle2' className='StorieTitle'>Moreton Island, Queensland</Typography>
-                                        <Button variant='text' className='StorieButton' endIcon={<ArrowRight />}>Discover More</Button>
-                                    </Stack>
-                                </Box>
-                                <Box className="BottomStoriePost">
-                                    <img src="https://picsum.photos/600/520" alt="https://picsum.photos/600/520" />
-                                    <Stack className='StoryContentBox'>
-                                        <Typography variant='subtitle2' className='StorieTitle'>Surfers Paradise Beach, Queensland</Typography>
-                                        <Button variant='text' className='StorieButton' endIcon={<ArrowRight />}>Discover More</Button>
-                                    </Stack>
-                                </Box>
-                                <Box className="BottomStoriePost">
-                                    <img src="https://picsum.photos/600/520" alt="https://picsum.photos/600/520" />
-                                    <Stack className='StoryContentBox'>
-                                        <Typography variant='subtitle2' className='StorieTitle'>Daintree River, Forest Creek Queensland</Typography>
-                                        <Button variant='text' className='StorieButton' endIcon={<ArrowRight />}>Discover More</Button>
-                                    </Stack>
-                                </Box>
+                                {mainHomePageData?.stories?.slice(3).map((image, index) => (
+                                    <Box key={index} className="BottomStoriePost">
+                                        <img src={image?.imageUrl ?? noImage} alt={image?.title ?? "Image"} />
+                                        <Stack className='StoryContentBox'>
+                                            <Typography variant='subtitle2' className='StorieTitle'>{image?.title}</Typography>
+                                            <Button variant='text' className='StorieButton' endIcon={<ArrowRight />} onClick={() => {
+                                                navigate('/blog/' + image?.friendlyName)
+                                            }}>Discover More</Button>
+                                        </Stack>
+                                    </Box>
+                                ))}
+                                {/* 
+                            <Box className="BottomStoriePost">
+                                <img src="https://picsum.photos/600/520" alt={mainHomePageData?.stories?.[0]?.title ?? "Image"} />
+                                <Stack className='StoryContentBox'>
+                                    <Typography variant='subtitle2' className='StorieTitle'>Surfers Paradise Beach, Queensland</Typography>
+                                    <Button variant='text' className='StorieButton' endIcon={<ArrowRight />}>Discover More</Button>
+                                </Stack>
+                            </Box>
+                            <Box className="BottomStoriePost">
+                                <img src="https://picsum.photos/600/520" alt={mainHomePageData?.stories?.[0]?.title ?? "Image"} />
+                                <Stack className='StoryContentBox'>
+                                    <Typography variant='subtitle2' className='StorieTitle'>Daintree River, Forest Creek Queensland</Typography>
+                                    <Button variant='text' className='StorieButton' endIcon={<ArrowRight />}>Discover More</Button>
+                                </Stack>
+                            </Box> */}
                             </Box>
                         </Box>
                         <Box className="SectionButtonMobile">
-                            <Button variant="contained" endIcon={<ArrowRight />}>Discover More</Button>
+                            <Button variant="contained" endIcon={<ArrowRight />} onClick={() => {
+                                navigate('/blog')
+                            }}>Discover More</Button>
                         </Box>
                     </Box>
                 </Container>
-            </Box> : null
+            </Box>
+            : null
     )
 }
 

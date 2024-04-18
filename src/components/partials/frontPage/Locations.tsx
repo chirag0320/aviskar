@@ -7,6 +7,7 @@ import { SwiperNavigation } from "@/components/common/Utils"
 // Utills
 import { SectionHeading } from "../../common/Utils"
 import { useAppSelector } from '@/hooks'
+import noImage from '../../../assets/images/noImage.png'
 
 function Locations() {
     const { mainHomePageData } = useAppSelector((state) => state.homePage)
@@ -60,8 +61,8 @@ function Locations() {
                                         return (
                                             <SwiperSlide>
                                                 <Box className="LocationsSlide">
-                                                    <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                                    <Typography className="SlideDescription">Lady Elliot Island</Typography>
+                                                    <img src={item?.imageUrl?? noImage} alt={item?.title} />
+                                                    <Typography className="SlideDescription">{item?.title}</Typography>
                                                 </Box>
                                             </SwiperSlide>
                                         )

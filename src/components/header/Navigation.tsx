@@ -20,7 +20,7 @@ import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { bodyForGetShoppingCartData } from "@/utils/common"
-import { getLiveDashboardChartData } from "@/redux/reducers/homepageReducer"
+import { CategoriesListDetails, getLiveDashboardChartData } from "@/redux/reducers/homepageReducer"
 
 
 export interface Icategory {
@@ -49,6 +49,8 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
   useEffect(() => {
     dispatch(getLiveDashboardChartData({ url: ENDPOINTS.getLiveDashboardChartData }))
   }, [])
+  const [params] = useState({ page: location.pathname === "/main-home-page/" ? 0 : 1 })
+  useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, params })
   return (
     <Box className="NavigationHeader">
       <Container>

@@ -292,7 +292,7 @@ export const TravelCard = (props: any) => {
   const { place, description, imageUrl, friendlyName } = props
   return (
     <Card className="TravelCard" onClick={() => {
-      navigate(`blog/${friendlyName}`)
+      navigate(`/blog/${friendlyName}`)
     }}>
       <Link className="ImageLink">
         <img src={imageUrl ?? noImage} alt="Travel image" loading="lazy" />

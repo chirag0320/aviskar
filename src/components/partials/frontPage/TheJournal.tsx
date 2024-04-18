@@ -52,10 +52,10 @@ interface Idata {
 }
 
 function TheJournal() {
-    const { configDetails } = useAppSelector((state) => state.homePage)
-    const { data, loading }: Idata = useApiRequest(ENDPOINTS.getBlog, 'post', dataforbody);
+    const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
 
     return (
+        (mainHomePageData && mainHomePageData?.bestAdventure?.length > 0) ?
         <Box id="TheJournal">
             <Container component="section">
                 <SectionHeading
@@ -63,44 +63,22 @@ function TheJournal() {
                     description='Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
                 />
                 <Container className="TheJounalPostWrapperContainer" maxWidth="lg">
-                    {data?.data?.items?.length !== 0 ? (
                         <Box className="TheJounalPostWrapper">
-                            {loading ? (
-                                data?.data?.items?.slice(0, 2).map((destination) => (
-                                    <Box className="TheJounalPost" key={destination.id}>
+                            {mainHomePageData?.bestAdventure?.map((item) => (
+                                    <Box className="TheJounalPost" key={item.title}>
                                         <TravelCard
-                                            friendlyName={destination?.friendlyName}
-                                            place={destination.title}
-                                            description={destination.bodyOverview}
-                                            imageUrl={destination.imageUrl}
+                                            friendlyName={item?.friendlyName}
+                                            place={item.title}
+                                            description={item.overview}
+                                            imageUrl={item.imageUrl}
                                         />
                                     </Box>
                                 ))
-                            ) : (
-                                Array(5)
-                                    .fill(0)
-                                    .map((_, index) => {
-                                        return (
-                                            <Box key={index}>
-                                                <Card className="ProductCard">
-                                                    <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
-                                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                                                        <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
-                                                        <Skeleton animation="wave" height={70} width="95%" />
-                                                    </div>
-                                                </Card>
-                                            </Box>
-                                        );
-                                    })
-                            )
                             }
                         </Box>
-                    ) : (
-                        <RecordNotFound message="No destination available" />
-                    )}
                 </Container>
             </Container>
-        </Box>
+        </Box> : null
     )
 }
 
