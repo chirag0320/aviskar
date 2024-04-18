@@ -26,7 +26,7 @@ function Accounts() {
     const accountsData = useAppSelector(state => state.myVault.accounts)
     const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
     const [addAccount, setAddAccount] = useState<boolean>(false)
-    const [alignment, setAlignment] = React.useState('Individual');
+    const [alignment, setAlignment] = useState<string | null>(null);
     useAPIoneTime({
         service: getAccounts,
         endPoint: ENDPOINTS.getAccounts

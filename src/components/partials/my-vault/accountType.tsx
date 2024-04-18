@@ -33,7 +33,7 @@ const getAccountTypeIcon = (alignment: string) => {
 interface AccountTypeProps {
     open: boolean
     dialogTitle: string
-    alignment: string
+    alignment: string | null
     onClose: () => void
     handleAccountTypeNextButton: () => void
     handleChange: (event: React.MouseEvent<HTMLElement>, newAlignment: string) => void
@@ -42,6 +42,7 @@ interface AccountTypeProps {
 export default function AccountType(props: AccountTypeProps) {
     const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
     const { open, dialogTitle, alignment, handleChange, onClose, handleAccountTypeNextButton } = props
+    console.log("🚀 ~ AccountType ~ alignment:", alignment)
 
     return (
         <>
@@ -78,7 +79,7 @@ export default function AccountType(props: AccountTypeProps) {
                     <Button variant="outlined" onClick={onClose}>
                         Close
                     </Button>
-                    <Button variant="contained" onClick={handleAccountTypeNextButton}>Next</Button>
+                    <Button variant="contained" onClick={handleAccountTypeNextButton} disabled={!alignment}>Next</Button>
                 </Stack>
             </StyledDialog>
         </>

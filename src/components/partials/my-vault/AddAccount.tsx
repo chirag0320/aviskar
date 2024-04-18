@@ -24,7 +24,7 @@ import { Account } from "@/types/myVault"
 interface AddAccountProps {
   open: boolean
   dialogTitle: string
-  alignment: string
+  alignment: string | null
   onClose: () => void
   addressTypeId?: number
   handleAddressUpdate?: (addressData: any, isbilling: any) => any
@@ -71,6 +71,7 @@ function getSchemaFromAlignment(alignment: string) {
 function AddAccount(props: AddAccountProps) {
   const { open, dialogTitle, alignment, onClose, hadleSecondaryAction, existingAccount } = props
   const accountTypeText = useMemo(() => {
+     if(!alignment) return ""
      return existingAccount ? alignment : AccountTypeEnumReverse[alignment];
   }, [existingAccount, AccountTypeEnumReverse, alignment])
   const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
@@ -136,7 +137,7 @@ function AddAccount(props: AddAccountProps) {
       return { ...field[Object.keys(field)[0]], customerAdditionalBeneficiaryId: 0 }
     });
 
-    const accountTypeId = existingAccount ? AccountTypeEnum[alignment] : alignment;
+    const accountTypeId = existingAccount && alignment ? AccountTypeEnum[alignment] : alignment;
 
     const commonAddressQueryForPreparation = {
       customerId: existingAccount?.customerId || undefined,
