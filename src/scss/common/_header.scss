@@ -49,6 +49,14 @@
           gap: 16px;
         }
 
+        .Left {
+          .Logo {
+            img {
+              max-width: 250px;
+            }
+          }
+        }
+
         .Right {
           align-items: center;
           gap: 20px;
