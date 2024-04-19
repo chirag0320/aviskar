@@ -42,7 +42,9 @@ function FrontMain(props: any) {
                     <Stack className="Right">
                         {/* <Link to={ENDPOINTS.login}> */}
                         <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton ActionButton" variant="outlined" startIcon={<Profile />}>{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Button>
-                        <Button name='Contact us' aria-label='Contact us' onClick={handleAuth} variant="outlined" className="ActionButton">Contact Us</Button>
+                        <Button name='Contact us' aria-label='Contact us' onClick={()=>{
+                            navigate('/contactus')
+                        }} variant="outlined" className="ActionButton">Contact Us</Button>
                         {/* </Link> */}
                         <IconButton color="secondary" area-label="HamburgerMenuButton" className="HamburgerButton MenuButton" onClick={toggleMobileMenu}>{!openMobileMenu ? <HamburgerIcon className="HamburgerIcon" /> : <CrossIcon className="CrossIcon" />}</IconButton>
                     </Stack>

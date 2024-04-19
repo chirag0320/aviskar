@@ -32,15 +32,6 @@ function Layout({ children }: any) {
     }
   }, [])
   useAPIoneTime({ service: configDetails, endPoint: ENDPOINTS.getConfigStore })
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      await dispatch(CategoriesListDetails({
-        url: ENDPOINTS.topCategoriesListWithSubCategories, params: {page: 1}
-      }))
-    }
-    fetchCategories();
-  }, [])
   return (
     <Stack id="PageLayout">
       {/* <Suspense fallback={<Box id="HeaderWrapper"></Box>}> */}
@@ -67,15 +58,3 @@ Layout.propTypes = {
 }
 
 export default Layout
-  // useAPIoneTime({
-  //   service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, body: {
-  //     "search": "",
-  //     "pageNo": 0,
-  //     "pageSize": -1,
-  //     "sortBy": "",
-  //     "sortOrder": "",
-  //     "filters": {
-  //       "includeInTopMenu": true
-  //     }
-  //   }
-  // })

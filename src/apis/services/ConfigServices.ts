@@ -103,6 +103,9 @@ class ConfigServices {
   static async getPrivateHoldingList() {
     return axiosInstance.get(ENDPOINTS.getPrivateHoldingsList)
   }
+  static async reOrderAPI(orderId: string | number) {
+    return axiosInstance.get(ENDPOINTS.reOrder.replace('Orderid',orderId.toString()))
+  }
   static async getMainHomePageAPI() {
     return axiosInstance.get(ENDPOINTS.mainHomePage)
   }
