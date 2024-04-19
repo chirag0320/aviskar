@@ -133,8 +133,8 @@ function AddAccount(props: AddAccountProps) {
   })
 
   const onAddressFormSubmitHandler = async (data: any) => {
-    if (!alignment){
-      showToaster({message : "Can not save address as Selected Account Type is not valid" , severity : "warning"})
+    if (!alignment) {
+      showToaster({ message: "Can not save address as Selected Account Type is not valid", severity: "warning" })
       return;
     }
 
@@ -146,8 +146,14 @@ function AddAccount(props: AddAccountProps) {
     });
 
     const accountTypeId = existingAccount && alignment ? AccountTypeEnum[alignment] : alignment;
+
+    const checkingWithGoogleAddress = googleAddressComponents && (data.Address1.trim() !== googleAddressComponents?.address.trim() || data.Address2.trim() !== googleAddressComponents?.address2.trim() || data.City.trim() !== googleAddressComponents?.city.trim() || data.State.trim() !== googleAddressComponents?.state.trim() || (googleAddressComponents?.postalCode && data.Code.trim() !== googleAddressComponents?.postalCode?.trim()))
+
+    const checkingWithExistingAddress = !googleAddressComponents && (existingAccount?.address?.addressLine1.trim() !== data.Address1.trim() || existingAccount?.address?.addressLine2.trim() !== data?.Address2.trim() || data.City.trim() !== existingAccount?.address?.city?.trim() || data.State.trim() !== existingAccount?.address?.stateName.trim())
+
+
     let isAddressVerified = isAddressGoogleVerified;
-    if (googleAddressComponents && (data.Address1.trim() !== googleAddressComponents?.address.trim() || data.Address2.trim() !== googleAddressComponents?.address2.trim() || data.City.trim() !== googleAddressComponents?.city.trim() || data.State.trim() !== googleAddressComponents?.state.trim() || (googleAddressComponents?.postalCode && data.Code.trim() !== googleAddressComponents?.postalCode?.trim()))) {
+    if (checkingWithGoogleAddress || (existingAccount && checkingWithExistingAddress)) {
       isAddressVerified = false
     }
 
