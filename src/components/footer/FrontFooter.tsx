@@ -106,7 +106,10 @@ function FrontFooter() {
                     </Stack> */}
                 </Stack>
             </Container>
-            <Suspense fallback={<Skeleton style={{ height: '30px' }} />}>
+            <Suspense fallback={
+                <></>
+            // <Skeleton style={{ height: '30px' }} />
+            }>
                 <CopyRight />
             </Suspense>
         </Box>

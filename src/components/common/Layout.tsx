@@ -42,7 +42,10 @@ function Layout({ children }: any) {
         {children}
         {/* </Suspense> */}
       </main>
-      {<Suspense fallback={<Skeleton height='30vh'></Skeleton>}>
+      {<Suspense fallback={
+        <></>
+      // <Skeleton height='30vh'></Skeleton>
+      }>
         <LazyFooter />
       </Suspense>}
       {openSessionExpireDialog && <SessionExpiredDialog

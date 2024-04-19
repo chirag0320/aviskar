@@ -24,14 +24,18 @@ const FrontHeader = () => {
     return (
         <Box id="HeaderWrapper" className="FrontHeader">
             {!isMobile && <>
-                <Suspense fallback={<Skeleton style={{ minHeight: '60px' }} />}>
+                <Suspense fallback={
+                    <></>
+                // <Skeleton style={{ minHeight: '60px' }} />
+                }>
                     <FrontPricing />
                 </Suspense>
                 <Divider sx={{ borderBottom: '1px solid #FFFFFF33' }} />
             </>}
             <AppBar position={trigger ? "fixed" : "static"}>
                 {loading && <PageLoader />}
-                <Suspense fallback={<Skeleton style={{ minHeight: '80px' }} />}>
+                <Suspense fallback={<></>}>
+                {/* <Skeleton style={{ minHeight: '80px' }} /> */}
                     <FrontMain toggleMobileMenu={toggleMobileMenu} openMobileMenu={openMobileMenu} />
                 </Suspense>
             </AppBar>
