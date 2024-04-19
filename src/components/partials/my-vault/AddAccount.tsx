@@ -175,15 +175,17 @@ function AddAccount(props: AddAccountProps) {
       }
     }
 
+    console.log("alignment", alignment)
+    if (!alignment) return;
     let prepareAddressQuery;
-    switch (alignment) {
+    switch (AccountTypeEnumReverse[alignment!.toString()]) {
       case "Joint":
         prepareAddressQuery = { ...commonAddressQueryForPreparation } // need to change for addtional beneficary
         break;
       case "Business":
         prepareAddressQuery = { ...commonAddressQueryForPreparation, businessName: data.BusinessName }
         break;
-      case "SuperFund":
+      case "Superfund":
         prepareAddressQuery = { ...commonAddressQueryForPreparation, superfundName: data.SuperfundName, trusteeTypeId: data.TrusteeType, trusteeName: data.TrusteeName }
         break;
       case "Trust":
