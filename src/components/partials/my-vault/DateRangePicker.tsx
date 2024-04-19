@@ -8,7 +8,7 @@ interface Props {
     dateRangeValue: {
         start: CalendarDate,
         end: CalendarDate
-    } | undefined,
+    } | null,
     setDateRangeValue: (value: any) => void
 }
 
