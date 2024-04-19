@@ -100,19 +100,22 @@ const isThisInsideCategory = getLengthOfThePaths(window?.location?.pathname?.toL
               {needToShowProgressLoader && <ProductUpdateCountdown needToShowText={false} />}
               {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
               {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
-                <Link area-label="shopping-cart-link" to="/shopping-cart">
-                  <HoverTooltip
-                    className="CartHoverList"
-                    placement="bottom-start"
-                    disablePortal
-                    lightTheme
-                  >
-                    <CartDropdownMenu />
-                  </HoverTooltip>
-                  <Badge badgeContent={cartItems?.length?.toString()} color="primary" max={99}>
-                    <CartMenu />
-                  </Badge>
-                </Link>
+                <HoverTooltip
+                  className="CartHoverList"
+                  placement="bottom-start"
+                  renderComponent={
+                    <Link area-label="shopping-cart-link" to="/shopping-cart">
+                      <Badge badgeContent={cartItems?.length?.toString()} color="primary" max={99}>
+                        <CartMenu />
+                      </Badge>
+                    </Link>
+                  }
+                  disablePortal
+                  lightTheme
+                >
+                  <CartDropdownMenu />
+                </HoverTooltip>
+
               </Suspense> : null}
               <ActionMenu />
             </Stack>
