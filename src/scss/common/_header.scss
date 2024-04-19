@@ -238,10 +238,10 @@
         .LeftPart {
           justify-content: space-between;
           align-items: center;
-          gap: 40px;
+          gap: 16px;
 
-          @include media($lg) {
-            gap: 3vw;
+          @include media-min($xxl) {
+            gap: 30px;
           }
 
           .MenuLink {
@@ -259,7 +259,7 @@
             &:hover {
               color: $yellowFuel;
             }
-            
+
             &.Active {
               font-weight: 600;
               color: $yellowFuel;
@@ -451,7 +451,7 @@
           .StockReturnWithName {
             border-right: 1px solid #ffffff33;
 
-            &>.MuiTypography-root {
+            & > .MuiTypography-root {
               color: $white;
             }
           }
