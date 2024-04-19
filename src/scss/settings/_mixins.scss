@@ -62,3 +62,48 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+// button: base
+@mixin btn() {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  padding: 8px 18px;
+  text-decoration: none;
+  vertical-align: middle;
+  border-radius: 8px;
+  background-color: transparent;
+  border: none;
+  @include transition;
+}
+
+// button: text-color
+@mixin btn-text-color($default, $hover) {
+  color: $default;
+  &:hover {
+    color: $hover;
+  }
+}
+
+// button: outline-color
+@mixin btn-outline-color($default) {
+  color: $default;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba($default, 0.5);
+  &:hover {
+    background-color: rgba($default, 0.04);
+    border-color: rgba($default, 1);
+  }
+}
+
+// button: contained-color
+@mixin btn-contained-color($default, $hover) {
+  color: $white;
+  border-color: rgba($default, 0.5);
+  background-color: $default;
+  &:hover {
+    background-color: $hover;
+    border-color: rgba($default, 1);
+  }
+}

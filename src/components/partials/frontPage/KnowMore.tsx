@@ -7,15 +7,18 @@ import { SwiperNavigation } from "@/components/common/Utils"
 // Utills
 import { SectionHeading } from "../../common/Utils"
 import { PlayIcon } from "../../../assets/icons/index"
+import { useAppSelector } from '@/hooks'
+import { navigate } from 'gatsby'
 
 function KnowMore() {
+    const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
     const config = {
         slidesPerView: 4,
         centeredSlides: true,
         spaceBetween: 30,
         loop: true,
         speed: 300,
-        initialSlide: 3,
+        initialSlide: 1,
         pagination: {
             clickable: true,
         },
@@ -43,17 +46,52 @@ function KnowMore() {
     };
 
     return (
-        <Box id="KnowMore">
-            <Box className="KnowMoreWrapper">
-                <SectionHeading title="Know More About Queensland" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
-                <Box className="KnowMoreSlideWrapper" component="section" key={'KnowMore'}>
-                    <Box className="SwiperContainer">
-                        <Swiper {...config}>
+        (mainHomePageData && mainHomePageData?.knowMore?.length > 0) ?
+            <Box id="KnowMore">
+                <Box className="KnowMoreWrapper">
+                    <SectionHeading title={configDetails?.["mainhomepage.knowmoretital"]?.value} description={configDetails?.["mainhomepage.knowmoresubtital"]?.value} />
+                    <Box className="KnowMoreSlideWrapper" component="section" key={'KnowMore'}>
+                        <Box className="SwiperContainer">
+                            <Swiper {...config}>
+                                {(mainHomePageData && mainHomePageData?.knowMore?.length > 0) ?
+                                    [...mainHomePageData?.knowMore,...mainHomePageData?.knowMore]?.map((item) => {
+                                        return (
+                                            <SwiperSlide onClick={() => {
+                                                navigate('/blog/' + item.friendlyName)
+                                            }}>
+                                                <Box className="KnowMoreSlide">
+                                                    <img src={item?.imageUrl} alt={item?.title} />
+                                                    <Box className="KnowMoreSlideContentBox">
+                                                        <Typography className="SlideTitle">{item?.title}</Typography>
+                                                        <Box className="HiddenContent">
+                                                            <Typography className="SlideSubTitle">{item?.overview}</Typography>
+                                                            <Button variant='outlined' className="Button" onClick={() => {
+                                                                navigate('/blog/' + item?.friendlyName)
+                                                            }}>Know More</Button>
+                                                        </Box>
+                                                    </Box>
+                                                </Box>
+                                            </SwiperSlide>
+                                        )
+                                    })
+                                    : null}
+                                {/* <SwiperSlide>
+                                <Box className="KnowMoreSlide">
+                                    <img src="https://picsum.photos/600/520" alt="https://picsum.photos/600/520" />
+                                    <Box className="KnowMoreSlideContentBox">
+                                        <Typography className="SlideTitle">The Gold Coast</Typography>
+                                        <Box className="HiddenContent">
+                                            <Typography className="SlideSubTitle">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Typography>
+                                            <Button variant='outlined' className="Button">Know More</Button>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </SwiperSlide>
                             <SwiperSlide>
                                 <Box className="KnowMoreSlide">
                                     <img src="https://picsum.photos/600/520" alt="https://picsum.photos/600/520" />
                                     <Box className="KnowMoreSlideContentBox">
-                                        <Typography className="SlideTitle">The Daintree Rainforest</Typography>
+                                        <Typography className="SlideTitle">The Whitsundays</Typography>
                                         <Box className="HiddenContent">
                                             <Typography className="SlideSubTitle">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Typography>
                                             <Button variant='outlined' className="Button">Know More</Button>
@@ -89,30 +127,6 @@ function KnowMore() {
                                 <Box className="KnowMoreSlide">
                                     <img src="https://picsum.photos/600/520" alt="https://picsum.photos/600/520" />
                                     <Box className="KnowMoreSlideContentBox">
-                                        <Typography className="SlideTitle">The Gold Coast</Typography>
-                                        <Box className="HiddenContent">
-                                            <Typography className="SlideSubTitle">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Typography>
-                                            <Button variant='outlined' className="Button">Know More</Button>
-                                        </Box>
-                                    </Box>
-                                </Box>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <Box className="KnowMoreSlide">
-                                    <img src="https://picsum.photos/600/520" alt="https://picsum.photos/600/520" />
-                                    <Box className="KnowMoreSlideContentBox">
-                                        <Typography className="SlideTitle">The Whitsundays</Typography>
-                                        <Box className="HiddenContent">
-                                            <Typography className="SlideSubTitle">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Typography>
-                                            <Button variant='outlined' className="Button">Know More</Button>
-                                        </Box>
-                                    </Box>
-                                </Box>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <Box className="KnowMoreSlide">
-                                    <img src="https://picsum.photos/600/520" alt="https://picsum.photos/600/520" />
-                                    <Box className="KnowMoreSlideContentBox">
                                         <Typography className="SlideTitle">The Daintree Rainforest</Typography>
                                         <Box className="HiddenContent">
                                             <Typography className="SlideSubTitle">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</Typography>
@@ -120,12 +134,12 @@ function KnowMore() {
                                         </Box>
                                     </Box>
                                 </Box>
-                            </SwiperSlide>
-                        </Swiper>
+                            </SwiperSlide> */}
+                            </Swiper>
+                        </Box>
                     </Box>
                 </Box>
-            </Box>
-        </Box>
+            </Box> : null
     )
 }
 

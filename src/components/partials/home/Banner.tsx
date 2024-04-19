@@ -23,7 +23,7 @@ interface IbannerData {
   cdnUrlSmall: any
 }
 function Banner() {
-  const { data }: any = useApiRequest(ENDPOINTS.getSlider);
+  const { data }: any = useApiRequest(ENDPOINTS.getSlider.replace('typeEnum','1'));
   const isLargeScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('sm'))
   const [tempImgHide, setTempImgHide] = useState(true)
@@ -64,7 +64,6 @@ function Banner() {
       <Box className="SwiperContainer">
         {data?.data?.length > 0 ?
           <Swiper {...config} >
-            <>
               {
                 data?.data?.map((item: IbannerData, index: number) => {
                   return (
@@ -92,11 +91,10 @@ function Banner() {
                   )
                 })
               }
-            </>
           </Swiper>
           :
           <>
-            {!isMobile ? <Skeleton animation="wave" height="75vh" width="100%" style={{ transform: "none", margin: "auto", borderRadius: "0px" }} /> : <Skeleton animation="wave" height="300px" width="100%" style={{ transform: "none", margin: "auto", borderRadius: "0px" }} />}
+            {/* {!isMobile ? <Skeleton animation="wave" height="75vh" width="100%" style={{ transform: "none", margin: "auto", borderRadius: "0px" }} /> : <Skeleton animation="wave" height="300px" width="100%" style={{ transform: "none", margin: "auto", borderRadius: "0px" }} />} */}
           </>
         }
         {<SwiperNavigation />}

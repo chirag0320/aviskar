@@ -129,7 +129,7 @@ export const SectionHeading = React.memo(({ title, description }: SectionHeading
   );
 });
 
-export const PageTitle = React.memo(({ title, backToDashboard, maxWidth }: any) => {
+export const PageTitle = React.memo(({ title, backToDashboard, maxWidth, redirectOnClick }: any) => {
   const handleBackToDashboard = () => {
     navigate('/my-vault')
   };
@@ -137,9 +137,14 @@ export const PageTitle = React.memo(({ title, backToDashboard, maxWidth }: any) 
   return (
     <Box className="PageTitle">
       <Container maxWidth={maxWidth}>
-        <Stack justifyContent="space-between" alignItems="center">
+        <Stack className="AllWrapper" justifyContent="space-between" alignItems="center">
           <Typography variant="h4" component="h2">{title}</Typography>
-          {backToDashboard && <Button className="BackToDashboard" onClick={handleBackToDashboard} startIcon={<ArrowLeft />}>Back To Dashboard</Button>}
+          {(redirectOnClick || backToDashboard) &&
+            <Stack className="ButtonsWrapper">
+              {!!redirectOnClick && <Button variant="contained" className="AddNewButton" startIcon={<PlusIcon />} onClick={redirectOnClick}>Add new</Button>}
+              {backToDashboard && <Button className="BackToDashboard" onClick={handleBackToDashboard} startIcon={<ArrowLeft />}>Back To Dashboard</Button>}
+            </Stack>
+          }
         </Stack>
       </Container>
     </Box>
@@ -152,7 +157,7 @@ export const Breadcrumb = React.memo(({ arr }: any) => {
     >
       <Container>
         <Breadcrumbs aria-label="breadcrumb" separator={<ChevronRight />}>
-          <Link color="inherit" variant="body2" onClick={() => { navigate('/') }}>
+          <Link color="inherit" variant="body2" onClick={() => { navigate('/shop') }}>
             Home
           </Link>
           {arr.map((item: any, index: any) => <Link key={index} color={true ? variable.dark : "inherit"} variant="body2" onClick={() => { navigate(item.navigate) }}>
@@ -235,6 +240,21 @@ export const PriceChangeReturn = React.memo(({ percentage }: { percentage: strin
       <ChevronUpRounded />
       <Typography>{percentage}%</Typography>
     </Stack >
+  )
+})
+
+export const TextFlipAnimation = React.memo(({ frontValue, backValue }: { frontValue: string, backValue: string }) => {
+  const containerWidth = Math.max(frontValue.length, backValue.length) * 10;
+
+  return (
+    <Box className="TextFlipAnimation"
+      width={containerWidth}
+    >
+      <Typography className="Flipper">
+        <Typography variant="inherit" component="span" className="Value Front">{frontValue}</Typography>
+        <Typography variant="inherit" component="span" className="Value Back">{backValue}</Typography>
+      </Typography>
+    </Box>
   )
 })
 

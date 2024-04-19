@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useAppDispatch } from '.'
 import { setLoadingFalse, setLoadingTrue } from '@/redux/reducers/homepageReducer'
 
 const useAPIoneTime = ({ service, endPoint, body, params, conditionalCall = true }: { service: any, endPoint?: string, body?: any, params?: any, callAgain?: any, conditionalCall?: boolean }) => {
     const dispatch = useAppDispatch()
-    useEffect(() => {
+    useLayoutEffect(() => {
         let timeoutId: any;
         dispatch(setLoadingTrue())
         const apiCall = async () => {
@@ -18,7 +18,7 @@ const useAPIoneTime = ({ service, endPoint, body, params, conditionalCall = true
         }
         timeoutId = setTimeout(() => {
             apiCall()
-        }, 1000);
+        }, 500);
         return () => {
             timeoutId && clearTimeout(timeoutId)
         }

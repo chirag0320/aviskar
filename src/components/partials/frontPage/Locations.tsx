@@ -6,8 +6,12 @@ import { SwiperNavigation } from "@/components/common/Utils"
 
 // Utills
 import { SectionHeading } from "../../common/Utils"
+import { useAppSelector } from '@/hooks'
+import noImage from '../../../assets/images/noImage.png'
+import { navigate } from 'gatsby'
 
 function Locations() {
+    const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
     const config = {
         slidesPerView: 4,
         slidesPerColumn: 2,
@@ -51,13 +55,54 @@ function Locations() {
         },
     }
     return (
-        <Box id="Location">
-            <Container maxWidth="lg">
-                <Box className="LocationsWrapper">
-                    <SectionHeading title="Beyond Queensland" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
-                    <Box component="section" key={'Locations'}>
-                        <Box className="SwiperContainer">
-                            <Swiper {...config} >
+        (mainHomePageData && mainHomePageData?.beyond?.length > 0) ?
+            <Box id="Location">
+                <Container maxWidth="lg">
+                    <Box className="LocationsWrapper">
+                        <SectionHeading title={configDetails?.["mainhomepage.beyondtital"]?.value} description={configDetails?.["mainhomepage.beyondsubtital"]?.value} />
+                        <Box component="section" key={'Locations'}>
+                            <Box className="SwiperContainer">
+                                <Swiper {...config} >
+                                    {(mainHomePageData && mainHomePageData?.beyond?.length > 0) ?
+                                        mainHomePageData?.beyond?.map((item) => {
+                                            return (
+                                                <SwiperSlide onClick={() => {
+                                                    navigate('/blog/' + item.friendlyName)
+                                                }}>
+                                                    <Box className="LocationsSlide">
+                                                        <img src={item?.imageUrl ?? noImage} alt={item?.title} />
+                                                        <Typography className="SlideDescription" onClick={() => {
+                                                            navigate('/blog/' + item.friendlyName)
+                                                        }}>{item?.title}</Typography>
+                                                    </Box>
+                                                </SwiperSlide>
+                                            )
+                                        })
+                                        : null}
+                                    {/* <SwiperSlide>
+                                    <Box className="LocationsSlide">
+                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
+                                        <Typography className="SlideDescription">Great Keppel Island</Typography>
+                                    </Box>
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <Box className="LocationsSlide">
+                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
+                                        <Typography className="SlideDescription">Great Keppel Island</Typography>
+                                    </Box>
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <Box className="LocationsSlide">
+                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
+                                        <Typography className="SlideDescription">The Gold Coast</Typography>
+                                    </Box>
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <Box className="LocationsSlide">
+                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
+                                        <Typography className="SlideDescription">Airlie Beach</Typography>
+                                    </Box>
+                                </SwiperSlide>
                                 <SwiperSlide>
                                     <Box className="LocationsSlide">
                                         <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
@@ -87,44 +132,14 @@ function Locations() {
                                         <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
                                         <Typography className="SlideDescription">Airlie Beach</Typography>
                                     </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">Lady Elliot Island</Typography>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">Great Keppel Island</Typography>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">Great Keppel Island</Typography>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">The Gold Coast</Typography>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">Airlie Beach</Typography>
-                                    </Box>
-                                </SwiperSlide>
-                            </Swiper>
-                            {<SwiperNavigation />}
+                                </SwiperSlide> */}
+                                </Swiper>
+                                {<SwiperNavigation />}
+                            </Box>
                         </Box>
-                    </Box>
-                </Box >
-            </Container>
-        </Box>
+                    </Box >
+                </Container>
+            </Box> : null
     )
 }
 

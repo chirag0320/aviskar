@@ -1,7 +1,9 @@
-import React from 'react'
-import { Box, FormControl, Select, RadioGroup, FormControlLabel, FormLabel, Radio, FormHelperText, Checkbox, FormGroup, Switch, TextField, IconButton, InputAdornment } from '@mui/material'
+import React, { useEffect } from 'react'
+import { Box, FormControl, Select, RadioGroup, FormControlLabel, FormLabel, Radio, FormHelperText, Checkbox, FormGroup, Switch, TextField, IconButton, InputAdornment, Button, Stack } from '@mui/material'
 import { Controller } from 'react-hook-form'
 import classNames from 'classnames'
+import PhoneInput from 'react-phone-input-2'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 // Hooks
 import { useToggle } from '../../hooks'
@@ -16,28 +18,32 @@ import {
   EyeOnIcon,
   EyeOffIcon,
 } from '../../assets/icons/index'
+import { clear } from 'console'
 
 interface RenderFieldProps {
   type?: RenderFieldType
   error?: FieldError | boolean
-  register: UseFormRegister<any>
+  register?: UseFormRegister<any>
   placeholder?: string
   label?: string
   variant?: 'standard' | 'outlined' | 'filled'
   color?: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'
   value?: string
-  onChange?: (value:any) => void
+  onChange?: (value?: any) => void
   id?: string
   className?: string
   name: string
-  defaultValue?: string
+  defaultValue?: string | number
   options?: FieldOption[]
   multiline?: boolean
   readOnly?: boolean
   rows?: number
   control?: any
   autoComplete?: string
+  uploadFileHandler?: any
   disabled?: boolean,
+  setSelectedFile?: any,
+  clearErrors?: any,
   getValues?: any,
   margin?: 'dense' | 'normal' | 'none'
   row?: boolean
@@ -73,7 +79,9 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   options,
   defaultValue,
   multiline,
+  clearErrors,
   disabled,
+  uploadFileHandler,
   autoComplete = 'on',
   margin = 'dense',
   fullWidth = true,
@@ -86,6 +94,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   icon,
   checkedIcon,
   endAdornment,
+  setSelectedFile,
   control,
   labelPlacement,
   required,
@@ -93,6 +102,11 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   ...otherProps
 }) => {
   const [passwordVisibility, togglePasswordVisibility] = useToggle(false)
+
+  useEffect(() => {
+    if (setValue)
+      setValue(name, value)
+  }, [value])
 
   let fieldType = null
   switch (type) {
@@ -128,11 +142,16 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 }
                 {...register(name)}
                 {...otherProps}
-                value={value}
+                value={(getValues && getValues(name)) ?? value}
                 onChange={(e) => {
-                  setValue(name, e.target.value)
+                  if (setValue) {
+                    setValue(name, e.target.value)
+                  }
                   if (onChange) {
                     onChange(e.target.value)
+                  }
+                  if (clearErrors && getValues && getValues(name) !== "none") {
+                    clearErrors(name)
                   }
                 }
                 }
@@ -144,6 +163,50 @@ const RenderFields: React.FC<RenderFieldProps> = ({
         </FormControl>
       );
       break;
+    // case 'select':
+    //   fieldType = (
+    //     <FormControl fullWidth={fullWidth} margin={margin} color={color}>
+    //       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+    //       <Controller
+    //         control={control}
+    //         render={({ field }) => (
+    //           <Select
+    //             inputProps={{ id: name }}
+    //             value={field.value}
+    //             defaultValue={defaultValue}
+    //             error={!!error}
+    //             disabled={disabled}
+    //             variant={variant}
+    //             MenuProps={MenuProps}
+    //             sx={
+    //               field.value === 'none' || field.value === ''
+    //                 ? {
+    //                   color: "#1d21296b",
+    //                 }
+    //                 : {
+    //                   color: "#1D2129",
+    //                 }
+    //             }
+    //             {...register(name)}
+    //             {...otherProps}
+    //             onChange={(event) => {
+    //               // Call the provided onChange function
+    //               field.onChange(event)
+    //               if (onChange) {
+    //                 onChange()
+    //               }
+    //               // You can also perform additional actions here if needed
+    //             }}
+    //           >
+    //             {children}
+    //           </Select>
+    //         )}
+    //         name={name}
+    //         {...otherProps}
+    //       />
+    //     </FormControl>
+    //   )
+    //   break
 
     case 'radio':
       if (!options) return null
@@ -276,6 +339,85 @@ const RenderFields: React.FC<RenderFieldProps> = ({
       )
       break
 
+    case "phoneInput":
+      fieldType = (
+        <FormControl
+          fullWidth={fullWidth}
+          margin={margin}
+          {...(error ? { error: true } : {})}
+        >
+          {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+          <Controller
+            name={name}
+            control={control}
+            defaultValue=""
+            rules={{ required: 'Phone number is required' }}
+            render={({ field }) => (
+              <PhoneInput
+                country="au"
+                onChange={(value) => field.onChange(value)}
+                value={value}
+                onBlur={field.onBlur}
+                preferredCountries={['au']}
+                // {...field}
+                inputClass={classNames("form-control", { "error": !!error })}
+              />
+            )}
+            {...register(name)}
+            {...otherProps}
+          />
+        </FormControl>
+      )
+      break
+
+    case 'file':
+      fieldType = (
+        <FormControl
+          fullWidth={fullWidth}
+          margin={margin}
+          {...(error ? { error: true } : {})}
+        >
+          {label && <FormLabel htmlFor={name}>{label}{required && " *"}</FormLabel>}
+          <Stack className="FileUploadWrapper" sx={{
+            position: 'relative',
+            alignItems: 'center',
+          }}>
+            <TextField
+              type="file"
+              id={name}
+              fullWidth={fullWidth}
+              error={!!error}
+              placeholder={placeholder}
+              multiline={multiline}
+              value={value}
+              autoComplete={autoComplete}
+              defaultValue={defaultValue}
+              disabled={disabled}
+              variant={variant}
+              onKeyDown={onKeyDown}
+              sx={{
+                '& .MuiInputBase-input': {
+                  height: '100%',
+                },
+              }}
+              InputProps={{ readOnly, onBlur, endAdornment, }}
+              {...register(name)}
+              {...otherProps}
+              onChange={(e: any) => {
+                if (setSelectedFile) setSelectedFile(e.target?.files[0])
+              }}
+            />
+            <Button className='UploadButton' variant="contained" size="large" sx={{
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              height: '100%',
+            }} onClick={uploadFileHandler}>Upload</Button>
+          </Stack>
+        </FormControl>
+      )
+      break
+
     case 'number':
       fieldType = (
         <FormControl
@@ -288,7 +430,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             name={name}
             control={control}
             defaultValue={value} // Set defaultValue instead of passing value prop
-            render={({ field: { value, onChange } }) => (
+            render={({ field: { } }) => (
               <>
                 <TextField
                   id={name}
@@ -296,23 +438,27 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                   fullWidth={fullWidth}
                   error={!!error}
                   placeholder={placeholder}
-                  value={value}
                   defaultValue={defaultValue}
                   disabled={disabled}
                   autoComplete={autoComplete}
                   variant={variant}
                   InputProps={{ endAdornment }}
                   onChange={(event) => {
+                    // console.log("swdesfrgtfhy")
                     const numberRegex = /^-?\d*\.?\d*$/
                     if (!numberRegex.test(event.target.value)) {
                       return
                     }
-                    onChange(event)
+                    if (onChange) {
+                      console.log("swdesfrgtfhy")
+                      onChange(event)
+                    }
                   }}
                   onKeyDown={(e) => {
                     ;['e', 'E', '+', '-', '.'].includes(e.key) &&
                       e.preventDefault()
                   }}
+                  value={value}
                   {...register(name)}
                   {...otherProps}
                 />
@@ -346,6 +492,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             onKeyDown={onKeyDown}
             // label={label}
             InputProps={{ readOnly, onBlur, endAdornment }}
+            onChange={onChange}
             {...register(name)}
             {...otherProps}
           />

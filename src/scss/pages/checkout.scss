@@ -328,4 +328,9 @@
       }
     }
   }
+  .RecordNotFound {
+    @include media($xs) {
+      @include padding-horizontal(5);
+    }
+  }
 }

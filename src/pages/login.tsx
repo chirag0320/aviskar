@@ -55,10 +55,6 @@ function SignInPage() {
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [loadingForNavigate, setLoadingForNavigate] = useState(false)
   const [loginError, setLoginError] = useState<string | null>(null);
-  if (isLoggedIn) {
-    navigate('/', { replace: true })
-    return;
-  }
   const dispatch: Dispatch<any> = useAppDispatch()
 
   const togglePasswordVisibility = () => {
@@ -107,7 +103,10 @@ function SignInPage() {
       handleSubmit(onSubmit)()
     }
   }
-
+  if (isLoggedIn) {
+    navigate('/', { replace: true })
+    return;
+  }
   return (
     <>
       {openToaster && <Toaster />}

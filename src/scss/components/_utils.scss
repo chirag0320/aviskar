@@ -128,29 +128,59 @@
     }
   }
 
-  .BackToDashboard {
-    font-size: 14px;
-
-    @include media($ssm) {
-      font-size: 12px;
+  .AllWrapper {
+    @include media($sm) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px
     }
 
-    span {
-      margin-right: 4px;
+    .ButtonsWrapper {
+      gap: 50px;
 
-      @include media($ssm) {
-        margin-right: 2px;
+      @include media($md) {
+        gap: 20px;
       }
 
-      svg {
-        width: 16px;
+      @include media($sm) {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .AddNewButton {
+        @include media($md) {
+          padding: 5px 10px;
+          font-size: 14px;
+        }
+      }
+
+      .BackToDashboard {
+        font-size: 14px;
 
         @include media($ssm) {
-          width: 14px;
+          font-size: 12px;
+        }
+
+        span {
+          margin-right: 4px;
+
+          @include media($ssm) {
+            margin-right: 2px;
+          }
+
+          svg {
+            width: 16px;
+
+            @include media($ssm) {
+              width: 14px;
+            }
+          }
         }
       }
     }
   }
+
+
 }
 
 .Breadcrumb {
@@ -272,4 +302,44 @@
 
 .RecordNotFound {
   // text-align: center;
+}
+
+.TextFlipAnimation {
+  perspective: 1000px;
+  position: relative;
+  height: pxToRem(26);
+
+  .Flipper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: flipAnimation 6s infinite;
+
+    @keyframes flipAnimation {
+      0% {
+        transform: rotateX(0deg);
+      }
+
+      50% {
+        transform: rotateX(180deg);
+      }
+
+      100% {
+        transform: rotateX(360deg);
+      }
+    }
+
+    .Value {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      inset: 0;
+
+      &.Back {
+        transform: rotateX(180deg);
+      }
+    }
+  }
 }

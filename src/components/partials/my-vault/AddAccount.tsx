@@ -1,8 +1,7 @@
 
-import React, { useEffect, useState } from "react"
-import { Autocomplete, MenuItem, Button, Stack, TextField, Box, Typography, IconButton, Divider } from "@mui/material"
+import React, { useEffect, useMemo, useState } from "react"
+import { Autocomplete, MenuItem, Button, Stack, TextField, Box, Typography } from "@mui/material"
 import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // Hooks
@@ -12,23 +11,25 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 import StyledDialog from "@/components/common/StyledDialog"
 import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
-import { StateOrCountry, addAddress as addAddressForCheckout, addOrEditAddress as addOrEditAddressForCheckout } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
-import { hasFulfilled } from "@/utils/common"
+import { PhoneNumberCountryCode, hasFulfilled, AccountTypeEnumReverse, AccountTypeEnum } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
-import { AddressType } from "@/types/enums"
-import { addOrEditAddresses as addOrEditAddressForMyVault, addAddress as addAddressForMyVault } from "@/redux/reducers/myVaultReducer"
-import { Delete1Icon } from "@/assets/icons"
+import { addOrEditAccount, getAccounts } from "@/redux/reducers/myVaultReducer"
+import { BussinessAccountFormSchema, IndividualAccountFormSchema, JointAccountFormSchema, SuperFundAccountFormSchema, TrustAccountFormSchema } from "@/utils/accountFormSchemas.schema"
+import { AxiosError } from "axios"
+import AdditionalFields, { IField } from "./AdditionalFields"
+import { Account } from "@/types/myVault"
 
-interface AddAccount {
+interface AddAccountProps {
   open: boolean
   dialogTitle: string
-  alignment: string
+  alignment: string | null
   onClose: () => void
   addressTypeId?: number
   handleAddressUpdate?: (addressData: any, isbilling: any) => any
-  hadleSecondaryAction: () => void
+  hadleSecondaryAction?: () => void
+  existingAccount?: Account
 }
 
 interface Inputs {
@@ -36,11 +37,11 @@ interface Inputs {
   SuperfundName: string,
   TrustName: string,
   TrusteeName: string,
+  TrusteeType: string,
   FirstName: string,
   LastName: string,
   Company: string,
   Contact: string,
-  ContactCode: string,
   Email: string,
   Address1: string,
   Address2: string,
@@ -50,141 +51,172 @@ interface Inputs {
   Code: number,
 }
 
-export const addressSchema = yup.object().shape({
-  BusinessName: yup.string().trim().required('Business name is a required field'),
-  SuperfundName: yup.string().trim().required('Superfund name is a required field'),
-  TrustName: yup.string().trim().required('Trust name is a required field'),
-  TrusteeName: yup.string().trim().required('Trustee name is a required field'),
-  FirstName: yup.string().trim().required('First name is a required field'),
-  LastName: yup.string().trim().required('Last name is a required field'),
-  Company: yup.string().trim(),
-  Contact: yup.string().trim().required(),
-  ContactCode: yup.string().required(),
-  Email: yup.string().email().required(),
-  Address1: yup.string().trim().required("Address 1 in required field"),
-  Address2: yup.string().trim(),
-  City: yup.string().required().trim(),
-  State: yup.string().required(),
-  Country: yup.string().required(),
-  Code: yup.string().required('Zip / Postal code is required').trim()
-})
+function getSchemaFromAlignment(alignment: string) {
+  switch (alignment) {
+    case "Individual":
+      return IndividualAccountFormSchema;
+    case "Business":
+      return BussinessAccountFormSchema;
+    case "Joint":
+      return JointAccountFormSchema;
+    case "Superfund":
+      return SuperFundAccountFormSchema;
+    case "Trust":
+      return TrustAccountFormSchema;
+    default:
+      return IndividualAccountFormSchema
+  }
+}
 
-function AddAccount(props: AddAccount) {
-  const { open, dialogTitle, alignment, onClose, addressTypeId, handleAddressUpdate, hadleSecondaryAction } = props
+function AddAccount(props: AddAccountProps) {
+  const { open, dialogTitle, alignment, onClose, hadleSecondaryAction, existingAccount } = props
+  const accountTypeText = useMemo(() => {
+    if (!alignment) return ""
+    return existingAccount ? alignment : AccountTypeEnumReverse[alignment];
+  }, [existingAccount, AccountTypeEnumReverse, alignment])
+  const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
   const dispatch = useAppDispatch();
-  const countryList = useAppSelector(state => state.checkoutPage.countryList);
-  const stateListall = useAppSelector(state => state.checkoutPage.stateList);
   const [stateList, setStateList] = useState([])
   const [stateId, setStateId] = useState<number | null>(null);
   const { showToaster } = useShowToaster();
   const loading = useAppSelector(state => state.checkoutPage.loading);
   const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
-  const [countryValue, setcountryValue] = useState<any>('-1')
+  const [countryValue, setcountryValue] = useState<any>('')
   const [stateValue, setstateValue] = useState<any>('')
+  const [additionalFields, setAdditionalFields] = useState<IField[]>([{ [Math.random().toString(36).substring(7)]: { firstName: "", lastName: "" } }]);
+  const [isAddressGoogleVerified, setIsAddressGoogleVerified] = useState<boolean>(false)
+  const [phoneValue, setPhoneValue] = useState("");
+
+  useEffect(() => {
+    setValue('Country', "none")
+    if (accountTypeText === "Trust" || accountTypeText === "Superfund") {
+      setValue('TrusteeType', "none")
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!existingAccount) return;
+    setValue('State', existingAccount?.address.stateName);
+    setStateId(existingAccount?.address.stateId);
+    setValue('Country', existingAccount?.address.countryId?.toString())
+    setValue("Contact", existingAccount?.phoneNumber)
+    setcountryValue(existingAccount?.address.countryId?.toString())
+    setstateValue(existingAccount?.address.stateName)
+    setPhoneValue(existingAccount?.phoneNumber)
+    setIsAddressGoogleVerified(true)
+    const additionalBeneficiary = existingAccount?.additionalBeneficiary.map((beneficiary) => {
+      return {
+        [beneficiary.id]: {
+          firstName: beneficiary.firstName,
+          lastName: beneficiary.lastName
+        }
+      }
+    })
+    additionalBeneficiary.splice(1, 1)
+    console.log("🚀 ~ additionalBeneficiary ~ additionalBeneficiary:", additionalBeneficiary)
+    setAdditionalFields(() => additionalBeneficiary)
+    return () => {
+      reset()
+    }
+  }, [existingAccount])
+
   const {
     register,
     reset,
     handleSubmit,
+    clearErrors,
     control,
     setValue,
     getValues,
     formState: { errors },
   } = useForm<Inputs>({
-    resolver: yupResolver(addressSchema)
+    resolver: yupResolver(getSchemaFromAlignment(accountTypeText))
   })
 
   const onAddressFormSubmitHandler = async (data: any) => {
-    const addressQuery = {
-      addressTypeId,
+    const additionalBeneficiary = additionalFields.map((field) => {
+      // id static
+      return { ...field[Object.keys(field)[0]], customerAdditionalBeneficiaryId: 0 }
+    });
+
+    const accountTypeId = existingAccount && alignment ? AccountTypeEnum[alignment] : alignment;
+    let isAddressVerified = isAddressGoogleVerified;
+    if (googleAddressComponents && (data.Address1.trim() !== googleAddressComponents?.address.trim() || data.Address2.trim() !== googleAddressComponents?.address2.trim() || data.City.trim() !== googleAddressComponents?.city.trim() || data.State.trim() !== googleAddressComponents?.state.trim() || (googleAddressComponents?.postalCode && data.Code.trim() !== googleAddressComponents?.postalCode?.trim()))) {
+      isAddressVerified = false
+    }
+
+    const commonAddressQueryForPreparation = {
+      customerId: existingAccount?.customerId || undefined,
       firstName: data.FirstName,
       lastName: data.LastName,
-      company: data.Company,
       phoneNumber: data.Contact,
       email: data.Email,
-      isVerified: true, // static
-      addressLine1: data.Address1,
-      addressLine2: data.Address2,
+      isVerified: isAddressVerified, // static
       city: data.City,
-      stateId: stateId || 0,
-      stateName: data.State,
-      postcode: data.Code,
-      countryId: data.Country,
+      state: stateId || 0,
+      country: data.Country,
+      accountTypeId: accountTypeId,
+      additionalBeneficiary: additionalBeneficiary,
+      address: {
+        addressId: existingAccount?.address.addressId || undefined,
+        firstName: data.FirstName,
+        lastName: data.LastName,
+        phoneNumber: data.Contact,
+        email: data.Email,
+        isVerified: isAddressVerified, // static
+        addressLine1: data.Address1,
+        addressLine2: data.Address2,
+        city: data.City,
+        state: stateId || 0,
+        stateName: data.State,
+        postcode: data.Code,
+        countryId: data.Country,
+        accountTypeId: accountTypeId,
+      }
     }
 
-    // to show whether it is coming from my-vault or checkout
-    if (!addressTypeId) {
-      addressQuery["addressTypeId"] = undefined;
+    console.log("alignment", alignment)
+    if (!alignment) return;
+    let prepareAddressQuery;
+    switch (AccountTypeEnumReverse[alignment!.toString()]) {
+      case "Joint":
+        prepareAddressQuery = { ...commonAddressQueryForPreparation } // need to change for addtional beneficary
+        break;
+      case "Business":
+        prepareAddressQuery = { ...commonAddressQueryForPreparation, businessName: data.BusinessName }
+        break;
+      case "Superfund":
+        prepareAddressQuery = { ...commonAddressQueryForPreparation, superfundName: data.SuperfundName, trusteeTypeId: data.TrusteeType, trusteeName: data.TrusteeName }
+        break;
+      case "Trust":
+        prepareAddressQuery = { ...commonAddressQueryForPreparation, trusteeName: data.TrusteeName, trustName: data.TrustName }
+        break;
+      default:
+        prepareAddressQuery = { ...commonAddressQueryForPreparation }
+        break;
+    }
 
-      const response = await dispatch(addOrEditAddressForMyVault(
-        {
-          url: ENDPOINTS.addOrEditAddressesInMyVault,
-          body: { ...addressQuery }
-        }
-      ))
+    const response = await dispatch(addOrEditAccount({
+      url: ENDPOINTS.addOrEditAccount,
+      body: prepareAddressQuery
+    }))
 
-      if (hasFulfilled(response.type)) {
-        onClose()
-        reset()
-        showToaster({ message: "Address saved successfully", severity: "success" })
-        const addressId = (response?.payload as any)?.data?.data;
-        dispatch(addAddressForMyVault({
-          addressId: addressId,
-          firstName: data.FirstName,
-          lastName: data.LastName,
-          company: data.Company,
-          phoneNumber: data.Contact,
-          email: data.Email,
-          addressLine1: data.Address1,
-          addressLine2: data.Address2,
-          city: data.City,
-          stateName: data.State,
-          postcode: data.Code,
-          countryId: data.Country,
-          stateId: stateId,
-        }))
-      } else {
-        showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
-      }
+    if (hasFulfilled(response.type)) {
+      onClose()
+      reset()
+      showToaster({ message: "Account saved successfully", severity: "success" })
+      await dispatch(getAccounts({ url: ENDPOINTS.getAccounts }))
     }
     else {
-      const response = await dispatch(addOrEditAddressForCheckout({
-        url: ENDPOINTS.addOrEditAddress,
-        body: {
-          ...addressQuery
-        }
-      }))
-      let addressId;
-      if (hasFulfilled(response?.type)) {
-        addressId = (response?.payload as any)?.data?.data;
-      }
-
-      const needToadd = {
-        ...addressQuery,
-        addressId: addressId,
-        addressType: addressTypeId,
-        customerId: null,
-        state: addressQuery.stateId,
-        country: addressQuery.countryId,
-        phone1: addressQuery.phoneNumber,
-        isSource: null,
-        "countryName": "Australia"
-      }
-      if (hasFulfilled(response.type)) {
-        dispatch(addAddress(needToadd))
-        handleAddressUpdate!(needToadd, addressTypeId == AddressType.Billing)
-        onClose()
-        reset()
-        showToaster({ message: "Address saved successfully", severity: "success" })
-      } else {
-        showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
-      }
+      showToaster({ message: ((response.payload as AxiosError).response?.data as { message?: string }).message || "Failed to save address! Please try again", severity: "error" })
     }
   }
 
   useEffect(() => {
     return () => {
+      if (existingAccount) return;
       reset()
-      setcountryValue(-1)
+      setcountryValue("none")
       setstateValue('')
     }
   }, [open]);
@@ -192,7 +224,7 @@ function AddAccount(props: AddAccount) {
   useEffect(() => {
     if (googleAddressComponents) {
       setValue('Address1', googleAddressComponents.address)
-      countryList.forEach((country: StateOrCountry) => {
+      configDropdowns?.countryList.forEach((country) => {
         if (country.name === googleAddressComponents.country.trim()) {
           setValue('Country', country.id.toString())
           setcountryValue(country.id.toString())
@@ -206,19 +238,28 @@ function AddAccount(props: AddAccount) {
       if (googleAddressComponents?.postalCode) {
         setValue("Code", Number(googleAddressComponents?.postalCode));
       }
+      setIsAddressGoogleVerified(true)
+      clearErrors('Country')
+      clearErrors('State')
+      clearErrors('City')
+      clearErrors('Address1')
+      clearErrors('Code')
     }
   }, [googleAddressComponents])
 
   useEffect(() => {
-    const data: any = stateListall?.filter((state: any) => {
-      return state.enumValue == countryValue || countryValue == -1
+    const data: any = configDropdowns?.stateList.filter((state: any) => {
+      return state.enumValue == countryValue || countryValue == "none"
     })
     setStateList(data)
-  }, [stateListall, countryValue])
+  }, [configDropdowns?.stateList, countryValue])
 
   const OnChange = (value: any) => {
     setcountryValue(value)
+    setValue('Country', value)
+    setIsAddressGoogleVerified(false)
   }
+  // console.log("🚀 ~ AddAccount ~ additionalFields:" , alignment)
   return (
     <StyledDialog
       id="AddAccountDialog"
@@ -229,9 +270,9 @@ function AddAccount(props: AddAccount) {
       maxWidth="sm"
     >
       <form onSubmit={handleSubmit(onAddressFormSubmitHandler)}>
-        <Typography className="AccountType">Account Type : <Typography variant="inherit" component="span">{alignment}</Typography></Typography>
+        <Typography className="AccountType">Account Type : <Typography variant="inherit" component="span">{accountTypeText}</Typography></Typography>
         <Stack className="FieldsWrapper">
-          {alignment === "Business" && <Stack className="Fields BusinessFields">
+          {accountTypeText === "Business" && <Stack className="Fields BusinessFields">
             <RenderFields
               register={register}
               error={errors.BusinessName}
@@ -242,7 +283,7 @@ function AddAccount(props: AddAccount) {
               margin='none'
             />
           </Stack>}
-          {alignment === "SuperFund" && <Stack className="Fields SuperfundFields">
+          {accountTypeText === "Superfund" && <Stack className="Fields SuperfundFields">
             <RenderFields
               register={register}
               error={errors.SuperfundName}
@@ -256,14 +297,19 @@ function AddAccount(props: AddAccount) {
               <RenderFields
                 register={register}
                 type="select"
+                clearErrors={clearErrors}
                 control={control}
-                error={errors.Country}
-                name="Country"
+                error={errors.TrusteeType}
+                setValue={setValue}
+                getValues={getValues}
+                name="TrusteeType"
                 variant='outlined'
                 margin='none'
               >
                 <MenuItem value="none">Select trustee</MenuItem>
-                <MenuItem value="1">Select trustee</MenuItem>
+                {configDropdowns && configDropdowns.trusteeTypeList.map((trustee) =>
+                  <MenuItem key={trustee.id} value={trustee.id}>{trustee.name}</MenuItem>
+                )}
               </RenderFields>
               <RenderFields
                 register={register}
@@ -276,19 +322,24 @@ function AddAccount(props: AddAccount) {
               />
             </Stack>
           </Stack>}
-          {alignment === "Trust" && <Stack className="Fields TrustFields">
+          {accountTypeText === "Trust" && <Stack className="Fields TrustFields">
             <Stack className="Column">
               <RenderFields
                 register={register}
                 type="select"
+                clearErrors={clearErrors}
                 control={control}
-                error={errors.Country}
-                name="Country"
+                error={errors.TrusteeType}
+                setValue={setValue}
+                getValues={getValues}
+                name="TrusteeType"
                 variant='outlined'
                 margin='none'
               >
-                <MenuItem value="none">Select trustee</MenuItem>
-                <MenuItem value="1">Select trustee</MenuItem>
+                <MenuItem value="none" selected>Select trustee</MenuItem>
+                {configDropdowns && configDropdowns.trusteeTypeList.map((trustee) =>
+                  <MenuItem key={trustee.id} value={trustee.id}>{trustee.name}</MenuItem>
+                )}
               </RenderFields>
               <RenderFields
                 register={register}
@@ -316,6 +367,7 @@ function AddAccount(props: AddAccount) {
                 register={register}
                 error={errors.FirstName}
                 name="FirstName"
+                defaultValue={existingAccount?.firstName}
                 placeholder="Enter first name *"
                 control={control}
                 variant='outlined'
@@ -325,6 +377,7 @@ function AddAccount(props: AddAccount) {
                 register={register}
                 error={errors.LastName}
                 name="LastName"
+                defaultValue={existingAccount?.lastName}
                 placeholder="Enter last name *"
                 control={control}
                 variant='outlined'
@@ -335,32 +388,22 @@ function AddAccount(props: AddAccount) {
               <Box className="ContactField">
                 <RenderFields
                   register={register}
-                  type="select"
+                  type="phoneInput"
                   control={control}
-                  error={errors.ContactCode}
-                  name="ContactCode"
+                  // defaultValue={existingAccount?.phoneNumber}
+                  setValue={setValue}
+                  name="Contact"
+                  value={phoneValue}
                   variant="outlined"
                   margin="none"
                   className="ContactSelect"
-                >
-                  <MenuItem value="91">+91</MenuItem>
-                  <MenuItem value="11">+11</MenuItem>
-                </RenderFields>
-                <RenderFields
-                  register={register}
                   error={errors.Contact}
-                  name="Contact"
-                  type="number"
-                  placeholder="Enter contact *"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                  className="ContactTextField"
-                />
+                ></RenderFields>
               </Box>
               <RenderFields
                 register={register}
                 error={errors.Email}
+                defaultValue={existingAccount?.email}
                 name="Email"
                 placeholder="Enter email id *"
                 control={control}
@@ -373,6 +416,7 @@ function AddAccount(props: AddAccount) {
               <RenderFields
                 register={register}
                 error={errors.Address1}
+                defaultValue={existingAccount?.address.addressLine1}
                 name="Address1"
                 placeholder="Enter address line 1 *"
                 control={control}
@@ -382,6 +426,7 @@ function AddAccount(props: AddAccount) {
               <RenderFields
                 register={register}
                 error={errors.Address2}
+                defaultValue={existingAccount?.address.addressLine2}
                 name="Address2"
                 placeholder="Enter address line 2"
                 control={control}
@@ -393,6 +438,7 @@ function AddAccount(props: AddAccount) {
               <RenderFields
                 register={register}
                 error={errors.City}
+                defaultValue={existingAccount?.address.city}
                 name="City"
                 placeholder="Enter city *"
                 control={control}
@@ -402,14 +448,15 @@ function AddAccount(props: AddAccount) {
               <Autocomplete
                 disablePortal
                 options={stateList}
-                getOptionLabel={option => {
+                defaultValue={existingAccount?.address.stateName}
+                getOptionLabel={(option: any) => {
                   if (typeof option === 'string') {
                     return option;
                   }
                   return option.name;
                 }}
                 renderInput={(params) => <TextField placeholder="Enter state *" {...params} error={errors.State as boolean | undefined} />}
-                onChange={(_, value) => {
+                onChange={(_, value: any) => {
                   if (!value) {
                     return;
                   }
@@ -421,7 +468,7 @@ function AddAccount(props: AddAccount) {
                     setStateId(value?.id ? value?.id : null);
                   }
                 }}
-                inputValue={stateValue}
+                inputValue={stateValue ?? ""}
                 // defaultValue={getValues('State')}
                 onInputChange={(event, newInputValue) => {
                   setValue('State', newInputValue); // Update the form value with the manually typed input
@@ -435,6 +482,7 @@ function AddAccount(props: AddAccount) {
                 register={register}
                 error={errors.Code}
                 name="Code"
+                defaultValue={existingAccount?.address.postcode?.toString()}
                 placeholder="Enter zip / postal code *"
                 control={control}
                 variant='outlined'
@@ -445,74 +493,26 @@ function AddAccount(props: AddAccount) {
                 type="select"
                 control={control}
                 error={errors.Country}
+                defaultValue={existingAccount?.address.countryId ?? "none"}
                 name="Country"
+                clearErrors={clearErrors}
                 variant='outlined'
                 margin='none'
-                defaultValue={"-1"}
+                // defaultValue={"-1
+                getValues={getValues}
                 value={countryValue}
                 setValue={setValue}
                 onChange={OnChange}
+
               >
-                <MenuItem value="-1">Select country *</MenuItem>
-                {countryList.map((country: StateOrCountry) => (
+                <MenuItem value="none" selected>Select country *</MenuItem>
+                {configDropdowns?.countryList.map((country) => (
                   <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
                 ))}
               </RenderFields>
             </Stack>
           </Stack>
-          {alignment === "Joint" && <Stack className="Fields JointFields">
-            <Stack className="Header">
-              <Typography>Additional Beneficiary / Account Holder</Typography>
-              <Button variant="contained" color="success">Add more</Button>
-            </Stack>
-            <Stack
-              className="FieldsWrapper"
-              divider={<Divider flexItem />}
-            >
-              <Stack className="Column">
-                <RenderFields
-                  register={register}
-                  error={errors.FirstName}
-                  name="FirstName"
-                  placeholder="Enter first name *"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                />
-                <RenderFields
-                  register={register}
-                  error={errors.LastName}
-                  name="LastName"
-                  placeholder="Enter last name *"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                />
-                <IconButton><Delete1Icon /></IconButton>
-              </Stack>
-              <Stack className="Column">
-                <RenderFields
-                  register={register}
-                  error={errors.FirstName}
-                  name="FirstName"
-                  placeholder="Enter first name"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                />
-                <RenderFields
-                  register={register}
-                  error={errors.LastName}
-                  name="LastName"
-                  placeholder="Enter last name"
-                  control={control}
-                  variant='outlined'
-                  margin='none'
-                />
-                <IconButton><Delete1Icon /></IconButton>
-              </Stack>
-            </Stack>
-          </Stack>}
+          {accountTypeText === "Joint" && <AdditionalFields fields={additionalFields} setFields={setAdditionalFields} />}
         </Stack>
         <Stack className="ActionWrapper">
           <Button variant="outlined" onClick={hadleSecondaryAction}>

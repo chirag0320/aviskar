@@ -16,7 +16,7 @@ import { ENDPOINTS } from "@/utils/constants";
 import { downloadOrderInvoice, getOrderDetailsData } from "@/redux/reducers/orderDetailsReducer";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import Toaster from "@/components/common/Toaster";
-import { hasFulfilled, paymentMethodType, roundOfThePrice } from "@/utils/common";
+import { formatDate, hasFulfilled, paymentMethodType, roundOfThePrice } from "@/utils/common";
 import useShowToaster from "@/hooks/useShowToaster";
 import { AxiosError } from "axios";
 import Loader from "@/components/common/Loader";

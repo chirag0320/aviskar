@@ -63,10 +63,13 @@ import SelectDropdown from "./SelectDropdown";
 import OutlinedCheckIcon from "./OutlinedCheckIcon";
 import Map1Icon from "./Map1Icon";
 import Map2Icon from "./Map2Icon";
+import Map3Icon from "./Map3Icon";
 import PencilIcon from "./PencilIcon";
 import ClipboardIcon from "./ClipboardIcon";
 import ShieldIcon from "./ShieldIcon";
+import Shield1Icon from "./Shield1Icon";
 import CreditCard from "./CreditCard";
+import LockIcon from "./LockIcon";
 
 // Social
 import FacebookIcon from "./social/FacebookIcon";
@@ -169,10 +172,13 @@ export {
   OptionsIcon,
   Map1Icon,
   Map2Icon,
+  Map3Icon,
   PencilIcon,
   ClipboardIcon,
   ShieldIcon,
+  Shield1Icon,
   CreditCard,
+  LockIcon,
 
   // Social
   FacebookIcon,

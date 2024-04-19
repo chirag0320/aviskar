@@ -6,9 +6,10 @@ import LargerScreenFilters from "./LargerScreenFilters"
 import { navigate } from "gatsby"
 import useDebounce from "@/hooks/useDebounce"
 import { ENDPOINTS } from "@/utils/constants"
-import { requestBodyDefault } from "@/pages/[category]"
+import { requestBodyDefault } from "@/pages/category/[category]"
 import { getCategoryData, setClearFilters, setSortBy } from "@/redux/reducers/categoryReducer"
 import { useAppDispatch, useAppSelector } from "@/hooks"
+import { getlastPartOfPath } from "@/utils/common"
 let timeOut: any;
 function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: number, searchParams: URLSearchParams }) {
   const isSmallScreen: boolean = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
@@ -22,7 +23,7 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
 
   const debounceFilter = useDebounce(selectedFilters, 700);
   const debouncePrice = useDebounce(selectedPrice, 700);
-
+console.log(location.pathname,"location.pathname")
   useEffect(() => {
     if (setPage) {
       // if (parseInt(searchParams.get("page")!) == 1) {
@@ -58,7 +59,7 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
         };
 
         const argumentForService = {
-          url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `${location.pathname}`,
+          url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${getlastPartOfPath(location.pathname)}`,
           body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, ...commonArgument } : { ...requestBodyDefault, ...commonArgument }
         }
 
@@ -84,7 +85,7 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
     };
 
     const argumentForService = {
-      url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `${location.pathname}`,
+      url: searchParams.has("keyword") ? ENDPOINTS.search : ENDPOINTS.getCategoryData + `/${getlastPartOfPath(location.pathname)}`,
       body: searchParams.has("keyword") ? { ...requestBodyDefault, search: searchParams.get("keyword")!, ...commonArgument } : { ...requestBodyDefault, ...commonArgument }
     }
     if (timeOut) {
@@ -107,7 +108,7 @@ function CategoryFilters({ page, searchParams, setPage }: { setPage: any, page: 
           data.map((item: any, index: number) => (
             <Fragment key={item.categoryId}>
               <ListItem>
-                <ListItemButton onClick={() => navigatePageHandler(item.categoryId, item.searchEngineFriendlyPageName)}>
+                <ListItemButton onClick={() => navigatePageHandler(item.categoryId, item.searchEngineFriendlyPageName)} selected={false}>
                   <ListItemText primary={item.name} primaryTypographyProps={{ variant: "body2" }} />
                 </ListItemButton>
               </ListItem>

@@ -5,7 +5,7 @@ import { Skeleton, Stack } from "@mui/material";
 // Components
 import LazyHeader from "../header/index"
 import { convertMinutesToMilliseconds, storeLastPage } from "@/utils/common";
-import { CategoriesListDetails, configDetails } from "@/redux/reducers/homepageReducer";
+import { configDetails } from "@/redux/reducers/homepageReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { useAppDispatch, useAppSelector, useToggle } from "@/hooks";
@@ -32,24 +32,6 @@ function Layout({ children }: any) {
     }
   }, [])
   useAPIoneTime({ service: configDetails, endPoint: ENDPOINTS.getConfigStore })
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      await dispatch(CategoriesListDetails({
-        url: ENDPOINTS.topCategoriesListWithSubCategories, body: {
-          "search": "",
-          "pageNo": 0,
-          "pageSize": -1,
-          "sortBy": "",
-          "sortOrder": "",
-          "filters": {
-            "includeInTopMenu": true
-          }
-        }
-      }))
-    }
-    fetchCategories();
-  }, [])
   return (
     <Stack id="PageLayout">
       {/* <Suspense fallback={<Box id="HeaderWrapper"></Box>}> */}
@@ -60,7 +42,10 @@ function Layout({ children }: any) {
         {children}
         {/* </Suspense> */}
       </main>
-      {<Suspense fallback={<Skeleton height='30vh'></Skeleton>}>
+      {<Suspense fallback={
+        <></>
+        // <Skeleton height='30vh'></Skeleton>
+      }>
         <LazyFooter />
       </Suspense>}
       {openSessionExpireDialog && <SessionExpiredDialog
@@ -76,15 +61,3 @@ Layout.propTypes = {
 }
 
 export default Layout
-  // useAPIoneTime({
-  //   service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, body: {
-  //     "search": "",
-  //     "pageNo": 0,
-  //     "pageSize": -1,
-  //     "sortBy": "",
-  //     "sortOrder": "",
-  //     "filters": {
-  //       "includeInTopMenu": true
-  //     }
-  //   }
-  // })

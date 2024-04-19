@@ -13,9 +13,10 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemButton,
 } from "@mui/material";
 import classNames from "classnames";
-
+import { Account } from "@/types/myVault"
 // Type
 import type { SelectChangeEvent } from "@mui/material"
 
@@ -42,7 +43,7 @@ import noImage from '../../assets/images/noImage.png'
 import { ProductStockStatus, ProductUpdateCountdown } from "./Utils"
 import { IFeaturedProducts } from "../partials/home/FeaturedProducts"
 import { Link as NavigationLink, navigate } from "gatsby"
-import { bodyForGetShoppingCartData, deliveryMethodMessage, roundOfThePrice } from "@/utils/common"
+import { bodyForGetShoppingCartData, calculationOfThePremiumAndDiscount, deliveryMethodMessage, roundOfThePrice } from "@/utils/common"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import { productImages } from "@/utils/data"
 import { CartItem } from "@/types/shoppingCart";
@@ -54,6 +55,7 @@ import useShowToaster from "@/hooks/useShowToaster";
 import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer";
 import { Address } from "@/types/myVault";
 import UpdateAddress from "../partials/checkout/UpdateAddress";
+import AddAccount from "../partials/my-vault/AddAccount";
 
 interface Iproduct {
   product: IFeaturedProducts;
@@ -152,12 +154,13 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                 </Typography>
                 : null}
             </Stack>
-            {product?.priceWithDetails?.discount &&
+            {/* this is commented due to new implementation of the save and off calculation */}
+            {/* {product?.priceWithDetails?.discount &&
               product?.priceWithDetails?.discount !== 0 ? (
               <Typography variant="overline" className="Discount">
                 ${product?.priceWithDetails?.discount?.toFixed(2)} Off
               </Typography>
-            ) : null}
+            ) : null} */}
           </Stack>
           <Stack className="Bottom">
             <Typography variant="overline" className="PriceMessage">
@@ -168,9 +171,9 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
             </Typography>
             {/* @todo :- below will be static for now */}
             <Stack className="RightSide">
-              <Typography variant="overline" className="DiscountMessage">
-                {configDetailsState?.productboxdiscounttext?.value}
-              </Typography>
+              {(product?.premiumDiscount && product?.productPremium) ? <Typography variant="overline" className="DiscountMessage">
+                {calculationOfThePremiumAndDiscount(product?.productPremium, product?.premiumDiscount)!}
+              </Typography> : null}
               {/* <HoverTooltip
                 placement="top-end"
                 renderComponent={
@@ -218,6 +221,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
               </Button>
             }
             lightTheme
+            disablePortal={true}
             arrow
           >
             <Box className="Offers">
@@ -261,6 +265,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
               </IconButton>
             }
             lightTheme
+            disablePortal={true}
             arrow
           >
             <Stack className="Content">
@@ -286,7 +291,7 @@ export const TravelCard = (props: any) => {
   const { place, description, imageUrl, friendlyName } = props
   return (
     <Card className="TravelCard" onClick={() => {
-      navigate(`blog/${friendlyName}`)
+      navigate(`/blog/${friendlyName}`)
     }}>
       <Link className="ImageLink">
         <img src={imageUrl ?? noImage} alt="Travel image" loading="lazy" />
@@ -303,12 +308,14 @@ export const TravelCard = (props: any) => {
 };
 
 export const StatsCard = (props: any) => {
-  const { title, icon, statsNumber, bgColor } = props;
+  const { title, icon, statsNumber, bgColor, onClick } = props;
   return (
-    <Card className="StatsCard" style={{ background: bgColor }}>
+    <Card className="StatsCard">
       <CardContent>
         <Box className="TopWrapper">
-          {icon ? icon : <OrdersIcon />}
+          <Stack>
+            {icon ? icon : <OrdersIcon />}
+          </Stack>
           <Typography variant="subtitle2" component="h3">
             {title}
           </Typography>
@@ -317,7 +324,7 @@ export const StatsCard = (props: any) => {
           <Typography className="StatNumber" variant="h4">
             {statsNumber}
           </Typography>
-          <IconButton>
+          <IconButton onClick={onClick}>
             <ArrowRight />
           </IconButton>
         </Stack>
@@ -326,35 +333,61 @@ export const StatsCard = (props: any) => {
   );
 };
 export const UserStatsCard = (props: any) => {
-  const { title, icon, bgColor } = props;
+  const { title, icon, bgColor, currentPrice, movevalue, movePercentage } = props;
+  const [liveHoldingsOptions, setLiveHoldingsOptions] = useState<boolean>(false)
+  const tooltipRef: any = useRef(null)
+
+  const handleTooltipClose = (event: any) => {
+    setLiveHoldingsOptions(false)
+  }
+  const handleTooltipOpen = (event: any) => {
+    setLiveHoldingsOptions(true)
+  }
+  const handleClickAway = (event: any) => {
+    setLiveHoldingsOptions(false)
+  }
+
+
   return (
     <Card className="UserStatsCard" style={{ borderColor: bgColor }}>
       <CardContent
-        sx={{
-          "&:after": {
-            border: `50px solid ${bgColor}`,
-          },
-          "&:before": {
-            background: bgColor,
-          },
-        }}
+      // sx={{
+      //   "&:after": {
+      //     border: `50px solid ${bgColor}`,
+      //   },
+      //   "&:before": {
+      //     background: bgColor,
+      //   },
+      // }}
       >
         <Box className="TopWrapper">
           <Box className="Return Profit">
             {/* pass Profit and Loss class */}
-            <Typography variant="h4">$1030.80</Typography>
+            <Typography variant="h4">${roundOfThePrice(currentPrice)}</Typography>
             <Typography variant="body1">
               <FilledUpButton />
-              4.50 (0.44%)
+              {roundOfThePrice(movevalue)} ({roundOfThePrice(movePercentage)}%)
             </Typography>
           </Box>
-          <IconButton>
-            <OptionsIcon />
-          </IconButton>
+          <ClickTooltip
+            name='liveholdings'
+            open={liveHoldingsOptions}
+            placement="bottom-end"
+            onClose={handleTooltipClose}
+            onClickAway={handleClickAway}
+            renderComponent={<IconButton name='liveholdings' ref={tooltipRef} className="OptionButton" onClick={handleTooltipOpen}><OptionsIcon /></IconButton>}
+            lightTheme
+            disablePortal={false}
+            arrow
+          >
+            <ToolTipOptionsForTheChartCards />
+          </ClickTooltip>
         </Box>
         <Box className="BottomWrapper">
           <Box className="Left">
-            {icon ? icon : <OrdersIcon />}
+            <Stack>
+              {icon ? icon : <OrdersIcon />}
+            </Stack>
             <Typography variant="subtitle2" component="h3">
               {title}
             </Typography>
@@ -365,9 +398,46 @@ export const UserStatsCard = (props: any) => {
     </Card>
   );
 };
-
+export const ToolTipOptionsForTheChartCards = () => {
+  return (<List>
+    <ListItem>
+      <ListItemButton onClick={() => { navigate('/my-vault/order-history') }}>
+        <ListItemText primary="View orders" />
+      </ListItemButton>
+    </ListItem>
+    <ListItem>
+      <ListItemButton onClick={() => {
+        navigate('/my-vault/private-holding-add')
+      }}>
+        <ListItemText primary="Add private holding " />
+      </ListItemButton>
+    </ListItem>
+    <ListItem>
+      <ListItemButton onClick={() => {
+        navigate('/my-vault/private-holding')
+      }}>
+        <ListItemText primary="View private holdings" />
+      </ListItemButton>
+    </ListItem>
+  </List>)
+}
 export const LineChartCard = (props: any) => {
-  const { place, description, bgColor } = props;
+  const { place, description, bgColor, currentPrice, low, high, valueForChart, title } = props;
+  console.log("🚀 ~ LineChartCard ~ low:", low)
+  const [liveHoldingsOptions, setLiveHoldingsOptions] = useState<boolean>(false)
+  const tooltipRef: any = useRef(null)
+
+  const handleTooltipClose = (event: any) => {
+    setLiveHoldingsOptions(false)
+  }
+  const handleTooltipOpen = (event: any) => {
+    setLiveHoldingsOptions(true)
+  }
+  const handleClickAway = (event: any) => {
+    setLiveHoldingsOptions(false)
+  }
+
+
   return (
     <Card className="LineChartCard" style={{ borderColor: bgColor }}>
       <CardContent
@@ -383,34 +453,44 @@ export const LineChartCard = (props: any) => {
         <Box className="TopWrapper">
           <Box className="Left">
             {/* pass Profit and Loss class */}
-            <Typography variant="subtitle2">My Vault</Typography>
+            <Typography variant="subtitle2">{title}</Typography>
             <Typography variant="body1" sx={{ mt: 0.75 }}>
               Current
             </Typography>
             <Typography variant="h4" sx={{ mt: 0.5 }}>
-              1030.80
+              {roundOfThePrice(currentPrice)}
             </Typography>
           </Box>
           <Box className="Right">
-            <IconButton>
-              <OptionsIcon />
-            </IconButton>
+            <ClickTooltip
+              name='liveholdings'
+              open={liveHoldingsOptions}
+              placement="bottom-end"
+              onClose={handleTooltipClose}
+              onClickAway={handleClickAway}
+              renderComponent={<IconButton name='liveholdings' ref={tooltipRef} className="OptionButton" onClick={handleTooltipOpen}><OptionsIcon /></IconButton>}
+              lightTheme
+              disablePortal={true}
+              arrow
+            >
+              <ToolTipOptionsForTheChartCards />
+            </ClickTooltip>
             <Typography variant="body1">3 Day Range</Typography>
           </Box>
         </Box>
         <Box className="BottomWrapper">
           <Box className="Chart">
-            <LineBarChart />
+            <LineBarChart value={valueForChart?.map((val: number | string) => ({ uv: val }))} />
           </Box>
           <Box className="RangeBar">
             <Box className="Price">
-              <Typography variant="body1">907.5</Typography>
-              <Typography variant="body1">1040.3</Typography>
+              <Typography variant="body1">{roundOfThePrice(low)}</Typography>
+              <Typography variant="body1">{roundOfThePrice(high)}</Typography>
             </Box>
             <Box className="HLCircuit">
               <Typography variant="caption">LOW</Typography>
               <Box className="HLCircuitRange">
-                <Box className="UpArrow" sx={{ left: "20%" }}>
+                <Box className="UpArrow" sx={{ left: (high - low) == 0 ? '0%' : ((high-currentPrice) * 100 / (high - low)) + "%" }}>
                   {/* add percentage in left to slide arrowAicon */}
                   <FilledUpButton />
                 </Box>
@@ -524,14 +604,16 @@ interface AddressCardProps {
   email: string,
   phoneNumber: string,
   address: Address,
-  showDelete: any,
+  showDelete: boolean,
   handleDelete?: any,
-  id?: number
+  id?: number,
+  accountData?: Account
 }
 
 export const AddressCard = (props: AddressCardProps) => {
-  const { id, accountType, accountName, firstName, lastName, email, phoneNumber, address, showDelete, handleDelete } = props;
+  const { id, accountType, accountName, firstName, lastName, email, phoneNumber, address, showDelete, handleDelete, accountData } = props;
   const [openUpdateAddress, setOpenUpdateAddress] = useState<boolean>(false)
+  const [openUpdateAccount, setOpenUpdateAccount] = useState(false);
 
   const handleUpdateAddress = () => {
     setOpenUpdateAddress(true);
@@ -540,13 +622,19 @@ export const AddressCard = (props: AddressCardProps) => {
   const handleCloseUpdateAddress = () => {
     setOpenUpdateAddress(false);
   }
+  const handleUpdateAccount = () => {
+    setOpenUpdateAccount(true);
+  }
 
+  const handleCloseUpdateAccount = () => {
+    setOpenUpdateAccount(false);
+  }
   return (
     <Box className="AddressCard">
       <Stack className="CardHeader">
         <Typography variant="subtitle2" className="AccountType">{accountType}</Typography>
         <Box className="ActionButton">
-          <Button variant="contained" size="small" color="success" onClick={handleUpdateAddress}>Edit</Button>
+          <Button variant="contained" size="small" color="success" onClick={accountData ? handleUpdateAccount : handleUpdateAddress}>Edit</Button>
           {showDelete && <Button variant="contained" size="small" color="error" onClick={() => handleDelete(id)}>Delete</Button>}
         </Box>
       </Stack>
@@ -561,7 +649,8 @@ export const AddressCard = (props: AddressCardProps) => {
         </Typography>}
       </Box>
 
-      <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={handleCloseUpdateAddress} existingAddress={address} isComingFromMyVault={true}/>
+      <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={handleCloseUpdateAddress} existingAddress={address} isComingFromMyVault={true} />
+      {openUpdateAccount && <AddAccount dialogTitle="Update account" open={openUpdateAccount} alignment={accountData?.accountType ?? "1"} onClose={handleCloseUpdateAccount} existingAccount={accountData} hadleSecondaryAction={handleCloseUpdateAccount} />}
     </Box>
   );
 };

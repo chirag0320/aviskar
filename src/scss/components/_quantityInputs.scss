@@ -1,0 +1,52 @@
+.QuantityInputs {
+    .QuantityLabel {
+        font-size: 1rem;
+        font-weight: 500;
+        color: $dark;
+        line-height: 1.625rem;
+        margin-bottom: 4px;
+    }
+
+    .Quantity {
+        border: 1px solid $palladium;
+        border-radius: 8px;
+        width: fit-content;
+
+
+        .MuiIconButton-root {
+            border-radius: initial;
+            // height: 32px;
+
+            // @include media($xs) {
+            //     height: 28px;
+            //     width: 28px;
+            // }
+
+            &.Minus {
+                border-right: 1px solid $palladium;
+            }
+
+            &.Plus {
+                border-left: 1px solid $palladium;
+            }
+        }
+
+        .MuiTextField-root {
+            width: 40px;
+
+            .MuiInputBase-root {
+                height: 100%;
+
+                .MuiInputBase-input {
+                    padding: 0;
+                    height: inherit;
+                    text-align: center;
+                }
+
+                .MuiOutlinedInput-notchedOutline {
+                    display: none;
+                }
+            }
+        }
+    }
+}

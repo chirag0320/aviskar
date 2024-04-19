@@ -116,6 +116,15 @@
                       color: $yellowFuel;
                       background-color: transparent;
                     }
+                    &.Mui-selected {
+                      color: $yellowFuel;
+                      background-color: transparent;
+                      .MuiListItemText-root {
+                        .MuiTypography-root {
+                          font-weight: 500;
+                        }
+                      }
+                    }
                   }
                 }
                 .MuiDivider-root {
@@ -230,18 +239,6 @@
       .Pagination {
         justify-content: center;
         margin-top: 60px;
-        .MuiPagination-root {
-          .MuiPagination-ul {
-            .MuiPaginationItem-root {
-              min-width: 28px;
-              height: 28px;
-              &.MuiPaginationItem-ellipsis {
-                min-width: 20px;
-                margin: 0;
-              }
-            }
-          }
-        }
       }
     }
   }

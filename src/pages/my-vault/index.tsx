@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -20,7 +20,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination, A11y } from "swiper/modules";
 import useApiRequest from "@/hooks/useAPIRequest";
 import { Url } from "url";
-import { ENDPOINTS } from "@/utils/constants";
+import { ENDPOINTS, changePasswordURL } from "@/utils/constants";
 import { SwiperNavigation } from "@/components/common/Utils";
 
 // Components
@@ -37,6 +37,15 @@ import { Breadcrumb } from "@/components/common/Utils";
 
 // Assets
 import { ArrowRight, OrdersIcon, PrivateHoldingIcon, AllotedHldingIcon, SmartMetalsIcon, AccountsIcon, AddressesIcon, RewardPointsIcon, BuyBackOrderIcon, MyVaultIcon, MyGoldIcon, MySilverIcon } from "../../assets/icons/index";
+import useAPIoneTime from "@/hooks/useAPIoneTime";
+import { getMyVaultHomePageChartData, getMyVaultHomePageData } from "@/redux/reducers/myVaultReducer";
+import { useAppSelector } from "@/hooks";
+import { navigate } from "gatsby";
+import ConfigServices from "@/apis/services/ConfigServices";
+import useRequireLogin from "@/hooks/useRequireLogin";
+import RecordNotFound from "@/components/common/RecordNotFound";
+import Toaster from "@/components/common/Toaster";
+import useShowToaster from "@/hooks/useShowToaster";
 
 interface VaultProps {
   id: number;
@@ -51,7 +60,10 @@ interface VaultProps {
 }
 
 function Vault() {
-  const { data }: any = useApiRequest(ENDPOINTS.getSlider);
+  const openToaster = useAppSelector(state => state.homePage.openToaster)
+  const { showToaster } = useShowToaster()
+  const { loadingForCheckingLogin } = useRequireLogin()
+  const { myVaultHomePageData, myVaultHomePageChartData } = useAppSelector((state) => state.myVault)
   const isLargeScreen = useMediaQuery((theme: Theme) =>
     theme.breakpoints.up("lg")
   );
@@ -79,19 +91,43 @@ function Vault() {
       delay: 8000,
     },
   };
+  const [state,] = useState({ service: getMyVaultHomePageData })
+  const [state2,] = useState({ service: getMyVaultHomePageChartData })
+  useAPIoneTime(state)
+  useAPIoneTime(state2)
+  const reOrderFunction = useCallback(async (orderId: any) => {
+    try {
+      const res = await ConfigServices.reOrderAPI(orderId)
+      if (res.data.data) {
+        navigate('/shopping-cart')
+        return;
+      }else{
+        showToaster({ message: res.data.message, severity: "error" })
+      }
+    } catch (error) {
+      console.log("🚀 ~ reOrderFunction ~ res:", error)
+    }
+  }, [])
+  if (loadingForCheckingLogin) {
+    return
+  }
   return (
     <Layout>
+      {openToaster && <Toaster />}
       <Box className="VaultPage">
-        <Breadcrumb arr={[{ navigate: '/vault', name: 'vault' }]} />
+        <Breadcrumb arr={[{ navigate: '/my-vault', name: 'My Vault' }]} />
         <Box className="HeroSection">
           <Container>
             <Box className="HeroSectionWrapper">
               <Box className="Left">
-                <Typography variant="subtitle2" component="h2">
+                {/* <Typography variant="subtitle2" component="h2"  sx={{ mb: 3.25 }}>
                   Good Morning Steve!
-                </Typography>
-                <Typography variant="body1" sx={{ mt: 3.25 }}>
-                  Monitor real time performance and valuations of your
+                </Typography> */}
+                {/* @ts-ignore */}
+                <Typography variant="body1" dangerouslySetInnerHTML={{
+                  __html: myVaultHomePageData?.customerGreeting
+                }}>
+                  {/* Monitor real time performance and valuations of your
                   collection or investment portfolio even if you purchased
                   elsewhere. My Vault enables you to see the value of your
                   portfolio in real time, add private holdings, check your
@@ -100,61 +136,57 @@ function Vault() {
                   order is fully complete. Allocated Vault Storage holdings will
                   ve migrated to this platform on july 1st. In the interim
                   Allocated Vault Storage clients can request holding statements
-                  by calling our office during business hours.
+                  by calling our office during business hours. */}
                 </Typography>
-                <Button size="large" variant="contained" sx={{ mt: 5 }}>
+                <Button size="large" variant="contained" sx={{ mt: 5 }} onClick={() => {
+                  navigate('/shop')
+                }}>
                   Shop Now
                 </Button>
                 <Box className="VaultStats">
-                  <StatsCard title="View Orders" statsNumber="5" icon={<OrdersIcon />} bgColor="rgb(52 145 250 / 6%)" />
-                  <StatsCard title="Private Holding" icon={<PrivateHoldingIcon />} statsNumber="35" bgColor="rgb(234 162 43 / 6%)" />
-                  <StatsCard title="Allocated Holdings" statsNumber="8" icon={<AllotedHldingIcon />} bgColor="rgb(255 31 31 / 6%)" />
-                  <StatsCard title="Smart Metals" statsNumber="460" icon={<SmartMetalsIcon />} bgColor="rgb(0 128 1 / 6%)" />
+                  <StatsCard onClick={() => { navigate('/my-vault/accounts/') }} title="Accounts" statsNumber={myVaultHomePageData?.Customers} icon={<AccountsIcon />} bgColor="rgb(52 145 250 / 6%)" />
+                  <StatsCard onClick={() => { navigate('/my-vault/addresses/') }} title="Addresses" statsNumber={myVaultHomePageData?.Addresses} icon={<AddressesIcon />} bgColor="rgb(234 162 43 / 6%)" />
+                  <StatsCard onClick={() => { navigate('/my-vault/order-history/') }} title="View Orders" statsNumber={myVaultHomePageData?.Order} icon={<OrdersIcon />} bgColor="rgb(52 145 250 / 6%)" />
+                  <StatsCard onClick={() => { navigate('/my-vault/buy-back-order-history/') }} title="Buyback Orders" statsNumber={myVaultHomePageData?.["Buyback Order"]} icon={<BuyBackOrderIcon />} bgColor="rgb(0 128 1 / 6%)" />
+
                 </Box>
               </Box>
               <Box className="Right">
                 <Box id="Banner" component="section" key={"banner"}>
                   <Box className="SwiperContainer">
-                    {data?.data?.length > 0 ? (
+                    {myVaultHomePageData?.sliders?.length ? (
                       <Swiper {...config}>
                         <>
-                          {data?.data?.map(
-                            (item: VaultProps, index: number) => {
-                              return (
-                                <SwiperSlide key={`BannerSlider-${index}`}>
-                                  <Box
-                                    className="Wrapper"
-                                    sx={{
-                                      position: "relative",
-                                      width: "100%",
-                                      height: "100%",
-                                    }}
-                                  >
-                                    {
-                                      <>
-                                        <img
-                                          className="BannerImage"
-                                          rel="prefetch"
-                                          loading="eager"
-                                          src={
-                                            isLargeScreen
-                                              ? "https://picsum.photos/880/688"
-                                              : item.cdnUrlSmall
-                                          }
-                                          // src={
-                                          //   isLargeScreen
-                                          //     ? item.cdnUrlLarge
-                                          //     : item.cdnUrlSmall
-                                          // }
-                                          alt="background"
-
-                                        />
-                                      </>
-                                    }
-                                  </Box>
-                                </SwiperSlide>
-                              );
-                            }
+                          {myVaultHomePageData?.sliders?.map((item, index: number) => {
+                            return (
+                              <SwiperSlide key={`BannerSlider-${index}`}>
+                                <Box
+                                  className="Wrapper"
+                                  sx={{
+                                    position: "relative",
+                                    width: "100%",
+                                    height: "100%",
+                                  }}
+                                >
+                                  {
+                                    <>
+                                      <img
+                                        className="BannerImage"
+                                        rel="prefetch"
+                                        loading="eager"
+                                        src={
+                                          isLargeScreen
+                                            ? item.cdnUrlLarge
+                                            : item.cdnUrlSmall
+                                        }
+                                        alt="background"
+                                      />
+                                    </>
+                                  }
+                                </Box>
+                              </SwiperSlide>
+                            );
+                          }
                           )}
                         </>
                       </Swiper>
@@ -194,12 +226,12 @@ function Vault() {
         <Box className="UserStats" sx={{ mt: 9.625 }}>
           <Container>
             <Box className="UserStatsWrapper">
-              <UserStatsCard title="My Vault" icon={<MyVaultIcon />} bgColor="#3491fa14" />
-              <UserStatsCard title="My Gold" icon={<MyGoldIcon />} bgColor="rgb(234 162 43 / 5%)" />
-              <UserStatsCard title="My Silver" icon={<MySilverIcon />} bgColor="rgb(255 31 31 / 5%)" />
-              <LineChartCard />
-              <LineChartCard />
-              <LineChartCard />
+              <UserStatsCard title="My Vault" icon={<MyVaultIcon />} bgColor="#3491fa14" currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} movevalue={myVaultHomePageChartData?.totalValueFacturation?.move} movePercentage={myVaultHomePageChartData?.totalValueFacturation?.percentage} />
+              <UserStatsCard title="My Gold" icon={<MyGoldIcon />} bgColor="rgb(234 162 43 / 5%)" currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} movevalue={myVaultHomePageChartData?.goldValueFacturation?.move} movePercentage={myVaultHomePageChartData?.goldValueFacturation?.percentage} />
+              <UserStatsCard title="My Silver" icon={<MySilverIcon />} bgColor="rgb(255 31 31 / 5%)" currentPrice={myVaultHomePageChartData?.silverValueFacturation?.percentage} movevalue={myVaultHomePageChartData?.silverValueFacturation?.move} movePercentage={myVaultHomePageChartData?.silverValueFacturation?.percentage} />
+              <LineChartCard title="My Vault" currentPrice={myVaultHomePageChartData?.totalValueFacturation?.current} low={myVaultHomePageChartData?.totalValueFacturation?.low} high={myVaultHomePageChartData?.totalValueFacturation?.high} valueForChart={myVaultHomePageChartData?.totalValueFacturation?.linechartdata} />
+              <LineChartCard title="My Gold" currentPrice={myVaultHomePageChartData?.goldValueFacturation?.current} low={myVaultHomePageChartData?.goldValueFacturation?.low} high={myVaultHomePageChartData?.goldValueFacturation?.high} valueForChart={myVaultHomePageChartData?.goldValueFacturation?.linechartdata} />
+              <LineChartCard title="My Silver" currentPrice={myVaultHomePageChartData?.silverValueFacturation?.current} low={myVaultHomePageChartData?.silverValueFacturation?.low} high={myVaultHomePageChartData?.silverValueFacturation?.high} valueForChart={myVaultHomePageChartData?.silverValueFacturation?.linechartdata} />
             </Box>
           </Container>
         </Box>
@@ -207,48 +239,47 @@ function Vault() {
           <Container>
             <Box className="UserInfoWrapper">
               <Box className="Left">
-                <StatsCard title="Smart Metals" statsNumber="5" icon={<AccountsIcon />} bgColor="rgb(52 145 250 / 6%)" />
-                <StatsCard title="Addresses" statsNumber="2" icon={<AddressesIcon />} bgColor="rgb(234 162 43 / 6%)" />
-                <StatsCard title="Rewards Points" statsNumber="460" icon={<RewardPointsIcon />} bgColor="rgb(255 31 31 / 6%)" />
-                <StatsCard title="Buyback Orders" statsNumber="8" icon={<BuyBackOrderIcon />} bgColor="rgb(0 128 1 / 6%)" />
+                <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Allocated Holdings" statsNumber="todo" icon={<AllotedHldingIcon />} bgColor="rgb(255 31 31 / 6%)" />
+                <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Private Holding" icon={<PrivateHoldingIcon />} statsNumber={"todo"} bgColor="rgb(234 162 43 / 6%)" />
+                <StatsCard onClick={() => { navigate('/my-vault/smart-metals/') }} title="Smart Metals" statsNumber="todo" icon={<SmartMetalsIcon />} bgColor="rgb(0 128 1 / 6%)" />
+                <StatsCard onClick={() => { navigate('/rewardpoints/history') }} title="Rewards Points" statsNumber={myVaultHomePageData?.["Reward Point"]} icon={<RewardPointsIcon />} bgColor="rgb(255 31 31 / 6%)" />
               </Box>
               <Box className="Right">
                 <Box id="Banner" component="section" key={"banner"}>
                   <Box className="SwiperContainer">
-                    {data?.data?.length > 0 ? (
+                    {myVaultHomePageData?.discoverSliders?.length ? (
                       <Swiper {...config}>
                         <>
-                          {data?.data?.map(
-                            (item: VaultProps, index: number) => {
-                              return (
-                                <SwiperSlide key={`BannerSlider-${index}`}>
-                                  <Box
-                                    className="Wrapper"
-                                    sx={{
-                                      position: "relative",
-                                      width: "100%",
-                                      height: "100%",
-                                    }}
-                                  >
-                                    {
-                                      <>
-                                        <img
-                                          className="BannerImage"
-                                          rel="prefetch"
-                                          loading="eager"
-                                          src={
-                                            isLargeScreen
-                                              ? item.cdnUrlLarge
-                                              : item.cdnUrlSmall
-                                          }
-                                          alt="background"
-                                        />
-                                      </>
-                                    }
-                                  </Box>
-                                </SwiperSlide>
-                              );
-                            }
+                          {myVaultHomePageData?.discoverSliders?.map((item, index: number) => {
+                            return (
+                              <SwiperSlide key={`BannerSlider-${index}`}>
+                                <Box
+                                  className="Wrapper"
+                                  sx={{
+                                    position: "relative",
+                                    width: "100%",
+                                    height: "100%",
+                                  }}
+                                >
+                                  {
+                                    <>
+                                      <img
+                                        className="BannerImage"
+                                        rel="prefetch"
+                                        loading="eager"
+                                        src={
+                                          isLargeScreen
+                                            ? item.cdnUrlLarge
+                                            : item.cdnUrlSmall
+                                        }
+                                        alt="background"
+                                      />
+                                    </>
+                                  }
+                                </Box>
+                              </SwiperSlide>
+                            );
+                          }
                           )}
                         </>
                       </Swiper>
@@ -290,17 +321,20 @@ function Vault() {
             <Box className="RecentOrdersWrapper">
               <Stack className="RecentOrdersTitleWrapper">
                 <Typography variant="h4">Recent Orders</Typography>
-                <Button endIcon={<ArrowRight />}>View All</Button>
+                <Button endIcon={<ArrowRight />} onClick={() => {
+                  navigate('/my-vault/order-history/')
+                }}>View All</Button>
               </Stack>
-              <RecentOrderTable />
+              {(myVaultHomePageData?.recentOrders?.length && myVaultHomePageData?.recentOrders?.length > 0) ? <RecentOrderTable recentOrders={myVaultHomePageData?.recentOrders!} reOrderFunction={reOrderFunction} /> : <RecordNotFound message="No orders are available" />}
             </Box>
           </Container>
         </Box>
-        <Box className="RewardSection" sx={{ mt: 7.5 }}>
+        {/* @info:: below newsletter is commneted it will be use in future */}
+        {/* <Box className="RewardSection" sx={{ mt: 7.5 }}>
           <Container>
             <Stack className="RewardWrapper">
               <Typography className="rewardText">Your Rewards Points: </Typography>
-              <Typography variant="h4" className="rewardPoints"> 460</Typography>
+              <Typography variant="h4" className="rewardPoints">{myVaultHomePageData?.availableRewardPoints}</Typography>
             </Stack>
 
           </Container>
@@ -314,27 +348,32 @@ function Vault() {
               <Card className="AccountInformationCard">
                 <Typography variant="subtitle2">Contact Information</Typography>
                 <Typography variant="body2" sx={{ fontWeight: 500, mt: 1.5 }}>
-                  Steve Test
+                  {myVaultHomePageData?.customerInformation?.firstName + ' ' + myVaultHomePageData?.customerInformation?.lastName}
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 0.6 }}>
-                  stevetest@123.com
+                  {myVaultHomePageData?.customerInformation?.email}
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 0.6 }}>
+                  {myVaultHomePageData?.customerInformation?.phoneNumber}
                 </Typography>
                 <Button
                   variant="text"
                   sx={{ mt: 2, color: "#000", fontWeight: 600 }}
+                  onClick={() => {
+                    navigate(changePasswordURL)
+                  }}
                 >
                   Change password
                 </Button>
               </Card>
               <Card className="AccountInformationCard">
                 <Typography variant="subtitle2">Newsletters</Typography>
-                <Typography variant="body2" sx={{ mt: 1.5 }}>
-                  You are currently not subscribed to any newsletter.
+                <Typography variant="body2" sx={{ mt: 1.5 }} dangerouslySetInnerHTML={{ __html: myVaultHomePageData?.newsLetterDescription ?? "" }}>
                 </Typography>
               </Card>
             </Box>
           </Container>
-        </Box>
+        </Box> */}
       </Box>
     </Layout>
   );

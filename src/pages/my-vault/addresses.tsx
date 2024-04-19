@@ -16,8 +16,11 @@ import useShowToaster from "@/hooks/useShowToaster"
 import Toaster from "@/components/common/Toaster"
 import AddAddress from "@/components/partials/checkout/AddAddress"
 import { getStateAndCountryLists } from "@/redux/reducers/checkoutReducer"
+import { navigate } from "gatsby"
+import useRequireLogin from "@/hooks/useRequireLogin"
 
 function Addresses() {
+  const { loadingForCheckingLogin } = useRequireLogin()
   const openToaster = useAppSelector(state => state.homePage.openToaster)
   const loading = useAppSelector(state => state.myVault.loading)
   const dispatch = useAppDispatch()
@@ -53,7 +56,12 @@ function Addresses() {
       showToaster({ message: "Address remove failed! Please Try again", severity: "error" })
     }
   }
-
+  if (loadingForCheckingLogin) {
+    return
+  }
+  const onClickAction = () => {
+    handleAddAddress()
+  }
   return (
     <>
       <Loader open={loading} />
@@ -64,30 +72,26 @@ function Addresses() {
           title="Address"
           lang="en"
         />
-        <PageTitle title="Addresses" backToDashboard={true}/>
+        <PageTitle title="Addresses" backToDashboard={true} redirectOnClick={onClickAction} />
 
         <Box className="AddressesPage">
           <Container>
             <Box className="AddressList">
-              <Box sx={{ textAlign: 'right' }}>
-                <Button onClick={handleAddAddress} variant="outlined" startIcon={<PlusIcon />}>Add new</Button>
-              </Box>
               <Box className="AddressListWrapper">
                 {addressesData?.map(address => (
-                  <Box className="AddressListWrapper" key={address.customerId}>
-                    <AddressCard
-                      // accountName={address.accountName}
-                      // accountType={address.accountType}
-                      id={address.addressId}
-                      address={address}
-                      firstName={address.firstName}
-                      lastName={address.lastName}
-                      email={address.email}
-                      phoneNumber={address.phoneNumber}
-                      showDelete={() => { }}
-                      handleDelete={handleDeleteAddress}
-                    />
-                  </Box>
+                  <AddressCard
+                    key={address.customerId}
+                    // accountName={address.accountName}
+                    // accountType={address.accountType}
+                    id={address.addressId}
+                    address={address}
+                    firstName={address.firstName}
+                    lastName={address.lastName}
+                    email={address.email}
+                    phoneNumber={address.phoneNumber}
+                    showDelete={true}
+                    handleDelete={handleDeleteAddress}
+                  />
                 ))}
               </Box>
             </Box>

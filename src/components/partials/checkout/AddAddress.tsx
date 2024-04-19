@@ -14,11 +14,11 @@ import RenderFields from "@/components/common/RenderFields"
 import GoogleMaps from "@/components/common/GoogleMaps"
 import { StateOrCountry, addAddress as addAddressForCheckout, addOrEditAddress as addOrEditAddressForCheckout } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
-import { hasFulfilled } from "@/utils/common"
+import { PhoneNumberCountryCode, hasFulfilled } from "@/utils/common"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
 import { AddressType } from "@/types/enums"
-import { addOrEditAddresses as addOrEditAddressForMyVault, addAddress as addAddressForMyVault } from "@/redux/reducers/myVaultReducer"
+import { addOrEditAddresses as addOrEditAddressForMyVault, addAddress as addAddressForMyVault, getAddresses } from "@/redux/reducers/myVaultReducer"
 
 interface AddAddress {
     open: boolean
@@ -33,7 +33,6 @@ interface Inputs {
     LastName: string,
     Company: string,
     Contact: string,
-    ContactCode: string,
     Email: string,
     Address1: string,
     Address2: string,
@@ -48,14 +47,13 @@ export const addressSchema = yup.object().shape({
     LastName: yup.string().trim().required('Last name is a required field'),
     Company: yup.string().trim(),
     Contact: yup.string().trim().required(),
-    ContactCode: yup.string().required(),
     Email: yup.string().email().required(),
     Address1: yup.string().trim().required("Address 1 in required field"),
     Address2: yup.string().trim(),
     City: yup.string().required().trim(),
     State: yup.string().required(),
-    Country: yup.string().required(),
-    Code: yup.string().required('Zip / Postal code is required').trim()
+    Country: yup.string().notOneOf(["none"], "Country is required field"),
+    Code: yup.string().required('Zip / Postal code is required').trim(),
 })
 
 function AddAddress(props: AddAddress) {
@@ -68,11 +66,15 @@ function AddAddress(props: AddAddress) {
     const { showToaster } = useShowToaster();
     const loading = useAppSelector(state => state.checkoutPage.loading);
     const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
-    const [countryValue, setcountryValue] = useState<any>('-1')
+    const [countryValue, setcountryValue] = useState<any>('none')
+    const [isAddressGoogleVerified, setIsAddressGoogleVerified] = useState<boolean>(false)
+    // console.log("🚀 ~ AddAddress ~ isAddressGoogleVerified:", isAddressGoogleVerified)
     const [stateValue, setstateValue] = useState<any>('')
+
     const {
         register,
         reset,
+        clearErrors,
         handleSubmit,
         control,
         setValue,
@@ -82,7 +84,18 @@ function AddAddress(props: AddAddress) {
         resolver: yupResolver(addressSchema)
     })
 
+    useEffect(() => {
+        setValue("Country", "none");
+    }, [])
+
     const onAddressFormSubmitHandler = async (data: any) => {
+        // set is verified false if different from google account address not matches with current address
+        let isAddressVerified = isAddressGoogleVerified;
+        if (googleAddressComponents && (data.Address1.trim() !== googleAddressComponents?.address.trim() || data.Address2.trim() !== googleAddressComponents?.address2.trim() || data.City.trim() !== googleAddressComponents?.city.trim() || data.State.trim() !== googleAddressComponents?.state.trim() || (googleAddressComponents?.postalCode && data.Code.trim() !== googleAddressComponents?.postalCode?.trim()))) {
+            isAddressVerified = false
+        }
+
+
         const addressQuery = {
             addressTypeId,
             firstName: data.FirstName,
@@ -90,7 +103,7 @@ function AddAddress(props: AddAddress) {
             company: data.Company,
             phoneNumber: data.Contact,
             email: data.Email,
-            isVerified: true, // static
+            isVerified: isAddressVerified,
             addressLine1: data.Address1,
             addressLine2: data.Address2,
             city: data.City,
@@ -115,22 +128,7 @@ function AddAddress(props: AddAddress) {
                 onClose()
                 reset()
                 showToaster({ message: "Address saved successfully", severity: "success" })
-                const addressId = (response?.payload as any)?.data?.data;
-                dispatch(addAddressForMyVault({
-                    addressId: addressId,
-                    firstName: data.FirstName,
-                    lastName: data.LastName,
-                    company: data.Company,
-                    phoneNumber: data.Contact,
-                    email: data.Email,
-                    addressLine1: data.Address1,
-                    addressLine2: data.Address2,
-                    city: data.City,
-                    stateName: data.State,
-                    postcode: data.Code,
-                    countryId: data.Country,
-                    stateId: stateId,
-                }))
+                await dispatch(getAddresses({ url: ENDPOINTS.getAddresses }) as any);
             } else {
                 showToaster({ message: "Failed to save address. Please check the input fields", severity: "error" })
             }
@@ -159,7 +157,7 @@ function AddAddress(props: AddAddress) {
                 "countryName": "Australia"
             }
             if (hasFulfilled(response.type)) {
-                dispatch(addAddress(needToadd))
+                dispatch(addAddressForCheckout(needToadd))
                 handleAddressUpdate!(needToadd, addressTypeId == AddressType.Billing)
                 onClose()
                 reset()
@@ -173,8 +171,9 @@ function AddAddress(props: AddAddress) {
     useEffect(() => {
         return () => {
             reset()
-            setcountryValue(-1)
+            setcountryValue("none")
             setstateValue('')
+            setIsAddressGoogleVerified(false)
         }
     }, [open]);
 
@@ -195,19 +194,25 @@ function AddAddress(props: AddAddress) {
             if (googleAddressComponents?.postalCode) {
                 setValue("Code", Number(googleAddressComponents?.postalCode));
             }
+            setIsAddressGoogleVerified(true);
+            clearErrors('Country')
+            clearErrors('State')
+            clearErrors('City')
+            clearErrors('Address1')
+            clearErrors('Code')
         }
     }, [googleAddressComponents])
 
     useEffect(() => {
         const data: any = stateListall?.filter((state: any) => {
-            return state.enumValue == countryValue || countryValue == -1
+            return state.enumValue == countryValue || countryValue == "none"
         })
         setStateList(data)
     }, [stateListall, countryValue])
 
-    const OnChange = (value: any) => {
-        setcountryValue(value)
-    }
+    // const OnChange = (value: any) => {
+    //     setcountryValue(value)
+    // }
     return (
         <StyledDialog
             id="UpdateAddress"
@@ -239,6 +244,7 @@ function AddAddress(props: AddAddress) {
                             variant='outlined'
                             margin='none'
                         />
+
                     </Stack>
                     <RenderFields
                         register={register}
@@ -250,32 +256,19 @@ function AddAddress(props: AddAddress) {
                         margin='none'
                     />
                     <Stack className="Column">
-                        <Box className="ContactField">
-                            <RenderFields
-                                register={register}
-                                type="select"
-                                control={control}
-                                error={errors.ContactCode}
-                                name="ContactCode"
-                                variant="outlined"
-                                margin="none"
-                                className="ContactSelect"
-                            >
-                                <MenuItem value="91">+91</MenuItem>
-                                <MenuItem value="11">+11</MenuItem>
-                            </RenderFields>
-                            <RenderFields
-                                register={register}
-                                error={errors.Contact}
-                                name="Contact"
-                                type="number"
-                                placeholder="Enter contact *"
-                                control={control}
-                                variant='outlined'
-                                margin='none'
-                                className="ContactTextField"
-                            />
-                        </Box>
+                        {/* <Box className="ContactField"> */}
+                        <RenderFields
+                            register={register}
+                            type="phoneInput"
+                            control={control}
+                            setValue={setValue}
+                            name="Contact"
+                            variant="outlined"
+                            margin="none"
+                            className="ContactSelect"
+                            error={errors.Contact}
+                        ></RenderFields>
+                        {/* </Box> */}
                         <RenderFields
                             register={register}
                             error={errors.Email}
@@ -319,16 +312,20 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             type="select"
                             control={control}
+                            clearErrors={clearErrors}
                             error={errors.Country}
                             name="Country"
+                            getValues={getValues}
                             variant='outlined'
                             margin='none'
-                            defaultValue={"-1"}
                             value={countryValue}
                             setValue={setValue}
-                            onChange={OnChange}
+                            onChange={() => {
+                                setIsAddressGoogleVerified(false)
+                            }}
+                        // onChange={OnChange}
                         >
-                            <MenuItem value="-1">Select country *</MenuItem>
+                            <MenuItem value="none">Select country *</MenuItem>
                             {countryList.map((country: StateOrCountry) => (
                                 <MenuItem key={country.id} value={country.id}>{country.name}</MenuItem>
                             ))}
@@ -338,11 +335,11 @@ function AddAddress(props: AddAddress) {
                         <Autocomplete
                             disablePortal
                             options={stateList}
-                            getOptionLabel={option => {
+                            getOptionLabel={(option: any) => {
                                 if (typeof option === 'string') {
                                     return option;
                                 }
-                                return option.name;
+                                return option?.name;
                             }}
                             renderInput={(params) => <TextField placeholder="Enter state *" {...params} error={errors.State as boolean | undefined} />}
                             fullWidth

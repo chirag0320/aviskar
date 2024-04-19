@@ -1,8 +1,10 @@
+import { STORE_CODE } from "@/axiosfolder"
+
 export const ENDPOINTS = {
     getConfigStore: 'store/duMyjVf3k0KIi7Rq7CmHAA',
     getTicker: 'calculator/DMJqdS7VvR2VMk9R',
     getProduct: 'product/m9XieCcNOUOxk5ODsP6FXQ/0',
-    getSlider: 'home/Y9w8nK5PhEyKFBZQNbV2Ow',
+    getSlider: 'home/Y9w8nK5PhEyKFBZQNbV2Ow/?SliderType=typeEnum',
     getFooterLink: 'home/N2KdtXS5z0W3EbgvHaDCGw',
     homePageSection: 'home/sMwXo8EJm8Pad',
     getBlog: 'Blog/jk9mPhOPvkiq6luNZrwanA',
@@ -74,6 +76,9 @@ export const ENDPOINTS = {
     //send verification email
     sendVerificationEmail: 'account/Posb5zZpZUCS2QQEp6Fvjw/useEmail',
 
+    // my vault > dropdowns
+    getConfigDropdown: "myvault/topj10QyQkKhz89du2ssxw",
+
     // my vault > accounts
     getAccounts: "myvault/oFCrPGc21E6E9cIxEArX4g",
     addOrEditAccount: "myvault/d0axWq2BoUGRiP4GN0qHpg",
@@ -86,11 +91,47 @@ export const ENDPOINTS = {
     // my vault -> rewardPointsHistory
     getRewardPointsHistory: "myvault/kSFuIpNrDUuygzsl4bE3Hw",
 
+    // my vault > buy back order history
+    getBuyBackOrderHistory: "myvault/oz5pMSV4SUqP92QIId5KmQ",
+
+    // my vault -> orderHistory
+    getOrderHistory: "myvault/tBryhxlMq0qgjzuUfbewkA",
+
+    // my vault home page 
+    getMyVaultHomePageData: "myvault/eOmP5LRTU0O902gE7mO67Q",
+
+    // my vault home page chart data
+    getMyVaultHopePageDataChart: "myvault/c2srK54sfd5C4qjS",
+
     //popup details
     getPopUpDetails: "utility/85WwxAopc7Rn",
-    savePopUpData: "utility/CLWL6vMSSrzB"
+    savePopUpData: "utility/CLWL6vMSSrzB",
+
+    //"sitemap"
+    siteMapUrl: 'utility/fksBMEOGVoLiw',
+
+    // my vault > private holdings
+    getPrivateHoldingsList: 'myvault/y4vzhfrtjjTnwCFc71pMdI',
+    getPrivateHoldingsListLivePrice: 'myvault/LlamWfOP1YkWQZEp74U',
+    getPrivateHoldingWithId: "myvault/AymK5sLJJtY1Gq/", // dynamic
+    getPrivateHoldingAddFormDropdowns: "myvault/PEiK9YP7bHBux2w9fxe",
+    addOrEditPrivateHolding: "myvault/nWHfULZySYaaROO",
+    // re-orderAPI
+    reOrder: 'myvault/RxcLCj5Rvlbs4OwCiSkaBg/Orderid',
+    // enquiry
+    enquiry: "myvault/NKtlZmWzax4PNlIWj",
+    // sell qty
+    sellQty: "myvault/EZLnvfaBlImG4dOHR",
+    // convert to market place
+    convertToMarketPlace: "myvault/q9QOiEdTtEkrm6EVOewM2F",
+    //delete private holdings
+    deletePrivateHoldings: "myvault/puk8elMtXJIwa4NCP/id",
+    // new homepage
+   mainHomePage: "home/HOb6OH12P5xFHos4DC1L3Q"
 }
 export const StoreData = {
     storeCode: 12,
     returnUrl: typeof window !== 'undefined' ? window.location.href : null
 }
+
+export const changePasswordURL = "https://register.qmint.com/passwordrecovery?id=" + STORE_CODE

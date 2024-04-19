@@ -1,76 +1,82 @@
-.RecentOrdersTable {
-  box-shadow: none !important;
+.CommonTableWrapper {
   border: 1px solid $mercury;
   border-radius: 15px !important;
+  margin-top: 20px;
+  overflow: hidden;
 
-  table {
-    &.MuiTable-root {
-      .MuiTableHead-root {
-        background-color: $mercury30;
+  .CommonTableDesign {
+    box-shadow: none !important;
+    margin-top: 0;
 
-        .MuiTableRow-root {
-          .MuiTableCell-root {
-            font-size: 18px;
-            line-height: 28px;
-            font-weight: 700;
-            padding: 18px 23px;
-            border-left: 1px solid $mercury;
-            border-bottom: 1px solid $mercury;
+    table {
+      &.MuiTable-root {
+        .MuiTableHead-root {
+          background-color: $white;
 
-            &:first-child {
-              border-left: 0;
+          .MuiTableRow-root {
+            .MuiTableCell-root {
+              font-size: 18px;
+              line-height: 28px;
+              font-weight: 700;
+              padding: 18px 23px;
+              border-left: 1px solid $mercury;
+              border-bottom: 1px solid $mercury;
+
+              &:first-child {
+                border-left: 0;
+              }
             }
           }
         }
-      }
 
-      .MuiTableBody-root {
-        .MuiTableRow-root {
-          .MuiTableCell-root {
-            border-left: 1px solid $mercury;
-            // border-bottom: 1px solid $mercury;
-            font-size: 16px;
-            line-height: 26px;
-            font-weight: 500;
-            padding: 14px 23px;
+        .MuiTableBody-root {
+          .MuiTableRow-root {
+            .MuiTableCell-root {
+              border-left: 1px solid $mercury;
+              // border-bottom: 1px solid $mercury;
+              font-size: 16px;
+              line-height: 26px;
+              font-weight: 500;
+              padding: 14px 23px;
 
-            .ChipWrapper {
-              display: flex;
-              gap: 15px;
+              .ChipWrapper {
+                display: flex;
+                gap: 15px;
 
-              .MuiChip-colorError {
-                height: 26px;
-                padding: 3px 15px;
-                border-radius: 38px;
-                background: $red10;
+                .MuiChip-colorError {
+                  height: 26px;
+                  padding: 3px 15px;
+                  border-radius: 38px;
+                  background: $red10;
 
-                .MuiChip-label {
-                  font-size: 14px;
-                  line-height: 20px;
-                  font-weight: 600;
-                  padding: 0;
-                  color: $red;
+                  .MuiChip-label {
+                    font-size: 14px;
+                    line-height: 20px;
+                    font-weight: 600;
+                    padding: 0;
+                    color: $red;
+                  }
+                }
+
+                .MuiChip-colorSuccess {
+                  height: 26px;
+                  padding: 3px 15px;
+                  border-radius: 38px;
+                  background: $success10;
+
+                  .MuiChip-label {
+                    font-size: 14px;
+                    line-height: 20px;
+                    font-weight: 600;
+                    padding: 0;
+                    color: $success;
+                  }
                 }
               }
 
-              .MuiChip-colorSuccess {
-                height: 26px;
-                padding: 3px 15px;
-                border-radius: 38px;
-                background: $success10;
-
-                .MuiChip-label {
-                  font-size: 14px;
-                  line-height: 20px;
-                  font-weight: 600;
-                  padding: 0;
-                  color: $success;
-                }
+              &:first-child {
+                border-left: 0;
               }
-            }
-
-            &:first-child {
-              border-left: 0;
             }
           }
         }

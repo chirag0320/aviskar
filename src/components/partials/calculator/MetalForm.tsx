@@ -9,14 +9,14 @@ import { addCalculator, saveCalculatorsData } from '@/redux/reducers/calculators
 import { ENDPOINTS } from '@/utils/constants';
 
 interface Inputs {
-    SelectMetal?: number,
+    SelectMetal?: number| string,
     Weight?: number,
     MetalType?: number,
     WeightType?: number
 }
 
 const schema = yup.object().shape({
-    SelectMetal: yup.string().required("Metal selection is required"),
+    SelectMetal: yup.string().notOneOf(["none"], "Metal selection is required"),
     Weight: yup
         .number()
         .nullable()
@@ -35,11 +35,16 @@ const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
     const loading = useAppSelector(state => state.calculators.loading);
     const calculators = useAppSelector(state => state.calculators.calculators);
 
+    useEffect(() => {
+        setValue('SelectMetal', 'none')
+    },[])
+
     const {
         register,
         reset,
         handleSubmit,
         clearErrors,
+        getValues,
         control,
         setValue,
         formState: { errors },
@@ -57,7 +62,7 @@ const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
 
         dispatch(addCalculator(calculatorData));
         reset();
-        setValue('SelectMetal', data.SelectMetal)
+        setValue('SelectMetal', "none")
     }
     useEffect(() => {
         dispatch(saveCalculatorsData({
@@ -85,13 +90,16 @@ const MetalForm = ({ CalculatorType }: { CalculatorType: number }) => {
                         name="SelectMetal"
                         label="Select Metal"
                         setValue={setValue}
+                        getValues={getValues}
                         control={control}
+                        clearErrors={clearErrors}
+                        defaultValue="none"
                         variant='outlined'
                         margin='none'
                         className='SelectMetal'
                     >
                         {/* {Note:- refer to types/enums.ts file for reference of value of input} */}
-                        {/* <MenuItem value="none">Select Metal</MenuItem> */}
+                        <MenuItem value="none" selected>Select Metal</MenuItem>
                         <MenuItem value="1">Gold</MenuItem>
                         <MenuItem value="2">Silver</MenuItem>
                         <MenuItem value="3">Platinum</MenuItem>

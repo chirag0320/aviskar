@@ -3,6 +3,7 @@
 @import "settings/variables";
 @import "settings/mixins";
 @import "settings/functions";
+@import "settings/bootstrap";
 
 // Components
 @import "components/scrollbar";
@@ -21,6 +22,8 @@
 @import "components/orderDateStatusSelector";
 @import "components/reactSpectrum";
 @import "components/tooltip";
+@import "components/quantityInputs";
+@import "components/reactPhoneInput2";
 
 // Common
 @import "common/header";
@@ -53,3 +56,6 @@
 @import "pages/accountTypeWrapper.scss";
 @import "pages/Error404.scss";
 @import "pages/history.scss";
+@import "pages/privateHolding.scss";
+@import "pages/privateHoldingAdd.scss";
+@import "pages/sitemap.scss";

@@ -6,16 +6,26 @@ interface CustomHeaders {
     Storecode: number;
     Validkey: string;
 }
+export const STORE_CODE = process.env.STORE_CODE
+export const BASE_URL = process.env.BASE_URL
+export const VALID_KEY = process.env.VALID_KEY
 
 const axiosInstance = axios.create({
-    baseURL: "https://qmapistaging.qmint.com/api/v1/",
+    baseURL: BASE_URL,
     headers: {
-        "Storecode": 12,
-        "Validkey": "MBXCSv6SGIx8mx1tHvrMw5b0H3R91eMmtid4c2ItRHRKL4Pnzo"
+        "Storecode": STORE_CODE,
+        "Validkey": VALID_KEY
     }
     // timeout: 5000, // Timeout in milliseconds
 });
-
+// const axiosInstance = axios.create({
+//     baseURL: "https://qmapistaging.qmint.com/api/v1/",
+//     headers: {
+//         "Storecode": 12,
+//         "Validkey": "MBXCSv6SGIx8mx1tHvrMw5b0H3R91eMmtid4c2ItRHRKL4Pnzo"
+//     }
+//     // timeout: 5000, // Timeout in milliseconds
+// });
 // Request interceptor
 axiosInstance.interceptors.request.use(
     (config) => {

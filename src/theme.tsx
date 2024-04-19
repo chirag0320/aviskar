@@ -23,6 +23,9 @@ const theme: Theme = createTheme({
     success: {
       main: variable.success,
     },
+    error: {
+      main: variable.error,
+    },
     divider: "#1d212933",
     tonalOffset: 0.1,
     text: {
@@ -467,6 +470,13 @@ const theme: Theme = createTheme({
         },
       },
     },
+    MuiMenu: {
+      styleOverrides: {
+        list: {
+          maxHeight: 300,
+        },
+      },
+    },
     MuiMenuItem: {
       styleOverrides: {
         root: {
@@ -705,6 +715,18 @@ const theme: Theme = createTheme({
       styleOverrides: {
         badge: {
           lineHeight: "normal",
+        },
+      },
+    },
+    MuiPaginationItem: {
+      styleOverrides: {
+        root: {
+          minWidth: 28,
+          height: 28,
+        },
+        ellipsis: {
+          minWidth: 20,
+          margin: 0,
         },
       },
     },

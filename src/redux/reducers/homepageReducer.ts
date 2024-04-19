@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // Types
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
-import ConfigServices, { IPopUpDetails, IloginUserBody } from '@/apis/services/ConfigServices'
+import ConfigServices, { IPopUpDetails, ISavePopUpDetails, IloginUserBody } from '@/apis/services/ConfigServices'
 import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 
 // Services
@@ -26,6 +26,24 @@ interface IPopupDetails {
   negativeRedirect: string | null;
   issession: boolean;
   classification: number;
+}
+interface Item {
+  title: string;
+  overview: string;
+  imageUrl: string;
+  friendlyName: string;
+  mediaType: string | null;
+}
+
+interface IMainHomePage {
+  beyond: Item[]; // You can replace 'any' with a more specific type if needed
+  adventure: Item[]; // You can replace 'any' with a more specific type if needed
+  experience: Item[]; // You can replace 'any' with a more specific type if needed
+  knowMore: Item[]; // You can replace 'any' with a more specific type if needed
+  stories: Item[]; // You can replace 'any' with a more specific type if needed
+  gallery: Item[]; // You can replace 'any' with a more specific type if needed
+  closerLook: Item[];
+  bestAdventure: Item[]; // You can replace 'any' with a more specific type if needed
 }
 
 interface CreateGuidelineState {
@@ -69,13 +87,77 @@ interface CreateGuidelineState {
       linechartdata2: number[]
     }
   },
-  popUpdata: IPopupDetails | null
+  popUpdata: IPopupDetails | null,
+  siteMapData: { items: IsiteMapData[], totalCount: number } | null;
+  mainHomePageData: IMainHomePage | null
 }
+interface Settings {
+  TwoFactorAuthenticatorAdminlogin: string;
+  AdditionalOrderCancellationCharge: string;
+  LogRocket_Enable: string;
+  LogRocket_AppID: string;
+  ImageKitPublicKey: string;
+  ImageKitPrivateKey: string;
+  ImageKitUrlEndPoint: string;
+  LastUpdatedChartData: string;
+  xero_bmk_loans_bmk: string | null;
+  xero_bmk_loans_qmint: string;
+  xero_qmint_loans_bmk: string;
+  xero_qmint_loans_qmint: string | null;
+  xero_qmint_shipment_charge_ac: string;
+  xero_qmint_charge_ac: string;
+  xero_secure_ship_charge_itemcode: string;
+  xero_secure_ship_charge_description: string;
+  xero_credit_card_charge_itemcode: string;
+  xero_credit_card_charge_description: string;
+  xero_vault_charge_itemcode: string;
+  xero_vault_charge_description: string;
+  xero_buyback_settelment_itemcode: string;
+  xero_buyback_settelment_itemdescription: string;
+  Registration_Target: string;
+  xero_bmk_charge_ac: string;
+  xero_vault_charge_ac: string;
+  ProviderId: string;
+  SyncInXero: string;
+  AusPost_PARCEL_POST_SIGNATURE: string;
+  AusPost_EXPRESS_POST_SIGNATURE: string;
+  AusPost_EXPRESS_EPARCEL_POST_RETURNS: string;
+  AusPost_EPARCEL_POST_ZONAL_RETURNS: string;
+  AusPost_EPARCEL_POST_RETURNS: string;
+  StarTrack_PREMIUM: string;
+  StarTrack_1_3_5KG_FIXED_PRICE_PREMIUM: string;
+  shipments_and_Track_Key: string;
+  shipments_and_Track_Password: string;
+  shipments_and_Track_Authorization_Token: string;
+  Aus_Post_Account_Number: string;
+  Star_Track_Account_Number: string;
+  CheckWeightTolerance: string;
+  Aus_Post_api_Host_Url: string;
+  Aus_Post_api_Port: string;
+  Create_Shipment_Url: string;
+  Create_Shipment_Label_Url: string;
+  Market_Loss_Owing_is_Overdue_Days: string;
+  Order_Not_Paid_Days: string;
+  Vault_Storage_Invoice_Not_Paid_Days: string;
+  AvailableAgainAfterDays: string;
+  bundlediscountkey: string;
+  showbundlediscount: string;
+  deliverysignofftransfertext: string;
+  deliverysignofftransferheder: string;
+  Create_Shipment_Order: string;
+  Get_Order_Summary: string;
+}
+
+interface IsiteMapData {
+  storeCode: number;
+  settings: Settings;
+}
+
 const initialState: CreateGuidelineState = {
   configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
   loading: false,
   sectionDetails: isBrowser && JSON.parse(localStorageGetItem('sectionDetails') ?? JSON.stringify({ 1: {}, 2: {} })),
-  categoriesList: isBrowser && JSON.parse(localStorageGetItem('categoriesList') ?? JSON.stringify(({}))),
+  categoriesList: {},
   userDetails: isBrowser && JSON.parse(localStorageGetItem('userDetails') || JSON.stringify({})),
   isLoggedIn: isBrowser && JSON.parse(localStorageGetItem('isLoggedIn') || JSON.stringify(false)),
   loadingForSignIn: false,
@@ -90,7 +172,9 @@ const initialState: CreateGuidelineState = {
   severity: 'info',
   needToShowProgressLoader: false,
   liveDashboardChartData: {},
-  popUpdata: null
+  popUpdata: null,
+  siteMapData: null,
+  mainHomePageData: null
 }
 
 export const configDetails = appCreateAsyncThunk(
@@ -107,8 +191,8 @@ export const HomePageSectionDetails = appCreateAsyncThunk(
 )
 export const CategoriesListDetails = appCreateAsyncThunk(
   'CategoriesListDetails/status',
-  async ({ url, body }: { url: string, body: any }) => {
-    return await ConfigServices.categoriesList(url, body)
+  async ({ url, params }: { url: string, params: any }) => {
+    return await ConfigServices.categoriesList(url, params)
   }
 )
 
@@ -143,7 +227,12 @@ export const getLiveDashboardChartData = appCreateAsyncThunk(
     return await ConfigServices.getLiveDashboardChartData(url)
   }
 )
-
+export const getSiteMapData = appCreateAsyncThunk(
+  'getSiteMapData/status',
+  async ({ body }: any) => {
+    return await ConfigServices.getSiteMapData(body)
+  }
+)
 // export const add = appCreateAsyncThunk(
 //   'add/status',
 //   async (data: GuidelineTitleParams) => {
@@ -172,10 +261,17 @@ export const getPopUpDetailsAPI = appCreateAsyncThunk(
 )
 export const savePopUpDataAPI = appCreateAsyncThunk(
   'savePopUpDataAPI/status',
-  async (params: IPopUpDetails) => {
-    return await ConfigServices.savePoPUpDetails(params)
+  async (body: ISavePopUpDetails) => {
+    return await ConfigServices.savePoPUpDetails(body)
   }
 )
+export const getMainHomePageData = appCreateAsyncThunk(
+  'getMainHomePageData',
+  async () => {
+    return await ConfigServices.getMainHomePageAPI()
+  }
+)
+
 export const createHomepageSlice = createSlice({
   name: 'homepage',
   initialState,
@@ -233,7 +329,13 @@ export const createHomepageSlice = createSlice({
     },
     serProgressLoaderStatus: (state, action) => {
       state.needToShowProgressLoader = action.payload
-    }
+    },
+    setPopUpDetails: (state, action) => {
+      state.popUpdata = { ...state.popUpdata, htmlCode: action.payload ?? null } as any
+    },
+    setCategoryListEmpty: (state) => {
+      state.categoriesList = {}
+    },
   },
 
   extraReducers: (builder) => {
@@ -297,11 +399,11 @@ export const createHomepageSlice = createSlice({
     // Get categories list
     builder.addCase(CategoriesListDetails.pending, (state, action) => {
       state.loading = true
+      state.categoriesList = {}
     })
     builder.addCase(CategoriesListDetails.fulfilled, (state, action) => {
-      const data = { ...action?.payload?.data?.data, items: action?.payload?.data?.data?.items?.sort((a: any, b: any) => a?.categoryId - b?.categoryId) }
+      const data = { ...action?.payload?.data?.data, items: action?.payload?.data?.data?.sort((a: any, b: any) => a?.categoryId - b?.categoryId) }
       state.categoriesList = data
-      localStorageSetItem('categoriesList', JSON.stringify(data))
       state.loading = false
     })
     builder.addCase(CategoriesListDetails.rejected, (state, action) => {
@@ -380,9 +482,43 @@ export const createHomepageSlice = createSlice({
     builder.addCase(getPopUpDetailsAPI.rejected, (state, action) => {
       // state.loading = false
     })
+    // sitemap data
+    builder.addCase(getSiteMapData.pending, (state, action) => {
+      state.loading = true
+    })
+    builder.addCase(getSiteMapData.fulfilled, (state, action) => {
+      // Group the data by groupTitle
+      const responseData = action.payload.data.data;
+      console.log("🚀 ~ builder.addCase ~ responseData:", responseData)
+      const groupedData = responseData?.items?.reduce((acc: { [x: string]: any[]; }, currentItem: { groupTitle: any; }) => {
+        const { groupTitle } = currentItem;
+        if (!acc[groupTitle]) {
+          acc[groupTitle] = [];
+        }
+        acc[groupTitle].push(currentItem);
+        return acc;
+      }, {});
+      state.siteMapData = { items: groupedData, totalCount: responseData?.count }
+      state.loading = false
+    })
+    builder.addCase(getSiteMapData.rejected, (state, action) => {
+      state.loading = false
+    })
+    builder.addCase(getMainHomePageData.pending, (state, action) => {
+      state.loading = true
+    })
+    builder.addCase(getMainHomePageData.fulfilled, (state, action) => {
+      const res = action.payload.data.data
+      console.log("🚀 ~ builder.addCase ~ res:", res)
+      state.mainHomePageData = res
+      state.loading = false
+    })
+    builder.addCase(getMainHomePageData.rejected, (state, action) => {
+      state.loading = false
+    })
   },
 })
 
-export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState, setScrollPosition, serProgressLoaderStatus } = createHomepageSlice.actions
+export const { setCategoryListEmpty, resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState, setScrollPosition, serProgressLoaderStatus, setPopUpDetails } = createHomepageSlice.actions
 
 export default createHomepageSlice.reducer

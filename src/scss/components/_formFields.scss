@@ -11,3 +11,44 @@ input[type=search] {
     cursor: pointer;
   }
 }
+
+input {
+  &[type=file] {
+    cursor: pointer;
+    &::-webkit-file-upload-button {
+      cursor: pointer;
+    }
+  }
+}
+
+.primary-text-btn {
+  @include btn;
+  @include btn-text-color($yellowFuel, $dark);
+  padding: 0;
+}
+
+.primary-outline-btn {
+  @include btn;
+  @include btn-outline-color($yellowFuel);
+}
+
+.primary-contained-btn {
+  @include btn;
+  @include btn-contained-color($yellowFuel, #c68924);
+}
+
+.secondary-text-btn {
+  @include btn;
+  @include btn-text-color($dark, $yellowFuel);
+  padding: 0;
+}
+
+.secondary-outline-btn {
+  @include btn;
+  @include btn-outline-color($dark);
+}
+
+.secondary-contained-btn {
+  @include btn;
+  @include btn-contained-color($dark, $yellowFuel);
+}
