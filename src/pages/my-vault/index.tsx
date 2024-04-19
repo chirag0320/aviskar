@@ -101,7 +101,7 @@ function Vault() {
       if (res.data.data) {
         navigate('/shopping-cart')
         return;
-      }else{
+      } else {
         showToaster({ message: res.data.message, severity: "error" })
       }
     } catch (error) {
@@ -169,7 +169,7 @@ function Vault() {
                                   }}
                                 >
                                   {
-                                    <>
+                                    <Box className="Content">
                                       <img
                                         className="BannerImage"
                                         rel="prefetch"
@@ -181,7 +181,13 @@ function Vault() {
                                         }
                                         alt="background"
                                       />
-                                    </>
+                                      <Box className="BannerImageContent"
+                                        dangerouslySetInnerHTML={{
+                                          __html: item.htmlcode,
+                                        }}
+                                      >
+                                      </Box>
+                                    </Box>
                                   }
                                 </Box>
                               </SwiperSlide>
@@ -262,7 +268,7 @@ function Vault() {
                                   }}
                                 >
                                   {
-                                    <>
+                                    <Box className="Content">
                                       <img
                                         className="BannerImage"
                                         rel="prefetch"
@@ -274,7 +280,13 @@ function Vault() {
                                         }
                                         alt="background"
                                       />
-                                    </>
+                                      <Box className="BannerImageContent"
+                                        dangerouslySetInnerHTML={{
+                                          __html: item.htmlcode,
+                                        }}
+                                      >
+                                      </Box>
+                                    </Box>
                                   }
                                 </Box>
                               </SwiperSlide>
