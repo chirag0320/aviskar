@@ -113,7 +113,6 @@ function AddAccount(props: AddAccountProps) {
       }
     })
     additionalBeneficiary.splice(1, 1)
-    console.log("🚀 ~ additionalBeneficiary ~ additionalBeneficiary:", additionalBeneficiary)
     setAdditionalFields(() => additionalBeneficiary)
     return () => {
       reset()
@@ -134,7 +133,14 @@ function AddAccount(props: AddAccountProps) {
   })
 
   const onAddressFormSubmitHandler = async (data: any) => {
-    const additionalBeneficiary = additionalFields.map((field) => {
+    if (!alignment){
+      showToaster({message : "Can not save address as Selected Account Type is not valid" , severity : "warning"})
+      return;
+    }
+
+    const additionalBeneficiary = additionalFields.filter(field => {
+      return field[Object.keys(field)[0]].firstName !== "" || field[Object.keys(field)[0]].lastName !== ""
+    }).map((field) => {
       // id static
       return { ...field[Object.keys(field)[0]], customerAdditionalBeneficiaryId: 0 }
     });
@@ -175,8 +181,6 @@ function AddAccount(props: AddAccountProps) {
       }
     }
 
-    console.log("alignment", alignment)
-    if (!alignment) return;
     let prepareAddressQuery;
     switch (AccountTypeEnumReverse[alignment!.toString()]) {
       case "Joint":
