@@ -64,7 +64,6 @@ function Vault() {
   const { showToaster } = useShowToaster()
   const { loadingForCheckingLogin } = useRequireLogin()
   const { myVaultHomePageData, myVaultHomePageChartData } = useAppSelector((state) => state.myVault)
-  console.log("🚀 ~ Vault ~ myVaultHomePageData:", myVaultHomePageChartData)
   const isLargeScreen = useMediaQuery((theme: Theme) =>
     theme.breakpoints.up("lg")
   );
