@@ -1,15 +1,18 @@
 import { useAppSelector } from '@/hooks'
 import useDebounce from '@/hooks/useDebounce'
 import { Box, Slider, Typography } from '@mui/material'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-let temp = 0
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 
 const PriceSlider = ({ minPrice, maxPrice, setSelectedPrice, selectedPrice, setIsPriceChanged }: { minPrice: number, maxPrice: number, setSelectedPrice: any, selectedPrice?: number[] | null, setIsPriceChanged: any }) => {
     const [value, setValue] = useState<number[]>(selectedPrice ? [selectedPrice[0], selectedPrice[1]] : [minPrice, maxPrice])
-    // console.log("🚀 ~ PriceSlider ~ value:", value, selectedPrice)
+    // console.log("🚀 ~ PriceSlider ~ value:", value, minPrice, maxPrice)
     const clearFilters = useAppSelector(state => state.category.clearFilters)
     const debouncedValue = useDebounce(value, 700);
     const firstUpdate = useRef(true);
+
+    useLayoutEffect(() => {
+        setValue([minPrice, maxPrice])
+    }, [minPrice, maxPrice, setValue])
 
     useEffect(() => {
         if (clearFilters) {
@@ -18,21 +21,15 @@ const PriceSlider = ({ minPrice, maxPrice, setSelectedPrice, selectedPrice, setI
     }, [clearFilters])
 
     useEffect(() => {
-        // if (temp === 0) {
-        //     temp++
-        //     return
-        // }
         if (firstUpdate.current) {
             firstUpdate.current = false;
             return;
         }
-        setIsPriceChanged(true);
+        if (value[0] !== minPrice || value[1] !== maxPrice) {
+            setIsPriceChanged(true);
+        }
         setSelectedPrice([value[0], value[1]])
     }, [debouncedValue])
-
-    useEffect(() => {
-        setValue([minPrice, maxPrice])
-    }, [minPrice, maxPrice, setValue])
 
     const valuetext = (value: number) => {
         return `Price ${value}`;
