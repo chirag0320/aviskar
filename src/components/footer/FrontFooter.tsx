@@ -46,7 +46,6 @@ function FrontFooter() {
                             <IconButton title="Follow us on Facebook" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}><FacebookIcon fontSize="small" /></IconButton>
                             <IconButton title="Follow us on Youtube" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}><YoutubeIcon /></IconButton>
                             <IconButton title="Follow us on Twitter" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}><TwitterIcon fontSize="small" /></IconButton>
-                            <IconButton title="Follow us on Feed" target={"_blank"} href={configDetailsState?.feedIcon?.value ?? window?.location?.href}><FeedIcon /></IconButton>
                         </Stack>
                     </Stack>
                     <Stack className="MenuesPart" component="nav">
@@ -94,7 +93,7 @@ function FrontFooter() {
                             </Stack>
                         </Box>
                     </Stack>
-                    <Stack className="NewsletterPart">
+                    {/* <Stack className="NewsletterPart">
                         <Typography className="MenuTitle" variant="subtitle2" component="p">Newsletter</Typography>
                         <Box className="Content">
                             <Typography className="InfoMessage" variant="overline">Stay up to date with our latest news.</Typography>
@@ -104,10 +103,13 @@ function FrontFooter() {
                             </Stack>
                             <Typography className="ConsentMessage" variant="body2">Your email is safe with us, we don't spam</Typography>
                         </Box>
-                    </Stack>
+                    </Stack> */}
                 </Stack>
             </Container>
-            <Suspense fallback={<Skeleton style={{ height: '30px' }} />}>
+            <Suspense fallback={
+                <></>
+            // <Skeleton style={{ height: '30px' }} />
+            }>
                 <CopyRight />
             </Suspense>
         </Box>

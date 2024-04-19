@@ -13,6 +13,7 @@ import { navigate } from 'gatsby'
 
 function Experience() {
     const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
+    console.log("🚀 ~ Experience ~ mainHomePageData:", mainHomePageData?.experience)
     return (
         (mainHomePageData && mainHomePageData?.experience?.length > 0) ?
             <Box id="Experience">
@@ -56,14 +57,25 @@ function Experience() {
                                     {(mainHomePageData && mainHomePageData?.experience?.length > 0) ?
                                         mainHomePageData?.experience?.map((item) => {
                                             return (
-                                                <SwiperSlide onClick={() => {
-                                                    navigate('/blog/' + item.friendlyName)
-                                                }}>
+                                                <SwiperSlide
+                                                // onClick={() => {
+                                                //     navigate('/blog/' + item.friendlyName)
+                                                // }}
+                                                >
                                                     <Box className="ExperienceSlide">
-                                                        {item?.mediaType ? <video src={item.imageUrl}/> :<img src={item.imageUrl ?? noImage} alt={item.title} />}
-                                                        <IconButton className="PlayIcon">
-                                                            <PlayIcon />
-                                                        </IconButton>
+                                                        {item?.mediaType == '0' ?
+                                                            <>
+                                                                <IconButton className="PlayIcon">
+                                                                    <PlayIcon />
+                                                                </IconButton>
+                                                                <iframe width="420" height="345"
+                                                                    src="https://www.youtube.com/embed/Oswc-jAgwgo?si=Sl-ig71KsTEdgicY&amp;controls=0"
+                                                                    >
+                                                                    </iframe>
+                                                            </>
+                                                            :
+                                                            <img src={item.imageUrl ?? noImage} alt={item.title} />}
+
                                                     </Box>
                                                 </SwiperSlide>
                                             )

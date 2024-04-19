@@ -94,7 +94,7 @@ function Banner() {
           </Swiper>
           :
           <>
-            {!isMobile ? <Skeleton animation="wave" height="75vh" width="100%" style={{ transform: "none", margin: "auto", borderRadius: "0px" }} /> : <Skeleton animation="wave" height="300px" width="100%" style={{ transform: "none", margin: "auto", borderRadius: "0px" }} />}
+            {/* {!isMobile ? <Skeleton animation="wave" height="75vh" width="100%" style={{ transform: "none", margin: "auto", borderRadius: "0px" }} /> : <Skeleton animation="wave" height="300px" width="100%" style={{ transform: "none", margin: "auto", borderRadius: "0px" }} />} */}
           </>
         }
         {<SwiperNavigation />}
