@@ -38,7 +38,7 @@ function MainHomePage() {
     }, [])
 
     useAPIoneTime({ service: HomePageSectionDetails, endPoint: ENDPOINTS.homePageSection })
-    useAPIoneTime({ service: getMainHomePageData})
+    useAPIoneTime({ service: getMainHomePageData })
     useUserDetailsFromToken()
     useEffect(() => {
         dispatch(serProgressLoaderStatus(true))
@@ -46,6 +46,7 @@ function MainHomePage() {
             dispatch(serProgressLoaderStatus(false))
         }
     }, [])
+    useAPIoneTime({ service: configDetails, endPoint: ENDPOINTS.getConfigStore })
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -74,7 +75,7 @@ function MainHomePage() {
             </>
             {<Suspense fallback={
                 <></>
-            // <Skeleton height='30vh'></Skeleton>
+                // <Skeleton height='30vh'></Skeleton>
             }>
                 <LazyFooter />
             </Suspense>}
