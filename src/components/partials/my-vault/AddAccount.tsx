@@ -81,7 +81,8 @@ function AddAccount(props: AddAccountProps) {
   const { showToaster } = useShowToaster();
   const loading = useAppSelector(state => state.checkoutPage.loading);
   const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
-  const [countryValue, setcountryValue] = useState<any>('')
+  const [countryValue, setcountryValue] = useState<any>('none')
+  const [trusteeTypeValue, setTrusteeTypeValue] = useState("none");
   const [stateValue, setstateValue] = useState<any>('')
   const [additionalFields, setAdditionalFields] = useState<IField[]>([{ [Math.random().toString(36).substring(7)]: { firstName: "", lastName: "" } }]);
   const [isAddressGoogleVerified, setIsAddressGoogleVerified] = useState<boolean>(false)
@@ -312,11 +313,12 @@ function AddAccount(props: AddAccountProps) {
                 error={errors.TrusteeType}
                 setValue={setValue}
                 getValues={getValues}
+                value={trusteeTypeValue}
                 name="TrusteeType"
                 variant='outlined'
                 margin='none'
               >
-                <MenuItem value="none">Select trustee</MenuItem>
+                <MenuItem value="none">Select trustee type*</MenuItem>
                 {configDropdowns && configDropdowns.trusteeTypeList.map((trustee) =>
                   <MenuItem key={trustee.id} value={trustee.id}>{trustee.name}</MenuItem>
                 )}
@@ -341,12 +343,13 @@ function AddAccount(props: AddAccountProps) {
                 control={control}
                 error={errors.TrusteeType}
                 setValue={setValue}
+                value={trusteeTypeValue}
                 getValues={getValues}
                 name="TrusteeType"
                 variant='outlined'
                 margin='none'
               >
-                <MenuItem value="none" selected>Select trustee</MenuItem>
+                <MenuItem value="none" selected>Select trustee type*</MenuItem>
                 {configDropdowns && configDropdowns.trusteeTypeList.map((trustee) =>
                   <MenuItem key={trustee.id} value={trustee.id}>{trustee.name}</MenuItem>
                 )}
