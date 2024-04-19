@@ -69,6 +69,9 @@ export interface DashboardData {
         myVaultEvaPeakSliderId: number;
         storeCode: number;
         displayOrder: number;
+        htmlcode: null | string;
+        isImgUrl: boolean;
+        url: null | string;
         sliderTime: number;
         cdnUrlLarge: string;
         cdnUrlSmall: string;
@@ -77,6 +80,9 @@ export interface DashboardData {
         myVaultEvaPeakSliderId: number;
         storeCode: number;
         displayOrder: number;
+        htmlcode: null | string;
+        isImgUrl: boolean;
+        url: null | string;
         sliderTime: number;
         cdnUrlLarge: string;
         cdnUrlSmall: string;
@@ -98,6 +104,7 @@ export interface DashboardData {
     Order: string;
     "Reward Point": string;
     customerGreeting: string;
+    "Private Holdings": string
 }
 
 const initialState: MyVaultInitialState = {

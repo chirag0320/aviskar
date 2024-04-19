@@ -31,7 +31,6 @@ export interface FooterSection {
 
 function FrontFooter() {
     const { configDetails: configDetailsState, categoriesList } = useAppSelector((state) => state.homePage)
-    console.log("🚀 ~ FrontFooter ~ configDetailsState:", configDetailsState)
     const { data }: { data: { data: FooterSection[] } } = useApiRequest(ENDPOINTS.getFooterLink);
     const { email, handleEmailChange, subscribe } = useSubscription()
     return (
@@ -58,7 +57,13 @@ function FrontFooter() {
                                     categoriesList?.items?.length > 0 ?
                                         categoriesList?.items?.map((category: Icategory) => {
                                             return (
-                                                category.subCategories.map(subCategory => {
+                                                <>
+                                                <ListItem key={category.categoryId}>
+                                                    <ListItemButton onClick={() => navigate(`/category/${category.searchEngineFriendlyPageName}`)}>
+                                                        <ListItemText primary={category.name} primaryTypographyProps={{ variant: "body2" }} />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                                {category.subCategories.map(subCategory => {
                                                     return (
                                                         <ListItem key={subCategory.categoryId}>
                                                             <ListItemButton onClick={() => navigate(`/category/${subCategory.searchEngineFriendlyPageName}`)}>
@@ -66,10 +71,11 @@ function FrontFooter() {
                                                             </ListItemButton>
                                                         </ListItem>
                                                     )
-                                                })
+                                                })}
+                                                </>
                                             )
                                         }
-                                        ) : null
+                                ) : null
                                 }
                             </List>
                         </Box>
