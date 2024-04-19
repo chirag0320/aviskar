@@ -5,7 +5,7 @@ import { Skeleton, Stack } from "@mui/material";
 // Components
 import LazyHeader from "../header/index"
 import { convertMinutesToMilliseconds, storeLastPage } from "@/utils/common";
-import { CategoriesListDetails, configDetails } from "@/redux/reducers/homepageReducer";
+import { configDetails } from "@/redux/reducers/homepageReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { useAppDispatch, useAppSelector, useToggle } from "@/hooks";
@@ -44,7 +44,7 @@ function Layout({ children }: any) {
       </main>
       {<Suspense fallback={
         <></>
-      // <Skeleton height='30vh'></Skeleton>
+        // <Skeleton height='30vh'></Skeleton>
       }>
         <LazyFooter />
       </Suspense>}

@@ -77,7 +77,7 @@ function UpdateAddress(props: UpdateAddress) {
     const checkingWithGoogleAddress = googleAddressComponents && (data.Address1.trim() !== googleAddressComponents?.address.trim() || data.Address2.trim() !== googleAddressComponents?.address2.trim() || data.City.trim() !== googleAddressComponents?.city.trim() || data.State.trim() !== googleAddressComponents?.state.trim() || (googleAddressComponents?.postalCode && data.Code.trim() !== googleAddressComponents?.postalCode?.trim()))
 
     // NOTE - need to check with existing also later on
-    const checkingWithExistingAddress = !googleAddressComponents && (existingAddress?.addressLine1.trim() !== data.Address1.trim() || existingAddress?.addressLine2.trim() !== data.Address2.trim() || data.City.trim() !== existingAddress.city.trim() || data.State.trim() !== existingAddress?.stateName.trim())
+    const checkingWithExistingAddress = !googleAddressComponents && (existingAddress?.addressLine1.trim() !== data.Address1.trim() || existingAddress?.addressLine2.trim() !== data?.Address2.trim() || data.City.trim() !== existingAddress?.city?.trim() || data.State.trim() !== existingAddress?.stateName.trim())
 
     if (checkingWithGoogleAddress || checkingWithExistingAddress) {
       isAddressVerified = false

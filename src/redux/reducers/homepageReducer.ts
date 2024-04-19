@@ -157,7 +157,7 @@ const initialState: CreateGuidelineState = {
   configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
   loading: false,
   sectionDetails: isBrowser && JSON.parse(localStorageGetItem('sectionDetails') ?? JSON.stringify({ 1: {}, 2: {} })),
-  categoriesList: isBrowser && JSON.parse(localStorageGetItem('categoriesList') ?? JSON.stringify(({}))),
+  categoriesList: {},
   userDetails: isBrowser && JSON.parse(localStorageGetItem('userDetails') || JSON.stringify({})),
   isLoggedIn: isBrowser && JSON.parse(localStorageGetItem('isLoggedIn') || JSON.stringify(false)),
   loadingForSignIn: false,
@@ -332,7 +332,10 @@ export const createHomepageSlice = createSlice({
     },
     setPopUpDetails: (state, action) => {
       state.popUpdata = { ...state.popUpdata, htmlCode: action.payload ?? null } as any
-    }
+    },
+    setCategoryListEmpty: (state) => {
+      state.categoriesList = {}
+    },
   },
 
   extraReducers: (builder) => {
@@ -396,6 +399,7 @@ export const createHomepageSlice = createSlice({
     // Get categories list
     builder.addCase(CategoriesListDetails.pending, (state, action) => {
       state.loading = true
+      state.categoriesList = {}
     })
     builder.addCase(CategoriesListDetails.fulfilled, (state, action) => {
       const data = { ...action?.payload?.data?.data, items: action?.payload?.data?.data?.sort((a: any, b: any) => a?.categoryId - b?.categoryId) }
@@ -500,21 +504,21 @@ export const createHomepageSlice = createSlice({
     builder.addCase(getSiteMapData.rejected, (state, action) => {
       state.loading = false
     })
-    builder.addCase(getMainHomePageData.pending,(state, action)=>{
-      state.loading=true
+    builder.addCase(getMainHomePageData.pending, (state, action) => {
+      state.loading = true
     })
-    builder.addCase(getMainHomePageData.fulfilled,(state, action)=>{
+    builder.addCase(getMainHomePageData.fulfilled, (state, action) => {
       const res = action.payload.data.data
       console.log("🚀 ~ builder.addCase ~ res:", res)
       state.mainHomePageData = res
-      state.loading=false
+      state.loading = false
     })
-    builder.addCase(getMainHomePageData.rejected,(state, action)=>{
-      state.loading=false
+    builder.addCase(getMainHomePageData.rejected, (state, action) => {
+      state.loading = false
     })
   },
 })
 
-export const { resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState, setScrollPosition, serProgressLoaderStatus, setPopUpDetails } = createHomepageSlice.actions
+export const { setCategoryListEmpty, resetWholeHomePageData, setLoadingTrue, setLoadingFalse, setRecentlyViewedProduct, setToasterState, setScrollPosition, serProgressLoaderStatus, setPopUpDetails } = createHomepageSlice.actions
 
 export default createHomepageSlice.reducer

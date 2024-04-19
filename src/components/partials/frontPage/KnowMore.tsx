@@ -18,7 +18,7 @@ function KnowMore() {
         spaceBetween: 30,
         loop: true,
         speed: 300,
-        initialSlide: 3,
+        initialSlide: 1,
         pagination: {
             clickable: true,
         },
@@ -54,7 +54,7 @@ function KnowMore() {
                         <Box className="SwiperContainer">
                             <Swiper {...config}>
                                 {(mainHomePageData && mainHomePageData?.knowMore?.length > 0) ?
-                                    mainHomePageData?.knowMore?.map((item) => {
+                                    [...mainHomePageData?.knowMore,...mainHomePageData?.knowMore]?.map((item) => {
                                         return (
                                             <SwiperSlide onClick={() => {
                                                 navigate('/blog/' + item.friendlyName)

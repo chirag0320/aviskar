@@ -81,7 +81,8 @@ function AddAccount(props: AddAccountProps) {
   const { showToaster } = useShowToaster();
   const loading = useAppSelector(state => state.checkoutPage.loading);
   const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
-  const [countryValue, setcountryValue] = useState<any>('')
+  const [countryValue, setcountryValue] = useState<any>('none')
+  const [trusteeTypeValue, setTrusteeTypeValue] = useState("none");
   const [stateValue, setstateValue] = useState<any>('')
   const [additionalFields, setAdditionalFields] = useState<IField[]>([{ [Math.random().toString(36).substring(7)]: { firstName: "", lastName: "" } }]);
   const [isAddressGoogleVerified, setIsAddressGoogleVerified] = useState<boolean>(false)
@@ -113,7 +114,6 @@ function AddAccount(props: AddAccountProps) {
       }
     })
     additionalBeneficiary.splice(1, 1)
-    console.log("🚀 ~ additionalBeneficiary ~ additionalBeneficiary:", additionalBeneficiary)
     setAdditionalFields(() => additionalBeneficiary)
     return () => {
       reset()
@@ -134,14 +134,27 @@ function AddAccount(props: AddAccountProps) {
   })
 
   const onAddressFormSubmitHandler = async (data: any) => {
-    const additionalBeneficiary = additionalFields.map((field) => {
+    if (!alignment) {
+      showToaster({ message: "Can not save address as Selected Account Type is not valid", severity: "warning" })
+      return;
+    }
+
+    const additionalBeneficiary = additionalFields.filter(field => {
+      return field[Object.keys(field)[0]].firstName !== "" || field[Object.keys(field)[0]].lastName !== ""
+    }).map((field) => {
       // id static
       return { ...field[Object.keys(field)[0]], customerAdditionalBeneficiaryId: 0 }
     });
 
     const accountTypeId = existingAccount && alignment ? AccountTypeEnum[alignment] : alignment;
+
+    const checkingWithGoogleAddress = googleAddressComponents && (data.Address1.trim() !== googleAddressComponents?.address.trim() || data.Address2.trim() !== googleAddressComponents?.address2.trim() || data.City.trim() !== googleAddressComponents?.city.trim() || data.State.trim() !== googleAddressComponents?.state.trim() || (googleAddressComponents?.postalCode && data.Code.trim() !== googleAddressComponents?.postalCode?.trim()))
+
+    const checkingWithExistingAddress = !googleAddressComponents && (existingAccount?.address?.addressLine1.trim() !== data.Address1.trim() || existingAccount?.address?.addressLine2.trim() !== data?.Address2.trim() || data.City.trim() !== existingAccount?.address?.city?.trim() || data.State.trim() !== existingAccount?.address?.stateName.trim())
+
+
     let isAddressVerified = isAddressGoogleVerified;
-    if (googleAddressComponents && (data.Address1.trim() !== googleAddressComponents?.address.trim() || data.Address2.trim() !== googleAddressComponents?.address2.trim() || data.City.trim() !== googleAddressComponents?.city.trim() || data.State.trim() !== googleAddressComponents?.state.trim() || (googleAddressComponents?.postalCode && data.Code.trim() !== googleAddressComponents?.postalCode?.trim()))) {
+    if (checkingWithGoogleAddress || (existingAccount && checkingWithExistingAddress)) {
       isAddressVerified = false
     }
 
@@ -175,8 +188,6 @@ function AddAccount(props: AddAccountProps) {
       }
     }
 
-    console.log("alignment", alignment)
-    if (!alignment) return;
     let prepareAddressQuery;
     switch (AccountTypeEnumReverse[alignment!.toString()]) {
       case "Joint":
@@ -302,11 +313,12 @@ function AddAccount(props: AddAccountProps) {
                 error={errors.TrusteeType}
                 setValue={setValue}
                 getValues={getValues}
+                value={trusteeTypeValue}
                 name="TrusteeType"
                 variant='outlined'
                 margin='none'
               >
-                <MenuItem value="none">Select trustee</MenuItem>
+                <MenuItem value="none">Select trustee type*</MenuItem>
                 {configDropdowns && configDropdowns.trusteeTypeList.map((trustee) =>
                   <MenuItem key={trustee.id} value={trustee.id}>{trustee.name}</MenuItem>
                 )}
@@ -331,12 +343,13 @@ function AddAccount(props: AddAccountProps) {
                 control={control}
                 error={errors.TrusteeType}
                 setValue={setValue}
+                value={trusteeTypeValue}
                 getValues={getValues}
                 name="TrusteeType"
                 variant='outlined'
                 margin='none'
               >
-                <MenuItem value="none" selected>Select trustee</MenuItem>
+                <MenuItem value="none" selected>Select trustee type*</MenuItem>
                 {configDropdowns && configDropdowns.trusteeTypeList.map((trustee) =>
                   <MenuItem key={trustee.id} value={trustee.id}>{trustee.name}</MenuItem>
                 )}
