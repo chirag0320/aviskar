@@ -62,7 +62,7 @@ function SearchField() {
   const handleSearch = () => {
     if (inputValue !== "") {
       const key = Date.now()
-      navigate(`/search/?keyword=${inputValue}`, { state: key });
+      navigate(`/category/search/?keyword=${inputValue}`, { state: key });
     }
     else {
       showToaster({ message: "Please enter some search keyword.", severity: "info" })

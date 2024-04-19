@@ -126,7 +126,6 @@
     }
 
     #CloserLook {
-        background-color: $yellowFuel05;
         padding: 80px 0;
 
         @include media($md) {
@@ -340,7 +339,6 @@
     }
 
     #Experience {
-        background-color: $yellowFuel05;
         padding: 80px 0;
 
         @include media($md) {
@@ -559,16 +557,6 @@
         @include media($md) {
             padding-bottom: 50px;
         }
-
-        &:after {
-            background: linear-gradient(180deg, rgba(234, 162, 43, 0) 0%, rgba(234, 162, 43, 0.56) 100%);
-            content: "";
-            inset: 0;
-            position: absolute;
-            opacity: .1;
-            z-index: -1;
-        }
-
 
         .LatestStoriesContainer {
             padding-left: 0;

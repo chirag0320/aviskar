@@ -19,7 +19,7 @@ import { ProductUpdateCountdown } from "../common/Utils"
 import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
-import { bodyForGetShoppingCartData, getlastPartOfPath } from "@/utils/common"
+import { bodyForGetShoppingCartData, getLengthOfThePaths, getlastPartOfPath } from "@/utils/common"
 import { CategoriesListDetails, getLiveDashboardChartData } from "@/redux/reducers/homepageReducer"
 
 
@@ -52,7 +52,7 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
   }, [])
   const [params] = useState({ page: location.pathname === "/" ? 0 : 1 })
   useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, params })
-
+const isThisInsideCategory = getLengthOfThePaths(window?.location?.pathname?.toLocaleLowerCase()).length == 2
   return (
     <Box className="NavigationHeader">
       <Container>
@@ -73,7 +73,7 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
                           <Link
                             to={location.pathname === '/' ? `/${category.searchEngineFriendlyPageName}` : `/category/${category.searchEngineFriendlyPageName}`}
                             aria-label={category?.searchEngineFriendlyPageName ?? category.name}
-                            className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected })}
+                            className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected  && isThisInsideCategory})}
                           >
                             {category.name}
                           </Link>
@@ -86,7 +86,7 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
                       : <Fragment key={category.name}><Link
                         to={location.pathname === '/' ? `/${category.searchEngineFriendlyPageName}` : `/category/${category.searchEngineFriendlyPageName}`}
                         aria-label={category?.searchEngineFriendlyPageName ?? category.name}
-                        className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected })}
+                        className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected && isThisInsideCategory })}
                       >
                         {category.name}
                       </Link></Fragment>
