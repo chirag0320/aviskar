@@ -62,7 +62,6 @@ interface Iproduct {
   stickyProduct?: boolean
 }
 export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Iproduct) => {
-  console.log("🚀 ~ product:", product)
   const dispatch = useAppDispatch()
   const { loading: loadingForAddToCart, error: errorForAddToCart, apiCallFunction } = useCallAPI()
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
@@ -292,7 +291,7 @@ export const TravelCard = (props: any) => {
   const { place, description, imageUrl, friendlyName } = props
   return (
     <Card className="TravelCard" onClick={() => {
-      navigate(`blog/${friendlyName}`)
+      navigate(`/blog/${friendlyName}`)
     }}>
       <Link className="ImageLink">
         <img src={imageUrl ?? noImage} alt="Travel image" loading="lazy" />
@@ -311,10 +310,12 @@ export const TravelCard = (props: any) => {
 export const StatsCard = (props: any) => {
   const { title, icon, statsNumber, bgColor, onClick } = props;
   return (
-    <Card className="StatsCard" style={{ background: bgColor }}>
+    <Card className="StatsCard">
       <CardContent>
         <Box className="TopWrapper">
-          {icon ? icon : <OrdersIcon />}
+          <Stack>
+            {icon ? icon : <OrdersIcon />}
+          </Stack>
           <Typography variant="subtitle2" component="h3">
             {title}
           </Typography>
@@ -350,14 +351,14 @@ export const UserStatsCard = (props: any) => {
   return (
     <Card className="UserStatsCard" style={{ borderColor: bgColor }}>
       <CardContent
-        sx={{
-          "&:after": {
-            border: `50px solid ${bgColor}`,
-          },
-          "&:before": {
-            background: bgColor,
-          },
-        }}
+      // sx={{
+      //   "&:after": {
+      //     border: `50px solid ${bgColor}`,
+      //   },
+      //   "&:before": {
+      //     background: bgColor,
+      //   },
+      // }}
       >
         <Box className="TopWrapper">
           <Box className="Return Profit">
@@ -384,7 +385,9 @@ export const UserStatsCard = (props: any) => {
         </Box>
         <Box className="BottomWrapper">
           <Box className="Left">
-            {icon ? icon : <OrdersIcon />}
+            <Stack>
+              {icon ? icon : <OrdersIcon />}
+            </Stack>
             <Typography variant="subtitle2" component="h3">
               {title}
             </Typography>
@@ -420,6 +423,7 @@ export const ToolTipOptionsForTheChartCards = () => {
 }
 export const LineChartCard = (props: any) => {
   const { place, description, bgColor, currentPrice, low, high, valueForChart, title } = props;
+  console.log("🚀 ~ LineChartCard ~ low:", low)
   const [liveHoldingsOptions, setLiveHoldingsOptions] = useState<boolean>(false)
   const tooltipRef: any = useRef(null)
 
@@ -486,7 +490,7 @@ export const LineChartCard = (props: any) => {
             <Box className="HLCircuit">
               <Typography variant="caption">LOW</Typography>
               <Box className="HLCircuitRange">
-                <Box className="UpArrow" sx={{ left: (high - low) == 0 ? '0%' : ((currentPrice / (high - low)) * 100) + "%" }}>
+                <Box className="UpArrow" sx={{ left: (high - low) == 0 ? '0%' : ((high-currentPrice) * 100 / (high - low)) + "%" }}>
                   {/* add percentage in left to slide arrowAicon */}
                   <FilledUpButton />
                 </Box>

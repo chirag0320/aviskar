@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { getRewardPointsHistory } from "@/redux/reducers/myVaultReducer";
-import { requestBodyDefault } from "@/pages/[category]";
+import { requestBodyDefault } from "@/pages/category/[category]";
 
 function createData(
     date: string,

@@ -11,7 +11,7 @@ import { navigate } from 'gatsby'
 import noImage from '../../../assets/images/noImage.png'
 
 function Adventure() {
-    const { mainHomePageData } = useAppSelector((state) => state.homePage)
+    const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
     const config = {
         slidesPerView: 1.5,
         centeredSlides: true,
@@ -35,14 +35,18 @@ function Adventure() {
         (mainHomePageData && mainHomePageData?.adventure?.length > 0) ?
             <Box id="Adventure">
                 <Box className="AdventureWrapper">
-                    <SectionHeading title="The Best Of Adventure" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
+                    <SectionHeading
+                        title={configDetails?.["mainhomepage.adventuretital"]?.value} description={configDetails?.["mainhomepage.adventuresubtital"]?.value}
+                    />
                     <Box className="AdventureSlideWrapper" component="section" key={'Adventure'}>
                         <Box className="SwiperContainer">
                             <Swiper {...config}>
                                 {(mainHomePageData && mainHomePageData?.adventure?.length > 0) ?
                                     mainHomePageData?.adventure?.map((item) => {
                                         return (
-                                            <SwiperSlide>
+                                            <SwiperSlide onClick={() => {
+                                                navigate('/blog/' + item.friendlyName)
+                                            }}>
                                                 <Box className="AdventureSlide">
                                                     <img src={item?.imageUrl ?? noImage} alt={noImage} />
                                                     <Box className="AdventureSlideContentBox">

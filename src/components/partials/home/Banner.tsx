@@ -64,7 +64,6 @@ function Banner() {
       <Box className="SwiperContainer">
         {data?.data?.length > 0 ?
           <Swiper {...config} >
-            <>
               {
                 data?.data?.map((item: IbannerData, index: number) => {
                   return (
@@ -92,7 +91,6 @@ function Banner() {
                   )
                 })
               }
-            </>
           </Swiper>
           :
           <>

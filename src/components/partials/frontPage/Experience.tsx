@@ -9,15 +9,16 @@ import { SectionHeading } from "../../common/Utils"
 import { PlayIcon } from "../../../assets/icons/index"
 import { useAppSelector } from '@/hooks'
 import noImage from '../../../assets/images/noImage.png'
+import { navigate } from 'gatsby'
 
 function Experience() {
-    const { mainHomePageData } = useAppSelector((state) => state.homePage)
+    const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
     return (
         (mainHomePageData && mainHomePageData?.experience?.length > 0) ?
             <Box id="Experience">
                 <Container maxWidth="lg">
                     <Box className="ExperienceWrapper">
-                        <SectionHeading title="Travel Experience" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
+                        <SectionHeading title={configDetails?.["mainhomepage.experiencetital"]?.value} description={configDetails?.["mainhomepage.experiencesubtital"]?.value} />
                         <Box className="ExperienceSlideWrapper" component="section" key={'Experience'}>
                             <Box className="SwiperContainer">
                                 <Swiper
@@ -55,7 +56,9 @@ function Experience() {
                                     {(mainHomePageData && mainHomePageData?.experience?.length > 0) ?
                                         mainHomePageData?.experience?.map((item) => {
                                             return (
-                                                <SwiperSlide>
+                                                <SwiperSlide onClick={() => {
+                                                    navigate('/blog/' + item.friendlyName)
+                                                }}>
                                                     <Box className="ExperienceSlide">
                                                         {item?.mediaType ? <video src={item.imageUrl}/> :<img src={item.imageUrl ?? noImage} alt={item.title} />}
                                                         <IconButton className="PlayIcon">

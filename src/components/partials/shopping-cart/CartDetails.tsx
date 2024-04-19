@@ -153,7 +153,7 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
                 {cartItemsWithLivePrice?.length > 0 && <Typography variant="body1"><Typography component="span" className="Note">Note:</Typography> Prices are live prices and will be locked on confirm order. </Typography>}
             </Box>
             <Stack className="BottomCartActionsWrapper">
-                <Button className='LeftArrow' startIcon={<LeftArrow />} color='secondary' onClick={() => navigate("/shop")} disabled={loading}> Continue Shopping</Button>
+                <Button className='LeftArrow' startIcon={<LeftArrow />} color='secondary' onClick={() => navigate("/category/shop")} disabled={loading}> Continue Shopping</Button>
                 <Stack className='ClearUpdateCartWrapper'>
                     <Button className="ClearShoppingCart" color='secondary' onClick={clearCartHandler} disabled={loading || cartItemsWithLivePrice.length === 0}>Clear Shopping Cart</Button>
                     <Button className='UpdateCartBtn' size='large' variant="contained" onClick={() => updateCartHandler(true)} disabled={loading || cartItemsWithLivePrice.length === 0}>Update Shopping Cart</Button>
