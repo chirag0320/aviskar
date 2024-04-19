@@ -51,6 +51,7 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
   }, [])
   const [params] = useState({ page: location.pathname === "/" ? 0 : 1 })
   useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, params })
+
   return (
     <Box className="NavigationHeader">
       <Container>
@@ -69,7 +70,7 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
                         placement="bottom-start"
                         renderComponent={
                           <Link
-                            to={location.pathname === '/'? `/${category.searchEngineFriendlyPageName}` : `/category/${category.searchEngineFriendlyPageName}`}
+                            to={location.pathname === '/' ? `/${category.searchEngineFriendlyPageName}` : `/category/${category.searchEngineFriendlyPageName}`}
                             aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                             className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected })}
                           >
@@ -82,7 +83,7 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
                         <MegaMenu subCategorys={category.subCategories} category={category} />
                       </HoverTooltip></Fragment>
                       : <Fragment key={category.name}><Link
-                        to={location.pathname === '/'? `/${category.searchEngineFriendlyPageName}` :`/category/${category.searchEngineFriendlyPageName}`}
+                        to={location.pathname === '/' ? `/${category.searchEngineFriendlyPageName}` : `/category/${category.searchEngineFriendlyPageName}`}
                         aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                         className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected })}
                       >
