@@ -37,7 +37,9 @@
     .LogoPart {
       flex-direction: column;
       align-items: center;
-
+      img {
+        max-width: 250px;
+      }
       .AboutWrapper {
         flex-direction: column;
         gap: 21px;
