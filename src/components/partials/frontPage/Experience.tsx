@@ -65,16 +65,20 @@ function Experience() {
                                                     <Box className="ExperienceSlide">
                                                         {item?.mediaType == '0' ?
                                                             <>
-                                                                <IconButton className="PlayIcon">
-                                                                    <PlayIcon />
-                                                                </IconButton>
-                                                                <iframe width="420" height="345"
-                                                                    src="https://www.youtube.com/embed/Oswc-jAgwgo?si=Sl-ig71KsTEdgicY&amp;controls=0"
+                                                                
+                                                                <iframe width="100%" height="484"
+                                                                    src="https://www.youtube.com/watch?v=wQby7Va1vbk"
                                                                     >
                                                                     </iframe>
                                                             </>
                                                             :
-                                                            <img src={item.imageUrl ?? noImage} alt={item.title} />}
+                                                            <>
+                                                                <IconButton className="PlayIcon">
+                                                                    <PlayIcon />
+                                                                </IconButton>
+                                                                <img src={item.imageUrl ?? noImage} alt={item.title} />
+                                                            </>
+                                                            }
 
                                                     </Box>
                                                 </SwiperSlide>
