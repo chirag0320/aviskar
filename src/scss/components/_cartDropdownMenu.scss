@@ -1,0 +1,72 @@
+.CartDropdownMenuWrapper {
+
+    @include media($md) {
+        display: none;
+    }
+
+    .CartDropdownMenuHeader,
+    .CartDropdownMenuBody,
+    .CartDropdownMenuFooter {
+        padding: 15px;
+    }
+
+    .CartDropdownMenuHeader {
+        a {
+            text-decoration: none;
+        }
+    }
+
+    .CartDropdownMenuBody {
+        .ProductWrapper {
+            justify-content: space-between;
+            gap: 15px;
+            align-items: center;
+            padding-top: 15px;
+            margin-top: 15px;
+            border-top: 1px solid #1d212933;
+
+            &:first-child {
+                padding-top: 0;
+                margin-top: 0;
+                border-top: 0;
+            }
+
+            .ProductImagewrapper {
+                border-radius: 10px;
+                border: 1px solid #1d212933;
+                padding: 10px;
+                display: flex;
+                justify-content: baseline;
+                align-items: center;
+
+                img {
+                    max-width: 50px;
+                    max-height: 50px;
+                    object-fit: contain;
+                }
+
+            }
+
+            .ProductName {
+                font-size: 16px;
+                line-height: 18px;
+                font-weight: 600;
+                overflow-wrap: anywhere;
+            }
+
+            .ProductPrice {
+                color: $yellowFuel;
+                font-weight: 500;
+            }
+        }
+    }
+
+    .CartDropdownMenuFooter {
+        justify-content: space-between;
+        gap: 15px;
+
+        .MuiButton-root {
+            flex: 1;
+        }
+    }
+}
