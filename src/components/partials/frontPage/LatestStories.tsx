@@ -12,7 +12,7 @@ import { navigate } from 'gatsby'
 import noImage from '../../../assets/images/noImage.png'
 
 function LatestStories() {
-    const { mainHomePageData,configDetails } = useAppSelector((state) => state.homePage)
+    const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
     return (
         (mainHomePageData && mainHomePageData?.stories?.length > 0) ?
             <Box id="LatestStories">
@@ -29,7 +29,9 @@ function LatestStories() {
                         </Stack>
                         <Box className="LatestStoriesWrapper" component="section" key={'LatestStories'}>
                             <Box className="TopStoriesWrapper">
-                                <Box className="TopStoriePost">
+                                <Box className="TopStoriePost" onClick={() => {
+                                    navigate('/blog/' + mainHomePageData?.stories?.[0]?.friendlyName)
+                                }}>
                                     <img src={mainHomePageData?.stories?.[0]?.imageUrl ?? noImage} alt={mainHomePageData?.stories?.[0]?.title ?? "Image"} />
                                     <Stack className='StoryContentBox'>
                                         <Typography variant='subtitle2' className='StorieTitle'>Whitsunday Island: Vivid experiences on and under the water</Typography>
@@ -38,7 +40,9 @@ function LatestStories() {
                                         }}>Read more</Button>
                                     </Stack>
                                 </Box>
-                                <Box className="TopStoriePost">
+                                <Box className="TopStoriePost" onClick={() => {
+                                    navigate('/blog/' + mainHomePageData?.stories?.[1]?.friendlyName)
+                                }}>
                                     <img src={mainHomePageData?.stories?.[1]?.imageUrl ?? noImage} alt={mainHomePageData?.stories?.[0]?.title ?? "Image"} />
                                     <Stack className='StoryContentBox'>
                                         <Typography variant='subtitle2' className='StorieTitle'>Whitsunday Island: Vivid experiences on and under the water</Typography>
@@ -50,7 +54,9 @@ function LatestStories() {
                             </Box>
                             <Box className="BottomStoriesWrapper">
                                 {mainHomePageData?.stories?.slice(3).map((image, index) => (
-                                    <Box key={index} className="BottomStoriePost">
+                                    <Box key={index} className="BottomStoriePost" onClick={() => {
+                                        navigate('/blog/' + image?.friendlyName)
+                                    }}>
                                         <img src={image?.imageUrl ?? noImage} alt={image?.title ?? "Image"} />
                                         <Stack className='StoryContentBox'>
                                             <Typography variant='subtitle2' className='StorieTitle'>{image?.title}</Typography>
