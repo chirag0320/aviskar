@@ -67,7 +67,7 @@ function Experience() {
                                                             <>
                                                                 
                                                                 <iframe width="100%" height="484"
-                                                                    src="https://www.youtube.com/watch?v=wQby7Va1vbk"
+                                                                    src="https://www.youtube.com/embed/Oswc-jAgwgo?si=Sl-ig71KsTEdgicY&amp;controls=0"
                                                                     >
                                                                     </iframe>
                                                             </>
