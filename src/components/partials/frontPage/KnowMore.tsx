@@ -11,7 +11,7 @@ import { useAppSelector } from '@/hooks'
 import { navigate } from 'gatsby'
 
 function KnowMore() {
-    const { mainHomePageData } = useAppSelector((state) => state.homePage)
+    const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
     const config = {
         slidesPerView: 4,
         centeredSlides: true,
@@ -49,14 +49,16 @@ function KnowMore() {
         (mainHomePageData && mainHomePageData?.knowMore?.length > 0) ?
             <Box id="KnowMore">
                 <Box className="KnowMoreWrapper">
-                    <SectionHeading title="Know More About Queensland" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
+                    <SectionHeading title={configDetails?.["mainhomepage.knowmoretital"]?.value} description={configDetails?.["mainhomepage.knowmoresubtital"]?.value} />
                     <Box className="KnowMoreSlideWrapper" component="section" key={'KnowMore'}>
                         <Box className="SwiperContainer">
                             <Swiper {...config}>
                                 {(mainHomePageData && mainHomePageData?.knowMore?.length > 0) ?
                                     mainHomePageData?.knowMore?.map((item) => {
                                         return (
-                                            <SwiperSlide>
+                                            <SwiperSlide onClick={() => {
+                                                navigate('/blog/' + item.friendlyName)
+                                            }}>
                                                 <Box className="KnowMoreSlide">
                                                     <img src={item?.imageUrl} alt={item?.title} />
                                                     <Box className="KnowMoreSlideContentBox">

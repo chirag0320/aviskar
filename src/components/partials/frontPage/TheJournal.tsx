@@ -56,29 +56,26 @@ function TheJournal() {
 
     return (
         (mainHomePageData && mainHomePageData?.bestAdventure?.length > 0) ?
-        <Box id="TheJournal">
-            <Container component="section">
-                <SectionHeading
-                    title='The Best Of Adventure'
-                    description='Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-                />
-                <Container className="TheJounalPostWrapperContainer" maxWidth="lg">
+            <Box id="TheJournal">
+                <Container component="section">
+                    <SectionHeading title={configDetails?.["mainhomepage.bestadventuretital"]?.value} description={configDetails?.["mainhomepage.bestadventuresubtital"]?.value} />
+                    <Container className="TheJounalPostWrapperContainer" maxWidth="lg">
                         <Box className="TheJounalPostWrapper">
                             {mainHomePageData?.bestAdventure?.map((item) => (
-                                    <Box className="TheJounalPost" key={item.title}>
-                                        <TravelCard
-                                            friendlyName={item?.friendlyName}
-                                            place={item.title}
-                                            description={item.overview}
-                                            imageUrl={item.imageUrl}
-                                        />
-                                    </Box>
-                                ))
+                                <Box className="TheJounalPost" key={item.title}>
+                                    <TravelCard
+                                        friendlyName={item?.friendlyName}
+                                        place={item.title}
+                                        description={item.overview}
+                                        imageUrl={item.imageUrl}
+                                    />
+                                </Box>
+                            ))
                             }
                         </Box>
+                    </Container>
                 </Container>
-            </Container>
-        </Box> : null
+            </Box> : null
     )
 }
 

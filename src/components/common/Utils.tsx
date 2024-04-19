@@ -157,7 +157,7 @@ export const Breadcrumb = React.memo(({ arr }: any) => {
     >
       <Container>
         <Breadcrumbs aria-label="breadcrumb" separator={<ChevronRight />}>
-          <Link color="inherit" variant="body2" onClick={() => { navigate('/') }}>
+          <Link color="inherit" variant="body2" onClick={() => { navigate('/shop') }}>
             Home
           </Link>
           {arr.map((item: any, index: any) => <Link key={index} color={true ? variable.dark : "inherit"} variant="body2" onClick={() => { navigate(item.navigate) }}>

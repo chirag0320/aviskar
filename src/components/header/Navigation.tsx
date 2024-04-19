@@ -19,7 +19,7 @@ import { ProductUpdateCountdown } from "../common/Utils"
 import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
-import { bodyForGetShoppingCartData } from "@/utils/common"
+import { bodyForGetShoppingCartData, getlastPartOfPath } from "@/utils/common"
 import { CategoriesListDetails, getLiveDashboardChartData } from "@/redux/reducers/homepageReducer"
 
 
@@ -41,7 +41,7 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
   const { cartItems } = useAppSelector((state) => state.shoppingCart)
   const [currententlySelected, setCurrententlySelected] = useState('')
   useEffect(() => {
-    setCurrententlySelected(window?.location?.pathname?.toLocaleLowerCase()?.replace(/[\s/]/g, ''))
+    setCurrententlySelected(getlastPartOfPath(window?.location?.pathname?.toLocaleLowerCase())?.replace(/[\s/]/g, ''))
   }, [window?.location?.pathname])
   useEffect(() => {
     dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
@@ -49,7 +49,7 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
   useEffect(() => {
     dispatch(getLiveDashboardChartData({ url: ENDPOINTS.getLiveDashboardChartData }))
   }, [])
-  const [params] = useState({ page: location.pathname === "/main-home-page/" ? 0 : 1 })
+  const [params] = useState({ page: location.pathname === "/" ? 0 : 1 })
   useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, params })
   return (
     <Box className="NavigationHeader">
@@ -69,9 +69,9 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
                         placement="bottom-start"
                         renderComponent={
                           <Link
-                            to={`/${category.searchEngineFriendlyPageName}`}
+                            to={location.pathname === '/'? `/${category.searchEngineFriendlyPageName}` : `/category/${category.searchEngineFriendlyPageName}`}
                             aria-label={category?.searchEngineFriendlyPageName ?? category.name}
-                            className={classNames("MenuLink", { "Active": category?.name?.toLocaleLowerCase()?.replace(/[\s/]/g, '') === currententlySelected })}
+                            className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected })}
                           >
                             {category.name}
                           </Link>
@@ -82,9 +82,9 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
                         <MegaMenu subCategorys={category.subCategories} category={category} />
                       </HoverTooltip></Fragment>
                       : <Fragment key={category.name}><Link
-                        to={`/${category.searchEngineFriendlyPageName}`}
+                        to={location.pathname === '/'? `/${category.searchEngineFriendlyPageName}` :`/category/${category.searchEngineFriendlyPageName}`}
                         aria-label={category?.searchEngineFriendlyPageName ?? category.name}
-                        className={classNames("MenuLink", { "Active": category?.name?.toLocaleLowerCase()?.replace(/[\s/]/g, '') === currententlySelected })}
+                        className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected })}
                       >
                         {category.name}
                       </Link></Fragment>

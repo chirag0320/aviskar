@@ -7,14 +7,14 @@ import { SectionHeading } from "../../common/Utils"
 import { useAppSelector } from '@/hooks'
 
 function Gallery() {
-    const { mainHomePageData } = useAppSelector((state) => state.homePage)
+    const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
 
     return (
         (mainHomePageData && mainHomePageData?.gallery?.length > 0) ?
             <Box id="Gallery">
                 <Container maxWidth="lg">
                     <Box className="GalleryWrapper">
-                        <SectionHeading title="Picture Gallery" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
+                        <SectionHeading title={configDetails?.["mainhomepage.gallerytital"]?.value} description={configDetails?.["mainhomepage.gallerysubtital"]?.value} />
                         <Box className="GalleryContentWrapper" component="section" key={'Gallery'}>
                             <Box className="TopImageWrapper">
                                 <Box className="Left">

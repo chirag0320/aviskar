@@ -57,12 +57,14 @@ function Banner() {
                             return (
                                 <SwiperSlide>
                                     <Box className="HeroBannerSliderWrapper" style={{ backgroundImage: `url(${isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall})` }}>
-                                        <Box className="HeroBannerTopWrapper">
-                                            <Typography className="BgText">QUEENSLAND</Typography>
-                                            <Typography className="SlideTitle">Explore Queensland</Typography>
+                                        <Box className="HeroBannerTopWrapper" dangerouslySetInnerHTML={{
+                                            __html: item.htmlCode,
+                                        }}>
+                                            {/* <Typography className="BgText">QUEENSLAND</Typography>
+                                            <Typography className="SlideTitle">Explore Queensland</Typography> */}
                                         </Box>
-                                        <Typography variant="body1" className="SlideDescription">Sed ut perspiciatis unde omnis iste natus error sit voluptatem</Typography>
-                                        <Button sx={{ mt: 3.75 }} variant="contained">Discover More</Button>
+                                        {/* <Typography variant="body1" className="SlideDescription">Sed ut perspiciatis unde omnis iste natus error sit voluptatem</Typography>
+                                        <Button sx={{ mt: 3.75 }} variant="contained">Discover More</Button> */}
                                     </Box>
                                 </SwiperSlide>
                             )

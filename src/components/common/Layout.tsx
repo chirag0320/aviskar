@@ -58,15 +58,3 @@ Layout.propTypes = {
 }
 
 export default Layout
-// useAPIoneTime({
-//   service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, body: {
-//     "search": "",
-//     "pageNo": 0,
-//     "pageSize": -1,
-//     "sortBy": "",
-//     "sortOrder": "",
-//     "filters": {
-//       "includeInTopMenu": true
-//     }
-//   }
-// })
