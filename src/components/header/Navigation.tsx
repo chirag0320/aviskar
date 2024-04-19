@@ -40,7 +40,6 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
   const { configDetails: configDetailsState, categoriesList, needToShowProgressLoader, isLoggedIn } = useAppSelector((state) => state.homePage)
   const { cartItems } = useAppSelector((state) => state.shoppingCart)
   const [currententlySelected, setCurrententlySelected] = useState('')
-  console.log("🚀 ~ Navigation ~ currententlySelected:", currententlySelected)
   useEffect(() => {
     setCurrententlySelected(getlastPartOfPath(window?.location?.pathname?.toLocaleLowerCase())?.replace(/[\s/]/g, ''))
   }, [window?.location?.pathname])

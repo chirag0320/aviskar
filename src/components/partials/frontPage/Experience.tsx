@@ -9,6 +9,7 @@ import { SectionHeading } from "../../common/Utils"
 import { PlayIcon } from "../../../assets/icons/index"
 import { useAppSelector } from '@/hooks'
 import noImage from '../../../assets/images/noImage.png'
+import { navigate } from 'gatsby'
 
 function Experience() {
     const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
@@ -55,7 +56,9 @@ function Experience() {
                                     {(mainHomePageData && mainHomePageData?.experience?.length > 0) ?
                                         mainHomePageData?.experience?.map((item) => {
                                             return (
-                                                <SwiperSlide>
+                                                <SwiperSlide onClick={() => {
+                                                    navigate('/blog/' + item.friendlyName)
+                                                }}>
                                                     <Box className="ExperienceSlide">
                                                         {item?.mediaType ? <video src={item.imageUrl}/> :<img src={item.imageUrl ?? noImage} alt={item.title} />}
                                                         <IconButton className="PlayIcon">

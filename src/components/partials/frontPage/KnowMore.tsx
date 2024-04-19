@@ -56,7 +56,9 @@ function KnowMore() {
                                 {(mainHomePageData && mainHomePageData?.knowMore?.length > 0) ?
                                     mainHomePageData?.knowMore?.map((item) => {
                                         return (
-                                            <SwiperSlide>
+                                            <SwiperSlide onClick={() => {
+                                                navigate('/blog/' + item.friendlyName)
+                                            }}>
                                                 <Box className="KnowMoreSlide">
                                                     <img src={item?.imageUrl} alt={item?.title} />
                                                     <Box className="KnowMoreSlideContentBox">

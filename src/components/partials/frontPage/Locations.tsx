@@ -8,6 +8,7 @@ import { SwiperNavigation } from "@/components/common/Utils"
 import { SectionHeading } from "../../common/Utils"
 import { useAppSelector } from '@/hooks'
 import noImage from '../../../assets/images/noImage.png'
+import { navigate } from 'gatsby'
 
 function Locations() {
     const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
@@ -49,26 +50,30 @@ function Locations() {
     }
     return (
         (mainHomePageData && mainHomePageData?.beyond?.length > 0) ?
-        <Box id="Location">
-            <Container maxWidth="lg">
-                <Box className="LocationsWrapper">
-                    <SectionHeading title={configDetails?.["mainhomepage.beyondtital"]?.value} description={configDetails?.["mainhomepage.beyondsubtital"]?.value} />
-                    <Box component="section" key={'Locations'}>
-                        <Box className="SwiperContainer">
-                            <Swiper {...config} >
-                                {(mainHomePageData && mainHomePageData?.beyond?.length > 0) ?
-                                    mainHomePageData?.beyond?.map((item) => {
-                                        return (
-                                            <SwiperSlide>
-                                                <Box className="LocationsSlide">
-                                                    <img src={item?.imageUrl?? noImage} alt={item?.title} />
-                                                    <Typography className="SlideDescription">{item?.title}</Typography>
-                                                </Box>
-                                            </SwiperSlide>
-                                        )
-                                    })
-                                    : null}
-                                {/* <SwiperSlide>
+            <Box id="Location">
+                <Container maxWidth="lg">
+                    <Box className="LocationsWrapper">
+                        <SectionHeading title={configDetails?.["mainhomepage.beyondtital"]?.value} description={configDetails?.["mainhomepage.beyondsubtital"]?.value} />
+                        <Box component="section" key={'Locations'}>
+                            <Box className="SwiperContainer">
+                                <Swiper {...config} >
+                                    {(mainHomePageData && mainHomePageData?.beyond?.length > 0) ?
+                                        mainHomePageData?.beyond?.map((item) => {
+                                            return (
+                                                <SwiperSlide onClick={() => {
+                                                    navigate('/blog/' + item.friendlyName)
+                                                }}>
+                                                    <Box className="LocationsSlide">
+                                                        <img src={item?.imageUrl ?? noImage} alt={item?.title} />
+                                                        <Typography className="SlideDescription" onClick={() => {
+                                                            navigate('/blog/' + item.friendlyName)
+                                                        }}>{item?.title}</Typography>
+                                                    </Box>
+                                                </SwiperSlide>
+                                            )
+                                        })
+                                        : null}
+                                    {/* <SwiperSlide>
                                     <Box className="LocationsSlide">
                                         <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
                                         <Typography className="SlideDescription">Great Keppel Island</Typography>
@@ -122,13 +127,13 @@ function Locations() {
                                         <Typography className="SlideDescription">Airlie Beach</Typography>
                                     </Box>
                                 </SwiperSlide> */}
-                            </Swiper>
-                            {<SwiperNavigation />}
+                                </Swiper>
+                                {<SwiperNavigation />}
+                            </Box>
                         </Box>
-                    </Box>
-                </Box >
-            </Container>
-        </Box> : null
+                    </Box >
+                </Container>
+            </Box> : null
     )
 }
 

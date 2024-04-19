@@ -44,7 +44,9 @@ function Adventure() {
                                 {(mainHomePageData && mainHomePageData?.adventure?.length > 0) ?
                                     mainHomePageData?.adventure?.map((item) => {
                                         return (
-                                            <SwiperSlide>
+                                            <SwiperSlide onClick={() => {
+                                                navigate('/blog/' + item.friendlyName)
+                                            }}>
                                                 <Box className="AdventureSlide">
                                                     <img src={item?.imageUrl ?? noImage} alt={noImage} />
                                                     <Box className="AdventureSlideContentBox">
