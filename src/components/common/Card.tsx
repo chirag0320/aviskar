@@ -310,10 +310,12 @@ export const TravelCard = (props: any) => {
 export const StatsCard = (props: any) => {
   const { title, icon, statsNumber, bgColor, onClick } = props;
   return (
-    <Card className="StatsCard" style={{ background: bgColor }}>
+    <Card className="StatsCard">
       <CardContent>
         <Box className="TopWrapper">
-          {icon ? icon : <OrdersIcon />}
+          <Stack>
+            {icon ? icon : <OrdersIcon />}
+          </Stack>
           <Typography variant="subtitle2" component="h3">
             {title}
           </Typography>
@@ -349,14 +351,14 @@ export const UserStatsCard = (props: any) => {
   return (
     <Card className="UserStatsCard" style={{ borderColor: bgColor }}>
       <CardContent
-        sx={{
-          "&:after": {
-            border: `50px solid ${bgColor}`,
-          },
-          "&:before": {
-            background: bgColor,
-          },
-        }}
+      // sx={{
+      //   "&:after": {
+      //     border: `50px solid ${bgColor}`,
+      //   },
+      //   "&:before": {
+      //     background: bgColor,
+      //   },
+      // }}
       >
         <Box className="TopWrapper">
           <Box className="Return Profit">
@@ -383,7 +385,9 @@ export const UserStatsCard = (props: any) => {
         </Box>
         <Box className="BottomWrapper">
           <Box className="Left">
-            {icon ? icon : <OrdersIcon />}
+            <Stack>
+              {icon ? icon : <OrdersIcon />}
+            </Stack>
             <Typography variant="subtitle2" component="h3">
               {title}
             </Typography>
