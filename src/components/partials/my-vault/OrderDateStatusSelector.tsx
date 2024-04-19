@@ -74,6 +74,7 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
         await dispatch(service({ url: endPoint, body: requestBodyOrderHistory }));
         setValue("OrderStatus", "none")
         setDateRangeValue(() => null)
+        clearErrors("OrderStatus")
     }
 
     return (
@@ -107,7 +108,7 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
                 </Stack>
                 <Stack className="ButtonsWrapper">
                     <Button variant="contained" type="submit" size="large" color='primary' className="SearchButton">Search</Button>
-                    <Button variant="contained" size="large" color='info' onClick={clearFiltersHandler}>Clear</Button>
+                    <Button variant="contained" size="large" color='info' onClick={clearFiltersHandler} disabled={!dateRangeValue && getValues("OrderStatus") === "none"}>Clear</Button>
                 </Stack>
             </Stack>
         </form>
