@@ -1396,3 +1396,8 @@ export const getlastPartOfPath = (path: any) => {
   const lastPartOfPath = parts[parts.length - 1];
   return lastPartOfPath
 }
+export const getLengthOfThePaths = (path: any) => {
+  const parts = path.split('/').filter((part: string) => part !== '');
+
+  return parts
+}
