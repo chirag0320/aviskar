@@ -47,7 +47,7 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
 
     const onSubmit = async (data: any) => {
         // console.log("Qmint", dateRangeValue)
-        if (dateRangeValue === undefined) {
+        if (dateRangeValue === null) {
             showToaster({
                 message: "Please select date range"
             })
