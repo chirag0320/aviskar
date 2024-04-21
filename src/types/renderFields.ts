@@ -10,6 +10,7 @@ export type RenderFieldType =
   | 'slider'
   | 'file'
   | "phoneInput"
+  | "dateRange"
 
 export interface FieldOption {
   id: string
