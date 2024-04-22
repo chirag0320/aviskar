@@ -19,6 +19,8 @@ import {
   EyeOffIcon,
 } from '../../assets/icons/index'
 import { clear } from 'console'
+import { DateRangePicker } from '@adobe/react-spectrum'
+import { CalendarDate } from '@internationalized/date'
 
 interface RenderFieldProps {
   type?: RenderFieldType
@@ -39,6 +41,15 @@ interface RenderFieldProps {
   readOnly?: boolean
   rows?: number
   control?: any
+  dateRangeValue?: {
+    start: CalendarDate,
+    end: CalendarDate
+  } | null,
+  setDateRangeValue?: React.Dispatch<React.SetStateAction<{
+    start: CalendarDate;
+    end: CalendarDate;
+  } | null>>,
+  dateRangeError?: string | null,
   autoComplete?: string
   uploadFileHandler?: any
   disabled?: boolean,
@@ -87,6 +98,9 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   fullWidth = true,
   row,
   readOnly,
+  dateRangeValue,
+  // dateRangeError,
+  setDateRangeValue,
   setValue,
   onBlur,
   onKeyDown,
@@ -469,6 +483,40 @@ const RenderFields: React.FC<RenderFieldProps> = ({
         </FormControl>
       )
       break
+
+    case "dateRange":
+      fieldType = (
+        <FormControl
+          fullWidth={fullWidth}
+          margin={margin}
+          {...(error ? { error: true } : {})}
+        >
+          {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+          <DateRangePicker
+            label="Date range"
+            value={dateRangeValue}
+            onChange={
+              (value) => {
+                if (setDateRangeValue) {
+                  setDateRangeValue(value)
+                }
+                if(setValue){
+                  setValue(name, value)
+                }
+                if (clearErrors) {
+                  clearErrors(name)
+                }
+              }
+            }
+            maxVisibleMonths={2}
+            pageBehavior="single"
+            // NEED TO ADJUST ERROR
+            UNSAFE_className={(error ? "error" : "") + " DateRangePicker"}
+          />
+        </FormControl>
+      )
+      break
+
 
     default:
       fieldType = (

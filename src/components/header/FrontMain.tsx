@@ -28,7 +28,6 @@ function FrontMain(props: any) {
             navigate('/')
         }
     }
-    const [frontPage] = useState(true)
     return (
         <Box className="HeaderContainerWrapper">
             <Container className="MainHeader">
@@ -37,7 +36,7 @@ function FrontMain(props: any) {
                         <Link className="Logo" to="/"><img src={WhiteLogo} alt="QMint white logo" loading="eager" /></Link>
                     </Stack>
                     <Stack className="Center">
-                        <Navigation frontPage={frontPage} />
+                        <Navigation frontPage={true} />
                     </Stack>
                     <Stack className="Right">
                         {/* <Link to={ENDPOINTS.login}> */}

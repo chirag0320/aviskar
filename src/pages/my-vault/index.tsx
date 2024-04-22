@@ -46,6 +46,7 @@ import useRequireLogin from "@/hooks/useRequireLogin";
 import RecordNotFound from "@/components/common/RecordNotFound";
 import Toaster from "@/components/common/Toaster";
 import useShowToaster from "@/hooks/useShowToaster";
+import { openNewTab } from "@/utils/common";
 
 interface VaultProps {
   id: number;
@@ -64,6 +65,7 @@ function Vault() {
   const { showToaster } = useShowToaster()
   const { loadingForCheckingLogin } = useRequireLogin()
   const { myVaultHomePageData, myVaultHomePageChartData } = useAppSelector((state) => state.myVault)
+  console.log("🚀 ~ Vault ~ myVaultHomePageData:", myVaultHomePageData)
   const isLargeScreen = useMediaQuery((theme: Theme) =>
     theme.breakpoints.up("lg")
   );
@@ -101,7 +103,7 @@ function Vault() {
       if (res.data.data) {
         navigate('/shopping-cart')
         return;
-      }else{
+      } else {
         showToaster({ message: res.data.message, severity: "error" })
       }
     } catch (error) {
@@ -111,6 +113,7 @@ function Vault() {
   if (loadingForCheckingLogin) {
     return
   }
+  console.log(myVaultHomePageData,"myVaultHomePageData?.sliders")
   return (
     <Layout>
       {openToaster && <Toaster />}
@@ -169,7 +172,7 @@ function Vault() {
                                   }}
                                 >
                                   {
-                                    <>
+                                    <Box className="Content">
                                       <img
                                         className="BannerImage"
                                         rel="prefetch"
@@ -180,8 +183,19 @@ function Vault() {
                                             : item.cdnUrlSmall
                                         }
                                         alt="background"
+                                        onClick={() => {
+                                          if (item.isImgUrl) {
+                                            openNewTab(item.url)
+                                          }
+                                        }}
                                       />
-                                    </>
+                                      <Box className="BannerImageContent"
+                                        dangerouslySetInnerHTML={{
+                                          __html: item.htmlcode,
+                                        }}
+                                      >
+                                      </Box>
+                                    </Box>
                                   }
                                 </Box>
                               </SwiperSlide>
@@ -240,7 +254,7 @@ function Vault() {
             <Box className="UserInfoWrapper">
               <Box className="Left">
                 <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Allocated Holdings" statsNumber="todo" icon={<AllotedHldingIcon />} bgColor="rgb(255 31 31 / 6%)" />
-                <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Private Holding" icon={<PrivateHoldingIcon />} statsNumber={"todo"} bgColor="rgb(234 162 43 / 6%)" />
+                <StatsCard onClick={() => { navigate('/my-vault/private-holding/') }} title="Private Holding" icon={<PrivateHoldingIcon />} statsNumber={myVaultHomePageData?.["Private Holdings"]} bgColor="rgb(234 162 43 / 6%)" />
                 <StatsCard onClick={() => { navigate('/my-vault/smart-metals/') }} title="Smart Metals" statsNumber="todo" icon={<SmartMetalsIcon />} bgColor="rgb(0 128 1 / 6%)" />
                 <StatsCard onClick={() => { navigate('/rewardpoints/history') }} title="Rewards Points" statsNumber={myVaultHomePageData?.["Reward Point"]} icon={<RewardPointsIcon />} bgColor="rgb(255 31 31 / 6%)" />
               </Box>
@@ -262,7 +276,7 @@ function Vault() {
                                   }}
                                 >
                                   {
-                                    <>
+                                    <Box className="Content">
                                       <img
                                         className="BannerImage"
                                         rel="prefetch"
@@ -273,8 +287,19 @@ function Vault() {
                                             : item.cdnUrlSmall
                                         }
                                         alt="background"
+                                        onClick={() => {
+                                          if (item.isImgUrl) {
+                                            openNewTab(item.url)
+                                          }
+                                        }}
                                       />
-                                    </>
+                                      <Box className="BannerImageContent"
+                                        dangerouslySetInnerHTML={{
+                                          __html: item.htmlcode,
+                                        }}
+                                      >
+                                      </Box>
+                                    </Box>
                                   }
                                 </Box>
                               </SwiperSlide>
