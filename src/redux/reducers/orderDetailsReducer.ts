@@ -6,10 +6,22 @@ import { OrderDetails } from '@/types/orderDetails'
 import OrderDetailsServices from '@/apis/services/orderDetailsServices'
 // Services
 
-const initialState: { loading: boolean, orderDetailsData: OrderDetails | null, isOrderFound: boolean | null } = {
+const initialState: {
+    loading: boolean, orderDetailsData: OrderDetails | null, isOrderFound: boolean | null, shippingMethods: {
+        "Local pick up": boolean,
+        "Secure Shipping": boolean,
+        "Vault storage": boolean
+
+    }
+} = {
     loading: false,
     orderDetailsData: null,
-    isOrderFound: null
+    isOrderFound: null,
+    shippingMethods: {
+        "Local pick up": false,
+        "Secure Shipping": false,
+        "Vault storage": false
+    }
 }
 
 export const getOrderDetailsData = appCreateAsyncThunk(
@@ -49,6 +61,9 @@ export const orderDetailsPageSlice = createSlice({
                 state.isOrderFound = false;
                 return;
             }
+            responseData.orderItems.forEach((item: any) => {
+                state.shippingMethods[item.shippingMethod as keyof typeof state.shippingMethods] = true;
+            });
             state.orderDetailsData = responseData;
             state.loading = false;
         })

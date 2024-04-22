@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Seo from "../components/common/Seo"
 import Layout from "@/components/common/Layout";
 import {
@@ -37,9 +37,15 @@ function orderDetails({ location }: { location: any }) {
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search])
     useAPIoneTime({ service: getOrderDetailsData, endPoint: ENDPOINTS.getOrderDetailsData + searchParams.get("orderNo") ?? "" });
     const orderDetails = useAppSelector(state => state.orderDetails.orderDetailsData)
+    const shippingMethods = useAppSelector(state => state.orderDetails.shippingMethods)
     const dispatch = useAppDispatch();
     const loading = useAppSelector(state => state.orderDetails.loading)
     const isOrderFound = useAppSelector(state => state.orderDetails.isOrderFound)
+    // const [shippingMethod, setShippingMethod] = useState({
+    //     "Local pick up": false,
+    //     "Secure shipping": false,
+    //     "Vault storage": false
+    // });
 
     const downloadInvoiceHandler = useDownloadInvoiceHandler()
     return (
@@ -129,39 +135,39 @@ function orderDetails({ location }: { location: any }) {
                                 </Box>
 
                                 <Box className="TableContainerWrapper">
-                                <TableContainer
-                                    className="OrderDetailTableWrapper"
-                                    sx={{}}
-                                // component={Paper}
-                                >
-                                    <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell className="Name">Name</TableCell>
-                                                <TableCell>Shipping Method</TableCell>
-                                                <TableCell>Price</TableCell>
-                                                <TableCell>Quantity</TableCell>
-                                                <TableCell>Total</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {orderDetails?.orderItems?.map((row) => (
-                                                <TableRow
-                                                    key={row.productId}
-                                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                >
-                                                    <TableCell component="th" scope="row">
-                                                        {row.productName}
-                                                    </TableCell>
-                                                    <TableCell>{orderDetails.shippingMethod}</TableCell>
-                                                    <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
-                                                    <TableCell>{row.quantity}</TableCell>
-                                                    <TableCell>${roundOfThePrice(row.totalPrice)}</TableCell>
+                                    <TableContainer
+                                        className="OrderDetailTableWrapper"
+                                        sx={{}}
+                                    // component={Paper}
+                                    >
+                                        <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell className="Name">Name</TableCell>
+                                                    <TableCell>Shipping Method</TableCell>
+                                                    <TableCell>Price</TableCell>
+                                                    <TableCell>Quantity</TableCell>
+                                                    <TableCell>Total</TableCell>
                                                 </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
+                                            </TableHead>
+                                            <TableBody>
+                                                {orderDetails?.orderItems?.map((row: any) => (
+                                                    <TableRow
+                                                        key={row.productId}
+                                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                    >
+                                                        <TableCell component="th" scope="row">
+                                                            {row.productName}
+                                                        </TableCell>
+                                                        <TableCell>{row.shippingMethod}</TableCell>
+                                                        <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
+                                                        <TableCell>{row.quantity}</TableCell>
+                                                        <TableCell>${roundOfThePrice(row.totalPrice)}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
                                 </Box>
 
                                 <Stack className='TotalShippingDetailsWrapper'>
@@ -170,10 +176,18 @@ function orderDetails({ location }: { location: any }) {
                                             <Typography variant="body1" sx={{ marginBottom: "2px" }}>Subtotal</Typography>
                                             <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.orderSubtotal)}</Typography>
                                         </Box>
-                                        <Box className="SecureShipping">
+                                        {shippingMethods["Secure Shipping"] && <Box className="SecureShipping">
                                             <Typography variant="body1" sx={{ marginBottom: "2px" }}>Secure Shipping</Typography>
                                             <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.orderShippingFee)}</Typography>
-                                        </Box>
+                                        </Box>}
+                                        {shippingMethods["Local pick up"] && <Box className="SecureShipping">
+                                            <Typography variant="body1" sx={{ marginBottom: "2px" }}>Local pick up</Typography>
+                                            <Typography variant="subtitle1"   >$0.00</Typography>
+                                        </Box>}
+                                        {shippingMethods["Vault storage"] && <Box className="SecureShipping">
+                                            <Typography variant="body1" sx={{ marginBottom: "2px" }}>Vault Storage</Typography>
+                                            <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.vaultStorageFee)}</Typography>
+                                        </Box>}
                                         {orderDetails?.paymentMethod === paymentMethodType["CreditCard"] && <Box className="SecureShipping">
                                             <Typography variant="body1" sx={{ marginBottom: "2px" }}>Credit Card Fee</Typography>
                                             <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.paymentMethodFee)}</Typography>
