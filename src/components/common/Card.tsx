@@ -644,7 +644,8 @@ export const AddressCard = (props: AddressCardProps) => {
         <Typography component="li" className="UserEmail"><strong>Name:</strong> {firstName + " " + lastName}</Typography>
         <Typography component="li" className="UserEmail"><strong>Email:</strong> {email}</Typography>
         <Typography component="li" className="UserPhoneNumber"><strong>Phone number:</strong> {phoneNumber}</Typography>
-        <Typography component="li" className="UserAddress"><strong>Address:</strong> {address?.addressLine1 + ", " + address?.addressLine2 + ", " + address?.city + " - " + address?.postcode + ", " + address?.stateName + ", " + address?.countryName}</Typography>
+        <Typography component="li" className="UserAddress"><strong>Address:</strong> {`${address?.addressLine1}${address?.addressLine2 ? `, ${address?.addressLine2}` : ''} ${address?.city} - ${address?.postcode}, ${address?.stateName}, ${address?.countryName}`
+        }</Typography>
         {address?.isVerified && <Typography component="li" className="verificationstatus">
           <VerifiedIcon /> Address Verified
         </Typography>}

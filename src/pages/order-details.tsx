@@ -115,7 +115,8 @@ function orderDetails({ location }: { location: any }) {
                                         <Stack sx={{ gap: "10px", alignItems: "center" }} className="CommonBottomMargin">
                                             <Typography variant="body1">Phone </Typography><Typography variant="subtitle1" className='Font16'> : {orderDetails?.addresses[0]?.phoneNumber}</Typography>
                                         </Stack>
-                                        <Typography variant="body1" className="CommonBottomMargin">{orderDetails?.addresses[0]?.addressLine1 + ", " + orderDetails?.addresses[0]?.addressLine2 + ", " + orderDetails?.addresses[0]?.city + " - " + orderDetails?.addresses[0]?.postcode + ", " + orderDetails?.addresses[0]?.stateName + ", " + orderDetails?.addresses[0]?.countryName}</Typography>
+                                        <Typography variant="body1" className="CommonBottomMargin">{`${orderDetails?.addresses[0]?.addressLine1}${orderDetails?.addresses[0]?.addressLine2.length > 0 ? (", " + orderDetails?.addresses[0]?.addressLine2) : ""} ${orderDetails?.addresses[0]?.city} - ${orderDetails?.addresses[0]?.postcode}, ${orderDetails?.addresses[0]?.stateName}, ${orderDetails?.addresses[0]?.countryName}`
+                                        }</Typography>
                                         {/* <Stack sx={{ gap: "10px", alignItems: "center" }}   >
                                         <Typography variant="body1">Account Type: </Typography><Typography variant="subtitle1" className='Font16'>{orderDetails?.addresses[0]?.}</Typography>
                                     </Stack> */}
@@ -129,7 +130,8 @@ function orderDetails({ location }: { location: any }) {
                                         <Stack sx={{ gap: "10px", alignItems: "center" }} className="CommonBottomMargin">
                                             <Typography variant="body1">Phone </Typography><Typography variant="subtitle1" className='Font16'> : {orderDetails?.addresses[1]?.phoneNumber}</Typography>
                                         </Stack>
-                                        <Typography variant="body1" className="CommonBottomMargin">{orderDetails?.addresses[1]?.addressLine1 + ", " + orderDetails?.addresses[1]?.addressLine2 + ", " + orderDetails?.addresses[1]?.city + " - " + orderDetails?.addresses[1]?.postcode + ", " + orderDetails?.addresses[1]?.stateName + ", " + orderDetails?.addresses[1]?.countryName}</Typography>
+                                        <Typography variant="body1" className="CommonBottomMargin">{`${orderDetails?.addresses[1]?.addressLine1}${orderDetails?.addresses[1]?.addressLine2 !== "" ? (", " + orderDetails?.addresses[1]?.addressLine2) + "" : ""}, ${orderDetails?.addresses[1]?.city} - ${orderDetails?.addresses[1]?.postcode}, ${orderDetails?.addresses[1]?.stateName}, ${orderDetails?.addresses[1]?.countryName}`
+                                        }</Typography>
                                         {orderDetails?.addresses[1]?.isVerified && <Typography variant="subtitle1" className='Font16 AddressVerified'><GreenConfirmationIcon fontSize="small" /> Address Verified</Typography>}
                                     </Box>
                                 </Box>
