@@ -175,7 +175,7 @@ function AboutProduct({ productId }: any) {
       }
     }) as any)
     showToaster({
-      message: 'The product has been added to your product watchlist',
+      message: 'The product has been added to your',
       buttonText: 'product watchlist',
       redirectButtonUrl: 'watchlist',
       severity: 'success'
@@ -261,14 +261,14 @@ function AboutProduct({ productId }: any) {
                       )}</Typography>}
                       <Typography className="ProductValue" variant="subtitle2">${roundOfThePrice(priceData?.data?.[0]?.price)}</Typography>
                     </Box>
-                    {priceData?.data?.[0]?.discount !== 0 && calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount) ? 
-                    <Stack className="DiscountWrapper">
-                      <Typography className="SaveMessage">SAVE</Typography>
-                      <TextFlipAnimation
-                        frontValue={calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount)!}
-                        backValue={'$'+ roundOfThePrice(productDetailsData?.premiumDiscount) + ' Off'}
-                      /></Stack>
-                    : null}
+                    {priceData?.data?.[0]?.discount !== 0 && calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount) ?
+                      <Stack className="DiscountWrapper">
+                        <Typography className="SaveMessage">SAVE</Typography>
+                        <TextFlipAnimation
+                          frontValue={calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount)!}
+                          backValue={'$' + roundOfThePrice(productDetailsData?.premiumDiscount) + ' Off'}
+                        /></Stack>
+                      : null}
                     {/* valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, min:progressData?.data?.minPrice, max:progressData?.data?.maxPrice}) */}
                   </Stack>
                   <Stack className="Right">
@@ -323,7 +323,7 @@ function AboutProduct({ productId }: any) {
                           <Typography className="SaveMessage">SAVE</Typography>
                           <TextFlipAnimation
                             frontValue={calculationOfThePremiumAndDiscount(productDetailsData?.productPremium, productDetailsData?.premiumDiscount)!}
-                            backValue={'$' + roundOfThePrice(productDetailsData?.premiumDiscount) +' Off'}
+                            backValue={'$' + roundOfThePrice(productDetailsData?.premiumDiscount) + ' Off'}
                           /></Stack>
                         : null}
                       {/* <PriceChangeReturn percentage={valueChangeForPrice({ currentprice: priceData?.data?.[0]?.price, yesterdayprice: progressData?.data?.yesterdayPrice })} /> */}
