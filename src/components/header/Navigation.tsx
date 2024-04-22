@@ -70,7 +70,7 @@ const isThisInsideCategory = getLengthOfThePaths(window?.location?.pathname?.toL
                         placement="bottom-start"
                         renderComponent={
                           <Link
-                            to={location.pathname === '/' ? `/${category.searchEngineFriendlyPageName}` : `/category/${category.searchEngineFriendlyPageName}`}
+                            to={location.pathname === '/' ? `${category.searchEngineFriendlyPageName}` : `/category/${category.searchEngineFriendlyPageName}`}
                             aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                             className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected  && isThisInsideCategory})}
                           >
@@ -83,7 +83,7 @@ const isThisInsideCategory = getLengthOfThePaths(window?.location?.pathname?.toL
                         <MegaMenu subCategorys={category.subCategories} category={category} />
                       </HoverTooltip></Fragment>
                       : <Fragment key={category.name}><Link
-                        to={location.pathname === '/' ? `/${category.searchEngineFriendlyPageName}` : `/category/${category.searchEngineFriendlyPageName}`}
+                        to={location.pathname === '/' ? `${category.searchEngineFriendlyPageName}` : `/category/${category.searchEngineFriendlyPageName}`}
                         aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                         className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected && isThisInsideCategory })}
                       >
