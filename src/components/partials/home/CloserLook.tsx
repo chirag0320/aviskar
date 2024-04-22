@@ -107,58 +107,60 @@ function CloserLook() {
   }
 
   return (
-    <Container id="CloserLook" component="section">
-      <SectionHeading
-        title={configDetails?.["home.closerlook.tital"]?.value ?? "Take a closer look*"}
-        description={configDetails?.["home.closerlook.subtital"]?.value ?? "description*"}
-      />
-      <Container className="DestinationWrapper" maxWidth="lg">
-        {data?.data?.items?.length !== 0 ?
-          <Box className="SwiperContainer">
-            <Swiper {...config} >
-              {
-                !loading ?
-                  (data?.data?.items?.length > 0 ? data?.data?.items?.map((destination) => (
-                    <SwiperSlide key={destination.id}>
-                      <TravelCard
-                        friendlyName={destination?.friendlyName}
-                        place={destination.title}
-                        description={destination.bodyOverview}
-                        imageUrl={destination.imageUrl}
-                      />
-                    </SwiperSlide>
-                  ))
-                    : null) :
-                  Array(5).fill(0).map((_, index) => {
-                    return (
-                      <SwiperSlide key={index}>
-                        <Card className="ProductCard">
-                          <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
-                          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                            <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
-                            <Skeleton animation="wave" height={70} width="95%" />
-                          </div>
-                        </Card>
+    <Box id="CloserLook">
+      <Container component="section">
+        <SectionHeading
+          title={configDetails?.["home.closerlook.tital"]?.value ?? "Take a closer look*"}
+          description={configDetails?.["home.closerlook.subtital"]?.value ?? "description*"}
+        />
+        <Container className="DestinationWrapper" maxWidth="lg">
+          {data?.data?.items?.length !== 0 ?
+            <Box className="SwiperContainer">
+              <Swiper {...config} >
+                {
+                  !loading ?
+                    (data?.data?.items?.length > 0 ? data?.data?.items?.map((destination) => (
+                      <SwiperSlide key={destination.id}>
+                        <TravelCard
+                          friendlyName={destination?.friendlyName}
+                          place={destination.title}
+                          description={destination.bodyOverview}
+                          imageUrl={destination.imageUrl}
+                        />
                       </SwiperSlide>
-                    );
-                  })
-              }
-            </Swiper>
-          </Box>
-          : <RecordNotFound message="No destination available" />
-        }
-      </Container>
-      {/* <Stack className="Action" onClick={() => {
+                    ))
+                      : null) :
+                    Array(5).fill(0).map((_, index) => {
+                      return (
+                        <SwiperSlide key={index}>
+                          <Card className="ProductCard">
+                            <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
+                            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                              <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
+                              <Skeleton animation="wave" height={70} width="95%" />
+                            </div>
+                          </Card>
+                        </SwiperSlide>
+                      );
+                    })
+                }
+              </Swiper>
+            </Box>
+            : <RecordNotFound message="No destination available" />
+          }
+        </Container>
+        {/* <Stack className="Action" onClick={() => {
           navigate('/blog')
         }}>
         <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained">Discover More</Button>
       </Stack> */}
-      <Stack className="Action">
-        <Button className="DiscoverMore" name='CloserLook' aria-label="CloserLook" variant="contained" onClick={() => {
-          navigate('/blog')
-        }}>Discover More</Button>
-      </Stack>
-    </Container>
+        <Stack className="Action">
+          <Button className="DiscoverMore" name='CloserLook' aria-label="CloserLook" variant="contained" onClick={() => {
+            navigate('/blog')
+          }}>Discover More</Button>
+        </Stack>
+      </Container>
+    </Box>
   )
 }
 

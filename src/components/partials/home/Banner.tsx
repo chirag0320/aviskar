@@ -10,6 +10,8 @@ import { Url } from "url"
 import { ENDPOINTS } from "@/utils/constants"
 import { GatsbyImage, StaticImage } from "gatsby-plugin-image"
 import { SwiperNavigation } from "@/components/common/Utils"
+import { navigate } from "gatsby"
+import { openNewTab } from "@/utils/common"
 
 interface IbannerData {
   id: number,
@@ -23,7 +25,7 @@ interface IbannerData {
   cdnUrlSmall: any
 }
 function Banner() {
-  const { data }: any = useApiRequest(ENDPOINTS.getSlider.replace('typeEnum','1'));
+  const { data }: any = useApiRequest(ENDPOINTS.getSlider.replace('typeEnum', '1'));
   const isLargeScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('sm'))
   const [tempImgHide, setTempImgHide] = useState(true)
@@ -64,13 +66,13 @@ function Banner() {
       <Box className="SwiperContainer">
         {data?.data?.length > 0 ?
           <Swiper {...config} >
-              {
-                data?.data?.map((item: IbannerData, index: number) => {
-                  return (
-                    <SwiperSlide key={`BannerSlider-${index}`}>
-                      <Box className="Wrapper" sx={{ position: 'relative', width: '100%', height: '100%' }}>
-                        {<>
-                          {/* <StaticImage
+            {
+              data?.data?.map((item: IbannerData, index: number) => {
+                return (
+                  <SwiperSlide key={`BannerSlider-${index}`}>
+                    <Box className="Wrapper" sx={{ position: 'relative', width: '100%', height: '100%' }}>
+                      {<>
+                        {/* <StaticImage
                           rel="prefetch"
                           loading="eager"
                           src={'../../../assets/images/loading.gif'}
@@ -78,19 +80,24 @@ function Banner() {
                           alt="background"
                           style={{visibility: tempImgHide ?'visible' :'hidden', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'fill' }}
                         />   */}
-                          <img
-                            className="BannerImage"
-                            rel="prefetch"
-                            loading="eager"
-                            src={isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall}
-                            alt="background"
-                            style={{ visibility: !tempImgHide ? 'visible' : 'hidden' }}
-                          /></>}
-                      </Box>
-                    </SwiperSlide>
-                  )
-                })
-              }
+                        <img
+                          className="BannerImage"
+                          rel="prefetch"
+                          loading="eager"
+                          src={isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall}
+                          alt="background"
+                          style={{ visibility: !tempImgHide ? 'visible' : 'hidden' }}
+                          onClick={() => {
+                            if (item.isImgUrl) {
+                              openNewTab(item.url)
+                            }
+                          }}
+                        /></>}
+                    </Box>
+                  </SwiperSlide>
+                )
+              })
+            }
           </Swiper>
           :
           <>

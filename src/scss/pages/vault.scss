@@ -52,18 +52,28 @@
         }
 
         #Banner {
+          height: 100%;
           .SwiperContainer {
+            height: inherit;
             .swiper {
+              height: inherit;
               .swiper-wrapper {
                 .swiper-slide {
                   .Wrapper {
                     border-radius: 15px;
                     background-color: transparent;
-
-                    .BannerImage {
-                      visibility: visible !important;
-                      border-radius: 15px;
-                      max-height: 630px;
+                    .Content {
+                      position: relative;
+                      .BannerImage {
+                        visibility: visible !important;
+                        border-radius: 15px;
+                        max-height: 630px;
+                      }
+                      .BannerImageContent {
+                        position: absolute;
+                        inset: 0;
+                        z-index: 1;
+                      }
                     }
                   }
                 }
@@ -98,6 +108,7 @@
 
     .UserInfoWrapper {
       display: flex;
+      align-items: center;
       gap: 30px;
 
       @include media($lg) {
@@ -140,11 +151,20 @@
                 .swiper-slide {
                   .Wrapper {
                     border-radius: 15px;
-
-                    .BannerImage {
-                      visibility: visible !important;
-                      border-radius: 15px;
-                      max-height: 630px;
+                    place-content: initial;
+                    .Content {
+                      position: relative;
+                      .BannerImage {
+                        visibility: visible !important;
+                        border-radius: 15px;
+                        max-height: 294px;
+                        object-fit: cover;
+                      }
+                      .BannerImageContent {
+                        position: absolute;
+                        inset: 0;
+                        z-index: 1;
+                      }
                     }
                   }
                 }

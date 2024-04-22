@@ -13,7 +13,13 @@ import { navigate } from 'gatsby'
 
 function Experience() {
     const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
-    console.log("🚀 ~ Experience ~ mainHomePageData:", mainHomePageData?.experience)
+    const handleSlideChange = () => {
+        // const iframes = document.querySelectorAll('iframe');
+        // iframes.forEach(iframe => {
+        //     iframe.src = iframe.src; // Reload the iframe to stop video playback
+        // });
+    };
+
     return (
         (mainHomePageData && mainHomePageData?.experience?.length > 0) ?
             <Box id="Experience">
@@ -52,8 +58,9 @@ function Experience() {
                                             slidesPerView: "auto"
                                         },
                                     }}
+                                    onSlideChange={handleSlideChange}
                                 >
-                                    {<SwiperNavigation />}
+                                    {<SwiperNavigation handleSlideChange={handleSlideChange} />}
                                     {(mainHomePageData && mainHomePageData?.experience?.length > 0) ?
                                         mainHomePageData?.experience?.map((item) => {
                                             return (
@@ -65,16 +72,21 @@ function Experience() {
                                                     <Box className="ExperienceSlide">
                                                         {item?.mediaType == '0' ?
                                                             <>
-                                                                <IconButton className="PlayIcon">
+                                                                {/* <IconButton className="PlayIcon">
                                                                     <PlayIcon />
-                                                                </IconButton>
-                                                                <iframe width="420" height="345"
-                                                                    src="https://www.youtube.com/embed/Oswc-jAgwgo?si=Sl-ig71KsTEdgicY&amp;controls=0"
-                                                                    >
-                                                                    </iframe>
+                                                                </IconButton> */}
+                                                                <iframe width="100%" height="484"
+                                                                    // src="https://www.youtube.com/embed/KcNAfplWuJw?si=LVtD_lAYMXTrbnMJ" 
+                                                                    src={item.imageUrl}
+                                                                    title="YouTube video player"
+                                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                                />
                                                             </>
                                                             :
-                                                            <img src={item.imageUrl ?? noImage} alt={item.title} />}
+                                                            <>
+                                                                <img src={item.imageUrl ?? noImage} alt={item.title} />
+                                                            </>
+                                                        }
 
                                                     </Box>
                                                 </SwiperSlide>

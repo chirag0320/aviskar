@@ -10,6 +10,7 @@ import { Url } from "url"
 import { ENDPOINTS } from "@/utils/constants"
 import { GatsbyImage, StaticImage } from "gatsby-plugin-image"
 import { SwiperNavigation } from "@/components/common/Utils"
+import { openNewTab } from "@/utils/common"
 
 interface IbannerData {
     id: number,
@@ -56,7 +57,11 @@ function Banner() {
                         data?.data?.map((item: IbannerData, index: number) => {
                             return (
                                 <SwiperSlide>
-                                    <Box className="HeroBannerSliderWrapper" style={{ backgroundImage: `url(${isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall})` }}>
+                                    <Box className="HeroBannerSliderWrapper" style={{ backgroundImage: `url(${isLargeScreen ? item.cdnUrlLarge : item.cdnUrlSmall})` }} onClick={() => {
+                                        if (item.isImgUrl) {
+                                            openNewTab(item.url)
+                                        }
+                                    }}>
                                         <Box className="HeroBannerTopWrapper" dangerouslySetInnerHTML={{
                                             __html: item.htmlCode,
                                         }}>

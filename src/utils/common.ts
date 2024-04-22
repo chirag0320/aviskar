@@ -1,4 +1,5 @@
 import { IPopUpDetails } from "@/apis/services/ConfigServices";
+import { navigate } from "gatsby";
 
 export const stockUpdate: any = {
   availableStock: 'We only have few items left for some products as listed below. Kindly adjust your cart quantity(s) accordingly.',
@@ -1396,3 +1397,17 @@ export const getlastPartOfPath = (path: any) => {
   const lastPartOfPath = parts[parts.length - 1];
   return lastPartOfPath
 }
+export const getLengthOfThePaths = (path: any) => {
+  const parts = path.split('/').filter((part: string) => part !== '');
+
+  return parts
+}
+export const openNewTab = (url:any) => {
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    // Open a new tab for external URLs
+    window.open(url, '_blank');
+  } else {
+    // For internal URLs, use Gatsby's navigate function
+    navigate(url);
+  }
+};
