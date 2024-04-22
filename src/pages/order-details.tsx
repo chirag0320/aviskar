@@ -9,7 +9,7 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material"
-import { AddToCartIcon, CreditCard, CartIcon, GreenConfirmationIcon, PdfIcon, ShieldIcon } from '@/assets/icons';
+import { AddToCartIcon, CreditCard, CartIcon, GreenConfirmationIcon, PdfIcon, ShieldIcon, PlusIcon } from '@/assets/icons';
 import StatusImage from '../assets/images/StatusImage.png';
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { ENDPOINTS } from "@/utils/constants";
@@ -171,7 +171,7 @@ function orderDetails({ location }: { location: any }) {
                                 </Box>
 
                                 <Stack className='TotalShippingDetailsWrapper'>
-                                    <Stack className='SubtotalShippingWrapper'>
+                                    <Stack className='SubtotalShippingWrapper' divider={<PlusIcon />}>
                                         <Box className="Subtotal">
                                             <Typography variant="body1" sx={{ marginBottom: "2px" }}>Subtotal</Typography>
                                             <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.orderSubtotal)}</Typography>
