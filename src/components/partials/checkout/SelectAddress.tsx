@@ -17,6 +17,7 @@ interface SelectAddress {
   listOfAddress: any
   handleAddressUpdate: any
   isbillingAddress: boolean
+  defaultSelectedAddress?: string
 }
 export type address = {
   "addressId": number,
@@ -43,12 +44,14 @@ export type address = {
 
 
 function SelectAddress(props: SelectAddress) {
-  const { open, onClose, listOfAddress, handleAddressUpdate, isbillingAddress } = props
-  const [selectAccount, setSelectAccount] = useState<string>(listOfAddress?.[0])
+  const { open, onClose, listOfAddress, handleAddressUpdate, isbillingAddress, defaultSelectedAddress } = props
+  // console.log("🚀 ~ SelectAddress ~ listOfAddress:", listOfAddress)
+  const [selectAccount, setSelectAccount] = useState<string>(defaultSelectedAddress ?? "")
 
   const handleSelectAccount = (event: SelectChangeEvent) => {
     setSelectAccount(event.target.value as string);
     handleAddressUpdate(event.target.value, isbillingAddress)
+    onClose();
   }
 
   useEffect(() => {
