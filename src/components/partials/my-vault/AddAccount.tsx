@@ -381,7 +381,7 @@ function AddAccount(props: AddAccountProps) {
                 error={errors.FirstName}
                 name="FirstName"
                 defaultValue={existingAccount?.firstName}
-                placeholder="Enter first name *"
+                placeholder="Enter first name*"
                 control={control}
                 variant='outlined'
                 margin='none'
@@ -391,7 +391,7 @@ function AddAccount(props: AddAccountProps) {
                 error={errors.LastName}
                 name="LastName"
                 defaultValue={existingAccount?.lastName}
-                placeholder="Enter last name *"
+                placeholder="Enter last name*"
                 control={control}
                 variant='outlined'
                 margin='none'
@@ -418,7 +418,7 @@ function AddAccount(props: AddAccountProps) {
                 error={errors.Email}
                 defaultValue={existingAccount?.email}
                 name="Email"
-                placeholder="Enter email id *"
+                placeholder="Enter email id*"
                 control={control}
                 variant='outlined'
                 margin='none'
@@ -431,7 +431,7 @@ function AddAccount(props: AddAccountProps) {
                 error={errors.Address1}
                 defaultValue={existingAccount?.address.addressLine1}
                 name="Address1"
-                placeholder="Enter address line 1 *"
+                placeholder="Enter address line 1*"
                 control={control}
                 variant='outlined'
                 margin='none'
@@ -453,7 +453,7 @@ function AddAccount(props: AddAccountProps) {
                 error={errors.City}
                 defaultValue={existingAccount?.address.city}
                 name="City"
-                placeholder="Enter city *"
+                placeholder="Enter city*"
                 control={control}
                 variant='outlined'
                 margin='none'
@@ -496,7 +496,7 @@ function AddAccount(props: AddAccountProps) {
                 error={errors.Code}
                 name="Code"
                 defaultValue={existingAccount?.address.postcode?.toString()}
-                placeholder="Enter zip / postal code *"
+                placeholder="Enter zip / postal code*"
                 control={control}
                 variant='outlined'
                 margin='none'

@@ -97,6 +97,7 @@ function SearchField() {
           <TextField
             {...params}
             variant="filled"
+            type="search"
             placeholder="Search Product"
             defaultValue={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
