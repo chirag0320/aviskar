@@ -36,18 +36,18 @@ function index() {
   const FixWrapperHeight = document.querySelector(".FixWrapper")?.clientHeight
   useEffect(() => {
     setFixWrapperHeight(FixWrapperHeight ?? 0)
-  }, [FixWrapperHeight] )
+  }, [FixWrapperHeight])
   return (
-    <Box id="MainFooterSection" component="footer" sx={{paddingBottom: `${fixWrapperHeight}px` }}>
+    <Box id="MainFooterSection" component="footer" sx={{ paddingBottom: `${fixWrapperHeight}px` }}>
       <Container className="Container">
         <Stack className="FooterWrapper">
           <Stack className="LogoPart">
-            <NavigationLink style={{cursor: 'pointer'}} to={'/'}>
-            <img src={configDetailsState?.brandlogourl?.value} alt="Footer logo" loading="lazy" 
-            // onClick={()=>{
-            //   navigate('/')
-            // }}
-            />
+            <NavigationLink style={{ cursor: 'pointer' }} to={'/'}>
+              <img src={configDetailsState?.brandlogourl?.value} alt="Footer logo" loading="lazy"
+              // onClick={()=>{
+              //   navigate('/')
+              // }}
+              />
             </NavigationLink>
             <Stack className="AboutWrapper">
               <Stack className="LocationWrapper About">
@@ -67,7 +67,9 @@ function index() {
                 <List>
                   {menu.links.map((item) => (
                     <ListItem key={item.linkTitle}>
-                      <ListItemButton href={item.linkUrl}>
+                      <ListItemButton onClick={() => {
+                        navigate(item.linkUrl)
+                      }}>
                         <ListItemIcon>
                           <ChevronRight />
                         </ListItemIcon>
@@ -101,7 +103,7 @@ function index() {
       </Container>
       <Suspense fallback={
         <></>
-      // <Skeleton style={{ height: '30px' }} />
+        // <Skeleton style={{ height: '30px' }} />
       }>
         <CopyRight />
       </Suspense>
