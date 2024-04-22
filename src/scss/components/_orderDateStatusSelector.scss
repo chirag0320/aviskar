@@ -28,6 +28,9 @@
             .DateCalenderWrapper,
             .SelectStatusWrapper {
                 flex: 1;
+                .MuiFormHelperText-root {
+                    position: absolute;
+                }
             }
 
             .DateCalenderWrapper {

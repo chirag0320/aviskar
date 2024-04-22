@@ -106,6 +106,7 @@ const OrderDateStatusSelector = ({ orderHistoryType }: { orderHistoryType: "buy-
                                     }}
                                     clearErrors={clearErrors}
                                     setDateRangeValue={setDateRangeValue}
+                                    margin="none"
                                 />
                             </Provider>
                         </Box>
