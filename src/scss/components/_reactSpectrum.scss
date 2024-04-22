@@ -111,3 +111,9 @@ div {
     --spectrum-global-dimension-font-size-75: 0.8125rem !important;
     --spectrum-global-font-line-height-small: 1.125rem !important;
 }
+
+[class*="_react-spectrum-Datepicker-dialogContent"] {
+    [class*="_spectrum-HelpText"] {
+        padding-block: initial !important;
+    }
+}
