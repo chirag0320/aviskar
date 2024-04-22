@@ -5,11 +5,6 @@
         }
     }
 
-    // NEED TO ADJUST
-    .error {
-        border: 1px solid $red;
-    }
-
     .DateRangePicker {
         position: relative;
 
@@ -67,15 +62,17 @@
         }
 
         [class*="_spectrum-HelpText"] {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            [class*="_spectrum-HelpText-text"] {
+                font-weight: 600;
+                margin-top: 3px;
+                @include padding-vertical(0);
+            }
         }
 
-        [class*="_i18nFontFamily"] {
-            font-family: $fontFamily;
-        }
+    }
+
+    [class*="_i18nFontFamily"] {
+        font-family: $fontFamily;
     }
 }
 
@@ -109,4 +106,8 @@ div {
     --spectrum-gray-600: #1d21296b !important;
     --spectrum-alias-highlight-selected: #eaa22b2e !important;
     --spectrum-accent-background-color-hover: #1d2129 !important;
+    --spectrum-red-900: #ff1f1f !important;
+    --spectrum-red-1000: #ff1f1f !important;
+    --spectrum-global-dimension-font-size-75: 0.8125rem !important;
+    --spectrum-global-font-line-height-small: 1.125rem !important;
 }
