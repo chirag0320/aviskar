@@ -510,8 +510,8 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             }
             maxVisibleMonths={2}
             pageBehavior="single"
-            // NEED TO ADJUST ERROR
-            UNSAFE_className={(error ? "error" : "") + " DateRangePicker"}
+            UNSAFE_className="DateRangePicker"
+            validationState={error ? "invalid" : undefined}
           />
         </FormControl>
       )

@@ -229,7 +229,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.FirstName}
                             name="FirstName"
-                            placeholder="Enter first name *"
+                            placeholder="Enter first name*"
                             control={control}
                             // setValue={setValue}
                             variant='outlined'
@@ -239,7 +239,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.LastName}
                             name="LastName"
-                            placeholder="Enter last name *"
+                            placeholder="Enter last name*"
                             control={control}
                             variant='outlined'
                             margin='none'
@@ -273,7 +273,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.Email}
                             name="Email"
-                            placeholder="Enter email id *"
+                            placeholder="Enter email id*"
                             control={control}
                             variant='outlined'
                             margin='none'
@@ -284,7 +284,7 @@ function AddAddress(props: AddAddress) {
                         register={register}
                         error={errors.Address1}
                         name="Address1"
-                        placeholder="Enter address line 1 *"
+                        placeholder="Enter address line 1*"
                         control={control}
                         variant='outlined'
                         margin='none'
@@ -303,7 +303,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.City}
                             name="City"
-                            placeholder="Enter city *"
+                            placeholder="Enter city*"
                             control={control}
                             variant='outlined'
                             margin='none'
@@ -368,7 +368,7 @@ function AddAddress(props: AddAddress) {
                             register={register}
                             error={errors.Code}
                             name="Code"
-                            placeholder="Enter zip / postal code *"
+                            placeholder="Enter zip / postal code*"
                             control={control}
                             variant='outlined'
                             margin='none'

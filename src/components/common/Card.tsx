@@ -259,6 +259,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                 ref={tooltipRef}
                 aria-label='StackIcon'
                 className="Outlined Stack"
+                title="PromoContent"
                 onClick={handleTooltipOpen}
               >
                 <StackIcon />
@@ -281,7 +282,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
           </ClickTooltip>
         }
 
-        <IconButton aria-label="AddToCartButton" className="Outlined AddToCart" onClick={handleAddToCart}><AddToCartIcon /></IconButton>
+        <IconButton title="AddToCart" aria-label="AddToCartButton" className="Outlined AddToCart" onClick={handleAddToCart}><AddToCartIcon /></IconButton>
       </CardActions>
     </Card>
   );
@@ -490,7 +491,7 @@ export const LineChartCard = (props: any) => {
             <Box className="HLCircuit">
               <Typography variant="caption">LOW</Typography>
               <Box className="HLCircuitRange">
-                <Box className="UpArrow" sx={{ left: (high - low) == 0 ? '0%' : ((high-currentPrice) * 100 / (high - low)) + "%" }}>
+                <Box className="UpArrow" sx={{ left: (high - low) == 0 ? '0%' : ((high - currentPrice) * 100 / (high - low)) + "%" }}>
                   {/* add percentage in left to slide arrowAicon */}
                   <FilledUpButton />
                 </Box>

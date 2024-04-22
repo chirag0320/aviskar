@@ -1,5 +1,5 @@
 import React, { Fragment, Suspense, lazy, useEffect, useState } from "react"
-import { Container, Stack, Divider, Button, Box } from "@mui/material"
+import { Container, Stack, Divider, Button, Box, Typography } from "@mui/material"
 import classNames from "classnames"
 
 // Components
@@ -14,13 +14,14 @@ import Badge from '@mui/material/Badge';
 
 // Utils
 import { chartMenuData, subMenuItems } from "../../utils/data"
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 import { ProductUpdateCountdown } from "../common/Utils"
 import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { bodyForGetShoppingCartData, getLengthOfThePaths, getlastPartOfPath } from "@/utils/common"
 import { CategoriesListDetails, getLiveDashboardChartData } from "@/redux/reducers/homepageReducer"
+import CartDropdownMenu from "../common/CartDropdownMenu"
 
 
 export interface Icategory {
@@ -99,11 +100,22 @@ const isThisInsideCategory = getLengthOfThePaths(window?.location?.pathname?.toL
               {needToShowProgressLoader && <ProductUpdateCountdown needToShowText={false} />}
               {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
               {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
-                <Link area-label="shopping-cart-link" to="/shopping-cart">
-                  <Badge badgeContent={cartItems?.length?.toString()} color="primary" max={99}>
-                    <CartMenu />
-                  </Badge>
-                </Link>
+                <HoverTooltip
+                  className="CartHoverList"
+                  placement="bottom-start"
+                  renderComponent={
+                    <Link area-label="shopping-cart-link" to="/shopping-cart">
+                      <Badge badgeContent={cartItems?.length?.toString()} color="primary" max={99}>
+                        <CartMenu />
+                      </Badge>
+                    </Link>
+                  }
+                  disablePortal
+                  lightTheme
+                >
+                  <CartDropdownMenu />
+                </HoverTooltip>
+
               </Suspense> : null}
               <ActionMenu />
             </Stack>
