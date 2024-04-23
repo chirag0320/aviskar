@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { Autocomplete, MenuItem, Button, Stack, TextField, Box } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -19,6 +19,9 @@ import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
 import { AddressType } from "@/types/enums"
 import { addOrEditAddresses as addOrEditAddressForMyVault, addAddress as addAddressForMyVault, getAddresses } from "@/redux/reducers/myVaultReducer"
+import { isValidPhoneNumber } from "@/components/common/Utils"
+import { CountryCode } from "libphonenumber-js"
+import { CountryData } from "react-phone-input-2"
 
 interface AddAddress {
     open: boolean
@@ -41,12 +44,11 @@ interface Inputs {
     State: string,
     Code: number,
 }
-
 export const addressSchema = yup.object().shape({
     FirstName: yup.string().trim().required('First name is a required field'),
     LastName: yup.string().trim().required('Last name is a required field'),
     Company: yup.string().trim(),
-    Contact: yup.string().trim().required(),
+    Contact: yup.string().trim(),
     Email: yup.string().email().required(),
     Address1: yup.string().trim().required("Address 1 in required field"),
     Address2: yup.string().trim(),
@@ -70,7 +72,29 @@ function AddAddress(props: AddAddress) {
     const [isAddressGoogleVerified, setIsAddressGoogleVerified] = useState<boolean>(false)
     // console.log("🚀 ~ AddAddress ~ isAddressGoogleVerified:", isAddressGoogleVerified)
     const [stateValue, setstateValue] = useState<any>('')
+    const [phoneNumberValue, setPhoneNumberValue] = useState<{ value: string, country: any }>({
+        value: "",
+        country: {}
+    })
+    const firstTimeRender = useRef(true);
 
+    const addressSchema = yup.object().shape({
+        FirstName: yup.string().trim().required('First name is a required field'),
+        LastName: yup.string().trim().required('Last name is a required field'),
+        Company: yup.string().trim(),
+        Contact: yup.string().trim().test('valid-phone-number', 'Please enter a valid phone number',
+            function (value) {
+                if (value) return isValidPhoneNumber(value, phoneNumberValue?.country?.countryCode);
+                else return false;
+            }),
+        Email: yup.string().email().required(),
+        Address1: yup.string().trim().required("Address 1 in required field"),
+        Address2: yup.string().trim(),
+        City: yup.string().required().trim(),
+        State: yup.string().required(),
+        Country: yup.string().notOneOf(["none"], "Country is required field"),
+        Code: yup.string().required('Zip / Postal code is required').trim(),
+    })
     const {
         register,
         reset,
@@ -78,11 +102,28 @@ function AddAddress(props: AddAddress) {
         handleSubmit,
         control,
         setValue,
+        setError,
         getValues,
         formState: { errors },
     } = useForm<Inputs>({
         resolver: yupResolver(addressSchema)
     })
+
+    useEffect(() => {
+        if (firstTimeRender.current) {
+            firstTimeRender.current = false;
+            return;
+        }
+        if (!isValidPhoneNumber(phoneNumberValue.value, phoneNumberValue?.country?.countryCode)) {
+            setError("Contact", {
+                type: "manual",
+                message: "Please enter a valid phone number"
+            });
+        }
+        else {
+            clearErrors("Contact")
+        }
+    }, [phoneNumberValue])
 
     useEffect(() => {
         setValue("Country", "none");
@@ -112,7 +153,9 @@ function AddAddress(props: AddAddress) {
             postcode: data.Code,
             countryId: data.Country,
         }
-
+        if (!isValidPhoneNumber(phoneNumberValue.value, phoneNumberValue?.country?.countryCode)) {
+            return;
+        }
         // to show whether it is coming from my-vault or checkout
         if (!addressTypeId) {
             addressQuery["addressTypeId"] = undefined;
@@ -173,6 +216,11 @@ function AddAddress(props: AddAddress) {
             reset()
             setcountryValue("none")
             setstateValue('')
+            setPhoneNumberValue({
+                value: "",
+                country: {}
+            })
+            firstTimeRender.current = true;
             setIsAddressGoogleVerified(false)
         }
     }, [open]);
@@ -210,9 +258,6 @@ function AddAddress(props: AddAddress) {
         setStateList(data)
     }, [stateListall, countryValue])
 
-    // const OnChange = (value: any) => {
-    //     setcountryValue(value)
-    // }
     return (
         <StyledDialog
             id="UpdateAddress"
@@ -222,7 +267,16 @@ function AddAddress(props: AddAddress) {
             primaryActionText="Save"
             maxWidth="sm"
         >
-            <form onSubmit={handleSubmit(onAddressFormSubmitHandler)}>
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                if (!isValidPhoneNumber(phoneNumberValue.value, phoneNumberValue?.country?.countryCode)) {
+                    setError("Contact", {
+                        type: "manual",
+                        message: "Please enter a valid phone number"
+                    });
+                }
+                handleSubmit(onAddressFormSubmitHandler)();
+            }}>
                 <Stack className="AllFields" >
                     <Stack className="Column">
                         <RenderFields
@@ -262,6 +316,8 @@ function AddAddress(props: AddAddress) {
                             type="phoneInput"
                             control={control}
                             setValue={setValue}
+                            value={phoneNumberValue.value}
+                            setPhoneNumberValue={setPhoneNumberValue}
                             name="Contact"
                             variant="outlined"
                             margin="none"

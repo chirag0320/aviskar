@@ -41,6 +41,7 @@ interface RenderFieldProps {
   readOnly?: boolean
   rows?: number
   control?: any
+  setPhoneNumberValue?: any
   dateRangeValue?: {
     start: CalendarDate,
     end: CalendarDate
@@ -101,6 +102,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   dateRangeValue,
   // dateRangeError,
   setDateRangeValue,
+  setPhoneNumberValue,
   setValue,
   onBlur,
   onKeyDown,
@@ -369,7 +371,14 @@ const RenderFields: React.FC<RenderFieldProps> = ({
             render={({ field }) => (
               <PhoneInput
                 country="au"
-                onChange={(value) => field.onChange(value)}
+                onChange={(value, country) => {
+                  // field.onChange(value)
+                  setPhoneNumberValue({
+                    value,
+                    country
+                  })
+                  setValue(name, value)
+                }}
                 value={value}
                 onBlur={field.onBlur}
                 preferredCountries={['au']}
@@ -500,7 +509,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 if (setDateRangeValue) {
                   setDateRangeValue(value)
                 }
-                if(setValue){
+                if (setValue) {
                   setValue(name, value)
                 }
                 if (clearErrors) {

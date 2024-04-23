@@ -288,7 +288,7 @@ function AddAccount(props: AddAccountProps) {
               register={register}
               error={errors.BusinessName}
               name="BusinessName"
-              placeholder="Enter business name *"
+              placeholder="Enter business name*"
               control={control}
               variant='outlined'
               margin='none'
@@ -299,7 +299,7 @@ function AddAccount(props: AddAccountProps) {
               register={register}
               error={errors.SuperfundName}
               name="SuperfundName"
-              placeholder="Enter superfund name *"
+              placeholder="Enter superfund name*"
               control={control}
               variant='outlined'
               margin='none'
@@ -327,7 +327,7 @@ function AddAccount(props: AddAccountProps) {
                 register={register}
                 error={errors.TrusteeName}
                 name="TrusteeName"
-                placeholder="Enter trustee name *"
+                placeholder="Enter trustee name*"
                 control={control}
                 variant='outlined'
                 margin='none'
