@@ -267,16 +267,8 @@ function AddAddress(props: AddAddress) {
             primaryActionText="Save"
             maxWidth="sm"
         >
-            <form onSubmit={(e) => {
-                e.preventDefault();
-                if (!isValidPhoneNumber(phoneNumberValue.value, phoneNumberValue?.country?.countryCode)) {
-                    setError("Contact", {
-                        type: "manual",
-                        message: "Please enter a valid phone number"
-                    });
-                }
-                handleSubmit(onAddressFormSubmitHandler)();
-            }}>
+            <form onSubmit={handleSubmit(onAddressFormSubmitHandler)}
+            >
                 <Stack className="AllFields" >
                     <Stack className="Column">
                         <RenderFields
