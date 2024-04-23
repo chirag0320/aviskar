@@ -10,6 +10,7 @@ const MobileMenu = lazy(() => import('./MobileMenu'))
 
 const FrontHeader = () => {
     const loading = useAppSelector((state) => state.homePage.loading)
+    const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
     const [isFrontPage] = useState(true)
     const [openMobileMenu, setOpenMobileMenu] = useState(false)
     const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
@@ -23,10 +24,10 @@ const FrontHeader = () => {
 
     return (
         <Box id="HeaderWrapper" className="FrontHeader">
-            {!isMobile && <>
+            {!isMobile && configDetailsState?.["mainhomepage.tickerenable"]?.value && <>
                 <Suspense fallback={
                     <></>
-                // <Skeleton style={{ minHeight: '60px' }} />
+                    // <Skeleton style={{ minHeight: '60px' }} />
                 }>
                     <FrontPricing />
                 </Suspense>
@@ -35,7 +36,7 @@ const FrontHeader = () => {
             <AppBar position={trigger ? "fixed" : "static"}>
                 {loading && <PageLoader />}
                 <Suspense fallback={<></>}>
-                {/* <Skeleton style={{ minHeight: '80px' }} /> */}
+                    {/* <Skeleton style={{ minHeight: '80px' }} /> */}
                     <FrontMain toggleMobileMenu={toggleMobileMenu} openMobileMenu={openMobileMenu} />
                 </Suspense>
             </AppBar>

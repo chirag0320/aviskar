@@ -55,10 +55,10 @@ function FrontPricing() {
                 >
                     <img src={configDetailsState?.australiaflagurl?.value} alt="Australia flag" width={36} height={24} loading="eager" />
                     <DraggableMarquee>
-                        <Stack className="PricingHeader__Wrapper--Content">
-                            {renderedStockItems}
+                        <Stack id={"mark-id"} className="PricingHeader__Wrapper--Content">
+                            {configDetailsState?.["mainhomepage.tickermetalpriceenable"]?.value && renderedStockItems}
                             {renderdTextAfterText}
-                            {renderedStockItems}
+                            {configDetailsState?.["mainhomepage.tickermetalpriceenable"]?.value && renderedStockItems}
                             {renderdTextAfterText}
                         </Stack>
                     </DraggableMarquee>
