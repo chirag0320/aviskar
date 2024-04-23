@@ -1,52 +1,92 @@
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import useApiRequest from '@/hooks/useAPIRequest';
+import { CartItem } from '@/types/shoppingCart';
+import { ENDPOINTS } from '@/utils/constants';
 import { Box, Button, Divider, Stack, Typography } from '@mui/material'
 import { navigate, Link } from 'gatsby'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { CartItemsWithLivePriceDetails } from '../partials/shopping-cart/CartDetails';
+import useShowToaster from '@/hooks/useShowToaster';
+import { resetSubTotal, setCartItemWarning, updateShoppingCartData, updateSubTotal } from '@/redux/reducers/shoppingCartReducer';
+import { hasFulfilled } from '@/utils/common';
 
-function CartDropdownMenu() {
+function CartDropdownMenu({ cartItemsWithLivePrice }: any) {
+    console.log("🚀 ~ CartDropdownMenu ~ cartItemsWithLivePrice:", cartItemsWithLivePrice)
+    const dispatch = useAppDispatch()
+    const { showToaster } = useShowToaster();
+    const { cartItems } = useAppSelector((state) => state.shoppingCart)
+    const itemCount = cartItems?.length ?? 0;
+    const itemWord = itemCount === 1 ? 'item' : 'items';
+    const itemCountWithWord = `${itemCount} ${itemWord}`;
+    const handleProccedToCheckout = async () => {
+        let quantities: any = {}
+        cartItems?.forEach((item: CartItem) => {
+            quantities[item.id] = item.quantity
+        })
+        let subTotal = 0;
+        const itemsWithQuantity = cartItemsWithLivePrice.map((item: CartItemsWithLivePriceDetails) => {
+            subTotal += (item?.LivePriceDetails?.price * quantities[item.id]);
+            return {
+                id: item.id,
+                quantity: quantities[item.id]
+            }
+        })
+        dispatch(resetSubTotal());
+        dispatch(updateSubTotal(subTotal))
+
+        const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
+
+        if (hasFulfilled(response.type)) {
+            if (!response?.payload?.data?.data || response?.payload?.data?.data?.length === 0) {
+                // showToaster({ message: "Cart updated and redirecting to checkout", severity: 'success' })
+                navigate('/checkout')
+            }
+            else {
+                dispatch(setCartItemWarning({ warnings: response?.payload?.data?.data, quantities }));
+                showToaster({ message: "Cannot Checkout as Some items have warnings", severity: 'warning' })
+            }
+        }
+        else {
+            showToaster({ message: "Update cart failed", severity: 'error' })
+        }
+    }
+
     return (
         <>
             <Box className="CartDropdownMenuWrapper">
                 <Box className="CartDropdownMenuHeader">
-                    <Typography variant="titleLarge">There are <Link area-label="shopping-cart-link" to="/shopping-cart">2 items</Link> in cart
+                    <Typography variant="titleLarge">There are <Link area-label="shopping-cart-link" to="/shopping-cart">{itemCountWithWord}</Link> in cart
                     </Typography>
                 </Box>
                 <Divider />
                 <Box className="CartDropdownMenuBody">
-                    <Stack className='ProductWrapper'>
-                        <Box className="ProductImagewrapper">
-                            <img src="https://qmintstoremedia.blob.core.windows.net/pictures/products/usquarterobverse_120320242303283.png?sv=2018-03-28&sr=b&sig=yw%2FlwoYtcC1LW69zXj7YmCR%2F8kz5FYYbUXWlN%2FALu%2Bc%3D&st=2024-03-11T13%3A50%3A28Z&se=3024-03-12T13%3A50%3A28Z&sp=r&c=638458482283304375" alt="product-img" />
-                        </Box>
-                        <Box className="ProductInfowrapper">
-                            <Typography component='h3' className="ProductName">Bullion Beginner Bundle</Typography>
-                            <Typography variant='overline' className="ProductPrice">$16,493.78</Typography>
-                        </Box>
-                    </Stack>
-                    <Stack className='ProductWrapper'>
-                        <Box className="ProductImagewrapper">
-                            <img src="https://qmintstoremedia.blob.core.windows.net/pictures/products/usquarterobverse_120320242303283.png?sv=2018-03-28&sr=b&sig=yw%2FlwoYtcC1LW69zXj7YmCR%2F8kz5FYYbUXWlN%2FALu%2Bc%3D&st=2024-03-11T13%3A50%3A28Z&se=3024-03-12T13%3A50%3A28Z&sp=r&c=638458482283304375" alt="product-img" />
-                        </Box>
-                        <Box className="ProductInfowrapper">
-                            <Typography component='h3' className="ProductName">Bullion Beginner Bundle</Typography>
-                            <Typography variant='body1' className="ProductPrice">$16,493.78</Typography>
-                        </Box>
-                    </Stack>
-                    <Stack className='ProductWrapper'>
-                        <Box className="ProductImagewrapper">
-                            <img src="https://qmintstoremedia.blob.core.windows.net/pictures/products/usquarterobverse_120320242303283.png?sv=2018-03-28&sr=b&sig=yw%2FlwoYtcC1LW69zXj7YmCR%2F8kz5FYYbUXWlN%2FALu%2Bc%3D&st=2024-03-11T13%3A50%3A28Z&se=3024-03-12T13%3A50%3A28Z&sp=r&c=638458482283304375" alt="product-img" />
-                        </Box>
-                        <Box className="ProductInfowrapper">
-                            <Typography component='h3' className="ProductName">Bullion Beginner Bundle</Typography>
-                            <Typography variant='body1' className="ProductPrice">$16,493.78</Typography>
-                        </Box>
-                    </Stack>
+                    {(cartItemsWithLivePrice && cartItemsWithLivePrice?.length > 0) ?
+                        cartItemsWithLivePrice?.slice(0, 3)?.map((item: { imageUrl: string | undefined; friendlypagename: string; productName: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; LivePriceDetails: { price: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }; }) => {
+                            return (
+                                <Stack className='ProductWrapper'>
+                                    <Box className="ProductImagewrapper">
+                                        <img src={item.imageUrl} alt="product-img" />
+                                    </Box>
+                                    <Box className="ProductInfowrapper">
+                                        <Typography component='h3' className="ProductName" onClick={() => {
+                                            navigate('/product-details/' + item?.friendlypagename)
+                                        }}>{item?.productName}</Typography>
+                                        <Typography variant='overline' className="ProductPrice">${item?.LivePriceDetails?.price}</Typography>
+                                    </Box>
+                                </Stack>
+                            )
+                        })
+                        : null}
                 </Box>
                 <Divider />
-                <Stack className="CartDropdownMenuFooter">
+                {(cartItems && cartItems?.length > 0) ? <Stack className="CartDropdownMenuFooter">
                     <Button variant="outlined" size="medium" onClick={() => navigate("/shopping-cart")}>Go to cart</Button>
-                    <Button variant="contained" size="medium" color="success">Checkout</Button>
-                </Stack>
+                    <Button variant="contained" size="medium" color="success" onClick={() => {
+                        handleProccedToCheckout()
+                    }}>Checkout</Button>
+                </Stack> : null}
             </Box>
         </>)
 }
 
-export default CartDropdownMenu
+export default React.memo(CartDropdownMenu)
