@@ -22,6 +22,7 @@ function OrderConfirmation(props: any) {
     const checkLoadingStatus = useAppSelector(state => state.orderConfirmationDetails.loading);
     // const orderId = props.location?.search?.split('=')[1];
     const orderConfirmationDetailsData = useAppSelector(state => state.orderConfirmationDetails.orderConfirmationDetailsData);
+    const shippingMethods = useAppSelector(state => state.orderConfirmationDetails.shippingMethods);
     useAPIoneTime({
         service: getOrderConfirmationDetails,
         endPoint: ENDPOINTS.orderConfimationDetails + new URLSearchParams(location.search).get("orderNo")
@@ -60,6 +61,7 @@ function OrderConfirmation(props: any) {
                     </Stack>
                     <Box className="DetailsWrapper">
                         <Box className="ThankyouWrapper">
+                            {/* @ts-ignore */}
                             <Typography className="ThankyouText" dangerouslySetInnerHTML={{ __html: orderConfirmationDetailsData?.thankyousection }} />
                             {/* <Typography variant="subtitle2" className="OrderID">Your order id is: {orderConfirmationDetailsData?.orderNumber}</Typography> */}
                             {/* <Typography variant="body1">You will receive an order confirmation email with details of your order and a link to track its progress.</Typography> */}
@@ -109,7 +111,7 @@ function OrderConfirmation(props: any) {
                                                                 src={row.imageUrl ?? noImage} alt="Product image" loading="lazy"></img>
                                                             {row.productName}
                                                         </TableCell>
-                                                        <TableCell>{orderConfirmationDetailsData.shippingMethod}</TableCell>
+                                                        <TableCell>{row.shippingMethod}</TableCell>
                                                         <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
                                                         <TableCell>{row.quantity}</TableCell>
                                                         <TableCell>${roundOfThePrice(row.subTotal)}</TableCell>
@@ -126,13 +128,14 @@ function OrderConfirmation(props: any) {
 
                                     {orderConfirmationDetailsData?.shippingMethod && <>
                                         <Divider />
-                                        {renderPricingItem(orderConfirmationDetailsData?.shippingMethod, `$${roundOfThePrice(Number(orderConfirmationDetailsData?.shippingFee))}`)}
+                                        {shippingMethods["Secure Shipping"] && renderPricingItem("Secure Shipping", `$${roundOfThePrice(Number(orderConfirmationDetailsData?.shippingFee))}`)}
+                                        {shippingMethods["Local pick up"] && renderPricingItem("Local pick up", "$0.00")}
+                                        {shippingMethods["Vault storage"] && renderPricingItem("Vault storage", `$${roundOfThePrice(Number(orderConfirmationDetailsData?.vaultStorageFee))}`)}
                                     </>}
                                     {orderConfirmationDetailsData?.paymentMethod && <>
                                         <Divider />
                                         {renderPricingItem(orderConfirmationDetailsData?.paymentMethod, `$${roundOfThePrice(Number(orderConfirmationDetailsData?.paymentFee))}`)}
                                     </>}
-
                                     {orderConfirmationDetailsData?.orderTax !== 0 && <><Divider />
                                         {renderPricingItem("GST Incuded", `$${roundOfThePrice(orderConfirmationDetailsData?.orderTax as number)}`)}
                                     </>}
@@ -152,6 +155,7 @@ function OrderConfirmation(props: any) {
                             {/* <Typography variant="body1">An email has been sent with your order details and payment instructions.You can also download or view on the following links: <Button variant="text">
                                     Download (download pdf)</Button></Typography>
                                 <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography> */}
+                            {/* @ts-ignore */}
                             <Typography className="DownloadMessage" variant="body1" dangerouslySetInnerHTML={{ __html: orderConfirmationDetailsData?.orderdescription }} />
                             {/* <Typography variant="body1"><Button variant="text">View Online</Button> Copies of historical orders can also be viewed and downloaded from your <Button variant="text">Account History</Button></Typography> */}
                         </Box>

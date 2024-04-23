@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Seo from "../components/common/Seo"
 import Layout from "@/components/common/Layout";
 import {
@@ -9,7 +9,7 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material"
-import { AddToCartIcon, CreditCard, CartIcon, GreenConfirmationIcon, PdfIcon, ShieldIcon } from '@/assets/icons';
+import { AddToCartIcon, CreditCard, CartIcon, GreenConfirmationIcon, PdfIcon, ShieldIcon, PlusIcon } from '@/assets/icons';
 import StatusImage from '../assets/images/StatusImage.png';
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { ENDPOINTS } from "@/utils/constants";
@@ -37,9 +37,15 @@ function orderDetails({ location }: { location: any }) {
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search])
     useAPIoneTime({ service: getOrderDetailsData, endPoint: ENDPOINTS.getOrderDetailsData + searchParams.get("orderNo") ?? "" });
     const orderDetails = useAppSelector(state => state.orderDetails.orderDetailsData)
+    const shippingMethods = useAppSelector(state => state.orderDetails.shippingMethods)
     const dispatch = useAppDispatch();
     const loading = useAppSelector(state => state.orderDetails.loading)
     const isOrderFound = useAppSelector(state => state.orderDetails.isOrderFound)
+    // const [shippingMethod, setShippingMethod] = useState({
+    //     "Local pick up": false,
+    //     "Secure shipping": false,
+    //     "Vault storage": false
+    // });
 
     const downloadInvoiceHandler = useDownloadInvoiceHandler()
     return (
@@ -109,7 +115,8 @@ function orderDetails({ location }: { location: any }) {
                                         <Stack sx={{ gap: "10px", alignItems: "center" }} className="CommonBottomMargin">
                                             <Typography variant="body1">Phone </Typography><Typography variant="subtitle1" className='Font16'> : {orderDetails?.addresses[0]?.phoneNumber}</Typography>
                                         </Stack>
-                                        <Typography variant="body1" className="CommonBottomMargin">{orderDetails?.addresses[0]?.addressLine1 + ", " + orderDetails?.addresses[0]?.addressLine2 + ", " + orderDetails?.addresses[0]?.city + " - " + orderDetails?.addresses[0]?.postcode + ", " + orderDetails?.addresses[0]?.stateName + ", " + orderDetails?.addresses[0]?.countryName}</Typography>
+                                        <Typography variant="body1" className="CommonBottomMargin">{`${orderDetails?.addresses[0]?.addressLine1}${orderDetails?.addresses[0]?.addressLine2.length > 0 ? (", " + orderDetails?.addresses[0]?.addressLine2) : ""} ${orderDetails?.addresses[0]?.city} - ${orderDetails?.addresses[0]?.postcode}, ${orderDetails?.addresses[0]?.stateName}, ${orderDetails?.addresses[0]?.countryName}`
+                                        }</Typography>
                                         {/* <Stack sx={{ gap: "10px", alignItems: "center" }}   >
                                         <Typography variant="body1">Account Type: </Typography><Typography variant="subtitle1" className='Font16'>{orderDetails?.addresses[0]?.}</Typography>
                                     </Stack> */}
@@ -123,57 +130,66 @@ function orderDetails({ location }: { location: any }) {
                                         <Stack sx={{ gap: "10px", alignItems: "center" }} className="CommonBottomMargin">
                                             <Typography variant="body1">Phone </Typography><Typography variant="subtitle1" className='Font16'> : {orderDetails?.addresses[1]?.phoneNumber}</Typography>
                                         </Stack>
-                                        <Typography variant="body1" className="CommonBottomMargin">{orderDetails?.addresses[1]?.addressLine1 + ", " + orderDetails?.addresses[1]?.addressLine2 + ", " + orderDetails?.addresses[1]?.city + " - " + orderDetails?.addresses[1]?.postcode + ", " + orderDetails?.addresses[1]?.stateName + ", " + orderDetails?.addresses[1]?.countryName}</Typography>
+                                        <Typography variant="body1" className="CommonBottomMargin">{`${orderDetails?.addresses[1]?.addressLine1}${orderDetails?.addresses[1]?.addressLine2 !== "" ? (", " + orderDetails?.addresses[1]?.addressLine2) + "" : ""}, ${orderDetails?.addresses[1]?.city} - ${orderDetails?.addresses[1]?.postcode}, ${orderDetails?.addresses[1]?.stateName}, ${orderDetails?.addresses[1]?.countryName}`
+                                        }</Typography>
                                         {orderDetails?.addresses[1]?.isVerified && <Typography variant="subtitle1" className='Font16 AddressVerified'><GreenConfirmationIcon fontSize="small" /> Address Verified</Typography>}
                                     </Box>
                                 </Box>
 
                                 <Box className="TableContainerWrapper">
-                                <TableContainer
-                                    className="OrderDetailTableWrapper"
-                                    sx={{}}
-                                // component={Paper}
-                                >
-                                    <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell className="Name">Name</TableCell>
-                                                <TableCell>Shipping Method</TableCell>
-                                                <TableCell>Price</TableCell>
-                                                <TableCell>Quantity</TableCell>
-                                                <TableCell>Total</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {orderDetails?.orderItems?.map((row) => (
-                                                <TableRow
-                                                    key={row.productId}
-                                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                                >
-                                                    <TableCell component="th" scope="row">
-                                                        {row.productName}
-                                                    </TableCell>
-                                                    <TableCell>{orderDetails.shippingMethod}</TableCell>
-                                                    <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
-                                                    <TableCell>{row.quantity}</TableCell>
-                                                    <TableCell>${roundOfThePrice(row.totalPrice)}</TableCell>
+                                    <TableContainer
+                                        className="OrderDetailTableWrapper"
+                                        sx={{}}
+                                    // component={Paper}
+                                    >
+                                        <Table className="OrderDetailTable" sx={{ minWidth: 650 }} aria-label="Orders details table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell className="Name">Name</TableCell>
+                                                    <TableCell>Shipping Method</TableCell>
+                                                    <TableCell>Price</TableCell>
+                                                    <TableCell>Quantity</TableCell>
+                                                    <TableCell>Total</TableCell>
                                                 </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
+                                            </TableHead>
+                                            <TableBody>
+                                                {orderDetails?.orderItems?.map((row: any) => (
+                                                    <TableRow
+                                                        key={row.productId}
+                                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                                    >
+                                                        <TableCell component="th" scope="row">
+                                                            {row.productName}
+                                                        </TableCell>
+                                                        <TableCell>{row.shippingMethod}</TableCell>
+                                                        <TableCell>${roundOfThePrice(row.unitPrice)}</TableCell>
+                                                        <TableCell>{row.quantity}</TableCell>
+                                                        <TableCell>${roundOfThePrice(row.totalPrice)}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
                                 </Box>
 
                                 <Stack className='TotalShippingDetailsWrapper'>
-                                    <Stack className='SubtotalShippingWrapper'>
+                                    <Stack className='SubtotalShippingWrapper' divider={<PlusIcon />}>
                                         <Box className="Subtotal">
                                             <Typography variant="body1" sx={{ marginBottom: "2px" }}>Subtotal</Typography>
                                             <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.orderSubtotal)}</Typography>
                                         </Box>
-                                        <Box className="SecureShipping">
+                                        {shippingMethods["Secure Shipping"] && <Box className="SecureShipping">
                                             <Typography variant="body1" sx={{ marginBottom: "2px" }}>Secure Shipping</Typography>
                                             <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.orderShippingFee)}</Typography>
-                                        </Box>
+                                        </Box>}
+                                        {shippingMethods["Local pick up"] && <Box className="SecureShipping">
+                                            <Typography variant="body1" sx={{ marginBottom: "2px" }}>Local pick up</Typography>
+                                            <Typography variant="subtitle1"   >$0.00</Typography>
+                                        </Box>}
+                                        {shippingMethods["Vault storage"] && <Box className="SecureShipping">
+                                            <Typography variant="body1" sx={{ marginBottom: "2px" }}>Vault Storage</Typography>
+                                            <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.vaultStorageFee)}</Typography>
+                                        </Box>}
                                         {orderDetails?.paymentMethod === paymentMethodType["CreditCard"] && <Box className="SecureShipping">
                                             <Typography variant="body1" sx={{ marginBottom: "2px" }}>Credit Card Fee</Typography>
                                             <Typography variant="subtitle1"   >${roundOfThePrice(orderDetails?.paymentMethodFee)}</Typography>

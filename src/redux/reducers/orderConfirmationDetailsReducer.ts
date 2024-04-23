@@ -18,6 +18,7 @@ interface OrderDetails {
     orderNumber: string | null;
     orderTotal: number | null;
     shippingFee: number | null;
+    vaultStorageFee : number | null;
     paymentFee: number | null;
     orderDiscount: number | null;
     orderTax: number | null;
@@ -37,10 +38,22 @@ interface OrderItem {
     subTotal: number;
 }
 
-const initialState: { loading: boolean, orderConfirmationDetailsData: OrderDetails | null, isOrderFound: boolean | null } = {
+const initialState: {
+    loading: boolean, orderConfirmationDetailsData: OrderDetails | null, isOrderFound: boolean | null, shippingMethods: {
+        "Local pick up": boolean,
+        "Secure Shipping": boolean,
+        "Vault storage": boolean
+
+    }
+} = {
     loading: false,
     orderConfirmationDetailsData: null,
-    isOrderFound: null
+    isOrderFound: null,
+    shippingMethods: {
+        "Local pick up": false,
+        "Secure Shipping": false,
+        "Vault storage": false
+    }
 };
 
 export const getOrderConfirmationDetails = appCreateAsyncThunk(
@@ -73,6 +86,9 @@ export const orderConfirmationDetailsPageSlice = createSlice({
                 state.loading = false;
                 return;
             }
+            responseData.orderItems.forEach((item: any) => {
+                state.shippingMethods[item.shippingMethod as keyof typeof state.shippingMethods] = true;
+            });
             state.orderConfirmationDetailsData = responseData;
             state.loading = false;
         })

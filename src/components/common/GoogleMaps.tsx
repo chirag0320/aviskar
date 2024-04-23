@@ -94,9 +94,9 @@ export default function GoogleMaps({ setParsedAddress }: { setParsedAddress: any
           setParsedAddress({
             country: parsedAddress?.country,
             state: parsedAddress?.state,
-            address: parsedAddress?.address,
+            address: parsedAddress?.address.replace(/,/g, ''),
             city: parsedAddress?.city,
-            address2: parsedAddress?.address2,
+            address2: parsedAddress?.address2.replace(/,/g, ''),
             postalCode: postalCode
           })
         }
@@ -104,9 +104,9 @@ export default function GoogleMaps({ setParsedAddress }: { setParsedAddress: any
           setParsedAddress({
             country: parsedAddress?.country,
             state: parsedAddress?.state,
-            address: parsedAddress?.address,
+            address: parsedAddress?.address.replace(/,/g, ''),
             city: parsedAddress?.city,
-            address2: parsedAddress?.address2
+            address2: parsedAddress?.address2.replace(/,/g, '')
           })
         }
       }

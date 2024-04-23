@@ -70,8 +70,10 @@ function SignInPage() {
       return
     }
     const lastPage = getLastPage();
+    console.log("🚀 ~ onSubmit ~ lastPage:", lastPage)
     if (lastPage) {
       // Redirect the user to the last visited page
+      console.log("🚀 ~ onSubmit ~ lastPage:", "isLoggedIn", lastPage)
       navigate(lastPage);
     } else {
       // Redirect the user to a default page
@@ -104,7 +106,18 @@ function SignInPage() {
     }
   }
   if (isLoggedIn) {
-    navigate('/', { replace: true })
+    console.log("🚀 ~ onSubmit ~ lastPage:", "isLoggedIn")
+    const lastPage = getLastPage();
+    console.log("🚀 ~ onSubmit ~ lastPage:", lastPage)
+    if (lastPage) {
+      // Redirect the user to the last visited page
+      console.log("🚀 ~ onSubmit ~ lastPage:", "isLoggedIn", lastPage)
+      navigate(lastPage, { replace: true });
+    } else {
+      // Redirect the user to a default page
+      navigate('/', { replace: true })
+
+    }
     return;
   }
   return (

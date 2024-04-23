@@ -28,13 +28,13 @@ function ContactUs() {
   return (
     <Layout>
       <>
-      <Loader open = {checkLoadingStatus} />
+        <Loader open={checkLoadingStatus} />
         <Seo
           keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
           title="Home"
           lang="en"
         />
-        {openToaster && <Toaster/>}
+        {openToaster && <Toaster />}
         <Box id="ContactUsPage" className='ContactUsPage' component="section">
           <Box className="TitleWrapper">
             <PageTitle title="Contact us" />
@@ -53,14 +53,14 @@ function ContactUs() {
                   <Icon className='OriginalIcon'><Calling /></Icon>
                 </Box>
                 <Typography variant="h4" component="h2" className="Title">Call us</Typography>
-                <Link href="tel:(07) 3184 8300" variant="body1" className="CallUsNumber">{configDetails?.displayphonenumber?.value}</Link>
+                <Link href={`tel:${configDetails?.displayphonenumber?.value}`} variant="body1" className="CallUsNumber">{configDetails?.displayphonenumber?.value}</Link>
               </Box>
               <Box className="EmailWrapper ContactCard">
                 <Box className="IconWrapper">
                   <Icon className='OriginalIcon'><Email /></Icon>
                 </Box>
                 <Typography variant="h4" component="h2" className="Title">Email Id</Typography>
-                <Link href="mailto:support@queenslandmint.com.ca" variant="body1" className="EmailAddress">{configDetails?.storecontactemail?.value}</Link>
+                <Link href={`mailto: ${configDetails?.storecontactemail?.value}`} variant="body1" className="EmailAddress">{configDetails?.storecontactemail?.value}</Link>
               </Box>
             </Stack>
             <Box className="GetInTouchWrapper">
