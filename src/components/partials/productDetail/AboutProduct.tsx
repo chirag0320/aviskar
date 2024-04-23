@@ -192,7 +192,7 @@ function AboutProduct({ productId }: any) {
       "quantity": quantityCount,
       "IsInstantBuy": isInstantBuy
     } as any)
-    if (response.code === 200) {
+    if (response.code === 200 && !isInstantBuy) {
       dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
       if (response.data) {
         showToaster({
