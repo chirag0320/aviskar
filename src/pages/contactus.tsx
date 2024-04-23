@@ -55,16 +55,16 @@ function ContactUs() {
                 <Typography variant="h4" component="h2" className="Title">Call us</Typography>
                 <Link href={`tel:${configDetails?.displayphonenumber?.value}`} variant="body1" className="CallUsNumber">{configDetails?.displayphonenumber?.value}</Link>
               </Box>
-              <Box className="EmailWrapper ContactCard">
+              {/* <Box className="EmailWrapper ContactCard">
                 <Box className="IconWrapper">
                   <Icon className='OriginalIcon'><Email /></Icon>
                 </Box>
                 <Typography variant="h4" component="h2" className="Title">Email Id</Typography>
                 <Link href={`mailto: ${configDetails?.storecontactemail?.value}`} variant="body1" className="EmailAddress">{configDetails?.storecontactemail?.value}</Link>
-              </Box>
+              </Box> */}
             </Stack>
             <Box className="GetInTouchWrapper">
-              <ContactUsForm />
+              {/* <ContactUsForm /> */}
               <Map />
             </Box>
             <SocialNetwork />

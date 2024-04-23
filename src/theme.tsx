@@ -33,7 +33,7 @@ const theme: Theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "'Montserrat', sans-serif",
+    fontFamily: "'Open Sans', sans-serif",
     button: {
       lineHeight: 1.5,
     },

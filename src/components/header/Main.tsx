@@ -39,7 +39,7 @@ function Main(props: any) {
           <LinkM href={"tel:" + configDetailsState?.companyphonenumber?.value} variant="overline" className="PhoneNumber" aria-label="PhoneNumber"><Call />{configDetailsState?.companyphonenumber?.value}</LinkM>
           <SearchField />
           {/* <Link to={ENDPOINTS.login}> */}
-          <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton" variant="outlined" color="primary" startIcon={<Profile />}>{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Button>
+          <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton" variant="outlined" color="primary" startIcon={<Profile />}><Typography variant="inherite">{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Typography></Button>
           {/* </Link> */}
           <IconButton color="secondary" title="menuButton" area-label="HamburgerMenuButton" className="HamburgerButton MenuButton" onClick={toggleMobileMenu}>{!openMobileMenu ? <HamburgerIcon className="HamburgerIcon" /> : <CrossIcon className="CrossIcon" />}</IconButton>
         </Stack>
