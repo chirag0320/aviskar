@@ -39,7 +39,7 @@ function FrontFooter() {
                 <Stack className="FooterWrapper">
                     <Stack className="LogoPart">
                         <Link style={{ cursor: 'pointer' }}>
-                            <img src={configDetailsState?.storelogourl?.value} alt="Footer logo" loading="lazy" onClick={() => {
+                            <img src={configDetailsState?.["mainhomepage.footerlogo"].value} alt="Footer logo" loading="lazy" onClick={() => {
                                 navigate('/')
                             }} />
                         </Link>

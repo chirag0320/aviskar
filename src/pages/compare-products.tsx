@@ -65,7 +65,7 @@ function CompareProducts() {
                                                 <TableCell className="StickyCell" style={{ minWidth: 200 }}>&nbsp;</TableCell>
                                                 {comparedProducts.map((product, index) => (
                                                     <TableCell sx={{ minWidth: { lg: "459px", xs: "400px" } }} key={product.productId} align="center">
-                                                        <Link to={`/product-details/${product.productName}`} className="ProductName">{product.productName}</Link>
+                                                        <Link to={`/product-details/${product.friendlypagename}`} className="ProductName">{product.productName}</Link>
                                                     </TableCell>
                                                 ))}
                                             </TableRow>
@@ -77,7 +77,7 @@ function CompareProducts() {
                                                     {comparedProducts.map((product, index) => (
                                                         <TableCell align="center" key={product.productId} className={attribute === 'ProductName' ? 'ProductName' : ''}>
                                                             {attribute === 'ProductName' ? (
-                                                                <Link to={`/product-details/${product.productName}`} className="productNameLink">{product.productName}</Link>
+                                                                <Link to={`/product-details/${product.friendlypagename}`} className="productNameLink">{product.productName}</Link>
                                                             ) : attribute === 'ProductImage' ? (
                                                                 <img src={product.imageUrl ?? noImage} className="ProductImage" alt={product.productName} />
                                                             ) : (

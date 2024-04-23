@@ -83,6 +83,7 @@ function AboutProduct({ productId }: any) {
   });
   const { productDetailsData } = useAppSelector((state) => state.category)
   const { configDetails: configDetailsState, isLoggedIn, openToaster } = useAppSelector((state) => state.homePage)
+  const { productIds: compareProducts } = useAppSelector((state) => state.compareProducts)
   const [quantityCount, setQuantityCount] = useState<number>(productDetailsData?.minimumCartQty ?? 1)
   const [productIds, setProductIds] = useState({ productIds: [Number(productId)] })
   const [urlForThePriceRange, setUrlForThePriceRange] = useState(ENDPOINTS.priceForprogressbar.replace('{{product-id}}', productId).replace('{{timeinterval}}', '1'))
@@ -158,13 +159,37 @@ function AboutProduct({ productId }: any) {
     }
   }
   const addIntoComapreProduct = (id: any) => {
-    dispatch(addProductToCompare(id))
-    showToaster({
-      message: 'The product has been added to compare',
-      buttonText: 'product comparison',
-      redirectButtonUrl: 'compare-products',
-      severity: 'success'
-    })
+    if(!compareProducts.includes(productId) && compareProducts.length < 5){
+      dispatch(addProductToCompare(id))
+      showToaster({
+        message: 'The Product has been added to the',
+        buttonText: 'compare product list',
+        redirectButtonUrl: 'compare-products',
+        severity: 'success'
+      })
+    }else{
+      let message = '';
+      if (compareProducts.includes(productId)) {
+        message = 'The product is already in the';
+        showToaster({
+          message: message,
+          buttonText: 'compare product list',
+          redirectButtonUrl: 'compare-products',
+          severity: 'error'
+        });
+      } else {
+        message = 'You can compare up to 5 products at a time. Remove some products to add new ones in';
+        showToaster({
+          message: message,
+          buttonText: 'compare product list',
+          redirectButtonUrl: 'compare-products',
+          severity: 'error'
+        });
+        
+      }
+
+    }
+
   }
   const addIntoWishList = async (id: any) => {
     await dispatch(addToWishList({
