@@ -160,8 +160,8 @@ function AboutProduct({ productId }: any) {
   const addIntoComapreProduct = (id: any) => {
     dispatch(addProductToCompare(id))
     showToaster({
-      message: 'The product has been added to compare',
-      buttonText: 'product comparison',
+      message: 'The Product has been added to the',
+      buttonText: 'compare product list',
       redirectButtonUrl: 'compare-products',
       severity: 'success'
     })
