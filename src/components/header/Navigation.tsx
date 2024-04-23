@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, lazy, useEffect, useState } from "react"
+import React, { Fragment, Suspense, lazy, useEffect, useMemo, useState } from "react"
 import { Container, Stack, Divider, Button, Box, Typography } from "@mui/material"
 import classNames from "classnames"
 
@@ -16,12 +16,15 @@ import Badge from '@mui/material/Badge';
 import { chartMenuData, subMenuItems } from "../../utils/data"
 import { Link, navigate } from "gatsby"
 import { ProductUpdateCountdown } from "../common/Utils"
-import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer"
+import { getShoppingCartData, updateSubTotal } from "@/redux/reducers/shoppingCartReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
 import { bodyForGetShoppingCartData, getLengthOfThePaths, getlastPartOfPath } from "@/utils/common"
 import { CategoriesListDetails, getLiveDashboardChartData } from "@/redux/reducers/homepageReducer"
 import CartDropdownMenu from "../common/CartDropdownMenu"
+import useApiRequest from "@/hooks/useAPIRequest"
+import { CartItem } from "@/types/shoppingCart"
+import { CartItemsWithLivePriceDetails } from "../partials/shopping-cart/CartDetails"
 
 
 export interface Icategory {
@@ -52,7 +55,38 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
   }, [])
   const [params] = useState({ page: location.pathname === "/" ? 0 : 1 })
   useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, params })
-const isThisInsideCategory = getLengthOfThePaths(window?.location?.pathname?.toLocaleLowerCase()).length == 2
+  const [productIds, setProductIds] = useState({})
+  const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
+  const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
+  useEffect(() => {
+    if (priceData?.data?.length > 0) {
+        const idwithpriceObj: any = {}
+        priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
+
+        let subTotal = 0;
+        const cartItemsWithLivePrice = cartItems?.map((item: CartItem) => {
+            subTotal += (idwithpriceObj?.[item.productId]?.price * item.quantity)
+            return {
+                ...item,
+                LivePriceDetails: idwithpriceObj[item.productId]
+            }
+        })
+
+        dispatch(updateSubTotal(subTotal))
+
+        if (cartItemsWithLivePrice) {
+            setCartItemsWithLivePrice(cartItemsWithLivePrice)
+        }
+    }
+}, [priceData])
+
+  useEffect(() => {
+    if (cartItems?.length ?? 0 > 0) {
+      const productIds = cartItems?.map((item: CartItem) => item.productId);
+      setProductIds({ productIds })
+    }
+  }, [cartItems])
+  const isThisInsideCategory = getLengthOfThePaths(window?.location?.pathname?.toLocaleLowerCase()).length == 2
   return (
     <Box className="NavigationHeader">
       <Container>
@@ -73,7 +107,7 @@ const isThisInsideCategory = getLengthOfThePaths(window?.location?.pathname?.toL
                           <Link
                             to={location.pathname === '/' ? `${category.searchEngineFriendlyPageName}` : `/category/${category.searchEngineFriendlyPageName}`}
                             aria-label={category?.searchEngineFriendlyPageName ?? category.name}
-                            className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected  && isThisInsideCategory})}
+                            className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected && isThisInsideCategory })}
                           >
                             {category.name}
                           </Link>
@@ -113,7 +147,7 @@ const isThisInsideCategory = getLengthOfThePaths(window?.location?.pathname?.toL
                   disablePortal
                   lightTheme
                 >
-                  <CartDropdownMenu />
+                  <CartDropdownMenu cartItemsWithLivePrice={cartItemsWithLivePrice}/>
                 </HoverTooltip>
 
               </Suspense> : null}

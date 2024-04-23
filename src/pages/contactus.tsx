@@ -53,7 +53,8 @@ function ContactUs() {
                   <Icon className='OriginalIcon'><Calling /></Icon>
                 </Box>
                 <Typography variant="h4" component="h2" className="Title">Call us</Typography>
-                <Link href={`tel:${configDetails?.displayphonenumber?.value}`} variant="body1" className="CallUsNumber">{configDetails?.displayphonenumber?.value}</Link>
+                <Link href={`tel:${configDetails?.["international.phonenumber"]?.value}`} variant="body1" className="CallUsNumber">{configDetails?.["international.phonenumber"]?.value}</Link>
+                <Link href={`tel:${configDetails?.["australia.phonenumber"]?.value}`} variant="body1" className="CallUsNumber">{configDetails?.["australia.phonenumber"]?.value}</Link>
               </Box>
               {/* <Box className="EmailWrapper ContactCard">
                 <Box className="IconWrapper">

@@ -36,7 +36,7 @@ function Main(props: any) {
         </Stack>
         <Stack className="Right">
           {!mobile && <Box className="Marketingoffer" dangerouslySetInnerHTML={{ __html: configDetailsState?.["home.header.marketingoffer"]?.value }}></Box>}
-          <LinkM href={"tel:" + configDetailsState?.companyphonenumber?.value} variant="overline" className="PhoneNumber" aria-label="PhoneNumber"><Call />{configDetailsState?.companyphonenumber?.value}</LinkM>
+          <LinkM href={"tel:" + configDetailsState?.["australia.phonenumber"]?.value} variant="overline" className="PhoneNumber" aria-label="PhoneNumber"><Call />{configDetailsState?.["australia.phonenumber"]?.value}</LinkM>
           <SearchField />
           {/* <Link to={ENDPOINTS.login}> */}
           <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton" variant="outlined" color="primary" startIcon={<Profile />}><Typography variant="inherite">{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Typography></Button>
