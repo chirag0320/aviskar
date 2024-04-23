@@ -27,7 +27,7 @@ function ContactUs() {
   useAPIoneTime({ service: getConfiguration, endPoint: ENDPOINTS.getContactUsConfiguration })
 
   return (
-    <MainLayout>
+    <Layout>
       <Loader open={checkLoadingStatus} />
       <Seo
         keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
@@ -71,7 +71,7 @@ function ContactUs() {
         </Container>
       </Box>
 
-    </MainLayout>)
+    </Layout>)
 }
 
 export default ContactUs
