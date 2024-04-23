@@ -30,7 +30,7 @@ export interface FooterSection {
 }
 
 function FrontFooter() {
-    const { configDetails: configDetailsState, categoriesList } = useAppSelector((state) => state.homePage)
+    const { configDetails: configDetailsState, categoriesList, mainHomePageData } = useAppSelector((state) => state.homePage)
     const { data }: { data: { data: FooterSection[] } } = useApiRequest(ENDPOINTS.getFooterLink);
     const { email, handleEmailChange, subscribe } = useSubscription()
     return (
@@ -54,28 +54,17 @@ function FrontFooter() {
                             <Typography className="MenuTitle" variant="subtitle2" component="p">Quick Links</Typography>
                             <List>
                                 {
-                                    categoriesList?.items?.length > 0 ?
-                                        categoriesList?.items?.map((category: Icategory) => {
+                                    mainHomePageData?.footerQuickLinks?.length ?? 0 > 0 ? <>{
+                                        mainHomePageData?.footerQuickLinks.map(quickLinks => {
                                             return (
-                                                <>
-                                                <ListItem key={category.categoryId}>
-                                                    <ListItemButton onClick={() => navigate(`/category/${category.searchEngineFriendlyPageName}`)}>
-                                                        <ListItemText primary={category.name} primaryTypographyProps={{ variant: "body2" }} />
+                                                <ListItem key={quickLinks.name}>
+                                                    <ListItemButton onClick={() => navigate(`${quickLinks.linkUrl}`)}>
+                                                        <ListItemText primary={quickLinks.name} primaryTypographyProps={{ variant: "body2" }} />
                                                     </ListItemButton>
                                                 </ListItem>
-                                                {category.subCategories.map(subCategory => {
-                                                    return (
-                                                        <ListItem key={subCategory.categoryId}>
-                                                            <ListItemButton onClick={() => navigate(`/category/${subCategory.searchEngineFriendlyPageName}`)}>
-                                                                <ListItemText primary={subCategory.name} primaryTypographyProps={{ variant: "body2" }} />
-                                                            </ListItemButton>
-                                                        </ListItem>
-                                                    )
-                                                })}
-                                                </>
                                             )
-                                        }
-                                ) : null
+                                        })
+                                    }</> : null
                                 }
                             </List>
                         </Box>

@@ -44,6 +44,12 @@ interface IMainHomePage {
   gallery: Item[]; // You can replace 'any' with a more specific type if needed
   closerLook: Item[];
   bestAdventure: Item[]; // You can replace 'any' with a more specific type if needed
+  footerQuickLinks: {
+    name: string,
+    linkType: number,
+    linkUrl: string,
+    displayOrder: number
+  }[]
 }
 
 interface CreateGuidelineState {
