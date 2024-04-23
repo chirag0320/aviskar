@@ -73,7 +73,7 @@ function FrontFooter() {
                             <Stack className="AboutWrapper">
                                 <Stack className="MailWrapper About">
                                     <PhoneCall />
-                                    <Link href={"tel:" + configDetailsState?.companyphonenumber?.value} variant="body2" className="Mail">{configDetailsState?.companyphonenumber?.value}</Link>
+                                    <Link href={"tel:" + configDetailsState?.["australia.phonenumber"]?.value} variant="body2" className="Mail">{configDetailsState?.["australia.phonenumber"]?.value}</Link>
                                 </Stack>
                                 <Stack className="MailWrapper About">
                                     <MailIcon />

@@ -208,6 +208,12 @@
               }
 
               @include media($xs) {
+                margin-right: 0;
+              }
+            }
+
+            .MuiTypography-root {
+              @include media($xs) {
                 display: none;
               }
             }
@@ -264,6 +270,7 @@
             @include media($lg) {
               @include padding-vertical(10);
             }
+
             &:hover {
               color: $yellowFuel;
             }
@@ -287,27 +294,35 @@
                     color: rgba($dark, 0.6);
                     text-decoration: none;
                     @include transition;
+
                     &:hover {
                       color: $yellowFuel;
                     }
+
                     &:first-of-type {
                       color: $dark;
+
                       &:hover {
                         color: $yellowFuel;
                       }
+
                       .MuiTypography-root {
                         text-transform: uppercase;
+
                         @include media-min($lg) {
                           margin-bottom: 9px;
                         }
                       }
                     }
+
                     &.Active {
                       color: $yellowFuel;
                       text-transform: uppercase;
                     }
+
                     .MuiTypography-root {
                       @include padding-vertical(8);
+
                       @include media($lg) {
                         @include padding-vertical(6);
                       }
@@ -459,7 +474,7 @@
           .StockReturnWithName {
             border-right: 1px solid #ffffff33;
 
-            & > .MuiTypography-root {
+            &>.MuiTypography-root {
               color: $white;
             }
           }
@@ -527,6 +542,14 @@
             flex-wrap: wrap;
           }
 
+          .Left {
+            .Logo {
+              img {
+                max-width: 190px;
+              }
+            }
+          }
+
           .Center {
             @include media($lg) {
               order: 3;
@@ -569,7 +592,13 @@
           .Right {
             .ActionButton {
               @include media($ssm) {
-                display: none;
+                .MuiButton-startIcon {
+                  margin-right: 0;
+                }
+
+                .MuiTypography-root {
+                  display: none;
+                }
               }
             }
           }

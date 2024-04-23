@@ -14,6 +14,7 @@ import {
   ListItem,
   ListItemText,
   ListItemButton,
+  Tooltip,
 } from "@mui/material";
 import classNames from "classnames";
 import { Account } from "@/types/myVault"
@@ -259,8 +260,8 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
                 ref={tooltipRef}
                 aria-label='StackIcon'
                 className="Outlined Stack"
-                title="PromoContent"
                 onClick={handleTooltipOpen}
+                title="Promo content"
               >
                 <StackIcon />
               </IconButton>
@@ -282,9 +283,9 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
           </ClickTooltip>
         }
 
-        <IconButton title="AddToCart" aria-label="AddToCartButton" className="Outlined AddToCart" onClick={handleAddToCart}><AddToCartIcon /></IconButton>
-      </CardActions>
-    </Card>
+        <IconButton title="Add to cart" aria-label="AddToCartButton" className="Outlined AddToCart" onClick={handleAddToCart}><AddToCartIcon /></IconButton>
+      </CardActions >
+    </Card >
   );
 };
 
