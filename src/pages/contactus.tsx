@@ -16,6 +16,7 @@ import Map from '@/components/partials/contactus/Map';
 import { useAppSelector } from '@/hooks';
 import Loader from '@/components/common/Loader';
 import Toaster from '@/components/common/Toaster';
+import MainLayout from '@/components/common/MainLayout';
 
 function ContactUs() {
   const openToaster = useAppSelector(state => state.homePage.openToaster)
@@ -26,53 +27,51 @@ function ContactUs() {
   useAPIoneTime({ service: getConfiguration, endPoint: ENDPOINTS.getContactUsConfiguration })
 
   return (
-    <Layout>
-      <>
-        <Loader open={checkLoadingStatus} />
-        <Seo
-          keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
-          title="Home"
-          lang="en"
-        />
-        {openToaster && <Toaster />}
-        <Box id="ContactUsPage" className='ContactUsPage' component="section">
-          <Box className="TitleWrapper">
-            <PageTitle title="Contact us" />
-          </Box>
-          <Container>
-            <Stack className="ContactCardsWrapper">
-              <Box className="AddressWrapper ContactCard">
-                <Box className="IconWrapper">
-                  <Icon className='OriginalIcon'><AddressIcon /></Icon>
-                </Box>
-                <Typography variant="h4" component="h2" className="Title">Address</Typography>
-                <Typography variant="body1" className="AddressDesription">{configDetails?.storeaddress?.value}</Typography>
-              </Box>
-              <Box className="CallUsWrapper ContactCard">
-                <Box className="IconWrapper">
-                  <Icon className='OriginalIcon'><Calling /></Icon>
-                </Box>
-                <Typography variant="h4" component="h2" className="Title">Call us</Typography>
-                <Link href={`tel:${configDetails?.displayphonenumber?.value}`} variant="body1" className="CallUsNumber">{configDetails?.displayphonenumber?.value}</Link>
-              </Box>
-              <Box className="EmailWrapper ContactCard">
-                <Box className="IconWrapper">
-                  <Icon className='OriginalIcon'><Email /></Icon>
-                </Box>
-                <Typography variant="h4" component="h2" className="Title">Email Id</Typography>
-                <Link href={`mailto: ${configDetails?.storecontactemail?.value}`} variant="body1" className="EmailAddress">{configDetails?.storecontactemail?.value}</Link>
-              </Box>
-            </Stack>
-            <Box className="GetInTouchWrapper">
-              <ContactUsForm />
-              <Map />
-            </Box>
-            <SocialNetwork />
-          </Container>
+    <MainLayout>
+      <Loader open={checkLoadingStatus} />
+      <Seo
+        keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
+        title="Home"
+        lang="en"
+      />
+      {openToaster && <Toaster />}
+      <Box id="ContactUsPage" className='ContactUsPage' component="section">
+        <Box className="TitleWrapper">
+          <PageTitle title="Contact us" />
         </Box>
+        <Container>
+          <Stack className="ContactCardsWrapper">
+            <Box className="AddressWrapper ContactCard">
+              <Box className="IconWrapper">
+                <Icon className='OriginalIcon'><AddressIcon /></Icon>
+              </Box>
+              <Typography variant="h4" component="h2" className="Title">Address</Typography>
+              <Typography variant="body1" className="AddressDesription">{configDetails?.storeaddress?.value}</Typography>
+            </Box>
+            <Box className="CallUsWrapper ContactCard">
+              <Box className="IconWrapper">
+                <Icon className='OriginalIcon'><Calling /></Icon>
+              </Box>
+              <Typography variant="h4" component="h2" className="Title">Call us</Typography>
+              <Link href={`tel:${configDetails?.displayphonenumber?.value}`} variant="body1" className="CallUsNumber">{configDetails?.displayphonenumber?.value}</Link>
+            </Box>
+            <Box className="EmailWrapper ContactCard">
+              <Box className="IconWrapper">
+                <Icon className='OriginalIcon'><Email /></Icon>
+              </Box>
+              <Typography variant="h4" component="h2" className="Title">Email Id</Typography>
+              <Link href={`mailto: ${configDetails?.storecontactemail?.value}`} variant="body1" className="EmailAddress">{configDetails?.storecontactemail?.value}</Link>
+            </Box>
+          </Stack>
+          <Box className="GetInTouchWrapper">
+            <ContactUsForm />
+            <Map />
+          </Box>
+          <SocialNetwork />
+        </Container>
+      </Box>
 
-      </>
-    </Layout>)
+    </MainLayout>)
 }
 
 export default ContactUs
