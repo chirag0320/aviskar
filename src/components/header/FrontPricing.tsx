@@ -25,7 +25,7 @@ interface IApiResponse<T> {
     error: string | null;
 }
 function FrontPricing() {
-    const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+    const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
     const { data }: IApiResponse<ItickerData> = useApiRequest(ENDPOINTS.getTicker, 'get', null, 60);
     const renderedStockItems = useMemo(() => {
         const tickerStyle = {
@@ -39,7 +39,7 @@ function FrontPricing() {
     const renderdTextAfterText = useMemo(() => {
         //todo if ues is logged in the use this headerticker insted of this guestheaderticker
         // <AfterStockReturnWithName text={configDetailsState?.headerticker?.value} />
-        return <AfterStockReturnWithName text={configDetailsState?.guestheaderticker?.value} />
+        return <AfterStockReturnWithName text={isLoggedIn ?configDetailsState?.loginheaderticker?.value : configDetailsState?.guestheaderticker?.value} />
     }, [configDetailsState])
     return (
         <Box
@@ -55,10 +55,10 @@ function FrontPricing() {
                 >
                     <img src={configDetailsState?.australiaflagurl?.value} alt="Australia flag" width={36} height={24} loading="eager" />
                     <DraggableMarquee>
-                        <Stack className="PricingHeader__Wrapper--Content">
-                            {renderedStockItems}
+                        <Stack id={"mark-id"} className="PricingHeader__Wrapper--Content">
+                            {configDetailsState?.["mainhomepage.tickermetalpriceenable"]?.value && renderedStockItems}
                             {renderdTextAfterText}
-                            {renderedStockItems}
+                            {configDetailsState?.["mainhomepage.tickermetalpriceenable"]?.value && renderedStockItems}
                             {renderdTextAfterText}
                         </Stack>
                     </DraggableMarquee>
