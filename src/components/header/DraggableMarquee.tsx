@@ -53,7 +53,7 @@ class Marquee extends Component<MarqueeProps, MarqueeState> {
     move = () => {
         const { offset = 1 } = this.props;
         let left = this.state.left - offset;
-        if (left < -this.spanWidth /2) {
+        if (left < -this.spanWidth /1.98) {
             left = 0;
         }
         this.setState({ left });
