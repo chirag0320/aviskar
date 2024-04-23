@@ -5,7 +5,6 @@ import React, { Suspense, lazy } from 'react'
 const LazyFrontHeader = lazy(() => import("../header/FrontHeader"));
 const LazyFrontFooter = lazy(() => import('../footer/FrontFooter'));
 
-
 const MainLayout = ({ children }: { children: any }) => {
     return (
         <Stack id="PageLayout">
