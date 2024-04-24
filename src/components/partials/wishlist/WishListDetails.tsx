@@ -11,6 +11,7 @@ import { addToWishListToShoppingCart, deleteWishListData, removeItemFromWishlist
 import { navigate } from 'gatsby'
 import { hasFulfilled } from '@/utils/common'
 import useShowToaster from '@/hooks/useShowToaster'
+import { set } from 'react-hook-form'
 
 const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }) => {
     const wishListstate = useAppSelector(state => state.wishList)
@@ -162,7 +163,14 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                                 <TableCell>
                                     <Stack className="Quantity">
                                         <IconButton className="Minus" onClick={() => decreaseQuantity(item.id)} disabled={quantities[item.id] === 1}><MinusIcon /></IconButton>
-                                        <TextField type="number" name="Qty" value={quantities[item.id]} disabled />
+                                        <TextField type="number" name="Qty" value={quantities[item.id]} onChange={(event) => {
+                                            const inputValue = event.target.value;
+                                            const parsedValue = parseInt(inputValue, 10); // Parse input value as integer
+                                            const formattedValue = parsedValue.toString(); // Convert parsed value back to string
+                                            setQuantities({ ...quantities, [item.id]: parsedValue });
+                                            setIsWishListUpdated(true);
+                                            event.target.value = formattedValue;
+                                        }} />
                                         <IconButton className="Plus" onClick={() => increaseQuantity(item.id)}><PlusIcon /></IconButton>
                                     </Stack>
                                 </TableCell>

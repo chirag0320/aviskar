@@ -54,6 +54,7 @@ function Wishlist() {
       <PageTitle title="Watchlist" maxWidth="lg" />
       <Container id="Pagewishlist" maxWidth="lg">
         <WishListDetails toggleEmailFriend={toggleEmailFriend} />
+        {/* FOR URL OF WATCHLIST */}
         {/* <Box className="WishlistLink">
           <Typography>Your Watchlist URL for sharing</Typography>
           <Stack className="Wrapper">

@@ -24,7 +24,7 @@ import { qmintRating } from "@/utils/data"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import useApiRequest from "@/hooks/useAPIRequest"
 import { ENDPOINTS } from "@/utils/constants"
-import { bodyForGetShoppingCartData, calculationOfThePremiumAndDiscount, getDefaultOption, roundOfThePrice, valueChangeForPrice } from "@/utils/common"
+import { bodyForGetShoppingCartData, calculationOfThePremiumAndDiscount, getDefaultOption, hasFulfilled, roundOfThePrice, valueChangeForPrice } from "@/utils/common"
 import useCallAPI from "@/hooks/useCallAPI"
 import { navigate } from "gatsby"
 import { addProductToCompare } from "@/redux/reducers/compareProductsReducer"
@@ -159,7 +159,7 @@ function AboutProduct({ productId }: any) {
     }
   }
   const addIntoComapreProduct = (id: any) => {
-    if(!compareProducts.includes(productId) && compareProducts.length < 5){
+    if (!compareProducts.includes(productId) && compareProducts.length < 5) {
       dispatch(addProductToCompare(id))
       showToaster({
         message: 'The Product has been added to the',
@@ -167,7 +167,7 @@ function AboutProduct({ productId }: any) {
         redirectButtonUrl: 'compare-products',
         severity: 'success'
       })
-    }else{
+    } else {
       let message = '';
       if (compareProducts.includes(productId)) {
         message = 'The product is already in the';
@@ -185,26 +185,36 @@ function AboutProduct({ productId }: any) {
           redirectButtonUrl: 'compare-products',
           severity: 'error'
         });
-        
+
       }
 
     }
 
   }
-  const addIntoWishList = async (id: any) => {
-    await dispatch(addToWishList({
+  const addToWatchList = async (id: any) => {
+    const response = await dispatch(addToWishList({
       url: ENDPOINTS.addToWishList,
       body: {
         productId: productId,
-        quantity: 1
+        quantity: quantityCount
       }
     }) as any)
-    showToaster({
-      message: 'The product has been added to your',
-      buttonText: 'product watchlist',
-      redirectButtonUrl: 'watchlist',
-      severity: 'success'
-    })
+    // console.log("response", response);
+
+    if (hasFulfilled(response?.type)) {
+      showToaster({
+        message: response?.payload?.data?.message,
+        buttonText: 'watchlist',
+        redirectButtonUrl: 'watchlist',
+        severity: 'success'
+      })
+    }
+    else {
+      showToaster({
+        message: "Error occurred while adding to the watchlist",
+        severity: "error"
+      })
+    }
   }
   useEffect(() => {
     return () => {
@@ -212,17 +222,26 @@ function AboutProduct({ productId }: any) {
     }
   }, [])
   const addToCartFunction = async (isInstantBuy: any) => {
+    if (quantityCount === 0) {
+      showToaster({
+        message: 'Quantity can not be zero',
+        severity: 'warning'
+      })
+      return
+    }
     const response = await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
       "productId": productId,
       "quantity": quantityCount,
       "IsInstantBuy": isInstantBuy
     } as any)
-    if (response.code === 200 && !isInstantBuy) {
+
+    if (response?.code === 200 && !isInstantBuy) {
       dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
+      // const responseMessage = response
       if (response.data) {
         showToaster({
-          message: 'The product has been added to your product cart',
-          buttonText: 'product cart',
+          message: response?.message,
+          buttonText: 'cart',
           redirectButtonUrl: 'shopping-cart',
           severity: 'success'
         })
@@ -411,11 +430,19 @@ function AboutProduct({ productId }: any) {
                           color="primary"
                           register={register}
                           error={errors.Quantity}
+                          control={control}
                           name="Quantity"
+                          type="number"
+                          onChange={(event) => {
+                            const inputValue = event.target.value;
+                            const parsedValue = parseInt(inputValue, 10); // Parse input value as integer
+                            const formattedValue = parsedValue.toString(); // Convert parsed value back to string
+                            setQuantityCount(parsedValue); // Set parsed value as quantity count
+                            event.target.value = formattedValue;
+                          }}
                           margin='none'
                           fullWidth={false}
                           value={quantityCount as any}
-                          disabled={true}
                         />
                         <IconButton id='plus' className="Plus" onClick={(e) => {
                           e.stopPropagation()
@@ -441,7 +468,7 @@ function AboutProduct({ productId }: any) {
             </Box>
             <Stack className="SocialConnects">
               <Button color="secondary" className="IconWithText" onClick={async () => {
-                addIntoWishList(productId)
+                addToWatchList(productId)
               }} >
                 <Box className="IconWrapper Watchlist"><WishlistIcon /></Box>
                 <Typography>Watchlist</Typography>
