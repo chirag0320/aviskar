@@ -188,7 +188,7 @@ function OrderSummary() {
     )
   }
 
-  const onConfirmOrderHandler = async (continueWithoutCheck?:boolean) => {
+  const onConfirmOrderHandler = async (continueWithoutCheck?: boolean) => {
     continueWithoutCheck = continueWithoutCheck === undefined ? false : continueWithoutCheck;
     if (!continueWithoutCheck) {
       const paramsObj: IPopUpDetails = {
@@ -197,17 +197,25 @@ function OrderSummary() {
         'KhgMNHTfVh9C': 'ProceedtoCheckout'
       }
       const res: boolean = await checkThePopUpDetails(paramsObj, toggleSessionExpireDialog, dispatch, getPopUpDetailsAPI)
-      console.log("🚀 ~ handleProccedToCheckout ~ res:", res)
       if (res) {
         return
       }
     }
+    let isAnyQuantityZero = false;
     const itemsWithQuantity = finalDataForTheCheckout?.cartItemsWithLivePrice?.map((item: any) => {
+      // console.log("Qmint", finalDataForTheCheckout?.quantitiesWithProductId[item.productId])
+      if (finalDataForTheCheckout?.quantitiesWithProductId[item.productId] === 0) {
+        isAnyQuantityZero = true;
+      }
       return ({
         id: item.id,
         quantity: finalDataForTheCheckout?.quantitiesWithProductId[item.productId]
       })
     })
+    if (isAnyQuantityZero) {
+      showToaster({ message: "Quantity cannot be zero", severity: 'error' })
+      return;
+    }
 
     const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
 
@@ -267,7 +275,7 @@ function OrderSummary() {
         <Stack className="ActionWrapper">
           <Button color="secondary" onClick={() => navigate("/")}>Continue Shopping</Button>
           {/* <Button variant="contained" onClick={toggleOTPConfirmation} disabled={!finalDataForTheCheckout?.termAndServiceIsRead}>Confirm Order</Button> */}
-          <Button variant="contained" onClick={()=>{onConfirmOrderHandler()}} disabled={!finalDataForTheCheckout?.termAndServiceIsRead || loading || finalDataForTheCheckout?.cartItemsWithLivePrice?.length < 1}>Confirm Order</Button>
+          <Button variant="contained" onClick={() => { onConfirmOrderHandler() }} disabled={!finalDataForTheCheckout?.termAndServiceIsRead || loading || finalDataForTheCheckout?.cartItemsWithLivePrice?.length < 1}>Confirm Order</Button>
         </Stack>
       </Box>
       {openOTPConfirmation && <OTPConfirmation open={openOTPConfirmation} onClose={toggleOTPConfirmation} message={message} placeOrderFun={placeOrderFun} />}

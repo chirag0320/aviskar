@@ -452,40 +452,39 @@ const RenderFields: React.FC<RenderFieldProps> = ({
           <Controller
             name={name}
             control={control}
-            defaultValue={value} // Set defaultValue instead of passing value prop
+            // defaultValue={value} // Set defaultValue instead of passing value prop
             render={({ field: { } }) => (
-              <>
-                <TextField
-                  id={name}
-                  type="number"
-                  fullWidth={fullWidth}
-                  error={!!error}
-                  placeholder={placeholder}
-                  defaultValue={defaultValue}
-                  disabled={disabled}
-                  autoComplete={autoComplete}
-                  variant={variant}
-                  InputProps={{ endAdornment }}
-                  onChange={(event) => {
+              <TextField
+                id={name}
+                type="number"
+                fullWidth={fullWidth}
+                error={!!error}
+                placeholder={placeholder}
+                defaultValue={defaultValue}
+                disabled={disabled}
+                autoComplete={autoComplete}
+                variant={variant}
+                InputProps={{ endAdornment }}
+
+                onKeyDown={(e) => {
+                  ;['e', 'E', '+', '-', '.'].includes(e.key) &&
+                    e.preventDefault()
+                }}
+                value={Number(value)}
+                {...register(name)}
+                {...otherProps}
+                onChange={(event) => {
+                  // console.log("swdesfrgtfhy")
+                  const numberRegex = /^-?\d*\.?\d*$/
+                  if (!numberRegex.test(event.target.value)) {
+                    return
+                  }
+                  if (onChange) {
                     // console.log("swdesfrgtfhy")
-                    const numberRegex = /^-?\d*\.?\d*$/
-                    if (!numberRegex.test(event.target.value)) {
-                      return
-                    }
-                    if (onChange) {
-                      console.log("swdesfrgtfhy")
-                      onChange(event)
-                    }
-                  }}
-                  onKeyDown={(e) => {
-                    ;['e', 'E', '+', '-', '.'].includes(e.key) &&
-                      e.preventDefault()
-                  }}
-                  value={value}
-                  {...register(name)}
-                  {...otherProps}
-                />
-              </>
+                    onChange(event)
+                  }
+                }}
+              />
             )}
           />
 

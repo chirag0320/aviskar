@@ -11,6 +11,7 @@ import { addToWishListToShoppingCart, deleteWishListData, removeItemFromWishlist
 import { navigate } from 'gatsby'
 import { hasFulfilled } from '@/utils/common'
 import useShowToaster from '@/hooks/useShowToaster'
+import { set } from 'react-hook-form'
 
 const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }) => {
     const wishListstate = useAppSelector(state => state.wishList)
@@ -74,12 +75,21 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
     }
 
     const updateWishListHandler = async () => {
+        let isAnyQuantityZero = false;
+
         const itemsWithQuantity = Object.keys(quantities).map((item: any) => {
+            if (quantities[item] === 0) {
+                isAnyQuantityZero = true;
+            }
             return {
                 id: item,
                 quantity: quantities[item]
             }
         })
+        if (isAnyQuantityZero) {
+            showToaster({ message: "Quantity cannot be zero", severity: 'error' })
+            return;
+        }
         setIsWishListUpdated(false)
         const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateWishListData, body: itemsWithQuantity }) as any);
         if (hasFulfilled(response.type)) {
@@ -162,7 +172,10 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                                 <TableCell>
                                     <Stack className="Quantity">
                                         <IconButton className="Minus" onClick={() => decreaseQuantity(item.id)} disabled={quantities[item.id] === 1}><MinusIcon /></IconButton>
-                                        <TextField type="number" name="Qty" value={quantities[item.id]} disabled />
+                                        <TextField type="number" name="Qty" value={quantities[item.id]} onChange={(event) => {
+                                            setQuantities({ ...quantities, [item.id]: Number(event.target.value) });
+                                            setIsWishListUpdated(true);
+                                        }} />
                                         <IconButton className="Plus" onClick={() => increaseQuantity(item.id)}><PlusIcon /></IconButton>
                                     </Stack>
                                 </TableCell>

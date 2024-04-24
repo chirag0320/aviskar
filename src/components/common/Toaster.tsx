@@ -5,6 +5,7 @@ import Alert from "@mui/material/Alert"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 import { setToasterState } from "@/redux/reducers/homepageReducer"
 import { navigate } from "gatsby"
+import { Typography } from "@mui/material"
 
 function Toaster() {
   const dispatch = useAppDispatch()
@@ -50,15 +51,19 @@ function Toaster() {
         open={true}
         onClose={handleClose}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        className="Snackbar"
+        autoHideDuration={600000}
       >
         <Alert
           onClose={handleClose}
           severity={severity}
           variant="filled"
         >
-          {toasterMessage}  <Button onClick={() => {
+          <span dangerouslySetInnerHTML={{
+            __html: toasterMessage
+          }}></span>  {buttonText !== "" && <Button onClick={() => {
             navigate(`/${redirectButtonUrl}`)
-          }}>{buttonText}</Button>
+          }}>{buttonText}</Button>}
         </Alert>
       </Snackbar>
     </>

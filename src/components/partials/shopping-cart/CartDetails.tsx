@@ -77,6 +77,10 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
         setQuantities(prevQuantities => ({ ...prevQuantities, [id]: prevQuantities[id] + 1 }));
     }
 
+    const changesInQuantity = (event: any, id: number) => {
+        setQuantities(prevQuantities => ({ ...prevQuantities, [id]: Number(event.target.value) }));
+    }
+
     const decreaseQuantity = (id: number) => {
         setQuantities(prevQuantities => ({ ...prevQuantities, [id]: prevQuantities[id] - 1 }));
     }
@@ -96,8 +100,12 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
 
     const updateCartHandler = async (isapiCallNeeded?: boolean) => {
         let subTotal = 0;
+        let isAnyQuantityZero = false;
         const itemsWithQuantity = cartItemsWithLivePrice.map((item: CartItemsWithLivePriceDetails) => {
             subTotal += (item?.LivePriceDetails?.price * quantities[item.id]);
+            if (quantities[item.id] === 0) {
+                isAnyQuantityZero = true;
+            }
             return {
                 id: item.id,
                 quantity: quantities[item.id]
@@ -107,6 +115,10 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
         dispatch(updateSubTotal(subTotal))
 
         if (isapiCallNeeded) {
+            if (isAnyQuantityZero) {
+                showToaster({ message: "Quantity cannot be zero", severity: 'error' })
+                return;
+            }
             const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateShoppingCartData, body: itemsWithQuantity }) as any);
 
             // NOTE :- Proper response is not coming from backend to show the right toaster so bottom can be a bug for showing right toaster message
@@ -147,7 +159,7 @@ const CartDetails = ({ cartItemsWithLivePrice, setCartItemsWithLivePrice, quanti
                 {!loading && cartItems && cartItems?.length === 0 && <Typography variant="body1" style={{ textAlign: "center" }}>No items in the cart</Typography>}
                 {cartItemsWithLivePrice?.length > 0 && cartItemsWithLivePrice?.map((cartItem) => {
                     return (
-                        <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={true} quantity={quantities[cartItem.id]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} />
+                        <CartCard key={cartItem.productId} cartItem={cartItem} hideDeliveryMethod={true} quantity={quantities[cartItem.id]} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} removeItem={removeItemFromCart} idForQuantity={cartItem.id} changesInQuantity={changesInQuantity} />
                     )
                 })}
                 {cartItemsWithLivePrice?.length > 0 && <Typography variant="body1"><Typography component="span" className="Note">Note:</Typography> Prices are live prices and will be locked on confirm order. </Typography>}

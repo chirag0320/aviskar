@@ -39,13 +39,21 @@ const CartOrderSummary = ({ cartItemsWithLivePrice, quantities }: Props) => {
             }
         }
         let subTotal = 0;
+        let isAnyQuantityZero = false;
         const itemsWithQuantity = cartItemsWithLivePrice.map((item: CartItemsWithLivePriceDetails) => {
             subTotal += (item?.LivePriceDetails?.price * quantities[item.id]);
+            if (quantities[item.id] === 0) {
+                isAnyQuantityZero = true;
+            }
             return {
                 id: item.id,
                 quantity: quantities[item.id]
             }
         })
+        if (isAnyQuantityZero) {
+            showToaster({ message: "Quantity cannot be zero", severity: 'error' })
+            return;
+        }
         dispatch(resetSubTotal());
         dispatch(updateSubTotal(subTotal))
 
