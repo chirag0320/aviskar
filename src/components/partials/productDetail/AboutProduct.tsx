@@ -258,6 +258,13 @@ function AboutProduct({ productId }: any) {
       navigate('/login')
       return
     }
+    if (quantityCount === 0) {
+      showToaster({
+        message: 'Quantity can not be zero',
+        severity: 'error'
+      })
+      return
+    }
     await addToCartFunction(true)
     navigate('/checkout/?isInstantBuy=true')
   }
