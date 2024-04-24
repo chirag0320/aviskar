@@ -8,12 +8,12 @@ import { useAppSelector } from '@/hooks'
 function LookingFor() {
   const sectionDetails = useAppSelector((state) => state.homePage.sectionDetails)
   return (
-    sectionDetails[1]?.htmlBody ?
+    sectionDetails["lookingFor"] ?
       <Box id="LookingFor" component="section">
         <Box className="ck-content">
-          <Container className="Container" dangerouslySetInnerHTML={{ __html: sectionDetails[1]?.htmlBody }}>
+          <Container className="Container" dangerouslySetInnerHTML={{ __html: sectionDetails["lookingFor"] }}>
           </Container>
-        </Box>
+        </Box>~
       </Box> : null
   )
 }

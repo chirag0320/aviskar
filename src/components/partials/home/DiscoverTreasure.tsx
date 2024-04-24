@@ -5,10 +5,10 @@ import { useAppSelector } from '@/hooks'
 function DiscoverTreasure() {
   const sectionDetails = useAppSelector((state) => state.homePage.sectionDetails)
   return (
-    sectionDetails[2]?.htmlBody ?
+    sectionDetails["discoverTreasure"] ?
       <Box id="DiscoverTreasure" component="section">
         <Box className="ck-content">
-          <Container className="Container" dangerouslySetInnerHTML={{ __html: sectionDetails[2]?.htmlBody }}>
+          <Container className="Container" dangerouslySetInnerHTML={{ __html: sectionDetails["discoverTreasure"]}}>
           </Container>
         </Box>
       </Box> : null
