@@ -58,11 +58,12 @@ function Experience() {
                                             slidesPerView: "auto"
                                         },
                                     }}
+                                    loop={true}
                                     onSlideChange={handleSlideChange}
                                 >
                                     {<SwiperNavigation handleSlideChange={handleSlideChange} />}
                                     {(mainHomePageData && mainHomePageData?.experience?.length > 0) ?
-                                        mainHomePageData?.experience?.map((item) => {
+                                        [...mainHomePageData?.experience,...mainHomePageData?.experience]?.map((item) => {
                                             return (
                                                 <SwiperSlide
                                                 // onClick={() => {

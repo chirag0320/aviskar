@@ -119,17 +119,17 @@ export const AfterStockReturnWithName = React.memo(({ text }: any) => {
     </Stack>
   );
 });
-export const SwiperNavigation = React.memo(({ handleSlideChange }: { handleSlideChange?: any }) => {
+export const SwiperNavigation = React.memo(({ handleSlideChange,classNamePrev, classNameNext}: { handleSlideChange?: any, classNamePrev?:string, classNameNext?:string }) => {
   return (
     <Stack className="SwiperNavigation">
-      <IconButton className="SwiperButton SwiperButtonPrev" onClick={() => {
+      <IconButton className={classNames("SwiperButton SwiperButtonPrev", classNamePrev)} onClick={() => {
         if (handleSlideChange) {
           handleSlideChange()
         }
       }}>
         <ArrowLeft />
       </IconButton>
-      <IconButton className="SwiperButton SwiperButtonNext" onClick={() => {
+      <IconButton className={classNames("SwiperButton SwiperButtonNext", classNameNext)} onClick={() => {
         if (handleSlideChange) {
           handleSlideChange()
         }
