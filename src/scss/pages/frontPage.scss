@@ -134,7 +134,7 @@
     }
 
     #TheJournal {
-        padding: 100px 0;
+        padding-bottom: 100px;
 
         @include media($md) {
             padding: 50px 0;
@@ -346,11 +346,6 @@
     }
 
     #Experience {
-        padding: 80px 0;
-
-        @include media($md) {
-            padding: 50px 0;
-        }
 
         .ExperienceSlideWrapper {
             .SwiperContainer {
@@ -772,8 +767,6 @@
     }
 
     #Gallery {
-        padding: 100px 0;
-
         @include media($md) {
             padding: 50px 0;
         }

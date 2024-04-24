@@ -107,8 +107,9 @@
               align-items: center;
               .ProductImage {
                 object-fit: contain;
+                height: 270px;
                 @include media($xl) {
-                  max-height: 200px;
+                  height: 200px;
                 }
               }
             }
