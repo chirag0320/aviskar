@@ -63,11 +63,10 @@ function SkeletonCloserLook({ index }: { index: number | string }) {
     </SwiperSlide>
   )
 }
-function CloserLook() {
+function CloserLookMain() {
   const { configDetails } = useAppSelector((state) => state.homePage)
-  // const { data }: Idata = useApiRequest(ENDPOINTS.getBlog, 'post', dataforbody);
-  const homePageSectionDetails = useAppSelector(state => state.homePage.sectionDetails)
-  console.log("🚀 ~ CloserLook ~ homePageSectionDetails:", homePageSectionDetails)
+  const { mainHomePageData } = useAppSelector((state) => state.homePage)
+  console.log("🚀 ~ CloserLook ~ mainHomePageData:", mainHomePageData)
   const [loading, setLoading] = useState(false)
   useEffect(() => {
     setLoading(true)
@@ -109,61 +108,62 @@ function CloserLook() {
   }
 
   return (
-    <Box id="CloserLook">
-      <Container component="section">
-        <SectionHeading
-          title={configDetails?.["home.closerlook.tital"]?.value ?? "Take a closer look*"}
-          description={configDetails?.["home.closerlook.subtital"]?.value ?? "description*"}
-        />
-        <Container className="DestinationWrapper" maxWidth="lg">
-          {homePageSectionDetails?.closerLook?.length !== 0 ?
-            <Box className="SwiperContainer">
-              <Swiper {...config} >
-                {
-                  !loading ?
-                    (homePageSectionDetails?.closerLook?.length > 0 ? homePageSectionDetails?.closerLook?.map((destination: { id: React.Key | null | undefined; friendlyName: any; title: any; overview: any; imageUrl: any }) => (
-                      <SwiperSlide key={destination.id}>
-                        <TravelCard
-                          friendlyName={destination?.friendlyName}
-                          place={destination.title}
-                          description={destination.overview}
-                          imageUrl={destination.imageUrl}
-                        />
-                      </SwiperSlide>
-                    ))
-                      : null) :
-                    Array(5).fill(0).map((_, index) => {
-                      return (
-                        <SwiperSlide key={index}>
-                          <Card className="ProductCard">
-                            <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
-                            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                              <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
-                              <Skeleton animation="wave" height={70} width="95%" />
-                            </div>
-                          </Card>
+    (mainHomePageData && mainHomePageData?.closerLook?.length > 0) ?
+      <Box id="CloserLook">
+        <Container component="section">
+          <SectionHeading
+            title={configDetails?.["home.closerlook.tital"]?.value ?? "Take a closer look*"}
+            description={configDetails?.["home.closerlook.subtital"]?.value ?? "description*"}
+          />
+          <Container className="DestinationWrapper" maxWidth="lg">
+            {mainHomePageData?.closerLook?.length !== 0 ?
+              <Box className="SwiperContainer">
+                <Swiper {...config} >
+                  {
+                    !loading ?
+                      (mainHomePageData?.closerLook?.length > 0 ? mainHomePageData?.closerLook?.map((destination) => (
+                        <SwiperSlide key={destination.title}>
+                          <TravelCard
+                            friendlyName={destination?.friendlyName}
+                            place={destination.title}
+                            description={destination.overview}
+                            imageUrl={destination.imageUrl}
+                          />
                         </SwiperSlide>
-                      );
-                    })
-                }
-              </Swiper>
-            </Box>
-            : <RecordNotFound message="No destination available" />
-          }
-        </Container>
-        {/* <Stack className="Action" onClick={() => {
+                      ))
+                        : null) :
+                      Array(5).fill(0).map((_, index) => {
+                        return (
+                          <SwiperSlide key={index}>
+                            <Card className="ProductCard">
+                              <Skeleton animation="wave" height={500} style={{ borderRadius: "10px 10px 0 0", padding: "0px" }} />
+                              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                                <Skeleton animation="wave" height={95} width="95%" style={{ marginBottom: "4px" }} />
+                                <Skeleton animation="wave" height={70} width="95%" />
+                              </div>
+                            </Card>
+                          </SwiperSlide>
+                        );
+                      })
+                  }
+                </Swiper>
+              </Box>
+              : <RecordNotFound message="No destination available" />
+            }
+          </Container>
+          {/* <Stack className="Action" onClick={() => {
           navigate('/blog')
         }}>
         <Button aria-label={'DiscoverMore'} name={'DiscoverMore'} variant="contained">Discover More</Button>
       </Stack> */}
-        <Stack className="Action">
-          <Button className="DiscoverMore" name='CloserLook' aria-label="CloserLook" variant="contained" onClick={() => {
-            navigate('/blog')
-          }}>Discover More</Button>
-        </Stack>
-      </Container>
-    </Box>
+          <Stack className="Action">
+            <Button className="DiscoverMore" name='CloserLook' aria-label="CloserLook" variant="contained" onClick={() => {
+              navigate('/blog')
+            }}>Discover More</Button>
+          </Stack>
+        </Container>
+      </Box> : null
   )
 }
 
-export default React.memo(CloserLook)
+export default React.memo(CloserLookMain)
