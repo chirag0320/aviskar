@@ -65,7 +65,9 @@ function SkeletonCloserLook({ index }: { index: number | string }) {
 }
 function CloserLook() {
   const { configDetails } = useAppSelector((state) => state.homePage)
-  const { data }: Idata = useApiRequest(ENDPOINTS.getBlog, 'post', dataforbody);
+  // const { data }: Idata = useApiRequest(ENDPOINTS.getBlog, 'post', dataforbody);
+  const homePageSectionDetails = useAppSelector(state => state.homePage.sectionDetails)
+  console.log("🚀 ~ CloserLook ~ homePageSectionDetails:", homePageSectionDetails)
   const [loading, setLoading] = useState(false)
   useEffect(() => {
     setLoading(true)
@@ -114,17 +116,17 @@ function CloserLook() {
           description={configDetails?.["home.closerlook.subtital"]?.value ?? "description*"}
         />
         <Container className="DestinationWrapper" maxWidth="lg">
-          {data?.data?.items?.length !== 0 ?
+          {homePageSectionDetails?.closerLook?.length !== 0 ?
             <Box className="SwiperContainer">
               <Swiper {...config} >
                 {
                   !loading ?
-                    (data?.data?.items?.length > 0 ? data?.data?.items?.map((destination) => (
+                    (homePageSectionDetails?.closerLook?.length > 0 ? homePageSectionDetails?.closerLook?.map((destination: { id: React.Key | null | undefined; friendlyName: any; title: any; overview: any; imageUrl: any }) => (
                       <SwiperSlide key={destination.id}>
                         <TravelCard
                           friendlyName={destination?.friendlyName}
                           place={destination.title}
-                          description={destination.bodyOverview}
+                          description={destination.overview}
                           imageUrl={destination.imageUrl}
                         />
                       </SwiperSlide>
