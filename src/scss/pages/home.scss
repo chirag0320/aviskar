@@ -64,6 +64,92 @@
   }
 }
 
+#ProductsSlider {
+  @include padding-vertical(70, 50);
+
+
+  .ProductsSliderWrapper {
+    @include media-min($md) {
+      @include padding-horizontal(24);
+    }
+
+    @include media-min($xl) {
+      @include padding-horizontal(40);
+    }
+
+    .SwiperContainer {
+      .swiper {
+        @include padding-vertical(40);
+        @include margin-vertical(-40);
+
+        @include media-min($md) {
+          @include padding-horizontal(24);
+          @include margin-horizontal(-24);
+        }
+
+        @include media-min($xl) {
+          @include padding-horizontal(40);
+          @include margin-horizontal(-40);
+        }
+
+
+        .ProductCardLink {
+          text-decoration: none;
+
+          .ProductCard {
+            padding: 60px 30px;
+
+            .ProductImageWrapper {
+
+              .ProductImage {
+                object-fit: contain;
+              }
+            }
+
+            .ProductTitle {
+              text-align: center;
+              margin-top: 35px;
+
+            }
+          }
+        }
+
+
+      }
+
+      .swiper-pagination {
+        position: static;
+        @include padding-vertical(30, 0);
+
+        @include media($md) {
+          display: none;
+        }
+      }
+
+      .SwiperNavigation {
+        bottom: 50%;
+        right: -23px;
+        left: -23px;
+        justify-content: space-between;
+
+        @include media($md) {
+          display: none;
+        }
+
+        .SwiperButton {
+          color: $white;
+          background-color: $yellowFuel;
+
+          &:hover {
+            color: $yellowFuel;
+            background-color: $white;
+          }
+        }
+      }
+    }
+  }
+}
+
 #FeaturedProducts {
   @include padding-vertical(70, 70);
 
