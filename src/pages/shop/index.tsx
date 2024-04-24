@@ -18,6 +18,7 @@ import Toaster from "@/components/common/Toaster";
 import Loader from "@/components/common/Loader";
 import useAlertPopUp from "@/hooks/useAlertPopUp";
 import SessionExpiredDialog from "@/components/header/SessionExpiredDialog";
+import ProductsSlider from "@/components/partials/home/ProductsSlider";
 
 function IndexPage() {
   const dispatch = useAppDispatch()
@@ -66,11 +67,11 @@ function IndexPage() {
       clearTimeout(timeout3)
     }
   }, [])
-  useAlertPopUp({pageName: 'Home',openPopup:toggleSessionExpireDialog})
+  useAlertPopUp({ pageName: 'Home', openPopup: toggleSessionExpireDialog })
   return (
     <Layout>
       <>
-      <Loader open = {loading} />
+        <Loader open={loading} />
         {openToaster && <Toaster />}
         <Seo
           keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
@@ -79,15 +80,16 @@ function IndexPage() {
         />
         {/* {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>} */}
         {configDetailsState?.sliderenableinhome?.value === false ? null : <Banner />}
+        <Suspense fallback={<></>}> <ProductsSlider /></Suspense>
         <Suspense fallback={<></>}> <FeaturedProducts /></Suspense>
         <Suspense fallback={<></>}> <LookingFor /></Suspense>
         <Suspense fallback={<></>}><PopularProducts /></Suspense>
         <Suspense fallback={<></>}><DiscoverTreasure /></Suspense>
         <Suspense fallback={<></>}><CloserLook /></Suspense>
         {openSessionExpireDialog && <SessionExpiredDialog
-        open={openSessionExpireDialog}
-        onClose={toggleSessionExpireDialog}
-      />}
+          open={openSessionExpireDialog}
+          onClose={toggleSessionExpireDialog}
+        />}
       </>
     </Layout>
   )
