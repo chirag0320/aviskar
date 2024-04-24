@@ -7,9 +7,11 @@ import { Link } from "gatsby";
 import { Navigation, Autoplay, Pagination, A11y } from 'swiper/modules'
 
 import { SwiperNavigation } from "@/components/common/Utils"
+import { useAppSelector } from "@/hooks";
 
 function ProductsSlider() {
     const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
+    const homePageSectionDetails = useAppSelector(state => state.homePage.sectionDetails)
     const config = {
         slidesPerView: 1.3,
         spaceBetween: 16,
@@ -61,19 +63,25 @@ function ProductsSlider() {
             <Box className="ProductsSliderWrapper">
                 <Box className="SwiperContainer">
                     <Swiper  {...config}>
-                        <SwiperSlide>
-                            <Link to="#" className="ProductCardLink">
-                                <Card className="ProductCard">
-                                    <Box className="ProductImageWrapper">
-                                        <img className="ProductImage" src="https://qmintstoremedia.blob.core.windows.net/pictures/products/2023-1oz-lunar-series-year-of-the-rabbit-platinum-coin_120320242303026.png?sv=2018-03-28&sr=b&sig=5tD7n%2Bvm4%2BK%2BKE5ZHQfCaSdQBforI3BPxO1kNTNTOzI%3D&st=2024-03-11T13%3A50%3A02Z&se=3024-03-12T13%3A50%3A02Z&sp=r&c=638458482026612121" alt="product-image" />
-                                    </Box>
-                                    <Box className="ProductTitle">
-                                        <Typography variant="h4">Popular silver</Typography>
-                                    </Box>
-                                </Card>
-                            </Link>
-                        </SwiperSlide>
-                        <SwiperSlide>
+                        {
+                          homePageSectionDetails?.quickCategoryLinks?.length >0 ? homePageSectionDetails?.quickCategoryLinks?.map((product: any) => {
+                            return (
+                                <SwiperSlide>
+                                <Link to={product?.linkUrl} className="ProductCardLink">
+                                    <Card className="ProductCard">
+                                        <Box className="ProductImageWrapper">
+                                            <img className="ProductImage" src={product?.imageUrl} alt="product-image" />
+                                        </Box>
+                                        <Box className="ProductTitle">
+                                            <Typography variant="h4">{product?.name}</Typography>
+                                        </Box>
+                                    </Card>
+                                </Link>
+                            </SwiperSlide>
+                            )
+                          }): null
+                        }
+                        {/* <SwiperSlide>
                             <Link to="#" className="ProductCardLink">
                                 <Card className="ProductCard">
                                     <Box className="ProductImageWrapper">
@@ -144,7 +152,7 @@ function ProductsSlider() {
                                     </Box>
                                 </Card>
                             </Link>
-                        </SwiperSlide>
+                        </SwiperSlide> */}
                     </Swiper>
                     <SwiperNavigation classNameNext="ProductNext" classNamePrev="ProductPrev" />
                 </Box>

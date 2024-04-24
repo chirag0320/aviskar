@@ -7,7 +7,7 @@ const LookingFor = lazy(() => import("../components/partials/home/LookingFor"))
 const PopularProducts = lazy(() => import("../components/partials/home/PopularProducts"))
 const DiscoverTreasure = lazy(() => import("../components/partials/home/DiscoverTreasure"))
 import LazyHeader from "../components/header/FrontHeader"
-const CloserLook = lazy(() => import("../components/partials/home/CloserLook"))
+const CloserLookMain = lazy(() => import("../components/partials/frontPage/CloserLookMain"))
 const TheJournal = lazy(() => import("../components/partials/frontPage/TheJournal"))
 const Locations = lazy(() => import("../components/partials/frontPage/Locations"))
 const Adventure = lazy(() => import("../components/partials/frontPage/Adventure"))
@@ -53,7 +53,7 @@ function MainHomePage() {
         <div className="flex flex-col min-h-screen">
             {/* <Suspense fallback={<Box id="HeaderWrapper"></Box>}> */}
             <MainLayout>
-                {/* <Loader open={loading} /> */}
+                <Loader open={loading} />
                 {openToaster && <Toaster />}
                 <Seo
                     keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
@@ -69,7 +69,7 @@ function MainHomePage() {
                     <Suspense fallback={<></>}><KnowMore /></Suspense>
                     <Suspense fallback={<></>}><LatestStories /></Suspense>
                     <Suspense fallback={<></>}><Gallery /></Suspense>
-                    <Suspense fallback={<></>}><CloserLook /></Suspense>
+                    <Suspense fallback={<></>}><CloserLookMain /></Suspense>
                     <Suspense fallback={<></>}><TheJournal /></Suspense>
                 </Box>
             </MainLayout>

@@ -175,7 +175,7 @@ function AboutProduct({ productId }: any) {
           message: message,
           buttonText: 'compare product list',
           redirectButtonUrl: 'compare-products',
-          severity: 'error'
+          severity: 'info'
         });
       } else {
         message = 'You can compare up to 5 products at a time. Remove some products to add new ones in';
@@ -227,7 +227,6 @@ function AboutProduct({ productId }: any) {
         message: 'Quantity can not be zero',
         severity: 'error'
       })
-      return
     }
     const response = await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
       "productId": productId,
@@ -238,7 +237,7 @@ function AboutProduct({ productId }: any) {
     if (response?.code === 200 && !isInstantBuy) {
       dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
       // const responseMessage = response
-      if (response.data) {
+      if (response.data === true) {
         showToaster({
           message: response?.message,
           buttonText: 'cart',
@@ -258,15 +257,36 @@ function AboutProduct({ productId }: any) {
       navigate('/login')
       return
     }
-    if (quantityCount === 0) {
+    if(quantityCount === 0){
       showToaster({
-        message: 'Quantity can not be zero',
+        message : "Quantity can not be zero",
+        severity : "error"
+      })
+      return;
+    }
+
+    const response = await apiCallFunction(ENDPOINTS.addToCartProduct, 'POST', {
+      "productId": productId,
+      "quantity": quantityCount,
+      "IsInstantBuy": true
+    } as any)
+
+    if(response.code === 200){
+      if (response.data === true) {
+        navigate('/checkout/?isInstantBuy=true')
+      } else {
+        showToaster({
+          message: response.message,
+          severity: 'warning'
+        })
+      }
+    }
+    else{
+      showToaster({
+        message: "Error occurred while buy now",
         severity: 'error'
       })
-      return
     }
-    await addToCartFunction(true)
-    navigate('/checkout/?isInstantBuy=true')
   }
   const renderProductSpecification = (property: string, value: string) => {
     return (

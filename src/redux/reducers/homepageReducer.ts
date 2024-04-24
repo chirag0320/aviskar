@@ -390,13 +390,9 @@ export const createHomepageSlice = createSlice({
       state.loading = true
     })
     builder.addCase(HomePageSectionDetails.fulfilled, (state, action) => {
-      const data = action?.payload?.data?.data?.reduce((acc: any, current: any) => {
-        acc[current.sectionEnum] = current
-        return acc
-      }, { 1: {}, 2: {} }) ?? {}
-      state.sectionDetails = data
+      state.sectionDetails = action?.payload?.data?.data
       state.loading = false
-      localStorageSetItem('sectionDetails', JSON.stringify(data))
+      // localStorageSetItem('sectionDetails', JSON.stringify(data))
     })
     builder.addCase(HomePageSectionDetails.rejected, (state, action) => {
       state.loading = false
