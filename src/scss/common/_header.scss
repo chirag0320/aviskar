@@ -553,10 +553,8 @@
           }
 
           .Center {
-            @include media($lg) {
-              order: 3;
-              width: 100%;
-            }
+            justify-content: center;
+            flex-grow: 1;
 
             .NavigationHeader {
               position: static;
