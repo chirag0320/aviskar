@@ -32,7 +32,7 @@ function FrontMain(props: any) {
             <Container className="MainHeader">
                 <Stack className="MainHeader__Wrapper">
                     <Stack className="Left">
-                        <Link className="Logo" to="/"><img src={configDetailsState?.["mainhomepage.headerlogo"].value} alt="QMint white logo" loading="eager" /></Link>
+                        <Link className="Logo" to="/"><img src={configDetailsState?.["mainhomepage.headerlogo"]?.value} alt="QMint white logo" loading="eager" /></Link>
                     </Stack>
                     <Stack className="Center">
                         <Navigation frontPage={true} />
