@@ -18,6 +18,7 @@ import Toaster from "@/components/common/Toaster";
 import Loader from "@/components/common/Loader";
 import useAlertPopUp from "@/hooks/useAlertPopUp";
 import SessionExpiredDialog from "@/components/header/SessionExpiredDialog";
+import ProductsSlider from "@/components/partials/home/ProductsSlider";
 
 function IndexPage() {
   const dispatch = useAppDispatch()
@@ -79,6 +80,7 @@ function IndexPage() {
         />
         {/* {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>} */}
         {configDetailsState?.sliderenableinhome?.value === false || isMobile ? null : <Banner />}
+        <Suspense fallback={<></>}> <ProductsSlider /></Suspense>
         <Suspense fallback={<></>}> <FeaturedProducts /></Suspense>
         <Suspense fallback={<></>}> <LookingFor /></Suspense>
         <Suspense fallback={<></>}><PopularProducts /></Suspense>

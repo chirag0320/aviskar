@@ -283,7 +283,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
           </ClickTooltip>
         }
 
-        <IconButton title="Add to cart" aria-label="AddToCartButton" className="Outlined AddToCart" onClick={handleAddToCart}><AddToCartIcon /></IconButton>
+        {product.availability !== "Sold Out" && <IconButton title="Add to cart" aria-label="AddToCartButton" className="Outlined AddToCart" onClick={handleAddToCart}><AddToCartIcon /></IconButton>}
       </CardActions >
     </Card >
   );
