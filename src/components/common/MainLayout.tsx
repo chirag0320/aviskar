@@ -5,11 +5,17 @@ import React, { Suspense, lazy } from 'react'
 const LazyFrontHeader = lazy(() => import("../header/FrontHeader"));
 const LazyFrontFooter = lazy(() => import('../footer/FrontFooter'));
 
-const MainLayout = ({ children }: { children: any }) => {
+interface MainLayout {
+    children: any
+    blackTheme?: boolean
+}
+
+const MainLayout = (props: MainLayout) => {
+    const {children, blackTheme} = props
     return (
         <Stack id="PageLayout">
             <Suspense fallback={<></>}>
-                <LazyFrontHeader />
+                <LazyFrontHeader blackTheme={blackTheme} />
             </Suspense>
             <main>
                 {children}

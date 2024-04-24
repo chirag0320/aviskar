@@ -14,8 +14,8 @@ function ProductsSlider() {
         slidesPerView: 1.3,
         spaceBetween: 16,
         navigation: {
-            nextEl: ".SwiperButtonNext",
-            prevEl: ".SwiperButtonPrev",
+            nextEl: ".ProductNext",
+            prevEl: ".ProductPrev",
             disabledClass: "SwiperButtonDisabled"
         },
         pagination: {
@@ -24,7 +24,7 @@ function ProductsSlider() {
         centeredSlides: isMobile,
         loop: true,
         speed: 500,
-        modules: [Autoplay, Pagination, A11y],
+        modules: [Navigation, Autoplay, Pagination, A11y],
         scrollbar: {
             draggable: true
         },
@@ -146,7 +146,7 @@ function ProductsSlider() {
                             </Link>
                         </SwiperSlide>
                     </Swiper>
-                    <SwiperNavigation />
+                    <SwiperNavigation classNameNext="ProductNext" classNamePrev="ProductPrev" />
                 </Box>
             </Box>
         </Box>

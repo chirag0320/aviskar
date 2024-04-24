@@ -16,7 +16,7 @@ import {
 import TabPanel from "@/components/common/TabPanel";
 
 // Components
-import Layout from "@/components/common/Layout";
+import MainLayout from "@/components/common/MainLayout";
 import PostCard from "@/components/common/PostCard";
 
 // Utils
@@ -60,7 +60,7 @@ function BlogDetails(params: any) {
     apiCall()
   }, [params?.params?.["blog-details-friendly-name"]])
   return (
-    <Layout>
+    <MainLayout blackTheme>
       <Loader open = {checkLoadingStatus} />
       <Box className="BlogDetailPage">
         <Box className="PostDescription">
@@ -257,7 +257,7 @@ function BlogDetails(params: any) {
           </Container>
         </Box> */}
       </Box>
-    </Layout>
+    </MainLayout>
   );
 }
 export default React.memo(BlogDetails);

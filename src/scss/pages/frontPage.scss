@@ -328,6 +328,7 @@
                                 font-size: 12px;
                                 line-height: 22px;
                                 margin-top: 8px;
+                                @include max-line(4);
                             }
                         }
 

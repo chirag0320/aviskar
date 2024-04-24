@@ -17,8 +17,8 @@ function Locations() {
         slidesPerColumn: 2,
         spaceBetween: 30,
         navigation: {
-            nextEl: ".SwiperButtonNext",
-            prevEl: ".SwiperButtonPrev",
+            nextEl: ".LocationNext",
+            prevEl: ".LocationPrev",
             disabledClass: "SwiperButtonDisabled"
         },
         pagination: {
@@ -64,7 +64,7 @@ function Locations() {
                             <Box className="SwiperContainer">
                                 <Swiper {...config} >
                                     {(mainHomePageData && mainHomePageData?.beyond?.length > 0) ?
-                                        mainHomePageData?.beyond?.map((item) => {
+                                        [...mainHomePageData?.beyond, ...mainHomePageData?.beyond]?.map((item) => {
                                             return (
                                                 <SwiperSlide onClick={() => {
                                                     navigate('/blog/' + item.friendlyName)
@@ -79,62 +79,8 @@ function Locations() {
                                             )
                                         })
                                         : null}
-                                    {/* <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">Great Keppel Island</Typography>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">Great Keppel Island</Typography>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">The Gold Coast</Typography>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">Airlie Beach</Typography>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">Lady Elliot Island</Typography>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">Great Keppel Island</Typography>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">Great Keppel Island</Typography>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">The Gold Coast</Typography>
-                                    </Box>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Box className="LocationsSlide">
-                                        <img src="https://picsum.photos/270/270" alt="https://picsum.photos/270/270" />
-                                        <Typography className="SlideDescription">Airlie Beach</Typography>
-                                    </Box>
-                                </SwiperSlide> */}
                                 </Swiper>
-                                {<SwiperNavigation />}
+                                {<SwiperNavigation classNameNext="LocationNext" classNamePrev="LocationPrev" />}
                             </Box>
                         </Box>
                     </Box >
