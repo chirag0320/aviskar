@@ -75,12 +75,21 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
     }
 
     const updateWishListHandler = async () => {
+        let isAnyQuantityZero = false;
+
         const itemsWithQuantity = Object.keys(quantities).map((item: any) => {
+            if (quantities[item] === 0) {
+                isAnyQuantityZero = true;
+            }
             return {
                 id: item,
                 quantity: quantities[item]
             }
         })
+        if (isAnyQuantityZero) {
+            showToaster({ message: "Quantity cannot be zero", severity: 'error' })
+            return;
+        }
         setIsWishListUpdated(false)
         const response = await dispatch(updateShoppingCartData({ url: ENDPOINTS.updateWishListData, body: itemsWithQuantity }) as any);
         if (hasFulfilled(response.type)) {
@@ -164,12 +173,8 @@ const WishListDetails = ({ toggleEmailFriend }: { toggleEmailFriend: () => any }
                                     <Stack className="Quantity">
                                         <IconButton className="Minus" onClick={() => decreaseQuantity(item.id)} disabled={quantities[item.id] === 1}><MinusIcon /></IconButton>
                                         <TextField type="number" name="Qty" value={quantities[item.id]} onChange={(event) => {
-                                            const inputValue = event.target.value;
-                                            const parsedValue = parseInt(inputValue, 10); // Parse input value as integer
-                                            const formattedValue = parsedValue.toString(); // Convert parsed value back to string
-                                            setQuantities({ ...quantities, [item.id]: parsedValue });
+                                            setQuantities({ ...quantities, [item.id]: Number(event.target.value) });
                                             setIsWishListUpdated(true);
-                                            event.target.value = formattedValue;
                                         }} />
                                         <IconButton className="Plus" onClick={() => increaseQuantity(item.id)}><PlusIcon /></IconButton>
                                     </Stack>

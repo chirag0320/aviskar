@@ -50,7 +50,7 @@ import { productImages } from "@/utils/data"
 import { CartItem } from "@/types/shoppingCart";
 import { CartItemsWithLivePriceDetails } from "../partials/shopping-cart/CartDetails";
 import useCallAPI from "@/hooks/useCallAPI";
-import { ENDPOINTS } from "@/utils/constants";
+import { ENDPOINTS, changePasswordURL } from "@/utils/constants";
 import { setToasterState } from "@/redux/reducers/homepageReducer";
 import useShowToaster from "@/hooks/useShowToaster";
 import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer";
@@ -507,7 +507,9 @@ export const LineChartCard = (props: any) => {
 };
 
 
-export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod }: { deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide?: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any }) => {
+export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity, increaseQuantity, decreaseQuantity, removeItem, isDifferentMethod, deliveryMethodOfParent, changeDeliveryMethodOfProduct, deliverMethod, idForQuantity, changesInQuantity }: {
+  deliverMethod?: any, cartItem: CartItemsWithLivePriceDetails, hideDeliveryMethod: boolean, hideRightSide?: boolean, quantity: number, increaseQuantity: any, decreaseQuantity: any, removeItem: any, isDifferentMethod?: boolean, deliveryMethodOfParent?: any, changeDeliveryMethodOfProduct?: any, idForQuantity: number, changesInQuantity: (event: any, productId: number) => void
+}) => {
   // const [deliveryMethod, setDeliveryMethod] = useState<string>('LocalShipping')
   const handleDeliveryMethod = (event: SelectChangeEvent) => {
     // setDeliveryMethod(event.target.value as string);
@@ -535,7 +537,12 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
             <Typography variant="subtitle1">${roundOfThePrice(cartItem?.LivePriceDetails?.price)}</Typography>
             <Stack className="Quantity">
               <IconButton className="Minus" onClick={() => decreaseQuantity(cartItem.id)} disabled={quantity === 1}><MinusIcon /></IconButton>
-              <TextField value={quantity} disabled />
+              <TextField value={quantity} type="number" onChange={(event) => {
+                // setQuantities(prev => {
+                //   return { ...prev, [idForQuantity]: Number(event.target.value) }
+                // });
+                changesInQuantity(event, idForQuantity)
+              }} />
               <IconButton className="Plus" onClick={() => increaseQuantity(cartItem.id)}><PlusIcon /></IconButton>
             </Stack>
             <IconButton className="DeleteButton MenuButton" onClick={() => removeItem(cartItem.id)}><Delete1Icon /></IconButton>
