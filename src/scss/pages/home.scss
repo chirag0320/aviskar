@@ -258,7 +258,7 @@
 #DiscoverTreasure {
   border: 1px solid $white;
   background-color: rgba($yellowFuel, 0.05);
-
+  overflow: hidden;
   .Container {
     .Wrapper {
       gap: 30px;
@@ -318,6 +318,7 @@
 }
 
 #CloserLook {
+  clear: both;
   @include padding-vertical(60, 50);
 
   @include media($md) {
