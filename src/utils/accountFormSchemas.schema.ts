@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 
-const commonAccountSchema = {
+export const commonAccountSchema = {
     FirstName: yup.string().trim().required('First name is a required field'),
     LastName: yup.string().trim().required('Last name is a required field'),
     Contact: yup.string().trim().required(),

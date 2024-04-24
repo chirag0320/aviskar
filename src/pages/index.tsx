@@ -26,6 +26,7 @@ import Layout from "@/components/common/Layout";
 import useUserDetailsFromToken from "@/hooks/useUserDetailsFromToken";
 import Toaster from "@/components/common/Toaster";
 import Loader from "@/components/common/Loader";
+import MainLayout from "@/components/common/MainLayout";
 
 function MainHomePage() {
     const dispatch = useAppDispatch()
@@ -51,8 +52,7 @@ function MainHomePage() {
     return (
         <div className="flex flex-col min-h-screen">
             {/* <Suspense fallback={<Box id="HeaderWrapper"></Box>}> */}
-            <LazyHeader />
-            <>
+            <MainLayout>
                 {/* <Loader open={loading} /> */}
                 {openToaster && <Toaster />}
                 <Seo
@@ -72,13 +72,7 @@ function MainHomePage() {
                     <Suspense fallback={<></>}><CloserLook /></Suspense>
                     <Suspense fallback={<></>}><TheJournal /></Suspense>
                 </Box>
-            </>
-            {<Suspense fallback={
-                <></>
-                // <Skeleton height='30vh'></Skeleton>
-            }>
-                <LazyFooter />
-            </Suspense>}
+            </MainLayout>
         </div>
     )
 }

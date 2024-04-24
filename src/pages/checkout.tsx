@@ -29,7 +29,7 @@ function Checkout() {
   const { loadingForCheckingLogin } = useRequireLogin()
   const dispatch = useAppDispatch()
   const checkLoadingStatus = useAppSelector(state => state.checkoutPage.loading);
-  const { checkoutPageData } = useAppSelector((state) => state.checkoutPage)
+  const { checkoutPageData, isApiCalled } = useAppSelector((state) => state.checkoutPage)
   const cartItems = useAppSelector(state => state.shoppingCart.cartItems);
   const openToaster = useAppSelector(state => state.homePage.openToaster)
   const [state, setState] = useState({ service: getCheckoutPageData, endPoint: ENDPOINTS.checkoutDetails })
@@ -58,7 +58,7 @@ function Checkout() {
       <PageTitle title="Checkout" />
       <Container id="PageCheckout">
         {(checkoutPageData?.shoppingCartItems?.length && checkoutPageData?.shoppingCartItems?.length > 0) ?
-          <>
+          (<>
             <Stack className="AllSteps">
               <Step1 />
               <Step2 />
@@ -66,7 +66,8 @@ function Checkout() {
               <TermsServices />
             </Stack>
             <OrderSummary />
-          </> : <RecordNotFound message="No Items are available" />}
+          </>) : null}
+        {(!checkLoadingStatus && isApiCalled && checkoutPageData?.shoppingCartItems?.length === 0) ? <RecordNotFound message="No Items are available" /> : null}
       </Container>
       {openSessionExpireDialog && <SessionExpiredDialog
         open={openSessionExpireDialog}

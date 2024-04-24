@@ -22,7 +22,7 @@ import SessionExpiredDialog from "@/components/header/SessionExpiredDialog";
 function IndexPage() {
   const dispatch = useAppDispatch()
   const { configDetails: configDetailsState, openToaster, scrollPosition, loading } = useAppSelector((state) => state.homePage)
-  const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
+  const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('sm'))
   const [openSessionExpireDialog, toggleSessionExpireDialog] = useToggle(false)
 
   const [body] = useState({
@@ -66,11 +66,11 @@ function IndexPage() {
       clearTimeout(timeout3)
     }
   }, [])
-  useAlertPopUp({pageName: 'Home',openPopup:toggleSessionExpireDialog})
+  useAlertPopUp({ pageName: 'Home', openPopup: toggleSessionExpireDialog })
   return (
     <Layout>
       <>
-      <Loader open = {loading} />
+        <Loader open={loading} />
         {openToaster && <Toaster />}
         <Seo
           keywords={[`gatsby`, `tailwind`, `react`, `tailwindcss`]}
@@ -78,16 +78,16 @@ function IndexPage() {
           lang="en"
         />
         {/* {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>} */}
-        {configDetailsState?.sliderenableinhome?.value === false ? null : <Banner />}
+        {configDetailsState?.sliderenableinhome?.value === false || isMobile ? null : <Banner />}
         <Suspense fallback={<></>}> <FeaturedProducts /></Suspense>
         <Suspense fallback={<></>}> <LookingFor /></Suspense>
         <Suspense fallback={<></>}><PopularProducts /></Suspense>
         <Suspense fallback={<></>}><DiscoverTreasure /></Suspense>
         <Suspense fallback={<></>}><CloserLook /></Suspense>
         {openSessionExpireDialog && <SessionExpiredDialog
-        open={openSessionExpireDialog}
-        onClose={toggleSessionExpireDialog}
-      />}
+          open={openSessionExpireDialog}
+          onClose={toggleSessionExpireDialog}
+        />}
       </>
     </Layout>
   )

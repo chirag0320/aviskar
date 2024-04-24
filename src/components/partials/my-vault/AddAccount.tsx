@@ -1,5 +1,5 @@
 
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { Autocomplete, MenuItem, Button, Stack, TextField, Box, Typography } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -16,10 +16,12 @@ import { PhoneNumberCountryCode, hasFulfilled, AccountTypeEnumReverse, AccountTy
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
 import { addOrEditAccount, getAccounts } from "@/redux/reducers/myVaultReducer"
-import { BussinessAccountFormSchema, IndividualAccountFormSchema, JointAccountFormSchema, SuperFundAccountFormSchema, TrustAccountFormSchema } from "@/utils/accountFormSchemas.schema"
+import { BussinessAccountFormSchema, IndividualAccountFormSchema, JointAccountFormSchema, SuperFundAccountFormSchema, TrustAccountFormSchema, commonAccountSchema } from "@/utils/accountFormSchemas.schema"
 import { AxiosError } from "axios"
 import AdditionalFields, { IField } from "./AdditionalFields"
 import { Account } from "@/types/myVault"
+import * as yup from 'yup'
+import { isValidPhoneNumber } from "@/components/common/Utils"
 
 interface AddAccountProps {
   open: boolean
@@ -51,23 +53,6 @@ interface Inputs {
   Code: number,
 }
 
-function getSchemaFromAlignment(alignment: string) {
-  switch (alignment) {
-    case "Individual":
-      return IndividualAccountFormSchema;
-    case "Business":
-      return BussinessAccountFormSchema;
-    case "Joint":
-      return JointAccountFormSchema;
-    case "Superfund":
-      return SuperFundAccountFormSchema;
-    case "Trust":
-      return TrustAccountFormSchema;
-    default:
-      return IndividualAccountFormSchema
-  }
-}
-
 function AddAccount(props: AddAccountProps) {
   const { open, dialogTitle, alignment, onClose, hadleSecondaryAction, existingAccount } = props
   const accountTypeText = useMemo(() => {
@@ -86,7 +71,11 @@ function AddAccount(props: AddAccountProps) {
   const [stateValue, setstateValue] = useState<any>('')
   const [additionalFields, setAdditionalFields] = useState<IField[]>([{ [Math.random().toString(36).substring(7)]: { firstName: "", lastName: "" } }]);
   const [isAddressGoogleVerified, setIsAddressGoogleVerified] = useState<boolean>(false)
-  const [phoneValue, setPhoneValue] = useState("");
+  const [phoneNumberValue, setPhoneNumberValue] = useState<{ value: string, country: any }>({
+    value: "",
+    country: {}
+  })
+  const firstTimeRender = useRef(true);
 
   useEffect(() => {
     setValue('Country', "none")
@@ -100,10 +89,15 @@ function AddAccount(props: AddAccountProps) {
     setValue('State', existingAccount?.address.stateName);
     setStateId(existingAccount?.address.stateId);
     setValue('Country', existingAccount?.address.countryId?.toString())
-    setValue("Contact", existingAccount?.phoneNumber)
+    // setValue("Contact",  
     setcountryValue(existingAccount?.address.countryId?.toString())
     setstateValue(existingAccount?.address.stateName)
-    setPhoneValue(existingAccount?.phoneNumber)
+    setPhoneNumberValue({
+      value: existingAccount?.phoneNumber,
+      country: {
+        countryCode: "AU"
+      }
+    })
     setIsAddressGoogleVerified(true)
     const additionalBeneficiary = existingAccount?.additionalBeneficiary.map((beneficiary) => {
       return {
@@ -120,12 +114,72 @@ function AddAccount(props: AddAccountProps) {
     }
   }, [existingAccount])
 
+  function getSchemaFromAlignment(alignment: string) {
+    switch (alignment) {
+      case "Individual":
+        return yup.object().shape({
+          ...commonAccountSchema,
+          Contact: yup.string().trim().test('valid-phone-number', 'Please enter a valid phone number',
+            function (value) {
+              if (value) return isValidPhoneNumber(value, phoneNumberValue?.country?.countryCode);
+              else return false;
+            })
+        });
+      case "Business":
+        return yup.object().shape({
+          ...commonAccountSchema,
+          BusinessName: yup.string().trim().required("Bussiness Name is required field"),
+          Contact: yup.string().trim().test('valid-phone-number', 'Please enter a valid phone number',
+            function (value) {
+              if (value) return isValidPhoneNumber(value, phoneNumberValue?.country?.countryCode);
+              else return false;
+            })
+        });
+      case "Joint":
+        return yup.object().shape({
+          ...commonAccountSchema,
+          Contact: yup.string().trim().test('valid-phone-number', 'Please enter a valid phone number',
+            function (value) {
+              if (value) return isValidPhoneNumber(value, phoneNumberValue?.country?.countryCode);
+              else return false;
+            })
+        });
+      case "Superfund":
+        return yup.object().shape({
+          ...commonAccountSchema,
+          Contact: yup.string().trim().test('valid-phone-number', 'Please enter a valid phone number',
+            function (value) {
+              if (value) return isValidPhoneNumber(value, phoneNumberValue?.country?.countryCode);
+              else return false;
+            }),
+          SuperfundName: yup.string().trim().required("Superfund Name is required field"),
+          TrusteeType: yup.string().trim().notOneOf(["none"], "Trustee Type is required field"),
+          TrusteeName: yup.string().trim().required("Trustee Name is required field")
+        });
+      case "Trust":
+        return yup.object().shape({
+          ...commonAccountSchema,
+          Contact: yup.string().trim().test('valid-phone-number', 'Please enter a valid phone number',
+            function (value) {
+              if (value) return isValidPhoneNumber(value, phoneNumberValue?.country?.countryCode);
+              else return false;
+            }),
+          TrusteeName: yup.string().trim().required("Trustee Name is required field"),
+          TrusteeType: yup.string().trim().notOneOf(["none"], "Trustee Type is required field"),
+          TrustName: yup.string().trim().required("Trust Name is required field")
+        });
+      default:
+        return IndividualAccountFormSchema
+    }
+  }
+
   const {
     register,
     reset,
     handleSubmit,
     clearErrors,
     control,
+    setError,
     setValue,
     getValues,
     formState: { errors },
@@ -224,10 +278,28 @@ function AddAccount(props: AddAccountProps) {
   }
 
   useEffect(() => {
+    if (firstTimeRender.current) {
+      firstTimeRender.current = false;
+      return;
+    }
+    if (!isValidPhoneNumber(phoneNumberValue.value, phoneNumberValue?.country?.countryCode)) {
+      setError("Contact", {
+        type: "manual",
+        message: "Please enter a valid phone number"
+      });
+    }
+    else {
+      clearErrors("Contact")
+    }
+  }, [phoneNumberValue])
+
+  useEffect(() => {
     return () => {
       if (existingAccount) return;
       reset()
       setcountryValue("none")
+      setPhoneNumberValue({ value: "", country: {} })
+      firstTimeRender.current = true;
       setstateValue('')
     }
   }, [open]);
@@ -288,7 +360,7 @@ function AddAccount(props: AddAccountProps) {
               register={register}
               error={errors.BusinessName}
               name="BusinessName"
-              placeholder="Enter business name *"
+              placeholder="Enter business name*"
               control={control}
               variant='outlined'
               margin='none'
@@ -299,7 +371,7 @@ function AddAccount(props: AddAccountProps) {
               register={register}
               error={errors.SuperfundName}
               name="SuperfundName"
-              placeholder="Enter superfund name *"
+              placeholder="Enter superfund name*"
               control={control}
               variant='outlined'
               margin='none'
@@ -327,7 +399,7 @@ function AddAccount(props: AddAccountProps) {
                 register={register}
                 error={errors.TrusteeName}
                 name="TrusteeName"
-                placeholder="Enter trustee name *"
+                placeholder="Enter trustee name*"
                 control={control}
                 variant='outlined'
                 margin='none'
@@ -406,7 +478,8 @@ function AddAccount(props: AddAccountProps) {
                   // defaultValue={existingAccount?.phoneNumber}
                   setValue={setValue}
                   name="Contact"
-                  value={phoneValue}
+                  value={phoneNumberValue.value}
+                  setPhoneNumberValue={setPhoneNumberValue}
                   variant="outlined"
                   margin="none"
                   className="ContactSelect"

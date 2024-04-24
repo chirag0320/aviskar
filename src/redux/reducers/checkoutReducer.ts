@@ -135,6 +135,7 @@ interface CheckoutPageState {
         "termsConditionsbody": any,
     } | null,
     subTotal: number,
+    isApiCalled: boolean | null,
     finalDataForTheCheckout: any,
     insuranceAndTaxCalculation: Fees | null,
     craditCardCharges: CreditCardCharges | null,
@@ -152,6 +153,7 @@ const initialState: CheckoutPageState = {
     isOTPEnabled: null,
     isOTPSent: null,
     isOTPVerified: null,
+    isApiCalled: null,
     checkoutPageData: null,
     subTotal: 0,
     finalDataForTheCheckout: {},
@@ -161,7 +163,7 @@ const initialState: CheckoutPageState = {
     stateList: [],
     countryList: [],
     message: null,
-    otpverfiedMessage: null 
+    otpverfiedMessage: null
 }
 
 export const getCheckoutPageData = appCreateAsyncThunk(
@@ -253,7 +255,7 @@ export const checkoutPage = createSlice({
             state.message = null
             state.otpverfiedMessage = null
         },
-        removeOTPvalidationMessage:(state)=>{
+        removeOTPvalidationMessage: (state) => {
             state.otpverfiedMessage = null
         },
         updateAddress: (state, action) => {
@@ -318,6 +320,7 @@ export const checkoutPage = createSlice({
         })
         builder.addCase(getCheckoutPageData.fulfilled, (state, action) => {
             state.checkoutPageData = action?.payload?.data?.data
+            state.isApiCalled = true
             state.loading = false;
         })
         builder.addCase(getCheckoutPageData.rejected, (state, action) => {

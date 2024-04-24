@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { Autocomplete, MenuItem, Button, Stack, TextField, Box, Typography } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -15,10 +15,11 @@ import GoogleMaps from "@/components/common/GoogleMaps"
 import { StateOrCountry, addOrEditAddress as addOrEditAddressForCheckout, updateAddress as updateAddressForCheckout } from "@/redux/reducers/checkoutReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import { PhoneNumberCountryCode, hasFulfilled } from "@/utils/common"
-import { addressSchema } from "./AddAddress"
+// import { addressSchema } from "./AddAddress"
 import useShowToaster from "@/hooks/useShowToaster"
 import { AddressComponents } from "@/utils/parseAddressComponents"
 import { addOrEditAddresses as addOrEditAddressForMyVault, getAddresses, updateAddress as updateAddressForMyVault } from "@/redux/reducers/myVaultReducer"
+import { isValidPhoneNumber } from "@/components/common/Utils"
 
 interface UpdateAddress {
   open: boolean
@@ -57,12 +58,35 @@ function UpdateAddress(props: UpdateAddress) {
   const [countryValue, setcountryValue] = useState<any>('')
   const [stateValue, setstateValue] = useState<any>('')
   const [isAddressGoogleVerified, setIsAddressGoogleVerified] = useState<boolean>(false)
-  const [phoneInputValue, setPhoneInputValue] = useState("")
+  const [phoneNumberValue, setPhoneNumberValue] = useState<{ value: string, country: any }>({
+    value: "",
+    country: {}
+  })
+  const firstTimeRender = useRef(true);
+
+  const addressSchema = yup.object().shape({
+    FirstName: yup.string().trim().required('First name is a required field'),
+    LastName: yup.string().trim().required('Last name is a required field'),
+    Company: yup.string().trim(),
+    Contact: yup.string().trim().test('valid-phone-number', 'Please enter a valid phone number',
+      function (value) {
+        if (value) return isValidPhoneNumber(value, phoneNumberValue?.country?.countryCode);
+        else return false;
+      }),
+    Email: yup.string().email().required(),
+    Address1: yup.string().trim().required("Address 1 in required field"),
+    Address2: yup.string().trim(),
+    City: yup.string().required().trim(),
+    State: yup.string().required(),
+    Country: yup.string().notOneOf(["none"], "Country is required field"),
+    Code: yup.string().required('Zip / Postal code is required').trim(),
+  })
 
   const {
     register,
     reset,
     handleSubmit,
+    setError,
     control,
     clearErrors,
     setValue,
@@ -153,6 +177,22 @@ function UpdateAddress(props: UpdateAddress) {
   }
 
   useEffect(() => {
+    if (firstTimeRender.current) {
+      firstTimeRender.current = false;
+      return;
+    }
+    if (!isValidPhoneNumber(phoneNumberValue.value, phoneNumberValue?.country?.countryCode)) {
+      setError("Contact", {
+        type: "manual",
+        message: "Please enter a valid phone number"
+      });
+    }
+    else {
+      clearErrors("Contact")
+    }
+  }, [phoneNumberValue])
+
+  useEffect(() => {
     if (googleAddressComponents) {
       setValue('Address1', googleAddressComponents.address)
       countryList.forEach((country: StateOrCountry) => {
@@ -185,12 +225,22 @@ function UpdateAddress(props: UpdateAddress) {
     setValue("Contact", existingAddress?.phoneNumber)
     setcountryValue(existingAddress?.country || existingAddress?.countryId)
     setstateValue(existingAddress?.stateName)
-    setPhoneInputValue(existingAddress?.phoneNumber)
+    setPhoneNumberValue({
+      value: existingAddress?.phoneNumber,
+      country: {
+        countryCode: "AU"
+      }
+    })
     setIsAddressGoogleVerified(existingAddress?.isVerified)
     return () => {
       reset()
       setIsAddressGoogleVerified(false)
       setGoogleAddressComponents(null)
+      setPhoneNumberValue({
+        value: "",
+        country: {}
+      })
+      firstTimeRender.current = true;
     }
   }, [existingAddress])
 
@@ -262,7 +312,8 @@ function UpdateAddress(props: UpdateAddress) {
               margin="none"
               className="ContactSelect"
               error={errors.Contact}
-              value={phoneInputValue}
+              value={phoneNumberValue.value}
+              setPhoneNumberValue={setPhoneNumberValue}
             ></RenderFields>
             <RenderFields
               register={register}

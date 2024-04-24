@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import classNames from "classnames";
 import * as variable from "../../scss/settings/variables.module.scss";
+import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js';
 
 // Assets
 import {
@@ -52,6 +53,19 @@ interface ProductStockStatus {
   availability: string
   colorClass?: string
   iconClass?: string
+}
+
+export const isValidPhoneNumber = (phoneNumber: string, country: string) => {
+  try {
+    const phoneNumberObj = parsePhoneNumberFromString("+" + phoneNumber, country.toUpperCase() as CountryCode);
+
+    if (phoneNumberObj && phoneNumberObj.isValid()) {
+      return true;
+    }
+  } catch (error) {
+    // Handle any errors
+  }
+  return false;
 }
 
 export const StockReturnWithName = React.memo(
@@ -105,18 +119,18 @@ export const AfterStockReturnWithName = React.memo(({ text }: any) => {
     </Stack>
   );
 });
-export const SwiperNavigation = React.memo(({handleSlideChange}:{handleSlideChange?:any}) => {
+export const SwiperNavigation = React.memo(({ handleSlideChange }: { handleSlideChange?: any }) => {
   return (
     <Stack className="SwiperNavigation">
-      <IconButton className="SwiperButton SwiperButtonPrev" onClick={()=>{
-        if(handleSlideChange){
+      <IconButton className="SwiperButton SwiperButtonPrev" onClick={() => {
+        if (handleSlideChange) {
           handleSlideChange()
         }
       }}>
         <ArrowLeft />
       </IconButton>
-      <IconButton className="SwiperButton SwiperButtonNext" onClick={()=>{
-        if(handleSlideChange){
+      <IconButton className="SwiperButton SwiperButtonNext" onClick={() => {
+        if (handleSlideChange) {
           handleSlideChange()
         }
       }}>
