@@ -1,5 +1,6 @@
 import React, { Suspense, lazy, useCallback, useState } from "react"
 import { useMediaQuery, useScrollTrigger, AppBar, Box, Divider, Skeleton } from "@mui/material"
+import classNames from "classnames"
 
 // Components
 const FrontPricing = lazy(() => import('./FrontPricing'))
@@ -8,7 +9,12 @@ import { PageLoader } from './Loader'
 import { useAppSelector } from "@/hooks"
 const MobileMenu = lazy(() => import('./MobileMenu'))
 
-const FrontHeader = () => {
+interface FrontHeader {
+    blackTheme?: boolean
+}
+
+const FrontHeader = (props:FrontHeader) => {
+    const { blackTheme } = props
     const loading = useAppSelector((state) => state.homePage.loading)
     const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
     const [isFrontPage] = useState(true)
@@ -23,7 +29,7 @@ const FrontHeader = () => {
     }, [openMobileMenu])
 
     return (
-        <Box id="HeaderWrapper" className="FrontHeader">
+        <Box id="HeaderWrapper" className={classNames("FrontHeader", {"Black": blackTheme})}>
             {!isMobile && configDetailsState?.["mainhomepage.tickerenable"]?.value && <>
                 <Suspense fallback={
                     <></>

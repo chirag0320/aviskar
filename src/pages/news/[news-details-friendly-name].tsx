@@ -16,7 +16,7 @@ import {
 import TabPanel from "@/components/common/TabPanel";
 
 // Components
-import Layout from "@/components/common/Layout";
+import MainLayout from "@/components/common/MainLayout";
 import PostCard from "@/components/common/PostCard";
 
 // Utils
@@ -59,7 +59,7 @@ function NewsDetails(params: any) {
     apiCall()
   }, [params?.params?.["news-details-friendly-name"]])
   return (
-    <Layout>
+    <MainLayout blackTheme>
       <Loader open = {checkLoadingStatus} />
       <Box className="BlogDetailPage">
         <Box className="PostDescription">
@@ -214,7 +214,7 @@ function NewsDetails(params: any) {
           </Container>
         </Box> */}
       </Box>
-    </Layout>
+    </MainLayout>
   );
 }
 export default NewsDetails;

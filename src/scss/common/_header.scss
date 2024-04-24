@@ -467,15 +467,17 @@
     left: 0;
     right: 0;
     z-index: 999;
-
-    .PricingHeader {
-      .PricingHeader__Wrapper {
-        .PricingHeader__Wrapper--Content {
-          .StockReturnWithName {
-            border-right: 1px solid #ffffff33;
-
-            &>.MuiTypography-root {
-              color: $white;
+    #PricingHeader {
+      background-color: #1D212966;
+      .PricingHeader {
+        .PricingHeader__Wrapper {
+          .PricingHeader__Wrapper--Content {
+            .StockReturnWithName {
+              border-right: 1px solid #ffffff33;
+  
+              &>.MuiTypography-root {
+                color: $white;
+              }
             }
           }
         }
@@ -605,7 +607,64 @@
         }
       }
     }
+    &.Black {
+      position: sticky;
+      #PricingHeader {
+        background-color: $white;
+        border-bottom: 1px solid rgba($dark, 0.2);
+        .PricingHeader {
+          .PricingHeader__Wrapper {
+            .PricingHeader__Wrapper--Content {
+              .StockReturnWithName {
+                border-color: color-mix(in srgb, currentColor 50%, transparent);
+    
+                &>.MuiTypography-root {
+                  color: $dark;
+                }
+              }
+            }
+          }
+        }
+      }
+      .MuiAppBar-positionStatic {
+        background-color: $white;
+        .HeaderContainerWrapper {
+          .MainHeader__Wrapper {
+            .Left {
+              .Logo {
+                img {
+                  filter: brightness(0);
+                }
+              }
+            }
 
+            .Center {
+              .NavigationHeader {
+                .NavigationHeader__Wrapper {
+                  .LeftPart {
+                    .MenuLink {
+                      &:not(:hover) {
+                        color: $dark;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+  
+            .Right {
+              .HamburgerButton {
+  
+                .HamburgerIcon,
+                .CrossIcon {
+                  color: $dark;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 

@@ -14,7 +14,7 @@ import {
 import TabPanel from "@/components/common/TabPanel";
 
 // Components
-import Layout from "@/components/common/Layout";
+import MainLayout from "@/components/common/MainLayout";
 import PostCard from "@/components/common/PostCard";
 import RecordNotFound from "@/components/common/RecordNotFound";
 
@@ -71,7 +71,7 @@ function Blog() {
   };
 
   return (
-    <Layout>
+    <MainLayout blackTheme>
       <Loader open={checkLoadingStatus} />
       <Seo
         keywords={['blog', 'latest posts', 'articles']}
@@ -197,7 +197,7 @@ function Blog() {
           </Container>
         </Box>
       </Box>
-    </Layout>
+    </MainLayout>
   );
 }
 
