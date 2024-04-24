@@ -175,7 +175,7 @@ function AboutProduct({ productId }: any) {
           message: message,
           buttonText: 'compare product list',
           redirectButtonUrl: 'compare-products',
-          severity: 'error'
+          severity: 'info'
         });
       } else {
         message = 'You can compare up to 5 products at a time. Remove some products to add new ones in';

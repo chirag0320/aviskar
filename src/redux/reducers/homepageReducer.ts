@@ -390,6 +390,7 @@ export const createHomepageSlice = createSlice({
       state.loading = true
     })
     builder.addCase(HomePageSectionDetails.fulfilled, (state, action) => {
+      console.log("🚀 ~ data ~ action?.payload?.data?.data:", action?.payload)
       const data = action?.payload?.data?.data?.reduce((acc: any, current: any) => {
         acc[current.sectionEnum] = current
         return acc
