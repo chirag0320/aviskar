@@ -33,8 +33,8 @@ function Banner() {
     slidesPerView: 1,
     spaceBetween: 30,
     navigation: {
-      nextEl: ".SwiperButtonNext",
-      prevEl: ".SwiperButtonPrev",
+      nextEl: ".BannerNext",
+      prevEl: ".BannerPrev",
       disabledClass: "SwiperButtonDisabled"
     },
     pagination: {
@@ -104,7 +104,7 @@ function Banner() {
             {/* {!isMobile ? <Skeleton animation="wave" height="75vh" width="100%" style={{ transform: "none", margin: "auto", borderRadius: "0px" }} /> : <Skeleton animation="wave" height="300px" width="100%" style={{ transform: "none", margin: "auto", borderRadius: "0px" }} />} */}
           </>
         }
-        {<SwiperNavigation />}
+        {<SwiperNavigation classNameNext="BannerNext" classNamePrev="BannerPrev" />}
       </Box>
     </Box >
   )
