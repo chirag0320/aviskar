@@ -64,22 +64,22 @@ function ProductsSlider() {
                 <Box className="SwiperContainer">
                     <Swiper  {...config}>
                         {
-                          homePageSectionDetails?.quickCategoryLinks?.length >0 ? homePageSectionDetails?.quickCategoryLinks?.map((product: any) => {
-                            return (
-                                <SwiperSlide>
-                                <Link to={product?.linkUrl} className="ProductCardLink">
-                                    <Card className="ProductCard">
-                                        <Box className="ProductImageWrapper">
-                                            <img className="ProductImage" src={product?.imageUrl} alt="product-image" />
-                                        </Box>
-                                        <Box className="ProductTitle">
-                                            <Typography variant="h4">{product?.name}</Typography>
-                                        </Box>
-                                    </Card>
-                                </Link>
-                            </SwiperSlide>
-                            )
-                          }): null
+                            homePageSectionDetails?.quickCategoryLinks?.length > 0 ? [...homePageSectionDetails?.quickCategoryLinks, ...homePageSectionDetails?.quickCategoryLinks]?.map((product: any) => {
+                                return (
+                                    <SwiperSlide>
+                                        <Link to={product?.linkUrl} className="ProductCardLink">
+                                            <Card className="ProductCard">
+                                                <Box className="ProductImageWrapper">
+                                                    <img className="ProductImage" src={product?.imageUrl} alt="product-image" />
+                                                </Box>
+                                                <Box className="ProductTitle">
+                                                    <Typography variant="h4">{product?.name}</Typography>
+                                                </Box>
+                                            </Card>
+                                        </Link>
+                                    </SwiperSlide>
+                                )
+                            }) : null
                         }
                         {/* <SwiperSlide>
                             <Link to="#" className="ProductCardLink">
