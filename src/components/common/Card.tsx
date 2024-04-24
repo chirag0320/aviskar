@@ -572,7 +572,9 @@ export const CartCard = ({ cartItem, hideDeliveryMethod, hideRightSide, quantity
           {(cartItem?.warnings?.length !== 0) && (
             <Stack className="RightSide">
               {cartItem?.warnings?.map((warning) => (
-                <Typography className="ShippingMessage" variant="body2" key={warning}>{warning}</Typography>
+                <Typography className="ShippingMessage" variant="body2" key={warning} dangerouslySetInnerHTML={{
+                  __html: warning
+                }} />
               ))}
             </Stack>
           )}

@@ -51,6 +51,8 @@ function Toaster() {
         open={true}
         onClose={handleClose}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        className="Snackbar"
+        autoHideDuration={600000}
       >
         <Alert
           onClose={handleClose}
@@ -59,9 +61,9 @@ function Toaster() {
         >
           <span dangerouslySetInnerHTML={{
             __html: toasterMessage
-          }} />  <Button onClick={() => {
+          }}></span>  {buttonText !== "" && <Button onClick={() => {
             navigate(`/${redirectButtonUrl}`)
-          }}>{buttonText}</Button>
+          }}>{buttonText}</Button>}
         </Alert>
       </Snackbar>
     </>

@@ -470,11 +470,11 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                   ;['e', 'E', '+', '-', '.'].includes(e.key) &&
                     e.preventDefault()
                 }}
-                value={value}
+                value={Number(value)}
                 {...register(name)}
                 {...otherProps}
                 onChange={(event) => {
-                  console.log("swdesfrgtfhy")
+                  // console.log("swdesfrgtfhy")
                   const numberRegex = /^-?\d*\.?\d*$/
                   if (!numberRegex.test(event.target.value)) {
                     return

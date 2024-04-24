@@ -225,7 +225,7 @@ function AboutProduct({ productId }: any) {
     if (quantityCount === 0) {
       showToaster({
         message: 'Quantity can not be zero',
-        severity: 'warning'
+        severity: 'error'
       })
       return
     }
@@ -426,6 +426,9 @@ function AboutProduct({ productId }: any) {
                           e.stopPropagation()
                           handleQuentityUpdate('minus')
                         }}><MinusIcon /></IconButton>
+                        {/* <TextField type="number" value={quantityCount} onChange={(event) => {
+                          setQuantityCount(Number(event?.target?.value))
+                        }} /> */}
                         <RenderFields
                           color="primary"
                           register={register}
@@ -434,11 +437,7 @@ function AboutProduct({ productId }: any) {
                           name="Quantity"
                           type="number"
                           onChange={(event) => {
-                            const inputValue = event.target.value;
-                            const parsedValue = parseInt(inputValue, 10); // Parse input value as integer
-                            const formattedValue = parsedValue.toString(); // Convert parsed value back to string
-                            setQuantityCount(parsedValue); // Set parsed value as quantity count
-                            event.target.value = formattedValue;
+                            setQuantityCount(Number(event.target.value));
                           }}
                           margin='none'
                           fullWidth={false}

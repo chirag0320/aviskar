@@ -1015,6 +1015,10 @@
             color: $redCoral;
             border-radius: 4px;
             padding: 3px 7px;
+
+            p {
+              margin: 0;
+            }
           }
         }
       }
