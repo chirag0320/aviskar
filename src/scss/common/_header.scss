@@ -254,7 +254,7 @@
           align-items: center;
           gap: 16px;
 
-          @include media-min($xxl) {
+          @include media-min($lg) {
             gap: 50px;
           }
 
