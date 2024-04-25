@@ -55,7 +55,7 @@ function PostCard({ details, navigate, isNews = false }: any) {
               {details?.title}
             </Typography>
           </Button>
-          <Typography variant="body1" className='PostDescription' sx={{ mt: 1.25 }} dangerouslySetInnerHTML={{
+          <Typography variant="body1" className='PostInfoDescription' sx={{ mt: 1.25 }} dangerouslySetInnerHTML={{
             __html: isNews ? details?.shortDescription : details?.bodyOverview
           }} onClick={() => {
             if (navigate) {
