@@ -35,7 +35,7 @@ function FrontPricing() {
         return configDetailsState?.["mainhomepage.tickermetalpriceenable"]?.value ? data?.data?.map((stock) => (
             <StockReturnWithName key={stock.name} name={stock.name} value={stock.current} charturl={stock.charturl} status={stock.position === 1} percentage={stock.percentage} move={stock.move} tickerStyle={tickerStyle} />
         )): null;
-    }, [data]);
+    }, [data, configDetailsState]);
     const renderdTextAfterText = useMemo(() => {
         //todo if ues is logged in the use this headerticker insted of this guestheaderticker
         // <AfterStockReturnWithName text={configDetailsState?.headerticker?.value} />

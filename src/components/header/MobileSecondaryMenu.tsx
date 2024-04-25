@@ -16,7 +16,7 @@ import { useAppSelector } from "@/hooks"
 import { navigate } from "gatsby"
 
 function MobileSecondaryMenu() {
-  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+  const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
   const [openSearch, setOpenSearch] = useState<boolean>(false)
   const [headerHeight, setHeaderHeight] = useState<number>(0)
   const searchButtonRef: any = useRef(null)
@@ -68,7 +68,7 @@ function MobileSecondaryMenu() {
               </Container>
             </ClickTooltip>
             <IconButton color="secondary" title='Call us' className={classNames("MenuButton", { "Active": false })} href={"tel:" + configDetailsState?.["australia.phonenumber"]?.value}><Call /></IconButton>
-            {configDetailsState?.enablechart?.value ?
+            {configDetailsState?.enablechart?.value && (configDetailsState.chartenableforguests.value || isLoggedIn) ?
               <ChartMenu />
               : null}
             {configDetailsState?.enablecart?.value ?

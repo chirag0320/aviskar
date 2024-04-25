@@ -17,6 +17,7 @@ const MobileMenu = lazy(() => import('./MobileMenu'))
 
 const Index = () => {
   const loading = useAppSelector((state) => state.homePage.loading)
+  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
   const [openMobileMenu, setOpenMobileMenu] = useState(false)
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
   const [params] = useState({ page: 1 })
@@ -31,7 +32,7 @@ const Index = () => {
 
   return (
     <>
-      {!isMobile && <>
+      {!isMobile && configDetailsState?.tickerenable?.value && <>
         <Suspense fallback={
           <></>
           // <Skeleton style={{ minHeight: '60px' }} />
@@ -46,14 +47,14 @@ const Index = () => {
           {loading && <PageLoader />}
           <Suspense fallback={
             <></>
-          // <Skeleton style={{ minHeight: '80px' }} />
+            // <Skeleton style={{ minHeight: '80px' }} />
           }>
             <Main toggleMobileMenu={toggleMobileMenu} openMobileMenu={openMobileMenu} />
           </Suspense>
           <Divider />
           <Suspense fallback={
             <></>
-          // <Skeleton style={{ minHeight: '53px' }} />
+            // <Skeleton style={{ minHeight: '53px' }} />
           }>
             <Navigation />
           </Suspense>

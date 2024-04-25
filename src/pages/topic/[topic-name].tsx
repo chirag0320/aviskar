@@ -23,6 +23,7 @@ function Topics(paramsData: any) {
       />
       <PageTitle title={topicDetails?.systemName} />
       <Container id="PageTopics">
+        {/* @ts-ignore */}
         <Box className="Content" dangerouslySetInnerHTML={{
           __html: topicDetails?.body
         }} > 

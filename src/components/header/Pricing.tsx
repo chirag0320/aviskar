@@ -32,15 +32,15 @@ function Pricing() {
       tickerboxfontcolor: configDetailsState?.tickerboxfontcolor?.value,
       tickertype: configDetailsState?.tickertype?.value,
     }
-    return data?.data?.map((stock) => (
+    return (configDetailsState?.tickermetalpriceenableforguests?.value || isLoggedIn) ? data?.data?.map((stock) => (
       <StockReturnWithName key={stock.name} name={stock.name} value={stock.current} charturl={stock.charturl} status={stock.position === 1} percentage={stock.percentage} move={stock.move} tickerStyle={tickerStyle} />
-    ));
-  }, [data]);
+    )) : null
+  }, [data, isLoggedIn, configDetailsState]);
+
   const renderdTextAfterText = useMemo(() => {
-    //todo if ues is logged in the use this headerticker insted of this guestheaderticker
     // <AfterStockReturnWithName text={configDetailsState?.headerticker?.value} />
     return <AfterStockReturnWithName text={isLoggedIn ? configDetailsState?.headerticker?.value  : configDetailsState?.guestheaderticker?.value} />
-  }, [configDetailsState])
+  }, [configDetailsState, isLoggedIn])
   return (
     <Box
       id="PricingHeader"
