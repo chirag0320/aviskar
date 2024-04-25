@@ -501,23 +501,25 @@
                 .MuiFormControl-root {
                   height: 100%;
 
-                  .MuiFormControl-root {
+                  .MuiInputBase-root {
                     height: inherit;
+                    font-size: pxToRem(18);
+                    color: $yellowFuel;
+                    background-color: transparent;
+                    @include media($md){
+                      font-size: pxToRem(16);
+                    }
+                    .MuiInputBase-input {
+                      text-align: center;
+                      padding: 0;
 
-                    .MuiInputBase-root {
-                      height: inherit;
-                      color: $yellowFuel;
-                      background-color: transparent;
-
-                      .MuiInputBase-input {
-                        text-align: center;
-                        @include padding-horizontal(0);
-
-                        @include media($md) {
-                          @include padding-vertical(3);
-                          height: auto;
-                        }
+                      @include media($md) {
+                        @include padding-vertical(3);
+                        height: auto;
                       }
+                    }
+                    .MuiOutlinedInput-notchedOutline {
+                      display: none;
                     }
                   }
                 }

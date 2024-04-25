@@ -453,9 +453,11 @@ function AboutProduct({ productId }: any) {
                           e.stopPropagation()
                           handleQuentityUpdate('minus')
                         }}><MinusIcon /></IconButton>
-                        <TextField type="number" value={quantityCount} onChange={(event) => {
-                          setQuantityCount(Number(event?.target?.value))
-                        }} name="Quantity" />
+                        <Box className="InputRow">
+                          <TextField type="number" value={quantityCount} onChange={(event) => {
+                            setQuantityCount(Number(event?.target?.value))
+                          }} name="Quantity" />
+                        </Box>
                         {/* <RenderFields
                           color="primary"
                           register={register}
