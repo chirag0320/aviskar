@@ -19,7 +19,7 @@ import { ProductUpdateCountdown } from "../common/Utils"
 import { getShoppingCartData, updateSubTotal } from "@/redux/reducers/shoppingCartReducer"
 import { ENDPOINTS } from "@/utils/constants"
 import useAPIoneTime from "@/hooks/useAPIoneTime"
-import { bodyForGetShoppingCartData, getLengthOfThePaths, getlastPartOfPath } from "@/utils/common"
+import { bodyForGetShoppingCartData, formatCategoryUrl, getLengthOfThePaths, getlastPartOfPath } from "@/utils/common"
 import { CategoriesListDetails, getLiveDashboardChartData } from "@/redux/reducers/homepageReducer"
 import CartDropdownMenu from "../common/CartDropdownMenu"
 import useApiRequest from "@/hooks/useAPIRequest"
@@ -58,25 +58,25 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
   useEffect(() => {
     if (priceData?.data?.length > 0) {
-        const idwithpriceObj: any = {}
-        priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
+      const idwithpriceObj: any = {}
+      priceData?.data?.forEach((product: any) => idwithpriceObj[product?.productId] = product)
 
-        let subTotal = 0;
-        const cartItemsWithLivePrice = cartItems?.map((item: CartItem) => {
-            subTotal += (idwithpriceObj?.[item.productId]?.price * item.quantity)
-            return {
-                ...item,
-                LivePriceDetails: idwithpriceObj[item.productId]
-            }
-        })
-
-        dispatch(updateSubTotal(subTotal))
-
-        if (cartItemsWithLivePrice) {
-            setCartItemsWithLivePrice(cartItemsWithLivePrice)
+      let subTotal = 0;
+      const cartItemsWithLivePrice = cartItems?.map((item: CartItem) => {
+        subTotal += (idwithpriceObj?.[item.productId]?.price * item.quantity)
+        return {
+          ...item,
+          LivePriceDetails: idwithpriceObj[item.productId]
         }
+      })
+
+      dispatch(updateSubTotal(subTotal))
+
+      if (cartItemsWithLivePrice) {
+        setCartItemsWithLivePrice(cartItemsWithLivePrice)
+      }
     }
-}, [priceData])
+  }, [priceData])
 
   useEffect(() => {
     if (cartItems?.length ?? 0 > 0) {
@@ -103,7 +103,7 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
                         placement="bottom-start"
                         renderComponent={
                           <Link
-                            to={location.pathname === '/' ? `${category.searchEngineFriendlyPageName}` : `/category/${category.searchEngineFriendlyPageName}`}
+                            to={frontPage ? `${formatCategoryUrl(category.searchEngineFriendlyPageName)}` : `/category${formatCategoryUrl(category.searchEngineFriendlyPageName)}`}
                             aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                             className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected && isThisInsideCategory })}
                           >
@@ -116,7 +116,7 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
                         <MegaMenu subCategorys={category.subCategories} category={category} />
                       </HoverTooltip></Fragment>
                       : <Fragment key={category.name}><Link
-                        to={location.pathname === '/' ? `${category.searchEngineFriendlyPageName}` : `/category/${category.searchEngineFriendlyPageName}`}
+                        to={frontPage ? `${formatCategoryUrl(category.searchEngineFriendlyPageName)}` : `/category${formatCategoryUrl(category.searchEngineFriendlyPageName)}`}
                         aria-label={category?.searchEngineFriendlyPageName ?? category.name}
                         className={classNames("MenuLink", { "Active": getlastPartOfPath(category?.searchEngineFriendlyPageName?.toLocaleLowerCase())?.replace(/[\s/]/g, '') === currententlySelected && isThisInsideCategory })}
                       >
@@ -145,7 +145,7 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
                   disablePortal
                   lightTheme
                 >
-                  <CartDropdownMenu cartItemsWithLivePrice={cartItemsWithLivePrice}/>
+                  <CartDropdownMenu cartItemsWithLivePrice={cartItemsWithLivePrice} />
                 </HoverTooltip>
 
               </Suspense> : null}

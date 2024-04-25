@@ -54,10 +54,10 @@ function index() {
                 <MapIcon />
                 <Typography className="Location" variant="body2" component="address">{configDetailsState?.storeaddress?.value}</Typography>
               </Stack>
-              <Stack className="MailWrapper About">
+              {/* <Stack className="MailWrapper About">
                 <MailIcon />
                 <Link href={"mailto:" + configDetailsState?.storecontactemail?.value} variant="body2" className="Mail">{configDetailsState?.storecontactemail?.value}</Link>
-              </Stack>
+              </Stack> */}
             </Stack>
           </Stack>
           <Stack className="MenuesPart" component="nav">

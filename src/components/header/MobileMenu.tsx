@@ -12,6 +12,7 @@ import { navigate } from "gatsby";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { CategoriesListDetails } from "@/redux/reducers/homepageReducer";
 import { ENDPOINTS } from "@/utils/constants";
+import { formatCategoryUrl } from "@/utils/common";
 function FrontMobileMenu(props: any) {
   const { open, toggleMobileMenu, trigger, isFrontPage } = props
   const location = useLocation();
@@ -19,7 +20,6 @@ function FrontMobileMenu(props: any) {
   const [openSubMenu, setOpenSubMenu] = useState<any>({})
   const [isHomePage, setIsHomePage] = useState<boolean>(false)
   const { categoriesList } = useAppSelector((state) => state.homePage)
-  console.log("🚀 ~ FrontMobileMenu ~ categoriesList:", categoriesList)
   const [params] = useState({ page: location.pathname === "/" ? 0 : 1 })
   const handleClickMainMenu = (menuId: any) => {
     setOpenMenu((prevOpenMenus: any) => ({
@@ -66,7 +66,7 @@ function FrontMobileMenu(props: any) {
                     onClick={() => {
                       handleClickMainMenu(category.categoryId);
                       if (!hasSubcategory) {
-                        handleNavigate(!isFrontPage ?`/category/${category.searchEngineFriendlyPageName}` :`${category.searchEngineFriendlyPageName}`)
+                        handleNavigate(!isFrontPage ?`/category${formatCategoryUrl(category.searchEngineFriendlyPageName)}` :`${formatCategoryUrl(category.searchEngineFriendlyPageName)}`)
                       }
                     }}
                   >
@@ -91,7 +91,7 @@ function FrontMobileMenu(props: any) {
                                   {menu.subCategories.map((subCategory: any) => {
                                     return (
                                       <ListItemButton key={`SubMenu_${subCategory.categoryId}-${subCategory.name}`} selected={false} sx={{ pl: 4 }} onClick={() => {
-                                        handleNavigate(!isFrontPage ? `/category/${subCategory.searchEngineFriendlyPageName}` :`${subCategory.searchEngineFriendlyPageName}`)
+                                        handleNavigate(!isFrontPage ? `/category${formatCategoryUrl(subCategory.searchEngineFriendlyPageName)}` :`${formatCategoryUrl(subCategory.searchEngineFriendlyPageName)}`)
                                       }}>
                                         <ListItemText primary={subCategory.name} primaryTypographyProps={{ variant: "body2" }} />
                                       </ListItemButton>
