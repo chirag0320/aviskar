@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Box, Container, Typography, IconButton } from '@mui/material'
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation, Autoplay, Pagination, A11y, EffectCoverflow } from 'swiper/modules'
@@ -13,12 +13,13 @@ import { navigate } from 'gatsby'
 
 function Experience() {
     const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
-    const handleSlideChange = () => {
-        const iframes = document.querySelectorAll('iframe');
-        iframes.forEach(iframe => {
-            iframe.src = iframe.src; // Reload the iframe to stop video playback
-        });
-    };
+    const handleSlideChange = useCallback(() => {
+            const iframes = document.querySelectorAll('iframe');
+            console.log("🚀 ~ handleSlideChange ~ iframes:", iframes)
+            iframes.forEach(iframe => {
+                iframe.src = iframe.src; // Reload the iframe to stop video playback
+            });
+        },[])
 
     return (
         (mainHomePageData && mainHomePageData?.experience?.length > 0) ?
@@ -59,7 +60,7 @@ function Experience() {
                                         },
                                     }}
                                     loop={true}
-                                    onSlideChange={handleSlideChange}
+                                    // onSlideChange={handleSlideChange}
                                 >
                                     {<SwiperNavigation handleSlideChange={handleSlideChange} />}
                                     {(mainHomePageData && mainHomePageData?.experience?.length > 0) ?
