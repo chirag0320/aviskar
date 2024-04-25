@@ -7,7 +7,7 @@ import classNames from 'classnames'
 const CopyRight = lazy(() => import('./CopyRight'))
 
 // Assets
-import { MapIcon, MailIcon, FacebookIcon, YoutubeIcon, TwitterIcon, FeedIcon, ChevronRight } from "../../assets/icons/index"
+import { MapIcon, MailIcon, FacebookIcon, YoutubeIcon, TwitterIcon, FeedIcon, ChevronRight, InstagramIcon1 } from "../../assets/icons/index"
 
 // Utils
 import useApiRequest from '@/hooks/useAPIRequest'
@@ -54,10 +54,10 @@ function index() {
                 <MapIcon />
                 <Typography className="Location" variant="body2" component="address">{configDetailsState?.storeaddress?.value}</Typography>
               </Stack>
-              <Stack className="MailWrapper About">
+              {/* <Stack className="MailWrapper About">
                 <MailIcon />
                 <Link href={"mailto:" + configDetailsState?.storecontactemail?.value} variant="body2" className="Mail">{configDetailsState?.storecontactemail?.value}</Link>
-              </Stack>
+              </Stack> */}
             </Stack>
           </Stack>
           <Stack className="MenuesPart" component="nav">
@@ -96,6 +96,7 @@ function index() {
               <IconButton title="Follow us on Facebook" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}><FacebookIcon fontSize="small" /></IconButton>
               <IconButton title="Follow us on Youtube" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}><YoutubeIcon /></IconButton>
               <IconButton title="Follow us on Twitter" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}><TwitterIcon fontSize="small" /></IconButton>
+              <IconButton title="Follow us on Instagram" target={"_blank"} href={configDetailsState?.instagramlink?.value ?? window?.location?.href}><InstagramIcon1 fontSize="small" /></IconButton>
               {/* <IconButton title="Follow us on Feed" target={"_blank"} href={configDetailsState?.feedIcon?.value ?? window?.location?.href}><FeedIcon /></IconButton> */}
             </Stack>
           </Stack>

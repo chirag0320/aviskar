@@ -5,13 +5,14 @@ import { useMediaQuery, Container, Stack, Button, Link as LinkM, IconButton, Typ
 import SearchField from "./SearchField"
 
 // Assets
-import { Call, Profile, HamburgerIcon, CrossIcon } from "../../assets/icons/index"
+import { Call, SignInIcon, SignOutIcon, HamburgerIcon, CrossIcon } from "../../assets/icons/index"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 
 // Utils
 import { ENDPOINTS } from "../../utils/constants"
 import { Link, navigate } from "gatsby"
-import { LogOutUserAPI } from "@/redux/reducers/homepageReducer"
+import { CategoriesListDetails, LogOutUserAPI } from "@/redux/reducers/homepageReducer"
+import useAPIoneTime from "@/hooks/useAPIoneTime"
 const Navigation = lazy(() => import('./Navigation'))
 
 function FrontMain(props: any) {
@@ -27,19 +28,21 @@ function FrontMain(props: any) {
             navigate('/')
         }
     }
+    const [params] = useState({ page: 0 })
+    useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, params })
     return (
         <Box className="HeaderContainerWrapper">
             <Container className="MainHeader">
                 <Stack className="MainHeader__Wrapper">
                     <Stack className="Left">
-                        <Link className="Logo" to="/"><img src={configDetailsState?.["mainhomepage.headerlogo"]?.value} alt="QMint white logo" loading="eager" /></Link>
+                        <Link className="Logo" to="/"><img src={configDetailsState?.["mainhomepage.headerlogo"]?.value} width={mobile ? 190 : 246} height={mobile ? 30 : 40} alt="QMint white logo" loading="eager" /></Link>
                     </Stack>
                     <Stack className="Center">
                         <Navigation frontPage={true} />
                     </Stack>
                     <Stack className="Right">
                         {/* <Link to={ENDPOINTS.login}> */}
-                        <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton ActionButton" variant="outlined" startIcon={<Profile />}><Typography variant="inherite">{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Typography></Button>
+                        <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton ActionButton" variant="outlined" startIcon={!isLoggedIn ? <SignInIcon /> : <SignOutIcon />}><Typography variant="inherit">{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Typography></Button>
                         {/* <Button name='Contact us' aria-label='Contact us' onClick={() => {
                             navigate('/contactus')
                         }} variant="outlined" className="ActionButton">Contact Us</Button> */}

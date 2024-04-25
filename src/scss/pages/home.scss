@@ -98,7 +98,7 @@
 
           .ProductCard {
             padding: 60px 30px;
-            @include media($md) {
+            @include media($xxl) {
               @include padding-vertical(30);
             }
             .ProductImageWrapper {
@@ -108,7 +108,7 @@
               .ProductImage {
                 object-fit: contain;
                 height: 270px;
-                @include media($xl) {
+                @include media($xxl) {
                   height: 200px;
                 }
               }

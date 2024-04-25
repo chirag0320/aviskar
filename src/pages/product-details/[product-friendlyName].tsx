@@ -15,26 +15,33 @@ import { setRecentlyViewedProduct } from "@/redux/reducers/homepageReducer"
 import Toaster from "@/components/common/Toaster"
 import Loader from "@/components/common/Loader"
 import FourZeroFour from "@/components/partials/404"
+import useShowToaster from "@/hooks/useShowToaster"
 
 function ProductDetail({ params }: any) {
   const configDetails = useAppSelector(state => state.homePage.configDetails)
-  console.log("🚀 ~ ProductDetail ~ configDetails:", configDetails)
+  const { showToaster } = useShowToaster();
   const checkLoadingStatus = useAppSelector(state => state.category.loading)
   const { productDetailsData } = useAppSelector((state) => state.category)
+  console.log("🚀 ~ ProductDetail ~ productDetailsData:", productDetailsData)
   const dispatch = useAppDispatch()
   const endPoint = useMemo(() => {
     return ENDPOINTS.productDetails.replace('{{product-id}}', params?.["product-friendlyName"])
   }, [params])
-  useAPIoneTime({
-    service: getProductDetailsData, endPoint, params : params
-  })
+  useAPIoneTime({ service: getProductDetailsData, endPoint, params: params })
 
   useEffect(() => {
     if (productDetailsData?.productId) {
-      dispatch(setRecentlyViewedProduct(productDetailsData?.productId))
+      const res = dispatch(setRecentlyViewedProduct(productDetailsData?.productId))
     }
   }, [productDetailsData?.productId])
-
+  useEffect(() => {
+    if (productDetailsData?.errorMessage) {
+      showToaster({
+        message: productDetailsData?.errorMessage,
+        severity: 'error'
+      })
+    }
+  }, [productDetailsData])
   return (
     <Layout>
       <Loader open={checkLoadingStatus} />
@@ -43,10 +50,10 @@ function ProductDetail({ params }: any) {
         title="Category"
         lang="en"
       />
-      {productDetailsData ? (<><Breadcrumb arr={[{ navigate: '/shop', name: 'Shop' }, { navigate: '/product-details/' + params?.["product-friendlyName"], name: params?.["product-friendlyName"] }]} />
+      {productDetailsData && !productDetailsData?.errorMessage ? (<><Breadcrumb arr={[{ navigate: '/shop', name: 'Shop' }, { navigate: '/product-details/' + params?.["product-friendlyName"], name: params?.["product-friendlyName"] }]} />
         <Container id="PageProductDetail">
           {productDetailsData?.productId && <AboutProduct productId={productDetailsData?.productId} />}
-          {productDetailsData?.relatedProducts?.length > 0 && <RelatedProduct relatedProductsList={structuredClone(productDetailsData?.relatedProducts)} heading={configDetails["productdetails.relatedproducttital"]?.value} description={configDetails["productdetails.relatedproductsubtital"]?.value}/>}
+          {productDetailsData?.relatedProducts?.length > 0 && <RelatedProduct relatedProductsList={structuredClone(productDetailsData?.relatedProducts)} heading={configDetails["productdetails.relatedproducttital"]?.value} description={configDetails["productdetails.relatedproductsubtital"]?.value} />}
         </Container></>) : <FourZeroFour />}
     </Layout>
   )

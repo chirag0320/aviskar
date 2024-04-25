@@ -1411,3 +1411,8 @@ export const openNewTab = (url:any) => {
     navigate(url);
   }
 };
+export const formatCategoryUrl = (pageName:any) => {
+  // Check if pageName starts with '/' and adjust URL accordingly
+  const formattedPageName = pageName.startsWith('/') ? pageName : `/${pageName}`;
+  return formattedPageName;
+};

@@ -7,7 +7,7 @@ import classNames from 'classnames'
 const CopyRight = lazy(() => import('./CopyRight'))
 
 // Assets
-import { MapIcon, MailIcon, FacebookIcon, YoutubeIcon, TwitterIcon, FeedIcon, ChevronRight, PhoneCall } from "../../assets/icons/index"
+import { MapIcon, MailIcon, FacebookIcon, YoutubeIcon, TwitterIcon, FeedIcon, ChevronRight, PhoneCall, InstagramIcon1 } from "../../assets/icons/index"
 import FooterLogo from "@/assets/logos/FooterLogo.png";
 
 // Utils
@@ -50,6 +50,7 @@ function FrontFooter() {
                             <IconButton title="Follow us on Facebook" target={"_blank"} href={configDetailsState?.facebooklink?.value ?? window?.location?.href}><FacebookIcon fontSize="small" /></IconButton>
                             <IconButton title="Follow us on Youtube" target={"_blank"} href={configDetailsState?.youtubelink?.value ?? window?.location?.href}><YoutubeIcon /></IconButton>
                             <IconButton title="Follow us on Twitter" target={"_blank"} href={configDetailsState?.twitterlink?.value ?? window?.location?.href}><TwitterIcon fontSize="small" /></IconButton>
+                            <IconButton title="Follow us on Instagram" target={"_blank"} href={configDetailsState?.instagramlink?.value ?? window?.location?.href}><InstagramIcon1 fontSize="small" /></IconButton>
                         </Stack>
                     </Stack>
                     <Stack className="MenuesPart" component="nav">

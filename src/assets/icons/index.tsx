@@ -8,7 +8,8 @@ import ChevronUpRounded from "./ChevronUpRounded";
 import ChevronRight from "./ChevronRight";
 import ChevronLeft from "./ChevronLeft";
 import Search from "./Search";
-import Profile from "./Profile";
+import SignInIcon from "./SignInIcon";
+import SignOutIcon from "./SignOutIcon";
 import Call from "./Call";
 import ActivityIcon from "./ActivityIcon";
 import CartIcon from "./CartIcon";
@@ -117,7 +118,8 @@ export {
   ChevronRight,
   ChevronLeft,
   Search,
-  Profile,
+  SignInIcon,
+  SignOutIcon,
   Call,
   ActivityIcon,
   CartIcon,

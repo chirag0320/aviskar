@@ -14,7 +14,6 @@ const useAlertPopUp = ({ pageName, openPopup }: { pageName: string, openPopup: a
             'KhgMNHTfVh9C': pageName
         }
         const needTOCallOrNot = ['checkout', 'home'].some((item) => location.pathname.includes(item))
-        console.log(location.pathname, needTOCallOrNot, "qwertyuiop", pageName)
         // if(){
         checkThePopUpDetails(paramsObj, openPopup, dispatch, getPopUpDetailsAPI)
         // }

@@ -5,7 +5,7 @@ import { useMediaQuery, Container, Stack, Button, Link as LinkM, IconButton, Typ
 import SearchField from "./SearchField"
 
 // Assets
-import { Call, Profile, HamburgerIcon, CrossIcon } from "../../assets/icons/index"
+import { Call, SignInIcon, SignOutIcon, HamburgerIcon, CrossIcon } from "../../assets/icons/index"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 
 // Utils
@@ -32,14 +32,14 @@ function Main(props: any) {
     <Container className="MainHeader">
       <Stack className="MainHeader__Wrapper">
         <Stack className="Left">
-          <Link className="Logo" to="/"><img src={mobile ? configDetailsState?.storelogourl?.value : configDetailsState?.storelogourl?.value} width={mobile ? 189 : 246} height={mobile ? 30 : 40} alt="QMint logo" loading="eager" /></Link>
+          <Link className="Logo" to="/"><img src={mobile ? configDetailsState?.storelogourl?.value : configDetailsState?.storelogourl?.value} width={mobile ? 190 : 246} height={mobile ? 30 : 40} alt="QMint logo" loading="eager" /></Link>
         </Stack>
         <Stack className="Right">
           {!mobile && <Box className="Marketingoffer" dangerouslySetInnerHTML={{ __html: configDetailsState?.["home.header.marketingoffer"]?.value }}></Box>}
           <LinkM href={"tel:" + configDetailsState?.["australia.phonenumber"]?.value} variant="overline" className="PhoneNumber" aria-label="PhoneNumber"><Call />{configDetailsState?.["australia.phonenumber"]?.value}</LinkM>
           <SearchField />
           {/* <Link to={ENDPOINTS.login}> */}
-          <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton" variant="outlined" color="primary" startIcon={<Profile />}><Typography variant="inherite">{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Typography></Button>
+          <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton" variant="outlined" color="primary" startIcon={!isLoggedIn ? <SignInIcon /> : <SignOutIcon />}><Typography variant="inherit">{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Typography></Button>
           {/* </Link> */}
           <IconButton color="secondary" title="menuButton" area-label="HamburgerMenuButton" className="HamburgerButton MenuButton" onClick={toggleMobileMenu}>{!openMobileMenu ? <HamburgerIcon className="HamburgerIcon" /> : <CrossIcon className="CrossIcon" />}</IconButton>
         </Stack>
