@@ -5,7 +5,7 @@ import { useMediaQuery, Container, Stack, Button, Link as LinkM, IconButton, Typ
 import SearchField from "./SearchField"
 
 // Assets
-import { Call, Profile, HamburgerIcon, CrossIcon } from "../../assets/icons/index"
+import { Call, SignInIcon, SignOutIcon, HamburgerIcon, CrossIcon } from "../../assets/icons/index"
 import { useAppDispatch, useAppSelector } from "@/hooks"
 
 // Utils
@@ -32,14 +32,14 @@ function FrontMain(props: any) {
             <Container className="MainHeader">
                 <Stack className="MainHeader__Wrapper">
                     <Stack className="Left">
-                        <Link className="Logo" to="/"><img src={configDetailsState?.["mainhomepage.headerlogo"]?.value} alt="QMint white logo" loading="eager" /></Link>
+                        <Link className="Logo" to="/"><img src={configDetailsState?.["mainhomepage.headerlogo"]?.value} width={mobile ? 190 : 246} height={mobile ? 30 : 40} alt="QMint white logo" loading="eager" /></Link>
                     </Stack>
                     <Stack className="Center">
                         <Navigation frontPage={true} />
                     </Stack>
                     <Stack className="Right">
                         {/* <Link to={ENDPOINTS.login}> */}
-                        <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton ActionButton" variant="outlined" startIcon={<Profile />}><Typography variant="inherite">{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Typography></Button>
+                        <Button name='signIn' aria-label='signIn' onClick={handleAuth} className="SignInButton ActionButton" variant="outlined" startIcon={!isLoggedIn ? <SignInIcon /> : <SignOutIcon />}><Typography variant="inherit">{!isLoggedIn ? 'Sign In' : 'Sign Out'}</Typography></Button>
                         {/* <Button name='Contact us' aria-label='Contact us' onClick={() => {
                             navigate('/contactus')
                         }} variant="outlined" className="ActionButton">Contact Us</Button> */}
