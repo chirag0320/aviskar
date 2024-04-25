@@ -33,7 +33,7 @@ export const actionMenuItems = [
   {
     text: "Sell to Us",
     icon: <SellToUsIcon />,
-    href: "/sell-to-us",
+    href: "/topic/sell-to-us",
     key: 'enableselltous'
   },
   {
@@ -45,7 +45,7 @@ export const actionMenuItems = [
   {
     text: "Loans",
     icon: <LoanIcon />,
-    href: "/loans",
+    href: "/topic/loans",
     key: 'enableloans'
   },
   {
