@@ -11,7 +11,8 @@ import { useAppDispatch, useAppSelector } from "@/hooks"
 // Utils
 import { ENDPOINTS } from "../../utils/constants"
 import { Link, navigate } from "gatsby"
-import { LogOutUserAPI } from "@/redux/reducers/homepageReducer"
+import { CategoriesListDetails, LogOutUserAPI } from "@/redux/reducers/homepageReducer"
+import useAPIoneTime from "@/hooks/useAPIoneTime"
 const Navigation = lazy(() => import('./Navigation'))
 
 function FrontMain(props: any) {
@@ -27,6 +28,8 @@ function FrontMain(props: any) {
             navigate('/')
         }
     }
+    const [params] = useState({ page: 0 })
+    useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, params })
     return (
         <Box className="HeaderContainerWrapper">
             <Container className="MainHeader">

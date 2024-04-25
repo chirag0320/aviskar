@@ -10,12 +10,17 @@ import { PageLoader } from './Loader'
 const Navigation = lazy(() => import('./Navigation'))
 import { useAppSelector, useToggle } from "@/hooks"
 import SessionExpiredDialog from "./SessionExpiredDialog";
+import useAPIoneTime from "@/hooks/useAPIoneTime";
+import { CategoriesListDetails } from "@/redux/reducers/homepageReducer";
+import { ENDPOINTS } from "@/utils/constants";
 const MobileMenu = lazy(() => import('./MobileMenu'))
 
 const Index = () => {
   const loading = useAppSelector((state) => state.homePage.loading)
   const [openMobileMenu, setOpenMobileMenu] = useState(false)
   const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
+  const [params] = useState({ page: 1 })
+  useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, params })
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: isMobile ? 68 : 50,
