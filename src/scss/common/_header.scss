@@ -53,12 +53,10 @@
           .Logo {
             img {
               width: auto;
-              max-width: 250px;
+              max-width: 280px;
               @include media($sm) {
-                max-width: 210px;
-              }
-              @include media($xs) {
-                width: 198px;
+                width: 100%;
+                max-width: 260px;
               }
             }
           }
@@ -541,6 +539,9 @@
           }
 
           .Left {
+            @include media($sm) {
+              flex: 1;
+            }
             .Logo {
               img {
                 // max-width: 190px;
