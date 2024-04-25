@@ -33,7 +33,6 @@ export interface FooterSection {
 
 function FrontFooter() {
     const { configDetails: configDetailsState, categoriesList, mainHomePageData } = useAppSelector((state) => state.homePage)
-    console.log("🚀 ~ FrontFooter ~ configDetailsState:", configDetailsState)
     useAPIoneTime({ service: getMainHomePageData })
     const { data }: { data: { data: FooterSection[] } } = useApiRequest(ENDPOINTS.getFooterLink);
     const { email, handleEmailChange, subscribe } = useSubscription()
