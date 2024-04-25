@@ -47,12 +47,9 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
   useEffect(() => {
     setCurrententlySelected(getlastPartOfPath(window?.location?.pathname?.toLocaleLowerCase())?.replace(/[\s/]/g, ''))
   }, [window?.location?.pathname])
-  useEffect(() => {
-    dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
-  }, [isLoggedIn])
-  useEffect(() => {
-    dispatch(getLiveDashboardChartData({ url: ENDPOINTS.getLiveDashboardChartData }))
-  }, [])
+  // useEffect(() => {
+  //   dispatch(getLiveDashboardChartData({ url: ENDPOINTS.getLiveDashboardChartData }))
+  // }, [])
   const [productIds, setProductIds] = useState({})
   const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);

@@ -109,5 +109,8 @@ class ConfigServices {
   static async getMainHomePageAPI() {
     return axiosInstance.get(ENDPOINTS.mainHomePage)
   }
+  static async getFooterSections(){
+    return axiosInstance.get(ENDPOINTS.getFooterLink)
+  }
 }
 export default ConfigServices

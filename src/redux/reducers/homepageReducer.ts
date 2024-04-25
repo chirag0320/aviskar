@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
 import ConfigServices, { IPopUpDetails, ISavePopUpDetails, IloginUserBody } from '@/apis/services/ConfigServices'
 import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
+import { FooterLink } from '@/components/footer';
 
 // Services
 interface IPopupDetails {
@@ -75,6 +76,7 @@ interface CreateGuidelineState {
   recentlyViewedProducts: any[] | null,
   // toaster
   openToaster: boolean,
+  footerSections: FooterSection[] | null,
   buttonText: string,
   redirectButtonUrl: string,
   toasterMessage: string,
@@ -159,11 +161,18 @@ interface IsiteMapData {
   settings: Settings;
 }
 
+export interface FooterSection {
+  mainTitle: string;
+  columnOrder: number;
+  links: FooterLink[];
+}
+
 const initialState: CreateGuidelineState = {
   configDetails: isBrowser && JSON.parse(localStorageGetItem('configDetails') ?? JSON.stringify({})),
   loading: false,
   sectionDetails: isBrowser && JSON.parse(localStorageGetItem('sectionDetails') ?? JSON.stringify({ 1: {}, 2: {} })),
   categoriesList: {},
+  footerSections: null,
   userDetails: isBrowser && JSON.parse(localStorageGetItem('userDetails') || JSON.stringify({})),
   isLoggedIn: isBrowser && JSON.parse(localStorageGetItem('isLoggedIn') || JSON.stringify(false)),
   loadingForSignIn: false,
@@ -275,6 +284,13 @@ export const getMainHomePageData = appCreateAsyncThunk(
   'getMainHomePageData',
   async () => {
     return await ConfigServices.getMainHomePageAPI()
+  }
+)
+
+export const getFooterLinks = appCreateAsyncThunk(
+  "getFooterLinks",
+  async () => {
+    return await ConfigServices.getFooterSections();
   }
 )
 
@@ -516,6 +532,18 @@ export const createHomepageSlice = createSlice({
       state.loading = false
     })
     builder.addCase(getMainHomePageData.rejected, (state, action) => {
+      state.loading = false
+    })
+    // GET FOOTER SECTIONS
+    builder.addCase(getFooterLinks.pending, (state, action) => {
+      state.loading = true
+    })
+    builder.addCase(getFooterLinks.fulfilled, (state, action) => {
+      const resData = action.payload.data.data
+      state.footerSections = resData
+      state.loading = false
+    })
+    builder.addCase(getFooterLinks.rejected, (state, action) => {
       state.loading = false
     })
   },
