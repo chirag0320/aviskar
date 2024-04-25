@@ -27,6 +27,7 @@ import useUserDetailsFromToken from "@/hooks/useUserDetailsFromToken";
 import Toaster from "@/components/common/Toaster";
 import Loader from "@/components/common/Loader";
 import MainLayout from "@/components/common/MainLayout";
+import RenderOnViewportEntry from "@/components/common/RenderOnViewportEntry";
 
 function MainHomePage() {
     const dispatch = useAppDispatch()
@@ -62,14 +63,14 @@ function MainHomePage() {
                 {/* {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>} */}
                 <Box className="FrontPage">
                     {configDetailsState?.sliderenableinhome?.value === false ? null : <Banner />}
-                    <Suspense fallback={<></>}><Locations /></Suspense>
-                    <Suspense fallback={<></>}><Adventure /></Suspense>
-                    <Suspense fallback={<></>}><Experience /></Suspense>
-                    <Suspense fallback={<></>}><KnowMore /></Suspense>
-                    <Suspense fallback={<></>}><LatestStories /></Suspense>
-                    <Suspense fallback={<></>}><Gallery /></Suspense>
-                    <Suspense fallback={<></>}><CloserLookMain /></Suspense>
-                    <Suspense fallback={<></>}><TheJournal /></Suspense>
+                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><Locations /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><Adventure /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><Experience /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><KnowMore /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><LatestStories /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><Gallery /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><CloserLookMain /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><TheJournal /></RenderOnViewportEntry>
                 </Box>
             </MainLayout>
         </div>
