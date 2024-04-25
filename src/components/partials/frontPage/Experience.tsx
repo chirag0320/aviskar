@@ -14,10 +14,10 @@ import { navigate } from 'gatsby'
 function Experience() {
     const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
     const handleSlideChange = () => {
-        // const iframes = document.querySelectorAll('iframe');
-        // iframes.forEach(iframe => {
-        //     iframe.src = iframe.src; // Reload the iframe to stop video playback
-        // });
+        const iframes = document.querySelectorAll('iframe');
+        iframes.forEach(iframe => {
+            iframe.src = iframe.src; // Reload the iframe to stop video playback
+        });
     };
 
     return (

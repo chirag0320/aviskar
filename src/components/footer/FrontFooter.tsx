@@ -18,6 +18,8 @@ import { apicall, trimAllSpaceFromString } from '@/utils/helper'
 import useSubscription from '@/hooks/useSubscription'
 import { navigate } from 'gatsby'
 import { Icategory } from '../header/Navigation'
+import { getMainHomePageData } from '@/redux/reducers/homepageReducer'
+import useAPIoneTime from '@/hooks/useAPIoneTime'
 export interface FooterLink {
     linkTitle: string;
     linkUrl: string;
@@ -31,6 +33,7 @@ export interface FooterSection {
 
 function FrontFooter() {
     const { configDetails: configDetailsState, categoriesList, mainHomePageData } = useAppSelector((state) => state.homePage)
+    useAPIoneTime({ service: getMainHomePageData })
     const { data }: { data: { data: FooterSection[] } } = useApiRequest(ENDPOINTS.getFooterLink);
     const { email, handleEmailChange, subscribe } = useSubscription()
     return (
@@ -75,10 +78,10 @@ function FrontFooter() {
                                     <PhoneCall />
                                     <Link href={"tel:" + configDetailsState?.["australia.phonenumber"]?.value} variant="body2" className="Mail">{configDetailsState?.["australia.phonenumber"]?.value}</Link>
                                 </Stack>
-                                <Stack className="MailWrapper About">
+                                {/* <Stack className="MailWrapper About">
                                     <MailIcon />
                                     <Link href={"mailto:" + configDetailsState?.storecontactemail?.value} variant="body2" className="Mail">{configDetailsState?.storecontactemail?.value}</Link>
-                                </Stack>
+                                </Stack> */}
                                 <Stack className="LocationWrapper About">
                                     <MapIcon />
                                     <Typography className="Location" variant="body2" component="address">{configDetailsState?.storeaddress?.value}</Typography>

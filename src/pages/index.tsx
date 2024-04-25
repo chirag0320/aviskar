@@ -39,7 +39,6 @@ function MainHomePage() {
     }, [])
 
     useAPIoneTime({ service: HomePageSectionDetails, endPoint: ENDPOINTS.homePageSection })
-    useAPIoneTime({ service: getMainHomePageData })
     useUserDetailsFromToken()
     useEffect(() => {
         dispatch(serProgressLoaderStatus(true))
