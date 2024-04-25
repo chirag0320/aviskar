@@ -257,10 +257,10 @@ function AboutProduct({ productId }: any) {
       navigate('/login')
       return
     }
-    if(quantityCount === 0){
+    if (quantityCount === 0) {
       showToaster({
-        message : "Quantity can not be zero",
-        severity : "error"
+        message: "Quantity can not be zero",
+        severity: "error"
       })
       return;
     }
@@ -271,7 +271,7 @@ function AboutProduct({ productId }: any) {
       "IsInstantBuy": true
     } as any)
 
-    if(response.code === 200){
+    if (response.code === 200) {
       if (response.data === true) {
         navigate('/checkout/?isInstantBuy=true')
       } else {
@@ -281,7 +281,7 @@ function AboutProduct({ productId }: any) {
         })
       }
     }
-    else{
+    else {
       showToaster({
         message: "Error occurred while buy now",
         severity: 'error'
@@ -453,10 +453,10 @@ function AboutProduct({ productId }: any) {
                           e.stopPropagation()
                           handleQuentityUpdate('minus')
                         }}><MinusIcon /></IconButton>
-                        {/* <TextField type="number" value={quantityCount} onChange={(event) => {
+                        <TextField type="number" value={quantityCount} onChange={(event) => {
                           setQuantityCount(Number(event?.target?.value))
-                        }} /> */}
-                        <RenderFields
+                        }} name="Quantity" />
+                        {/* <RenderFields
                           color="primary"
                           register={register}
                           error={errors.Quantity}
@@ -469,7 +469,7 @@ function AboutProduct({ productId }: any) {
                           margin='none'
                           fullWidth={false}
                           value={quantityCount as any}
-                        />
+                        /> */}
                         <IconButton id='plus' className="Plus" onClick={(e) => {
                           e.stopPropagation()
                           handleQuentityUpdate('plus')

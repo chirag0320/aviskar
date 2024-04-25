@@ -59,6 +59,7 @@ function AddAccount(props: AddAccountProps) {
     if (!alignment) return ""
     return existingAccount ? alignment : AccountTypeEnumReverse[alignment];
   }, [existingAccount, AccountTypeEnumReverse, alignment])
+  // console.log("🚀 ~ existingAccount:", existingAccount)
   const configDropdowns = useAppSelector(state => state.myVault.configDropdowns)
   const dispatch = useAppDispatch();
   const [stateList, setStateList] = useState([])

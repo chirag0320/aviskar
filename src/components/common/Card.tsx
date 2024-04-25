@@ -87,13 +87,12 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
       "quantity": 1,
       "IsInstantBuy": false
     } as any)
-    // console.log("🚀 ~ addTOCart response", response);
-    if (response.code === 200) {
+    if (response?.code === 200) {
       dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
-      if (response.data) {
+      if (response.data === true) {
         showToaster({
-          message: 'The product has been added to your product cart',
-          buttonText: 'product cart',
+          message: response?.message,
+          buttonText: 'cart',
           redirectButtonUrl: 'shopping-cart',
           severity: 'success'
         })
@@ -110,7 +109,6 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
         severity: 'error'
       })
     }
-
   }
 
   return (

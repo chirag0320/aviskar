@@ -452,7 +452,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
           <Controller
             name={name}
             control={control}
-            // defaultValue={value} // Set defaultValue instead of passing value prop
+            defaultValue={defaultValue}
             render={({ field: { } }) => (
               <TextField
                 id={name}
@@ -465,14 +465,6 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 autoComplete={autoComplete}
                 variant={variant}
                 InputProps={{ endAdornment }}
-
-                onKeyDown={(e) => {
-                  ;['e', 'E', '+', '-', '.'].includes(e.key) &&
-                    e.preventDefault()
-                }}
-                value={Number(value)}
-                {...register(name)}
-                {...otherProps}
                 onChange={(event) => {
                   // console.log("swdesfrgtfhy")
                   const numberRegex = /^-?\d*\.?\d*$/
@@ -484,6 +476,14 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                     onChange(event)
                   }
                 }}
+                onKeyDown={(e) => {
+                  ;['e', 'E', '+', '-', '.'].includes(e.key) &&
+                    e.preventDefault()
+                }}
+                value={value}
+                {...register(name)}
+                {...otherProps}
+
               />
             )}
           />
