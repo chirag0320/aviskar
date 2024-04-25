@@ -52,7 +52,12 @@
         .Left {
           .Logo {
             img {
-              max-width: 250px;
+              width: auto;
+              max-width: 280px;
+              @include media($sm) {
+                width: 100%;
+                max-width: 260px;
+              }
             }
           }
         }
@@ -189,11 +194,9 @@
           }
 
           .SignInButton {
-            align-self: stretch;
             flex-shrink: 0;
-
             @include media($xs) {
-              @include padding-horizontal(6);
+              padding: 5px;
             }
 
             @include media-between($md, $mmd) {
@@ -201,14 +204,9 @@
             }
 
             .MuiButton-startIcon {
-              margin-left: 0;
-
-              @include media-between($md, $mmd) {
+              @include margin-horizontal(0);
+              @include media-min($xs) {
                 display: none;
-              }
-
-              @include media($xs) {
-                margin-right: 0;
               }
             }
 
@@ -254,7 +252,7 @@
           align-items: center;
           gap: 16px;
 
-          @include media-min($xxl) {
+          @include media-min($mmmd) {
             gap: 50px;
           }
 
@@ -534,10 +532,6 @@
       position: relative;
 
       .MainHeader {
-        @include media($lg) {
-          padding-top: 15px;
-          padding-bottom: 6px;
-        }
 
         .MainHeader__Wrapper {
           @include media($lg) {
@@ -545,9 +539,12 @@
           }
 
           .Left {
+            @include media($sm) {
+              flex: 1;
+            }
             .Logo {
               img {
-                max-width: 190px;
+                // max-width: 190px;
               }
             }
           }
@@ -555,7 +552,9 @@
           .Center {
             justify-content: center;
             flex-grow: 1;
-
+            @include media($md) {
+              display: none;
+            }
             .NavigationHeader {
               position: static;
 
@@ -591,12 +590,14 @@
 
           .Right {
             .ActionButton {
-              @include media($ssm) {
-                .MuiButton-startIcon {
-                  margin-right: 0;
+              .MuiButton-startIcon {
+                @include media-min($xs) {
+                  display: none;
                 }
-
-                .MuiTypography-root {
+              }
+  
+              .MuiTypography-root {
+                @include media($xs) {
                   display: none;
                 }
               }

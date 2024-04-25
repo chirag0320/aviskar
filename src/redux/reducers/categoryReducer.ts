@@ -122,12 +122,13 @@ export const categoryPageSlice = createSlice({
       state.loading = true;
     })
     builder.addCase(getProductDetailsData.fulfilled, (state, action) => {
-      state.productDetailsData = action.payload.data.data
+      state.productDetailsData = action?.payload?.data?.data
       state.loading = false;
 
     })
-    builder.addCase(getProductDetailsData.rejected, (state) => {
+    builder.addCase(getProductDetailsData.rejected, (state,action) => {
       state.loading = false;
+      state.productDetailsData = {errorMessage: action.payload?.response?.data?.message}
     })
   },
 })

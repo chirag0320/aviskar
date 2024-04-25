@@ -67,7 +67,6 @@ function CloserLook() {
   const { configDetails } = useAppSelector((state) => state.homePage)
   // const { data }: Idata = useApiRequest(ENDPOINTS.getBlog, 'post', dataforbody);
   const homePageSectionDetails = useAppSelector(state => state.homePage.sectionDetails)
-  console.log("🚀 ~ CloserLook ~ homePageSectionDetails:", homePageSectionDetails)
   const [loading, setLoading] = useState(false)
   useEffect(() => {
     setLoading(true)

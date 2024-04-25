@@ -14,12 +14,14 @@ import { navigate } from 'gatsby'
 function Experience() {
     const { mainHomePageData, configDetails } = useAppSelector((state) => state.homePage)
     const handleSlideChange = useCallback(() => {
+        requestAnimationFrame(() => {
             const iframes = document.querySelectorAll('iframe');
-            console.log("🚀 ~ handleSlideChange ~ iframes:", iframes)
             iframes.forEach(iframe => {
-                iframe.src = iframe.src; // Reload the iframe to stop video playback
+                // Reload the iframe to stop video playback
+                iframe.src = iframe.src;
             });
-        },[])
+        });
+    }, []);
 
     return (
         (mainHomePageData && mainHomePageData?.experience?.length > 0) ?
@@ -60,11 +62,11 @@ function Experience() {
                                         },
                                     }}
                                     loop={true}
-                                    // onSlideChange={handleSlideChange}
+                                // onSlideChange={handleSlideChange}
                                 >
                                     {<SwiperNavigation handleSlideChange={handleSlideChange} />}
                                     {(mainHomePageData && mainHomePageData?.experience?.length > 0) ?
-                                        [...mainHomePageData?.experience,...mainHomePageData?.experience]?.map((item) => {
+                                        [...mainHomePageData?.experience, ...mainHomePageData?.experience]?.map((item) => {
                                             return (
                                                 <SwiperSlide
                                                 // onClick={() => {

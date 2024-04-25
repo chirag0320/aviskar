@@ -62,7 +62,7 @@ function CompareProducts() {
                                     <Table className="CompareProductTable" sx={{ minWidth: 650 }} aria-label="CompareProductTable">
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell className="StickyCell" style={{ minWidth: 200 }}>&nbsp;</TableCell>
+                                                <TableCell className="StickyCell" style={{ minWidth: 200 }}>Name</TableCell>
                                                 {comparedProducts.map((product, index) => (
                                                     <TableCell sx={{ minWidth: { lg: "459px", xs: "400px" } }} key={product.productId} align="center">
                                                         <Link to={`/product-details/${product.friendlypagename}`} className="ProductName">{product.productName}</Link>
@@ -78,7 +78,7 @@ function CompareProducts() {
                                                         <TableCell align="center" key={product.productId} className={attribute === 'ProductName' ? 'ProductName' : ''}>
                                                             {attribute === 'ProductName' ? (
                                                                 <Link to={`/product-details/${product.friendlypagename}`} className="productNameLink">{product.productName}</Link>
-                                                            ) : attribute === 'ProductImage' ? (
+                                                            ) : attribute === 'Picture' ? (
                                                                 <img src={product.imageUrl ?? noImage} className="ProductImage" alt={product.productName} />
                                                             ) : (
                                                                 product.specifications[attribute]
