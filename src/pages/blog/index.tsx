@@ -191,7 +191,7 @@ function Blog() {
                   //   <Button variant="contained">Load More</Button>
                   // </Stack>
                   null
-                ) : <RecordNotFound message="No blogs to show" />}
+                ) : <RecordNotFound message="No blogs to show" isTextAlignCenter={true}/>}
               </TabPanel>
             </Box>
           </Container>
