@@ -22,7 +22,7 @@ class Marquee extends Component<MarqueeProps, MarqueeState> {
         super(props);
         this.state = {
             left: 0,
-            isDragging: false
+            isDragging: false,
         };
     }
 
@@ -37,23 +37,22 @@ class Marquee extends Component<MarqueeProps, MarqueeState> {
     initMarquee() {
         const { freq = 15 } = this.props;
         let spanWidth = this.dragSpan.current?.getBoundingClientRect().width || 0;
-        // Get the element by its ID
-        const element = document.getElementById('mark-id');
-        // Check if the element exists
-        if (element) {
-            // Get the width of the element
-            spanWidth = element.scrollWidth;
-        }
+        // // Get the element by its ID
+        // const element = document.getElementById('mark-id');
+        // // Check if the element exists
+        // if (element) {
+        //     // Get the width of the element
+        //     spanWidth = element.scrollWidth;
+        // }
         const windowWidth = window.innerWidth;
-        // this.spanWidth = Math.min(spanWidth, windowWidth);
-        this.spanWidth = spanWidth
+        this.spanWidth = Math.min(spanWidth, windowWidth);
         this.scrollTimer = setInterval(this.move, freq);
     }
 
     move = () => {
         const { offset = 1 } = this.props;
         let left = this.state.left - offset;
-        if (left < -this.spanWidth /1.98) {
+        if (left < -this.spanWidth * 3) {
             left = 0;
         }
         this.setState({ left });

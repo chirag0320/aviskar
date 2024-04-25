@@ -53,8 +53,6 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
   useEffect(() => {
     dispatch(getLiveDashboardChartData({ url: ENDPOINTS.getLiveDashboardChartData }))
   }, [])
-  const [params] = useState({ page: location.pathname === "/" ? 0 : 1 })
-  useAPIoneTime({ service: CategoriesListDetails, endPoint: ENDPOINTS.topCategoriesListWithSubCategories, params })
   const [productIds, setProductIds] = useState({})
   const [cartItemsWithLivePrice, setCartItemsWithLivePrice] = useState<CartItemsWithLivePriceDetails[]>([]);
   const { data: priceData, loading: priceLoading } = useApiRequest(ENDPOINTS.productPrices, 'post', productIds, 60);
