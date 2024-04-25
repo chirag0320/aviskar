@@ -65,7 +65,7 @@ interface Iproduct {
 export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Iproduct) => {
   const dispatch = useAppDispatch()
   const { loading: loadingForAddToCart, error: errorForAddToCart, apiCallFunction } = useCallAPI()
-  const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
+  const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
   const [open, setOpen] = useState(false)
   const tooltipRef: any = useRef(null)
   const handleTooltipClose = (event: any) => {
@@ -110,18 +110,18 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
       })
     }
   }
-
+const renderStockStatus = isLoggedIn || configDetailsState?.availabilityenableforguests?.value
   return (
     <Card className={classNames("ProductCard", { "Sticky": stickyProduct })} key={product.productId}>
       <Stack className="ImageWrapper">
-        <NavigationLink className="ImageLink" to={`/product-details/${product?.friendlypagename}`}>
+        <NavigationLink className="ImageLink" to={`/product-details/${product?.friendlypagename}`} style={{...((!renderStockStatus) && {paddingBottom: '18px'})}}>
           <img src={product.imageUrl ?? noImage} alt="Product image" loading="lazy" />
         </NavigationLink>
-        <ProductStockStatus
+        {(renderStockStatus) && <ProductStockStatus
           availability={product.availability}
           colorClass={product.colorClass}
           iconClass={product.iconClass}
-        />
+        />}
       </Stack>
       <CardContent>
         <Link className="ProductName" onClick={() => {
@@ -129,7 +129,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
         }}>
           <Typography component="h3">{product.productName}</Typography>
         </Link>
-        <Stack className="ContentWrapper">
+        {(isLoggedIn || configDetailsState?.productpriceenableforguests?.value) && <Stack className="ContentWrapper">
           <Stack className="Top">
             <Stack className="Left">
               { /*{product.productPrice !== 0 ? <Typography variant="subtitle1" className="ActualPrice">${product.productPrice}</Typography> : <><Typography variant="subtitle1" className="ActualPrice">${(product?.priceWithDetails?.tierPriceList && product?.priceWithDetails?.tierPriceList?.length > 0) ?
@@ -187,7 +187,7 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
               </HoverTooltip> */}
             </Stack>
           </Stack>
-        </Stack>
+        </Stack>}
         {product.tagName && (
           <Typography
             className={classNames("OfferBadge")}

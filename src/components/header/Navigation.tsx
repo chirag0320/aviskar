@@ -130,8 +130,8 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
           {!frontPage && (
             <Stack className="RightPart">
               {needToShowProgressLoader && <ProductUpdateCountdown needToShowText={false} />}
-              {configDetailsState?.enablechart?.value ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
-              {configDetailsState?.enablecart?.value ? <Suspense fallback={<></>}>
+              {configDetailsState?.enablechart?.value && (configDetailsState.chartenableforguests.value || isLoggedIn) ? <Suspense fallback={<></>}> <ChartMenu /></Suspense> : null}
+              {configDetailsState?.enablecart?.value && (configDetailsState.chartenableforguests.value || isLoggedIn) ? <Suspense fallback={<></>}>
                 <HoverTooltip
                   className="CartHoverList"
                   placement="bottom-start"
