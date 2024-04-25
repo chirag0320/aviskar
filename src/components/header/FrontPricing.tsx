@@ -32,14 +32,14 @@ function FrontPricing() {
             tickerboxfontcolor: configDetailsState?.tickerboxfontcolor?.value,
             tickertype: configDetailsState?.tickertype?.value,
         }
-        return data?.data?.map((stock) => (
+        return configDetailsState?.["mainhomepage.tickermetalpriceenable"]?.value ? data?.data?.map((stock) => (
             <StockReturnWithName key={stock.name} name={stock.name} value={stock.current} charturl={stock.charturl} status={stock.position === 1} percentage={stock.percentage} move={stock.move} tickerStyle={tickerStyle} />
-        ));
+        )): null;
     }, [data]);
     const renderdTextAfterText = useMemo(() => {
         //todo if ues is logged in the use this headerticker insted of this guestheaderticker
         // <AfterStockReturnWithName text={configDetailsState?.headerticker?.value} />
-        return <AfterStockReturnWithName text={isLoggedIn ?configDetailsState?.["mainhomepage.loginheaderticker"]?.value : configDetailsState?.["mainhomepage.guestheaderticker"]?.value} />
+        return <AfterStockReturnWithName text={isLoggedIn ? configDetailsState?.["mainhomepage.loginheaderticker"]?.value : configDetailsState?.["mainhomepage.guestheaderticker"]?.value} />
     }, [configDetailsState])
     return (
         <Box
@@ -55,9 +55,9 @@ function FrontPricing() {
                     <img src={configDetailsState?.australiaflagurl?.value} alt="Australia flag" width={36} height={24} loading="eager" />
                     <DraggableMarquee>
                         <Stack id={"mark-id"} className="PricingHeader__Wrapper--Content">
-                            {configDetailsState?.["mainhomepage.tickermetalpriceenable"]?.value && renderedStockItems}
+                            {renderedStockItems}
                             {renderdTextAfterText}
-                            {configDetailsState?.["mainhomepage.tickermetalpriceenable"]?.value && renderedStockItems}
+                            {renderedStockItems}
                             {renderdTextAfterText}
                         </Stack>
                     </DraggableMarquee>
