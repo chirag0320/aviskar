@@ -19,6 +19,7 @@ function FrontMobileMenu(props: any) {
   const [openSubMenu, setOpenSubMenu] = useState<any>({})
   const [isHomePage, setIsHomePage] = useState<boolean>(false)
   const { categoriesList } = useAppSelector((state) => state.homePage)
+  console.log("🚀 ~ FrontMobileMenu ~ categoriesList:", categoriesList)
   const [params] = useState({ page: location.pathname === "/" ? 0 : 1 })
   const handleClickMainMenu = (menuId: any) => {
     setOpenMenu((prevOpenMenus: any) => ({
@@ -37,6 +38,10 @@ function FrontMobileMenu(props: any) {
       setIsHomePage(true)
     }
   }, [])
+  const handleNavigate=(pathTo:any)=>{
+    navigate(pathTo)
+    toggleMobileMenu()
+  }
   return (
     <Drawer
       id="MobileMenu"
@@ -61,7 +66,7 @@ function FrontMobileMenu(props: any) {
                     onClick={() => {
                       handleClickMainMenu(category.categoryId);
                       if (!hasSubcategory) {
-                        navigate(`/${category.searchEngineFriendlyPageName}`)
+                        handleNavigate(!isFrontPage ?`/category/${category.searchEngineFriendlyPageName}` :`${category.searchEngineFriendlyPageName}`)
                       }
                     }}
                   >
@@ -86,7 +91,7 @@ function FrontMobileMenu(props: any) {
                                   {menu.subCategories.map((subCategory: any) => {
                                     return (
                                       <ListItemButton key={`SubMenu_${subCategory.categoryId}-${subCategory.name}`} selected={false} sx={{ pl: 4 }} onClick={() => {
-                                        navigate(`/${subCategory.searchEngineFriendlyPageName}`)
+                                        handleNavigate(!isFrontPage ? `/category/${subCategory.searchEngineFriendlyPageName}` :`${subCategory.searchEngineFriendlyPageName}`)
                                       }}>
                                         <ListItemText primary={subCategory.name} primaryTypographyProps={{ variant: "body2" }} />
                                       </ListItemButton>
