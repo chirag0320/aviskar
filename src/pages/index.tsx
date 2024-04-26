@@ -63,14 +63,14 @@ function MainHomePage() {
                 {/* {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>} */}
                 <Box className="FrontPage">
                     {configDetailsState?.sliderenableinhome?.value === false ? null : <Banner />}
-                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><Locations /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><Adventure /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><Experience /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><KnowMore /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><LatestStories /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><Gallery /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><CloserLookMain /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} style={{minHeight: '240px'}}><TheJournal /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} minHeight={774}><Locations /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} minHeight={1025}><Adventure /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} minHeight={614}><Experience /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} minHeight={973}><KnowMore /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} minHeight={731}><LatestStories /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} minHeight={844}><Gallery /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} minHeight={875}><CloserLookMain /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry threshold={0.25} minHeight={1083}><TheJournal /></RenderOnViewportEntry>
                 </Box>
             </MainLayout>
         </div>

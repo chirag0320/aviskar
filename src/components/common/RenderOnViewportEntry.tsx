@@ -4,6 +4,7 @@ import React, { Suspense, useRef } from 'react'
 const RenderOnViewportEntry = ({
     children,
     threshold = 0,
+    minHeight = 240,
     root = null,
     rootMargin = "0px 0px 0px 0px",
     ...wrapperDivProps
@@ -13,7 +14,14 @@ const RenderOnViewportEntry = ({
     console.log("🚀 ~ entered:", entered)
     return (
         <div {...wrapperDivProps} ref={ref}>
-            {entered && <Suspense fallback={<div style={{minHeight:'240px'}}></div>}>{children}</Suspense>}
+            {entered && <Suspense fallback={
+                <div
+                    className="CustomSkeleton"
+                    style={{
+                        minHeight: minHeight,
+                    }}
+                ></div>
+            }>{children}</Suspense>}
         </div>
     )
 }
