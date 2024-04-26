@@ -12,6 +12,7 @@ import ChartMenuChart from "./ChartMenuChart"
 // Hooks
 import { useAppSelector } from "@/hooks"
 import { metalColors } from "@/utils/common"
+import { navigate } from "gatsby"
 
 const requiredChartKeys = new Set(["gold", "silver", "platinum", "palladium"])
 
@@ -74,7 +75,9 @@ function ChartMenu() {
           }
           return null;
         })}
-        <Button color="secondary" variant="contained" fullWidth>See More</Button>
+        <Button color="secondary" variant="contained" fullWidth onClick={()=>{
+          navigate("/chart")
+        }}>See More</Button>
       </Stack>
 
     </ClickTooltip>

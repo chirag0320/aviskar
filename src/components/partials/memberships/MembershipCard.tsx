@@ -1,15 +1,17 @@
 import React from 'react'
 import { Link, Typography, Card, CardContent, CardActions, Button, Stack, Box, } from "@mui/material"
-import { useAppSelector } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { capitalizeFirstChar } from '@/utils/common';
+import ConfigServices from '@/apis/services/ConfigServices';
 
 interface MembershipCardProps {
   bgcolor: string,
   details: any,
   cardtitle: string,
+  handleUpgradPlan: (title:any)=>void
 }
 
-function MembershipCard({ bgcolor, cardtitle, details }: MembershipCardProps) {
+function MembershipCard({ bgcolor, cardtitle, details, handleUpgradPlan }: MembershipCardProps) {
   const { mebershipPlanDetailsData } = useAppSelector((state) => state.homePage)
   const isCurrentPlan = cardtitle?.toLocaleLowerCase() === mebershipPlanDetailsData?.currentMemberShip?.toLocaleLowerCase()
   const opacityColor = `${bgcolor}80`;
@@ -60,7 +62,7 @@ function MembershipCard({ bgcolor, cardtitle, details }: MembershipCardProps) {
           </Box>
         </CardContent>
         <CardActions className="UpgradPlanButtonWrapper">
-          <Button name='upgradePlan' aria-label='upgradePlan' variant="outlined" size='large' className="UpgradPlanButton" fullWidth>{isCurrentPlan ? 'Current Plan' : 'Upgrade Plan'}</Button>
+          <Button name='upgradePlan' aria-label='upgradePlan' variant="outlined" size='large' className="UpgradPlanButton" fullWidth onClick={()=>{handleUpgradPlan(cardtitle.toLocaleLowerCase())}}>{isCurrentPlan ? 'Current Plan' : 'Upgrade Plan'}</Button>
         </CardActions>
       </Card >
     </>
