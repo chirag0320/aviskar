@@ -76,9 +76,10 @@ function Navigation({ frontPage = false }: { frontPage?: boolean }) {
   }, [priceData])
 
   useEffect(() => {
-    if (cartItems?.length ?? 0 > 0) {
-      const productIds = cartItems?.map((item: CartItem) => item.productId);
-      setProductIds({ productIds })
+    const productIds = cartItems?.length !== undefined ? cartItems?.map((item: CartItem) => item.productId) : [];
+    setProductIds({ productIds })
+    if (productIds?.length == 0) {
+      setCartItemsWithLivePrice([])
     }
   }, [cartItems])
   const isThisInsideCategory = getLengthOfThePaths(window?.location?.pathname?.toLocaleLowerCase()).length == 2

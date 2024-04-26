@@ -127,7 +127,9 @@ export const ENDPOINTS = {
     //delete private holdings
     deletePrivateHoldings: "myvault/puk8elMtXJIwa4NCP/id",
     // new homepage
-   mainHomePage: "home/HOb6OH12P5xFHos4DC1L3Q"
+    mainHomePage: "home/HOb6OH12P5xFHos4DC1L3Q",
+    //    upgrade Plan
+    upgradPlan : "Checkout/ZQtAuhUHduOX"
 }
 export const StoreData = {
     storeCode: 12,

@@ -15,6 +15,9 @@ export interface ISavePopUpDetails {
   "IsAccepted": boolean,
   "Popupid": number
 }
+export interface IupgradPlan {
+  "FkqHBCX" : number
+}
 class ConfigServices {
   static async details(url: string) {
     return axiosInstance.get(url)
@@ -111,6 +114,9 @@ class ConfigServices {
   }
   static async getFooterSections(){
     return axiosInstance.get(ENDPOINTS.getFooterLink)
+  }
+  static async upgradMemberShipPlan(params:IupgradPlan){
+    return await axiosInstance.get(ENDPOINTS.upgradPlan,{params:params})
   }
 }
 export default ConfigServices
