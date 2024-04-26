@@ -11,7 +11,6 @@ import { resetSubTotal, setCartItemWarning, updateShoppingCartData, updateSubTot
 import { hasFulfilled } from '@/utils/common';
 
 function CartDropdownMenu({ cartItemsWithLivePrice }: any) {
-    console.log("🚀 ~ CartDropdownMenu ~ cartItemsWithLivePrice:", cartItemsWithLivePrice)
     const dispatch = useAppDispatch()
     const { showToaster } = useShowToaster();
     const { cartItems } = useAppSelector((state) => state.shoppingCart)
@@ -50,7 +49,7 @@ function CartDropdownMenu({ cartItemsWithLivePrice }: any) {
             showToaster({ message: "Update cart failed", severity: 'error' })
         }
     }
-
+    const isThereItems = cartItemsWithLivePrice && cartItemsWithLivePrice?.length > 0
     return (
         <>
             <Box className="CartDropdownMenuWrapper">
@@ -58,9 +57,9 @@ function CartDropdownMenu({ cartItemsWithLivePrice }: any) {
                     <Typography variant="titleLarge">There are <Link area-label="shopping-cart-link" to="/shopping-cart">{itemCountWithWord}</Link> in cart
                     </Typography>
                 </Box>
-                <Divider />
-                <Box className="CartDropdownMenuBody">
-                    {(cartItemsWithLivePrice && cartItemsWithLivePrice?.length > 0) ?
+                {isThereItems && <Divider />}
+                {isThereItems && <Box className="CartDropdownMenuBody">
+                    {(isThereItems) ?
                         cartItemsWithLivePrice?.slice(0, 3)?.map((item: { imageUrl: string | undefined; friendlypagename: string; productName: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; LivePriceDetails: { price: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }; }) => {
                             return (
                                 <Stack className='ProductWrapper'>
@@ -77,8 +76,8 @@ function CartDropdownMenu({ cartItemsWithLivePrice }: any) {
                             )
                         })
                         : null}
-                </Box>
-                <Divider />
+                </Box>}
+                {isThereItems && <Divider />}
                 {(cartItems && cartItems?.length > 0) ? <Stack className="CartDropdownMenuFooter">
                     <Button variant="outlined" size="medium" onClick={() => navigate("/shopping-cart")}>Go to cart</Button>
                     <Button variant="contained" size="medium" color="success" onClick={() => {

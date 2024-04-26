@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // Types
 import { appCreateAsyncThunk } from '../middleware/thunkMiddleware'
-import ConfigServices, { IPopUpDetails, ISavePopUpDetails, IloginUserBody } from '@/apis/services/ConfigServices'
+import ConfigServices, { IPopUpDetails, ISavePopUpDetails, IloginUserBody, IupgradPlan } from '@/apis/services/ConfigServices'
 import { isBrowser, localStorageGetItem, localStorageSetItem } from '@/utils/common'
 import { FooterLink } from '@/components/footer';
 
@@ -293,7 +293,12 @@ export const getFooterLinks = appCreateAsyncThunk(
     return await ConfigServices.getFooterSections();
   }
 )
-
+export const upgradePlaneOfMembership = appCreateAsyncThunk(
+  "upgradePlaneOfMembership",
+  async (params: IupgradPlan) => {
+    return await ConfigServices.upgradMemberShipPlan(params);
+  }
+)
 export const createHomepageSlice = createSlice({
   name: 'homepage',
   initialState,
@@ -544,6 +549,16 @@ export const createHomepageSlice = createSlice({
       state.loading = false
     })
     builder.addCase(getFooterLinks.rejected, (state, action) => {
+      state.loading = false
+    })
+    // Upgrad Membership plan
+    builder.addCase(upgradePlaneOfMembership.pending, (state, action) => {
+      state.loading = true
+    })
+    builder.addCase(upgradePlaneOfMembership.fulfilled, (state, action) => {
+      state.loading = false
+    })
+    builder.addCase(upgradePlaneOfMembership.rejected, (state, action) => {
       state.loading = false
     })
   },
