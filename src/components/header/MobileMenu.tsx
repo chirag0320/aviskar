@@ -70,7 +70,11 @@ function FrontMobileMenu(props: any) {
                       }
                     }}
                   >
-                    <ListItemText primary={category.name} primaryTypographyProps={{ variant: "body2" }} />
+                    <ListItemText primary={category.name} primaryTypographyProps={{ variant: "body2" }}
+                      onClick={() => {
+                        handleNavigate(!isFrontPage ? `/category${formatCategoryUrl(category.searchEngineFriendlyPageName)}` : `${formatCategoryUrl(category.searchEngineFriendlyPageName)}`)
+                      }}
+                    />
                     {hasSubcategory ?
                       openMenu[category.categoryId] ? <ArrowUp /> : <ArrowDown />
                       : null
@@ -83,7 +87,7 @@ function FrontMobileMenu(props: any) {
                           return (
                             <Fragment key={menu.categoryId}>
                               <ListItemButton key={`SubMenu_${menu.categoryId}-${menu.name}`} selected={false} onClick={() => handleClickSubMenu(menu.categoryId)} sx={{ pl: 4 }}>
-                                <ListItemText primary={menu.name} primaryTypographyProps={{ variant: "body2" }} />
+                                <ListItemText primary={menu.name} primaryTypographyProps={{ variant: "body2" }} onClick={() => handleNavigate(!isFrontPage ? `/category${formatCategoryUrl(menu?.searchEngineFriendlyPageName)}` :`${formatCategoryUrl(menu?.searchEngineFriendlyPageName)}`)} />
                                 {openSubMenu[menu.categoryId] ? <ArrowUp /> : <ArrowDown />}
                               </ListItemButton>
                               <Collapse key={`Collapse_${menu.categoryId}-${menu.name}`} in={openSubMenu[menu.categoryId]} sx={{ pl: 4 }}>
