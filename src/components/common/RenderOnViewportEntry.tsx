@@ -13,7 +13,7 @@ const RenderOnViewportEntry = ({
     console.log("🚀 ~ entered:", entered)
     return (
         <div {...wrapperDivProps} ref={ref}>
-            {entered && <Suspense fallback={<span>"...Loading"</span>}>{children}</Suspense>}
+            {entered && <Suspense fallback={<div style={{minHeight:'240px'}}></div>}>{children}</Suspense>}
         </div>
     )
 }
