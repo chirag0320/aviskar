@@ -4,13 +4,14 @@ import { Skeleton, Stack } from "@mui/material";
 
 // Components
 import LazyHeader from "../header/index"
-import { convertMinutesToMilliseconds, storeLastPage } from "@/utils/common";
-import { configDetails } from "@/redux/reducers/homepageReducer";
+import { bodyForGetShoppingCartData, convertMinutesToMilliseconds, storeLastPage } from "@/utils/common";
+import { configDetails, getFooterLinks, getLiveDashboardChartData } from "@/redux/reducers/homepageReducer";
 import { ENDPOINTS } from "@/utils/constants";
 import useAPIoneTime from "@/hooks/useAPIoneTime";
 import { useAppDispatch, useAppSelector, useToggle } from "@/hooks";
 import useInactiveLogout from "@/hooks/useInactiveLogout";
 import SessionExpiredDialog from "../header/SessionExpiredDialog";
+import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer";
 const LazyFooter = lazy(() => import('../footer/index'));
 function Layout({ children }: any) {
   const { configDetails: configDetailsState, isLoggedIn } = useAppSelector((state) => state.homePage)
@@ -32,6 +33,15 @@ function Layout({ children }: any) {
     }
   }, [])
   useAPIoneTime({ service: configDetails, endPoint: ENDPOINTS.getConfigStore })
+  useEffect(() => {
+    dispatch(getLiveDashboardChartData({ url: ENDPOINTS.getLiveDashboardChartData }))
+  }, [])
+  useEffect(() => {
+    dispatch(getShoppingCartData({ url: ENDPOINTS.getShoppingCartData, body: bodyForGetShoppingCartData }))
+  }, [isLoggedIn])
+  useAPIoneTime({ service: getFooterLinks, endPoint: ENDPOINTS.getFooterLink })
+  // const { data }: { data: { data: FooterSection[] } } = useApiRequest(ENDPOINTS.getFooterLink);
+
   return (
     <Stack id="PageLayout">
       {/* <Suspense fallback={<Box id="HeaderWrapper"></Box>}> */}

@@ -67,7 +67,7 @@ function News() {
 
   return (
     <MainLayout blackTheme>
-      <Loader open = {checkLoadingStatus} />
+      <Loader open={checkLoadingStatus} />
       <Box className="BlogPage">
         <Box className="HeroSection">
           <Container>
@@ -159,12 +159,7 @@ function News() {
                     })}
                   </Grid>
                 )}
-                {newsList?.items?.length > 0 ? (
-                  // <Stack justifyContent="center" sx={{ mt: 7.5, mb: 10 }}>
-                  //   <Button variant="contained">Load More</Button>
-                  // </Stack>
-                  null
-                 ) : <RecordNotFound message="No news to show" />}
+                {newsList?.items?.length === 0 && <RecordNotFound message="No news to show" isTextAlignCenter={true} />}
               </TabPanel>
             </Box>
           </Container>

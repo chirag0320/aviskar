@@ -22,15 +22,9 @@ export interface FooterLink {
   linkUrl: string;
 }
 
-export interface FooterSection {
-  mainTitle: string;
-  columnOrder: number;
-  links: FooterLink[];
-}
-
 function index() {
   const { configDetails: configDetailsState } = useAppSelector((state) => state.homePage)
-  const { data }: { data: { data: FooterSection[] } } = useApiRequest(ENDPOINTS.getFooterLink);
+  const data = useAppSelector((state) => state.homePage.footerSections)
   const { email, handleEmailChange, subscribe } = useSubscription()
   const [fixWrapperHeight, setFixWrapperHeight] = useState<number>(0)
   const FixWrapperHeight = document.querySelector(".FixWrapper")?.clientHeight
@@ -61,11 +55,11 @@ function index() {
             </Stack>
           </Stack>
           <Stack className="MenuesPart" component="nav">
-            {data?.data.map((menu) => (
+            {data?.map((menu) => (
               <Box key={menu.mainTitle} className={classNames("MenuWrapper", trimAllSpaceFromString(menu.mainTitle))}>
                 <Typography className="MenuTitle" variant="subtitle2" component="p">{menu.mainTitle.toLocaleLowerCase()}</Typography>
                 <List>
-                  {menu.links.map((item) => (
+                  {menu.links.map((item: any) => (
                     <ListItem key={item.linkTitle}>
                       <ListItemButton onClick={() => {
                         navigate(item.linkUrl)

@@ -2,14 +2,15 @@ import React from "react"
 import { Box, Typography } from "@mui/material"
 
 interface RecordNotFound {
-  message?: string
+  message?: string,
+  isTextAlignCenter?: boolean
 }
 
 function RecordNotFound(props: RecordNotFound) {
-  const { message } = props
+  const { message, isTextAlignCenter } = props
   return (
     <Box className="RecordNotFound">
-      <Typography> {message ? message : "Record not found"}</Typography>
+      <Typography style={{ textAlign: isTextAlignCenter ? "center" : "initial" }}> {message ? message : "Record not found"}</Typography>
     </Box>
   )
 }
