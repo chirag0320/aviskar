@@ -62,15 +62,16 @@ function MainHomePage() {
                 />
                 {/* {isMobile && <Suspense fallback={<></>}> <MobileSecondaryMenu /></Suspense>} */}
                 <Box className="FrontPage">
-                    {configDetailsState?.sliderenableinhome?.value === false ? null : <Banner />}
-                    <RenderOnViewportEntry threshold={0.25} minHeight={774}><Locations /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} minHeight={1025}><Adventure /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} minHeight={614}><Experience /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} minHeight={973}><KnowMore /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} minHeight={731}><LatestStories /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} minHeight={844}><Gallery /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} minHeight={875}><CloserLookMain /></RenderOnViewportEntry>
-                    <RenderOnViewportEntry threshold={0.25} minHeight={1083}><TheJournal /></RenderOnViewportEntry>
+                    {/* {configDetailsState?.sliderenableinhome?.value === false ? null : } */}
+                    <RenderOnViewportEntry rootMargin={'600px'} threshold={0.25} minHeight={'100vh'}>{configDetailsState?.sliderenableinhome?.value ? <Banner /> : null}</RenderOnViewportEntry>
+                    <RenderOnViewportEntry rootMargin={'600px'} threshold={0.25} minHeight={774}><Locations /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry rootMargin={'600px'} threshold={0.25} minHeight={1025}><Adventure /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry rootMargin={'600px'} threshold={0.25} minHeight={614}><Experience /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry rootMargin={'600px'} threshold={0.25} minHeight={973}><KnowMore /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry rootMargin={'600px'} threshold={0.25} minHeight={731}><LatestStories /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry rootMargin={'600px'} threshold={0.25} minHeight={844}><Gallery /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry rootMargin={'600px'} threshold={0.25} minHeight={875}><CloserLookMain /></RenderOnViewportEntry>
+                    <RenderOnViewportEntry rootMargin={'600px'} threshold={0.25} minHeight={1083}><TheJournal /></RenderOnViewportEntry>
                 </Box>
             </MainLayout>
         </div>

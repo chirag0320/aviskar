@@ -13,7 +13,9 @@ const RenderOnViewportEntry = ({
     const entered = useFirstViewportEntry(ref, { threshold, root, rootMargin })
     console.log("🚀 ~ entered:", entered)
     return (
-        <div {...wrapperDivProps} ref={ref}>
+        <div {...wrapperDivProps} ref={ref}  style={{
+            minHeight: !entered ? minHeight : null,
+        }}>
             {entered && <Suspense fallback={
                 <div
                     className="CustomSkeleton"
