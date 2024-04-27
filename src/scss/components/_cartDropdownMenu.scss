@@ -52,6 +52,11 @@
                 line-height: 18px;
                 font-weight: 600;
                 overflow-wrap: anywhere;
+
+                &:hover {
+                    cursor: pointer;
+                    // color: $goldTips;
+                }
             }
 
             .ProductPrice {
