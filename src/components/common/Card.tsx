@@ -57,6 +57,7 @@ import { getShoppingCartData } from "@/redux/reducers/shoppingCartReducer";
 import { Address } from "@/types/myVault";
 import UpdateAddress from "../partials/checkout/UpdateAddress";
 import AddAccount from "../partials/my-vault/AddAccount";
+import { parsePhoneNumber } from "libphonenumber-js";
 
 interface Iproduct {
   product: IFeaturedProducts;
@@ -110,11 +111,11 @@ export const ProductCard: React.FC<Iproduct> = ({ product, stickyProduct }: Ipro
       })
     }
   }
-const renderStockStatus = isLoggedIn || configDetailsState?.availabilityenableforguests?.value
+  const renderStockStatus = isLoggedIn || configDetailsState?.availabilityenableforguests?.value
   return (
     <Card className={classNames("ProductCard", { "Sticky": stickyProduct })} key={product.productId}>
       <Stack className="ImageWrapper">
-        <NavigationLink className="ImageLink" to={`/product-details/${product?.friendlypagename}`} style={{...((!renderStockStatus) && {paddingBottom: '18px'})}}>
+        <NavigationLink className="ImageLink" to={`/product-details/${product?.friendlypagename}`} style={{ ...((!renderStockStatus) && { paddingBottom: '18px' }) }}>
           <img src={product.imageUrl ?? noImage} alt="Product image" loading="lazy" />
         </NavigationLink>
         {(renderStockStatus) && <ProductStockStatus
@@ -621,6 +622,7 @@ interface AddressCardProps {
 
 export const AddressCard = (props: AddressCardProps) => {
   const { id, accountType, accountName, firstName, lastName, email, phoneNumber, address, showDelete, handleDelete, accountData } = props;
+  console.log("🚀 ~ AddressCard ~ phoneNumber:", phoneNumber)
   const [openUpdateAddress, setOpenUpdateAddress] = useState<boolean>(false)
   const [openUpdateAccount, setOpenUpdateAccount] = useState(false);
 
@@ -651,7 +653,19 @@ export const AddressCard = (props: AddressCardProps) => {
         <Typography component="li" className="UserName">{accountName}</Typography>
         <Typography component="li" className="UserEmail"><strong>Name:</strong> {firstName + " " + lastName}</Typography>
         <Typography component="li" className="UserEmail"><strong>Email:</strong> {email}</Typography>
-        <Typography component="li" className="UserPhoneNumber"><strong>Phone number:</strong> {phoneNumber}</Typography>
+        {!Number.isNaN("+" + phoneNumber) && (
+          <Typography component="li" className="UserPhoneNumber">
+            <strong>Phone number:</strong>{" "}
+            {(() => {
+              try {
+                const formattedPhoneNumber = parsePhoneNumber("+" + phoneNumber)?.formatInternational();
+                return formattedPhoneNumber || "Invalid phone number";
+              } catch (error) {
+                return phoneNumber;
+              }
+            })()}
+          </Typography>
+        )}
         <Typography component="li" className="UserAddress"><strong>Address:</strong> {`${address?.addressLine1}${address?.addressLine2 ? `, ${address?.addressLine2}` : ''}, ${address?.city} - ${address?.postcode}, ${address?.stateName}, ${address?.countryName}`
         }</Typography>
         {address?.isVerified && <Typography component="li" className="verificationstatus">
@@ -661,6 +675,6 @@ export const AddressCard = (props: AddressCardProps) => {
 
       <UpdateAddress open={openUpdateAddress} dialogTitle="Update Address" onClose={handleCloseUpdateAddress} existingAddress={address} isComingFromMyVault={true} />
       {openUpdateAccount && <AddAccount dialogTitle="Update account" open={openUpdateAccount} alignment={accountData?.accountType ?? "1"} onClose={handleCloseUpdateAccount} existingAccount={accountData} hadleSecondaryAction={handleCloseUpdateAccount} />}
-    </Box>
+    </Box >
   );
 };
