@@ -11,6 +11,7 @@ export type RenderFieldType =
   | 'file'
   | "phoneInput"
   | "dateRange"
+  | "autocomplete"
 
 export interface FieldOption {
   id: string

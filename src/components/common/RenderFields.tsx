@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import { Box, FormControl, Select, RadioGroup, FormControlLabel, FormLabel, Radio, FormHelperText, Checkbox, FormGroup, Switch, TextField, IconButton, InputAdornment, Button, Stack } from '@mui/material'
-import { Controller } from 'react-hook-form'
+import React, { useEffect, useState } from 'react'
+import { Box, FormControl, Select, RadioGroup, FormControlLabel, FormLabel, Radio, FormHelperText, Checkbox, FormGroup, Switch, TextField, IconButton, InputAdornment, Button, Stack, Autocomplete } from '@mui/material'
+import { Controller, get } from 'react-hook-form'
 import classNames from 'classnames'
 import PhoneInput from 'react-phone-input-2'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -37,6 +37,11 @@ interface RenderFieldProps {
   name: string
   defaultValue?: string | number
   options?: FieldOption[]
+  autocompleteOptions?: {
+    id: number,
+    name: string
+  }[]
+  setAutoCompleteValue?: any
   multiline?: boolean
   readOnly?: boolean
   rows?: number
@@ -56,6 +61,7 @@ interface RenderFieldProps {
   disabled?: boolean,
   setSelectedFile?: any,
   clearErrors?: any,
+  setError?: any,
   getValues?: any,
   margin?: 'dense' | 'normal' | 'none'
   row?: boolean
@@ -99,12 +105,14 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   fullWidth = true,
   row,
   readOnly,
+  setError,
   dateRangeValue,
   // dateRangeError,
   setDateRangeValue,
   setPhoneNumberValue,
   setValue,
   onBlur,
+  setAutoCompleteValue,
   onKeyDown,
   MenuProps,
   icon,
@@ -112,6 +120,7 @@ const RenderFields: React.FC<RenderFieldProps> = ({
   endAdornment,
   setSelectedFile,
   control,
+  autocompleteOptions,
   labelPlacement,
   required,
   alreadySelectedFilters,
@@ -123,6 +132,8 @@ const RenderFields: React.FC<RenderFieldProps> = ({
     if (setValue)
       setValue(name, value)
   }, [value])
+  if(name === "State")
+  console.log("🚀 ~ useEffect ~ value:", value)
 
   let fieldType = null
   switch (type) {
@@ -179,50 +190,6 @@ const RenderFields: React.FC<RenderFieldProps> = ({
         </FormControl>
       );
       break;
-    // case 'select':
-    //   fieldType = (
-    //     <FormControl fullWidth={fullWidth} margin={margin} color={color}>
-    //       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-    //       <Controller
-    //         control={control}
-    //         render={({ field }) => (
-    //           <Select
-    //             inputProps={{ id: name }}
-    //             value={field.value}
-    //             defaultValue={defaultValue}
-    //             error={!!error}
-    //             disabled={disabled}
-    //             variant={variant}
-    //             MenuProps={MenuProps}
-    //             sx={
-    //               field.value === 'none' || field.value === ''
-    //                 ? {
-    //                   color: "#1d21296b",
-    //                 }
-    //                 : {
-    //                   color: "#1D2129",
-    //                 }
-    //             }
-    //             {...register(name)}
-    //             {...otherProps}
-    //             onChange={(event) => {
-    //               // Call the provided onChange function
-    //               field.onChange(event)
-    //               if (onChange) {
-    //                 onChange()
-    //               }
-    //               // You can also perform additional actions here if needed
-    //             }}
-    //           >
-    //             {children}
-    //           </Select>
-    //         )}
-    //         name={name}
-    //         {...otherProps}
-    //       />
-    //     </FormControl>
-    //   )
-    //   break
 
     case 'radio':
       if (!options) return null
@@ -386,6 +353,58 @@ const RenderFields: React.FC<RenderFieldProps> = ({
                 inputClass={classNames("form-control", { "error": !!error })}
               />
             )}
+            {...register(name)}
+            {...otherProps}
+          />
+        </FormControl>
+      )
+      break
+
+    case "autocomplete":
+      fieldType = (
+        <FormControl
+          fullWidth={fullWidth}
+          margin={margin}
+          {...(error ? { error: true } : {})}
+        >
+          {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+          <Controller
+            name={name}
+            control={control}
+            render={({ field }) => (
+              <Autocomplete
+                disablePortal
+                options={autocompleteOptions ?? []}
+                getOptionLabel={(option: any) => {
+                  if (typeof option === 'string') {
+                    return option;
+                  }
+                  return option?.name;
+                }}
+                renderInput={(params) => <TextField placeholder="Enter state *" {...params} error={!!error}/>}
+                fullWidth
+                onChange={(_, value) => {
+                  if (!value) {
+                    return;
+                  }
+                  if (typeof value === 'string') {
+                    setValue('State', value);
+                  } else {
+                    setValue('State', value?.name);
+                  }
+                }}
+                inputValue={value}
+                onInputChange={(event, newInputValue) => {
+                  setValue('State', newInputValue);
+                  setAutoCompleteValue(newInputValue)
+                  if (newInputValue !== "") {
+                    clearErrors(name)
+                  }
+                  else if (setError) {
+                    setError(name, { type: "required", message: "State is a required field" })
+                  }
+                }}
+                freeSolo />)}
             {...register(name)}
             {...otherProps}
           />

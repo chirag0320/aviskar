@@ -63,15 +63,15 @@ function AddAddress(props: AddAddress) {
     const dispatch = useAppDispatch();
     const countryList = useAppSelector(state => state.checkoutPage.countryList);
     const stateListall = useAppSelector(state => state.checkoutPage.stateList);
-    const [stateList, setStateList] = useState([])
-    const [stateId, setStateId] = useState<number | null>(null);
+    const [stateList, setStateList] = useState<{ id: number, name: string }[]>([])
+    // const [stateId, setStateId] = useState<number | null>(null);
     const { showToaster } = useShowToaster();
     const loading = useAppSelector(state => state.checkoutPage.loading);
     const [googleAddressComponents, setGoogleAddressComponents] = useState<AddressComponents & { postalCode?: string } | null>(null);
     const [countryValue, setcountryValue] = useState<any>('none')
     const [isAddressGoogleVerified, setIsAddressGoogleVerified] = useState<boolean>(false)
     // console.log("🚀 ~ AddAddress ~ isAddressGoogleVerified:", isAddressGoogleVerified)
-    const [stateValue, setstateValue] = useState<any>('')
+    const [stateValue, setstateValue] = useState<any>(undefined)
     const [phoneNumberValue, setPhoneNumberValue] = useState<{ value: string, country: any }>({
         value: "",
         country: {}
@@ -136,6 +136,7 @@ function AddAddress(props: AddAddress) {
             isAddressVerified = false
         }
 
+        const stateId = stateList.find((state) => state.name === data.State)?.id;
 
         const addressQuery = {
             addressTypeId,
@@ -236,7 +237,6 @@ function AddAddress(props: AddAddress) {
             })
             setValue('State', googleAddressComponents.state)
             setstateValue(googleAddressComponents.state)
-            setStateId(() => null);
             setValue('City', googleAddressComponents?.city)
             setValue('Address2', googleAddressComponents.address2)
             if (googleAddressComponents?.postalCode) {
@@ -254,7 +254,12 @@ function AddAddress(props: AddAddress) {
     useEffect(() => {
         const data: any = stateListall?.filter((state: any) => {
             return state.enumValue == countryValue || countryValue == "none"
-        })
+        }).map((state: any) => {
+            return {
+                id: state.id,
+                name: state.name
+            }
+        });
         setStateList(data)
     }, [stateListall, countryValue])
 
@@ -380,37 +385,23 @@ function AddAddress(props: AddAddress) {
                         </RenderFields>}
                     </Stack>
                     <Stack className="Column">
-                        <Autocomplete
-                            disablePortal
-                            options={stateList}
-                            getOptionLabel={(option: any) => {
-                                if (typeof option === 'string') {
-                                    return option;
-                                }
-                                return option?.name;
-                            }}
-                            renderInput={(params) => <TextField placeholder="Enter state *" {...params} error={errors.State as boolean | undefined} />}
-                            fullWidth
-                            onChange={(_, value) => {
-                                if (!value) {
-                                    return;
-                                }
-
-                                if (typeof value === 'string') {
-                                    setValue('State', value);
-                                } else {
-                                    setValue('State', value?.name);
-                                    setStateId(value?.id ? value?.id : null);
-                                }
-                            }}
-                            inputValue={stateValue}
-                            // defaultValue={getValues('State')}
-                            onInputChange={(event, newInputValue) => {
-                                setValue('State', newInputValue); // Update the form value with the manually typed input
-                                setstateValue(newInputValue)
-                            }}
-                            freeSolo />
-
+                        <RenderFields
+                            type="autocomplete"
+                            register={register}
+                            error={errors.State}
+                            name="State"
+                            placeholder="Enter state *"
+                            control={control}
+                            getValues={getValues}
+                            variant='outlined'
+                            clearErrors={clearErrors}
+                            setError={setError}
+                            value={stateValue}
+                            setValue={setValue}
+                            margin='none'
+                            setAutoCompleteValue={setstateValue}
+                            autocompleteOptions={stateList}
+                        />
                         <RenderFields
                             type="number"
                             register={register}
