@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from "react"
-import { Autocomplete, MenuItem, Button, Stack, TextField, Box } from "@mui/material"
+import { Autocomplete, MenuItem, Button, Stack, TextField, Box, FormHelperText } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -22,6 +22,7 @@ import { addOrEditAddresses as addOrEditAddressForMyVault, addAddress as addAddr
 import { isValidPhoneNumber } from "@/components/common/Utils"
 import { CountryCode } from "libphonenumber-js"
 import { CountryData } from "react-phone-input-2"
+import classNames from "classnames"
 
 interface AddAddress {
     open: boolean
@@ -385,7 +386,7 @@ function AddAddress(props: AddAddress) {
                         </RenderFields>}
                     </Stack>
                     <Stack className="Column">
-                        <RenderFields
+                        {/* <RenderFields
                             type="autocomplete"
                             register={register}
                             error={errors.State}
@@ -401,7 +402,54 @@ function AddAddress(props: AddAddress) {
                             margin='none'
                             setAutoCompleteValue={setstateValue}
                             autocompleteOptions={stateList}
-                        />
+                        /> */}
+                        <Box className='InputRow'>
+                            <Autocomplete
+                                disablePortal
+                                options={stateList}
+                                getOptionLabel={option => {
+                                    if (typeof option === 'string') {
+                                        return option;
+                                    }
+                                    return option.name;
+                                }}
+                                renderInput={(params) => <TextField placeholder="Enter state *" {...params} error={errors.State as boolean | undefined} />}
+                                fullWidth
+                                onChange={(_, value) => {
+                                    if (!value) {
+                                        return;
+                                    }
+
+                                    if (typeof value === 'string') {
+                                        setValue('State', value);
+                                    }
+                                    else {
+                                        setValue('State', value.name);
+                                        // setStateId(value.id);
+                                    }
+                                }}
+                                inputValue={stateValue ?? ""}
+                                onInputChange={(event, newInputValue) => {
+                                    setValue('State', newInputValue); // Update the form value with the manually typed input
+                                    setstateValue(newInputValue)
+                                    if (newInputValue !== "") {
+                                        clearErrors("State")
+                                    }
+                                    else {
+                                        setError("State", {
+                                            type: "manual",
+                                            message: "State is a required field"
+                                        });
+                                    }
+                                }}
+                                freeSolo
+                            />
+                            {!!errors["State"] && (
+                                <FormHelperText className={classNames({ "Mui-error": !!errors["State"] })}>
+                                    {errors.State.message}
+                                </FormHelperText>
+                            )}
+                        </Box>
                         <RenderFields
                             type="number"
                             register={register}

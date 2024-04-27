@@ -1,6 +1,6 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react"
-import { Autocomplete, MenuItem, Button, Stack, TextField, Box, Typography } from "@mui/material"
+import { Autocomplete, MenuItem, Button, Stack, TextField, Box, Typography, FormHelperText } from "@mui/material"
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
@@ -22,6 +22,7 @@ import AdditionalFields, { IField } from "./AdditionalFields"
 import { Account } from "@/types/myVault"
 import * as yup from 'yup'
 import { isValidPhoneNumber } from "@/components/common/Utils"
+import classNames from "classnames"
 
 interface AddAccountProps {
   open: boolean
@@ -532,36 +533,52 @@ function AddAccount(props: AddAccountProps) {
                 variant='outlined'
                 margin='none'
               />
-              <Autocomplete
-                disablePortal
-                options={stateList}
-                defaultValue={existingAccount?.address.stateName}
-                getOptionLabel={(option: any) => {
-                  if (typeof option === 'string') {
-                    return option;
-                  }
-                  return option.name;
-                }}
-                renderInput={(params) => <TextField placeholder="Enter state *" {...params} error={errors.State as boolean | undefined} />}
-                onChange={(_, value: any) => {
-                  if (!value) {
-                    return;
-                  }
+              <Box className='InputRow'>
+                <Autocomplete
+                  disablePortal
+                  options={stateList}
+                  defaultValue={existingAccount?.address.stateName}
+                  getOptionLabel={(option: any) => {
+                    if (typeof option === 'string') {
+                      return option;
+                    }
+                    return option.name;
+                  }}
+                  renderInput={(params) => <TextField placeholder="Enter state *" {...params} error={errors.State as boolean | undefined} />}
+                  onChange={(_, value: any) => {
+                    if (!value) {
+                      return;
+                    }
 
-                  if (typeof value === 'string') {
-                    setValue('State', value);
-                  } else {
-                    setValue('State', value?.name);
-                    setStateId(value?.id ? value?.id : null);
-                  }
-                }}
-                inputValue={stateValue ?? ""}
-                // defaultValue={getValues('State')}
-                onInputChange={(event, newInputValue) => {
-                  setValue('State', newInputValue); // Update the form value with the manually typed input
-                  setstateValue(newInputValue)
-                }}
-                freeSolo />
+                    if (typeof value === 'string') {
+                      setValue('State', value);
+                    } else {
+                      setValue('State', value?.name);
+                      setStateId(value?.id ? value?.id : null);
+                    }
+                  }}
+                  inputValue={stateValue ?? ""}
+                  // defaultValue={getValues('State')}
+                  onInputChange={(event, newInputValue) => {
+                    setValue('State', newInputValue); // Update the form value with the manually typed input
+                    setstateValue(newInputValue)
+                    if (newInputValue !== "") {
+                      clearErrors("State")
+                    }
+                    else {
+                      setError("State", {
+                        type: "manual",
+                        message: "State is a required field"
+                      });
+                    }
+                  }}
+                  freeSolo />
+                {!!errors["State"] && (
+                  <FormHelperText className={classNames({ "Mui-error": !!errors["State"] })}>
+                    {errors["State"].message}
+                  </FormHelperText>
+                )}
+              </Box>
             </Stack>
             <Stack className="Column">
               <RenderFields

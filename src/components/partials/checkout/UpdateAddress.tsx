@@ -410,12 +410,21 @@ function UpdateAddress(props: UpdateAddress) {
                 onInputChange={(event, newInputValue) => {
                   setValue('State', newInputValue); // Update the form value with the manually typed input
                   setstateValue(newInputValue)
+                  if (newInputValue !== "") {
+                    clearErrors("State")
+                  }
+                  else {
+                    setError("State", {
+                      type: "manual",
+                      message: "State is a required field"
+                    });
+                  }
                 }}
                 freeSolo
               />
               {!!errors["State"] && (
                 <FormHelperText className={classNames({ "Mui-error": !!errors["State"] })}>
-                  test error
+                  {errors["State"].message}
                 </FormHelperText>
               )}
             </Box>
